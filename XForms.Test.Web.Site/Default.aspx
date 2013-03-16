@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="XForms.Test.Web.Site.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="XEngine.Test.Web.Site.Default" %>
 <%@ Register Assembly="XForms.Web.UI" Namespace="XForms.Web.UI" TagPrefix="xforms" %>
 
 <!DOCTYPE html>
