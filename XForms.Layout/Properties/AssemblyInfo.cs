@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ISIS.Forms.Layout")]
+[assembly: AssemblyTitle("XForms.Layout")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Institution Solutions LLC")]
-[assembly: AssemblyProduct("ISIS.Forms.Layout")]
-[assembly: AssemblyCopyright("Copyright © Institution Solutions LLC 2012")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("XForms.Layout")]
+[assembly: AssemblyCopyright("Copyright © Jerome Haltom 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

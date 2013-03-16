@@ -8,8 +8,8 @@
     <ProjectGuid>{2B27233A-849A-4339-96C6-BABCB968B8B0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ISIS.Forms</RootNamespace>
-    <AssemblyName>ISIS.Forms</AssemblyName>
+    <RootNamespace>XForms</RootNamespace>
+    <AssemblyName>XForms</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

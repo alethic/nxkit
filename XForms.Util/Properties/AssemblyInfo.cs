@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("XForms.Web.UI")]
+[assembly: AssemblyTitle("XForms.Util")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("XForms.Web.UI")]
+[assembly: AssemblyProduct("XForms.Util")]
 [assembly: AssemblyCopyright("Copyright © Jerome Haltom 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e9dd7b37-64e6-4d92-9462-388b55f8e5fe")]
+[assembly: Guid("6522afde-6a2d-4a7d-b086-a80a88783abf")]
 
 // Version information for an assembly consists of the following four values:
 //
