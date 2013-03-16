@@ -5,6 +5,8 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
+using XEngine.Util;
+
 namespace XEngine.Forms.XForms
 {
 
