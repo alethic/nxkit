@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 using XEngine;
 
-namespace XEngine.Forms.Events
+namespace XEngine.Events
 {
 
     [SchemaPackage]

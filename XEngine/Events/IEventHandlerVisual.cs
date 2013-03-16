@@ -1,4 +1,4 @@
-﻿namespace XEngine.Forms.Events
+﻿namespace XEngine.Events
 {
 
     /// <summary>
