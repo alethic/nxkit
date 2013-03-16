@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Xml.Linq;
 
 using XForms.Util;
-using ISIS.Forms.Events;
 
 namespace ISIS.Forms
 {
