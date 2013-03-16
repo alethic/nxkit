@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XEngine", "XEngine\XEngine.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XEngine.Layout", "XEngine.Layout\XEngine.Layout.csproj", "{0B8BC4B5-851F-4B8E-B5D4-0A8925B23886}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XEngine.Forms.Web.UI", "XEngine.Web.UI\XEngine.Forms.Web.UI.csproj", "{4E56F9A0-8D52-433B-AF43-9A3D2A1B522E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XEngine.Forms.Web.UI", "XEngine.Forms.Web.UI\XEngine.Forms.Web.UI.csproj", "{4E56F9A0-8D52-433B-AF43-9A3D2A1B522E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XEngine.Test.Web.Site", "XEngine.Test.Web.Site\XEngine.Test.Web.Site.csproj", "{606CFC52-D06A-4B21-B295-A52C5D8C979E}"
 EndProject

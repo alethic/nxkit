@@ -70,7 +70,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XEngine.Web.UI\XEngine.Forms.Web.UI.csproj">
+    <ProjectReference Include="..\XEngine.Forms.Web.UI\XEngine.Forms.Web.UI.csproj">
       <Project>{4e56f9a0-8d52-433b-af43-9a3d2a1b522e}</Project>
       <Name>XEngine.Forms.Web.UI</Name>
     </ProjectReference>
