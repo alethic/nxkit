@@ -1,4 +1,6 @@
-﻿namespace XEngine.Forms.Layout
+﻿using XEngine.Forms;
+
+namespace XEngine.Layout
 {
 
     public class LanguageAnnotation : VisualAnnotation

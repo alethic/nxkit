@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace XEngine.Forms
+namespace XEngine
 {
 
     /// <summary>

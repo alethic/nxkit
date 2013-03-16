@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Xml.Linq;
 
-namespace XEngine.Forms.XForms
+namespace XEngine.Forms
 {
 
     [Serializable]

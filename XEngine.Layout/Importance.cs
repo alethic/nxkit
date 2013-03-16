@@ -1,4 +1,4 @@
-﻿namespace XEngine.Forms.Layout
+﻿namespace XEngine.Layout
 {
 
     public enum Importance

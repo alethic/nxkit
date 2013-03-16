@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Web.UI.WebControls;
 
-using XEngine.Forms.XForms;
+using XEngine.Forms;
 
 namespace XEngine.Forms.Web.UI.XForms
 {

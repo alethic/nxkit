@@ -7,7 +7,7 @@ using System.Xml.XPath;
 
 using XEngine.Util;
 
-namespace XEngine.Forms.XForms
+namespace XEngine.Forms
 {
 
     [Module]

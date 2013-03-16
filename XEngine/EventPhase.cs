@@ -1,4 +1,4 @@
-﻿namespace XEngine.Forms
+﻿namespace XEngine
 {
 
     public enum EventPhase

@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 using XEngine.Util;
 
-namespace XEngine.Forms.XForms
+namespace XEngine.Forms
 {
 
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System.Xml.Linq;
 
 
-namespace XEngine.Forms
+namespace XEngine
 {
 
     public class TextVisual : Visual

@@ -1,4 +1,4 @@
-﻿namespace XEngine.Forms
+﻿namespace XEngine
 {
 
     public class VisualAddedEvent : Event

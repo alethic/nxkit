@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 
-namespace XEngine.Forms
+namespace XEngine
 {
 
     public interface IVisualTypeDescriptorMetadata

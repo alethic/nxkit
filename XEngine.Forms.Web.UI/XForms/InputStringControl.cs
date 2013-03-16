@@ -5,7 +5,7 @@ using System.Web.UI;
 
 using Telerik.Web.UI;
 
-using XEngine.Forms.XForms;
+using XEngine.Forms;
 using System.Web.UI.WebControls;
 
 namespace XEngine.Forms.Web.UI.XForms

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XEngine.Forms.XForms
+namespace XEngine.Forms
 {
 
     [Serializable]

@@ -3,9 +3,9 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
-using XEngine.Forms.XForms.XPathFunctions;
+using XEngine.Forms.XPathFunctions;
 
-namespace XEngine.Forms.XForms
+namespace XEngine.Forms
 {
 
     /// <summary>

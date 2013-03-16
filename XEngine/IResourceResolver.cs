@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace XEngine.Forms
+namespace XEngine
 {
 
     /// <summary>

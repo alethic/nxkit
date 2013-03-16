@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Web.UI;
 
-using XEngine.Forms.XForms;
+using XEngine.Forms;
 
 namespace XEngine.Forms.Web.UI.XForms
 {
@@ -86,7 +86,7 @@ namespace XEngine.Forms.Web.UI.XForms
                 writer.RenderEndTag();
             }
 
-            if (Visual.Appearance == XEngine.Forms.Layout.Constants.Layout_1_0 + "sequence")
+            if (Visual.Appearance == XEngine.Layout.Constants.Layout_1_0 + "sequence")
             {
                 writer.AddAttribute(HtmlTextWriterAttribute.Class, "Layout_Sequence");
                 writer.RenderBeginTag(HtmlTextWriterTag.Ol);

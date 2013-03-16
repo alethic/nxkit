@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace XEngine.Forms.Layout
+namespace XEngine.Layout
 {
 
     [VisualTypeDescriptor(Constants.Layout_1_0_NS, "form")]

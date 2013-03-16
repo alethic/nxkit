@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI;
 
-using XEngine.Forms.XForms;
+using XEngine.Forms;
 
 using XEngine.Util;
 

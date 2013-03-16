@@ -3,7 +3,7 @@ using System.Xml.XPath;
 
 using XEngine.Util;
 
-namespace XEngine.Forms.XForms.XPathFunctions
+namespace XEngine.Forms.XPathFunctions
 {
 
     internal class InstanceFunction : XPathFunction

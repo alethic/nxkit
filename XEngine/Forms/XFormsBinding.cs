@@ -5,7 +5,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace XEngine.Forms.XForms
+namespace XEngine.Forms
 {
 
     public class XFormsBinding

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace XEngine.Forms.XForms
+namespace XEngine.Forms
 {
 
     public class XFormsItemSetItemVisual : XFormsItemVisual, IEvaluationContextScope, INamingScope

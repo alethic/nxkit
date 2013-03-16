@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace XEngine.Forms
+namespace XEngine
 {
 
     public class EventListener<T> : IEventListener

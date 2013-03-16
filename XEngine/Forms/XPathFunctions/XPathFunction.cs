@@ -1,7 +1,7 @@
 ﻿using System.Xml.XPath;
 using System.Xml.Xsl;
 
-namespace XEngine.Forms.XForms.XPathFunctions
+namespace XEngine.Forms.XPathFunctions
 {
 
     internal abstract class XPathFunction : IXsltContextFunction

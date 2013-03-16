@@ -1,8 +1,8 @@
 ﻿using System.Xml.Linq;
 
-using XEngine.Forms.XForms;
+using XEngine.Forms;
 
-namespace XEngine.Forms.Layout
+namespace XEngine.Layout
 {
 
     [VisualTypeDescriptor(Constants.Layout_1_0_NS, "section")]

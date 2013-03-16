@@ -3,7 +3,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace XEngine.Forms.XForms
+namespace XEngine.Forms
 {
 
     [VisualTypeDescriptor(Constants.XForms_1_0_NS, "delete")]

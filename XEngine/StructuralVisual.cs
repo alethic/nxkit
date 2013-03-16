@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 using XEngine.Util;
 
-namespace XEngine.Forms
+namespace XEngine
 {
 
     /// <summary>

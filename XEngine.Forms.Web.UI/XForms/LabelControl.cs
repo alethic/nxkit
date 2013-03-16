@@ -1,6 +1,6 @@
 ﻿using System.Web.UI;
 
-using XEngine.Forms.XForms;
+using XEngine.Forms;
 
 namespace XEngine.Forms.Web.UI.XForms
 {

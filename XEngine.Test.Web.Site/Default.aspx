@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="XEngine.Test.Web.Site.Default" %>
-<%@ Register Assembly="XEngine.Web.UI" Namespace="XEngine.Web.UI" TagPrefix="xforms" %>
+<%@ Register Assembly="XEngine.Forms.Web.UI" Namespace="XEngine.Forms.Web.UI" TagPrefix="xforms" %>
 
 <!DOCTYPE html>
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using XEngine.Util;
 
-namespace XEngine.Forms
+namespace XEngine
 {
 
     public class VisualAnnotationCollection

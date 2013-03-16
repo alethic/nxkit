@@ -1,7 +1,7 @@
 ﻿using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace XEngine.Forms.XForms.XPathFunctions
+namespace XEngine.Forms.XPathFunctions
 {
 
     internal class MaxFunction : XPathFunction

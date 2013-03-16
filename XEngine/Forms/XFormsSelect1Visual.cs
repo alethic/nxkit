@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 
 
-namespace XEngine.Forms.XForms
+namespace XEngine.Forms
 {
 
     [VisualTypeDescriptor(Constants.XForms_1_0_NS, "select1")]

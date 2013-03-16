@@ -1,4 +1,4 @@
-﻿namespace XEngine.Forms.XForms
+﻿namespace XEngine.Forms
 {
 
     public class XFormsSubmitDoneEvent : XFormsEvent

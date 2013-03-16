@@ -1,6 +1,6 @@
 ﻿using XEngine.Forms.Events;
 
-namespace XEngine.Forms.XForms
+namespace XEngine.Forms
 {
 
     internal interface IActionVisual : IEventHandlerVisual

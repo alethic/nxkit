@@ -2,7 +2,7 @@
 
 using XEngine.Util;
 
-namespace XEngine.Forms.Layout
+namespace XEngine.Layout
 {
 
     [VisualTypeDescriptor(Constants.Layout_1_0_NS, "table-column-group")]

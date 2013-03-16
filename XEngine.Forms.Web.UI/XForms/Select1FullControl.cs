@@ -6,7 +6,7 @@ using System.Web.UI.WebControls;
 
 using XEngine.Util;
 
-using XEngine.Forms.XForms;
+using XEngine.Forms;
 
 namespace XEngine.Forms.Web.UI.XForms
 {
