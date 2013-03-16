@@ -9,8 +9,8 @@
     <ProjectGuid>{4E56F9A0-8D52-433B-AF43-9A3D2A1B522E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XEngine.Web.UI</RootNamespace>
-    <AssemblyName>XEngine.Web.UI</AssemblyName>
+    <RootNamespace>XEngine.Forms.Web.UI</RootNamespace>
+    <AssemblyName>XEngine.Forms.Web.UI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Nonshipping>true</Nonshipping>
