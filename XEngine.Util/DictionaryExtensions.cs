@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XForms.Util
+namespace XEngine.Util
 {
 
     /// <summary>

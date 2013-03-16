@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace XForms.Test.Web.Site {
+namespace XEngine.Test.Web.Site {
     
     
     public partial class Default {

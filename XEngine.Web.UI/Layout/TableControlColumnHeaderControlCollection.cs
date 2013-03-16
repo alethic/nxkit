@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ISIS.Forms.Web.UI.Layout
+namespace XEngine.Forms.Web.UI.Layout
 {
 
     public class TableControlColumnHeaderControlCollection : VisualControlCollection

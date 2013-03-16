@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-namespace ISIS.Forms.Events
+namespace XEngine.Forms.Events
 {
 
     [Module]

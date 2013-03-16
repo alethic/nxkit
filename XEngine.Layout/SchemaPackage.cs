@@ -2,11 +2,11 @@
 using System.IO;
 using System.Xml.Linq;
 
-namespace ISIS.Forms.Layout
+namespace XEngine.Forms.Layout
 {
 
     [SchemaPackage]
-    public sealed class SchemaPackage : ISIS.Forms.SchemaPackage
+    public sealed class SchemaPackage : XEngine.Forms.SchemaPackage
     {
 
         public override IEnumerable<XNamespace> Namespaces

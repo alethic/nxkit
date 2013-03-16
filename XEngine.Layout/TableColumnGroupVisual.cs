@@ -1,8 +1,8 @@
 ﻿using System.Xml.Linq;
 
-using XForms.Util;
+using XEngine.Util;
 
-namespace ISIS.Forms.Layout
+namespace XEngine.Forms.Layout
 {
 
     [VisualTypeDescriptor(Constants.Layout_1_0_NS, "table-column-group")]

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace ISIS.Forms
+namespace XEngine.Forms
 {
 
     public static class XObjectExtensions

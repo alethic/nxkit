@@ -1,4 +1,4 @@
-﻿namespace ISIS.Forms.Layout
+﻿namespace XEngine.Forms.Layout
 {
 
     public class ImportanceAnnotation : VisualAnnotation

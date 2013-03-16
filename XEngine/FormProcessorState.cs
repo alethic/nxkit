@@ -5,7 +5,7 @@ using System.IO.Compression;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace ISIS.Forms
+namespace XEngine.Forms
 {
 
     [Serializable]

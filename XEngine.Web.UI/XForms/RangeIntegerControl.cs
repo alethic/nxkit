@@ -4,9 +4,9 @@ using System.Web.UI.WebControls;
 
 using Telerik.Web.UI;
 
-using ISIS.Forms.XForms;
+using XEngine.Forms.XForms;
 
-namespace ISIS.Forms.Web.UI.XForms
+namespace XEngine.Forms.Web.UI.XForms
 {
 
     public class RangeIntegerControl : VisualControl<XFormsRangeVisual>

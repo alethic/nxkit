@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Linq;
 
-namespace ISIS.Forms
+namespace XEngine.Forms
 {
 
     public abstract class SchemaPackage

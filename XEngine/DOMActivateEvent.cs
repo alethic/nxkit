@@ -1,4 +1,4 @@
-﻿namespace ISIS.Forms
+﻿namespace XEngine.Forms
 {
 
     public class DOMActivateEvent : Event

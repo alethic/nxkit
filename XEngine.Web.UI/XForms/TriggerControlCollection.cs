@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using ISIS.Forms.XForms;
+using XEngine.Forms.XForms;
 
-namespace ISIS.Forms.Web.UI.XForms
+namespace XEngine.Forms.Web.UI.XForms
 {
 
     public class TriggerControlCollection : VisualControlCollection

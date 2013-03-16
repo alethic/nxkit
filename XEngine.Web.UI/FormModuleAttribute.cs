@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 
-namespace ISIS.Forms.Web.UI
+namespace XEngine.Forms.Web.UI
 {
 
     /// <summary>

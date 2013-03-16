@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace ISIS.Forms
+namespace XEngine.Forms
 {
 
     /// <summary>

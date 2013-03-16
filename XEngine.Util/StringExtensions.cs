@@ -1,4 +1,4 @@
-﻿namespace XForms.Util
+﻿namespace XEngine.Util
 {
 
     /// <summary>

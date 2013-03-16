@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Xml;
 
-using ISIS.Forms.XForms;
+using XEngine.Forms.XForms;
 
-namespace ISIS.Forms.Web.UI.XForms
+namespace XEngine.Forms.Web.UI.XForms
 {
 
     public static class BindingUtil

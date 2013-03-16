@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace ISIS.Forms.Layout
+namespace XEngine.Forms.Layout
 {
 
     [VisualTypeDescriptor(Constants.Layout_1_0_NS, "table-row")]

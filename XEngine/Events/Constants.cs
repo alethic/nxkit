@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace ISIS.Forms.Events
+namespace XEngine.Forms.Events
 {
 
     public static class Constants

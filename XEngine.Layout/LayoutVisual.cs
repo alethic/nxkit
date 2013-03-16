@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
 
-using ISIS.Forms.XForms;
+using XEngine.Forms.XForms;
 
-namespace ISIS.Forms.Layout
+namespace XEngine.Forms.Layout
 {
 
     public class LayoutVisual : StructuralVisual

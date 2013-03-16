@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ISIS.Forms
+namespace XEngine.Forms
 {
 
     public class Event

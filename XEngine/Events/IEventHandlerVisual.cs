@@ -1,4 +1,4 @@
-﻿namespace ISIS.Forms.Events
+﻿namespace XEngine.Forms.Events
 {
 
     /// <summary>

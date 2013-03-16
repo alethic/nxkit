@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ISIS.Forms
+namespace XEngine.Forms
 {
 
     /// <summary>
