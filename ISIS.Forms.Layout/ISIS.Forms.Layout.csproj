@@ -15,7 +15,6 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
-    <DontImportPostSharp>True</DontImportPostSharp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,9 +77,9 @@
       <Project>{2B27233A-849A-4339-96C6-BABCB968B8B0}</Project>
       <Name>ISIS.Forms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ISIS.Util\ISIS.Util.csproj">
-      <Project>{A87220E0-0BAE-4D29-A49B-89F26CB3FFD9}</Project>
-      <Name>ISIS.Util</Name>
+    <ProjectReference Include="..\XForms.Util\XForms.Util.csproj">
+      <Project>{1e5fae9e-f890-487b-bfcd-e3ed5c4f8d41}</Project>
+      <Name>XForms.Util</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -92,8 +91,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <Import Project="..\packages\PostSharp.3.0.12-beta\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.3.0.12-beta\tools\PostSharp.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

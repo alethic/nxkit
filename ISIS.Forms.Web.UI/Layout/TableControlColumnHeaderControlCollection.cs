@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using ISIS.Util;
-
 namespace ISIS.Forms.Web.UI.Layout
 {
 
@@ -28,7 +26,7 @@ namespace ISIS.Forms.Web.UI.Layout
             return Table.ColumnGroups
                 .SelectMany(i => i.Columns)
                 .Select(i => i.Visual)
-                .NotNull();
+                .Where(i => i != null);
         }
 
     }

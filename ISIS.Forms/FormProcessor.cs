@@ -7,8 +7,6 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 
-using ISIS.Util;
-
 namespace ISIS.Forms
 {
 
@@ -21,7 +19,7 @@ namespace ISIS.Forms
         /// <summary>
         /// Composes parts available to the forms implementation.
         /// </summary>
-        private CompositionContainer container = new CompositionContainer(DefaultCompositionInitializer.Catalog);
+        internal static CompositionContainer container = new CompositionContainer(new ApplicationCatalog());
 
         /// <summary>
         /// Set of modules providing functionality to the form processor.

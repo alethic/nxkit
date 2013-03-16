@@ -5,8 +5,6 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-using ISIS.Util;
-
 namespace ISIS.Forms.XForms
 {
 
@@ -681,7 +679,8 @@ namespace ISIS.Forms.XForms
             if (ec == null)
                 ec = visual.Ascendants()
                     .OfType<IEvaluationContextScope>()
-                    .FirstOrDefault(i => i.Context != null, i => i.Context);
+                    .Select(i => i.Context)
+                    .FirstOrDefault(i => i != null);
 
             // default to default model
             if (ec == null)

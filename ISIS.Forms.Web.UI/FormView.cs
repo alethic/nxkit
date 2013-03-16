@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using System.Xml;
 using System.Xml.Linq;
 
-using ISIS.Forms.Web.UI.Layout;
 using ISIS.Forms.XForms;
-using ISIS.Util;
-using System.Text;
-using System.Web.UI.WebControls;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 
 namespace ISIS.Forms.Web.UI
 {
@@ -82,7 +80,7 @@ namespace ISIS.Forms.Web.UI
         public FormView()
             : base()
         {
-            var c = new CompositionContainer(DefaultCompositionInitializer.Catalog);
+            var c = new CompositionContainer(new ApplicationCatalog());
             c.ComposeExportedValue(FormModule.ViewParameter, this);
             c.ComposeParts(this);
         }

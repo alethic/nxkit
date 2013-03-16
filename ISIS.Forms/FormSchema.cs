@@ -7,8 +7,6 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 
-using ISIS.Util;
-
 namespace ISIS.Forms
 {
 
@@ -29,7 +27,7 @@ namespace ISIS.Forms
             /// </summary>
             public PackageContainer()
             {
-                DefaultCompositionInitializer.SatisfyImports(this);
+                FormProcessor.container.SatisfyImportsOnce(this);
             }
 
             [ImportMany(typeof(SchemaPackage))]

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
 
-using ISIS.Util;
+using XForms.Util;
 
 namespace ISIS.Forms.XForms
 {

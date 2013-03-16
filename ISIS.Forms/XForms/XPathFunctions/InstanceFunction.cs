@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Xml.XPath;
 
-using ISIS.Util;
+using XForms.Util;
 
 namespace ISIS.Forms.XForms.XPathFunctions
 {

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-using ISIS.Util;
+using XForms.Util;
 
 namespace ISIS.Forms.Layout
 {
@@ -32,10 +32,7 @@ namespace ISIS.Forms.Layout
 
         public string Name
         {
-            get
-            {
-                return Module.GetAttributeValue(Element, "name").TrimToNull();
-            }
+            get { return Module.GetAttributeValue(Element, "name").TrimToNull(); }
         }
 
     }

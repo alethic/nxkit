@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web.UI;
 
 using ISIS.Forms.XForms;
-using ISIS.Util;
 
 namespace ISIS.Forms.Web.UI.XForms
 {
@@ -74,7 +73,7 @@ namespace ISIS.Forms.Web.UI.XForms
             // obtain additional css classes if available
             var args = new BeginRenderEventArgs();
             OnBeginRender(args);
-            var classAttr = args.CssClasses.Distinct().Join(" ");
+            var classAttr = string.Join(" ", args.CssClasses.Distinct());
 
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
             writer.AddAttribute(HtmlTextWriterAttribute.Class, "XForms_Group " + classAttr);

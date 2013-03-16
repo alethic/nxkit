@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 
-using ISIS.Util;
+using XForms.Util;
 
 namespace ISIS.Forms
 {
@@ -30,7 +30,7 @@ namespace ISIS.Forms
         /// </summary>
         private VisualTypeDescriptorContainer()
         {
-            DefaultCompositionInitializer.SatisfyImports(this);
+            FormProcessor.container.SatisfyImportsOnce(this);
 
             // initialize map of XName to descriptor
             TypeDescriptorMap = TypeDescriptors.ToDictionary(i => XName.Get(i.Metadata.LocalName, i.Metadata.Namespace), i => i.Value);
