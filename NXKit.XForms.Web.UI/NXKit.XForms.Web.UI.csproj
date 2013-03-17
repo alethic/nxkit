@@ -127,15 +127,15 @@
     <Compile Include="XForms\WebResources.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XEngine.Layout\NXKit.Layout.csproj">
+    <ProjectReference Include="..\NXKit.Layout\NXKit.Layout.csproj">
       <Project>{0B8BC4B5-851F-4B8E-B5D4-0A8925B23886}</Project>
       <Name>NXKit.Layout</Name>
     </ProjectReference>
-    <ProjectReference Include="..\XEngine\NXKit.csproj">
+    <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2B27233A-849A-4339-96C6-BABCB968B8B0}</Project>
       <Name>NXKit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\XEngine.Util\NXKit.Util.csproj">
+    <ProjectReference Include="..\NXKit.Util\NXKit.Util.csproj">
       <Project>{1e5fae9e-f890-487b-bfcd-e3ed5c4f8d41}</Project>
       <Name>NXKit.Util</Name>
     </ProjectReference>
