@@ -279,7 +279,7 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
-        internal static string XDocumentToString(XDocument document)
+        public static string XDocumentToString(XDocument document)
         {
             return document.ToString(SaveOptions.DisableFormatting);
         }
