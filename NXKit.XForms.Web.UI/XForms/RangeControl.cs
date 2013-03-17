@@ -51,10 +51,10 @@ namespace NXKit.XForms.Web.UI.XForms
         /// <returns></returns>
         private VisualControl<XFormsRangeVisual> CreateRangeControl(XFormsRangeVisual visual)
         {
-            if (Visual.Type == EngineConstants.XMLSchema + "integer" ||
-                Visual.Type == EngineConstants.XMLSchema + "int")
+            if (Visual.Type == SchemaConstants.XMLSchema + "integer" ||
+                Visual.Type == SchemaConstants.XMLSchema + "int")
                 return new RangeIntegerControl(View, Visual);
-            else if (Visual.Type == EngineConstants.XMLSchema + "date")
+            else if (Visual.Type == SchemaConstants.XMLSchema + "date")
                 return new RangeDateControl(View, Visual);
             else
                 return null;

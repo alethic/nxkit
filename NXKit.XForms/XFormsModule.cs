@@ -905,7 +905,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal XName GetModelItemType(XObject item)
         {
-            return GetModelItem(item).Type ?? EngineConstants.XMLSchema + "string";
+            return GetModelItem(item).Type ?? NXKit.SchemaConstants.XMLSchema + "string";
         }
 
         /// <summary>

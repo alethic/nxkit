@@ -52,7 +52,7 @@
     <Compile Include="Events\IEventHandlerVisual.cs" />
     <Compile Include="IEventDefaultActionHandler.cs" />
     <Compile Include="IEventListener.cs" />
-    <Compile Include="EngineConstants.cs" />
+    <Compile Include="SchemaConstants.cs" />
     <Compile Include="Events\Constants.cs" />
     <Compile Include="Events\SchemaPackage.cs" />
     <Compile Include="EngineEventHandler.cs" />

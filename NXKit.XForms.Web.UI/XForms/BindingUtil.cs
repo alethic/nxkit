@@ -17,19 +17,19 @@ namespace NXKit.XForms.Web.UI.XForms
         /// <param name="value"></param>
         public static void Set(XFormsBinding binding, object value)
         {
-            if (binding.Type == EngineConstants.XMLSchema + "boolean")
+            if (binding.Type == SchemaConstants.XMLSchema + "boolean")
                 binding.SetValue(ToXsdBoolean((bool?)value));
-            else if (binding.Type == EngineConstants.XMLSchema + "date")
+            else if (binding.Type == SchemaConstants.XMLSchema + "date")
                 binding.SetValue(ToXsdDate((DateTime?)value));
-            else if (binding.Type == EngineConstants.XMLSchema + "int")
+            else if (binding.Type == SchemaConstants.XMLSchema + "int")
                 binding.SetValue(ToXsdDouble((double?)value));
-            else if (binding.Type == EngineConstants.XMLSchema + "integer")
+            else if (binding.Type == SchemaConstants.XMLSchema + "integer")
                 binding.SetValue(ToXsdDouble((double?)value));
-            else if (binding.Type == EngineConstants.XMLSchema + "long")
+            else if (binding.Type == SchemaConstants.XMLSchema + "long")
                 binding.SetValue(ToXsdDouble((double?)value));
-            else if (binding.Type == EngineConstants.XMLSchema + "short")
+            else if (binding.Type == SchemaConstants.XMLSchema + "short")
                 binding.SetValue(ToXsdDouble((double?)value));
-            else if (binding.Type == EngineConstants.XMLSchema + "double")
+            else if (binding.Type == SchemaConstants.XMLSchema + "double")
                 binding.SetValue(ToXsdDouble((double?)value));
             else
                 binding.SetValue((value ?? "").ToString());
