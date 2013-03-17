@@ -35,7 +35,7 @@ namespace NXKit.Events
         /// Initializes a new instance.
         /// </summary>
         [ImportingConstructor]
-        public EventsModule([Import(typeof(FormProcessor))] FormProcessor form)
+        public EventsModule([Import(typeof(Engine))] Engine form)
             : base(form)
         {
 

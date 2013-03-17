@@ -24,7 +24,7 @@ namespace NXKit
         /// <param name="form"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        protected StructuralVisual(IFormProcessor form, StructuralVisual parent, XElement element)
+        protected StructuralVisual(IEngine form, StructuralVisual parent, XElement element)
             : base(form, parent, element)
         {
 

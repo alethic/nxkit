@@ -12,7 +12,7 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public Module(IFormProcessor form)
+        public Module(IEngine form)
         {
             Form = form;
         }
@@ -20,7 +20,7 @@ namespace NXKit
         /// <summary>
         /// Gets a reference to the form processor hosting this module.
         /// </summary>
-        public IFormProcessor Form { get; private set; }
+        public IEngine Form { get; private set; }
 
         /// <summary>
         /// Gets a reference to the underlying form document.
@@ -58,7 +58,7 @@ namespace NXKit
         /// <param name="form"></param>
         /// <param name="node"></param>
         /// <returns></returns>
-        public virtual Visual CreateVisual(IFormProcessor form, StructuralVisual parent, XNode node)
+        public virtual Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
         {
             return null;
         }

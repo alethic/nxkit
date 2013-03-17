@@ -9,13 +9,13 @@ namespace NXKit
 {
 
     [Serializable]
-    public class FormProcessorState : ISerializable
+    public class EngineState : ISerializable
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public FormProcessorState()
+        public EngineState()
         {
 
         }
@@ -23,7 +23,7 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public FormProcessorState(SerializationInfo info, StreamingContext context)
+        public EngineState(SerializationInfo info, StreamingContext context)
         {
             // decompress document from stream
             var mstm = new MemoryStream((byte[])info.GetValue("1", typeof(byte[])));

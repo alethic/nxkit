@@ -13,7 +13,7 @@ namespace NXKit
     /// <summary>
     /// Hosts an ISIS Forms document. Provides access to the visual tree for a renderer.
     /// </summary>
-    public class FormProcessor : IFormProcessor
+    public class Engine : IEngine
     {
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public FormProcessor(string document, IResourceResolver resolver)
+        public Engine(string document, IResourceResolver resolver)
         {
             Initialize(document, resolver);
         }
@@ -46,7 +46,7 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public FormProcessor(XmlDocument document, IResourceResolver resolver)
+        public Engine(XmlDocument document, IResourceResolver resolver)
         {
             Initialize(document.InnerXml, resolver);
         }
@@ -56,7 +56,7 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public FormProcessor(XDocument document, IResourceResolver resolver)
+        public Engine(XDocument document, IResourceResolver resolver)
         {
             Initialize(document.ToString(SaveOptions.DisableFormatting), resolver);
         }
@@ -65,7 +65,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         /// <param name="state"></param>
-        public FormProcessor(FormProcessorState state, IResourceResolver resolver)
+        public Engine(EngineState state, IResourceResolver resolver)
         {
             Initialize(state, resolver);
         }
@@ -91,7 +91,7 @@ namespace NXKit
         /// </summary>
         /// <param name="state"></param>
         /// <param name="resolver"></param>
-        private void Initialize(FormProcessorState state, IResourceResolver resolver)
+        private void Initialize(EngineState state, IResourceResolver resolver)
         {
             Document = StringToXDocument(state.Document, resolver);
             Resolver = resolver;
@@ -107,7 +107,7 @@ namespace NXKit
         /// </summary>
         private void Initialize()
         {
-            container.ComposeExportedValue(AttributedModelServices.GetContractName(typeof(FormProcessor)), this);
+            container.ComposeExportedValue(AttributedModelServices.GetContractName(typeof(Engine)), this);
             container.SatisfyImportsOnce(this);
 
             // initialize the modules
@@ -195,7 +195,7 @@ namespace NXKit
         /// <returns></returns>
         private StructuralVisual CreateRootVisual()
         {
-            return (StructuralVisual)((IFormProcessor)this).CreateVisual(null, Document.Root);
+            return (StructuralVisual)((IEngine)this).CreateVisual(null, Document.Root);
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace NXKit
         /// <param name="parent"></param>
         /// <param name="node"></param>
         /// <returns></returns>
-        Visual IFormProcessor.CreateVisual(StructuralVisual parent, XNode node)
+        Visual IEngine.CreateVisual(StructuralVisual parent, XNode node)
         {
             if (node is XElement)
             {
@@ -240,9 +240,9 @@ namespace NXKit
         /// Saves the current state of the processor in a serializable format.
         /// </summary>
         /// <returns></returns>
-        public FormProcessorState Save()
+        public EngineState Save()
         {
-            return new FormProcessorState()
+            return new EngineState()
             {
                 Document = XDocumentToString(Document),
                 NextElementId = nextElementId,
@@ -265,7 +265,7 @@ namespace NXKit
                 IgnoreComments = true,
                 IgnoreProcessingInstructions = true,
                 IgnoreWhitespace = true,
-                Schemas = FormSchema.SchemaSet,
+                Schemas = EngineSchema.SchemaSet,
                 ValidationFlags = XmlSchemaValidationFlags.AllowXmlAttributes | XmlSchemaValidationFlags.ProcessIdentityConstraints | XmlSchemaValidationFlags.ProcessInlineSchema,
                 ValidationType = ValidationType.Schema,
                 XmlResolver = null,

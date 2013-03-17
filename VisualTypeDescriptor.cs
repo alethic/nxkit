@@ -9,7 +9,7 @@ namespace NXKit
     public abstract class VisualTypeDescriptor
     {
 
-        public abstract Visual CreateVisual(IFormProcessor form, StructuralVisual parent, XNode node);
+        public abstract Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node);
 
     }
 
