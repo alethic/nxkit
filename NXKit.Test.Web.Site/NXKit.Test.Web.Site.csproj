@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="Form.xml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

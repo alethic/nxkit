@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>NXKit.XForms</id>
+        <version>0.0.1</version>
+        <title>NXKit.XForms</title>
+        <authors>Jerome Haltom</authors>
+        <owners>Jerome Haltom</owners>
+        <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
+        <projectUrl>https://github.com/wasabii/nxkit</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.</description>
+        <releaseNotes />
+        <copyright>Copyright © 2013 Jerome Haltom</copyright>
+        <tags>xml xforms</tags>
+        <dependencies>
+            <dependency id="NXKit" />
+            <dependency id="NXKit.Util" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="NXKit.XForms\bin\Release\NXKit.XForms.dll" target="lib\net40\NXKit.XForms.dll" />
+    </files>
+</package>
