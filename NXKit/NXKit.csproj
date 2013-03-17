@@ -79,109 +79,11 @@
     <Compile Include="VisualAnnotationCollection.cs" />
     <Compile Include="VisualAddedEvent.cs" />
     <Compile Include="VisualTypeDescriptorContainer.cs" />
-    <Compile Include="XForms\Constants.cs" />
-    <Compile Include="XForms\SchemaPackage.cs" />
-    <Compile Include="XForms\XFormsInstanceVisualState.cs" />
-    <Compile Include="XForms\XFormsInvalidEvent.cs" />
-    <Compile Include="XForms\XFormsModelVisualState.cs" />
-    <Compile Include="XForms\XFormsValidEvent.cs" />
-    <Compile Include="XForms\IRelevancyScope.cs" />
-    <Compile Include="XForms\XFormsAlertVisual.cs" />
-    <Compile Include="XForms\XFormsHintVisual.cs" />
-    <Compile Include="XForms\XFormsHelpVisual.cs" />
-    <Compile Include="XForms\XFormsRangeVisual.cs" />
-    <Compile Include="XForms\XFormsDispatchVisual.cs" />
-    <Compile Include="XForms\XFormsRebuildVisual.cs" />
-    <Compile Include="XForms\XFormsRevalidateVisual.cs" />
-    <Compile Include="XForms\XFormsRefreshVisual.cs" />
-    <Compile Include="XForms\XFormsLoadVisual.cs" />
-    <Compile Include="XForms\XFormsSelection.cs" />
-    <Compile Include="XForms\XFormsTextAreaVisual.cs" />
-    <Compile Include="XForms\XFormsSelect1State.cs" />
-    <Compile Include="XForms\ISelectableVisual.cs" />
-    <Compile Include="XForms\XFormsBinding.cs" />
-    <Compile Include="XForms\XFormsCopyVisual.cs" />
-    <Compile Include="XForms\XFormsMessageVisual.cs" />
-    <Compile Include="XForms\XFormsInstanceVisual.cs" />
-    <Compile Include="XForms\XFormsItemSetItemVisual.cs" />
-    <Compile Include="XForms\XFormsOutOfRangeEvent.cs" />
-    <Compile Include="XForms\XFormsInRangeEvent.cs" />
-    <Compile Include="XForms\XFormsDisabledEvent.cs" />
-    <Compile Include="XForms\XFormsEnabledEvent.cs" />
-    <Compile Include="XForms\XFormsOptionalEvent.cs" />
-    <Compile Include="XForms\XFormsRequiredEvent.cs" />
-    <Compile Include="XForms\XFormsReadWriteEvent.cs" />
-    <Compile Include="XForms\XFormsReadOnlyEvent.cs" />
-    <Compile Include="XForms\XFormsValueChangedEvent.cs" />
-    <Compile Include="XForms\XFormsRefreshEvent.cs" />
-    <Compile Include="XForms\XFormsRebuildEvent.cs" />
-    <Compile Include="XForms\XFormsRevalidateEvent.cs" />
-    <Compile Include="XForms\XFormsDeleteVisual.cs" />
-    <Compile Include="XForms\XFormsDeleteEvent.cs" />
-    <Compile Include="XForms\XFormsInsertEvent.cs" />
-    <Compile Include="XForms\XFormsInsertVisual.cs" />
-    <Compile Include="XForms\XFormsRecalculateVisual.cs" />
-    <Compile Include="XForms\XFormsRepeatState.cs" />
-    <Compile Include="XForms\XFormsSendVisual.cs" />
-    <Compile Include="XForms\XFormsSetValueVisual.cs" />
-    <Compile Include="XForms\XFormsSubmitDoneEvent.cs" />
-    <Compile Include="XForms\XFormsActionVisual.cs" />
-    <Compile Include="XForms\XFormsRecalculateEvent.cs" />
-    <Compile Include="XForms\XFormsEvaluationContext.cs" />
-    <Compile Include="XForms\XFormsModelItemState.cs" />
-    <Compile Include="XForms\VisualXmlNamespaceContext.cs" />
-    <Compile Include="XForms\XFormsSubmissionVisual.cs" />
-    <Compile Include="XForms\XFormsSubmitErrorEvent.cs" />
-    <Compile Include="XForms\XFormsTriggerVisual.cs" />
-    <Compile Include="XForms\XFormsResetEvent.cs" />
-    <Compile Include="XForms\XFormsSelectVisual.cs" />
-    <Compile Include="XForms\XFormsValueVisual.cs" />
-    <Compile Include="XForms\XFormsItemVisual.cs" />
-    <Compile Include="XForms\XFormsChoicesVisual.cs" />
-    <Compile Include="XForms\XFormsItemSetVisual.cs" />
-    <Compile Include="XForms\XFormsLabelVisual.cs" />
-    <Compile Include="XForms\XFormsBindingVisual.cs" />
-    <Compile Include="XForms\XFormsGroupVisual.cs" />
-    <Compile Include="XForms\XFormsListItem.cs" />
-    <Compile Include="XForms\XFormsModuleState.cs" />
-    <Compile Include="XForms\XFormsNodeSetBindingVisual.cs" />
-    <Compile Include="XForms\XFormsSingleNodeBindingVisual.cs" />
-    <Compile Include="XForms\XFormsModelVisual.cs" />
-    <Compile Include="XForms\XFormsOutputVisual.cs" />
-    <Compile Include="XForms\XFormsSelect1Visual.cs" />
-    <Compile Include="XForms\IEvaluationContextScope.cs" />
-    <Compile Include="XForms\XFormsRepeatItemVisual.cs" />
-    <Compile Include="XForms\XFormsInputVisual.cs" />
-    <Compile Include="XForms\XFormsRepeatVisual.cs" />
     <Compile Include="IFormProcessor.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Visual.cs" />
-    <Compile Include="XForms\XFormsBindingExceptionEvent.cs" />
-    <Compile Include="XForms\XFormsReadyEvent.cs" />
-    <Compile Include="XForms\XFormsLinkExceptionEvent.cs" />
-    <Compile Include="XForms\XFormsModelConstructDoneEvent.cs" />
     <Compile Include="IResourceResolver.cs" />
-    <Compile Include="XForms\XFormsSubmitEvent.cs" />
-    <Compile Include="XForms\XFormsVersionExceptionEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XForms\XFormsEvent.cs" />
-    <Compile Include="XForms\XFormsModelConstructEvent.cs" />
-    <Compile Include="XForms\XFormsModule.cs" />
-    <Compile Include="XForms\XFormsVisual.cs" />
-    <Compile Include="XForms\XFormsBindVisual.cs" />
-    <Compile Include="XForms\IActionVisual.cs" />
-    <Compile Include="XForms\XPathFunctions\BooleanFromStringFunction.cs" />
-    <Compile Include="XForms\XPathFunctions\MaxFunction.cs" />
-    <Compile Include="XForms\XPathFunctions\PositionFunction.cs" />
-    <Compile Include="XForms\XPathFunctions\InstanceFunction.cs" />
-    <Compile Include="XForms\XPathFunctions\IndexFunction.cs" />
-    <Compile Include="XForms\XPathFunctions\IfFunction.cs" />
-    <Compile Include="XForms\XPathFunctions\XPathFunction.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="XForms\XForms-Schema.xsd">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Events\xml-events-attribs-1.xsd">
@@ -207,6 +109,7 @@
       <Name>NXKit.Util</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

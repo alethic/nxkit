@@ -8,8 +8,8 @@
     <ProjectGuid>{0B8BC4B5-851F-4B8E-B5D4-0A8925B23886}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NXKit.Layout</RootNamespace>
-    <AssemblyName>NXKit.Layout</AssemblyName>
+    <RootNamespace>NXKit.XForms.Layout</RootNamespace>
+    <AssemblyName>NXKit.XForms.Layout</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -73,6 +73,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
+      <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
+      <Name>NXKit.XForms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2B27233A-849A-4339-96C6-BABCB968B8B0}</Project>
       <Name>NXKit</Name>

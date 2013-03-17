@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NXKit.XForms.Layout")]
+[assembly: AssemblyTitle("NXKit.XForms")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NXKit.XForms.Layout")]
-[assembly: AssemblyCopyright("Copyright © Jerome Haltom 2013")]
+[assembly: AssemblyProduct("NXKit.XForms")]
+[assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("11a17b82-026c-4e56-bee6-28558ed0a786")]
+[assembly: Guid("d1044584-2003-43de-a323-b56feff2ab54")]
 
 // Version information for an assembly consists of the following four values:
 //

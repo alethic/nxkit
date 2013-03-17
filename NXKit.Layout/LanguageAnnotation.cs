@@ -1,6 +1,4 @@
-﻿using NXKit.XForms;
-
-namespace NXKit.Layout
+﻿namespace NXKit.Layout
 {
 
     public class LanguageAnnotation : VisualAnnotation
