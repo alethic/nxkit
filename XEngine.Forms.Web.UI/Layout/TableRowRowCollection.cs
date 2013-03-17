@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using XEngine.Layout;
+using NXKit.Layout;
 
-namespace XEngine.Forms.Web.UI.Layout
+namespace NXKit.XForms.Web.UI.Layout
 {
 
     public class TableRowRowCollection : IEnumerable<TableRow>

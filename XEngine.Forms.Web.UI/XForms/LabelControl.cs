@@ -1,8 +1,8 @@
 ﻿using System.Web.UI;
 
-using XEngine.Forms;
+using NXKit.XForms;
 
-namespace XEngine.Forms.Web.UI.XForms
+namespace NXKit.XForms.Web.UI.XForms
 {
 
     [VisualControlTypeDescriptor]

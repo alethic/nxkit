@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace XEngine.Util
+namespace NXKit.Util
 {
 
     /// <summary>

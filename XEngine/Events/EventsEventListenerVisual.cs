@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace XEngine.Events
+namespace NXKit.Events
 {
 
     [VisualTypeDescriptor(Constants.Events_1_0_NS, "listener")]

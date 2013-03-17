@@ -2,11 +2,11 @@
 using System.IO;
 using System.Xml.Linq;
 
-namespace XEngine.Layout
+namespace NXKit.Layout
 {
 
     [SchemaPackage]
-    public sealed class SchemaPackage : XEngine.SchemaPackage
+    public sealed class SchemaPackage : NXKit.SchemaPackage
     {
 
         public override IEnumerable<XNamespace> Namespaces

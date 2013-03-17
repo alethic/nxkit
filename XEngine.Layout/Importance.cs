@@ -1,4 +1,4 @@
-﻿namespace XEngine.Layout
+﻿namespace NXKit.Layout
 {
 
     public enum Importance

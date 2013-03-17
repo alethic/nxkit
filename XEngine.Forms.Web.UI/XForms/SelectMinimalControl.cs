@@ -3,9 +3,9 @@ using System.Linq;
 
 using Telerik.Web.UI;
 
-using XEngine.Forms;
+using NXKit.XForms;
 
-namespace XEngine.Forms.Web.UI.XForms
+namespace NXKit.XForms.Web.UI.XForms
 {
 
     public class SelectMinimalControl : VisualControl<XFormsSelectVisual>

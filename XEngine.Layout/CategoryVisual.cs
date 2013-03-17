@@ -1,8 +1,8 @@
 ﻿using System.Xml.Linq;
 
-using XEngine.Forms;
+using NXKit.XForms;
 
-namespace XEngine.Layout
+namespace NXKit.Layout
 {
 
     [VisualTypeDescriptor(Constants.Layout_1_0_NS, "category")]

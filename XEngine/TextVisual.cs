@@ -1,7 +1,7 @@
 ﻿using System.Xml.Linq;
 
 
-namespace XEngine
+namespace NXKit
 {
 
     public class TextVisual : Visual

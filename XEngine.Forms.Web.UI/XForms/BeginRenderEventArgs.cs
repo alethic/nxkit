@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XEngine.Forms.Web.UI.XForms
+namespace NXKit.XForms.Web.UI.XForms
 {
 
     public class BeginRenderEventArgs : EventArgs

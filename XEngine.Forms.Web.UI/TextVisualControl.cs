@@ -1,6 +1,6 @@
 ﻿using System.Web.UI;
 
-namespace XEngine.Forms.Web.UI
+namespace NXKit.XForms.Web.UI
 {
 
     [VisualControlTypeDescriptor]

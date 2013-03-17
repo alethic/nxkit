@@ -5,10 +5,10 @@ using System.Web.UI;
 
 using Telerik.Web.UI;
 
-using XEngine.Forms;
+using NXKit.XForms;
 using System.Web.UI.WebControls;
 
-namespace XEngine.Forms.Web.UI.XForms
+namespace NXKit.XForms.Web.UI.XForms
 {
 
     public class InputStringControl : VisualControl<XFormsInputVisual>, IScriptControl

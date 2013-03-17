@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using XEngine.Layout;
+using NXKit.Layout;
 using System.Collections.Specialized;
 using System;
 
-namespace XEngine.Forms.Web.UI.Layout
+namespace NXKit.XForms.Web.UI.Layout
 {
 
     public class TableColumnGroupCollection : IEnumerable<TableColumnGroup>

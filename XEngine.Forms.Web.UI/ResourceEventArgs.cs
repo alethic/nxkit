@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace XEngine.Forms.Web.UI
+namespace NXKit.XForms.Web.UI
 {
 
     public class ResourceActionEventArgs : EventArgs

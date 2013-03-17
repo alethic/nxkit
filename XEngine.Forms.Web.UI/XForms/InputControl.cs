@@ -1,6 +1,4 @@
-﻿using XEngine.Forms;
-
-namespace XEngine.Forms.Web.UI.XForms
+﻿namespace NXKit.XForms.Web.UI.XForms
 {
 
     [VisualControlTypeDescriptor]

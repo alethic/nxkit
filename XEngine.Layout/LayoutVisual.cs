@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
 
-using XEngine.Forms;
+using NXKit.XForms;
 
-namespace XEngine.Layout
+namespace NXKit.Layout
 {
 
     public class LayoutVisual : StructuralVisual

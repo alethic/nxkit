@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI;
 
-using XEngine.Forms;
+using NXKit.XForms;
 
-using XEngine.Util;
+using NXKit.Util;
 
 using Telerik.Web.UI;
 
-namespace XEngine.Forms.Web.UI.XForms
+namespace NXKit.XForms.Web.UI.XForms
 {
 
     public class Select1MinimalControl : VisualControl<XFormsSelect1Visual>, IScriptControl

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XEngine
+namespace NXKit
 {
 
     public class Event

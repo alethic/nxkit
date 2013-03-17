@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-namespace XEngine.Layout
+namespace NXKit.Layout
 {
 
     [Module]

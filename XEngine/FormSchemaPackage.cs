@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Linq;
 
-namespace XEngine
+namespace NXKit
 {
 
     [SchemaPackage]

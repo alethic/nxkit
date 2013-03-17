@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace XEngine
+namespace NXKit
 {
 
     /// <summary>

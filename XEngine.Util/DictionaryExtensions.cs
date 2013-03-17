@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XEngine.Util
+namespace NXKit.Util
 {
 
     /// <summary>

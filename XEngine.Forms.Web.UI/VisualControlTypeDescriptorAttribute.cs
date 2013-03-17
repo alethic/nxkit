@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 
-namespace XEngine.Forms.Web.UI
+namespace NXKit.XForms.Web.UI
 {
 
     [AttributeUsage(AttributeTargets.Class)]

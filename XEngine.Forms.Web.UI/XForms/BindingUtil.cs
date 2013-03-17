@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Xml;
 
-using XEngine.Forms;
+using NXKit.XForms;
 
-namespace XEngine.Forms.Web.UI.XForms
+namespace NXKit.XForms.Web.UI.XForms
 {
 
     public static class BindingUtil

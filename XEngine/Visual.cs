@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 
-using XEngine.Util;
+using NXKit.Util;
 
-namespace XEngine
+namespace NXKit
 {
 
     /// <summary>

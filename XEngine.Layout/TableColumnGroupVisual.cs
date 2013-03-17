@@ -1,8 +1,8 @@
 ﻿using System.Xml.Linq;
 
-using XEngine.Util;
+using NXKit.Util;
 
-namespace XEngine.Layout
+namespace NXKit.Layout
 {
 
     [VisualTypeDescriptor(Constants.Layout_1_0_NS, "table-column-group")]

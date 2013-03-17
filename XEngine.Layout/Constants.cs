@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace XEngine.Layout
+namespace NXKit.Layout
 {
 
     public static class Constants

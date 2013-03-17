@@ -1,4 +1,4 @@
-﻿namespace XEngine
+﻿namespace NXKit
 {
 
     public interface INamingScope

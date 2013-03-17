@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace XEngine.Util
+namespace NXKit.Util
 {
 
     public static class XObjectExtensions

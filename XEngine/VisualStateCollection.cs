@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XEngine.Util;
+using NXKit.Util;
 
-namespace XEngine
+namespace NXKit
 {
 
     [Serializable]

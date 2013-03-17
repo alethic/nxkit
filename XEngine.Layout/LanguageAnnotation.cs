@@ -1,6 +1,6 @@
-﻿using XEngine.Forms;
+﻿using NXKit.XForms;
 
-namespace XEngine.Layout
+namespace NXKit.Layout
 {
 
     public class LanguageAnnotation : VisualAnnotation

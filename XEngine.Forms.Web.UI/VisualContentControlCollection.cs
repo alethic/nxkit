@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace XEngine.Forms.Web.UI
+namespace NXKit.XForms.Web.UI
 {
 
     public class VisualContentControlCollection : VisualControlCollection

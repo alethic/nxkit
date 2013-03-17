@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace XEngine
+namespace NXKit
 {
 
     /// <summary>

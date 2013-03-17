@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace XEngine
+namespace NXKit
 {
 
     public class EventListener<T> : IEventListener

@@ -6,7 +6,7 @@ using System.Web.UI.WebControls;
 
 using Telerik.Web.UI;
 
-namespace XEngine.Forms.Web.UI
+namespace NXKit.XForms.Web.UI
 {
 
     /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace XEngine.Util
+﻿namespace NXKit.Util
 {
 
     /// <summary>

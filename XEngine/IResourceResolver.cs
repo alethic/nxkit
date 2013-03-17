@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace XEngine
+namespace NXKit
 {
 
     /// <summary>

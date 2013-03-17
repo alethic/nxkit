@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace XEngine.Layout
+namespace NXKit.Layout
 {
 
     [VisualTypeDescriptor(Constants.Layout_1_0_NS, "table")]

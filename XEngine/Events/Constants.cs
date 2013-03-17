@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace XEngine.Events
+namespace NXKit.Events
 {
 
     public static class Constants

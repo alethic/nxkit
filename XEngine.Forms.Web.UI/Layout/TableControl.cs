@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI;
 
-using XEngine.Layout;
-using XEngine.Forms.Web.UI.XForms;
+using NXKit.Layout;
+using NXKit.XForms.Web.UI.XForms;
 using System.Text;
 
-namespace XEngine.Forms.Web.UI.Layout
+namespace NXKit.XForms.Web.UI.Layout
 {
 
     [VisualControlTypeDescriptor]

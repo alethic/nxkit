@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 
-namespace XEngine
+namespace NXKit
 {
 
     [AttributeUsage(AttributeTargets.Class)]

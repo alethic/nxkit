@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace XEngine.Test.Web.Site {
+namespace NXKit.Test.Web.Site {
     
     
     public partial class Default {

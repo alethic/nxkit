@@ -1,4 +1,4 @@
-﻿namespace XEngine.Events
+﻿namespace NXKit.Events
 {
 
     /// <summary>
