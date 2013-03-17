@@ -25,7 +25,7 @@ namespace NXKit.XForms
         /// <param name="state"></param>
         /// <param name="resolver"></param>
         [ImportingConstructor]
-        public XFormsModule([Import(typeof(FormProcessor))] FormProcessor processor)
+        public XFormsModule([Import(typeof(Engine))] Engine processor)
             : base(processor)
         {
 
@@ -216,7 +216,7 @@ namespace NXKit.XForms
                         var resource = Resolver.Get(instanceSrc, instance.Element.BaseUri);
 
                         // parse resource into new DOM
-                        var instanceDataDocument = FormProcessor.StringToXDocument(new StreamReader(resource).ReadToEnd(), null);
+                        var instanceDataDocument = Engine.StringToXDocument(new StreamReader(resource).ReadToEnd(), null);
 
                         // add to model
                         instance.State.InstanceDocument = instanceDataDocument;
@@ -905,7 +905,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal XName GetModelItemType(XObject item)
         {
-            return GetModelItem(item).Type ?? FormConstants.XMLSchema + "string";
+            return GetModelItem(item).Type ?? EngineConstants.XMLSchema + "string";
         }
 
         /// <summary>

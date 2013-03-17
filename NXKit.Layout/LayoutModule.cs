@@ -12,7 +12,7 @@ namespace NXKit.Layout
         /// Initializes a new instance.
         /// </summary>
         [ImportingConstructor]
-        public LayoutModule([Import(typeof(FormProcessor))] FormProcessor form)
+        public LayoutModule([Import(typeof(Engine))] Engine form)
             : base(form)
         {
 

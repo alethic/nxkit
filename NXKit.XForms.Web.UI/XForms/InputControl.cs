@@ -49,19 +49,19 @@
         /// <returns></returns>
         private VisualControl<XFormsInputVisual> CreateInputControl(XFormsInputVisual visual)
         {
-            if (Visual.Type == FormConstants.XMLSchema + "boolean")
+            if (Visual.Type == EngineConstants.XMLSchema + "boolean")
                 return new InputBooleanControl(View, Visual);
-            else if (Visual.Type == FormConstants.XMLSchema + "date")
+            else if (Visual.Type == EngineConstants.XMLSchema + "date")
                 return new InputDateControl(View, Visual);
-            else if (Visual.Type == FormConstants.XMLSchema + "time")
+            else if (Visual.Type == EngineConstants.XMLSchema + "time")
                 return new InputTimeControl(View, Visual);
-            else if (Visual.Type == FormConstants.XMLSchema + "int")
+            else if (Visual.Type == EngineConstants.XMLSchema + "int")
                 return new InputIntegerControl(View, Visual);
-            else if (Visual.Type == FormConstants.XMLSchema + "integer")
+            else if (Visual.Type == EngineConstants.XMLSchema + "integer")
                 return new InputIntegerControl(View, Visual);
-            else if (Visual.Type == FormConstants.XMLSchema + "long")
+            else if (Visual.Type == EngineConstants.XMLSchema + "long")
                 return new InputIntegerControl(View, Visual);
-            else if (Visual.Type == FormConstants.XMLSchema + "short")
+            else if (Visual.Type == EngineConstants.XMLSchema + "short")
                 return new InputIntegerControl(View, Visual);
             else
                 return new InputStringControl(View, Visual);

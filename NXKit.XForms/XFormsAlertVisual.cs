@@ -8,7 +8,7 @@ namespace NXKit.XForms
     public class XFormsAlertVisualTypeDescriptor : VisualTypeDescriptor
     {
 
-        public override Visual CreateVisual(IFormProcessor form, StructuralVisual parent, XNode node)
+        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
         {
             return new XFormsAlertVisual(parent, (XElement)node);
         }

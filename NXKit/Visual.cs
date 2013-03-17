@@ -53,7 +53,7 @@ namespace NXKit
         /// <param name="form"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        protected Visual(IFormProcessor form, StructuralVisual parent, XNode node)
+        protected Visual(IEngine form, StructuralVisual parent, XNode node)
         {
             Form = form;
             Parent = parent;
@@ -73,9 +73,9 @@ namespace NXKit
         }
 
         /// <summary>
-        /// <see cref="IFormProcessor"/> responsible for the visual tree this visual resides within.
+        /// <see cref="IEngine"/> responsible for the visual tree this visual resides within.
         /// </summary>
-        public IFormProcessor Form { get; private set; }
+        public IEngine Form { get; private set; }
 
         /// <summary>
         /// Parent <see cref="Visual"/>.
@@ -158,7 +158,7 @@ namespace NXKit
         public class DelegateDispatchEventListener : IEventListener
         {
 
-            private FormEventHandler handler;
+            private EngineEventHandler handler;
 
             /// <summary>
             /// Initializes a new instance.
@@ -166,7 +166,7 @@ namespace NXKit
             /// <param name="observer"></param>
             /// <param name="target"></param>
             /// <param name="handler2"></param>
-            public DelegateDispatchEventListener(FormEventHandler handler2)
+            public DelegateDispatchEventListener(EngineEventHandler handler2)
             {
                 this.handler = handler2;
             }
@@ -185,7 +185,7 @@ namespace NXKit
         /// <typeparam name="T"></typeparam>
         /// <param name="handler"></param>
         /// <param name="useCapture"></param>
-        public void AddEventHandler<T>(FormEventHandler handler, bool useCapture)
+        public void AddEventHandler<T>(EngineEventHandler handler, bool useCapture)
         {
             string name = null;
 

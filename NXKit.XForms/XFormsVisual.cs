@@ -15,7 +15,7 @@ namespace NXKit.XForms
         /// <param name="form"></param>
         /// <param name="parent"></param>
         /// <param name="element"></param>
-        public XFormsVisual(IFormProcessor form, StructuralVisual parent, XElement element)
+        public XFormsVisual(IEngine form, StructuralVisual parent, XElement element)
             : base(form, parent, element)
         {
 

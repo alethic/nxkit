@@ -12,7 +12,7 @@ namespace NXKit.XForms
     public class XFormsSubmissionVisualTypeDescriptor : VisualTypeDescriptor
     {
 
-        public override Visual CreateVisual(IFormProcessor form, StructuralVisual parent, XNode node)
+        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
         {
             return new XFormsSubmissionVisual(parent, (XElement)node);
         }
@@ -59,7 +59,7 @@ namespace NXKit.XForms
                 var d = new XDocument(node);
 
                 // transform DOM into string
-                var t = FormProcessor.XDocumentToString(d);
+                var t = Engine.XDocumentToString(d);
 
                 // put data
                 var resource = Module.Resolver.Put(action, Element.BaseUri, new MemoryStream(Encoding.UTF8.GetBytes(t)));

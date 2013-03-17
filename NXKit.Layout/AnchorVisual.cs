@@ -8,7 +8,7 @@ namespace NXKit.Layout
     public class AnchorVisualTypeDescriptor : VisualTypeDescriptor
     {
 
-        public override Visual CreateVisual(IFormProcessor form, StructuralVisual parent, XNode element)
+        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode element)
         {
             return new AnchorVisual(parent, (XElement)element);
         }

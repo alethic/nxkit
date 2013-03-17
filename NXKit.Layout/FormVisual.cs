@@ -7,7 +7,7 @@ namespace NXKit.Layout
     public class FormVisualTypeDescriptor : VisualTypeDescriptor
     {
 
-        public override Visual CreateVisual(IFormProcessor form, StructuralVisual parent, XNode node)
+        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
         {
             return new FormVisual(form, (XElement)node);
         }
@@ -22,7 +22,7 @@ namespace NXKit.Layout
         /// </summary>
         /// <param name="form"></param>
         /// <param name="element"></param>
-        public FormVisual(IFormProcessor form, XElement element)
+        public FormVisual(IEngine form, XElement element)
             : base(form, null, element)
         {
 

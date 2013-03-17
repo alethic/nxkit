@@ -15,7 +15,7 @@ namespace NXKit.Layout
         /// <param name="form"></param>
         /// <param name="parent"></param>
         /// <param name="element"></param>
-        protected LayoutVisual(IFormProcessor form, StructuralVisual parent, XElement element)
+        protected LayoutVisual(IEngine form, StructuralVisual parent, XElement element)
             : base(form, parent, element)
         {
 

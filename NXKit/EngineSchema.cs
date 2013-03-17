@@ -11,9 +11,9 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Provides access to a static <see cref="JavaSchema"/> instance for working with ISIS forms.
+    /// Provides access to a static <see cref="SchemaSet"/> instance for working with NXKit forms.
     /// </summary>
-    internal static class FormSchema
+    internal static class EngineSchema
     {
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace NXKit
             /// </summary>
             public PackageContainer()
             {
-                FormProcessor.container.SatisfyImportsOnce(this);
+                Engine.container.SatisfyImportsOnce(this);
             }
 
             [ImportMany(typeof(SchemaPackage))]
@@ -40,7 +40,7 @@ namespace NXKit
         /// <summary>
         /// Initializes a new static instance.
         /// </summary>
-        static FormSchema()
+        static EngineSchema()
         {
             // initialize .Net schema
             {

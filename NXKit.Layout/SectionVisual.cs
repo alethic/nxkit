@@ -9,7 +9,7 @@ namespace NXKit.Layout
     public class SectionVisualTypeDescriptor : VisualTypeDescriptor
     {
 
-        public override Visual CreateVisual(IFormProcessor form, StructuralVisual parent, XNode element)
+        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode element)
         {
             return new SectionVisual(parent, (XElement)element);
         }

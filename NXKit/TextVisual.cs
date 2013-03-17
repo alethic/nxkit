@@ -14,7 +14,7 @@ namespace NXKit
         /// <param name="parent"></param>
         /// <param name="node"></param>
         /// <param name="text"></param>
-        public TextVisual(IFormProcessor form, StructuralVisual parent, XText node)
+        public TextVisual(IEngine form, StructuralVisual parent, XText node)
             : base(form, parent, node)
         {
 

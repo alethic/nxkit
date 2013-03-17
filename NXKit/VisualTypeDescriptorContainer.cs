@@ -30,7 +30,7 @@ namespace NXKit
         /// </summary>
         private VisualTypeDescriptorContainer()
         {
-            FormProcessor.container.SatisfyImportsOnce(this);
+            Engine.container.SatisfyImportsOnce(this);
 
             // initialize map of XName to descriptor
             TypeDescriptorMap = TypeDescriptors.ToDictionary(i => XName.Get(i.Metadata.LocalName, i.Metadata.Namespace), i => i.Value);

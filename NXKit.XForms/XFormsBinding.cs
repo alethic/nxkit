@@ -23,7 +23,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        internal XFormsBinding(IFormProcessor form, XFormsVisual visual, XFormsEvaluationContext ec, string xp)
+        internal XFormsBinding(IEngine form, XFormsVisual visual, XFormsEvaluationContext ec, string xp)
         {
             Visual = visual;
             Context = ec;

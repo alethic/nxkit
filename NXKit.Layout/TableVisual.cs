@@ -7,7 +7,7 @@ namespace NXKit.Layout
     public class TableVisualTypeDescriptor : VisualTypeDescriptor
     {
 
-        public override Visual CreateVisual(IFormProcessor form, StructuralVisual parent, XNode node)
+        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
         {
             return new TableVisual(parent, (XElement)node);
         }

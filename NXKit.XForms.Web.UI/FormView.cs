@@ -128,9 +128,9 @@ namespace NXKit.XForms.Web.UI
         public virtual string ValidationGroup { get; set; }
 
         /// <summary>
-        /// Gets a reference to the <see cref="FormProcessor"/>.
+        /// Gets a reference to the <see cref="Engine"/>.
         /// </summary>
-        public FormProcessor Form { get; private set; }
+        public Engine Form { get; private set; }
 
         /// <summary>
         /// Raised when the forms processor attempts to perform an action on a resource.
@@ -226,7 +226,7 @@ namespace NXKit.XForms.Web.UI
         public void Configure(string document)
         {
             // construct a new processor instance
-            Form = new FormProcessor(document, new ResourceResolver(this));
+            Form = new Engine(document, new ResourceResolver(this));
             Form.Run();
 
             Configure();
@@ -239,7 +239,7 @@ namespace NXKit.XForms.Web.UI
         public void Configure(XmlDocument document)
         {
             // construct a new processor instance
-            Form = new FormProcessor(document, new ResourceResolver(this));
+            Form = new Engine(document, new ResourceResolver(this));
             Form.Run();
 
             Configure();
@@ -252,7 +252,7 @@ namespace NXKit.XForms.Web.UI
         public void Configure(XDocument document)
         {
             // construct a new processor instance
-            Form = new FormProcessor(document, new ResourceResolver(this));
+            Form = new Engine(document, new ResourceResolver(this));
             Form.Run();
 
             Configure();
@@ -268,12 +268,12 @@ namespace NXKit.XForms.Web.UI
             base.LoadControlState(state[0]);
 
             // reload processor state
-            var formState = (FormProcessorState)state[1];
+            var formState = (EngineState)state[1];
             if (formState != null)
             {
                 navigations = null;
 
-                Form = new FormProcessor(formState, new ResourceResolver(this));
+                Form = new Engine(formState, new ResourceResolver(this));
                 Form.Run();
 
                 // find current page node from state

@@ -7,7 +7,7 @@ namespace NXKit.Events
     public class EventsEventListenerVisualTypeDescriptor : VisualTypeDescriptor
     {
 
-        public override Visual CreateVisual(IFormProcessor form, StructuralVisual parent, XNode node)
+        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
         {
             return new EventsEventListenerVisual(parent, (XElement)node);
         }

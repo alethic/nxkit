@@ -34,7 +34,7 @@ namespace NXKit.XForms
         public XFormsInstanceVisualState(SerializationInfo info, StreamingContext context)
         {
             NextItemId = info.GetInt32("NextNodeId");
-            InstanceDocument = FormProcessor.StringToXDocument(info.GetString("InstanceDocument"), null);
+            InstanceDocument = Engine.StringToXDocument(info.GetString("InstanceDocument"), null);
             InstanceElement = InstanceDocument.Root;
             deserializedModelItemState = (Tuple<int, XFormsModelItemState>[])info.GetValue("ModelItems", typeof(Tuple<int, XFormsModelItemState>[]));
         }
@@ -72,7 +72,7 @@ namespace NXKit.XForms
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("NextNodeId", NextItemId);
-            info.AddValue("InstanceDocument", FormProcessor.XDocumentToString(InstanceDocument));
+            info.AddValue("InstanceDocument", Engine.XDocumentToString(InstanceDocument));
             info.AddValue("ModelItems", SaveModelItems());
         }
 

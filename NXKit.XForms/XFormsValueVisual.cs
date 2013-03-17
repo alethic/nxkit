@@ -10,7 +10,7 @@ namespace NXKit.XForms
     public class XFormsValueVisualTypeDescriptor : VisualTypeDescriptor
     {
 
-        public override Visual CreateVisual(IFormProcessor form, StructuralVisual parent, XNode element)
+        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode element)
         {
             return new XFormsValueVisual(parent, (XElement)element);
         }
