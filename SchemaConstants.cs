@@ -3,7 +3,7 @@
 namespace NXKit
 {
 
-    public static class EngineConstants
+    public static class SchemaConstants
     {
 
         public static readonly string XML_NS = "http://www.w3.org/XML/1998/namespace";

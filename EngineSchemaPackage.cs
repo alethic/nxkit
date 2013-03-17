@@ -12,26 +12,26 @@ namespace NXKit
         {
             get
             {
-                yield return EngineConstants.XML;
-                yield return EngineConstants.XMLSchema;
+                yield return SchemaConstants.XML;
+                yield return SchemaConstants.XMLSchema;
             }
         }
 
         public override string ResolveSchema(XNamespace ns)
         {
-            if (ns == EngineConstants.XML)
-                return EngineConstants.XML_HREF;
-            else if (ns == EngineConstants.XMLSchema)
-                return EngineConstants.XMLSchema_HREF;
+            if (ns == SchemaConstants.XML)
+                return SchemaConstants.XML_HREF;
+            else if (ns == SchemaConstants.XMLSchema)
+                return SchemaConstants.XMLSchema_HREF;
             else
                 return null;
         }
 
         public override Stream OpenSchema(string location)
         {
-            if (location == EngineConstants.XML_HREF)
+            if (location == SchemaConstants.XML_HREF)
                 return typeof(EngineSchemaPackage).Assembly.GetManifestResourceStream("ISIS.Forms.xml.xsd");
-            else if (location == EngineConstants.XMLSchema_HREF)
+            else if (location == SchemaConstants.XMLSchema_HREF)
                 return typeof(EngineSchemaPackage).Assembly.GetManifestResourceStream("ISIS.Forms.xsdschema.xsd");
             else
                 return null;
