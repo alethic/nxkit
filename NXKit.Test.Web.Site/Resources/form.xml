@@ -31,7 +31,7 @@
       <xf:label>Limited Fixed Indemnity Benefit Plan</xf:label>
       <f:section xf:ref="lfi">
         <xf:label>Limited Fixed Indemnity Benefit Plan</xf:label>
-        <f:p>Limited Fixed Indemnity Benefit Insurance Plans are being coordinated by Mosaic to Host Home Providers (HHP) to help meet the insurance needs of you and your family. Additional information regarding the Limited Fixed Indemnity Benefit Plans can be found <f:a href="page1.pdf">here</f:a>.
+        <f:p>Limited Fixed Indemnity Benefit Insurance Plans are being coordinated by Host Home Providers (HHP) to help meet the insurance needs of you and your family. Additional information regarding the Limited Fixed Indemnity Benefit Plans can be found <f:a href="page1.pdf">here</f:a>.
         </f:p>
         <f:table>
           <f:table-column-group name="choice">
@@ -286,8 +286,8 @@ negotiated rates prior to the above benefits being applied.</f:table-cell>
       <xf:label>Dental &amp; Vision</xf:label>
       <f:section xf:ref="dental">
         <xf:label>Dental &amp; Free Vision Exam</xf:label>
-        <f:p>A Dental Benefit Plan is being coordinated by Mosaic to Host Home Providers (HHP) to help meet the insurance needs of you and your family. Additional information regarding the Dental Benefit Plan can be found <f:a href="page2.pdf">here</f:a>.</f:p>
-        <f:p>To access a provider visit: <f:a href="https://www.careington.com/search/search.aspx?gpid=PPO&amp;agentcode=CENTURYPPO56042P">www.careington.com</f:a></f:p>
+        <f:p>A Dental Benefit Plan is being coordinated by Host Home Providers (HHP) to help meet the insurance needs of you and your family. Additional information regarding the Dental Benefit Plan can be found <f:a href="page2.pdf">here</f:a>.</f:p>
+        <f:p>To access a provider visit: <f:a href="https://www.something.com">www.something.com</f:a></f:p>
         <f:table>
           <f:table-column-group>
             <f:table-column importance="high">Category</f:table-column>
