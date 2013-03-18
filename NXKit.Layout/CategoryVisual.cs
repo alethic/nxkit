@@ -1,34 +1,11 @@
-﻿using System.Xml.Linq;
-
-using NXKit.XForms;
-
-namespace NXKit.Layout
+﻿namespace NXKit.XForms.Layout
 {
 
-    [VisualTypeDescriptor(Constants.Layout_1_0_NS, "category")]
-    public class CategoryVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new CategoryVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("category")]
     public class CategoryVisual : XFormsGroupVisual
     {
 
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public CategoryVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
 
-        }
 
     }
 

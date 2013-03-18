@@ -3,30 +3,9 @@
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "bind")]
-    public class XFormsBindVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsBindVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("bind")]
     public class XFormsBindVisual : XFormsBindingVisual
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsBindVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         public override void Refresh()
         {

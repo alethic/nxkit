@@ -3,30 +3,9 @@
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "rebuild")]
-    public class XFormsRebuildVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsRebuildVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("rebuild")]
     public class XFormsRebuildVisual : XFormsVisual, IActionVisual
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        internal XFormsRebuildVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         public void Handle(Event ev)
         {

@@ -1,38 +1,16 @@
 ﻿using System.Linq;
-using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "item")]
-    public class XFormsItemVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsItemVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("item")]
     public class XFormsItemVisual : XFormsVisual
     {
 
-        private bool labelVisualCached;
-        private XFormsLabelVisual labelVisual;
-        private bool selectableCached;
-        private ISelectableVisual selectable;
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsItemVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
+        bool labelVisualCached;
+        XFormsLabelVisual labelVisual;
+        bool selectableCached;
+        ISelectableVisual selectable;
 
         /// <summary>
         /// Gets the <see cref="XFormsLabelVisual"/> for this item.

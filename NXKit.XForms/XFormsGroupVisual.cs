@@ -1,33 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "group")]
-    public class XFormsGroupVisualTypeDescriptor : VisualTypeDescriptor
+    [Visual("group")]
+    public class XFormsGroupVisual : XFormsSingleNodeBindingVisual, IRelevancyScope, INavigationCategoryVisual
     {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsGroupVisual(parent, (XElement)node);
-        }
-
-    }
-
-    public class XFormsGroupVisual : XFormsSingleNodeBindingVisual, IRelevancyScope
-    {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsGroupVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         protected override IEnumerable<Visual> CreateChildren()
         {
@@ -48,6 +29,23 @@ namespace NXKit.XForms
                 var lp = st.Length == 2 ? st[1] : st[0];
                 return XName.Get(lp, ns);
             }
+        }
+
+        public string Label
+        {
+            get { return GetLabel(); }
+        }
+
+        string GetLabel()
+        {
+            var b = new StringWriter();
+            var l = Children.OfType<XFormsLabelVisual>().FirstOrDefault();
+            if (l != null)
+                l.WriteText(b);
+            else
+                return null;
+
+            return b.ToString();
         }
 
     }

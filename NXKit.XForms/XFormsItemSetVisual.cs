@@ -6,32 +6,11 @@ using NXKit.Util;
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "itemset")]
-    public class XFormsItemSetVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsItemSetVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("itemset")]
     public class XFormsItemSetVisual : XFormsNodeSetBindingVisual, INamingScope
     {
 
-        private Dictionary<XObject, XFormsItemSetItemVisual> items = new Dictionary<XObject, XFormsItemSetItemVisual>();
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsItemSetVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
+        Dictionary<XObject, XFormsItemSetItemVisual> items = new Dictionary<XObject, XFormsItemSetItemVisual>();
 
         /// <summary>
         /// Dynamically generate itemset items.
@@ -57,7 +36,7 @@ namespace NXKit.XForms
         /// <param name="position"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        private XFormsItemSetItemVisual GetOrCreateItem(XFormsModelVisual model, XFormsInstanceVisual instance, XObject node, int position, int size)
+        XFormsItemSetItemVisual GetOrCreateItem(XFormsModelVisual model, XFormsInstanceVisual instance, XObject node, int position, int size)
         {
             // new context for child
             var ec = new XFormsEvaluationContext(model, instance, node, position, size);
@@ -65,7 +44,11 @@ namespace NXKit.XForms
             // obtain or create child
             var item = items.ValueOrDefault(node);
             if (item == null)
-                item = items[node] = new XFormsItemSetItemVisual(this, Element, ec);
+            {
+                item = items[node] = new XFormsItemSetItemVisual();
+                item.Initialize(Engine, this, Element);
+                item.SetContext(ec);
+            }
             else
                 item.SetContext(ec);
 

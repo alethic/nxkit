@@ -5,6 +5,9 @@ using System.Xml.Linq;
 namespace NXKit
 {
 
+    /// <summary>
+    /// Provides schema to the NXKit engine.
+    /// </summary>
     public abstract class SchemaPackage
     {
 

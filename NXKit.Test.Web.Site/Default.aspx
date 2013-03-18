@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="NXKit.Test.Web.Site.Default" %>
-<%@ Register Assembly="NXKit.XForms.Web.UI" Namespace="NXKit.XForms.Web.UI" TagPrefix="xforms" %>
+<%@ Register Assembly="NXKit.Web.UI" Namespace="NXKit.Web.UI" TagPrefix="xforms" %>
 
 <!DOCTYPE html>
 
@@ -12,7 +12,9 @@
 <body>
     <form id="form1" runat="server">
         <asp:ScriptManager runat="server" />
-        <xforms:FormView runat="server" />
+        <xforms:FormView ID="FormView" runat="server"
+            OnLoad="FormView_Load"
+            OnResourceAction="FormView_ResourceAction" />
     </form>
 </body>
 

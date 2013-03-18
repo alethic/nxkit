@@ -7,18 +7,6 @@ namespace NXKit.XForms
     {
 
         /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="module"></param>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsBindingVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
-
-        /// <summary>
         /// Returns the context which will be inherited by scoped elements.
         /// </summary>
         public abstract XFormsEvaluationContext Context { get; }

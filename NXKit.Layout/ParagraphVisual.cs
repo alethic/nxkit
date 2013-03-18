@@ -1,33 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace NXKit.Layout
+namespace NXKit.XForms.Layout
 {
 
-    [VisualTypeDescriptor(Constants.Layout_1_0_NS, "p")]
-    public class ParagraphVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new ParagraphVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("p")]
     public class ParagraphVisual : LayoutVisual
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public ParagraphVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         protected override IEnumerable<Visual> CreateChildren()
         {

@@ -4,30 +4,9 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "copy")]
-    public class XFormsCopyVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsCopyVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("copy")]
     public class XFormsCopyVisual : XFormsSingleNodeBindingVisual, ISelectableVisual
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsCopyVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         /// <summary>
         /// Implements the actions when selecting the item from a list control.

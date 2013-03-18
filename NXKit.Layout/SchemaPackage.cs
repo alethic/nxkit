@@ -2,10 +2,9 @@
 using System.IO;
 using System.Xml.Linq;
 
-namespace NXKit.Layout
+namespace NXKit.XForms.Layout
 {
 
-    [SchemaPackage]
     public sealed class SchemaPackage : NXKit.SchemaPackage
     {
 

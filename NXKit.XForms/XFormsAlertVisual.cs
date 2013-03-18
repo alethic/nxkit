@@ -1,37 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
+﻿using System.IO;
+using System.Linq;
 
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "alert")]
-    public class XFormsAlertVisualTypeDescriptor : VisualTypeDescriptor
+    [Visual("alert")]
+    public class XFormsAlertVisual : XFormsSingleNodeBindingVisual, ITextVisual
     {
 
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
+        public void WriteText(TextWriter w)
         {
-            return new XFormsAlertVisual(parent, (XElement)node);
-        }
-
-    }
-
-    public class XFormsAlertVisual : XFormsSingleNodeBindingVisual
-    {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsAlertVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
-
-        protected override IEnumerable<Visual> CreateChildren()
-        {
-            return CreateElementChildren(Element, includeTextContent: true);
+            if (Binding != null)
+                w.Write(Binding.Value ?? "");
+            else
+                foreach (var c in Children.OfType<ITextVisual>())
+                    c.WriteText(w);
         }
 
     }

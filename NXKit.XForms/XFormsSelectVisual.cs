@@ -1,33 +1,11 @@
 ﻿using System.Xml.Linq;
 
-
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "select")]
-    public class XFormsSelectVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsSelectVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("select")]
     public class XFormsSelectVisual : XFormsSingleNodeBindingVisual
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsSelectVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         public bool Incremental
         {

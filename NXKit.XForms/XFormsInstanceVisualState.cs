@@ -16,7 +16,7 @@ namespace NXKit.XForms
     public class XFormsInstanceVisualState : ISerializable
     {
 
-        private Tuple<int, XFormsModelItemState>[] deserializedModelItemState;
+        Tuple<int, XFormsModelItemState>[] deserializedModelItemState;
         
         /// <summary>
         /// Initializes a new instance.
@@ -34,7 +34,7 @@ namespace NXKit.XForms
         public XFormsInstanceVisualState(SerializationInfo info, StreamingContext context)
         {
             NextItemId = info.GetInt32("NextNodeId");
-            InstanceDocument = Engine.StringToXDocument(info.GetString("InstanceDocument"), null);
+            InstanceDocument = XDocument.Parse(info.GetString("InstanceDocument"));
             InstanceElement = InstanceDocument.Root;
             deserializedModelItemState = (Tuple<int, XFormsModelItemState>[])info.GetValue("ModelItems", typeof(Tuple<int, XFormsModelItemState>[]));
         }
@@ -72,7 +72,7 @@ namespace NXKit.XForms
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("NextNodeId", NextItemId);
-            info.AddValue("InstanceDocument", Engine.XDocumentToString(InstanceDocument));
+            info.AddValue("InstanceDocument", InstanceDocument.ToString(SaveOptions.DisableFormatting));
             info.AddValue("ModelItems", SaveModelItems());
         }
 

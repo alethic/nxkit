@@ -1,36 +1,13 @@
-﻿using System.Xml.Linq;
-
-using NXKit.Util;
+﻿using NXKit.Util;
 
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "setvalue")]
-    public class XFormsSetValueVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsSetValueVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("setvalue")]
     public class XFormsSetValueVisual : XFormsSingleNodeBindingVisual, IActionVisual
     {
 
-        private XFormsBinding valueBinding;
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        internal XFormsSetValueVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
+        XFormsBinding valueBinding;
 
         public override void Refresh()
         {
@@ -44,7 +21,7 @@ namespace NXKit.XForms
                 if (valueAttr != null)
                 {
                     var ec = new XFormsEvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.Context.Node, 1, 1);
-                    valueBinding = new XFormsBinding(Form, this, ec, valueAttr);
+                    valueBinding = new XFormsBinding(Engine, this, ec, valueAttr);
                 }
             }
         }

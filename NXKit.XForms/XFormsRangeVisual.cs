@@ -1,32 +1,9 @@
-﻿using System.Xml.Linq;
-
-namespace NXKit.XForms
+﻿namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "range")]
-    public class XFormsRangeVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsRangeVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("range")]
     public class XFormsRangeVisual : XFormsSingleNodeBindingVisual
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsRangeVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         public bool Incremental
         {

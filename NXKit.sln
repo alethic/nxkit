@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Util", "NXKit.Util\NX
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms", "NXKit.XForms\NXKit.XForms.csproj", "{67ECD54B-BD0D-442F-A184-65B4CA014E75}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Layout.Web.UI", "NXKit.XForms.Layout.Web.UI\NXKit.XForms.Layout.Web.UI.csproj", "{50D97152-A727-4F10-9DE6-5002E7D6E7A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Web.UI", "NXKit.Web.UI\NXKit.Web.UI.csproj", "{434F4E74-1BA0-4579-AB27-B0DC7DF4166C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,14 @@ Global
 		{67ECD54B-BD0D-442F-A184-65B4CA014E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67ECD54B-BD0D-442F-A184-65B4CA014E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67ECD54B-BD0D-442F-A184-65B4CA014E75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50D97152-A727-4F10-9DE6-5002E7D6E7A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50D97152-A727-4F10-9DE6-5002E7D6E7A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50D97152-A727-4F10-9DE6-5002E7D6E7A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50D97152-A727-4F10-9DE6-5002E7D6E7A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{434F4E74-1BA0-4579-AB27-B0DC7DF4166C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{434F4E74-1BA0-4579-AB27-B0DC7DF4166C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{434F4E74-1BA0-4579-AB27-B0DC7DF4166C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{434F4E74-1BA0-4579-AB27-B0DC7DF4166C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

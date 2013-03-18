@@ -1,32 +1,9 @@
-﻿using System.Xml.Linq;
-
-namespace NXKit.XForms
+﻿namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "textarea")]
-    public class XFormsTextAreaVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsTextAreaVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("textarea")]
     public class XFormsTextAreaVisual : XFormsSingleNodeBindingVisual
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsTextAreaVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         public bool Incremental
         {

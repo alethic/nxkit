@@ -6,30 +6,9 @@ using System.Xml.XPath;
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "delete")]
-    public class XFormsDeleteVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsDeleteVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("delete")]
     public class XFormsDeleteVisual : XFormsNodeSetBindingVisual, IActionVisual
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        internal XFormsDeleteVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         public void Handle(Event ev)
         {
@@ -92,7 +71,7 @@ namespace NXKit.XForms
             var curNode = Binding.Nodes[at - 1];
 
             // set of dependent visuals
-            var dependentVisualsState = Module.Form.RootVisual
+            var dependentVisualsState = Module.Engine.RootVisual
                 .Descendants(true)
                 .OfType<XFormsNodeSetBindingVisual>()
                 .Where(i => i.Binding != null && i.Binding.Nodes != null && i.Binding.Nodes.Any(j => j.Parent == parent))

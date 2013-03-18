@@ -8,31 +8,10 @@ using NXKit.Util;
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "submission")]
-    public class XFormsSubmissionVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsSubmissionVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("submission")]
     public class XFormsSubmissionVisual : XFormsSingleNodeBindingVisual,
         IEventDefaultActionHandler<XFormsSubmitEvent>
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsSubmissionVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         void IEventDefaultActionHandler<XFormsSubmitEvent>.DefaultAction(XFormsSubmitEvent evt)
         {
@@ -59,10 +38,10 @@ namespace NXKit.XForms
                 var d = new XDocument(node);
 
                 // transform DOM into string
-                var t = Engine.XDocumentToString(d);
+                var t = d.ToString(SaveOptions.DisableFormatting);
 
                 // put data
-                var resource = Module.Resolver.Put(action, Element.BaseUri, new MemoryStream(Encoding.UTF8.GetBytes(t)));
+                var resource = Engine.Resolver.Put(action, Element.BaseUri, new MemoryStream(Encoding.UTF8.GetBytes(t)));
 
                 if (resource != null)
                     throw new NotSupportedException("Cannot return new data from a Put.");

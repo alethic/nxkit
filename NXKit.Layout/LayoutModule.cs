@@ -1,21 +1,57 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
 
-namespace NXKit.Layout
+using NXKit.Util;
+using NXKit.XForms.Layout;
+
+namespace NXKit.XForms.Layout
 {
 
-    [Module]
     public class LayoutModule : Module
     {
 
         /// <summary>
-        /// Initializes a new instance.
+        /// Map of <see cref="XName"/> to <see cref="Visual"/> type.
         /// </summary>
-        [ImportingConstructor]
-        public LayoutModule([Import(typeof(Engine))] Engine form)
-            : base(form)
-        {
+        static readonly Dictionary<XName, Type> visualTypeMap = typeof(LayoutModule).Assembly.GetTypes()
+            .Select(i => new { Type = i, Attribute = i.GetCustomAttribute<VisualAttribute>() })
+            .Where(i => i.Attribute != null)
+            .ToDictionary(i => Constants.Layout_1_0 + i.Attribute.Name, i => i.Type);
 
+        /// <summary>
+        /// Creates the appropriate <see cref="Visual"/> instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public override Visual CreateVisual(XName xname)
+        {
+            if (xname.Namespace != Constants.Layout_1_0)
+                return null;
+
+            var type = visualTypeMap.ValueOrDefault(xname);
+            if (type == null)
+                return null;
+
+            return (Visual)Activator.CreateInstance(type);
+        }
+
+        public override void AnnotateVisual(Visual visual)
+        {
+            base.AnnotateVisual(visual);
+
+            // set importance annotation if marked
+            if (visual is StructuralVisual)
+            {
+                var attr = GetAttributeValue(((StructuralVisual)visual).Element, "importance");
+                if (attr == "high")
+                    visual.Annotations.Set<ImportanceAnnotation>(new ImportanceAnnotation(Importance.High));
+                else if (attr == "low")
+                    visual.Annotations.Set<ImportanceAnnotation>(new ImportanceAnnotation(Importance.Low));
+            }
         }
 
         /// <summary>
@@ -44,26 +80,6 @@ namespace NXKit.Layout
         {
             var attr = ResolveAttribute(element, name);
             return attr != null ? (string)attr : null;
-        }
-
-        public override void AnnotateVisual(Visual visual)
-        {
-            base.AnnotateVisual(visual);
-
-            // set importance annotation if marked
-            if (visual is StructuralVisual)
-            {
-                var attr = GetAttributeValue(((StructuralVisual)visual).Element, "importance");
-                if (attr == "high")
-                    visual.Annotations.Set<ImportanceAnnotation>(new ImportanceAnnotation(Importance.High));
-                else if (attr == "low")
-                    visual.Annotations.Set<ImportanceAnnotation>(new ImportanceAnnotation(Importance.Low));
-            }
-        }
-
-        public override bool Run()
-        {
-            return false;
         }
 
     }

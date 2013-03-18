@@ -3,52 +3,28 @@ using System.Xml.Linq;
 
 using NXKit.XForms;
 
-namespace NXKit.Layout
+namespace NXKit.XForms.Layout
 {
 
     public class LayoutVisual : StructuralVisual
     {
 
         /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="form"></param>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        protected LayoutVisual(IEngine form, StructuralVisual parent, XElement element)
-            : base(form, parent, element)
-        {
-
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="form"></param>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        protected LayoutVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
-
-        /// <summary>
         /// Gets a reference to the <see cref="XFormsModule"/> instance.
         /// </summary>
         public LayoutModule Module
         {
-            get { return Form.GetModule<LayoutModule>(); }
+            get { return Engine.GetModule<LayoutModule>(); }
         }
 
         public override string Id
         {
-            get { return Form.GetElementId(Element); }
+            get { return Engine.GetElementId(Element); }
         }
 
         public string Style
         {
-            get { return Form.GetModule<LayoutModule>().GetAttributeValue(Element, "style"); }
+            get { return Engine.GetModule<LayoutModule>().GetAttributeValue(Element, "style"); }
         }
 
         /// <summary>

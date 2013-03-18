@@ -6,11 +6,14 @@ using NXKit.Util;
 namespace NXKit
 {
 
+    /// <summary>
+    /// Associates serializable state information with <see cref="Visual"/> instances.
+    /// </summary>
     [Serializable]
     public class VisualStateCollection
     {
 
-        internal Dictionary<string, Dictionary<Type, object>> store;
+        Dictionary<string, Dictionary<Type, object>> store;
 
         /// <summary>
         /// Gets the state object of the specified type for the specified <see cref="Visual"/>.
@@ -18,7 +21,7 @@ namespace NXKit
         /// <param name="visual"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        private object Get(StructuralVisual visual, Type type, Func<object> getDefaultValue)
+        object Get(StructuralVisual visual, Type type, Func<object> getDefaultValue)
         {
             if (store == null)
                 store = new Dictionary<string, Dictionary<Type, object>>();

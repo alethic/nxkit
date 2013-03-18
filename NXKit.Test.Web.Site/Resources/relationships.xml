@@ -1,0 +1,8 @@
+﻿<relationships>
+    <relationship label="Spouse" value="spouse" />
+    <relationship label="Child" value="child" />
+    <relationship label="Brother" value="brother" />
+    <relationship label="Sister" value="sister" />
+    <relationship label="Mother" value="mother" />
+    <relationship label="Father" value="father" />
+</relationships>

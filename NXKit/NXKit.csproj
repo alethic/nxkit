@@ -39,12 +39,16 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EngineConfiguration.cs" />
+    <Compile Include="INavigationCategoryVisual.cs" />
+    <Compile Include="INavigationSectionVisual.cs" />
     <Compile Include="EventListenerMap.cs" />
     <Compile Include="EventPhase.cs" />
     <Compile Include="Event.cs" />
@@ -52,24 +56,25 @@
     <Compile Include="Events\IEventHandlerVisual.cs" />
     <Compile Include="IEventDefaultActionHandler.cs" />
     <Compile Include="IEventListener.cs" />
-    <Compile Include="SchemaConstants.cs" />
-    <Compile Include="Events\Constants.cs" />
+    <Compile Include="INavigationPageVisual.cs" />
+    <Compile Include="INavigationVisual.cs" />
+    <Compile Include="IStructuralVisual.cs" />
+    <Compile Include="ITextVisual.cs" />
+    <Compile Include="IVisual.cs" />
+    <Compile Include="XmlSchemaConstants.cs" />
+    <Compile Include="Events\SchemaConstants.cs" />
     <Compile Include="Events\SchemaPackage.cs" />
     <Compile Include="EngineEventHandler.cs" />
-    <Compile Include="EngineSchemaPackage.cs" />
+    <Compile Include="XmlSchemaPackage.cs" />
     <Compile Include="IEventTarget.cs" />
-    <Compile Include="ModuleAttribute.cs" />
     <Compile Include="SchemaPackage.cs" />
-    <Compile Include="SchemaPackageAttribute.cs" />
     <Compile Include="VisualStateCollection.cs" />
-    <Compile Include="VisualTypeDescriptorAttribute.cs" />
-    <Compile Include="VisualTypeDescriptor.cs" />
     <Compile Include="VisualRemovedEvent.cs" />
     <Compile Include="DOMActivateEvent.cs" />
     <Compile Include="EventListener.cs" />
     <Compile Include="Events\EventsEventListenerVisual.cs" />
     <Compile Include="Events\EventsModule.cs" />
-    <Compile Include="EngineSchema.cs" />
+    <Compile Include="SchemaContainer.cs" />
     <Compile Include="INamingScope.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="EngineState.cs" />
@@ -78,7 +83,6 @@
     <Compile Include="VisualAnnotation.cs" />
     <Compile Include="VisualAnnotationCollection.cs" />
     <Compile Include="VisualAddedEvent.cs" />
-    <Compile Include="VisualTypeDescriptorContainer.cs" />
     <Compile Include="IEngine.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Visual.cs" />

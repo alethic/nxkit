@@ -71,6 +71,7 @@
     <Compile Include="TableVisual.cs" />
     <Compile Include="LayoutVisual.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VisualAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">

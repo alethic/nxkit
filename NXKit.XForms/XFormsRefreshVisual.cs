@@ -3,31 +3,9 @@
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "refresh")]
-    public class XFormsRefreshVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsRefreshVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("refresh")]
     public class XFormsRefreshVisual : XFormsVisual, IActionVisual
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="module"></param>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        internal XFormsRefreshVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         public void Handle(Event ev)
         {

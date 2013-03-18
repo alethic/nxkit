@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{434F4E74-1BA0-4579-AB27-B0DC7DF4166C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NXKit.Web.UI</RootNamespace>
+    <AssemblyName>NXKit.Web.UI</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telerik.Web.UI">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ControlExtensions.cs" />
+    <Compile Include="FormModule.cs" />
+    <Compile Include="FormModuleAttribute.cs" />
+    <Compile Include="FormNavigation.cs" />
+    <Compile Include="FormPage.cs" />
+    <Compile Include="FormSection.cs" />
+    <Compile Include="FormView.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RadInputValidationDecorator.cs" />
+    <Compile Include="ResourceActionMethod.cs" />
+    <Compile Include="ResourceEventArgs.cs" />
+    <Compile Include="TextVisualControl.cs" />
+    <Compile Include="VisualContentControl.cs" />
+    <Compile Include="VisualContentControlCollection.cs" />
+    <Compile Include="VisualControl.cs" />
+    <Compile Include="VisualControlAddedEventArgs.cs" />
+    <Compile Include="VisualControlAddedEventHandler.cs" />
+    <Compile Include="VisualControlCollection.cs" />
+    <Compile Include="VisualControlTypeDescriptor.cs" />
+    <Compile Include="VisualControlTypeDescriptorAttribute.cs" />
+    <Compile Include="VisualExtensions.cs" />
+    <Compile Include="WebResources.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FormView.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="RadValidationDecorator.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NXKit.Util\NXKit.Util.csproj">
+      <Project>{1e5fae9e-f890-487b-bfcd-e3ed5c4f8d41}</Project>
+      <Name>NXKit.Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit\NXKit.csproj">
+      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
+      <Name>NXKit</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

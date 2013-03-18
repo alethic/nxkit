@@ -1,0 +1,19 @@
+﻿<elections>
+    <lfi>
+        <election />
+        <plan />
+        <coverage-type />
+    </lfi>
+    <dental>
+        <coverage-type />
+    </dental>
+    <optional-life>
+        <coverage-amount />
+    </optional-life>
+    <dependent-life>
+        <coverage-type />
+    </dependent-life>
+    <disability>
+        <elected>false</elected>
+    </disability>
+</elections>

@@ -1,7 +1,8 @@
 ﻿using System;
-using System.ComponentModel.Composition;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -10,41 +11,56 @@ using NXKit.Util;
 namespace NXKit.XForms
 {
 
-    [Module]
     public class XFormsModule : Module
     {
+
+        /// <summary>
+        /// Map of <see cref="XName"/> to <see cref="Visual"/> type.
+        /// </summary>
+        static readonly Dictionary<XName, Type> visualTypeMap = typeof(XFormsModule).Assembly.GetTypes()
+               .Select(i => new { Type = i, Attribute = i.GetCustomAttribute<VisualAttribute>() })
+               .Where(i => i.Attribute != null)
+               .ToDictionary(i => Constants.XForms_1_0 + i.Attribute.Name, i => i.Type);
 
         /// <summary>
         /// Tracks whether the processor is currently executing an outermost action handler.
         /// </summary>
         internal bool executingOutermostActionHandler;
 
-        /// <summary>
-        /// Initializes a new instance from the given state.
-        /// </summary>
-        /// <param name="state"></param>
-        /// <param name="resolver"></param>
-        [ImportingConstructor]
-        public XFormsModule([Import(typeof(Engine))] Engine processor)
-            : base(processor)
+        public override void Initialize(Engine engine)
         {
+            base.Initialize(engine);
 
-        }
-
-        public override void Initialize()
-        {
-            Form.ProcessSubmit += Form_ProcessSubmit;
+            Engine.ProcessSubmit += Form_ProcessSubmit;
 
             // obtain all model visuals
-            var models = Form.RootVisual
+            var models = Engine.RootVisual
                 .Descendants(true)
                 .OfType<XFormsModelVisual>()
                 .ToList();
 
             // perform refresh of just loaded visuals
             if (models.All(i => i.State.Ready))
-                foreach (var visual in Form.RootVisual.Descendants(true).OfType<XFormsBindingVisual>())
+                foreach (var visual in Engine.RootVisual.Descendants(true).OfType<XFormsBindingVisual>())
                     visual.Refresh();
+        }
+
+        /// <summary>
+        /// Creates the appropriate <see cref="Visual"/> instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public override Visual CreateVisual(XName xname)
+        {
+            if (xname.Namespace != Constants.XForms_1_0)
+                return null;
+
+            var type = visualTypeMap.ValueOrDefault(xname);
+            if (type == null)
+                return null;
+
+            return (XFormsVisual)Activator.CreateInstance(type);
         }
 
         /// <summary>
@@ -89,45 +105,45 @@ namespace NXKit.XForms
             return modelItem;
         }
 
-        private void Form_ProcessSubmit(object sender, EventArgs e)
+        void Form_ProcessSubmit(object sender, EventArgs e)
         {
             Submit();
         }
 
-        private void VersionExceptionEventDefaultAction(XFormsVersionExceptionEvent ev)
+        void VersionExceptionEventDefaultAction(XFormsVersionExceptionEvent ev)
         {
             System.Console.WriteLine(XFormsVersionExceptionEvent.Name);
-            Form.RootVisual.GetState<XFormsModuleState>().Failed = true;
+            Engine.RootVisual.GetState<XFormsModuleState>().Failed = true;
         }
 
-        private void LinkExceptionEventDefaultAction(XFormsLinkExceptionEvent ev)
+        void LinkExceptionEventDefaultAction(XFormsLinkExceptionEvent ev)
         {
             System.Console.WriteLine(XFormsLinkExceptionEvent.Name);
-            Form.RootVisual.GetState<XFormsModuleState>().Failed = true;
+            Engine.RootVisual.GetState<XFormsModuleState>().Failed = true;
         }
 
-        private void BindingExceptionEventDefaultAction(XFormsBindingExceptionEvent ev)
+        void BindingExceptionEventDefaultAction(XFormsBindingExceptionEvent ev)
         {
             System.Console.WriteLine(XFormsBindingExceptionEvent.Name);
-            Form.RootVisual.GetState<XFormsModuleState>().Failed = true;
+            Engine.RootVisual.GetState<XFormsModuleState>().Failed = true;
         }
 
         public override bool Run()
         {
-            if (Form.RootVisual.GetState<XFormsModuleState>().Failed)
+            if (Engine.RootVisual.GetState<XFormsModuleState>().Failed)
                 return false;
 
             var work = false;
 
             // obtain all model visuals
-            var models = Form.RootVisual
+            var models = Engine.RootVisual
                 .Descendants(true)
                 .OfType<XFormsModelVisual>()
                 .ToList();
 
             // raise construct event on all non-constructed models
             foreach (var model in models)
-                if (!Form.RootVisual.GetState<XFormsModuleState>().Failed)
+                if (!Engine.RootVisual.GetState<XFormsModuleState>().Failed)
                     if (!model.State.Construct)
                     {
                         model.DispatchEvent<XFormsModelConstructEvent>();
@@ -136,7 +152,7 @@ namespace NXKit.XForms
 
             // if all models have passed construct, raise construct done event
             if (models.All(i => i.State.Construct))
-                if (!Form.RootVisual.GetState<XFormsModuleState>().Failed)
+                if (!Engine.RootVisual.GetState<XFormsModuleState>().Failed)
                     foreach (var model in models)
                         if (!model.State.ConstructDone)
                         {
@@ -146,7 +162,7 @@ namespace NXKit.XForms
 
             // if all models have passed construct-done, raise ready event
             if (models.All(i => i.State.ConstructDone))
-                if (!Form.RootVisual.GetState<XFormsModuleState>().Failed)
+                if (!Engine.RootVisual.GetState<XFormsModuleState>().Failed)
                     foreach (var model in models)
                         if (!model.State.Ready)
                         {
@@ -154,35 +170,35 @@ namespace NXKit.XForms
                             work = true;
                         }
 
-            if (Form.RootVisual.GetState<XFormsModuleState>().Failed)
+            if (Engine.RootVisual.GetState<XFormsModuleState>().Failed)
                 return work;
 
             // only process main events if all models are ready
             if (models.All(i => i.State.Ready))
             {
                 foreach (var model in models.Where(i => i.State.RebuildFlag))
-                    if (!Form.RootVisual.GetState<XFormsModuleState>().Failed)
+                    if (!Engine.RootVisual.GetState<XFormsModuleState>().Failed)
                     {
                         work = true;
                         model.DispatchEvent<XFormsRebuildEvent>();
                     }
 
                 foreach (var model in models.Where(i => i.State.RecalculateFlag))
-                    if (!Form.RootVisual.GetState<XFormsModuleState>().Failed)
+                    if (!Engine.RootVisual.GetState<XFormsModuleState>().Failed)
                     {
                         work = true;
                         model.DispatchEvent<XFormsRecalculateEvent>();
                     }
 
                 foreach (var model in models.Where(i => i.State.RevalidateFlag))
-                    if (!Form.RootVisual.GetState<XFormsModuleState>().Failed)
+                    if (!Engine.RootVisual.GetState<XFormsModuleState>().Failed)
                     {
                         work = true;
                         model.DispatchEvent<XFormsRevalidateEvent>();
                     }
 
                 foreach (var model in models.Where(i => i.State.RefreshFlag))
-                    if (!Form.RootVisual.GetState<XFormsModuleState>().Failed)
+                    if (!Engine.RootVisual.GetState<XFormsModuleState>().Failed)
                     {
                         work = true;
                         model.DispatchEvent<XFormsRefreshEvent>();
@@ -202,7 +218,7 @@ namespace NXKit.XForms
             foreach (var instance in visual.Instances)
             {
                 // generate required 'id' attribute
-                Form.GetElementId(instance.Element);
+                Engine.GetElementId(instance.Element);
 
                 // extract instance values from xml
                 var instanceSrc = GetAttributeValue(instance.Element, "src");
@@ -213,10 +229,12 @@ namespace NXKit.XForms
                     try
                     {
                         // return resource as a stream
-                        var resource = Resolver.Get(instanceSrc, instance.Element.BaseUri);
+                        var resource = Engine.Resolver.Get(instanceSrc, instance.Element.BaseUri);
+                        if (resource == null)
+                            throw new FileNotFoundException("Could not load resource", instanceSrc);
 
                         // parse resource into new DOM
-                        var instanceDataDocument = Engine.StringToXDocument(new StreamReader(resource).ReadToEnd(), null);
+                        var instanceDataDocument = XDocument.Load(resource);
 
                         // add to model
                         instance.State.InstanceDocument = instanceDataDocument;
@@ -437,7 +455,7 @@ namespace NXKit.XForms
                             // calculated nodes are readonly
                             modelItem.ReadOnly = true;
 
-                            var calculateBinding = new XFormsBinding(Form, bind, ec, calculateAttr);
+                            var calculateBinding = new XFormsBinding(Engine, bind, ec, calculateAttr);
                             if (calculateBinding.Value != null)
                             {
                                 var oldValue = GetModelItemValue(ec, node);
@@ -574,7 +592,7 @@ namespace NXKit.XForms
                 model.State.RefreshFlag = false;
 
                 // resolve visuals whom are dependent on this model
-                var visuals = Form.RootVisual
+                var visuals = Engine.RootVisual
                     .Descendants(true)
                     .OfType<XFormsBindingVisual>();
 
@@ -686,7 +704,7 @@ namespace NXKit.XForms
 
             // default to default model
             if (ec == null)
-                ec = Form.RootVisual
+                ec = Engine.RootVisual
                     .Descendants(true)
                     .TakeWhile(i => !(i is XFormsGroupVisual))
                     .OfType<XFormsModelVisual>()
@@ -708,11 +726,11 @@ namespace NXKit.XForms
             if (!string.IsNullOrWhiteSpace(modelAttr))
             {
                 // find referenced model visual
-                var model = Form.RootVisual
+                var model = Engine.RootVisual
                     .Descendants(true)
                     .TakeWhile(i => !(i is XFormsGroupVisual))
                     .OfType<XFormsModelVisual>()
-                    .SingleOrDefault(i => Form.GetElementId(i.Element) == modelAttr);
+                    .SingleOrDefault(i => Engine.GetElementId(i.Element) == modelAttr);
 
                 if (model != null)
                     return model.Context;
@@ -763,7 +781,7 @@ namespace NXKit.XForms
                     return null;
 
                 // otherwise continue by evaluating expression
-                return new XFormsBinding(Form, visual, ec, xp);
+                return new XFormsBinding(Engine, visual, ec, xp);
             }
 
             return null;
@@ -798,7 +816,7 @@ namespace NXKit.XForms
             {
                 var nodesetAttr = GetAttributeValue(visual.Element, "nodeset");
                 if (nodesetAttr != null)
-                    return new XFormsBinding(Form, visual, ec, nodesetAttr);
+                    return new XFormsBinding(Engine, visual, ec, nodesetAttr);
             }
 
             return null;
@@ -905,7 +923,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal XName GetModelItemType(XObject item)
         {
-            return GetModelItem(item).Type ?? NXKit.SchemaConstants.XMLSchema + "string";
+            return GetModelItem(item).Type ?? NXKit.XmlSchemaConstants.XMLSchema + "string";
         }
 
         /// <summary>
@@ -985,10 +1003,10 @@ namespace NXKit.XForms
         public void Submit()
         {
             // ensure processor is up to date
-            Form.Run();
+            Engine.Run();
 
             // all submission elements on the form
-            var visuals = Form.RootVisual
+            var visuals = Engine.RootVisual
                 .Descendants()
                 .OfType<XFormsSubmissionVisual>();
 

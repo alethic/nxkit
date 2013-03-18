@@ -5,7 +5,6 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
-    [SchemaPackage]
     public sealed class SchemaPackage : NXKit.SchemaPackage
     {
 

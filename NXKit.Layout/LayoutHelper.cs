@@ -1,4 +1,4 @@
-﻿namespace NXKit.Layout
+﻿namespace NXKit.XForms.Layout
 {
 
     public static class LayoutHelper
@@ -11,7 +11,7 @@
         /// <returns></returns>
         public static Importance GetImportance(StructuralVisual visual)
         {
-            var attr = visual.Form.GetModule<LayoutModule>().GetAttributeValue(visual.Element, "importance");
+            var attr = visual.Engine.GetModule<LayoutModule>().GetAttributeValue(visual.Element, "importance");
 
             // return value based on string
             switch (attr)

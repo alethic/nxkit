@@ -5,17 +5,7 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "model")]
-    public class XFormsModelVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsModelVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("model")]
     public class XFormsModelVisual : XFormsVisual, IEvaluationContextScope,
         IEventDefaultActionHandler<XFormsModelConstructEvent>,
         IEventDefaultActionHandler<XFormsModelConstructDoneEvent>,
@@ -27,19 +17,7 @@ namespace NXKit.XForms
         IEventDefaultActionHandler<XFormsResetEvent>
     {
 
-        private XFormsModelVisualState state;
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="module"></param>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsModelVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
+        XFormsModelVisualState state;
 
         /// <summary>
         /// Gets a reference to the model visual's state.
@@ -67,15 +45,15 @@ namespace NXKit.XForms
 
             // emit instance children first
             foreach (var element in Element.Elements(Constants.XForms_1_0 + "instance"))
-                yield return Form.CreateVisual(this, element);
+                yield return Engine.CreateVisual(this, element);
 
             // emit instance children first
             foreach (var element in Element.Elements(Constants.XForms_1_0 + "bind"))
-                yield return Form.CreateVisual(this, element);
+                yield return Engine.CreateVisual(this, element);
 
             // emit instance children first
             foreach (var element in Element.Elements(Constants.XForms_1_0 + "submission"))
-                yield return Form.CreateVisual(this, element);
+                yield return Engine.CreateVisual(this, element);
         }
 
         /// <summary>

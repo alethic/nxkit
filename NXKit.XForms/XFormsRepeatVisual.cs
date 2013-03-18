@@ -6,37 +6,16 @@ using NXKit.Util;
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "repeat")]
-    public class XFormsRepeatVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsRepeatVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("repeat")]
     public class XFormsRepeatVisual : XFormsNodeSetBindingVisual, INamingScope
     {
 
-        private bool startIndexCached;
-        private int startIndex;
-        private bool numberCached;
-        private int? number;
+        bool startIndexCached;
+        int startIndex;
+        bool numberCached;
+        int? number;
 
-        private Dictionary<XObject, XFormsRepeatItemVisual> items = new Dictionary<XObject, XFormsRepeatItemVisual>();
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsRepeatVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
+        Dictionary<XObject, XFormsRepeatItemVisual> items = new Dictionary<XObject, XFormsRepeatItemVisual>();
 
         /// <summary>
         /// Dynamically generate repeat items, reusing existing instances if available.
@@ -62,7 +41,7 @@ namespace NXKit.XForms
         /// <param name="position"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        private XFormsRepeatItemVisual GetOrCreateItem(XFormsModelVisual model, XFormsInstanceVisual instance, XObject node, int position, int size)
+         XFormsRepeatItemVisual GetOrCreateItem(XFormsModelVisual model, XFormsInstanceVisual instance, XObject node, int position, int size)
         {
             // new context for child
             var ec = new XFormsEvaluationContext(model, instance, node, position, size);
@@ -70,7 +49,11 @@ namespace NXKit.XForms
             // obtain or create child
             var item = items.ValueOrDefault(node);
             if (item == null)
-                item = items[node] = new XFormsRepeatItemVisual(this, Element, ec);
+            {
+                item = items[node] = new XFormsRepeatItemVisual();
+                item.Initialize(Engine, this, Element);
+                item.SetContext(ec);
+            }
             else
                 item.SetContext(ec);
 

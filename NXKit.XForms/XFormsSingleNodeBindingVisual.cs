@@ -1,28 +1,14 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
 
-
-
 namespace NXKit.XForms
 {
 
     public class XFormsSingleNodeBindingVisual : XFormsBindingVisual
     {
 
-        private XFormsEvaluationContext context;
-        private bool contextCached;
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="module"></param>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsSingleNodeBindingVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
+        XFormsEvaluationContext context;
+        bool contextCached;
 
         /// <summary>
         /// Gets the evaluation context contributed to visuals within this visual's scope.

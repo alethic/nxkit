@@ -1,0 +1,166 @@
+﻿<persons>
+  <dependents>
+    <dependent type="spouse">
+      <name />
+      <ssn />
+      <dob />
+      <gender />
+    </dependent>
+    <dependent type="child">
+      <name />
+      <ssn />
+      <dob />
+      <gender />
+    </dependent>
+    <dependent type="child">
+      <name />
+      <ssn />
+      <dob />
+      <gender />
+    </dependent>
+    <dependent type="child">
+      <name />
+      <ssn />
+      <dob />
+      <gender />
+    </dependent>
+    <dependent type="child">
+      <name />
+      <ssn />
+      <dob />
+      <gender />
+    </dependent>
+    <dependent type="child">
+      <name />
+      <ssn />
+      <dob />
+      <gender />
+    </dependent>
+    <dependent type="child">
+      <name />
+      <ssn />
+      <dob />
+      <gender />
+    </dependent>
+    <dependent type="child">
+      <name />
+      <ssn />
+      <dob />
+      <gender />
+    </dependent>
+    <dependent type="child">
+      <name />
+      <ssn />
+      <dob />
+      <gender />
+    </dependent>
+    <dependent type="child">
+      <name />
+      <ssn />
+      <dob />
+      <gender />
+    </dependent>
+    <dependent type="child">
+      <name />
+      <ssn />
+      <dob />
+      <gender />
+    </dependent>
+  </dependents>
+  <beneficiaries>
+    <beneficiary>
+      <name />
+      <ssn />
+      <percentage />
+      <relationship />
+    </beneficiary>
+    <beneficiary>
+      <name />
+      <ssn />
+      <percentage />
+      <relationship />
+    </beneficiary>
+    <beneficiary>
+      <name />
+      <ssn />
+      <percentage />
+      <relationship />
+    </beneficiary>
+    <beneficiary>
+      <name />
+      <ssn />
+      <percentage />
+      <relationship />
+    </beneficiary>
+    <beneficiary>
+      <name />
+      <ssn />
+      <percentage />
+      <relationship />
+    </beneficiary>
+    <beneficiary>
+      <name />
+      <ssn />
+      <percentage />
+      <relationship />
+    </beneficiary>
+    <beneficiary>
+      <name />
+      <ssn />
+      <percentage />
+      <relationship />
+    </beneficiary>
+    <add>
+      <beneficiary>
+        <name />
+        <ssn />
+        <percentage />
+        <relationship />
+      </beneficiary>
+      <beneficiary>
+        <name />
+        <ssn />
+        <percentage />
+        <relationship />
+      </beneficiary>
+      <beneficiary>
+        <name />
+        <ssn />
+        <percentage />
+        <relationship />
+      </beneficiary>
+      <beneficiary>
+        <name />
+        <ssn />
+        <percentage />
+        <relationship />
+      </beneficiary>
+    </add>
+    <life>
+      <beneficiary>
+        <name />
+        <ssn />
+        <percentage />
+        <relationship />
+      </beneficiary>
+      <beneficiary>
+        <name />
+        <ssn />
+        <percentage />
+        <relationship />
+      </beneficiary>
+      <beneficiary>
+        <name />
+        <ssn />
+        <percentage />
+        <relationship />
+      </beneficiary>
+      <beneficiary>
+        <name />
+        <ssn />
+        <percentage />
+        <relationship />
+      </beneficiary>
+    </life>
+  </beneficiaries>
+</persons>

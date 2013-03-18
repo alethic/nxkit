@@ -1,4 +1,4 @@
-﻿namespace NXKit.Layout
+﻿namespace NXKit.XForms.Layout
 {
 
     public enum Importance

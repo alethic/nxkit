@@ -1,31 +1,15 @@
-﻿using System.Xml.Linq;
+﻿using System.IO;
 
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "output")]
-    public class XFormsOutputVisualTypeDescriptor : VisualTypeDescriptor
+    [Visual("output")]
+    public class XFormsOutputVisual : XFormsSingleNodeBindingVisual, ITextVisual
     {
 
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
+        public void WriteText(TextWriter w)
         {
-            return new XFormsOutputVisual(parent, (XElement)node);
-        }
-
-    }
-
-    public class XFormsOutputVisual : XFormsSingleNodeBindingVisual
-    {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsOutputVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
+            w.Write((Binding != null ? Binding.Value : null) ?? "");
         }
 
     }

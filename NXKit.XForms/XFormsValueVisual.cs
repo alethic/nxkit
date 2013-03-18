@@ -1,35 +1,13 @@
 ﻿using System;
-using System.Xml.Linq;
 
 using NXKit.Util;
 
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "value")]
-    public class XFormsValueVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode element)
-        {
-            return new XFormsValueVisual(parent, (XElement)element);
-        }
-
-    }
-
+    [Visual("value")]
     public class XFormsValueVisual : XFormsSingleNodeBindingVisual, ISelectableVisual
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsValueVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         /// <summary>
         /// Gets the text value associated with this value visual.

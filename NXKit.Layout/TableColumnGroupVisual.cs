@@ -1,34 +1,11 @@
-﻿using System.Xml.Linq;
+﻿using NXKit.Util;
 
-using NXKit.Util;
-
-namespace NXKit.Layout
+namespace NXKit.XForms.Layout
 {
 
-    [VisualTypeDescriptor(Constants.Layout_1_0_NS, "table-column-group")]
-    public class TableColumnGroupVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new TableColumnGroupVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("table-column-group")]
     public class TableColumnGroupVisual : LayoutVisual
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public TableColumnGroupVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         public string Name
         {

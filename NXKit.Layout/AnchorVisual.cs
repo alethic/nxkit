@@ -1,33 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace NXKit.Layout
+namespace NXKit.XForms.Layout
 {
 
-    [VisualTypeDescriptor(Constants.Layout_1_0_NS, "a")]
-    public class AnchorVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode element)
-        {
-            return new AnchorVisual(parent, (XElement)element);
-        }
-
-    }
-
+    [Visual("a")]
     public class AnchorVisual : LayoutVisual
     {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public AnchorVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         protected override IEnumerable<Visual> CreateChildren()
         {
@@ -37,7 +16,7 @@ namespace NXKit.Layout
 
         public string Href
         {
-            get { return Form.GetModule<LayoutModule>().GetAttributeValue(Element, "href"); }
+            get { return Engine.GetModule<LayoutModule>().GetAttributeValue(Element, "href"); }
         }
 
     }

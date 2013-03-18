@@ -14,18 +14,14 @@ namespace NXKit
     public abstract class StructuralVisual : Visual
     {
 
-        private string uniqueId;
-        private Visual[] children;
-        private Dictionary<XNode, Visual> nodeChildren = new Dictionary<XNode, Visual>();
+        string uniqueId;
+        Visual[] children;
+        Dictionary<XNode, Visual> nodeChildren = new Dictionary<XNode, Visual>();
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="form"></param>
-        /// <param name="parent"></param>
-        /// <param name="node"></param>
-        protected StructuralVisual(IEngine form, StructuralVisual parent, XElement element)
-            : base(form, parent, element)
+        public StructuralVisual()
         {
 
         }
@@ -33,10 +29,11 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="engine"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        public StructuralVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
+        protected StructuralVisual(IEngine engine, StructuralVisual parent, XNode node)
+            : base(engine, parent, node)
         {
 
         }
@@ -66,7 +63,7 @@ namespace NXKit
         /// Implements the getter for UniqueId.
         /// </summary>
         /// <returns></returns>
-        private string CreateUniqueId()
+        string CreateUniqueId()
         {
             var namingScope = Ascendants()
                 .OfType<INamingScope>()
@@ -117,7 +114,7 @@ namespace NXKit
                     yield return visual;
 
                 // create new child
-                visual = Form.CreateVisual(this, childNode);
+                visual = Engine.CreateVisual(this, childNode);
                 if (visual != null)
                 {
                     nodeChildren[childNode] = visual;
@@ -145,7 +142,7 @@ namespace NXKit
         /// Raises the ChildrenInvalidated event.
         /// </summary>
         /// <param name="args"></param>
-        private void OnChildrenInvalidated(EventArgs args)
+        void OnChildrenInvalidated(EventArgs args)
         {
             if (ChildrenInvalidated != null)
                 ChildrenInvalidated(this, args);
@@ -159,7 +156,7 @@ namespace NXKit
         {
             return Descendants(false);
         }
-         
+
         /// <summary>
         /// Yields each descendant visual.
         /// </summary>
@@ -189,7 +186,7 @@ namespace NXKit
                 yield break;
 
             if (includeSelf)
-                yield return this; 
+                yield return this;
 
             foreach (var child in Children)
                 if (child is StructuralVisual)
@@ -226,7 +223,7 @@ namespace NXKit
         public T GetState<T>()
             where T : new()
         {
-            return Form.VisualState.Get<T>(this);
+            return Engine.VisualState.Get<T>(this);
         }
 
     }

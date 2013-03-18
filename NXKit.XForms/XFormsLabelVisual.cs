@@ -1,37 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.Xml.Linq;
+using System.IO;
+using System.Linq;
 
 namespace NXKit.XForms
 {
-    
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "label")]
-    public class XFormsLabelVisualTypeDescriptor : VisualTypeDescriptor
+
+    [Visual("label")]
+    public class XFormsLabelVisual : XFormsSingleNodeBindingVisual, ITextVisual
     {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsLabelVisual(parent, (XElement)node);
-        }
-
-    }
-
-    public class XFormsLabelVisual : XFormsSingleNodeBindingVisual
-    {
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsLabelVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
 
         protected override IEnumerable<Visual> CreateChildren()
         {
             return CreateElementChildren(Element, includeTextContent: true);
+        }
+
+        public void WriteText(TextWriter w)
+        {
+            if (Binding != null)
+                w.Write(Binding.Value ?? "");
+            else
+                foreach (var c in Children.OfType<ITextVisual>())
+                    c.WriteText(w);
         }
 
     }

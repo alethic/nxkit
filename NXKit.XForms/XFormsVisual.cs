@@ -10,35 +10,11 @@ namespace NXKit.XForms
     {
 
         /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="form"></param>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsVisual(IEngine form, StructuralVisual parent, XElement element)
-            : base(form, parent, element)
-        {
-
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="module"></param>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
-
-        /// <summary>
         /// Gets a reference to the <see cref="XFormsModule"/> instance.
         /// </summary>
         public XFormsModule Module
         {
-            get { return Form.GetModule<XFormsModule>(); }
+            get { return Engine.GetModule<XFormsModule>(); }
         }
 
         /// <summary>
@@ -46,7 +22,7 @@ namespace NXKit.XForms
         /// </summary>
         public override string Id
         {
-            get { return Module.Form.GetElementId(Element); }
+            get { return Module.Engine.GetElementId(Element); }
         }
 
     }

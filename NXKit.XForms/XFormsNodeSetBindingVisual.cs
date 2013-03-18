@@ -6,19 +6,8 @@ namespace NXKit.XForms
     public abstract class XFormsNodeSetBindingVisual : XFormsBindingVisual
     {
 
-        private bool contextCached;
-        private XFormsEvaluationContext context;
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsNodeSetBindingVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
+        bool contextCached;
+        XFormsEvaluationContext context;
 
         /// <summary>
         /// Provides the default evaluation context for child elements, the first element.

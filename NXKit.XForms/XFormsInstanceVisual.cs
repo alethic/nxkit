@@ -4,32 +4,11 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
-    [VisualTypeDescriptor(Constants.XForms_1_0_NS, "instance")]
-    public class XFormsInstanceVisualTypeDescriptor : VisualTypeDescriptor
-    {
-
-        public override Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
-        {
-            return new XFormsInstanceVisual(parent, (XElement)node);
-        }
-
-    }
-
+    [Visual("instance")]
     public class XFormsInstanceVisual : XFormsVisual
     {
 
-        private XFormsInstanceVisualState state;
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsInstanceVisual(StructuralVisual parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
+        XFormsInstanceVisualState state;
 
         public XFormsInstanceVisualState State
         {

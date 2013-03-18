@@ -52,84 +52,43 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControlExtensions.cs" />
-    <Compile Include="FormModule.cs" />
-    <Compile Include="FormModuleAttribute.cs" />
-    <Compile Include="Layout\LayoutHelpers.cs" />
-    <Compile Include="Layout\LayoutModule.cs" />
-    <Compile Include="Layout\Table.cs" />
-    <Compile Include="Layout\TableCell.cs" />
-    <Compile Include="Layout\TableCellCollection.cs" />
-    <Compile Include="Layout\TableRowRowCollection.cs" />
-    <Compile Include="Layout\TableRow.cs" />
-    <Compile Include="Layout\TableRowCollection.cs" />
-    <Compile Include="Layout\TableControlColumnHeaderControlCollection.cs" />
-    <Compile Include="Layout\TableColumnHeaderControl.cs" />
-    <Compile Include="Layout\TableColumn.cs" />
-    <Compile Include="Layout\TableColumnCollection.cs" />
-    <Compile Include="Layout\TableColumnGroup.cs" />
-    <Compile Include="Layout\TableColumnGroupCollection.cs" />
-    <Compile Include="Layout\TableControlCellControlCollection.cs" />
-    <Compile Include="Layout\TableCellControl.cs" />
-    <Compile Include="Layout\TableControl.cs" />
-    <Compile Include="Layout\WebResources.cs" />
-    <Compile Include="RadInputValidationDecorator.cs" />
-    <Compile Include="VisualContentControlCollection.cs" />
-    <Compile Include="FormSection.cs" />
-    <Compile Include="FormPage.cs" />
-    <Compile Include="Layout\AnchorControl.cs" />
-    <Compile Include="Layout\SectionControl.cs" />
-    <Compile Include="Layout\CategoryControl.cs" />
-    <Compile Include="Layout\FormControl.cs" />
-    <Compile Include="Layout\ParagraphControl.cs" />
-    <Compile Include="Layout\PageControl.cs" />
-    <Compile Include="FormHelper.cs" />
-    <Compile Include="TextVisualControl.cs" />
-    <Compile Include="VisualControlCollection.cs" />
-    <Compile Include="VisualControlAddedEventArgs.cs" />
-    <Compile Include="VisualControlAddedEventHandler.cs" />
-    <Compile Include="VisualControlTypeDescriptorAttribute.cs" />
-    <Compile Include="VisualContentControl.cs" />
-    <Compile Include="VisualControlTypeDescriptor.cs" />
-    <Compile Include="WebResources.cs" />
-    <Compile Include="XForms\BeginRenderEventArgs.cs" />
-    <Compile Include="XForms\CommonControlCollection.cs" />
-    <Compile Include="XForms\RangeDateControl.cs" />
-    <Compile Include="XForms\RangeIntegerControl.cs" />
-    <Compile Include="XForms\RangeControl.cs" />
-    <Compile Include="XForms\OutputControl.cs" />
-    <Compile Include="XForms\TriggerControl.cs" />
-    <Compile Include="XForms\SelectCompactControl.cs" />
-    <Compile Include="XForms\SelectFullControl.cs" />
-    <Compile Include="XForms\SelectMinimalControl.cs" />
-    <Compile Include="XForms\SelectControl.cs" />
-    <Compile Include="XForms\Select1CompactControl.cs" />
-    <Compile Include="XForms\Select1FullControl.cs" />
-    <Compile Include="XForms\LabelControl.cs" />
-    <Compile Include="XForms\Select1MinimalControl.cs" />
-    <Compile Include="XForms\Select1Control.cs" />
-    <Compile Include="XForms\GroupControl.cs" />
-    <Compile Include="XForms\InputIntegerControl.cs" />
-    <Compile Include="XForms\InputTimeControl.cs" />
-    <Compile Include="XForms\InputDateControl.cs" />
-    <Compile Include="XForms\InputBooleanControl.cs" />
-    <Compile Include="FormNavigation.cs" />
-    <Compile Include="FormView.cs" />
-    <Compile Include="XForms\InputStringControl.cs" />
-    <Compile Include="XForms\InputControl.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResourceActionMethod.cs" />
-    <Compile Include="ResourceEventArgs.cs" />
-    <Compile Include="VisualControl.cs" />
     <Compile Include="VisualExtensions.cs" />
-    <Compile Include="XForms\BindingUtil.cs" />
-    <Compile Include="XForms\TriggerControlCollection.cs" />
-    <Compile Include="XForms\WebResources.cs" />
+    <Compile Include="BeginRenderEventArgs.cs" />
+    <Compile Include="CommonControlCollection.cs" />
+    <Compile Include="RangeDateControl.cs" />
+    <Compile Include="RangeIntegerControl.cs" />
+    <Compile Include="RangeControl.cs" />
+    <Compile Include="OutputControl.cs" />
+    <Compile Include="TriggerControl.cs" />
+    <Compile Include="SelectCompactControl.cs" />
+    <Compile Include="SelectFullControl.cs" />
+    <Compile Include="SelectMinimalControl.cs" />
+    <Compile Include="SelectControl.cs" />
+    <Compile Include="Select1CompactControl.cs" />
+    <Compile Include="Select1FullControl.cs" />
+    <Compile Include="LabelControl.cs" />
+    <Compile Include="Select1MinimalControl.cs" />
+    <Compile Include="Select1Control.cs" />
+    <Compile Include="GroupControl.cs" />
+    <Compile Include="InputIntegerControl.cs" />
+    <Compile Include="InputTimeControl.cs" />
+    <Compile Include="InputDateControl.cs" />
+    <Compile Include="InputBooleanControl.cs" />
+    <Compile Include="InputStringControl.cs" />
+    <Compile Include="InputControl.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BindingUtil.cs" />
+    <Compile Include="TriggerControlCollection.cs" />
+    <Compile Include="WebResources.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.Layout\NXKit.XForms.Layout.csproj">
       <Project>{0B8BC4B5-851F-4B8E-B5D4-0A8925B23886}</Project>
       <Name>NXKit.XForms.Layout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Web.UI\NXKit.Web.UI.csproj">
+      <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
+      <Name>NXKit.Web.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
       <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
@@ -145,25 +104,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="web.config" />
+    <EmbeddedResource Include="Select1FullControl.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="XForms\Select1FullControl.js" />
+    <EmbeddedResource Include="Select1MinimalControl.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FormView.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="XForms\Select1MinimalControl.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="XForms\InputStringControl.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Layout\TableControl.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="RadValidationDecorator.js" />
+    <EmbeddedResource Include="InputStringControl.js" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
