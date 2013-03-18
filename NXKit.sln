@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit", "NXKit\NXKit.csproj", "{2B27233A-849A-4339-96C6-BABCB968B8B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Layout", "NXKit.Layout\NXKit.XForms.Layout.csproj", "{0B8BC4B5-851F-4B8E-B5D4-0A8925B23886}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Layout", "NXKit.XForms.Layout\NXKit.XForms.Layout.csproj", "{0B8BC4B5-851F-4B8E-B5D4-0A8925B23886}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Web.UI", "NXKit.XForms.Web.UI\NXKit.XForms.Web.UI.csproj", "{4E56F9A0-8D52-433B-AF43-9A3D2A1B522E}"
 EndProject

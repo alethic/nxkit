@@ -82,7 +82,7 @@
     <Compile Include="WebResources.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NXKit.Layout\NXKit.XForms.Layout.csproj">
+    <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
       <Project>{0B8BC4B5-851F-4B8E-B5D4-0A8925B23886}</Project>
       <Name>NXKit.XForms.Layout</Name>
     </ProjectReference>
