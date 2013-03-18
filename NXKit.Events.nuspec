@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>NXKit.XForms</id>
-        <version>0.0.3</version>
-        <title>NXKit.XForms</title>
+        <id>NXKit.Events</id>
+        <version>0.0.2</version>
+        <title>NXKit.Events</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
@@ -11,17 +11,16 @@
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
         <description>NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
 
-NXKit.XForms contains the processing model for handing W3C XForms documents.</description>
+NXKit.Events contains the processing model for handing W3C Events containing documents.</description>
         <releaseNotes />
         <copyright>Copyright © 2013 Jerome Haltom</copyright>
         <tags>xml xforms</tags>
         <dependencies>
             <dependency id="NXKit" />
             <dependency id="NXKit.Util" />
-            <dependency id="NXKit.Events" />
         </dependencies>
     </metadata>
     <files>
-        <file src="NXKit.XForms\bin\Release\NXKit.XForms.dll" target="lib\net45\NXKit.XForms.dll" />
+        <file src="NXKit.Events\bin\Release\NXKit.Events.dll" target="lib\net45\NXKit.Events.dll" />
     </files>
 </package>
