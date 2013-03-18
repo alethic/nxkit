@@ -18,6 +18,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="NXKit.XForms\bin\Release\NXKit.XForms.dll" target="lib\net40\NXKit.XForms.dll" />
+        <file src="NXKit.XForms\bin\Release\NXKit.dll" target="lib\net45\NXKit.dll" />
     </files>
 </package>

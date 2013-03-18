@@ -17,9 +17,10 @@
             <dependency id="NXKit" />
             <dependency id="NXKit.Utils" />
             <dependency id="NXKit.XForms" />
+            <dependency id="NXKit.Web.UI" />
         </dependencies>
     </metadata>
     <files>
-        <file src="NXKit.XForms.Web.UI\bin\Release\NXKit.XForms.Web.UI.dll" target="lib\net40\NXKit.XForms.Web.UI.dll" />
+        <file src="NXKit.XForms.Web.UI\bin\Release\NXKit.XForms.Web.UI.dll" target="lib\net45\NXKit.XForms.Web.UI.dll" />
     </files>
 </package>

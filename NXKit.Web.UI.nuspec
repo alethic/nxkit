@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>NXKit.XForms</id>
+        <id>NXKit.Web.UI</id>
         <version>0.0.1</version>
-        <title>NXKit.XForms</title>
+        <title>NXKit.Web.UI</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
@@ -17,8 +17,12 @@
             <dependency id="NXKit" />
             <dependency id="NXKit.Util" />
         </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System.Web" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Web.Extensions" targetFramework="" />
+        </frameworkAssemblies>
     </metadata>
     <files>
-        <file src="NXKit.XForms\bin\Release\NXKit.XForms.dll" target="lib\net45\NXKit.XForms.dll" />
+        <file src="NXKit.Web.UI\bin\Release\NXKit.Web.UI.dll" target="lib\net45\NXKit.Web.UI.dll" />
     </files>
 </package>

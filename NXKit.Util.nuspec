@@ -3,7 +3,7 @@
     <metadata>
         <id>NXKit.Util</id>
         <version>0.0.1</version>
-        <title>NXKit Util</title>
+        <title>NXKit.Util</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
@@ -15,6 +15,6 @@
         <tags>xml xforms</tags>
     </metadata>
     <files>
-        <file src="NXKit.Util\bin\Release\NXKit.Util.dll" target="lib\net40" />
+        <file src="NXKit.Util\bin\Release\NXKit.Util.dll" target="lib\net45\NXKit.Util.dll" />
     </files>
 </package>
