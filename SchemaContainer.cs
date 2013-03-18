@@ -11,37 +11,29 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Provides access to a static <see cref="SchemaSet"/> instance for working with NXKit forms.
+    /// Manages the available schema.
     /// </summary>
-    internal static class EngineSchema
+    internal class SchemaContainer
     {
 
         /// <summary>
-        /// Hosts the MEF loaded schema packages.
+        /// Reference to the hosting engine.
         /// </summary>
-        private class PackageContainer
-        {
+        Engine Engine { get; set; }
 
-            /// <summary>
-            /// Initializes a new instance.
-            /// </summary>
-            public PackageContainer()
-            {
-                Engine.container.SatisfyImportsOnce(this);
-            }
-
-            [ImportMany(typeof(SchemaPackage))]
-            public IEnumerable<SchemaPackage> Packages { get; set; }
-
-        }
-
-        private static readonly PackageContainer container = new PackageContainer();
+        /// <summary>
+        /// Set of provided schema packages.
+        /// </summary>
+        [ImportMany]
+        public IEnumerable<SchemaPackage> Packages { get; set; }
 
         /// <summary>
         /// Initializes a new static instance.
         /// </summary>
-        static EngineSchema()
+        internal SchemaContainer(Engine engine)
         {
+            Engine = engine;
+
             // initialize .Net schema
             {
                 var settings = new XmlReaderSettings()
@@ -50,7 +42,7 @@ namespace NXKit
                     ValidationType = ValidationType.None,
                 };
 
-                var schemaStreams = container.Packages
+                var schemaStreams = Packages
                     .SelectMany(i => i.Namespaces)
                     .Where(i => i != null)
                     .Select(i => ResolveSchema(i))
@@ -61,7 +53,7 @@ namespace NXKit
                 // initialize static schema set
                 SchemaSet = new XmlSchemaSet();
                 SchemaSet.ValidationEventHandler += SchemaSet_ValidationEventHandler;
-                SchemaSet.XmlResolver = new XmlResolver();
+                SchemaSet.XmlResolver = new XmlResolver(this);
                 foreach (var stream in schemaStreams)
                     SchemaSet.Add(null, XmlReader.Create(stream, settings));
 
@@ -90,16 +82,16 @@ namespace NXKit
         /// <summary>
         /// Gets a reference to the compiled schema set.
         /// </summary>
-        public static XmlSchemaSet SchemaSet { get; private set; }
+        public XmlSchemaSet SchemaSet { get; private set; }
 
         /// <summary>
         /// Resolves the location of the given schema.
         /// </summary>
         /// <param name="ns"></param>
         /// <returns></returns>
-        public static string ResolveSchema(XNamespace ns)
+        public string ResolveSchema(XNamespace ns)
         {
-            return container.Packages.Select(i => i.ResolveSchema(ns)).Where(i => i != null).FirstOrDefault();
+            return Packages.Select(i => i.ResolveSchema(ns)).Where(i => i != null).FirstOrDefault();
         }
 
         /// <summary>
@@ -107,9 +99,9 @@ namespace NXKit
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        public static Stream OpenSchema(string location)
+        public Stream OpenSchema(string location)
         {
-            return container.Packages.Select(i => i.OpenSchema(location)).Where(i => i != null).FirstOrDefault();
+            return Packages.Select(i => i.OpenSchema(location)).Where(i => i != null).FirstOrDefault();
         }
 
         /// <summary>
@@ -117,7 +109,7 @@ namespace NXKit
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private static void SchemaSet_ValidationEventHandler(object sender, ValidationEventArgs args)
+        static void SchemaSet_ValidationEventHandler(object sender, ValidationEventArgs args)
         {
             if (args.Severity == XmlSeverityType.Error)
                 throw args.Exception;
@@ -126,12 +118,23 @@ namespace NXKit
         /// <summary>
         /// Provides an <see cref="XmlResolver"/> implementation for users of ISIS.Forms.
         /// </summary>
-        public class XmlResolver : XmlUrlResolver
+        class XmlResolver : XmlUrlResolver
         {
+
+            SchemaContainer schema;
+
+            /// <summary>
+            /// Initializes a new instance.
+            /// </summary>
+            /// <param name="schema"></param>
+            internal XmlResolver(SchemaContainer schema)
+            {
+                this.schema = schema;
+            }
 
             public override object GetEntity(Uri absoluteUri, string role, Type ofObjectToReturn)
             {
-                return ResolveSchema(absoluteUri.ToString());
+                return schema.ResolveSchema(absoluteUri.ToString());
             }
 
         }

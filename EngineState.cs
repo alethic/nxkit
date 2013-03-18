@@ -34,14 +34,36 @@ namespace NXKit
             VisualState = (VisualStateCollection)info.GetValue("4", typeof(VisualStateCollection));
         }
 
+        /// <summary>
+        /// Saved engine configuration.
+        /// </summary>
+        public EngineConfiguration Configuration { get; set; }
+
+        /// <summary>
+        /// Saved document.
+        /// </summary>
         public string Document { get; set; }
 
+        /// <summary>
+        /// Saved next element Id.
+        /// </summary>
         public int NextElementId { get; set; }
 
+        /// <summary>
+        /// Saved module state.
+        /// </summary>
         public Dictionary<Type, object> ModuleState { get; set; }
 
+        /// <summary>
+        /// Saved visual state.
+        /// </summary>
         public VisualStateCollection VisualState { get; set ;}
 
+        /// <summary>
+        /// Serializes the instance.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             // compress document to stream

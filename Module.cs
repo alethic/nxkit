@@ -12,36 +12,39 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public Module(IEngine form)
+        public Module()
         {
-            Form = form;
+
+        }
+
+        /// <summary>
+        /// Initializes the module instance against the specified <see cref="Engine"/>.
+        /// </summary>
+        /// <param name="engine"></param>
+        public virtual void Initialize(Engine engine)
+        {
+            Engine = engine;
         }
 
         /// <summary>
         /// Gets a reference to the form processor hosting this module.
         /// </summary>
-        public IEngine Form { get; private set; }
+        public IEngine Engine { get; private set; }
 
         /// <summary>
-        /// Gets a reference to the underlying form document.
+        /// Invoked when the engine wants to create a visual. Override this method to implement creation of <see
+        /// cref="Visual"/> instances.
         /// </summary>
-        public XDocument Document
-        {
-            get { return Form.Document; }
-        }
-        
-        /// <summary>
-        /// Gets a reference to the <see cref="IResourceResolver"/>.
-        /// </summary>
-        public IResourceResolver Resolver
-        {
-            get { return Form.Resolver; }
-        }
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public abstract Visual CreateVisual(XName xname);
 
         /// <summary>
-        /// Initializes the module. This is invoked after whatever state is available has been loaded.
+        /// Gives a <see cref="Module"/> a chance to attach additional information to a <see cref="Visual"/> created by
+        /// other modules.
         /// </summary>
-        public virtual void Initialize()
+        /// <param name="visual"></param>
+        public virtual void AnnotateVisual(Visual visual)
         {
 
         }
@@ -50,26 +53,9 @@ namespace NXKit
         /// Runs the module.
         /// </summary>
         /// <returns></returns>
-        public abstract bool Run();
-
-        /// <summary>
-        /// Expands a DOM node into a <see cref="Visual"/>.
-        /// </summary>
-        /// <param name="form"></param>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        public virtual Visual CreateVisual(IEngine form, StructuralVisual parent, XNode node)
+        public virtual bool Run()
         {
-            return null;
-        }
-
-        /// <summary>
-        /// Gives a <see cref="Module"/> a chance to attach additional information to a <see cref="Visual"/>.
-        /// </summary>
-        /// <param name="visual"></param>
-        public virtual void AnnotateVisual(Visual visual)
-        {
-
+            return false;
         }
 
     }

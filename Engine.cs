@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Schema;
 
 namespace NXKit
 {
@@ -17,28 +13,38 @@ namespace NXKit
     {
 
         /// <summary>
-        /// Composes parts available to the forms implementation.
+        /// Configuration for the engine.
         /// </summary>
-        internal static CompositionContainer container = new CompositionContainer(new ApplicationCatalog());
+        public EngineConfiguration Configuration { get; private set; }
 
         /// <summary>
-        /// Set of modules providing functionality to the form processor.
+        /// Set of generated modules.
         /// </summary>
-        [ImportMany(typeof(Module))]
-        private List<Module> modules = null;
+        Module[] modules;
 
-        private StructuralVisual rootVisual;
-        private int nextElementId;
-        private VisualStateCollection visualState;
+        /// <summary>
+        /// Root visual of the document.
+        /// </summary>
+        StructuralVisual rootVisual;
+
+        /// <summary>
+        /// Auto-assigned element ID to use next.
+        /// </summary>
+        int nextElementId;
+
+        /// <summary>
+        /// Stores per-<see cref="Visual"/> state.
+        /// </summary>
+        VisualStateCollection visualState;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Engine(string document, IResourceResolver resolver)
+        public Engine(EngineConfiguration configuration, string document, IResourceResolver resolver)
         {
-            Initialize(document, resolver);
+            Initialize(configuration, document, resolver);
         }
 
         /// <summary>
@@ -46,9 +52,9 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Engine(XmlDocument document, IResourceResolver resolver)
+        public Engine(EngineConfiguration configuration, XmlDocument document, IResourceResolver resolver)
         {
-            Initialize(document.InnerXml, resolver);
+            Initialize(configuration, document.InnerXml, resolver);
         }
 
         /// <summary>
@@ -56,9 +62,9 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Engine(XDocument document, IResourceResolver resolver)
+        public Engine(EngineConfiguration configuration, XDocument document, IResourceResolver resolver)
         {
-            Initialize(document.ToString(SaveOptions.DisableFormatting), resolver);
+            Initialize(configuration, document.ToString(SaveOptions.DisableFormatting), resolver);
         }
 
         /// <summary>
@@ -75,9 +81,10 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        private void Initialize(string document, IResourceResolver resolver)
+        private void Initialize(EngineConfiguration configuration, string document, IResourceResolver resolver)
         {
-            Document = StringToXDocument(document, resolver);
+            Configuration = configuration;
+            Document = XDocument.Parse(document);
             Resolver = resolver;
 
             nextElementId = 1;
@@ -93,7 +100,8 @@ namespace NXKit
         /// <param name="resolver"></param>
         private void Initialize(EngineState state, IResourceResolver resolver)
         {
-            Document = StringToXDocument(state.Document, resolver);
+            Configuration = state.Configuration;
+            Document = XDocument.Parse(state.Document);
             Resolver = resolver;
 
             nextElementId = state.NextElementId;
@@ -105,14 +113,16 @@ namespace NXKit
         /// <summary>
         /// Initializes modules
         /// </summary>
-        private void Initialize()
+        void Initialize()
         {
-            container.ComposeExportedValue(AttributedModelServices.GetContractName(typeof(Engine)), this);
-            container.SatisfyImportsOnce(this);
+            // create modules
+            modules = Configuration.ModuleTypes
+                .Select(i => (Module)Activator.CreateInstance(i))
+                .ToArray();
 
-            // initialize the modules
+            // initialize modules
             foreach (var module in modules)
-                module.Initialize();
+                module.Initialize(this);
         }
 
         /// <summary>
@@ -193,9 +203,20 @@ namespace NXKit
         /// Creates a new root <see cref="Visual"/> instance for navigating the visual tree.
         /// </summary>
         /// <returns></returns>
-        private StructuralVisual CreateRootVisual()
+        StructuralVisual CreateRootVisual()
         {
             return (StructuralVisual)((IEngine)this).CreateVisual(null, Document.Root);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Visual"/> from the loaded <see cref="Module"/>s.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        Visual CreateVisualFromModules(XElement element)
+        {
+            return modules.Select(i => i.CreateVisual(element.Name)).FirstOrDefault(i => i != null);
         }
 
         /// <summary>
@@ -206,34 +227,29 @@ namespace NXKit
         /// <returns></returns>
         Visual IEngine.CreateVisual(StructuralVisual parent, XNode node)
         {
-            if (node is XElement)
+            if (node is XText)
             {
-                var element = (XElement)node;
-
-                // look up descriptor
-                var visualTypeDescriptor = VisualTypeDescriptorContainer.DefaultInstance.GetDescriptor(element.Name);
-                if (visualTypeDescriptor != null)
-                {
-                    // create new instance of visual
-                    var visual = visualTypeDescriptor.CreateVisual(this, parent, node);
-                    if (visual != null)
-                    {
-                        // give each module a chance to add additional information to the visual
-                        foreach (var module2 in modules)
-                            module2.AnnotateVisual(visual);
-
-                        return visual;
-                    }
-                }
-
-                // unknown element
-                throw new Exception(string.Format("Could not create Visual from unknown element '{0}'.", element.Name));
+                var v = new TextVisual();
+                v.Initialize(this, parent, node);
+                return v;
             }
-            else if (node is XText)
-                // default processing for text
-                return new TextVisual(this, parent, (XText)node);
-            else
-                return null;
+            else if (node is XElement)
+            {
+                // create new instance of visual using extensions
+                var visual = CreateVisualFromModules((XElement)node);
+                if (visual != null)
+                {
+                    visual.Initialize(this, parent, node);
+
+                    // give each module a chance to add additional information to the visual
+                    foreach (var module2 in modules)
+                        module2.AnnotateVisual(visual);
+
+                    return visual;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -244,44 +260,11 @@ namespace NXKit
         {
             return new EngineState()
             {
-                Document = XDocumentToString(Document),
+                Configuration = Configuration,
+                Document = Document.ToString(SaveOptions.DisableFormatting),
                 NextElementId = nextElementId,
                 VisualState = visualState,
             };
-        }
-
-        /// <summary>
-        /// Parses a string into a new <see cref="XDocument"/>, using the available form schema.
-        /// </summary>
-        /// <param name="document"></param>
-        /// <param name="resolver"></param>
-        /// <returns></returns>
-        public static XDocument StringToXDocument(string document, IResourceResolver resolver)
-        {
-            var rdr = XmlReader.Create(new System.IO.StringReader(document), new XmlReaderSettings()
-            {
-                ConformanceLevel = ConformanceLevel.Document,
-                DtdProcessing = DtdProcessing.Prohibit,
-                IgnoreComments = true,
-                IgnoreProcessingInstructions = true,
-                IgnoreWhitespace = true,
-                Schemas = EngineSchema.SchemaSet,
-                ValidationFlags = XmlSchemaValidationFlags.AllowXmlAttributes | XmlSchemaValidationFlags.ProcessIdentityConstraints | XmlSchemaValidationFlags.ProcessInlineSchema,
-                ValidationType = ValidationType.Schema,
-                XmlResolver = null,
-            });
-
-            return XDocument.Load(rdr, LoadOptions.None);
-        }
-
-        /// <summary>
-        /// Transforms the <see cref="XDocument"/> into a string representation.
-        /// </summary>
-        /// <param name="document"></param>
-        /// <returns></returns>
-        public static string XDocumentToString(XDocument document)
-        {
-            return document.ToString(SaveOptions.DisableFormatting);
         }
 
         /// <summary>
@@ -292,7 +275,7 @@ namespace NXKit
             if (ProcessSubmit != null)
                 ProcessSubmit(this, EventArgs.Empty);
         }
-        
+
         /// <summary>
         /// Raised to initiate submission of the form.
         /// </summary>

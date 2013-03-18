@@ -3,7 +3,7 @@
 namespace NXKit.Events
 {
 
-    public static class Constants
+    public static class SchemaConstants
     {
 
         public const string Events_1_0_NS = "http://www.w3.org/2001/xml-events";

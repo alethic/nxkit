@@ -34,7 +34,7 @@ namespace NXKit
         }
 
         [ThreadStatic]
-        private static Visual current;
+        static Visual current;
 
         /// <summary>
         /// Gets the currently in-scope visual.
@@ -44,38 +44,49 @@ namespace NXKit
             get { return current; }
         }
 
-        private bool addedEventRaised = false;
-        private EventListenerMap listenerMap;
+        bool addedEventRaised = false;
+        EventListenerMap listenerMap;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="form"></param>
+        public Visual()
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="engine"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        protected Visual(IEngine form, StructuralVisual parent, XNode node)
+        protected Visual(IEngine engine, StructuralVisual parent, XNode node)
         {
-            Form = form;
+            Initialize(engine, parent, node);
+        }
+
+        /// <summary>
+        /// Initializes the instance.
+        /// </summary>
+        /// <param name="engine"></param>
+        /// <param name="parent"></param>
+        /// <param name="node"></param>
+        public void Initialize(IEngine engine, StructuralVisual parent, XNode node)
+        {
+            if (engine == null)
+                throw new ArgumentNullException("engine");
+
+            Engine = engine;
             Parent = parent;
             Node = node;
             Annotations = new VisualAnnotationCollection();
         }
 
         /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="node"></param>
-        public Visual(StructuralVisual parent, XNode node)
-            : this(parent.Form, parent, node)
-        {
-
-        }
-
-        /// <summary>
         /// <see cref="IEngine"/> responsible for the visual tree this visual resides within.
         /// </summary>
-        public IEngine Form { get; private set; }
+        public IEngine Engine { get; private set; }
 
         /// <summary>
         /// Parent <see cref="Visual"/>.

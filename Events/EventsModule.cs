@@ -1,17 +1,18 @@
-﻿using System.ComponentModel.Composition;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace NXKit.Events
 {
 
-    [Module]
+    /// <summary>
+    /// Introduces XML events support into the NXKit model.
+    /// </summary>
     public class EventsModule : Module
     {
 
-        private class EventListener : IEventListener
+        class EventListener : IEventListener
         {
 
-            private IEventHandlerVisual handler;
+            IEventHandlerVisual handler;
 
             /// <summary>
             /// Initializes a new instance.
@@ -31,19 +32,15 @@ namespace NXKit.Events
 
         }
 
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        [ImportingConstructor]
-        public EventsModule([Import(typeof(Engine))] Engine form)
-            : base(form)
+        public override Visual CreateVisual(XName xname)
         {
+            if (xname.Namespace != SchemaConstants.Events_1_0)
+                return null;
 
-        }
+            if (xname.LocalName == "listener")
+                return new EventsEventListenerVisual();
 
-        public override bool Run()
-        {
-            return false;
+            return null;
         }
 
         public override void AnnotateVisual(Visual visual)
@@ -75,18 +72,18 @@ namespace NXKit.Events
             else if (visual.Node is XElement)
             {
                 var element = (XElement)visual.Node;
-                eventAttr = (string)element.Attribute(Constants.Events_1_0 + "event");
+                eventAttr = (string)element.Attribute(SchemaConstants.Events_1_0 + "event");
 
                 // required attribute for events
                 if (eventAttr == null)
                     return;
 
-                observerAttr = (string)element.Attribute(Constants.Events_1_0 + "observer");
-                targetAttr = (string)element.Attribute(Constants.Events_1_0 + "target");
-                handlerAttr = (string)element.Attribute(Constants.Events_1_0 + "handler");
-                phaseAttr = (string)element.Attribute(Constants.Events_1_0 + "phase");
-                propagateAttr = (string)element.Attribute(Constants.Events_1_0 + "propagate");
-                defaultActionAttr = (string)element.Attribute(Constants.Events_1_0 + "defaultAction");
+                observerAttr = (string)element.Attribute(SchemaConstants.Events_1_0 + "observer");
+                targetAttr = (string)element.Attribute(SchemaConstants.Events_1_0 + "target");
+                handlerAttr = (string)element.Attribute(SchemaConstants.Events_1_0 + "handler");
+                phaseAttr = (string)element.Attribute(SchemaConstants.Events_1_0 + "phase");
+                propagateAttr = (string)element.Attribute(SchemaConstants.Events_1_0 + "propagate");
+                defaultActionAttr = (string)element.Attribute(SchemaConstants.Events_1_0 + "defaultAction");
             }
 
             var observer = observerAttr != null ? visual.ResolveId(observerAttr) : null;
@@ -108,6 +105,11 @@ namespace NXKit.Events
 
             if (handler != null)
                 observer.AddEventListener(eventAttr, new EventListener(observer, target, handler), capture);
+        }
+
+        public override bool Run()
+        {
+            return false;
         }
 
     }
