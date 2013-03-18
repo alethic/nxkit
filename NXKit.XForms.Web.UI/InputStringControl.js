@@ -1,24 +1,24 @@
-﻿Type.registerNamespace('ISIS.Forms.Web.UI.XForms');
+﻿Type.registerNamespace('NXKit.XForms.Web.UI');
 
-ISIS.Forms.Web.UI.XForms.InputStringControl = function (element)
+NXKit.XForms.Web.UI.InputStringControl = function (element)
 {
-    ISIS.Forms.Web.UI.XForms.InputStringControl.initializeBase(this, [element]);
+    NXKit.XForms.Web.UI.InputStringControl.initializeBase(this, [element]);
 
     this._formView = null;
     this._modelItemId = null;
     this._radTextBox = null;
 };
 
-ISIS.Forms.Web.UI.XForms.InputStringControl.prototype =
+NXKit.XForms.Web.UI.InputStringControl.prototype =
 {
     initialize: function ()
     {
-        ISIS.Forms.Web.UI.XForms.InputStringControl.callBaseMethod(this, 'initialize');
+        NXKit.XForms.Web.UI.InputStringControl.callBaseMethod(this, 'initialize');
     },
 
     dispose: function ()
     {
-        ISIS.Forms.Web.UI.XForms.InputStringControl.callBaseMethod(this, 'dispose');
+        NXKit.XForms.Web.UI.InputStringControl.callBaseMethod(this, 'dispose');
     },
 
     get_formView: function ()
@@ -83,11 +83,11 @@ ISIS.Forms.Web.UI.XForms.InputStringControl.prototype =
     
     _onTextBoxValueChangedHandler: function (source, args)
     {
-        this.get_formView().raiseValueChanged(new ISIS.Forms.Web.UI.ValueChangedEventArgs(self, this.get_modelItemId(), source.get_value(), null));
+        this.get_formView().raiseValueChanged(new NXKit.Web.UI.ValueChangedEventArgs(self, this.get_modelItemId(), source.get_value(), null));
     },
 };
 
-ISIS.Forms.Web.UI.XForms.InputStringControl.registerClass('ISIS.Forms.Web.UI.XForms.InputStringControl', Sys.UI.Control);
+NXKit.XForms.Web.UI.InputStringControl.registerClass('NXKit.XForms.Web.UI.InputStringControl', Sys.UI.Control);
 
 if (typeof(Sys) !== 'undefined')
     Sys.Application.notifyScriptLoaded();

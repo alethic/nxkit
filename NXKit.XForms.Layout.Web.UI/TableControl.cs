@@ -279,14 +279,14 @@ namespace NXKit.XForms.Layout.Web.UI
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
-            var desc = new ScriptControlDescriptor("ISIS.Forms.Web.UI.Layout.TableControl", ClientID);
+            var desc = new ScriptControlDescriptor("NXKit.XForms.Layout.Web.UI.TableControl", ClientID);
             desc.AddComponentProperty("formView", View.ClientID);
             yield return desc;
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference("ISIS.Forms.Web.UI.Layout.TableControl.js", typeof(TableControl).Assembly.FullName);
+            yield return new ScriptReference("NXKit.XForms.Layout.Web.UI.TableControl.js", typeof(TableControl).Assembly.FullName);
         }
 
     }

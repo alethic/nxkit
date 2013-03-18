@@ -1,17 +1,17 @@
-﻿Type.registerNamespace('ISIS.Forms.Web.UI.Layout');
+﻿Type.registerNamespace('NXKit.XForms.Layout.Web.UI');
 
-ISIS.Forms.Web.UI.Layout.TableControl = function (element)
+NXKit.XForms.Layout.Web.UI.TableControl = function (element)
 {
-    ISIS.Forms.Web.UI.Layout.TableControl.initializeBase(this, [element]);
+    NXKit.XForms.Layout.Web.UI.TableControl.initializeBase(this, [element]);
 
     this._formView = null;
 };
 
-ISIS.Forms.Web.UI.Layout.TableControl.prototype =
+NXKit.XForms.Layout.Web.UI.TableControl.prototype =
 {
     initialize: function ()
     {
-        ISIS.Forms.Web.UI.Layout.TableControl.callBaseMethod(this, 'initialize');
+        NXKit.XForms.Layout.Web.UI.TableControl.callBaseMethod(this, 'initialize');
         
         $addHandler(window,   'load', Function.createDelegate(this, this._onLoadHandler));
         $addHandler(window, 'resize', Function.createDelegate(this, this._onResizeHandler));
@@ -19,7 +19,7 @@ ISIS.Forms.Web.UI.Layout.TableControl.prototype =
 
     dispose: function ()
     {
-        ISIS.Forms.Web.UI.Layout.TableControl.callBaseMethod(this, 'dispose');
+        NXKit.XForms.Layout.Web.UI.TableControl.callBaseMethod(this, 'dispose');
     },
 
     get_formView: function ()
@@ -78,7 +78,7 @@ ISIS.Forms.Web.UI.Layout.TableControl.prototype =
     },
 };
 
-ISIS.Forms.Web.UI.Layout.TableControl.registerClass('ISIS.Forms.Web.UI.Layout.TableControl', Sys.UI.Control);
+NXKit.XForms.Layout.Web.UI.TableControl.registerClass('NXKit.XForms.Layout.Web.UI.TableControl', Sys.UI.Control);
 
 if (typeof(Sys) !== 'undefined')
     Sys.Application.notifyScriptLoaded();

@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Xml.Linq;
 
 using NXKit.Util;
-using NXKit.XForms.Layout;
 
 namespace NXKit.XForms.Layout
 {
@@ -20,6 +19,17 @@ namespace NXKit.XForms.Layout
             .Select(i => new { Type = i, Attribute = i.GetCustomAttribute<VisualAttribute>() })
             .Where(i => i.Attribute != null)
             .ToDictionary(i => Constants.Layout_1_0 + i.Attribute.Name, i => i.Type);
+
+        public override Type[] DependsOn
+        {
+            get
+            {
+                return new[]
+                {
+                    typeof(XFormsModule)
+                };
+            }
+        }
 
         /// <summary>
         /// Creates the appropriate <see cref="Visual"/> instance.

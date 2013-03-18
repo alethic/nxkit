@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
+using NXKit.Events;
 using NXKit.Util;
 
 namespace NXKit.XForms
@@ -26,6 +27,17 @@ namespace NXKit.XForms
         /// Tracks whether the processor is currently executing an outermost action handler.
         /// </summary>
         internal bool executingOutermostActionHandler;
+
+        public override Type[] DependsOn
+        {
+            get
+            {
+                return new[]
+                {
+                    typeof(EventsModule)
+                };
+            }
+        }
 
         public override void Initialize(Engine engine)
         {

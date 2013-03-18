@@ -1,18 +1,18 @@
-﻿Type.registerNamespace('ISIS.Forms.Web.UI.XForms');
+﻿Type.registerNamespace('NXKit.XForms.Web.UI');
 
-ISIS.Forms.Web.UI.XForms.Select1FullControl = function (element)
+NXKit.XForms.Web.UI.Select1FullControl = function (element)
 {
-    ISIS.Forms.Web.UI.XForms.Select1FullControl.initializeBase(this, [element]);
+    NXKit.XForms.Web.UI.Select1FullControl.initializeBase(this, [element]);
 
     this._formView = null;
     this._modelItemId = null;
 };
 
-ISIS.Forms.Web.UI.XForms.Select1FullControl.prototype =
+NXKit.XForms.Web.UI.Select1FullControl.prototype =
 {
     initialize: function ()
     {
-        ISIS.Forms.Web.UI.XForms.Select1FullControl.callBaseMethod(this, 'initialize');
+        NXKit.XForms.Web.UI.Select1FullControl.callBaseMethod(this, 'initialize');
 
         var self = this;
 
@@ -27,7 +27,7 @@ ISIS.Forms.Web.UI.XForms.Select1FullControl.prototype =
 
     dispose: function ()
     {
-        ISIS.Forms.Web.UI.XForms.Select1FullControl.callBaseMethod(this, 'dispose');
+        NXKit.XForms.Web.UI.Select1FullControl.callBaseMethod(this, 'dispose');
     },
 
     get_formView: function ()
@@ -75,11 +75,11 @@ ISIS.Forms.Web.UI.XForms.Select1FullControl.prototype =
 
     _onInputClickHandler: function (input)
     {
-        this.get_formView().raiseValueChanged(new ISIS.Forms.Web.UI.ValueChangedEventArgs(self, this.get_modelItemId(), null, parseInt(input.value)));
+        this.get_formView().raiseValueChanged(new NXKit.Web.UI.ValueChangedEventArgs(self, this.get_modelItemId(), null, parseInt(input.value)));
     },
 };
 
-ISIS.Forms.Web.UI.XForms.Select1FullControl.registerClass('ISIS.Forms.Web.UI.XForms.Select1FullControl', Sys.UI.Control);
+NXKit.XForms.Web.UI.Select1FullControl.registerClass('NXKit.XForms.Web.UI.Select1FullControl', Sys.UI.Control);
 
 if (typeof(Sys) !== 'undefined')
     Sys.Application.notifyScriptLoaded();

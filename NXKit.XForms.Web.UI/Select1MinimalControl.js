@@ -1,24 +1,24 @@
-﻿Type.registerNamespace('ISIS.Forms.Web.UI.XForms');
+﻿Type.registerNamespace('NXKit.XForms.Web.UI');
 
-ISIS.Forms.Web.UI.XForms.Select1MinimalControl = function (element)
+NXKit.XForms.Web.UI.Select1MinimalControl = function (element)
 {
-    ISIS.Forms.Web.UI.XForms.Select1MinimalControl.initializeBase(this, [element]);
+    NXKit.XForms.Web.UI.Select1MinimalControl.initializeBase(this, [element]);
 
     this._formView = null;
     this._modelItemId = null;
     this._radComboBox = null;
 };
 
-ISIS.Forms.Web.UI.XForms.Select1MinimalControl.prototype =
+NXKit.XForms.Web.UI.Select1MinimalControl.prototype =
 {
     initialize: function ()
     {
-        ISIS.Forms.Web.UI.XForms.Select1MinimalControl.callBaseMethod(this, 'initialize');
+        NXKit.XForms.Web.UI.Select1MinimalControl.callBaseMethod(this, 'initialize');
     },
 
     dispose: function ()
     {
-        ISIS.Forms.Web.UI.XForms.Select1MinimalControl.callBaseMethod(this, 'dispose');
+        NXKit.XForms.Web.UI.Select1MinimalControl.callBaseMethod(this, 'dispose');
     },
 
     get_formView: function ()
@@ -88,11 +88,11 @@ ISIS.Forms.Web.UI.XForms.Select1MinimalControl.prototype =
         if (item != null)
             value = parseInt(item.get_value());
 
-        this.get_formView().raiseValueChanged(new ISIS.Forms.Web.UI.ValueChangedEventArgs(self, this.get_modelItemId(), null, value));
+        this.get_formView().raiseValueChanged(new NXKit.Web.UI.ValueChangedEventArgs(self, this.get_modelItemId(), null, value));
     },
 };
 
-ISIS.Forms.Web.UI.XForms.Select1MinimalControl.registerClass('ISIS.Forms.Web.UI.XForms.Select1MinimalControl', Sys.UI.Control);
+NXKit.XForms.Web.UI.Select1MinimalControl.registerClass('NXKit.XForms.Web.UI.Select1MinimalControl', Sys.UI.Control);
 
 if (typeof(Sys) !== 'undefined')
     Sys.Application.notifyScriptLoaded();

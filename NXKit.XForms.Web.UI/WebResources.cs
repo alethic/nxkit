@@ -1,5 +1,5 @@
 ﻿using System.Web.UI;
 
-[assembly: WebResource("ISIS.Forms.Web.UI.XForms.InputStringControl.js", "text/javascript")]
-[assembly: WebResource("ISIS.Forms.Web.UI.XForms.Select1FullControl.js", "text/javascript")]
-[assembly: WebResource("ISIS.Forms.Web.UI.XForms.Select1MinimalControl.js", "text/javascript")]
+[assembly: WebResource("NXKit.XForms.Web.UI.InputStringControl.js", "text/javascript")]
+[assembly: WebResource("NXKit.XForms.Web.UI.Select1FullControl.js", "text/javascript")]
+[assembly: WebResource("NXKit.XForms.Web.UI.Select1MinimalControl.js", "text/javascript")]

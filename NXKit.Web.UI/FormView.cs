@@ -101,7 +101,7 @@ namespace NXKit.Web.UI
         {
             var d = ResolveVisualControlDescriptor(visual);
             if (d == null)
-                return false;
+                return true;
 
             return d.IsOpaque(visual);
         }
@@ -566,13 +566,13 @@ namespace NXKit.Web.UI
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
-            var desc = new ScriptControlDescriptor("ISIS.Forms.Web.UI.FormView", ClientID);
+            var desc = new ScriptControlDescriptor("NXKit.Web.UI.FormView", ClientID);
             yield return desc;
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference("ISIS.Forms.Web.UI.FormView.js", typeof(FormView).Assembly.FullName);
+            yield return new ScriptReference("NXKit.Web.UI.FormView.js", typeof(FormView).Assembly.FullName);
         }
     }
 

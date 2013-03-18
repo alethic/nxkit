@@ -45,7 +45,7 @@ namespace NXKit.Web.UI
                 ValidationGroup = decorator.ValidationGroup;
                 Display = ValidatorDisplay.None;
                 ValidateEmptyText = true;
-                ClientValidationFunction = "ISIS.Forms.Web.UI.RadValidationDecorator.RadInputValidationDecorator_ValidationFunction";
+                ClientValidationFunction = "NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_ValidationFunction";
             }
 
         }
@@ -139,14 +139,14 @@ namespace NXKit.Web.UI
                         Sys.Application.add_load(function()
                         {
                             var ctl = $find(""" + ctl.ClientID + @""");
-                            ISIS.Forms.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(ctl, true);
+                            NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(ctl, true);
                         });
                     </script>");
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference("ISIS.Forms.Web.UI.RadValidationDecorator.js", "ISIS.Forms.Web.UI");
+            yield return new ScriptReference("NXKit.Web.UI.RadValidationDecorator.js", "NXKit.Web.UI");
         }
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()

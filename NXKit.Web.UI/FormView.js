@@ -1,6 +1,6 @@
-﻿Type.registerNamespace('ISIS.Forms.Web.UI');
+﻿Type.registerNamespace('NXKit.Web.UI');
 
-ISIS.Forms.Web.UI.ValueChangedEventArgs = function (source, modelItemId, newValue, newValueHashCode)
+NXKit.Web.UI.ValueChangedEventArgs = function (source, modelItemId, newValue, newValueHashCode)
 {
     this._source = source;
     this._modelItemId = modelItemId;
@@ -8,7 +8,7 @@ ISIS.Forms.Web.UI.ValueChangedEventArgs = function (source, modelItemId, newValu
     this._newValueHashCode = newValueHashCode;
 };
 
-ISIS.Forms.Web.UI.ValueChangedEventArgs.prototype =
+NXKit.Web.UI.ValueChangedEventArgs.prototype =
 {
 
     get_source: function ()
@@ -33,25 +33,25 @@ ISIS.Forms.Web.UI.ValueChangedEventArgs.prototype =
 
 };
 
-ISIS.Forms.Web.UI.ValueChangedEventArgs.registerClass('ISIS.Forms.Web.UI.ValueChangedEventArgs', Sys.EventArgs);
+NXKit.Web.UI.ValueChangedEventArgs.registerClass('NXKit.Web.UI.ValueChangedEventArgs', Sys.EventArgs);
 
 
-ISIS.Forms.Web.UI.FormView = function (element)
+NXKit.Web.UI.FormView = function (element)
 {
-    ISIS.Forms.Web.UI.FormView.initializeBase(this, [element]);
+    NXKit.Web.UI.FormView.initializeBase(this, [element]);
 };
 
-ISIS.Forms.Web.UI.FormView.prototype =
+NXKit.Web.UI.FormView.prototype =
 {
 
     initialize: function ()
     {
-        ISIS.Forms.Web.UI.FormView.callBaseMethod(this, 'initialize');
+        NXKit.Web.UI.FormView.callBaseMethod(this, 'initialize');
     },
 
     dispose: function ()
     {
-        ISIS.Forms.Web.UI.FormView.callBaseMethod(this, 'dispose');
+        NXKit.Web.UI.FormView.callBaseMethod(this, 'dispose');
     },
 
     add_valueChanged: function (handler)
@@ -73,7 +73,7 @@ ISIS.Forms.Web.UI.FormView.prototype =
 
 };
 
-ISIS.Forms.Web.UI.FormView.registerClass('ISIS.Forms.Web.UI.FormView', Sys.UI.Control);
+NXKit.Web.UI.FormView.registerClass('NXKit.Web.UI.FormView', Sys.UI.Control);
 
 if (typeof(Sys) !== 'undefined')
     Sys.Application.notifyScriptLoaded();

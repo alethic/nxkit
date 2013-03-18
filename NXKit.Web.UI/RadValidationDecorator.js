@@ -1,6 +1,6 @@
-﻿Type.registerNamespace("ISIS.Forms.Web.UI.RadValidationDecorator");
+﻿Type.registerNamespace("NXKit.Web.UI.RadValidationDecorator");
 
-ISIS.Forms.Web.UI.RadValidationDecorator.RadInputValidationDecorator_ValidationFunction = function (source, arguments)
+NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_ValidationFunction = function (source, arguments)
 {
     if (source.controltovalidate == undefined)
         return;
@@ -21,28 +21,28 @@ ISIS.Forms.Web.UI.RadValidationDecorator.RadInputValidationDecorator_ValidationF
         if (!validator.isvalid)
         {
             // not valid, update input and exit
-            ISIS.Forms.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(txt, true);
+            NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(txt, true);
             return;
         }
     }
 
     // if we made it this far, all validators are valid
-    ISIS.Forms.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(txt, false);
+    NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(txt, false);
 }
 
-ISIS.Forms.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid = function (ctl, invalid)
+NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid = function (ctl, invalid)
 {
     ctl._invalid = invalid;
     ctl.updateCssClass();
 }
 
-ISIS.Forms.Web.UI.RadValidationDecorator.RadInputValidationDecorator_LoadInvalidate = function (ctl)
+NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_LoadInvalidate = function (ctl)
 {
     // set invalid state
-    ISIS.Forms.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(ctl, true);
+    NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(ctl, true);
 }
 
-ISIS.Forms.Web.UI.RadValidationDecorator.RadComboBoxValidationDecorator_ValidationFunction = function (source, arguments)
+NXKit.Web.UI.RadValidationDecorator.RadComboBoxValidationDecorator_ValidationFunction = function (source, arguments)
 {
     if (source.controltovalidate == undefined)
         return;

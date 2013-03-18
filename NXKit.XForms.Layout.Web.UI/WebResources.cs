@@ -1,3 +1,3 @@
 ﻿using System.Web.UI;
 
-[assembly: WebResource("ISIS.Forms.Web.UI.Layout.TableControl.js", "text/javascript")]
+[assembly: WebResource("NXKit.XForms.Layout.Web.UI.TableControl.js", "text/javascript")]

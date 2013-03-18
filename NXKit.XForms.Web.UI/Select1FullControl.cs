@@ -138,7 +138,7 @@ namespace NXKit.XForms.Web.UI
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
-            var desc = new ScriptControlDescriptor("ISIS.Forms.Web.UI.XForms.Select1FullControl", ClientID);
+            var desc = new ScriptControlDescriptor("NXKit.XForms.Web.UI.Select1FullControl", ClientID);
             desc.AddComponentProperty("formView", View.ClientID);
             desc.AddProperty("modelItemId", Visual.Binding != null ? Visual.Binding.NodeUniqueId : null);
             yield return desc;
@@ -146,7 +146,7 @@ namespace NXKit.XForms.Web.UI
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference("ISIS.Forms.Web.UI.XForms.Select1FullControl.js", typeof(Select1FullControl).Assembly.FullName);
+            yield return new ScriptReference("NXKit.XForms.Web.UI.Select1FullControl.js", typeof(Select1FullControl).Assembly.FullName);
         }
 
     }

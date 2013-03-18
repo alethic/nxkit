@@ -133,7 +133,7 @@ namespace NXKit.XForms.Web.UI
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
-            var desc = new ScriptControlDescriptor("ISIS.Forms.Web.UI.XForms.InputStringControl", ClientID);
+            var desc = new ScriptControlDescriptor("NXKit.XForms.Web.UI.InputStringControl", ClientID);
             desc.AddComponentProperty("formView", View.ClientID);
             desc.AddProperty("modelItemId", Visual.Binding != null ? Visual.Binding.NodeUniqueId : null);
             desc.AddComponentProperty("radTextBox", ctl.ClientID);
@@ -142,7 +142,7 @@ namespace NXKit.XForms.Web.UI
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference("ISIS.Forms.Web.UI.XForms.InputStringControl.js", typeof(InputStringControl).Assembly.FullName);
+            yield return new ScriptReference("NXKit.XForms.Web.UI.InputStringControl.js", typeof(InputStringControl).Assembly.FullName);
         }
 
     }
