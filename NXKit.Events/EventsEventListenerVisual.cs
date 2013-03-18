@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace NXKit.Events
+﻿namespace NXKit.Events
 {
 
     public class EventsEventListenerVisual : StructuralVisual, IEventHandlerVisual

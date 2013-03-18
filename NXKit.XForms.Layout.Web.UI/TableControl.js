@@ -4,7 +4,7 @@ NXKit.XForms.Layout.Web.UI.TableControl = function (element)
 {
     NXKit.XForms.Layout.Web.UI.TableControl.initializeBase(this, [element]);
 
-    this._formView = null;
+    this._view = null;
 };
 
 NXKit.XForms.Layout.Web.UI.TableControl.prototype =
@@ -22,16 +22,16 @@ NXKit.XForms.Layout.Web.UI.TableControl.prototype =
         NXKit.XForms.Layout.Web.UI.TableControl.callBaseMethod(this, 'dispose');
     },
 
-    get_formView: function ()
+    get_view: function ()
     {
-        return this._formView;
+        return this._view;
     },
-    set_formView: function (value)
+    set_view: function (value)
     {
-        if (this._formView != value)
+        if (this._view != value)
         {
-            this._formView = value;
-            this.raisePropertyChanged('formView');
+            this._view = value;
+            this.raisePropertyChanged('view');
         }
     },
 

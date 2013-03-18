@@ -280,7 +280,7 @@ namespace NXKit.XForms.Layout.Web.UI
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
             var desc = new ScriptControlDescriptor("NXKit.XForms.Layout.Web.UI.TableControl", ClientID);
-            desc.AddComponentProperty("formView", View.ClientID);
+            desc.AddComponentProperty("view", View.ClientID);
             yield return desc;
         }
 
