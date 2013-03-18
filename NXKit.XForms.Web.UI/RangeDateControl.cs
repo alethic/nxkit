@@ -20,7 +20,7 @@ namespace NXKit.XForms.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public RangeDateControl(FormView view, XFormsRangeVisual visual)
+        public RangeDateControl(View view, XFormsRangeVisual visual)
             : base(view,visual)
         {
 

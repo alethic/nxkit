@@ -17,7 +17,7 @@ namespace NXKit.Web.UI
             return true;
         }
 
-        public override VisualControl CreateControl(FormView view, Visual visual)
+        public override VisualControl CreateControl(View view, Visual visual)
         {
             return new TextVisualControl(view, (TextVisual)visual);
         }
@@ -32,7 +32,7 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public TextVisualControl(FormView view, TextVisual visual)
+        public TextVisualControl(View view, TextVisual visual)
             : base(view, visual)
         {
 

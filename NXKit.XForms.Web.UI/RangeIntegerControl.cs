@@ -17,7 +17,7 @@ namespace NXKit.XForms.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public RangeIntegerControl(NXKit.Web.UI.FormView view, XFormsRangeVisual visual)
+        public RangeIntegerControl(NXKit.Web.UI.View view, XFormsRangeVisual visual)
             : base(view, visual)
         {
 

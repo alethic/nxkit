@@ -10,12 +10,12 @@
         /// Initializes a new instance.
         /// </summary>
         /// <param name="view"></param>
-        public FormModule(FormView view)
+        public FormModule(View view)
         {
             View = view;
         }
 
-        public FormView View { get; private set; }
+        public View View { get; private set; }
 
     }
 

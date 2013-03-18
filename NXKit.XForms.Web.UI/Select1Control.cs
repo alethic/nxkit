@@ -18,7 +18,7 @@ namespace NXKit.XForms.Web.UI
             return true;
         }
 
-        public override VisualControl CreateControl(FormView view, Visual visual)
+        public override VisualControl CreateControl(View view, Visual visual)
         {
             return new Select1Control(view, (XFormsSelect1Visual)visual);
         }
@@ -32,7 +32,7 @@ namespace NXKit.XForms.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public Select1Control(FormView view, XFormsSelect1Visual visual)
+        public Select1Control(View view, XFormsSelect1Visual visual)
             : base(view, visual)
         {
 

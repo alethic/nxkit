@@ -20,7 +20,7 @@ namespace NXKit.XForms.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public InputDateControl(FormView view,XFormsInputVisual visual)
+        public InputDateControl(View view,XFormsInputVisual visual)
             : base(view,visual)
         {
             Visual.AddEventHandler<XFormsValueChangedEvent>(Visual_ValueChanged, false);

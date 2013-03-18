@@ -19,7 +19,7 @@ namespace NXKit.XForms.Layout.Web.UI
             return true;
         }
 
-        public override VisualControl CreateControl(FormView view, Visual visual)
+        public override VisualControl CreateControl(View view, Visual visual)
         {
             return new ParagraphControl(view, (ParagraphVisual)visual);
         }
@@ -33,7 +33,7 @@ namespace NXKit.XForms.Layout.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public ParagraphControl(FormView view, ParagraphVisual visual)
+        public ParagraphControl(View view, ParagraphVisual visual)
             : base(view, visual)
         {
 

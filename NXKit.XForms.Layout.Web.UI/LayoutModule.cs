@@ -14,7 +14,7 @@ namespace NXKit.XForms.Layout.Web.UI
         /// </summary>
         /// <param name="view"></param>
         [ImportingConstructor]
-        public LayoutModule([Import(FormModule.ViewParameter)] FormView view)
+        public LayoutModule([Import(FormModule.ViewParameter)] View view)
             : base(view)
         {
             View.VisualControlAdded += View_VisualControlAdded;

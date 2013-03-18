@@ -6,7 +6,7 @@ namespace NXKit.XForms.Layout.Web.UI
     public class Table
     {
 
-        public Table(FormView view, TableVisual visual)
+        public Table(View view, TableVisual visual)
         {
             View = view;
             Visual = visual;
@@ -14,7 +14,7 @@ namespace NXKit.XForms.Layout.Web.UI
             Rows = new TableRowCollection(this);
         }
 
-        public FormView View { get; private set; }
+        public View View { get; private set; }
 
         public TableVisual Visual { get; private set; }
 

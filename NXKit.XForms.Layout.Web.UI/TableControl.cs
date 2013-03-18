@@ -24,7 +24,7 @@ namespace NXKit.XForms.Layout.Web.UI
             return true;
         }
 
-        public override VisualControl CreateControl(FormView view, Visual visual)
+        public override VisualControl CreateControl(View view, Visual visual)
         {
             return new TableControl(view, (TableVisual)visual);
         }
@@ -38,7 +38,7 @@ namespace NXKit.XForms.Layout.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public TableControl(FormView view, TableVisual visual)
+        public TableControl(View view, TableVisual visual)
             : base(view, visual)
         {
             Model = new Table(View, visual);

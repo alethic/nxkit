@@ -19,7 +19,7 @@ namespace NXKit.XForms.Web.UI
             return false;
         }
 
-        public override VisualControl CreateControl(FormView view, Visual visual)
+        public override VisualControl CreateControl(View view, Visual visual)
         {
             return new LabelControl(view, (XFormsLabelVisual)visual);
         }
@@ -34,7 +34,7 @@ namespace NXKit.XForms.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public LabelControl(FormView view, XFormsLabelVisual visual)
+        public LabelControl(View view, XFormsLabelVisual visual)
             : base(view, visual)
         {
 

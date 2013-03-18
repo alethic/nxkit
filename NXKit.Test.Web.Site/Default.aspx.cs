@@ -14,7 +14,7 @@ namespace NXKit.Test.Web.Site
             base.OnLoad(args);
         }
 
-        protected void FormView_Load(object sender, EventArgs args)
+        protected void View_Load(object sender, EventArgs args)
         {
             if (!IsPostBack)
             {
@@ -22,11 +22,11 @@ namespace NXKit.Test.Web.Site
                 c.AddModule<NXKit.XForms.XFormsModule>();
                 c.AddModule<NXKit.XForms.Layout.LayoutModule>();
                 var d = XDocument.Load(typeof(Default).Assembly.GetManifestResourceStream("NXKit.Test.Web.Site.Resources.form.xml"));
-                FormView.Configure(c, d);
+                View.Configure(c, d);
             }
         }
 
-        protected void FormView_ResourceAction(object sender, ResourceActionEventArgs args)
+        protected void View_ResourceAction(object sender, ResourceActionEventArgs args)
         {
             if (args.Method != ResourceActionMethod.Get)
                 return;

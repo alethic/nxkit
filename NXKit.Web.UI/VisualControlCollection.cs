@@ -21,16 +21,16 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public VisualControlCollection(FormView view, StructuralVisual visual)
+        public VisualControlCollection(View view, StructuralVisual visual)
         {
             View = view;
             Visual = visual;
         }
 
         /// <summary>
-        /// Gets a reference to the <see cref="FormView"/>.
+        /// Gets a reference to the <see cref="View"/>.
         /// </summary>
-        public FormView View { get; private set; }
+        public View View { get; private set; }
 
         /// <summary>
         /// Gets a reference to the <see cref="Visual"/> associated with this manager.

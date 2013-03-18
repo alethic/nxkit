@@ -19,7 +19,7 @@ namespace NXKit.XForms.Web.UI
             return true;
         }
 
-        public override VisualControl CreateControl(FormView view, Visual visual)
+        public override VisualControl CreateControl(View view, Visual visual)
         {
             return new OutputControl(view, (XFormsOutputVisual)visual);
         }
@@ -34,7 +34,7 @@ namespace NXKit.XForms.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public OutputControl(FormView view, XFormsOutputVisual visual)
+        public OutputControl(View view, XFormsOutputVisual visual)
             : base(view, visual)
         {
 

@@ -16,14 +16,14 @@ namespace NXKit.XForms.Layout.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public TableColumnCollection(FormView view, TableColumnGroup columnGroup, TableColumnGroupVisual visual)
+        public TableColumnCollection(View view, TableColumnGroup columnGroup, TableColumnGroupVisual visual)
         {
             View = view;
             ColumnGroup = columnGroup;
             Visual = visual;
         }
 
-        public FormView View { get; private set; }
+        public View View { get; private set; }
 
         public TableColumnGroup ColumnGroup { get; private set; }
 

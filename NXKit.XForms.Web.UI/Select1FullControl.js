@@ -4,7 +4,7 @@ NXKit.XForms.Web.UI.Select1FullControl = function (element)
 {
     NXKit.XForms.Web.UI.Select1FullControl.initializeBase(this, [element]);
 
-    this._formView = null;
+    this._view = null;
     this._modelItemId = null;
 };
 
@@ -16,7 +16,7 @@ NXKit.XForms.Web.UI.Select1FullControl.prototype =
 
         var self = this;
 
-        FormView_jQuery(this.get_element()).find("input").each(function ()
+        View_jQuery(this.get_element()).find("input").each(function ()
         {
             $addHandler(this, "click", function()
             {
@@ -30,20 +30,20 @@ NXKit.XForms.Web.UI.Select1FullControl.prototype =
         NXKit.XForms.Web.UI.Select1FullControl.callBaseMethod(this, 'dispose');
     },
 
-    get_formView: function ()
+    get_view: function ()
     {
-        return this._formView;
+        return this._view;
     },
-    set_formView: function (value)
+    set_view: function (value)
     {
-        if (this._formView != value)
+        if (this._view != value)
         {
-            if (this._formView != undefined)
-                this._formView.remove_valueChanged(Function.createDelegate(this, this._valueChangedHandler));
+            if (this._view != undefined)
+                this._view.remove_valueChanged(Function.createDelegate(this, this._valueChangedHandler));
 
-            this._formView = value;
-            this._formView.add_valueChanged(Function.createDelegate(this, this._valueChangedHandler));
-            this.raisePropertyChanged('formView');
+            this._view = value;
+            this._view.add_valueChanged(Function.createDelegate(this, this._valueChangedHandler));
+            this.raisePropertyChanged('view');
         }
     },
 
@@ -67,7 +67,7 @@ NXKit.XForms.Web.UI.Select1FullControl.prototype =
         if (args.get_modelItemId() != this.get_modelItemId())
             return;
 
-        FormView_jQuery(this.get_element()).find("input").each(function ()
+        View_jQuery(this.get_element()).find("input").each(function ()
         {
             this.checked = parseInt(this.value) == args.get_newValueHashCode();
         });
@@ -75,7 +75,7 @@ NXKit.XForms.Web.UI.Select1FullControl.prototype =
 
     _onInputClickHandler: function (input)
     {
-        this.get_formView().raiseValueChanged(new NXKit.Web.UI.ValueChangedEventArgs(self, this.get_modelItemId(), null, parseInt(input.value)));
+        this.get_view().raiseValueChanged(new NXKit.Web.UI.ValueChangedEventArgs(self, this.get_modelItemId(), null, parseInt(input.value)));
     },
 };
 

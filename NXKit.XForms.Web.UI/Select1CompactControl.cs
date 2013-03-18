@@ -18,7 +18,7 @@ namespace NXKit.XForms.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public Select1CompactControl(FormView view, XFormsSelect1Visual visual)
+        public Select1CompactControl(View view, XFormsSelect1Visual visual)
             : base(view, visual)
         {
 

@@ -39,7 +39,7 @@
         /// <param name="view"></param>
         /// <param name="visual"></param>
         /// <returns></returns>
-        public virtual VisualControl CreateControl(FormView view, Visual visual)
+        public virtual VisualControl CreateControl(View view, Visual visual)
         {
             return null;
         }

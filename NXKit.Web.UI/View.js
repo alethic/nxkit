@@ -36,22 +36,22 @@ NXKit.Web.UI.ValueChangedEventArgs.prototype =
 NXKit.Web.UI.ValueChangedEventArgs.registerClass('NXKit.Web.UI.ValueChangedEventArgs', Sys.EventArgs);
 
 
-NXKit.Web.UI.FormView = function (element)
+NXKit.Web.UI.View = function (element)
 {
-    NXKit.Web.UI.FormView.initializeBase(this, [element]);
+    NXKit.Web.UI.View.initializeBase(this, [element]);
 };
 
-NXKit.Web.UI.FormView.prototype =
+NXKit.Web.UI.View.prototype =
 {
 
     initialize: function ()
     {
-        NXKit.Web.UI.FormView.callBaseMethod(this, 'initialize');
+        NXKit.Web.UI.View.callBaseMethod(this, 'initialize');
     },
 
     dispose: function ()
     {
-        NXKit.Web.UI.FormView.callBaseMethod(this, 'dispose');
+        NXKit.Web.UI.View.callBaseMethod(this, 'dispose');
     },
 
     add_valueChanged: function (handler)
@@ -73,7 +73,7 @@ NXKit.Web.UI.FormView.prototype =
 
 };
 
-NXKit.Web.UI.FormView.registerClass('NXKit.Web.UI.FormView', Sys.UI.Control);
+NXKit.Web.UI.View.registerClass('NXKit.Web.UI.View', Sys.UI.Control);
 
 if (typeof(Sys) !== 'undefined')
     Sys.Application.notifyScriptLoaded();

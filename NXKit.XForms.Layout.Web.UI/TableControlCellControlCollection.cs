@@ -15,7 +15,7 @@ namespace NXKit.XForms.Layout.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public TableControlCellControlCollection(FormView view, TableControl parent)
+        public TableControlCellControlCollection(View view, TableControl parent)
             : base(view, parent.Visual)
         {
             Table = parent.Model;

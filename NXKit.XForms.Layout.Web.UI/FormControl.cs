@@ -18,7 +18,7 @@ namespace NXKit.XForms.Layout.Web.UI
             return true;
         }
 
-        public override VisualControl CreateControl(FormView view, Visual visual)
+        public override VisualControl CreateControl(View view, Visual visual)
         {
             return new FormControl(view, (FormVisual)visual);
         }
@@ -32,7 +32,7 @@ namespace NXKit.XForms.Layout.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public FormControl(FormView view, FormVisual visual)
+        public FormControl(View view, FormVisual visual)
             : base(view, visual)
         {
 

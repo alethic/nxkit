@@ -18,7 +18,7 @@ namespace NXKit.XForms.Web.UI
             return true;
         }
 
-        public override VisualControl CreateControl(FormView view, Visual visual)
+        public override VisualControl CreateControl(View view, Visual visual)
         {
             return new RangeControl(view, (XFormsRangeVisual)visual);
         }
@@ -32,7 +32,7 @@ namespace NXKit.XForms.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public RangeControl(FormView view, XFormsRangeVisual visual)
+        public RangeControl(View view, XFormsRangeVisual visual)
             : base(view, visual)
         {
 

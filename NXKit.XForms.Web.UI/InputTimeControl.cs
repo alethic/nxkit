@@ -18,7 +18,7 @@ namespace NXKit.XForms.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public InputTimeControl(FormView view, XFormsInputVisual visual)
+        public InputTimeControl(View view, XFormsInputVisual visual)
             : base(view, visual)
         {
 

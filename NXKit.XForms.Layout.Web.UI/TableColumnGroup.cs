@@ -10,7 +10,7 @@ namespace NXKit.XForms.Layout.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public TableColumnGroup(FormView view, Table table, int index, TableColumnGroupVisual visual)
+        public TableColumnGroup(View view, Table table, int index, TableColumnGroupVisual visual)
         {
             View = view;
             Table = table;
@@ -19,7 +19,7 @@ namespace NXKit.XForms.Layout.Web.UI
             Columns = new TableColumnCollection(view, this, visual);
         }
 
-        public FormView View { get; private set; }
+        public View View { get; private set; }
 
         public Table Table { get; private set; }
 

@@ -20,7 +20,7 @@ namespace NXKit.XForms.Web.UI
             return true;
         }
 
-        public override VisualControl CreateControl(FormView view, Visual visual)
+        public override VisualControl CreateControl(View view, Visual visual)
         {
             return new TriggerControl(view, (XFormsTriggerVisual)visual);
         }
@@ -38,7 +38,7 @@ namespace NXKit.XForms.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public TriggerControl(FormView view, XFormsTriggerVisual visual)
+        public TriggerControl(View view, XFormsTriggerVisual visual)
             : base(view, visual)
         {
 

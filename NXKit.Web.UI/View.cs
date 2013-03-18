@@ -13,8 +13,8 @@ using System.Xml.Linq;
 namespace NXKit.Web.UI
 {
 
-    [ToolboxData("<{0}:FormView runat=\"server\"></{0}:FormView>")]
-    public class FormView : Control, INamingContainer, IPostBackEventHandler, IScriptControl
+    [ToolboxData("<{0}:View runat=\"server\"></{0}:View>")]
+    public class View : Control, INamingContainer, IPostBackEventHandler, IScriptControl
     {
 
         /// <summary>
@@ -23,13 +23,13 @@ namespace NXKit.Web.UI
         class ResourceResolver : IResourceResolver
         {
 
-            private FormView control;
+            private View control;
 
             /// <summary>
             /// Initializes a new instance.
             /// </summary>
             /// <param name="control"></param>
-            internal ResourceResolver(FormView control)
+            internal ResourceResolver(View control)
             {
                 this.control = control;
             }
@@ -75,7 +75,7 @@ namespace NXKit.Web.UI
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public FormView()
+        public View()
         {
             var c = new CompositionContainer(new ApplicationCatalog());
             c.ComposeExportedValue(FormModule.ViewParameter, this);
@@ -470,7 +470,7 @@ namespace NXKit.Web.UI
                 Page.ClientScript.RegisterClientScriptInclude("jq171", "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js");
             else
                 Page.ClientScript.RegisterClientScriptInclude("jq171", "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js");
-            Page.ClientScript.RegisterClientScriptBlock(typeof(FormView), "FormView_jQuery", "var FormView_jQuery = jQuery.noConflict();\n", true);
+            Page.ClientScript.RegisterClientScriptBlock(typeof(View), "View_jQuery", "var View_jQuery = jQuery.noConflict();\n", true);
             ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
 
             // process any changes
@@ -496,7 +496,7 @@ namespace NXKit.Web.UI
 
             // render form and contents
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "FormView");
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "View");
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
             base.Render(writer);
             writer.RenderEndTag();
@@ -566,13 +566,13 @@ namespace NXKit.Web.UI
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
-            var desc = new ScriptControlDescriptor("NXKit.Web.UI.FormView", ClientID);
+            var desc = new ScriptControlDescriptor("NXKit.Web.UI.View", ClientID);
             yield return desc;
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference("NXKit.Web.UI.FormView.js", typeof(FormView).Assembly.FullName);
+            yield return new ScriptReference("NXKit.Web.UI.View.js", typeof(View).Assembly.FullName);
         }
     }
 

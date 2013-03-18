@@ -51,7 +51,7 @@
     <Compile Include="FormNavigation.cs" />
     <Compile Include="FormPage.cs" />
     <Compile Include="FormSection.cs" />
-    <Compile Include="FormView.cs" />
+    <Compile Include="View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadInputValidationDecorator.cs" />
     <Compile Include="ResourceActionMethod.cs" />
@@ -69,7 +69,7 @@
     <Compile Include="WebResources.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FormView.js" />
+    <EmbeddedResource Include="View.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="RadValidationDecorator.js" />

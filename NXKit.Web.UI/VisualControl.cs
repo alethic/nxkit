@@ -14,7 +14,7 @@ namespace NXKit.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="view"></param>
-        protected VisualControl(FormView view, Visual visual)
+        protected VisualControl(View view, Visual visual)
         {
             View = view;
             Visual = visual;
@@ -33,9 +33,9 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets a reference to the containing <see cref="FormView"/>.
+        /// Gets a reference to the containing <see cref="View"/>.
         /// </summary>
-        public FormView View { get; private set; }
+        public View View { get; private set; }
 
         /// <summary>
         /// Gets a reference to the <see cref="Visual"/> to be handled.
@@ -67,7 +67,7 @@ namespace NXKit.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        protected VisualControl(FormView view, T visual)
+        protected VisualControl(View view, T visual)
             : base(view, visual)
         {
 

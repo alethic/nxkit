@@ -17,9 +17,9 @@
                 <asp:ScriptReference Name="jquery" />
             </Scripts>
         </asp:ScriptManager>
-        <xforms:FormView ID="FormView" runat="server"
-            OnLoad="FormView_Load"
-            OnResourceAction="FormView_ResourceAction" />
+        <xforms:View ID="View" runat="server"
+            OnLoad="View_Load"
+            OnResourceAction="View_ResourceAction" />
     </form>
 </body>
 

@@ -19,14 +19,14 @@ namespace NXKit.XForms.Layout.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public TableColumnGroupCollection(FormView view, Table table)
+        public TableColumnGroupCollection(View view, Table table)
         {
             View = view;
             Table = table;
             Table.Visual.AddEventHandler<VisualAddedEvent>(VisualAddedHandler, false);
         }
 
-        public FormView View { get; private set; }
+        public View View { get; private set; }
 
         public Table Table { get; private set; }
 

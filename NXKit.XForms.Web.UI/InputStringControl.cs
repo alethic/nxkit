@@ -22,7 +22,7 @@ namespace NXKit.XForms.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public InputStringControl(NXKit.Web.UI.FormView view, XFormsInputVisual visual)
+        public InputStringControl(NXKit.Web.UI.View view, XFormsInputVisual visual)
             : base(view, visual)
         {
             Visual.AddEventHandler<XFormsValueChangedEvent>(Visual_ValueChanged, false);
@@ -134,7 +134,7 @@ namespace NXKit.XForms.Web.UI
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
             var desc = new ScriptControlDescriptor("NXKit.XForms.Web.UI.InputStringControl", ClientID);
-            desc.AddComponentProperty("formView", View.ClientID);
+            desc.AddComponentProperty("view", View.ClientID);
             desc.AddProperty("modelItemId", Visual.Binding != null ? Visual.Binding.NodeUniqueId : null);
             desc.AddComponentProperty("radTextBox", ctl.ClientID);
             yield return desc;

@@ -4,7 +4,7 @@ NXKit.XForms.Web.UI.InputStringControl = function (element)
 {
     NXKit.XForms.Web.UI.InputStringControl.initializeBase(this, [element]);
 
-    this._formView = null;
+    this._view = null;
     this._modelItemId = null;
     this._radTextBox = null;
 };
@@ -21,20 +21,20 @@ NXKit.XForms.Web.UI.InputStringControl.prototype =
         NXKit.XForms.Web.UI.InputStringControl.callBaseMethod(this, 'dispose');
     },
 
-    get_formView: function ()
+    get_view: function ()
     {
-        return this._formView;
+        return this._view;
     },
-    set_formView: function (value)
+    set_view: function (value)
     {
-        if (this._formView != value)
+        if (this._view != value)
         {
-            if (this._formView != undefined)
-                this._formView.remove_valueChanged(Function.createDelegate(this, this._valueChangedHandler));
+            if (this._view != undefined)
+                this._view.remove_valueChanged(Function.createDelegate(this, this._valueChangedHandler));
 
-            this._formView = value;
-            this._formView.add_valueChanged(Function.createDelegate(this, this._valueChangedHandler));
-            this.raisePropertyChanged('formView');
+            this._view = value;
+            this._view.add_valueChanged(Function.createDelegate(this, this._valueChangedHandler));
+            this.raisePropertyChanged('view');
         }
     },
 
@@ -83,7 +83,7 @@ NXKit.XForms.Web.UI.InputStringControl.prototype =
     
     _onTextBoxValueChangedHandler: function (source, args)
     {
-        this.get_formView().raiseValueChanged(new NXKit.Web.UI.ValueChangedEventArgs(self, this.get_modelItemId(), source.get_value(), null));
+        this.get_view().raiseValueChanged(new NXKit.Web.UI.ValueChangedEventArgs(self, this.get_modelItemId(), source.get_value(), null));
     },
 };
 

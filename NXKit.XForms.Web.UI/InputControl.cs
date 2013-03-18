@@ -17,7 +17,7 @@ namespace NXKit.XForms.Web.UI
             return true;
         }
 
-        public override VisualControl CreateControl(FormView view, Visual visual)
+        public override VisualControl CreateControl(View view, Visual visual)
         {
             return new InputControl(view, (XFormsInputVisual)visual);
         }
@@ -31,7 +31,7 @@ namespace NXKit.XForms.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public InputControl(FormView view, XFormsInputVisual visual)
+        public InputControl(View view, XFormsInputVisual visual)
             : base(view, visual)
         {
 

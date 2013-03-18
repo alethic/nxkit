@@ -17,7 +17,7 @@ namespace NXKit.XForms.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public SelectFullControl(NXKit.Web.UI.FormView view, XFormsSelectVisual visual)
+        public SelectFullControl(NXKit.Web.UI.View view, XFormsSelectVisual visual)
             : base(view, visual)
         {
 

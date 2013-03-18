@@ -20,7 +20,7 @@ namespace NXKit.XForms.Layout.Web.UI
             return true;
         }
 
-        public override VisualControl CreateControl(FormView view, Visual visual)
+        public override VisualControl CreateControl(View view, Visual visual)
         {
             return new AnchorControl(view, (AnchorVisual)visual);
         }
@@ -34,7 +34,7 @@ namespace NXKit.XForms.Layout.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public AnchorControl(FormView view, AnchorVisual visual)
+        public AnchorControl(View view, AnchorVisual visual)
             : base(view, visual)
         {
 

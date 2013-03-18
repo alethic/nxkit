@@ -23,7 +23,7 @@ namespace NXKit.XForms.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public Select1FullControl(NXKit.Web.UI.FormView view, XFormsSelect1Visual visual)
+        public Select1FullControl(NXKit.Web.UI.View view, XFormsSelect1Visual visual)
             : base(view, visual)
         {
 
@@ -139,7 +139,7 @@ namespace NXKit.XForms.Web.UI
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
             var desc = new ScriptControlDescriptor("NXKit.XForms.Web.UI.Select1FullControl", ClientID);
-            desc.AddComponentProperty("formView", View.ClientID);
+            desc.AddComponentProperty("view", View.ClientID);
             desc.AddProperty("modelItemId", Visual.Binding != null ? Visual.Binding.NodeUniqueId : null);
             yield return desc;
         }

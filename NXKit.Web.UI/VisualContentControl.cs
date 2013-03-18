@@ -12,7 +12,7 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public VisualContentControl(FormView view, T visual)
+        public VisualContentControl(View view, T visual)
             : base(view, visual)
         {
 
