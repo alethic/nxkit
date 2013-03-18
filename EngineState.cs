@@ -26,12 +26,13 @@ namespace NXKit
         public EngineState(SerializationInfo info, StreamingContext context)
         {
             // decompress document from stream
-            var mstm = new MemoryStream((byte[])info.GetValue("1", typeof(byte[])));
+            var mstm = new MemoryStream((byte[])info.GetValue("Document", typeof(byte[])));
             var gstm = new GZipStream(mstm, CompressionMode.Decompress);
 
+            Configuration = (EngineConfiguration)info.GetValue("Configuration", typeof(EngineConfiguration));
             Document = new StreamReader(gstm, Encoding.UTF8).ReadToEnd();
-            NextElementId = info.GetInt32("2");
-            VisualState = (VisualStateCollection)info.GetValue("4", typeof(VisualStateCollection));
+            NextElementId = info.GetInt32("NextElementId");
+            VisualState = (VisualStateCollection)info.GetValue("VisualState", typeof(VisualStateCollection));
         }
 
         /// <summary>
@@ -74,9 +75,10 @@ namespace NXKit
             wrtr.Flush();
             gstm.Close();
 
-            info.AddValue("1", mstm.ToArray());
-            info.AddValue("2", NextElementId);
-            info.AddValue("4", VisualState);
+            info.AddValue("Configuration", Configuration);
+            info.AddValue("Document", mstm.ToArray());
+            info.AddValue("NextElementId", NextElementId);
+            info.AddValue("VisualState", VisualState);
         }
 
     }

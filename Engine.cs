@@ -115,10 +115,28 @@ namespace NXKit
         /// </summary>
         void Initialize()
         {
-            // create modules
-            modules = Configuration.ModuleTypes
-                .Select(i => (Module)Activator.CreateInstance(i))
-                .ToArray();
+            // dictionary of types to instances
+            var m = Configuration.ModuleTypes
+                .ToDictionary(i => i, i => (Module)null);
+
+            do
+            {
+                // instantiate types
+                foreach (var i in m.ToList())
+                    if (i.Value == null)
+                        m[i.Key] = (Module)Activator.CreateInstance(i.Key);
+
+                // add dependency types
+                foreach (var i in m.ToList())
+                    foreach (var d in i.Value.DependsOn)
+                        if (!m.ContainsKey(d))
+                            m[d] = null;
+            }
+            // end when all types are instantiated
+            while (m.Any(i => i.Value == null));
+
+            // generate final module list
+            modules = m.Values.ToArray();
 
             // initialize modules
             foreach (var module in modules)

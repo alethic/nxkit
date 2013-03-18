@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace NXKit
 {
@@ -15,6 +16,14 @@ namespace NXKit
         public Module()
         {
 
+        }
+
+        /// <summary>
+        /// Override to specify the modules this module depends on.
+        /// </summary>
+        public virtual Type[] DependsOn
+        {
+            get { return new Type[0]; }
         }
 
         /// <summary>
