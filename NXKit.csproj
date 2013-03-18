@@ -53,7 +53,6 @@
     <Compile Include="EventPhase.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventListenerData.cs" />
-    <Compile Include="Events\IEventHandlerVisual.cs" />
     <Compile Include="IEventDefaultActionHandler.cs" />
     <Compile Include="IEventListener.cs" />
     <Compile Include="INavigationPageVisual.cs" />
@@ -62,8 +61,6 @@
     <Compile Include="ITextVisual.cs" />
     <Compile Include="IVisual.cs" />
     <Compile Include="XmlSchemaConstants.cs" />
-    <Compile Include="Events\SchemaConstants.cs" />
-    <Compile Include="Events\SchemaPackage.cs" />
     <Compile Include="EngineEventHandler.cs" />
     <Compile Include="XmlSchemaPackage.cs" />
     <Compile Include="IEventTarget.cs" />
@@ -72,8 +69,6 @@
     <Compile Include="VisualRemovedEvent.cs" />
     <Compile Include="DOMActivateEvent.cs" />
     <Compile Include="EventListener.cs" />
-    <Compile Include="Events\EventsEventListenerVisual.cs" />
-    <Compile Include="Events\EventsModule.cs" />
     <Compile Include="SchemaContainer.cs" />
     <Compile Include="INamingScope.cs" />
     <Compile Include="Engine.cs" />
@@ -88,11 +83,6 @@
     <Compile Include="Visual.cs" />
     <Compile Include="IResourceResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Events\xml-events-attribs-1.xsd">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="xml.xsd">
