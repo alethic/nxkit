@@ -46,9 +46,11 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web" />
-    <Reference Include="Telerik.Web.UI, Version=2013.1.220.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.UI.dll</HintPath>
+    <Reference Include="Telerik.Web.UI">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.Skins">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.UI.Skins.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
