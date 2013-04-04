@@ -97,23 +97,13 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        public bool IsOpaque(Visual visual)
+        bool IsOpaque(Visual visual)
         {
             var d = ResolveVisualControlDescriptor(visual);
             if (d == null)
                 return true;
 
             return d.IsOpaque(visual);
-        }
-
-        /// <summary>
-        /// Returns the first parent visuals which is not-transparent.
-        /// </summary>
-        /// <param name="self"></param>
-        /// <returns></returns>
-        public Visual OpaqueParent(Visual self)
-        {
-            return self.Ascendants().FirstOrDefault(i => IsOpaque(i));
         }
 
         /// <summary>
@@ -141,7 +131,7 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        public VisualControl CreateVisualControl(Visual visual)
+        internal VisualControl CreateVisualControl(Visual visual)
         {
             var type = ResolveVisualControlDescriptor(visual);
             if (type != null)
@@ -165,8 +155,17 @@ namespace NXKit.Web.UI
                 VisualControlAdded(args);
         }
 
+        /// <summary>
+        /// Gets or sets the Cascading Style Sheet (CSS) class rendered by the Web server control on the client.
+        /// </summary>
+        [ThemeableAttribute(true)]
+        public string CssClass { get; set; }
+
+        /// <summary>
+        /// Gets or sets the group of controls for which the <see cref="View"/> control causes validation when it posts back to the server.
+        /// </summary>
         [ThemeableAttribute(false)]
-        public virtual string ValidationGroup { get; set; }
+        public string ValidationGroup { get; set; }
 
         /// <summary>
         /// Gets a reference to the <see cref="Engine"/>.
@@ -496,7 +495,8 @@ namespace NXKit.Web.UI
 
             // render form and contents
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "View");
+            if (CssClass != null)
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, CssClass);
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
             base.Render(writer);
             writer.RenderEndTag();
