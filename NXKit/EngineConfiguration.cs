@@ -11,17 +11,22 @@ namespace NXKit
     public class EngineConfiguration
     {
 
-        /// <summary>
-        /// Set of modules to make available.
-        /// </summary>
-        internal List<Type> ModuleTypes { get; private set; }
+        List<Type> moduleTypes = new List<Type>();
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public EngineConfiguration()
         {
-            ModuleTypes = new List<Type>();
+
+        }
+
+        /// <summary>
+        /// Set of modules to make available.
+        /// </summary>
+        public IEnumerable<Type> ModuleTypes
+        {
+            get { return moduleTypes; }
         }
 
         /// <summary>
@@ -32,7 +37,7 @@ namespace NXKit
             if (!typeof(Module).IsAssignableFrom(type))
                 throw new ArgumentException("Type must be NXKit.Module type.", "type");
 
-            ModuleTypes.Add(typeof(T));
+            moduleTypes.Add(type);
         }
 
         /// <summary>
@@ -42,7 +47,7 @@ namespace NXKit
         public void AddModule<T>()
             where T : Module, new()
         {
-            ModuleTypes.Add(typeof(T));
+            moduleTypes.Add(typeof(T));
         }
 
     }
