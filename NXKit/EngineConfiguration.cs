@@ -27,6 +27,17 @@ namespace NXKit
         /// <summary>
         /// Adds the given module type to the configuration.
         /// </summary>
+        public void AddModule(Type type)
+        {
+            if (!typeof(Module).IsAssignableFrom(type))
+                throw new ArgumentException("Type must be NXKit.Module type.", "type");
+
+            ModuleTypes.Add(typeof(T));
+        }
+
+        /// <summary>
+        /// Adds the given module type to the configuration.
+        /// </summary>
         /// <typeparam name="T"></typeparam>
         public void AddModule<T>()
             where T : Module, new()
