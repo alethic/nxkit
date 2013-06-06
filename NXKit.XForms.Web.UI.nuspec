@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>NXKit.XForms.Web.UI</id>
-        <version>0.0.3</version>
+        <version>0.0.4</version>
         <title>NXKit.XForms.Web.UI</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
@@ -17,7 +17,7 @@ NXKit.XForms.Web.UI can augment NXKit.Web.UI with support for rendering and resp
         <tags>xml xforms</tags>
         <dependencies>
             <dependency id="NXKit" />
-            <dependency id="NXKit.Utils" />
+            <dependency id="NXKit.Util" />
             <dependency id="NXKit.XForms" />
             <dependency id="NXKit.Web.UI" />
         </dependencies>
