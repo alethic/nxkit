@@ -26,6 +26,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{060885
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{C439567E-04E2-4941-AF17-4FF2264A8BF8}"
+	ProjectSection(SolutionItems) = preProject
+		NXKit.Events.nuspec = NXKit.Events.nuspec
+		NXKit.nuspec = NXKit.nuspec
+		NXKit.Util.nuspec = NXKit.Util.nuspec
+		NXKit.Web.UI.nuspec = NXKit.Web.UI.nuspec
+		NXKit.XForms.Layout.nuspec = NXKit.XForms.Layout.nuspec
+		NXKit.XForms.Layout.Web.UI.nuspec = NXKit.XForms.Layout.Web.UI.nuspec
+		NXKit.XForms.nuspec = NXKit.XForms.nuspec
+		NXKit.XForms.Web.UI.nuspec = NXKit.XForms.Web.UI.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
