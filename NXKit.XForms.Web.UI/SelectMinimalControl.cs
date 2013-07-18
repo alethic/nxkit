@@ -12,8 +12,6 @@ namespace NXKit.XForms.Web.UI
     public class SelectMinimalControl : VisualControl<XFormsSelectVisual>
     {
 
-        private RadComboBox ctl;
-
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
