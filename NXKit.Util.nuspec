@@ -9,14 +9,31 @@
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
         <projectUrl>https://github.com/wasabii/nxkit</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
+        <description>
+            NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
 
-NXKit.Util contains internal utilities used by the other NXKit packages.</description>
+            NXKit.Util contains internal utilities used by the other NXKit packages.
+        </description>
         <releaseNotes />
         <copyright>Copyright © 2013 Jerome Haltom</copyright>
         <tags>xml xforms</tags>
+        <references>
+            <reference
+                file="NXKit.Util.dll" />
+        </references>
     </metadata>
     <files>
-        <file src="NXKit.Util\bin\Release\NXKit.Util.dll" target="lib\net45\NXKit.Util.dll" />
+        <file
+            src="NXKit.Util\bin\Release\NXKit.Util.dll"
+            target="lib\net45" />
+        <file
+            src="NXKit.Util\bin\Release\NXKit.Util.pdb"
+            target="lib\net45" />
+        <file
+            src="NXKit.Util\bin\Release\CodeContracts\NXKit.Util.dll"
+            target="lib\net45\CodeContracts" />
+        <file
+            src="NXKit.Util\bin\Release\CodeContracts\NXKit.Util.pdb"
+            target="lib\net45\CodeContracts" />
     </files>
 </package>

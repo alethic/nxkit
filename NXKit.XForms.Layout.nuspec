@@ -9,19 +9,39 @@
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
         <projectUrl>https://github.com/wasabii/nxkit</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
+        <description>
+            NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
 
-NXKit.XForms.Layout contains the processing model for a basic page/section/category interface model that can be used along side XForms, without requiring XForms to be hosted inside of an HTML document.</description>
+            NXKit.XForms.Layout contains the processing model for a basic page/section/category interface model that can be used along side XForms, without requiring XForms to be hosted inside of an HTML document.
+        </description>
         <releaseNotes />
         <copyright>Copyright © 2013 Jerome Haltom</copyright>
         <tags>xml xforms</tags>
         <dependencies>
-            <dependency id="NXKit" />
-            <dependency id="NXKit.Util" />
-            <dependency id="NXKit.XForms" />
+            <dependency
+                id="NXKit" />
+            <dependency
+                id="NXKit.Util" />
+            <dependency
+                id="NXKit.XForms" />
         </dependencies>
+        <references>
+            <reference
+                file="NXKit.XForms.Layout.dll" />
+        </references>
     </metadata>
     <files>
-        <file src="NXKit.XForms.Layout\bin\Release\NXKit.XForms.Layout.dll" target="lib\net45\NXKit.XForms.Layout.dll" />
+        <file
+            src="NXKit.XForms.Layout\bin\Release\NXKit.XForms.Layout.dll"
+            target="lib\net45" />
+        <file
+            src="NXKit.XForms.Layout\bin\Release\NXKit.XForms.Layout.pdb"
+            target="lib\net45" />
+        <file
+            src="NXKit.XForms.Layout\bin\Release\CodeContracts\NXKit.XForms.Layout.dll"
+            target="lib\net45\CodeContracts" />
+        <file
+            src="NXKit.XForms.Layout\bin\Release\CodeContracts\NXKit.XForms.Layout.pdb"
+            target="lib\net45\CodeContracts" />
     </files>
 </package>

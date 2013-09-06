@@ -9,19 +9,39 @@
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
         <projectUrl>https://github.com/wasabii/nxkit</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
+        <description>
+            NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
 
-NXKit.XForms contains the processing model for handing W3C XForms documents.</description>
+            NXKit.XForms contains the processing model for handing W3C XForms documents.
+        </description>
         <releaseNotes />
         <copyright>Copyright © 2013 Jerome Haltom</copyright>
         <tags>xml xforms</tags>
         <dependencies>
-            <dependency id="NXKit" />
-            <dependency id="NXKit.Util" />
-            <dependency id="NXKit.Events" />
+            <dependency
+                id="NXKit" />
+            <dependency
+                id="NXKit.Util" />
+            <dependency
+                id="NXKit.Events" />
         </dependencies>
+        <references>
+            <reference
+                file="NXKit.XForms.dll" />
+        </references>
     </metadata>
     <files>
-        <file src="NXKit.XForms\bin\Release\NXKit.XForms.dll" target="lib\net45\NXKit.XForms.dll" />
+        <file
+            src="NXKit.XForms\bin\Release\NXKit.XForms.dll"
+            target="lib\net45" />
+        <file
+            src="NXKit.XForms\bin\Release\NXKit.XForms.pdb"
+            target="lib\net45" />
+        <file
+            src="NXKit.XForms\bin\Release\CodeContracts\NXKit.XForms.dll"
+            target="lib\net45\CodeContracts" />
+        <file
+            src="NXKit.XForms\bin\Release\CodeContracts\NXKit.XForms.pdb"
+            target="lib\net45\CodeContracts" />
     </files>
 </package>

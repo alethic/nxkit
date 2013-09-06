@@ -9,18 +9,37 @@
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
         <projectUrl>https://github.com/wasabii/nxkit</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
+        <description>
+            NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
 
-NXKit.Events contains the processing model for handing W3C Events containing documents.</description>
+            NXKit.Events contains the processing model for handing W3C Events containing documents.
+        </description>
         <releaseNotes />
         <copyright>Copyright © 2013 Jerome Haltom</copyright>
         <tags>xml xforms</tags>
         <dependencies>
-            <dependency id="NXKit" />
-            <dependency id="NXKit.Util" />
+            <dependency
+                id="NXKit" />
+            <dependency
+                id="NXKit.Util" />
         </dependencies>
+        <references>
+            <reference
+                file="NXKit.Events.dll" />
+        </references>
     </metadata>
     <files>
-        <file src="NXKit.Events\bin\Release\NXKit.Events.dll" target="lib\net45\NXKit.Events.dll" />
+        <file
+            src="NXKit.Events\bin\Release\NXKit.Events.dll"
+            target="lib\net45" />
+        <file
+            src="NXKit.Events\bin\Release\NXKit.Events.pdb"
+            target="lib\net45" />
+        <file
+            src="NXKit.Events\bin\Release\CodeContracts\NXKit.Events.dll"
+            target="lib\net45\CodeContracts" />
+        <file
+            src="NXKit.Events\bin\Release\CodeContracts\NXKit.Events.pdb"
+            target="lib\net45\CodeContracts" />
     </files>
 </package>

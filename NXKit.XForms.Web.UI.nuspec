@@ -9,20 +9,41 @@
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
         <projectUrl>https://github.com/wasabii/nxkit</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
+        <description>
+            NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
 
-NXKit.XForms.Web.UI can augment NXKit.Web.UI with support for rendering and responding to XForms documents.</description>
+            NXKit.XForms.Web.UI can augment NXKit.Web.UI with support for rendering and responding to XForms documents.
+        </description>
         <releaseNotes>This release currently depends on the Telerik ASP.Net RadControls for it's functionality. It is planned to factor this requirement out pretty quickly.</releaseNotes>
         <copyright>Copyright © 2013 Jerome Haltom</copyright>
         <tags>xml xforms</tags>
         <dependencies>
-            <dependency id="NXKit" />
-            <dependency id="NXKit.Util" />
-            <dependency id="NXKit.XForms" />
-            <dependency id="NXKit.Web.UI" />
+            <dependency
+                id="NXKit" />
+            <dependency
+                id="NXKit.Util" />
+            <dependency
+                id="NXKit.XForms" />
+            <dependency
+                id="NXKit.Web.UI" />
         </dependencies>
+        <references>
+            <reference
+                file="NXKit.XForms.Web.UI.dll" />
+        </references>
     </metadata>
     <files>
-        <file src="NXKit.XForms.Web.UI\bin\Release\NXKit.XForms.Web.UI.dll" target="lib\net45\NXKit.XForms.Web.UI.dll" />
+        <file
+            src="NXKit.XForms.Web.UI\bin\Release\NXKit.XForms.Web.UI.dll"
+            target="lib\net45" />
+        <file
+            src="NXKit.XForms.Web.UI\bin\Release\NXKit.XForms.Web.UI.pdb"
+            target="lib\net45" />
+        <file
+            src="NXKit.XForms.Web.UI\bin\Release\CodeContracts\NXKit.XForms.Web.UI.dll"
+            target="lib\net45\CodeContracts" />
+        <file
+            src="NXKit.XForms.Web.UI\bin\Release\CodeContracts\NXKit.XForms.Web.UI.pdb"
+            target="lib\net45\CodeContracts" />
     </files>
 </package>
