@@ -19,9 +19,11 @@
         <tags>xml xforms</tags>
         <dependencies>
             <dependency
-                id="NXKit" />
+                id="NXKit"
+                version="2013.1.0.1" />
             <dependency
-                id="NXKit.Util" />
+                id="NXKit.Util"
+                version="2013.1.0.1" />
         </dependencies>
         <references>
             <reference

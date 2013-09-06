@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>NXKit.XForms.Web.UI</id>
-        <version>2013.1.0.0</version>
+        <version>2013.1.0.1</version>
         <title>NXKit.XForms.Web.UI</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
@@ -19,13 +19,17 @@
         <tags>xml xforms</tags>
         <dependencies>
             <dependency
-                id="NXKit" />
+                id="NXKit"
+                version="2013.1.0.1" />
             <dependency
-                id="NXKit.Util" />
+                id="NXKit.Util"
+                version="2013.1.0.1" />
             <dependency
-                id="NXKit.XForms" />
+                id="NXKit.XForms"
+                version="2013.1.0.1" />
             <dependency
-                id="NXKit.Web.UI" />
+                id="NXKit.Web.UI"
+                version="2013.1.0.1" />
         </dependencies>
         <references>
             <reference

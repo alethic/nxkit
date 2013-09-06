@@ -11,10 +11,10 @@ namespace NXKit.Test.Web.Site
         {
             ScriptManager.ScriptResourceMapping.AddDefinition("jquery", new ScriptResourceDefinition
             {
-                Path = "~/Scripts/jquery-1.6.4.min.js",
-                DebugPath = "~/Scripts/jquery-1.6.4.js",
-                CdnPath = "http://ajax.microsoft.com/ajax/jQuery/jquery-1.6.4.min.js",
-                CdnDebugPath = "http://ajax.microsoft.com/ajax/jQuery/jquery-1.6.4.js"
+                Path = "~/Scripts/jquery-2.0.3.min.js",
+                DebugPath = "~/Scripts/jquery-2.0.3.js",
+                CdnPath = "http://ajax.microsoft.com/ajax/jQuery/jquery-2.0.3.min.js",
+                CdnDebugPath = "http://ajax.microsoft.com/ajax/jQuery/jquery-2.0.3.js"
             });
         }
 
