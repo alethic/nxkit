@@ -44,10 +44,10 @@
             src="NXKit.Web.UI\bin\Release\NXKit.Web.UI.pdb"
             target="lib\net45" />
         <file
-            src="NXKit.Web.UI\bin\Release\CodeContracts\NXKit.Web.UI.dll"
+            src="NXKit.Web.UI\bin\Release\CodeContracts\NXKit.Web.UI.Contracts.dll"
             target="lib\net45\CodeContracts" />
         <file
-            src="NXKit.Web.UI\bin\Release\CodeContracts\NXKit.Web.UI.pdb"
+            src="NXKit.Web.UI\bin\Release\CodeContracts\NXKit.Web.UI.Contracts.pdb"
             target="lib\net45\CodeContracts" />
     </files>
 </package>

@@ -40,10 +40,10 @@
             src="NXKit.XForms.Web.UI\bin\Release\NXKit.XForms.Web.UI.pdb"
             target="lib\net45" />
         <file
-            src="NXKit.XForms.Web.UI\bin\Release\CodeContracts\NXKit.XForms.Web.UI.dll"
+            src="NXKit.XForms.Web.UI\bin\Release\CodeContracts\NXKit.XForms.Web.UI.Contracts.dll"
             target="lib\net45\CodeContracts" />
         <file
-            src="NXKit.XForms.Web.UI\bin\Release\CodeContracts\NXKit.XForms.Web.UI.pdb"
+            src="NXKit.XForms.Web.UI\bin\Release\CodeContracts\NXKit.XForms.Web.UI.Contracts.pdb"
             target="lib\net45\CodeContracts" />
     </files>
 </package>

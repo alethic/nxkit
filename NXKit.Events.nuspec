@@ -36,10 +36,10 @@
             src="NXKit.Events\bin\Release\NXKit.Events.pdb"
             target="lib\net45" />
         <file
-            src="NXKit.Events\bin\Release\CodeContracts\NXKit.Events.dll"
+            src="NXKit.Events\bin\Release\CodeContracts\NXKit.Events.Contracts.dll"
             target="lib\net45\CodeContracts" />
         <file
-            src="NXKit.Events\bin\Release\CodeContracts\NXKit.Events.pdb"
+            src="NXKit.Events\bin\Release\CodeContracts\NXKit.Events.Contracts.pdb"
             target="lib\net45\CodeContracts" />
     </files>
 </package>

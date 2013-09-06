@@ -38,10 +38,10 @@
             src="NXKit.XForms.Layout\bin\Release\NXKit.XForms.Layout.pdb"
             target="lib\net45" />
         <file
-            src="NXKit.XForms.Layout\bin\Release\CodeContracts\NXKit.XForms.Layout.dll"
+            src="NXKit.XForms.Layout\bin\Release\CodeContracts\NXKit.XForms.Layout.Contracts.dll"
             target="lib\net45\CodeContracts" />
         <file
-            src="NXKit.XForms.Layout\bin\Release\CodeContracts\NXKit.XForms.Layout.pdb"
+            src="NXKit.XForms.Layout\bin\Release\CodeContracts\NXKit.XForms.Layout.Contracts.pdb"
             target="lib\net45\CodeContracts" />
     </files>
 </package>
