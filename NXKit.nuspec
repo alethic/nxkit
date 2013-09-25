@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>NXKit</id>
+        <version>$version$</version>
+        <title>NXKit</title>
+        <authors>Jerome Haltom</authors>
+        <owners>Jerome Haltom</owners>
+        <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
+        <projectUrl>https://github.com/wasabii/nxkit</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>
+            NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
+
+            Schema support is available in other NXKit packages.
+        </description>
+        <releaseNotes />
+        <copyright>Copyright © 2013 Jerome Haltom</copyright>
+        <tags>xml xforms</tags>
+        <dependencies>
+            <dependency
+                id="NXKit.Util"
+                version="$version$"/>
+        </dependencies>
+        <references>
+            <reference
+                file="NXKit.dll" />
+        </references>
+    </metadata>
+    <files>
+        <file
+            src="NXKit\bin\Release\NXKit.dll"
+            target="lib\net45" />
+        <file
+            src="NXKit\bin\Release\NXKit.pdb"
+            target="lib\net45" />
+        <file
+            src="NXKit\bin\Release\CodeContracts\NXKit.Contracts.dll"
+            target="lib\net45\CodeContracts" />
+        <file
+            src="NXKit\bin\Release\CodeContracts\NXKit.Contracts.pdb"
+            target="lib\net45\CodeContracts" />
+    </files>
+</package>
