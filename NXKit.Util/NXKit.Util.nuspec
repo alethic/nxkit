@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>NXKit.Util</id>
+        <id>$id$</id>
         <version>$version$</version>
-        <title>NXKit.Util</title>
+        <title>$id$</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
@@ -17,23 +17,5 @@
         <releaseNotes />
         <copyright>Copyright © 2013 Jerome Haltom</copyright>
         <tags>xml xforms</tags>
-        <references>
-            <reference
-                file="NXKit.Util.dll" />
-        </references>
     </metadata>
-    <files>
-        <file
-            src="NXKit.Util\bin\Release\NXKit.Util.dll"
-            target="lib\net45" />
-        <file
-            src="NXKit.Util\bin\Release\NXKit.Util.pdb"
-            target="lib\net45" />
-        <file
-            src="NXKit.Util\bin\Release\CodeContracts\NXKit.Util.Contracts.dll"
-            target="lib\net45\CodeContracts" />
-        <file
-            src="NXKit.Util\bin\Release\CodeContracts\NXKit.Util.Contracts.pdb"
-            target="lib\net45\CodeContracts" />
-    </files>
 </package>
