@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.20827.3
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit", "NXKit\NXKit.csproj", "{2B27233A-849A-4339-96C6-BABCB968B8B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Layout", "NXKit.XForms.Layout\NXKit.XForms.Layout.csproj", "{0B8BC4B5-851F-4B8E-B5D4-0A8925B23886}"
@@ -21,21 +23,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Events", "NXKit.Event
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{06088512-EBD1-40EE-915C-639EC7160665}"
 	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.config = .nuget\NuGet.config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{C439567E-04E2-4941-AF17-4FF2264A8BF8}"
-	ProjectSection(SolutionItems) = preProject
-		NXKit.Events.nuspec = NXKit.Events.nuspec
-		NXKit.nuspec = NXKit.nuspec
-		NXKit.Util.nuspec = NXKit.Util.nuspec
-		NXKit.Web.UI.nuspec = NXKit.Web.UI.nuspec
-		NXKit.XForms.Layout.nuspec = NXKit.XForms.Layout.nuspec
-		NXKit.XForms.Layout.Web.UI.nuspec = NXKit.XForms.Layout.Web.UI.nuspec
-		NXKit.XForms.nuspec = NXKit.XForms.nuspec
-		NXKit.XForms.Web.UI.nuspec = NXKit.XForms.Web.UI.nuspec
 	EndProjectSection
 EndProject
 Global

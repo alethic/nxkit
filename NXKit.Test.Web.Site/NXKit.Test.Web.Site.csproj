@@ -23,6 +23,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+    <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -159,8 +160,10 @@
     <EmbeddedResource Include="Resources\elections.xml" />
     <EmbeddedResource Include="Resources\persons.xml" />
     <EmbeddedResource Include="Resources\relationships.xml" />
+    <Content Include="FodyWeavers.xml" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
+    <Content Include="Fody.targets" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
@@ -248,6 +251,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="Fody.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

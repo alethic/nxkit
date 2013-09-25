@@ -198,7 +198,9 @@
                 .add($(selector).find("form"))
                 .filter("form");
 
-            $(selector).find(":input[data-val=true]").each(function () {
+            // :input is a psuedoselector provided by jQuery which selects input and input-like elements
+            // combining :input with other selectors significantly decreases performance.
+            $(selector).find(":input").filter("[data-val=true]").each(function () {
                 $jQval.unobtrusive.parseElement(this, true);
             });
 
@@ -315,14 +317,24 @@
         return match;
     });
 
-    adapters.addSingleVal("accept", "exts").addSingleVal("regex", "pattern");
+    if ($jQval.methods.extension) {
+        adapters.addSingleVal("accept", "mimtype");
+        adapters.addSingleVal("extension", "extension");
+    } else {
+        // for backward compatibility, when the 'extension' validation method does not exist, such as with versions
+        // of JQuery Validation plugin prior to 1.10, we should use the 'accept' method for
+        // validating the extension, and ignore mime-type validations as they are not supported.
+        adapters.addSingleVal("extension", "extension", "accept");
+    }
+
+    adapters.addSingleVal("regex", "pattern");
     adapters.addBool("creditcard").addBool("date").addBool("digits").addBool("email").addBool("number").addBool("url");
     adapters.addMinMax("length", "minlength", "maxlength", "rangelength").addMinMax("range", "min", "max", "range");
     adapters.add("equalto", ["other"], function (options) {
         var prefix = getModelPrefix(options.element.name),
             other = options.params.other,
             fullOtherName = appendModelPrefix(other, prefix),
-            element = $(options.form).find(":input[name='" + escapeAttributeValue(fullOtherName) + "']")[0];
+            element = $(options.form).find(":input").filter("[name='" + escapeAttributeValue(fullOtherName) + "']")[0];
 
         setValidationValues(options, "equalTo", element);
     });
@@ -343,7 +355,7 @@
         $.each(splitAndTrim(options.params.additionalfields || options.element.name), function (i, fieldName) {
             var paramName = appendModelPrefix(fieldName, prefix);
             value.data[paramName] = function () {
-                return $(options.form).find(":input[name='" + escapeAttributeValue(paramName) + "']").val();
+                return $(options.form).find(":input").filter("[name='" + escapeAttributeValue(paramName) + "']").val();
             };
         });
 
@@ -364,4 +376,4 @@
     $(function () {
         $jQval.unobtrusive.parse(document);
     });
-} (jQuery));
+}(jQuery));

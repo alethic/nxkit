@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>NXKit.XForms.Web.UI</id>
-        <version>2013.1.0.1</version>
-        <title>NXKit.XForms.Web.UI</title>
+        <id>NXKit.Web.UI</id>
+        <version>$version$</version>
+        <title>NXKit.Web.UI</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
@@ -12,42 +12,44 @@
         <description>
             NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
 
-            NXKit.XForms.Web.UI can augment NXKit.Web.UI with support for rendering and responding to XForms documents.
+            NXKit.Web.UI provides the basic model for rendering a NXKit hosted document in ASP.Net. The View control forms the basis of the implementation which can be extended by including other NXKit.*.Web.UI packages.
         </description>
-        <releaseNotes>This release currently depends on the Telerik ASP.Net RadControls for it's functionality. It is planned to factor this requirement out pretty quickly.</releaseNotes>
+        <releaseNotes />
         <copyright>Copyright © 2013 Jerome Haltom</copyright>
         <tags>xml xforms</tags>
         <dependencies>
             <dependency
                 id="NXKit"
-                version="2013.1.0.1" />
+                version="$version$" />
             <dependency
                 id="NXKit.Util"
-                version="2013.1.0.1" />
-            <dependency
-                id="NXKit.XForms"
-                version="2013.1.0.1" />
-            <dependency
-                id="NXKit.Web.UI"
-                version="2013.1.0.1" />
+                version="$version$" />
         </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly
+                assemblyName="System.Web"
+                targetFramework="" />
+            <frameworkAssembly
+                assemblyName="System.Web.Extensions"
+                targetFramework="" />
+        </frameworkAssemblies>
         <references>
             <reference
-                file="NXKit.XForms.Web.UI.dll" />
+                file="NXKit.Web.UI.dll" />
         </references>
     </metadata>
     <files>
         <file
-            src="NXKit.XForms.Web.UI\bin\Release\NXKit.XForms.Web.UI.dll"
+            src="NXKit.Web.UI\bin\Release\NXKit.Web.UI.dll"
             target="lib\net45" />
         <file
-            src="NXKit.XForms.Web.UI\bin\Release\NXKit.XForms.Web.UI.pdb"
+            src="NXKit.Web.UI\bin\Release\NXKit.Web.UI.pdb"
             target="lib\net45" />
         <file
-            src="NXKit.XForms.Web.UI\bin\Release\CodeContracts\NXKit.XForms.Web.UI.Contracts.dll"
+            src="NXKit.Web.UI\bin\Release\CodeContracts\NXKit.Web.UI.Contracts.dll"
             target="lib\net45\CodeContracts" />
         <file
-            src="NXKit.XForms.Web.UI\bin\Release\CodeContracts\NXKit.XForms.Web.UI.Contracts.pdb"
+            src="NXKit.Web.UI\bin\Release\CodeContracts\NXKit.Web.UI.Contracts.pdb"
             target="lib\net45\CodeContracts" />
     </files>
 </package>

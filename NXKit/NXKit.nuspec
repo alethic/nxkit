@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>NXKit.XForms</id>
-        <version>2013.1.0.1</version>
-        <title>NXKit.XForms</title>
+        <id>NXKit</id>
+        <version>$version$</version>
+        <title>NXKit</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
@@ -12,39 +12,33 @@
         <description>
             NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
 
-            NXKit.XForms contains the processing model for handing W3C XForms documents.
+            Schema support is available in other NXKit packages.
         </description>
         <releaseNotes />
         <copyright>Copyright © 2013 Jerome Haltom</copyright>
         <tags>xml xforms</tags>
         <dependencies>
             <dependency
-                id="NXKit"
-                version="2013.1.0.1" />
-            <dependency
                 id="NXKit.Util"
-                version="2013.1.0.1" />
-            <dependency
-                id="NXKit.Events"
-                version="2013.1.0.1" />
+                version="$version$"/>
         </dependencies>
         <references>
             <reference
-                file="NXKit.XForms.dll" />
+                file="NXKit.dll" />
         </references>
     </metadata>
     <files>
         <file
-            src="NXKit.XForms\bin\Release\NXKit.XForms.dll"
+            src="NXKit\bin\Release\NXKit.dll"
             target="lib\net45" />
         <file
-            src="NXKit.XForms\bin\Release\NXKit.XForms.pdb"
+            src="NXKit\bin\Release\NXKit.pdb"
             target="lib\net45" />
         <file
-            src="NXKit.XForms\bin\Release\CodeContracts\NXKit.XForms.Contracts.dll"
+            src="NXKit\bin\Release\CodeContracts\NXKit.Contracts.dll"
             target="lib\net45\CodeContracts" />
         <file
-            src="NXKit.XForms\bin\Release\CodeContracts\NXKit.XForms.Contracts.pdb"
+            src="NXKit\bin\Release\CodeContracts\NXKit.Contracts.pdb"
             target="lib\net45\CodeContracts" />
     </files>
 </package>
