@@ -36,7 +36,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-      <BuildPackage>true</BuildPackage>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
@@ -161,7 +160,7 @@
     <EmbeddedResource Include="Resources\elections.xml" />
     <EmbeddedResource Include="Resources\persons.xml" />
     <EmbeddedResource Include="Resources\relationships.xml" />
-    <Content Include="FodyWeavers.xml" />
+    <None Include="FodyWeavers.xml" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
     <Content Include="Fody.targets" />

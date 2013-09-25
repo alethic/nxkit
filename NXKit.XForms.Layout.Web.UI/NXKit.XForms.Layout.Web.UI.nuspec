@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>NXKit.XForms.Layout.Web.UI</id>
+        <id>$id$</id>
         <version>$version$</version>
-        <title>NXKit.XForms.Layout.Web.UI</title>
+        <title>$id$</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
@@ -31,23 +31,5 @@
                 id="NXKit.XForms.Layout"
                 version="$version$" />
         </dependencies>
-        <references>
-            <reference
-                file="NXKit.XForms.Layout.Web.UI.dll" />
-        </references>
     </metadata>
-    <files>
-        <file
-            src="NXKit.XForms.Layout.Web.UI\bin\Release\NXKit.XForms.Layout.Web.UI.dll"
-            target="lib\net45" />
-        <file
-            src="NXKit.XForms.Layout.Web.UI\bin\Release\NXKit.XForms.Layout.Web.UI.pdb"
-            target="lib\net45" />
-        <file
-            src="NXKit.XForms.Layout.Web.UI\bin\Release\CodeContracts\NXKit.XForms.Layout.Web.UI.Contracts.dll"
-            target="lib\net45\CodeContracts" />
-        <file
-            src="NXKit.XForms.Layout.Web.UI\bin\Release\CodeContracts\NXKit.XForms.Layout.Web.UI.Contracts.pdb"
-            target="lib\net45\CodeContracts" />
-    </files>
 </package>
