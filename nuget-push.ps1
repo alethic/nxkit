@@ -1,0 +1,1 @@
+Get-Item *\bin\Release\*.nupkg | %{ & .\.nuget\NuGet.exe push $_ }
