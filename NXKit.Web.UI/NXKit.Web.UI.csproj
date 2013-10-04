@@ -101,6 +101,9 @@
     <Compile Include="FormNavigation.cs" />
     <Compile Include="FormPage.cs" />
     <Compile Include="FormSection.cs" />
+    <Compile Include="INavigationCategoryVisual.cs" />
+    <Compile Include="INavigationPageVisual.cs" />
+    <Compile Include="INavigationSectionVisual.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadInputValidationDecorator.cs" />
