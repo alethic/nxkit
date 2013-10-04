@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
@@ -275,8 +276,11 @@ namespace NXKit
         /// <param name="visual"></param>
         /// <param name="evt"></param>
         /// <param name="useCapture"></param>
-        private void HandleEventOnVisual(Visual visual, Event evt, bool useCapture)
+        void HandleEventOnVisual(Visual visual, Event evt, bool useCapture)
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
+            Contract.Requires<ArgumentNullException>(evt != null);
+
             evt.CurrentTarget = visual;
             if (visual.listenerMap != null)
             {
@@ -295,6 +299,8 @@ namespace NXKit
         /// <param name="evt"></param>
         private void HandleDefaultAction(Event evt)
         {
+            Contract.Requires<ArgumentNullException>(evt != null);
+
             if (evt.PreventDefaultSet)
                 return;
 
@@ -335,6 +341,8 @@ namespace NXKit
         /// <returns></returns>
         bool IEventTarget.DispatchEvent(Event evt)
         {
+            Contract.Assume(evt != null);
+
             // event type must be specified
             if (string.IsNullOrEmpty(evt.Type))
                 throw new Exception();

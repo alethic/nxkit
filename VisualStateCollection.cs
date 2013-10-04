@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 using NXKit.Util;
 
@@ -23,6 +24,8 @@ namespace NXKit
         /// <returns></returns>
         object Get(StructuralVisual visual, Type type, Func<object> getDefaultValue)
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
             if (store == null)
                 store = new Dictionary<string, Dictionary<Type, object>>();
 
