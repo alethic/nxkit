@@ -71,6 +71,7 @@
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>3</CodeContractsAnalysisWarningLevel>
+    <DocumentationFile>bin\Release\NXKit.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -89,6 +90,9 @@
     <Compile Include="EventListenerData.cs" />
     <Compile Include="IEventDefaultActionHandler.cs" />
     <Compile Include="IEventListener.cs" />
+    <Compile Include="INavigationCategoryVisual.cs" />
+    <Compile Include="INavigationPageVisual.cs" />
+    <Compile Include="INavigationSectionVisual.cs" />
     <Compile Include="INavigationVisual.cs" />
     <Compile Include="IStructuralVisual.cs" />
     <Compile Include="ITextVisual.cs" />

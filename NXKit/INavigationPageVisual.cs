@@ -1,10 +1,10 @@
-﻿namespace NXKit.Web.UI
+﻿namespace NXKit
 {
 
     /// <summary>
     /// Marks a visual as being navigatable.
     /// </summary>
-    public interface INavigationCategoryVisual : INavigationVisual
+    public interface INavigationPageVisual : INavigationVisual
     {
 
 

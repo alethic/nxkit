@@ -1,6 +1,4 @@
-﻿using NXKit.Web.UI;
-
-namespace NXKit.XForms.Layout
+﻿namespace NXKit.XForms.Layout
 {
 
     [Visual( "page")]
