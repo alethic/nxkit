@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Reflection;
 
 namespace NXKit
@@ -36,11 +37,13 @@ namespace NXKit
         /// <param name="action"></param>
         private EventListener(Action<T> action)
         {
+            Contract.Requires(action != null);
             this.action = action;
         }
 
         void IEventListener.HandleEvent(Event @event)
         {
+            Contract.Assume(action != null);
             action((T)@event);
         }
 

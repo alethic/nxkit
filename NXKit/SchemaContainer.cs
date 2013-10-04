@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -91,6 +92,7 @@ namespace NXKit
         /// <returns></returns>
         public string ResolveSchema(XNamespace ns)
         {
+            Contract.Requires<ArgumentNullException>(Packages != null);
             return Packages.Select(i => i.ResolveSchema(ns)).Where(i => i != null).FirstOrDefault();
         }
 
@@ -101,6 +103,8 @@ namespace NXKit
         /// <returns></returns>
         public Stream OpenSchema(string location)
         {
+            Contract.Requires<ArgumentNullException>(location != null);
+            Contract.Requires<ArgumentNullException>(Packages != null);
             return Packages.Select(i => i.OpenSchema(location)).Where(i => i != null).FirstOrDefault();
         }
 
@@ -129,11 +133,14 @@ namespace NXKit
             /// <param name="schema"></param>
             internal XmlResolver(SchemaContainer schema)
             {
+                Contract.Requires<ArgumentNullException>(schema != null);
                 this.schema = schema;
             }
 
             public override object GetEntity(Uri absoluteUri, string role, Type ofObjectToReturn)
             {
+                Contract.Assume(schema != null);
+                Contract.Assume(schema.Packages != null);
                 return schema.ResolveSchema(absoluteUri.ToString());
             }
 
