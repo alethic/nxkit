@@ -25,6 +25,8 @@ namespace NXKit
         object Get(StructuralVisual visual, Type type, Func<object> getDefaultValue)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(getDefaultValue != null);
 
             if (store == null)
                 store = new Dictionary<string, Dictionary<Type, object>>();
@@ -49,6 +51,8 @@ namespace NXKit
         public T Get<T>(StructuralVisual visual)
             where T : new()
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
             return (T)Get(visual, typeof(T), () => new T());
         }
 

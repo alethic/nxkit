@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.Serialization;
@@ -25,6 +26,8 @@ namespace NXKit
         /// </summary>
         public EngineState(SerializationInfo info, StreamingContext context)
         {
+            Contract.Requires<ArgumentNullException>(info != null);
+
             // decompress document from stream
             var mstm = new MemoryStream((byte[])info.GetValue("Document", typeof(byte[])));
             var gstm = new GZipStream(mstm, CompressionMode.Decompress);
