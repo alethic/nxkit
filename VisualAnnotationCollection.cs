@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Contracts;
 
 using NXKit.Util;
 
@@ -9,8 +11,22 @@ namespace NXKit
     public class VisualAnnotationCollection
     {
 
-        private Dictionary<Type, VisualAnnotation> annotations =
-            new Dictionary<Type, VisualAnnotation>();
+        readonly Dictionary<Type, VisualAnnotation> annotations;
+
+        [ContractInvariantMethod]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
+        void ObjectInvariant()
+        {
+            Contract.Invariant(annotations != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        public VisualAnnotationCollection()
+        {
+            this.annotations = new Dictionary<Type, VisualAnnotation>();
+        }
 
         /// <summary>
         /// Gets an annotation.
@@ -20,7 +36,7 @@ namespace NXKit
         public T Get<T>()
             where T : VisualAnnotation
         {
-            return (T)annotations.ValueOrDefault(typeof(T));
+            return (T)annotations.GetOrDefault(typeof(T));
         }
 
         /// <summary>

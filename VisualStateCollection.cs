@@ -29,11 +29,11 @@ namespace NXKit
             if (store == null)
                 store = new Dictionary<string, Dictionary<Type, object>>();
 
-            var visualStore = store.ValueOrDefault(visual.UniqueId);
+            var visualStore = store.GetOrDefault(visual.UniqueId);
             if (visualStore == null)
                 visualStore = store[visual.UniqueId] = new Dictionary<Type, object>();
 
-            var value = visualStore.ValueOrDefault(type);
+            var value = visualStore.GetOrDefault(type);
             if (value == null)
                 value = visualStore[type] = getDefaultValue();
 

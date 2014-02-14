@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit
@@ -9,6 +10,8 @@ namespace NXKit
     /// </summary>
     public abstract class Module
     {
+
+        IEngine engine;
 
         /// <summary>
         /// Initializes a new instance.
@@ -32,17 +35,23 @@ namespace NXKit
         /// <param name="engine"></param>
         public virtual void Initialize(Engine engine)
         {
-            Engine = engine;
+            Contract.Requires<ArgumentNullException>(engine != null);
+
+            this.engine = engine;
         }
 
         /// <summary>
         /// Gets a reference to the form processor hosting this module.
         /// </summary>
-        public IEngine Engine { get; private set; }
+        public IEngine Engine
+        {
+            get { return engine; }
+        }
 
         /// <summary>
         /// Invoked when the engine wants to create a visual. Override this method to implement creation of <see
-        /// cref="Visual"/> instances.
+        /// cref="Visual"/> instances. Return <c>null</c> if the module doesn't support generation of a <see 
+        /// cref="Visual"/> for the given element name.
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
@@ -59,10 +68,10 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Runs the module.
+        /// Invokes the module.
         /// </summary>
         /// <returns></returns>
-        public virtual bool Run()
+        public virtual bool Invoke()
         {
             return false;
         }
