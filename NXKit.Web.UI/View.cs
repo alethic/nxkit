@@ -14,16 +14,21 @@ namespace NXKit.Web.UI
 {
 
     [ToolboxData("<{0}:View runat=\"server\"></{0}:View>")]
-    public class View : Control, INamingContainer, IPostBackEventHandler, IScriptControl
+    public class View :
+        Control,
+        INamingContainer,
+        IPostBackEventHandler,
+        IScriptControl
     {
 
         /// <summary>
         /// Private resolver implementation to dispatch to events.
         /// </summary>
-        class ResourceResolver : IResourceResolver
+        class ResourceResolver :
+            IResourceResolver
         {
 
-            private View control;
+            View control;
 
             /// <summary>
             /// Initializes a new instance.
@@ -44,7 +49,7 @@ namespace NXKit.Web.UI
                 return Resolve(ResourceActionMethod.Put, href, baseUri, body);
             }
 
-            private Stream Resolve(ResourceActionMethod method, string href, string baseUri, Stream body)
+             Stream Resolve(ResourceActionMethod method, string href, string baseUri, Stream body)
             {
                 var args = new ResourceActionEventArgs(method, href, baseUri, body);
                 control.OnResourceAction(args);
@@ -267,7 +272,7 @@ namespace NXKit.Web.UI
         {
             // construct a engine instance
             Engine = new Engine(configuration, document, new ResourceResolver(this));
-            Engine.Run();
+            Engine.Invoke();
 
             Configure();
         }
@@ -280,7 +285,7 @@ namespace NXKit.Web.UI
         {
             // construct a new processor instance
             Engine = new Engine(configuration, document, new ResourceResolver(this));
-            Engine.Run();
+            Engine.Invoke();
 
             Configure();
         }
@@ -293,7 +298,7 @@ namespace NXKit.Web.UI
         {
             // construct a new processor instance
             Engine = new Engine(configuration, document, new ResourceResolver(this));
-            Engine.Run();
+            Engine.Invoke();
 
             Configure();
         }
@@ -314,7 +319,7 @@ namespace NXKit.Web.UI
                 navigations = null;
 
                 Engine = new Engine(formState, new ResourceResolver(this));
-                Engine.Run();
+                Engine.Invoke();
 
                 // find current page node from state
                 Navigate(Navigations
@@ -334,7 +339,7 @@ namespace NXKit.Web.UI
         protected override object SaveControlState()
         {
             if (Engine != null)
-                Engine.Run();
+                Engine.Invoke();
 
             var state = new object[4];
             state[0] = base.SaveControlState();
@@ -421,7 +426,7 @@ namespace NXKit.Web.UI
         private void validator_ServerValidate(object source, ServerValidateEventArgs args)
         {
             // ensure form is run before children are validated
-            Engine.Run();
+            Engine.Invoke();
 
             args.IsValid = true;
         }
@@ -473,7 +478,7 @@ namespace NXKit.Web.UI
             ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
 
             // process any changes
-            Engine.Run();
+            Engine.Invoke();
 
             // prime unique ids required for rendering navigations
             Navigations

@@ -51,7 +51,7 @@ namespace NXKit
         /// <summary>
         /// Handles any outstanding actions in the form.
         /// </summary>
-        void Run();
+        void Invoke();
 
         /// <summary>
         /// Raised when the form wants to submit.

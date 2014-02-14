@@ -76,7 +76,7 @@ namespace NXKit.XForms.Web.UI
                             relevant = false;
 
                     // obtain or create new item
-                    var ctlItem = itemCache.GetOrCreate(itemVisual, i => new RadComboBoxItem());
+                    var ctlItem = itemCache.GetOrAdd(itemVisual, i => new RadComboBoxItem());
                     ctlItem.DataItem = itemVisual;
                     ctlItem.Value = itemVisual.Selectable.GetValueHashCode().ToString();
 
@@ -85,7 +85,7 @@ namespace NXKit.XForms.Web.UI
                     if (labelVisual != null)
                     {
                         ctlItem.Text = labelVisual.ToText();
-                        ctlItem.Controls.AddAt(0, itemLabelControlCache.GetOrCreate(labelVisual, i => new LabelControl(View, labelVisual)));
+                        ctlItem.Controls.AddAt(0, itemLabelControlCache.GetOrAdd(labelVisual, i => new LabelControl(View, labelVisual)));
                     }
                     else
                         ctlItem.Text = "unknown";

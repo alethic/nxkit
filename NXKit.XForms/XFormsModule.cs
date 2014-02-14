@@ -68,7 +68,7 @@ namespace NXKit.XForms
             if (xname.Namespace != Constants.XForms_1_0)
                 return null;
 
-            var type = visualTypeMap.ValueOrDefault(xname);
+            var type = visualTypeMap.GetOrDefault(xname);
             if (type == null)
                 return null;
 
@@ -140,7 +140,7 @@ namespace NXKit.XForms
             Engine.RootVisual.GetState<XFormsModuleState>().Failed = true;
         }
 
-        public override bool Run()
+        public override bool Invoke()
         {
             if (Engine.RootVisual.GetState<XFormsModuleState>().Failed)
                 return false;
@@ -993,7 +993,7 @@ namespace NXKit.XForms
             if (outermostAction)
             {
                 executingOutermostActionHandler = false;
-                Run();
+                Invoke();
             }
         }
 
@@ -1015,7 +1015,7 @@ namespace NXKit.XForms
         public void Submit()
         {
             // ensure processor is up to date
-            Engine.Run();
+            Engine.Invoke();
 
             // all submission elements on the form
             var visuals = Engine.RootVisual

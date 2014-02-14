@@ -42,7 +42,7 @@ namespace NXKit.XForms.Layout
             if (xname.Namespace != Constants.Layout_1_0)
                 return null;
 
-            var type = visualTypeMap.ValueOrDefault(xname);
+            var type = visualTypeMap.GetOrDefault(xname);
             if (type == null)
                 return null;
 

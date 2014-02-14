@@ -242,7 +242,7 @@ namespace NXKit
                 listenerMap = new EventListenerMap();
 
             // initialize listeners list
-            var listeners = listenerMap.ValueOrDefault(type);
+            var listeners = listenerMap.GetOrDefault(type);
             if (listeners == null)
                 listeners = listenerMap[type] = new List<EventListenerData>();
 
@@ -260,7 +260,7 @@ namespace NXKit
                 return;
 
             // initialize listeners list
-            var listeners = listenerMap.ValueOrDefault(type);
+            var listeners = listenerMap.GetOrDefault(type);
             if (listeners == null)
                 return;
 
@@ -285,7 +285,7 @@ namespace NXKit
             if (visual.listenerMap != null)
             {
                 // obtain set of registered listeners
-                var listeners = visual.listenerMap.ValueOrDefault(evt.Type);
+                var listeners = visual.listenerMap.GetOrDefault(evt.Type);
                 if (listeners != null)
                     foreach (var listener in listeners.Where(i => i.UseCapture == useCapture))
                         listener.Listener.HandleEvent(evt);

@@ -42,7 +42,7 @@ namespace NXKit.XForms
             var ec = new XFormsEvaluationContext(model, instance, node, position, size);
 
             // obtain or create child
-            var item = items.ValueOrDefault(node);
+            var item = items.GetOrDefault(node);
             if (item == null)
             {
                 item = items[node] = new XFormsItemSetItemVisual();

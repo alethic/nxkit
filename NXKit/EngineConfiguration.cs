@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Contracts;
 
 namespace NXKit
 {
@@ -11,14 +13,22 @@ namespace NXKit
     public class EngineConfiguration
     {
 
-        List<Type> moduleTypes = new List<Type>();
+        readonly List<Type> moduleTypes;
+
+        [ContractInvariantMethod]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
+        void ObjectInvariant()
+        {
+            Contract.Invariant(moduleTypes != null);
+        }
+
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public EngineConfiguration()
         {
-
+            this.moduleTypes = new List<Type>();
         }
 
         /// <summary>
@@ -34,8 +44,8 @@ namespace NXKit
         /// </summary>
         public void AddModule(Type type)
         {
-            if (!typeof(Module).IsAssignableFrom(type))
-                throw new ArgumentException("Type must be NXKit.Module type.", "type");
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentException>(typeof(Module).IsAssignableFrom(type), "Type must be NXKit.Modue type.");
 
             moduleTypes.Add(type);
         }

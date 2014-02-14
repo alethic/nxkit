@@ -107,7 +107,7 @@ namespace NXKit.Events
                 observer.AddEventListener(eventAttr, new EventListener(observer, target, handler), capture);
         }
 
-        public override bool Run()
+        public override bool Invoke()
         {
             return false;
         }

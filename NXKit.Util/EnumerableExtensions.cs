@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace NXKit.Util
@@ -13,6 +14,8 @@ namespace NXKit.Util
 
         public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T item)
         {
+            Contract.Requires<ArgumentNullException>(source != null);
+
             foreach (var i in source)
                 yield return i;
             yield return item;
@@ -20,6 +23,8 @@ namespace NXKit.Util
 
         public static IEnumerable<T> Prepend<T>(this IEnumerable<T> source, T item)
         {
+            Contract.Requires<ArgumentNullException>(source != null);
+
             yield return item;
             foreach (var i in source)
                 yield return i;
@@ -27,6 +32,8 @@ namespace NXKit.Util
 
         public static IEnumerable<T> Recurse<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> func)
         {
+            Contract.Requires<ArgumentNullException>(source != null);
+
             foreach (var i in source)
             {
                 yield return i;
@@ -38,6 +45,8 @@ namespace NXKit.Util
         public static IEnumerable<T> DistinctByReference<T>(this IEnumerable<T> source)
             where T : class
         {
+            Contract.Requires<ArgumentNullException>(source != null);
+
             return source.Distinct<T>(EqualityComparer<object>.Default);
         }
 

@@ -80,7 +80,7 @@ namespace NXKit.Web.UI
                 throw new ArgumentNullException("visual");
 
             // return existing control
-            var control = cache.ValueOrDefault(visual);
+            var control = cache.GetOrDefault(visual);
             if (control == null)
             {
                 // create visual control, if available

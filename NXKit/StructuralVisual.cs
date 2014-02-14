@@ -109,7 +109,7 @@ namespace NXKit
                     continue;
 
                 // restore existing visual child, if it exists
-                var visual = nodeChildren.ValueOrDefault(childNode);
+                var visual = nodeChildren.GetOrDefault(childNode);
                 if (visual != null)
                     yield return visual;
 

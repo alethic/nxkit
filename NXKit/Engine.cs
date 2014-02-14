@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -7,105 +9,180 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Hosts an ISIS Forms document. Provides access to the visual tree for a renderer.
+    /// Hosts an NXKit document. Provides access to the visual tree for a renderer or other processor.
     /// </summary>
-    public class Engine : IEngine
+    public class Engine :
+        IEngine
     {
 
         /// <summary>
-        /// Configuration for the engine.
+        /// Creates a new default <see cref="EngineConfiguration"/> instance.
         /// </summary>
-        public EngineConfiguration Configuration { get; private set; }
+        /// <returns></returns>
+        public static EngineConfiguration CreateDefaultConfiguration()
+        {
+            return new EngineConfiguration();
+        }
 
-        /// <summary>
-        /// Set of generated modules.
-        /// </summary>
-        Module[] modules;
+        readonly EngineConfiguration configuration;
+        readonly XDocument document;
+        readonly IResourceResolver resolver;
 
-        /// <summary>
-        /// Root visual of the document.
-        /// </summary>
-        StructuralVisual rootVisual;
-
-        /// <summary>
-        /// Auto-assigned element ID to use next.
-        /// </summary>
+        readonly VisualStateCollection visualState;
         int nextElementId;
 
-        /// <summary>
-        /// Stores per-<see cref="Visual"/> state.
-        /// </summary>
-        VisualStateCollection visualState;
+        StructuralVisual rootVisual;
+        Module[] modules;
+
+        [ContractInvariantMethod]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
+        void ObjectInvariant()
+        {
+            Contract.Invariant(configuration != null);
+            Contract.Invariant(document != null);
+            Contract.Invariant(resolver != null);
+            Contract.Invariant(visualState != null);
+            Contract.Invariant(nextElementId >= 0);
+        }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public Engine(XmlReader document, IResourceResolver resolver)
+            : this(CreateDefaultConfiguration(), document, resolver)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public Engine(XmlDocument document, IResourceResolver resolver)
+            : this(CreateDefaultConfiguration(), document, resolver)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public Engine(XDocument document, IResourceResolver resolver)
+            : this(CreateDefaultConfiguration(), document, resolver)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public Engine(string document, IResourceResolver resolver)
+            : this(CreateDefaultConfiguration(), document, resolver)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="configuration"></param>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
         public Engine(EngineConfiguration configuration, string document, IResourceResolver resolver)
+            : this(configuration, XDocument.Parse(document), resolver)
         {
-            Initialize(configuration, document, resolver);
+            Contract.Requires<ArgumentNullException>(configuration != null);
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public Engine(EngineConfiguration configuration, XmlReader document, IResourceResolver resolver)
+            : this(configuration, XDocument.Load(document), resolver)
+        {
+            Contract.Requires<ArgumentNullException>(configuration != null);
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="configuration"></param>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
         public Engine(EngineConfiguration configuration, XmlDocument document, IResourceResolver resolver)
+            : this(configuration, new XmlNodeReader(document), resolver)
         {
-            Initialize(configuration, document.InnerXml, resolver);
+            Contract.Requires<ArgumentNullException>(configuration != null);
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="configuration"></param>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
         public Engine(EngineConfiguration configuration, XDocument document, IResourceResolver resolver)
+            : this(configuration, document, resolver, 1, new VisualStateCollection())
         {
-            Initialize(configuration, document.ToString(SaveOptions.DisableFormatting), resolver);
+            Contract.Requires<ArgumentNullException>(configuration != null);
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="state"></param>
+        /// <param name="resolver"></param>
         public Engine(EngineState state, IResourceResolver resolver)
+            : this(state.Configuration, XDocument.Parse(state.Document), resolver, state.NextElementId, state.VisualState)
         {
-            Initialize(state, resolver);
+            Contract.Requires<ArgumentNullException>(state != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
         }
 
         /// <summary>
-        /// Initializes a new form.
+        /// Initializes a new instance.
         /// </summary>
+        /// <param name="configuration"></param>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        private void Initialize(EngineConfiguration configuration, string document, IResourceResolver resolver)
+        /// <param name="nextElementId"></param>
+        /// <param name="visualState"></param>
+        Engine(EngineConfiguration configuration, XDocument document, IResourceResolver resolver, int nextElementId, VisualStateCollection visualState)
         {
-            Configuration = configuration;
-            Document = XDocument.Parse(document);
-            Resolver = resolver;
+            Contract.Requires<ArgumentNullException>(configuration != null);
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+            Contract.Requires<ArgumentOutOfRangeException>(nextElementId >= 0);
+            Contract.Requires<ArgumentNullException>(visualState != null);
 
-            nextElementId = 1;
-            visualState = new VisualStateCollection();
+            this.configuration = configuration;
+            this.document = new XDocument(document);
+            this.resolver = resolver;
 
-            Initialize();
-        }
-
-        /// <summary>
-        /// Restores a previous form.
-        /// </summary>
-        /// <param name="state"></param>
-        /// <param name="resolver"></param>
-        private void Initialize(EngineState state, IResourceResolver resolver)
-        {
-            Configuration = state.Configuration;
-            Document = XDocument.Parse(state.Document);
-            Resolver = resolver;
-
-            nextElementId = state.NextElementId;
-            visualState = state.VisualState;
+            this.nextElementId = nextElementId;
+            this.visualState = visualState;
 
             Initialize();
         }
@@ -116,7 +193,7 @@ namespace NXKit
         void Initialize()
         {
             // dictionary of types to instances
-            var m = Configuration.ModuleTypes
+            var m = configuration.ModuleTypes
                 .ToDictionary(i => i, i => (Module)null);
 
             do
@@ -144,14 +221,28 @@ namespace NXKit
         }
 
         /// <summary>
+        /// Gets the current engine configuration.
+        /// </summary>
+        public EngineConfiguration Configuration
+        {
+            get { return configuration; }
+        }
+
+        /// <summary>
         /// Gets a reference to the current <see cref="Document"/> being handled.
         /// </summary>
-        public XDocument Document { get; private set; }
+        public XDocument Document
+        {
+            get { return document; }
+        }
 
         /// <summary>
         /// Gets a reference to the <see cref="IResourceResolver"/> which is used to save or load external resources.
         /// </summary>
-        public IResourceResolver Resolver { get; private set; }
+        public IResourceResolver Resolver
+        {
+            get { return resolver; }
+        }
 
         /// <summary>
         /// Gets the loaded module instance of the specified type.
@@ -173,9 +264,9 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Runs any outstanding actions.
+        /// Invokes any outstanding actions.
         /// </summary>
-        public void Run()
+        public void Invoke()
         {
             // run each module until no module does anything
             bool run;
@@ -183,7 +274,7 @@ namespace NXKit
             {
                 run = false;
                 foreach (var module in modules)
-                    run |= module.Run();
+                    run |= module.Invoke();
             }
             while (run);
 
@@ -278,8 +369,8 @@ namespace NXKit
         {
             return new EngineState()
             {
-                Configuration = Configuration,
-                Document = Document.ToString(SaveOptions.DisableFormatting),
+                Configuration = configuration,
+                Document = document.ToString(SaveOptions.DisableFormatting),
                 NextElementId = nextElementId,
                 VisualState = visualState,
             };

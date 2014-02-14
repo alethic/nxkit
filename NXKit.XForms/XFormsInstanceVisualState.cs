@@ -148,7 +148,7 @@ namespace NXKit.XForms
             foreach (var nodeItem in nodeItems)
             {
                 // find the incoming state for the item
-                var itemState = stateMap.ValueOrDefault(nodeItem.Index);
+                var itemState = stateMap.GetOrDefault(nodeItem.Index);
                 if (itemState == null)
                     continue;
 

@@ -63,7 +63,7 @@ namespace NXKit.XForms.Web.UI
                             continue;
 
                     // generate new item
-                    var ctlItem = itemCache.GetOrCreate(itemVisual, i => new ListItem());
+                    var ctlItem = itemCache.GetOrAdd(itemVisual, i => new ListItem());
                     ctlItem.Value = itemVisual.Selectable.GetValueHashCode().ToString();
 
                     // add label if available
