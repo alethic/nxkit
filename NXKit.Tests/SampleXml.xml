@@ -1,0 +1,6 @@
+﻿<form
+    xmlns="http://tempuri.org/sample" 
+    xmlns:xf="http://www.w3.org/2002/xforms">
+    <xf:model id="data"></xf:model>
+</form>
+    
