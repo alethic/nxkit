@@ -64,6 +64,8 @@ namespace NXKit
         /// <param name="node"></param>
         protected Visual(IEngine engine, StructuralVisual parent, XNode node)
         {
+            Contract.Requires<ArgumentNullException>(engine != null);
+
             Initialize(engine, parent, node);
         }
 
@@ -75,8 +77,7 @@ namespace NXKit
         /// <param name="node"></param>
         public void Initialize(IEngine engine, StructuralVisual parent, XNode node)
         {
-            if (engine == null)
-                throw new ArgumentNullException("engine");
+            Contract.Requires<ArgumentNullException>(engine != null);
 
             Engine = engine;
             Parent = parent;
@@ -157,6 +158,8 @@ namespace NXKit
         /// <returns></returns>
         protected INamingScope GetNamingScope(Visual visual)
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
             return visual.Ascendants().OfType<INamingScope>().Append(null).First();
         }
 

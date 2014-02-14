@@ -5,7 +5,8 @@ using System.Reflection;
 namespace NXKit
 {
 
-    public class EventListener<T> : IEventListener
+    public class EventListener<T> :
+        IEventListener
         where T : Event
     {
 
@@ -17,6 +18,9 @@ namespace NXKit
         /// <param name="useCapture"></param>
         public static void Register(IEventTarget target, Action<T> action, bool useCapture)
         {
+            Contract.Requires<ArgumentNullException>(target != null);
+            Contract.Requires<ArgumentNullException>(action != null);
+
             string name = null;
 
             var nameField = typeof(T).GetField("Name", BindingFlags.Static | BindingFlags.Public);
@@ -29,21 +33,21 @@ namespace NXKit
             target.AddEventListener(name, new EventListener<T>(action), useCapture);
         }
 
-        private Action<T> action;
+        Action<T> action;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="action"></param>
-        private EventListener(Action<T> action)
+        EventListener(Action<T> action)
         {
-            Contract.Requires(action != null);
+            Contract.Requires<ArgumentNullException>(action != null);
+
             this.action = action;
         }
 
         void IEventListener.HandleEvent(Event @event)
         {
-            Contract.Assume(action != null);
             action((T)@event);
         }
 

@@ -33,6 +33,8 @@ namespace NXKit
         /// </summary>
         internal SchemaContainer(Engine engine)
         {
+            Contract.Requires<ArgumentNullException>(engine != null);
+
             Engine = engine;
 
             // initialize .Net schema
