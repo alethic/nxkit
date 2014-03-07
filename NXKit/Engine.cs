@@ -234,7 +234,11 @@ namespace NXKit
         /// <returns></returns>
         Visual CreateVisualFromModules(XElement element)
         {
-            return modules.Select(i => i.CreateVisual(element.Name)).FirstOrDefault(i => i != null);
+            var v = modules.Select(i => i.CreateVisual(element.Name)).FirstOrDefault(i => i != null);
+            if (v == null)
+                Console.WriteLine("no visual for element: {0}", element.Name);
+
+            return v;
         }
 
         /// <summary>

@@ -163,6 +163,13 @@
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
+    <EmbeddedResource Include="Resources\beneficiaries.xml" />
+    <EmbeddedResource Include="Resources\primaryelections.xml" />
+    <EmbeddedResource Include="Resources\primaryperson.xml" />
+    <EmbeddedResource Include="Resources\primaryquestions.xml" />
+    <EmbeddedResource Include="Resources\secondaryelections.xml" />
+    <EmbeddedResource Include="Resources\secondaryperson.xml" />
+    <EmbeddedResource Include="Resources\secondaryquestions.xml" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
     <Content Include="Scripts\jquery-2.0.3.min.map" />
