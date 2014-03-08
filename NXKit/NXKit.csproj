@@ -152,7 +152,7 @@
     <Compile Include="IEngine.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Visual.cs" />
-    <Compile Include="IResourceResolver.cs" />
+    <Compile Include="IResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

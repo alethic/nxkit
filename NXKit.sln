@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit", "NXKit\NXKit.csproj", "{2B27233A-849A-4339-96C6-BABCB968B8B0}"
 EndProject
@@ -31,6 +31,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Wpf.UI", "NXKit.Wpf.UI\NXKit.Wpf.UI.csproj", "{DB960E33-5561-43EA-A998-B6E42CF16CCC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Tests", "NXKit.Tests\NXKit.Tests.csproj", "{5FE52D8D-76F0-4E3E-B54C-FF79343DE832}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Test.Wpf.App", "NXKit.Test.Wpf.App\NXKit.Test.Wpf.App.csproj", "{2ADD3FCF-35FE-4BEF-995A-5D12379CDB1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Wpf", "NXKit.Wpf\NXKit.Wpf.csproj", "{41357532-48CC-4C5C-9CF3-DCA24C00BDA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Wpf.UI", "NXKit.XForms.Wpf.UI\NXKit.XForms.Wpf.UI.csproj", "{30411C50-08C0-4814-97D4-76263A6C25A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Layout.Wpf.UI", "NXKit.XForms.Layout.Wpf.UI\NXKit.XForms.Layout.Wpf.UI.csproj", "{102E4D49-7EBD-47A5-9565-ED60D4668E0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,6 +90,22 @@ Global
 		{5FE52D8D-76F0-4E3E-B54C-FF79343DE832}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FE52D8D-76F0-4E3E-B54C-FF79343DE832}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FE52D8D-76F0-4E3E-B54C-FF79343DE832}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ADD3FCF-35FE-4BEF-995A-5D12379CDB1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ADD3FCF-35FE-4BEF-995A-5D12379CDB1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ADD3FCF-35FE-4BEF-995A-5D12379CDB1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ADD3FCF-35FE-4BEF-995A-5D12379CDB1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41357532-48CC-4C5C-9CF3-DCA24C00BDA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41357532-48CC-4C5C-9CF3-DCA24C00BDA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41357532-48CC-4C5C-9CF3-DCA24C00BDA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41357532-48CC-4C5C-9CF3-DCA24C00BDA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30411C50-08C0-4814-97D4-76263A6C25A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30411C50-08C0-4814-97D4-76263A6C25A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30411C50-08C0-4814-97D4-76263A6C25A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30411C50-08C0-4814-97D4-76263A6C25A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{102E4D49-7EBD-47A5-9565-ED60D4668E0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{102E4D49-7EBD-47A5-9565-ED60D4668E0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{102E4D49-7EBD-47A5-9565-ED60D4668E0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{102E4D49-7EBD-47A5-9565-ED60D4668E0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

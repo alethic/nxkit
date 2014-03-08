@@ -25,7 +25,7 @@ namespace NXKit.Web.UI
         /// Private resolver implementation to dispatch to events.
         /// </summary>
         class ResourceResolver :
-            IResourceResolver
+            IResolver
         {
 
             View control;

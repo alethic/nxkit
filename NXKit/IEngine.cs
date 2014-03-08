@@ -21,7 +21,7 @@ namespace NXKit
         /// <summary>
         /// Gets a reference to the resolver used to interact with external named resources.
         /// </summary>
-        IResourceResolver Resolver { get; }
+        IResolver Resolver { get; }
 
         /// <summary>
         /// Gets the 'id' attribute of the given <see cref="Element"/>.

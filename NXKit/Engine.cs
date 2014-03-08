@@ -26,7 +26,7 @@ namespace NXKit
 
         readonly EngineConfiguration configuration;
         readonly XDocument document;
-        readonly IResourceResolver resolver;
+        readonly IResolver resolver;
 
         readonly VisualStateCollection visualState;
         int nextElementId;
@@ -50,7 +50,7 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Engine(XmlReader document, IResourceResolver resolver)
+        public Engine(XmlReader document, IResolver resolver)
             : this(CreateDefaultConfiguration(), document, resolver)
         {
             Contract.Requires<ArgumentNullException>(document != null);
@@ -62,7 +62,7 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Engine(XmlDocument document, IResourceResolver resolver)
+        public Engine(XmlDocument document, IResolver resolver)
             : this(CreateDefaultConfiguration(), document, resolver)
         {
             Contract.Requires<ArgumentNullException>(document != null);
@@ -74,7 +74,7 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Engine(XDocument document, IResourceResolver resolver)
+        public Engine(XDocument document, IResolver resolver)
             : this(CreateDefaultConfiguration(), document, resolver)
         {
             Contract.Requires<ArgumentNullException>(document != null);
@@ -86,7 +86,7 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Engine(string document, IResourceResolver resolver)
+        public Engine(string document, IResolver resolver)
             : this(CreateDefaultConfiguration(), document, resolver)
         {
             Contract.Requires<ArgumentNullException>(document != null);
@@ -99,7 +99,7 @@ namespace NXKit
         /// <param name="configuration"></param>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Engine(EngineConfiguration configuration, string document, IResourceResolver resolver)
+        public Engine(EngineConfiguration configuration, string document, IResolver resolver)
             : this(configuration, XDocument.Parse(document), resolver)
         {
             Contract.Requires<ArgumentNullException>(configuration != null);
@@ -113,7 +113,7 @@ namespace NXKit
         /// <param name="configuration"></param>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Engine(EngineConfiguration configuration, XmlReader document, IResourceResolver resolver)
+        public Engine(EngineConfiguration configuration, XmlReader document, IResolver resolver)
             : this(configuration, XDocument.Load(document), resolver)
         {
             Contract.Requires<ArgumentNullException>(configuration != null);
@@ -127,7 +127,7 @@ namespace NXKit
         /// <param name="configuration"></param>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Engine(EngineConfiguration configuration, XmlDocument document, IResourceResolver resolver)
+        public Engine(EngineConfiguration configuration, XmlDocument document, IResolver resolver)
             : this(configuration, new XmlNodeReader(document), resolver)
         {
             Contract.Requires<ArgumentNullException>(configuration != null);
@@ -141,7 +141,7 @@ namespace NXKit
         /// <param name="configuration"></param>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Engine(EngineConfiguration configuration, XDocument document, IResourceResolver resolver)
+        public Engine(EngineConfiguration configuration, XDocument document, IResolver resolver)
             : this(configuration, document, resolver, 1, new VisualStateCollection())
         {
             Contract.Requires<ArgumentNullException>(configuration != null);
@@ -154,7 +154,7 @@ namespace NXKit
         /// </summary>
         /// <param name="state"></param>
         /// <param name="resolver"></param>
-        public Engine(EngineState state, IResourceResolver resolver)
+        public Engine(EngineState state, IResolver resolver)
             : this(state.Configuration, XDocument.Parse(state.Document), resolver, state.NextElementId, state.VisualState)
         {
             Contract.Requires<ArgumentNullException>(state != null);
@@ -169,7 +169,7 @@ namespace NXKit
         /// <param name="resolver"></param>
         /// <param name="nextElementId"></param>
         /// <param name="visualState"></param>
-        Engine(EngineConfiguration configuration, XDocument document, IResourceResolver resolver, int nextElementId, VisualStateCollection visualState)
+        Engine(EngineConfiguration configuration, XDocument document, IResolver resolver, int nextElementId, VisualStateCollection visualState)
         {
             Contract.Requires<ArgumentNullException>(configuration != null);
             Contract.Requires<ArgumentNullException>(document != null);
@@ -237,9 +237,9 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Gets a reference to the <see cref="IResourceResolver"/> which is used to save or load external resources.
+        /// Gets a reference to the <see cref="IResolver"/> which is used to save or load external resources.
         /// </summary>
-        public IResourceResolver Resolver
+        public IResolver Resolver
         {
             get { return resolver; }
         }
