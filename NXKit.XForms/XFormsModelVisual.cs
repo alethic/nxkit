@@ -6,7 +6,9 @@ namespace NXKit.XForms
 {
 
     [Visual("model")]
-    public class XFormsModelVisual : XFormsVisual, IEvaluationContextScope,
+    public class XFormsModelVisual :
+        XFormsVisual,
+        IEvaluationContextScope,
         IEventDefaultActionHandler<XFormsModelConstructEvent>,
         IEventDefaultActionHandler<XFormsModelConstructDoneEvent>,
         IEventDefaultActionHandler<XFormsReadyEvent>,
@@ -64,6 +66,10 @@ namespace NXKit.XForms
             get { return Children.OfType<XFormsInstanceVisual>(); }
         }
 
+        /// <summary>
+        /// Gets a new <see cref="XFormsEvaluationContext"/> that should be the default used for the model when no
+        /// instance is known.
+        /// </summary>
         public XFormsEvaluationContext DefaultEvaluationContext
         {
             get

@@ -49,7 +49,7 @@ namespace NXKit.Web.UI
                 return Resolve(ResourceActionMethod.Put, href, baseUri, body);
             }
 
-             Stream Resolve(ResourceActionMethod method, string href, string baseUri, Stream body)
+            Stream Resolve(ResourceActionMethod method, string href, string baseUri, Stream body)
             {
                 var args = new ResourceActionEventArgs(method, href, baseUri, body);
                 control.OnResourceAction(args);

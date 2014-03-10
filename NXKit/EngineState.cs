@@ -10,7 +10,8 @@ namespace NXKit
 {
 
     [Serializable]
-    public class EngineState : ISerializable
+    public class EngineState : 
+        ISerializable
     {
 
         /// <summary>

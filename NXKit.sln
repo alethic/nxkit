@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Wpf.UI", "NXKit.Wpf.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Tests", "NXKit.Tests\NXKit.Tests.csproj", "{5FE52D8D-76F0-4E3E-B54C-FF79343DE832}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Tests", "NXKit.XForms.Tests\NXKit.XForms.Tests.csproj", "{80087881-51FE-4499-8788-5BF5A76CF34B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{5FE52D8D-76F0-4E3E-B54C-FF79343DE832}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FE52D8D-76F0-4E3E-B54C-FF79343DE832}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FE52D8D-76F0-4E3E-B54C-FF79343DE832}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80087881-51FE-4499-8788-5BF5A76CF34B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80087881-51FE-4499-8788-5BF5A76CF34B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80087881-51FE-4499-8788-5BF5A76CF34B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80087881-51FE-4499-8788-5BF5A76CF34B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

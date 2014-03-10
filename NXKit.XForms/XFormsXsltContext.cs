@@ -12,7 +12,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Proxies the namespace context of a node to other systems.
     /// </summary>
-    internal class VisualXmlNamespaceContext :
+    public class XFormsXsltContext :
         XsltContext
     {
 
@@ -22,11 +22,16 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        internal VisualXmlNamespaceContext(Visual visual)
+        internal XFormsXsltContext(Visual visual)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
 
             this.visual = visual;
+        }
+
+        public Visual Visual
+        {
+            get { return visual; }
         }
 
         public override bool Whitespace
@@ -47,7 +52,6 @@ namespace NXKit.XForms
         public override string LookupNamespace(string prefix)
         {
             Contract.Requires<ArgumentNullException>(prefix != null);
-            Contract.Requires<ArgumentNullException>(visual.Node != null);
 
             var element = visual.Node as XElement;
             if (element == null)

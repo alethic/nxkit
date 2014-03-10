@@ -30,13 +30,11 @@ namespace NXKit.XForms.XPathFunctions
             get { return XPathResultType.NodeSet; }
         }
 
-        protected override object Invoke(VisualXmlNamespaceContext context, XPathNavigator navigator, params object[] args)
+        protected override object Invoke(XFormsXsltContext context, XPathNavigator navigator, params object[] args)
         {
             var id = args.Length > 0 ? ((string)args[0]).TrimToNull() : null;
             if (id == null)
-                return GetModel(context, navigator).Instances
-                    .Select(i => i.State.InstanceElement.CreateNavigator().Select("."))
-                    .FirstOrDefault();
+                return GetModel(context, navigator).DefaultEvaluationContext.Instance.Element.CreateNavigator().Select(".");
             else
                 return GetModel(context, navigator).Instances
                     .Where(i => i.Id == id)

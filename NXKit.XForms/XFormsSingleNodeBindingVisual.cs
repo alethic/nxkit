@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace NXKit.XForms
@@ -21,8 +22,18 @@ namespace NXKit.XForms
                 {
                     context = null;
 
-                    if (Binding != null && Binding.Node != null)
-                        context = new XFormsEvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.Node, 1, 1);
+                    if (Binding != null &&
+                        Binding.Node != null &&
+                        Binding.Node.Document != null)
+                    {
+                        var model = Binding.Node.Document.Annotation<XFormsModelVisual>();
+                        Contract.Assert(model != null);
+
+                        var instance = Binding.Node.Document.Annotation<XFormsInstanceVisual>();
+                        Contract.Assert(instance != null);
+
+                        context = new XFormsEvaluationContext(model, instance, Binding.Node, 1, 1);
+                    }
 
                     contextCached = true;
                 }

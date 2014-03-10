@@ -10,7 +10,7 @@ namespace NXKit.XForms.XPathFunctions
     /// <summary>
     /// Base XPath function for XForms.
     /// </summary>
-    internal abstract class XPathFunction :
+    public abstract class XPathFunction :
         IXsltContextFunction
     {
 
@@ -27,7 +27,7 @@ namespace NXKit.XForms.XPathFunctions
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        protected abstract object Invoke(VisualXmlNamespaceContext context, XPathNavigator navigator, params object[] args);
+        protected abstract object Invoke(XFormsXsltContext context, XPathNavigator navigator, params object[] args);
 
         /// <summary>
         /// Implements <see cref="IXsltContextFunction"/>.Invoke.
@@ -38,7 +38,7 @@ namespace NXKit.XForms.XPathFunctions
         /// <returns></returns>
         object IXsltContextFunction.Invoke(XsltContext xsltContext, object[] args, XPathNavigator docContext)
         {
-            return Invoke((VisualXmlNamespaceContext)xsltContext, docContext, args);
+            return Invoke((XFormsXsltContext)xsltContext, docContext, args);
         }
 
         /// <summary>
@@ -47,14 +47,18 @@ namespace NXKit.XForms.XPathFunctions
         /// <param name="context"></param>
         /// <param name="navigator"></param>
         /// <returns></returns>
-        protected XFormsModelVisual GetModel(VisualXmlNamespaceContext context, XPathNavigator navigator)
+        protected XFormsModelVisual GetModel(XFormsXsltContext context, XPathNavigator navigator)
         {
             Contract.Requires<ArgumentNullException>(context != null);
             Contract.Requires<ArgumentNullException>(navigator != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
 
-            return GetModel(context.Visual.Engine.GetModule<XFormsModule>(), navigator);
+            var result = GetModel(context.Visual.Engine.GetModule<XFormsModule>(), navigator);
+            if (result == null)
+                throw new NullReferenceException();
+
+            return result;
         }
 
         /// <summary>
@@ -63,7 +67,7 @@ namespace NXKit.XForms.XPathFunctions
         /// <param name="context"></param>
         /// <param name="navigator"></param>
         /// <returns></returns>
-        protected XFormsInstanceVisual GetInstance(VisualXmlNamespaceContext context, XPathNavigator navigator)
+        protected XFormsInstanceVisual GetInstance(XFormsXsltContext context, XPathNavigator navigator)
         {
             Contract.Requires<ArgumentNullException>(context != null);
             Contract.Requires<ArgumentNullException>(navigator != null);
@@ -85,6 +89,7 @@ namespace NXKit.XForms.XPathFunctions
             Contract.Requires<ArgumentNullException>(navigator != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
+            Contract.Ensures(Contract.Result<XFormsModelVisual>() != null);
 
             return module.GetModelItemModel((XObject)navigator.UnderlyingObject);
         }
@@ -100,6 +105,7 @@ namespace NXKit.XForms.XPathFunctions
             Contract.Requires<ArgumentNullException>(navigator != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
+            Contract.Ensures(Contract.Result<XFormsInstanceVisual>() != null);
 
             return module.GetModelItemInstance((XObject)navigator.UnderlyingObject);
         }
