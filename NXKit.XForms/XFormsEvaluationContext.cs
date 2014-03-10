@@ -4,6 +4,9 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
+    /// <summary>
+    /// Describes a context against which bindings can be applied.
+    /// </summary>
     public class XFormsEvaluationContext
     {
 
@@ -72,7 +75,7 @@ namespace NXKit.XForms
         /// </summary>
         public XFormsInstanceVisual Instance
         {
-            get { return Instance; }
+            get { return instance; }
         }
 
         /// <summary>
