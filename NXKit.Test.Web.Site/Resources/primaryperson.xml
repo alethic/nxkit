@@ -1,4 +1,4 @@
-  <person>
+<person>
     <firstname />
     <middlename />
     <lastname />
@@ -10,4 +10,4 @@
     <gender />
     <telephone1 />
     <telephone2 />
-  </person>
+</person>

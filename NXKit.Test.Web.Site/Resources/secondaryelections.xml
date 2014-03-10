@@ -1,6 +1,6 @@
 <elections>
-  <term-life>
-    <elected>false</elected>
-    <coverage-amount />
-  </term-life>
+    <term-life>
+        <elected>false</elected>
+        <coverage-amount />
+    </term-life>
 </elections>

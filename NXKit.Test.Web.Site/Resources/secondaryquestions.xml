@@ -1,38 +1,38 @@
 <questions>
-  <question1>
-    <answer>false</answer>
-  </question1>
-  <question2>
-    <answer>false</answer>
-    <healthinfo>
-      <condition />
-      <dates />
-      <currentstatus />
-      <physicianname />
-      <physicianaddress />
-      <physicianphonenumber />
-    </healthinfo>
-  </question2>
-  <question3>
-    <answer>false</answer>
-    <healthinfo>
-      <condition />
-      <dates />
-      <currentstatus />
-      <physicianname />
-      <physicianaddress />
-      <physicianphonenumber />
-    </healthinfo>
-  </question3>
-  <question4>
-    <answer>false</answer>
-    <healthinfo>
-      <condition />
-      <dates />
-      <currentstatus />
-      <physicianname />
-      <physicianaddress />
-      <physiciantelephone />
-    </healthinfo>
-  </question4>
+    <question1>
+        <answer>false</answer>
+    </question1>
+    <question2>
+        <answer>false</answer>
+        <healthinfo>
+            <condition />
+            <dates />
+            <currentstatus />
+            <physicianname />
+            <physicianaddress />
+            <physicianphonenumber />
+        </healthinfo>
+    </question2>
+    <question3>
+        <answer>false</answer>
+        <healthinfo>
+            <condition />
+            <dates />
+            <currentstatus />
+            <physicianname />
+            <physicianaddress />
+            <physicianphonenumber />
+        </healthinfo>
+    </question3>
+    <question4>
+        <answer>false</answer>
+        <healthinfo>
+            <condition />
+            <dates />
+            <currentstatus />
+            <physicianname />
+            <physicianaddress />
+            <physiciantelephone />
+        </healthinfo>
+    </question4>
 </questions>

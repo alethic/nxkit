@@ -55,7 +55,7 @@
         <xf:label>Enrollment Information</xf:label>
         <f:page>
             <xf:label>Request For Coverage</xf:label>
-            <f:section xf:ref="xf:instance('primaryperson')/person">
+            <f:section xf:ref="xf:instance('primaryperson')">
                 <xf:label>Additional Information About You</xf:label>
                 <xf:input ref="heightfeet"
                           appearance="minimal">
@@ -100,7 +100,7 @@
                     <xf:label>Work Phone</xf:label>
                 </xf:input>
             </f:section>
-            <f:section xf:ref="xf:instance('secondaryperson')/person">
+            <f:section xf:ref="xf:instance('secondaryperson')">
                 <xf:label>Your Spouse's Information</xf:label>
                 <xf:label>Complete if your spouse or domestic partner (DP) is requesting coverage.</xf:label>
                 <xf:input ref="firstname"
@@ -150,27 +150,27 @@
                     <xf:label>Date of Birth</xf:label>
                 </xf:input>
             </f:section>
-            <f:section xf:ref="xf:instance('elections')/term-life">
+            <f:section>
                 <xf:label>Coverage Selection</xf:label>
                 <f:table>
                     <f:table-row>
                         <f:table-cell>Applicant</f:table-cell>
                         <f:table-cell>
-                            <xf:select1 ref="coverage-amount"
+                            <xf:select1 ref="xf:instance('primaryelections')/term-life/coverage-amount"
                                         appearance="full">
                                 <xf:item>
                                     <xf:label>$75,000</xf:label>
                                     <xf:value>75000</xf:value>
                                 </xf:item>
                             </xf:select1>
-                            <xf:select1 ref="coverage-amount"
+                            <xf:select1 ref="xf:instance('primaryelections')/term-life/coverage-amount"
                                         appearance="full">
                                 <xf:item>
                                     <xf:label>$100,000</xf:label>
                                     <xf:value>100000</xf:value>
                                 </xf:item>
                             </xf:select1>
-                            <xf:select1 ref="coverage-amount"
+                            <xf:select1 ref="xf:instance('primaryelections')/term-life/coverage-amount"
                                         appearance="full">
                                 <xf:item>
                                     <xf:label>$150,000</xf:label>
@@ -180,21 +180,21 @@
                         </f:table-cell>
                         <f:table-cell>Spouse/DP*</f:table-cell>
                         <f:table-cell>
-                            <xf:select1 ref="coverage-amount"
+                            <xf:select1 ref="xf:instance('secondaryelections')/term-life/coverage-amount"
                                         appearance="full">
                                 <xf:item>
                                     <xf:label>$75,000</xf:label>
                                     <xf:value>75000</xf:value>
                                 </xf:item>
                             </xf:select1>
-                            <xf:select1 ref="coverage-amount"
+                            <xf:select1 ref="xf:instance('secondaryelections')/term-life/coverage-amount"
                                         appearance="full">
                                 <xf:item>
                                     <xf:label>$100,000</xf:label>
                                     <xf:value>100000</xf:value>
                                 </xf:item>
                             </xf:select1>
-                            <xf:select1 ref="coverage-amount"
+                            <xf:select1 ref="xf:instance('secondaryelections')/term-life/coverage-amount"
                                         appearance="full">
                                 <xf:item>
                                     <xf:label>$150,000</xf:label>
@@ -214,144 +214,120 @@
                         <f:table-cell>Please answer the following questions by choosing 'Yes' or 'No'.</f:table-cell>
                     </f:table-row>
                     <f:table-row>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('primaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                            <xf:select1 ref="xf:instance('primaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('secondaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                            <xf:select1 ref="xf:instance('secondaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
                         <f:table-cell>1. Within the last 12 months, have you used tobacco or nicotine in any form?</f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('primaryquestions')/question1/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('secondaryquestions')/question1/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
                     </f:table-row>
                     <f:table-row>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('primaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                            <xf:select1 ref="xf:instance('primaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('secondaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                            <xf:select1 ref="xf:instance('secondaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
                         <f:table-cell>2. Within the last five years, have you been treated for or diagnosed with any of the following: circulatory or respiratory disease or disorder; chest pain; high blood pressure; cancer or tumors; diabetes; disease or disorder of the heart, lungs, kidneys, liver, genitourinary system; arthritis or other musculoskeletal condition; alcoholism; mental or nervous disorder, or have you been diagnosed with, or treated by a member of the medical profession for Acquired Immune Deficiency Syndrome (AIDS) or AIDS-Related Complex (ARC)?</f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('primaryquestions')/question2/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('secondaryquestions')/question2/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
                     </f:table-row>
                     <f:table-row>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('primaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                            <xf:select1 ref="xf:instance('primaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('secondaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                            <xf:select1 ref="xf:instance('secondaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
                         <f:table-cell>3. Are you currently taking any medication or being treated for any condition, including pregnancy, or disease not mentioned in the previous questions?</f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('primaryquestions')/question3/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('secondaryquestions')/question3/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
                     </f:table-row>
                     <f:table-row>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('primaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                            <xf:select1 ref="xf:instance('primaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('secondaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                            <xf:select1 ref="xf:instance('secondaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
                         <f:table-cell>4. Within the last five years, have you been counseled, treated or hospitalized for the use of alcohol or drugs?</f:table-cell>
+                    <f:table-cell>
+                            <xf:select1 ref="xf:instance('primaryquestions')/question4/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('secondaryquestions')/question4/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
                     </f:table-row>
                     <f:table-row>
                         <f:table>

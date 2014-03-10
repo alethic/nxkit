@@ -1,1 +1,38 @@
-<questions><question1><answeredyes>false</answeredyes></question1><question2><answeredyes>false</answeredyes><healthinfo><condition /><dates /><currentstatus /><physicianname /><physicianaddress /><physicianphonenumber /></healthinfo></question2><question3><answeredyes>false</answeredyes><healthinfo><condition /><dates /><currentstatus /><physicianname /><physicianaddress /><physicianphonenumber /></healthinfo></question3><question4><answeredyes>false</answeredyes><healthinfo><condition /><dates /><currentstatus /><physicianname /><physicianaddress /><physicianphonenumber /></healthinfo></question4></questions>
+<questions>
+    <question1>
+        <answer>false</answer>
+    </question1>
+    <question2>
+        <answer>false</answer>
+        <healthinfo>
+            <condition />
+            <dates />
+            <currentstatus />
+            <physicianname />
+            <physicianaddress />
+            <physicianphonenumber />
+        </healthinfo>
+    </question2>
+    <question3>
+        <answer>false</answer>
+        <healthinfo>
+            <condition />
+            <dates />
+            <currentstatus />
+            <physicianname />
+            <physicianaddress />
+            <physicianphonenumber />
+        </healthinfo>
+    </question3>
+    <question4>
+        <answer>false</answer>
+        <healthinfo>
+            <condition />
+            <dates />
+            <currentstatus />
+            <physicianname />
+            <physicianaddress />
+            <physiciantelephone />
+        </healthinfo>
+    </question4>
+</questions>
