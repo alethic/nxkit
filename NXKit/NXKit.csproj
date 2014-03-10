@@ -131,7 +131,7 @@
     <Compile Include="IStructuralVisual.cs" />
     <Compile Include="ITextVisual.cs" />
     <Compile Include="IVisual.cs" />
-    <Compile Include="UnknownVisual.cs" />
+    <Compile Include="UnknownRootVisual.cs" />
     <Compile Include="XmlSchemaConstants.cs" />
     <Compile Include="EngineEventHandler.cs" />
     <Compile Include="XmlSchemaPackage.cs" />

@@ -34,7 +34,9 @@ namespace NXKit.XForms.XPathFunctions
         {
             var id = args.Length > 0 ? ((string)args[0]).TrimToNull() : null;
             if (id == null)
-                return GetModel(context, navigator).DefaultEvaluationContext.Instance.Element.CreateNavigator().Select(".");
+                return GetModel(context, navigator).Instances
+                    .Select(i => i.State.InstanceElement.CreateNavigator().Select("."))
+                    .FirstOrDefault();
             else
                 return GetModel(context, navigator).Instances
                     .Where(i => i.Id == id)

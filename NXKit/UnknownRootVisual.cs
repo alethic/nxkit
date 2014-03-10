@@ -8,7 +8,7 @@ namespace NXKit
     /// <summary>
     /// Provides an unknown visual.
     /// </summary>
-    public class UnknownVisual :
+    public class UnknownRootVisual :
         StructuralVisual,
         IVisual
     {
@@ -19,7 +19,7 @@ namespace NXKit
         /// <param name="engine"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        internal UnknownVisual(IEngine engine, StructuralVisual parent, XNode node)
+        internal UnknownRootVisual(IEngine engine, StructuralVisual parent, XNode node)
             : base(engine, parent, node)
         {
             Contract.Requires<ArgumentNullException>(engine != null);
