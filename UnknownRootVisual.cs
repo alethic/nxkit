@@ -8,7 +8,7 @@ namespace NXKit
     /// <summary>
     /// Provides an unknown visual.
     /// </summary>
-    public class UnknownRootVisual :
+    class UnknownRootVisual :
         StructuralVisual,
         IVisual
     {
