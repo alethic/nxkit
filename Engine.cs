@@ -218,6 +218,9 @@ namespace NXKit
             // initialize modules
             foreach (var module in modules)
                 module.Initialize(this);
+
+            // initiate run
+            Invoke();
         }
 
         /// <summary>
@@ -314,7 +317,9 @@ namespace NXKit
         /// <returns></returns>
         StructuralVisual CreateRootVisual()
         {
-            return (StructuralVisual)((IEngine)this).CreateVisual(null, Document.Root);
+            Contract.Ensures(Contract.Result<StructuralVisual>() != null);
+
+            return (StructuralVisual)((IEngine)this).CreateVisual(null, Document.Root) ?? new UnknownVisual(this, null, Document.Root);
         }
 
         /// <summary>
@@ -325,6 +330,8 @@ namespace NXKit
         /// <returns></returns>
         Visual CreateVisualFromModules(XElement element)
         {
+            Contract.Requires<ArgumentNullException>(element != null);
+
             return modules.Select(i => i.CreateVisual(element.Name)).FirstOrDefault(i => i != null);
         }
 
@@ -336,6 +343,8 @@ namespace NXKit
         /// <returns></returns>
         Visual IEngine.CreateVisual(StructuralVisual parent, XNode node)
         {
+            Contract.Requires<ArgumentNullException>(node != null);
+
             if (node is XText)
             {
                 var v = new TextVisual();

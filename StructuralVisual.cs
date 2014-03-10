@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-
 using NXKit.Util;
 
 namespace NXKit
@@ -35,7 +35,7 @@ namespace NXKit
         protected StructuralVisual(IEngine engine, StructuralVisual parent, XNode node)
             : base(engine, parent, node)
         {
-
+            Contract.Requires<ArgumentNullException>(engine != null);
         }
 
         /// <summary>
