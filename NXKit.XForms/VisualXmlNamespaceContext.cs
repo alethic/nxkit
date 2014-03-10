@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
@@ -11,10 +12,11 @@ namespace NXKit.XForms
     /// <summary>
     /// Proxies the namespace context of a node to other systems.
     /// </summary>
-    internal class VisualXmlNamespaceContext : XsltContext
+    internal class VisualXmlNamespaceContext :
+        XsltContext
     {
 
-        private Visual visual;
+        readonly Visual visual;
 
         /// <summary>
         /// Initializes a new instance.
@@ -22,6 +24,8 @@ namespace NXKit.XForms
         /// <param name="visual"></param>
         internal VisualXmlNamespaceContext(Visual visual)
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
             this.visual = visual;
         }
 
@@ -42,18 +46,29 @@ namespace NXKit.XForms
 
         public override string LookupNamespace(string prefix)
         {
+            Contract.Requires<ArgumentNullException>(prefix != null);
+            Contract.Requires<ArgumentNullException>(visual.Node != null);
+
             var element = visual.Node as XElement;
             if (element == null)
                 element = visual.Parent.Element;
+
+            if (element == null)
+                throw new NullReferenceException();
 
             return prefix != "" ? element.GetNamespaceOfPrefix(prefix).NamespaceName : element.GetDefaultNamespace().NamespaceName;
         }
 
         public override string LookupPrefix(string namespaceName)
         {
+            Contract.Requires<ArgumentNullException>(namespaceName != null);
+
             var element = visual.Node as XElement;
             if (element == null)
                 element = visual.Parent.Element;
+
+            if (element == null)
+                throw new NullReferenceException();
 
             return element.GetPrefixOfNamespace(namespaceName);
         }
