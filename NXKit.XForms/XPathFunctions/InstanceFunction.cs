@@ -6,7 +6,8 @@ using NXKit.Util;
 namespace NXKit.XForms.XPathFunctions
 {
 
-    internal class InstanceFunction : XPathFunction
+    public class InstanceFunction :
+        XPathFunction
     {
 
         public override XPathResultType[] ArgTypes
@@ -33,17 +34,15 @@ namespace NXKit.XForms.XPathFunctions
         {
             var id = args.Length > 0 ? ((string)args[0]).TrimToNull() : null;
             if (id == null)
-                return XFormsEvaluationContext.Current.Model.Instances.First().State.InstanceElement.CreateNavigator().Select(".");
+                return GetModel(context, navigator).Instances
+                    .Select(i => i.State.InstanceElement.CreateNavigator().Select("."))
+                    .FirstOrDefault();
             else
-            {
-                var instance = XFormsEvaluationContext.Current.Model.Instances.FirstOrDefault(i => i.Id == id);
-                if (instance != null)
-                    return instance.State.InstanceElement.CreateNavigator().Select(".");
-                else
-                    return null;
-            }
+                return GetModel(context, navigator).Instances
+                    .Where(i => i.Id == id)
+                    .Select(i => i.State.InstanceElement.CreateNavigator().Select("."))
+                    .FirstOrDefault();
         }
-
     }
 
 }
