@@ -319,7 +319,7 @@ namespace NXKit
         {
             Contract.Ensures(Contract.Result<StructuralVisual>() != null);
 
-            return (StructuralVisual)((IEngine)this).CreateVisual(null, Document.Root) ?? new UnknownVisual(this, null, Document.Root);
+            return (StructuralVisual)((IEngine)this).CreateVisual(null, Document.Root) ?? new UnknownRootVisual(this, null, Document.Root);
         }
 
         /// <summary>
