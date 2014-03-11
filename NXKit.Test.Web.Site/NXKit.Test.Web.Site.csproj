@@ -160,6 +160,7 @@
     <EmbeddedResource Include="Resources\elections.xml" />
     <EmbeddedResource Include="Resources\persons.xml" />
     <EmbeddedResource Include="Resources\relationships.xml" />
+    <Content Include="Default.css" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
@@ -256,7 +257,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Import Project="..\packages\GitFlowVersionTask.0.3.0\Build\GitFlowVersionTask.targets" Condition="Exists('..\packages\GitFlowVersionTask.0.3.0\Build\GitFlowVersionTask.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

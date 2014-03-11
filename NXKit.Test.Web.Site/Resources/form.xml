@@ -84,7 +84,7 @@
                     </xf:item>
                 </xf:select1>
                 <xf:input ref="socialsecuritynumber"
-                          appearance="minimal">
+                          appearance="full">
                     <xf:label>SSN</xf:label>
                 </xf:input>
                 <xf:input ref="dateofbirth"
