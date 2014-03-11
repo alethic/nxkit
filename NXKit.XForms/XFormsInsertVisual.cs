@@ -118,7 +118,7 @@ namespace NXKit.XForms
             }
 
             // node set visuals that are bound to nodes sharing the same parent
-            var nodeSetVisuals = Module.Engine.RootVisual
+            var nodeSetVisuals = Module.Document.RootVisual
                 .Descendants(true)
                 .OfType<XFormsNodeSetBindingVisual>()
                 .Where(i => i.Binding != null)

@@ -71,7 +71,7 @@ namespace NXKit.XForms
             var curNode = Binding.Nodes[at - 1];
 
             // set of dependent visuals
-            var dependentVisualsState = Module.Engine.RootVisual
+            var dependentVisualsState = Module.Document.RootVisual
                 .Descendants(true)
                 .OfType<XFormsNodeSetBindingVisual>()
                 .Where(i => i.Binding != null && i.Binding.Nodes != null && i.Binding.Nodes.Any(j => j.Parent == parent))

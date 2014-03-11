@@ -114,7 +114,7 @@ namespace NXKit
                     yield return visual;
 
                 // create new child
-                visual = Engine.CreateVisual(this, childNode);
+                visual = Document.CreateVisual(this, childNode);
                 if (visual != null)
                 {
                     nodeChildren[childNode] = visual;
@@ -223,7 +223,7 @@ namespace NXKit
         public T GetState<T>()
             where T : new()
         {
-            return Engine.VisualState.Get<T>(this);
+            return Document.VisualState.Get<T>(this);
         }
 
     }

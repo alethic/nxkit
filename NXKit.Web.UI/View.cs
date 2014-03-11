@@ -53,8 +53,6 @@ namespace NXKit.Web.UI
             {
                 var args = new ResourceActionEventArgs(method, uri, body);
                 control.OnResourceAction(args);
-
-                // return result
                 return args.Result;
             }
 

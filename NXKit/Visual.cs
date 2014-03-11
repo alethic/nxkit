@@ -13,13 +13,15 @@ namespace NXKit
     /// <summary>
     /// Represents a node in the visual tree.
     /// </summary>
-    public abstract class Visual : IEventTarget
+    public abstract class Visual :
+        IEventTarget
     {
 
         /// <summary>
         /// Manages the lifetime of the currently in scope <see cref="Visual"/>.
         /// </summary>
-        public sealed class ThreadScope : IDisposable
+        public sealed class ThreadScope :
+            IDisposable
         {
 
             internal ThreadScope(Visual visual)
@@ -59,27 +61,27 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="engine"></param>
+        /// <param name="document"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        protected Visual(INXDocument engine, StructuralVisual parent, XNode node)
+        protected Visual(INXDocument document, StructuralVisual parent, XNode node)
         {
-            Contract.Requires<ArgumentNullException>(engine != null);
+            Contract.Requires<ArgumentNullException>(document != null);
 
-            Initialize(engine, parent, node);
+            Initialize(document, parent, node);
         }
 
         /// <summary>
         /// Initializes the instance.
         /// </summary>
-        /// <param name="engine"></param>
+        /// <param name="document"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        public void Initialize(INXDocument engine, StructuralVisual parent, XNode node)
+        public void Initialize(INXDocument document, StructuralVisual parent, XNode node)
         {
-            Contract.Requires<ArgumentNullException>(engine != null);
+            Contract.Requires<ArgumentNullException>(document != null);
 
-            Engine = engine;
+            Document = document;
             Parent = parent;
             Node = node;
             Annotations = new VisualAnnotationCollection();
@@ -88,7 +90,7 @@ namespace NXKit
         /// <summary>
         /// <see cref="INXDocument"/> responsible for the visual tree this visual resides within.
         /// </summary>
-        public INXDocument Engine { get; private set; }
+        public INXDocument Document { get; private set; }
 
         /// <summary>
         /// Parent <see cref="Visual"/>.
@@ -170,7 +172,7 @@ namespace NXKit
         /// <summary>
         /// Private <see cref="org.w3c.dom.events.EventListener"/> implementation for implementing dispatch to a delegate.
         /// </summary>
-        public class DelegateDispatchEventListener : 
+        public class DelegateDispatchEventListener :
             IEventListener
         {
 
@@ -237,7 +239,6 @@ namespace NXKit
         {
             return GetType().Name;
         }
-
 
         public void AddEventListener(string type, IEventListener listener, bool useCapture)
         {

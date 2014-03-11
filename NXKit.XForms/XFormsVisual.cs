@@ -13,7 +13,7 @@
         /// </summary>
         public XFormsModule Module
         {
-            get { return Engine.GetModule<XFormsModule>(); }
+            get { return Document.GetModule<XFormsModule>(); }
         }
 
         /// <summary>
@@ -21,7 +21,7 @@
         /// </summary>
         public override string Id
         {
-            get { return Engine.GetElementId(Element); }
+            get { return Document.GetElementId(Element); }
         }
 
     }

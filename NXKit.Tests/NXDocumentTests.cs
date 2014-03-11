@@ -1,12 +1,12 @@
 ﻿using System.IO;
-using System.Xml.Linq;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NXKit.Tests
 {
 
     [TestClass]
-    public class EngineTests
+    public class NXDocumentTests
     {
 
         /// <summary>
@@ -15,13 +15,13 @@ namespace NXKit.Tests
         /// <returns></returns>
         Stream OpenSampleXml()
         {
-            return typeof(EngineTests).Assembly.GetManifestResourceStream("NXKit.Tests.SampleXml.xml");
+            return typeof(NXDocumentTests).Assembly.GetManifestResourceStream("NXKit.Tests.SampleXml.xml");
         }
 
         [TestMethod]
         public void TestMethod1()
         {
-            var engine = new NXDocument(XDocument.Load(OpenSampleXml()), null);
+            var engine = new NXDocument(OpenSampleXml(), null);
         }
 
     }

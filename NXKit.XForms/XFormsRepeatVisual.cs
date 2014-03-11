@@ -51,7 +51,7 @@ namespace NXKit.XForms
             if (item == null)
             {
                 item = items[node] = new XFormsRepeatItemVisual();
-                item.Initialize(Engine, this, Element);
+                item.Initialize(Document, this, Element);
                 item.SetContext(ec);
             }
             else

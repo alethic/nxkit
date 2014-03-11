@@ -14,17 +14,17 @@ namespace NXKit.XForms.Layout
         /// </summary>
         public LayoutModule Module
         {
-            get { return Engine.GetModule<LayoutModule>(); }
+            get { return Document.GetModule<LayoutModule>(); }
         }
 
         public override string Id
         {
-            get { return Engine.GetElementId(Element); }
+            get { return Document.GetElementId(Element); }
         }
 
         public string Style
         {
-            get { return Engine.GetModule<LayoutModule>().GetAttributeValue(Element, "style"); }
+            get { return Document.GetModule<LayoutModule>().GetAttributeValue(Element, "style"); }
         }
 
         /// <summary>

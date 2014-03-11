@@ -46,7 +46,7 @@ namespace NXKit.XForms
                     u = new Uri(new Uri(Element.BaseUri), u);
 
                 // put data
-                var resource = Engine.Resolver.Put(u, new MemoryStream(Encoding.UTF8.GetBytes(t)));
+                var resource = Document.Resolver.Put(u, new MemoryStream(Encoding.UTF8.GetBytes(t)));
 
                 if (resource != null)
                     throw new NotSupportedException("Cannot return new data from a Put.");

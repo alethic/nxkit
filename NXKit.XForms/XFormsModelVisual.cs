@@ -47,15 +47,15 @@ namespace NXKit.XForms
 
             // emit instance children first
             foreach (var element in Element.Elements(Constants.XForms_1_0 + "instance"))
-                yield return Engine.CreateVisual(this, element);
+                yield return Document.CreateVisual(this, element);
 
             // emit instance children first
             foreach (var element in Element.Elements(Constants.XForms_1_0 + "bind"))
-                yield return Engine.CreateVisual(this, element);
+                yield return Document.CreateVisual(this, element);
 
             // emit instance children first
             foreach (var element in Element.Elements(Constants.XForms_1_0 + "submission"))
-                yield return Engine.CreateVisual(this, element);
+                yield return Document.CreateVisual(this, element);
         }
 
         /// <summary>

@@ -21,7 +21,7 @@ namespace NXKit.XForms
                 if (valueAttr != null)
                 {
                     var ec = new XFormsEvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.Context.Node, 1, 1);
-                    valueBinding = new XFormsBinding(Engine, this, ec, valueAttr);
+                    valueBinding = new XFormsBinding(Document, this, ec, valueAttr);
                 }
             }
         }

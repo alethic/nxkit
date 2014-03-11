@@ -6,7 +6,7 @@
 
         public override string Id
         {
-            get { return Engine.GetElementId(Element); }
+            get { return Document.GetElementId(Element); }
         }
 
         public void Handle(Event ev)

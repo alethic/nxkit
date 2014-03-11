@@ -11,7 +11,7 @@
         /// <returns></returns>
         public static Importance GetImportance(StructuralVisual visual)
         {
-            var attr = visual.Engine.GetModule<LayoutModule>().GetAttributeValue(visual.Element, "importance");
+            var attr = visual.Document.GetModule<LayoutModule>().GetAttributeValue(visual.Element, "importance");
 
             // return value based on string
             switch (attr)

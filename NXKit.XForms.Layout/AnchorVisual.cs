@@ -16,7 +16,7 @@ namespace NXKit.XForms.Layout
 
         public string Href
         {
-            get { return Engine.GetModule<LayoutModule>().GetAttributeValue(Element, "href"); }
+            get { return Document.GetModule<LayoutModule>().GetAttributeValue(Element, "href"); }
         }
 
     }
