@@ -209,9 +209,9 @@
                 <xf:label>Health Questions</xf:label>
                 <f:table>
                     <f:table-row>
+                        <f:table-cell></f:table-cell>
                         <f:table-cell>Applicant</f:table-cell>
-                        <f:table-cell>Spouse/DP</f:table-cell>
-                        <f:table-cell>Please answer the following questions by choosing 'Yes' or 'No'.</f:table-cell>
+                        <f:table-cell>Spouse</f:table-cell>
                     </f:table-row>
                     <f:table-row>
                         <f:table-cell>1. Within the last 12 months, have you used tobacco or nicotine in any form?</f:table-cell>

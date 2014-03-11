@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -253,7 +254,7 @@ namespace NXKit.Web.UI
         /// <summary>
         /// Configures the control.
         /// </summary>
-        void Configure()
+        void Navigate()
         {
             // recreate on new form
             navigations = null;
@@ -263,42 +264,58 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Configures the control.
+        /// Loads the specified <see cref="Uri"/> into the view.
         /// </summary>
-        /// <param name="form"></param>
-        public void Configure(NXDocumentConfiguration configuration, string document)
+        /// <param name="uri"></param>
+        public void Configure(Uri uri)
         {
+            Contract.Requires<ArgumentNullException>(uri != null);
+
+            Document = new NXDocument(new ResourceResolver(this), uri);
+            Document.Invoke();
+
+            Navigate();
+        }
+
+        /// <summary>
+        /// Loads the specified uri into the view.
+        /// </summary>
+        /// <param name="uri"></param>
+        public void Configure(string uri)
+        {
+            Contract.Requires<ArgumentNullException>(uri != null);
+
+            Configure(new Uri(uri, UriKind.RelativeOrAbsolute));
+        }
+
+        /// <summary>
+        /// Loads the specified <see cref="Uri"/> into the view.
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="configuration"></param>
+        public void Configure(Uri uri, NXDocumentConfiguration configuration)
+        {
+            Contract.Requires<ArgumentNullException>(uri != null);
+            Contract.Requires<ArgumentNullException>(configuration != null);
+
             // construct a engine instance
-            Document = new NXDocument(configuration, document, new ResourceResolver(this));
+            Document = new NXDocument(new ResourceResolver(this), uri, configuration);
             Document.Invoke();
 
-            Configure();
+            Navigate();
         }
 
         /// <summary>
-        /// Configures the control.
+        /// Loads the specified <see cref="Uri"/> into the view.
         /// </summary>
-        /// <param name="form"></param>
-        public void Configure(NXDocumentConfiguration configuration, XmlDocument document)
+        /// <param name="uri"></param>
+        /// <param name="configuration"></param>
+        public void Configure(string uri, NXDocumentConfiguration configuration)
         {
-            // construct a new processor instance
-            Document = new NXDocument(configuration, document, new ResourceResolver(this));
-            Document.Invoke();
+            Contract.Requires<ArgumentNullException>(uri != null);
+            Contract.Requires<ArgumentNullException>(configuration != null);
 
-            Configure();
-        }
-
-        /// <summary>
-        /// Configures the control.
-        /// </summary>
-        /// <param name="form"></param>
-        public void Configure(NXDocumentConfiguration configuration, XDocument document)
-        {
-            // construct a new processor instance
-            Document = new NXDocument(configuration, document, new ResourceResolver(this));
-            Document.Invoke();
-
-            Configure();
+            Configure(new Uri(uri, UriKind.RelativeOrAbsolute), configuration);
         }
 
         /// <summary>
@@ -316,7 +333,7 @@ namespace NXKit.Web.UI
             {
                 navigations = null;
 
-                Document = new NXDocument(formState, new ResourceResolver(this));
+                Document = new NXDocument(new ResourceResolver(this), formState);
                 Document.Invoke();
 
                 // find current page node from state

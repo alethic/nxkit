@@ -12,9 +12,9 @@ namespace NXKit
     public interface IResolver
     {
 
-        Stream Get(Uri href);
+        Stream Get(Uri uri);
 
-        Stream Put(Uri href, Stream stream);
+        Stream Put(Uri uri, Stream stream);
 
     }
 
@@ -23,15 +23,15 @@ namespace NXKit
         IResolver
     {
 
-        public Stream Get(Uri href)
+        public Stream Get(Uri uri)
         {
-            Contract.Requires<ArgumentNullException>(href != null);
+            Contract.Requires<ArgumentNullException>(uri != null);
             throw new NotImplementedException();
         }
 
-        public Stream Put(Uri href, Stream stream)
+        public Stream Put(Uri uri, Stream stream)
         {
-            Contract.Requires<ArgumentNullException>(href != null);
+            Contract.Requires<ArgumentNullException>(uri != null);
             throw new NotImplementedException();
         }
 

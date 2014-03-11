@@ -107,7 +107,7 @@ namespace NXKit.Wpf
                 foreach (var moduleType in Modules)
                     cfg.AddModule(moduleType);
 
-                Document = new NXDocument(cfg, Uri, new Resolver());
+                Document = new NXDocument(new Resolver(), Uri, cfg);
             }
             else
                 Document = null;

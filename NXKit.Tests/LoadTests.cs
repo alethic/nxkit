@@ -6,7 +6,7 @@ namespace NXKit.Tests
 {
 
     [TestClass]
-    public class NXDocumentTests
+    public class LoadTests
     {
 
         /// <summary>
@@ -15,13 +15,13 @@ namespace NXKit.Tests
         /// <returns></returns>
         Stream OpenSampleXml()
         {
-            return typeof(NXDocumentTests).Assembly.GetManifestResourceStream("NXKit.Tests.SampleXml.xml");
+            return typeof(LoadTests).Assembly.GetManifestResourceStream("NXKit.Tests.SampleXml.xml");
         }
 
         [TestMethod]
         public void TestMethod1()
         {
-            var engine = new NXDocument(OpenSampleXml(), null);
+
         }
 
     }

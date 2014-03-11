@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("NXKit")]
@@ -12,3 +13,5 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 [assembly: Guid("912bb615-8509-4bdf-9a41-1010a389be8c")]
+
+[assembly: InternalsVisibleTo("NXKit.Tests")]

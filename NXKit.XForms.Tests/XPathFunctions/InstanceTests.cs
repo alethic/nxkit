@@ -18,21 +18,19 @@ namespace NXKit.XForms.Tests.XPathFunctions
             var c = new NXDocumentConfiguration();
             c.AddModule<XFormsModule>();
 
-            var e = new NXDocument(c,
-@"
-                <unknown xmlns:xf=""http://www.w3.org/2002/xforms"">
-                    <xf:model id=""data"">
-                        <xf:instance id=""instance1"">
-                            <data xmlns="""">node1</data>
-                        </xf:instance>
-                        <xf:instance id=""instance2"">
-                            <data xmlns="""">node2</data>
-                        </xf:instance>
-                    </xf:model>
-                    <xf:input ref=""xf:instance()"" />
-                </unknown>
-",
-                new ResourceSetResolver());
+            var e = NXDocument.Parse(@"
+<unknown xmlns:xf=""http://www.w3.org/2002/xforms"">
+    <xf:model id=""data"">
+        <xf:instance id=""instance1"">
+            <data xmlns="""">node1</data>
+        </xf:instance>
+        <xf:instance id=""instance2"">
+            <data xmlns="""">node2</data>
+        </xf:instance>
+    </xf:model>
+    <xf:input ref=""xf:instance()"" />
+</unknown>",
+                c);
 
             var input = e.RootVisual
                 .Descendants()
@@ -48,8 +46,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
             var c = new NXDocumentConfiguration();
             c.AddModule<XFormsModule>();
 
-            var e = new NXDocument(c,
-@"
+            var e = NXDocument.Parse(@"
                 <unknown xmlns:xf=""http://www.w3.org/2002/xforms"">
                     <xf:model id=""data"">
                         <xf:instance id=""instance1"">
@@ -60,9 +57,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
                         </xf:instance>
                     </xf:model>
                     <xf:input ref=""xf:instance('instance2')"" />
-                </unknown>
-", 
-                new ResourceSetResolver());
+                </unknown>", c);
 
             var input = e.RootVisual
                 .Descendants()

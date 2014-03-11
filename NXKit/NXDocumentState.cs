@@ -13,16 +13,67 @@ namespace NXKit
     /// Exported document state for serialization and reload.
     /// </summary>
     [Serializable]
-    public class NXDocumentState : 
+    public class NXDocumentState :
         ISerializable
     {
 
         /// <summary>
+        /// Loads the XML from the given buffer.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
+        static string LoadXml(byte[] buffer)
+        {
+            var mstm = new MemoryStream(buffer);
+            var gstm = new GZipStream(mstm, CompressionMode.Decompress);
+            return new StreamReader(gstm, Encoding.UTF8).ReadToEnd();
+        }
+
+        /// <summary>
+        /// Saves the XML to a buffer.
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <returns></returns>
+        static byte[] SaveXml(string xml)
+        {
+            // compress document to stream
+            var mstm = new MemoryStream();
+            var gstm = new GZipStream(mstm, CompressionMode.Compress);
+            var wrtr = new StreamWriter(gstm, Encoding.UTF8);
+            wrtr.Write(xml);
+            wrtr.Flush();
+            gstm.Close();
+
+            return mstm.ToArray();
+        }
+
+        readonly NXDocumentConfiguration configuration;
+        readonly Uri uri;
+        readonly string xml;
+        readonly int nextElementId;
+        readonly VisualStateCollection visualState;
+
+        /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public NXDocumentState()
+        internal NXDocumentState(
+            NXDocumentConfiguration configuration,
+            Uri uri,
+            string xml,
+            int nextElementId,
+            VisualStateCollection visualState)
         {
+            Contract.Requires<ArgumentNullException>(configuration != null);
+            Contract.Requires<ArgumentNullException>(uri != null);
+            Contract.Requires<ArgumentNullException>(xml != null);
+            Contract.Requires<ArgumentNullException>(nextElementId >= 0);
+            Contract.Requires<ArgumentNullException>(visualState != null);
 
+            this.configuration = configuration;
+            this.uri = uri;
+            this.xml = xml;
+            this.nextElementId = nextElementId;
+            this.visualState = visualState;
         }
 
         /// <summary>
@@ -32,40 +83,49 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(info != null);
 
-            // decompress document from stream
-            var mstm = new MemoryStream((byte[])info.GetValue("Document", typeof(byte[])));
-            var gstm = new GZipStream(mstm, CompressionMode.Decompress);
-
-            Configuration = (NXDocumentConfiguration)info.GetValue("Configuration", typeof(NXDocumentConfiguration));
-            Document = new StreamReader(gstm, Encoding.UTF8).ReadToEnd();
-            NextElementId = info.GetInt32("NextElementId");
-            VisualState = (VisualStateCollection)info.GetValue("VisualState", typeof(VisualStateCollection));
+            this.configuration = (NXDocumentConfiguration)info.GetValue("Configuration", typeof(NXDocumentConfiguration));
+            this.uri = (Uri)info.GetValue("Uri", typeof(Uri));
+            this.xml = LoadXml((byte[])info.GetValue("Xml", typeof(byte[])));
+            this.nextElementId = info.GetInt32("NextElementId");
+            this.visualState = (VisualStateCollection)info.GetValue("VisualState", typeof(VisualStateCollection));
         }
 
         /// <summary>
         /// Saved engine configuration.
         /// </summary>
-        public NXDocumentConfiguration Configuration { get; set; }
+        public NXDocumentConfiguration Configuration
+        {
+            get { return configuration; }
+        }
+
+        public Uri Uri
+        {
+            get { return uri; }
+        }
 
         /// <summary>
         /// Saved document.
         /// </summary>
-        public string Document { get; set; }
+        public string Xml
+        {
+            get { return xml; }
+        }
 
         /// <summary>
         /// Saved next element Id.
         /// </summary>
-        public int NextElementId { get; set; }
-
-        /// <summary>
-        /// Saved module state.
-        /// </summary>
-        public Dictionary<Type, object> ModuleState { get; set; }
+        public int NextElementId
+        {
+            get { return nextElementId; }
+        }
 
         /// <summary>
         /// Saved visual state.
         /// </summary>
-        public VisualStateCollection VisualState { get; set ;}
+        public VisualStateCollection VisualState
+        {
+            get { return visualState; }
+        }
 
         /// <summary>
         /// Serializes the instance.
@@ -74,18 +134,11 @@ namespace NXKit
         /// <param name="context"></param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            // compress document to stream
-            var mstm = new MemoryStream();
-            var gstm = new GZipStream(mstm, CompressionMode.Compress);
-            var wrtr = new StreamWriter(gstm, Encoding.UTF8);
-            wrtr.Write(Document);
-            wrtr.Flush();
-            gstm.Close();
-
-            info.AddValue("Configuration", Configuration);
-            info.AddValue("Document", mstm.ToArray());
-            info.AddValue("NextElementId", NextElementId);
-            info.AddValue("VisualState", VisualState);
+            info.AddValue("Configuration", configuration);
+            info.AddValue("Uri", uri);
+            info.AddValue("Xml", SaveXml(xml));
+            info.AddValue("NextElementId", nextElementId);
+            info.AddValue("VisualState", visualState);
         }
 
     }

@@ -1,4 +1,9 @@
-﻿.FormView .Layout_Section
+﻿.FormView 
+{
+    display: block;
+}
+
+.FormView .Layout_Section
 {
     margin-bottom: 1em;
 }

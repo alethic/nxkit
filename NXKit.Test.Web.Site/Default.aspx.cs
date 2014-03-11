@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml.Linq;
 
 using NXKit.Web.UI;
 
@@ -22,8 +21,7 @@ namespace NXKit.Test.Web.Site
                 var c = new NXDocumentConfiguration();
                 c.AddModule<NXKit.XForms.XFormsModule>();
                 c.AddModule<NXKit.XForms.Layout.LayoutModule>();
-                var d = XDocument.Load(typeof(Default).Assembly.GetManifestResourceStream("NXKit.Test.Web.Site.Resources.form.xml"));
-                View.Configure(c, d);
+                View.Configure("form.xml", c);
             }
         }
 
