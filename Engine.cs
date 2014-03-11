@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -43,6 +44,30 @@ namespace NXKit
             Contract.Invariant(resolver != null);
             Contract.Invariant(visualState != null);
             Contract.Invariant(nextElementId >= 0);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="resolver"></param>
+        public Engine(Uri uri, IResolver resolver)
+            : this(resolver.Get(uri), resolver)
+        {
+            Contract.Requires<ArgumentNullException>(uri != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public Engine(Stream document, IResolver resolver)
+            : this(XDocument.Load(document), resolver)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
         }
 
         /// <summary>
@@ -101,6 +126,33 @@ namespace NXKit
         /// <param name="resolver"></param>
         public Engine(EngineConfiguration configuration, string document, IResolver resolver)
             : this(configuration, XDocument.Parse(document), resolver)
+        {
+            Contract.Requires<ArgumentNullException>(configuration != null);
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="uri"></param>
+        /// <param name="resolver"></param>
+        public Engine(EngineConfiguration configuration, Uri uri, IResolver resolver)
+            : this(configuration, resolver.Get(uri), resolver)
+        {
+            Contract.Requires<ArgumentNullException>(uri != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public Engine(EngineConfiguration configuration, Stream document, IResolver resolver)
+            : this(configuration, XDocument.Load(document), resolver)
         {
             Contract.Requires<ArgumentNullException>(configuration != null);
             Contract.Requires<ArgumentNullException>(document != null);

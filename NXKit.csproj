@@ -117,11 +117,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultResolver.cs" />
     <Compile Include="EngineConfiguration.cs" />
     <Compile Include="EventListenerMap.cs" />
     <Compile Include="EventPhase.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventListenerData.cs" />
+    <Compile Include="HttpResolver.cs" />
     <Compile Include="IEventDefaultActionHandler.cs" />
     <Compile Include="IEventListener.cs" />
     <Compile Include="INavigationCategoryVisual.cs" />
