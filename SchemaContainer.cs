@@ -20,7 +20,7 @@ namespace NXKit
         /// <summary>
         /// Reference to the hosting engine.
         /// </summary>
-        NXDocument Engine { get; set; }
+        NXDocument Document { get; set; }
 
         /// <summary>
         /// Set of provided schema packages.
@@ -31,11 +31,11 @@ namespace NXKit
         /// <summary>
         /// Initializes a new static instance.
         /// </summary>
-        internal SchemaContainer(NXDocument engine)
+        internal SchemaContainer(NXDocument document)
         {
-            Contract.Requires<ArgumentNullException>(engine != null);
+            Contract.Requires<ArgumentNullException>(document != null);
 
-            Engine = engine;
+            Document = document;
 
             // initialize .Net schema
             {
