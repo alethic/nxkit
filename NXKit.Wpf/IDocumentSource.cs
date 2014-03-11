@@ -12,7 +12,7 @@ namespace NXKit.Wpf
         /// <summary>
         /// Gets a reference to the current document.
         /// </summary>
-        Engine Document { get; }
+        NXDocument Document { get; }
 
         /// <summary>
         /// Raised when the document is changed.

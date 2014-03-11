@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -11,12 +12,22 @@ namespace NXKit
     /// <summary>
     /// Hosts an NXKit document. Provides access to the visual tree for a renderer or other processor.
     /// </summary>
-    public class Document :
-        IEngine
+    public class NXDocument :
+        INXDocument
     {
 
-        readonly XDocument document;
-        readonly IResourceResolver resolver;
+        /// <summary>
+        /// Creates a new default <see cref="NXDocumentConfiguration"/> instance.
+        /// </summary>
+        /// <returns></returns>
+        public static NXDocumentConfiguration CreateDefaultConfiguration()
+        {
+            return new NXDocumentConfiguration();
+        }
+
+        readonly NXDocumentConfiguration configuration;
+        readonly XDocument xml;
+        readonly IResolver resolver;
 
         readonly VisualStateCollection visualState;
         int nextElementId;
@@ -28,7 +39,8 @@ namespace NXKit
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
         void ObjectInvariant()
         {
-            Contract.Invariant(document != null);
+            Contract.Invariant(configuration != null);
+            Contract.Invariant(xml != null);
             Contract.Invariant(resolver != null);
             Contract.Invariant(visualState != null);
             Contract.Invariant(nextElementId >= 0);
@@ -37,12 +49,12 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="document"></param>
+        /// <param name="uri"></param>
         /// <param name="resolver"></param>
-        public Document(string document, IResourceResolver resolver)
-            : this(XDocument.Parse(document), resolver)
+        public NXDocument(Uri uri, IResolver resolver)
+            : this(resolver.Get(uri), resolver)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(uri != null);
             Contract.Requires<ArgumentNullException>(resolver != null);
         }
 
@@ -51,19 +63,7 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Document(XmlDocument document, IResourceResolver resolver)
-            : this(new XmlNodeReader(document), resolver)
-        {
-            Contract.Requires<ArgumentNullException>(document != null);
-            Contract.Requires<ArgumentNullException>(resolver != null);
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="document"></param>
-        /// <param name="resolver"></param>
-        public Document(XmlReader document, IResourceResolver resolver)
+        public NXDocument(Stream document, IResolver resolver)
             : this(XDocument.Load(document), resolver)
         {
             Contract.Requires<ArgumentNullException>(document != null);
@@ -75,9 +75,128 @@ namespace NXKit
         /// </summary>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
-        public Document(XDocument document, IResourceResolver resolver)
-            : this(document, resolver, 1, new VisualStateCollection())
+        public NXDocument(XmlReader document, IResolver resolver)
+            : this(CreateDefaultConfiguration(), document, resolver)
         {
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public NXDocument(XmlDocument document, IResolver resolver)
+            : this(CreateDefaultConfiguration(), document, resolver)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public NXDocument(XDocument document, IResolver resolver)
+            : this(CreateDefaultConfiguration(), document, resolver)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public NXDocument(string document, IResolver resolver)
+            : this(CreateDefaultConfiguration(), document, resolver)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public NXDocument(NXDocumentConfiguration configuration, string document, IResolver resolver)
+            : this(configuration, XDocument.Parse(document), resolver)
+        {
+            Contract.Requires<ArgumentNullException>(configuration != null);
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="uri"></param>
+        /// <param name="resolver"></param>
+        public NXDocument(NXDocumentConfiguration configuration, Uri uri, IResolver resolver)
+            : this(configuration, resolver.Get(uri), resolver)
+        {
+            Contract.Requires<ArgumentNullException>(uri != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public NXDocument(NXDocumentConfiguration configuration, Stream document, IResolver resolver)
+            : this(configuration, XDocument.Load(document), resolver)
+        {
+            Contract.Requires<ArgumentNullException>(configuration != null);
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public NXDocument(NXDocumentConfiguration configuration, XmlReader document, IResolver resolver)
+            : this(configuration, XDocument.Load(document), resolver)
+        {
+            Contract.Requires<ArgumentNullException>(configuration != null);
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public NXDocument(NXDocumentConfiguration configuration, XmlDocument document, IResolver resolver)
+            : this(configuration, new XmlNodeReader(document), resolver)
+        {
+            Contract.Requires<ArgumentNullException>(configuration != null);
+            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="document"></param>
+        /// <param name="resolver"></param>
+        public NXDocument(NXDocumentConfiguration configuration, XDocument document, IResolver resolver)
+            : this(configuration, document, resolver, 1, new VisualStateCollection())
+        {
+            Contract.Requires<ArgumentNullException>(configuration != null);
             Contract.Requires<ArgumentNullException>(document != null);
             Contract.Requires<ArgumentNullException>(resolver != null);
         }
@@ -87,8 +206,8 @@ namespace NXKit
         /// </summary>
         /// <param name="state"></param>
         /// <param name="resolver"></param>
-        public Document(EngineState state, IResourceResolver resolver)
-            : this(XDocument.Parse(state.Document), resolver, state.NextElementId, state.VisualState)
+        public NXDocument(NXDocumentState state, IResolver resolver)
+            : this(state.Configuration, XDocument.Parse(state.Document), resolver, state.NextElementId, state.VisualState)
         {
             Contract.Requires<ArgumentNullException>(state != null);
             Contract.Requires<ArgumentNullException>(resolver != null);
@@ -97,18 +216,21 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="configuration"></param>
         /// <param name="document"></param>
         /// <param name="resolver"></param>
         /// <param name="nextElementId"></param>
         /// <param name="visualState"></param>
-        Document(XDocument document, IResourceResolver resolver, int nextElementId, VisualStateCollection visualState)
+        NXDocument(NXDocumentConfiguration configuration, XDocument document, IResolver resolver, int nextElementId, VisualStateCollection visualState)
         {
+            Contract.Requires<ArgumentNullException>(configuration != null);
             Contract.Requires<ArgumentNullException>(document != null);
             Contract.Requires<ArgumentNullException>(resolver != null);
             Contract.Requires<ArgumentOutOfRangeException>(nextElementId >= 0);
             Contract.Requires<ArgumentNullException>(visualState != null);
 
-            this.document = new XDocument(document);
+            this.configuration = configuration;
+            this.xml = new XDocument(document);
             this.resolver = resolver;
 
             this.nextElementId = nextElementId;
@@ -148,28 +270,31 @@ namespace NXKit
             // initialize modules
             foreach (var module in modules)
                 module.Initialize(this);
+
+            // initiate run
+            Invoke();
         }
 
         /// <summary>
         /// Gets the current engine configuration.
         /// </summary>
-        public EngineConfiguration Configuration
+        public NXDocumentConfiguration Configuration
         {
             get { return configuration; }
         }
 
         /// <summary>
-        /// Gets a reference to the current <see cref="Document"/> being handled.
+        /// Gets a reference to the current <see cref="Xml"/> being handled.
         /// </summary>
-        public XDocument Document
+        public XDocument Xml
         {
-            get { return document; }
+            get { return xml; }
         }
 
         /// <summary>
-        /// Gets a reference to the <see cref="IResourceResolver"/> which is used to save or load external resources.
+        /// Gets a reference to the <see cref="IResolver"/> which is used to save or load external resources.
         /// </summary>
-        public IResourceResolver Resolver
+        public IResolver Resolver
         {
             get { return resolver; }
         }
@@ -244,7 +369,9 @@ namespace NXKit
         /// <returns></returns>
         StructuralVisual CreateRootVisual()
         {
-            return (StructuralVisual)((IEngine)this).CreateVisual(null, Document.Root);
+            Contract.Ensures(Contract.Result<StructuralVisual>() != null);
+
+            return (StructuralVisual)((INXDocument)this).CreateVisual(null, Xml.Root) ?? new UnknownRootVisual(this, null, Xml.Root);
         }
 
         /// <summary>
@@ -255,6 +382,8 @@ namespace NXKit
         /// <returns></returns>
         Visual CreateVisualFromModules(XElement element)
         {
+            Contract.Requires<ArgumentNullException>(element != null);
+
             return modules.Select(i => i.CreateVisual(element.Name)).FirstOrDefault(i => i != null);
         }
 
@@ -264,8 +393,10 @@ namespace NXKit
         /// <param name="parent"></param>
         /// <param name="node"></param>
         /// <returns></returns>
-        Visual IEngine.CreateVisual(StructuralVisual parent, XNode node)
+        Visual INXDocument.CreateVisual(StructuralVisual parent, XNode node)
         {
+            Contract.Requires<ArgumentNullException>(node != null);
+
             if (node is XText)
             {
                 var v = new TextVisual();
@@ -295,12 +426,12 @@ namespace NXKit
         /// Saves the current state of the processor in a serializable format.
         /// </summary>
         /// <returns></returns>
-        public EngineState Save()
+        public NXDocumentState Save()
         {
-            return new EngineState()
+            return new NXDocumentState()
             {
                 Configuration = configuration,
-                Document = document.ToString(SaveOptions.DisableFormatting),
+                Document = xml.ToString(SaveOptions.DisableFormatting),
                 NextElementId = nextElementId,
                 VisualState = visualState,
             };

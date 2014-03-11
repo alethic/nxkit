@@ -4,7 +4,7 @@ using System.Xml.Linq;
 namespace NXKit
 {
 
-    public interface IEngine
+    public interface INXDocument
     {
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace NXKit
         /// <summary>
         /// Gets a reference to the DOM of the form.
         /// </summary>
-        XDocument Document { get; }
+        XDocument Xml { get; }
 
         /// <summary>
         /// Gets a reference to the resolver used to interact with external named resources.

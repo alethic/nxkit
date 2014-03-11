@@ -28,7 +28,7 @@ namespace NXKit.Web.UI
             IResolver
         {
 
-            View control;
+            readonly View control;
 
             /// <summary>
             /// Initializes a new instance.
@@ -173,9 +173,9 @@ namespace NXKit.Web.UI
         public string ValidationGroup { get; set; }
 
         /// <summary>
-        /// Gets a reference to the <see cref="Engine"/>.
+        /// Gets a reference to the <see cref="Document"/>.
         /// </summary>
-        public Engine Engine { get; private set; }
+        public NXDocument Document { get; private set; }
 
         /// <summary>
         /// Raised when the forms processor attempts to perform an action on a resource.
@@ -220,10 +220,10 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         private IEnumerable<FormNavigation> CreateNavigations()
         {
-            if (Engine == null)
+            if (Document == null)
                 return null;
 
-            return FormNavigation.CreateNavigations(null, Engine.RootVisual);
+            return FormNavigation.CreateNavigations(null, Document.RootVisual);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace NXKit.Web.UI
         public void Reset()
         {
             navigations = null;
-            Engine = null;
+            Document = null;
             CurrentPage = null;
         }
 
@@ -268,11 +268,11 @@ namespace NXKit.Web.UI
         /// Configures the control.
         /// </summary>
         /// <param name="form"></param>
-        public void Configure(EngineConfiguration configuration, string document)
+        public void Configure(NXDocumentConfiguration configuration, string document)
         {
             // construct a engine instance
-            Engine = new Engine(configuration, document, new ResourceResolver(this));
-            Engine.Invoke();
+            Document = new NXDocument(configuration, document, new ResourceResolver(this));
+            Document.Invoke();
 
             Configure();
         }
@@ -281,11 +281,11 @@ namespace NXKit.Web.UI
         /// Configures the control.
         /// </summary>
         /// <param name="form"></param>
-        public void Configure(EngineConfiguration configuration, XmlDocument document)
+        public void Configure(NXDocumentConfiguration configuration, XmlDocument document)
         {
             // construct a new processor instance
-            Engine = new Engine(configuration, document, new ResourceResolver(this));
-            Engine.Invoke();
+            Document = new NXDocument(configuration, document, new ResourceResolver(this));
+            Document.Invoke();
 
             Configure();
         }
@@ -294,11 +294,11 @@ namespace NXKit.Web.UI
         /// Configures the control.
         /// </summary>
         /// <param name="form"></param>
-        public void Configure(EngineConfiguration configuration, XDocument document)
+        public void Configure(NXDocumentConfiguration configuration, XDocument document)
         {
             // construct a new processor instance
-            Engine = new Engine(configuration, document, new ResourceResolver(this));
-            Engine.Invoke();
+            Document = new NXDocument(configuration, document, new ResourceResolver(this));
+            Document.Invoke();
 
             Configure();
         }
@@ -313,13 +313,13 @@ namespace NXKit.Web.UI
             base.LoadControlState(state[0]);
 
             // reload processor state
-            var formState = (EngineState)state[1];
+            var formState = (NXDocumentState)state[1];
             if (formState != null)
             {
                 navigations = null;
 
-                Engine = new Engine(formState, new ResourceResolver(this));
-                Engine.Invoke();
+                Document = new NXDocument(formState, new ResourceResolver(this));
+                Document.Invoke();
 
                 // find current page node from state
                 Navigate(Navigations
@@ -338,14 +338,14 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         protected override object SaveControlState()
         {
-            if (Engine != null)
-                Engine.Invoke();
+            if (Document != null)
+                Document.Invoke();
 
             var state = new object[4];
             state[0] = base.SaveControlState();
 
             // save processor configuration
-            state[1] = Engine != null ? Engine.Save() : null;
+            state[1] = Document != null ? Document.Save() : null;
 
             // save current navigation item
             state[2] = CurrentPage != null ? CurrentPage.Id : null;
@@ -406,9 +406,9 @@ namespace NXKit.Web.UI
             Controls.Add(contents);
 
             // generate body in update panel
-            if (Engine != null)
+            if (Document != null)
             {
-                var rootVisualControl = CreateVisualControl(Engine.RootVisual);
+                var rootVisualControl = CreateVisualControl(Document.RootVisual);
                 if (rootVisualControl != null)
                     SetVisualControlId(rootVisualControl);
 
@@ -426,7 +426,7 @@ namespace NXKit.Web.UI
         private void validator_ServerValidate(object source, ServerValidateEventArgs args)
         {
             // ensure form is run before children are validated
-            Engine.Invoke();
+            Document.Invoke();
 
             args.IsValid = true;
         }
@@ -464,7 +464,7 @@ namespace NXKit.Web.UI
         {
             base.OnPreRender(args);
 
-            if (Engine == null)
+            if (Document == null)
                 return;
 
             if (!Visible)
@@ -478,7 +478,7 @@ namespace NXKit.Web.UI
             ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
 
             // process any changes
-            Engine.Invoke();
+            Document.Invoke();
 
             // prime unique ids required for rendering navigations
             Navigations
@@ -493,7 +493,7 @@ namespace NXKit.Web.UI
         /// <param name="writer"></param>
         protected override void Render(HtmlTextWriter writer)
         {
-            if (Engine == null)
+            if (Document == null)
                 return;
 
             ScriptManager.GetCurrent(Page).RegisterScriptDescriptors(this);
@@ -551,8 +551,8 @@ namespace NXKit.Web.UI
         /// </summary>
         public void Submit()
         {
-            if (Engine != null)
-                Engine.Submit();
+            if (Document != null)
+                Document.Submit();
         }
 
         void IPostBackEventHandler.RaisePostBackEvent(string eventArgument)

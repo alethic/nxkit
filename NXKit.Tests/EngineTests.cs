@@ -21,7 +21,7 @@ namespace NXKit.Tests
         [TestMethod]
         public void TestMethod1()
         {
-            var engine = new Engine(XDocument.Load(OpenSampleXml()), null);
+            var engine = new NXDocument(XDocument.Load(OpenSampleXml()), null);
         }
 
     }

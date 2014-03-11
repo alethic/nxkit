@@ -15,10 +15,10 @@ namespace NXKit.XForms.Tests.XPathFunctions
         [TestMethod]
         public void Test_default()
         {
-            var c = new EngineConfiguration();
+            var c = new NXDocumentConfiguration();
             c.AddModule<XFormsModule>();
 
-            var e = new Engine(c,
+            var e = new NXDocument(c,
 @"
                 <unknown xmlns:xf=""http://www.w3.org/2002/xforms"">
                     <xf:model id=""data"">
@@ -45,10 +45,10 @@ namespace NXKit.XForms.Tests.XPathFunctions
         [TestMethod]
         public void Test_specified_id()
         {
-            var c = new EngineConfiguration();
+            var c = new NXDocumentConfiguration();
             c.AddModule<XFormsModule>();
 
-            var e = new Engine(c,
+            var e = new NXDocument(c,
 @"
                 <unknown xmlns:xf=""http://www.w3.org/2002/xforms"">
                     <xf:model id=""data"">

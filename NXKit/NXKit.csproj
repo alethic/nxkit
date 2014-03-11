@@ -118,7 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultResolver.cs" />
-    <Compile Include="EngineConfiguration.cs" />
+    <Compile Include="NXDocumentConfiguration.cs" />
     <Compile Include="EventListenerMap.cs" />
     <Compile Include="EventPhase.cs" />
     <Compile Include="Event.cs" />
@@ -135,7 +135,7 @@
     <Compile Include="IVisual.cs" />
     <Compile Include="UnknownRootVisual.cs" />
     <Compile Include="XmlSchemaConstants.cs" />
-    <Compile Include="EngineEventHandler.cs" />
+    <Compile Include="DocumentEventHandler.cs" />
     <Compile Include="XmlSchemaPackage.cs" />
     <Compile Include="IEventTarget.cs" />
     <Compile Include="SchemaPackage.cs" />
@@ -145,14 +145,14 @@
     <Compile Include="EventListener.cs" />
     <Compile Include="SchemaContainer.cs" />
     <Compile Include="INamingScope.cs" />
-    <Compile Include="Engine.cs" />
-    <Compile Include="EngineState.cs" />
+    <Compile Include="NXDocument.cs" />
+    <Compile Include="NXDocumentState.cs" />
     <Compile Include="StructuralVisual.cs" />
     <Compile Include="TextVisual.cs" />
     <Compile Include="VisualAnnotation.cs" />
     <Compile Include="VisualAnnotationCollection.cs" />
     <Compile Include="VisualAddedEvent.cs" />
-    <Compile Include="IEngine.cs" />
+    <Compile Include="INXDocument.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Visual.cs" />
     <Compile Include="IResolver.cs" />

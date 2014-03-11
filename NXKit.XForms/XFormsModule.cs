@@ -40,7 +40,7 @@ namespace NXKit.XForms
             }
         }
 
-        public override void Initialize(Engine engine)
+        public override void Initialize(NXDocument engine)
         {
             base.Initialize(engine);
 

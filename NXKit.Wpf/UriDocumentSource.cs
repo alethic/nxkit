@@ -20,7 +20,7 @@ namespace NXKit.Wpf
                 new PropertyMetadata(Modules_PropertyChanged));
 
         static readonly DependencyPropertyKey DocumentPropertyKey =
-            DependencyProperty.RegisterReadOnly("Document", typeof(Engine), typeof(UriDocumentSource),
+            DependencyProperty.RegisterReadOnly("Document", typeof(NXDocument), typeof(UriDocumentSource),
                 new PropertyMetadata(Document_PropertyChanged));
 
         public static DependencyProperty DocumentProperty =
@@ -80,11 +80,11 @@ namespace NXKit.Wpf
         }
 
         /// <summary>
-        /// Gets the <see cref="Engine"/> loaded from the <see cref="Uri"/>.
+        /// Gets the <see cref="Document"/> loaded from the <see cref="Uri"/>.
         /// </summary>
-        public Engine Document
+        public NXDocument Document
         {
-            get { return (Engine)GetValue(DocumentProperty); }
+            get { return (NXDocument)GetValue(DocumentProperty); }
             private set { SetValue(DocumentPropertyKey, value); }
         }
 
@@ -97,17 +97,17 @@ namespace NXKit.Wpf
         }
 
         /// <summary>
-        /// Initializes the <see cref="Engine"/>.
+        /// Initializes the <see cref="Document"/>.
         /// </summary>
         void Load()
         {
             if (Uri != null && Modules != null)
             {
-                var cfg = new EngineConfiguration();
+                var cfg = new NXDocumentConfiguration();
                 foreach (var moduleType in Modules)
                     cfg.AddModule(moduleType);
 
-                Document = new Engine(cfg, Uri, new Resolver());
+                Document = new NXDocument(cfg, Uri, new Resolver());
             }
             else
                 Document = null;

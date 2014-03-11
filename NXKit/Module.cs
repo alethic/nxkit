@@ -11,7 +11,7 @@ namespace NXKit
     public abstract class Module
     {
 
-        IEngine engine;
+        INXDocument engine;
 
         /// <summary>
         /// Initializes a new instance.
@@ -33,7 +33,7 @@ namespace NXKit
         /// Initializes the module instance against the specified <see cref="Engine"/>.
         /// </summary>
         /// <param name="engine"></param>
-        public virtual void Initialize(Engine engine)
+        public virtual void Initialize(NXDocument engine)
         {
             Contract.Requires<ArgumentNullException>(engine != null);
 
@@ -43,7 +43,7 @@ namespace NXKit
         /// <summary>
         /// Gets a reference to the form processor hosting this module.
         /// </summary>
-        public IEngine Engine
+        public INXDocument Engine
         {
             get { return engine; }
         }

@@ -19,7 +19,7 @@ namespace NXKit.Test.Web.Site
         {
             if (!IsPostBack)
             {
-                var c = new EngineConfiguration();
+                var c = new NXDocumentConfiguration();
                 c.AddModule<NXKit.XForms.XFormsModule>();
                 c.AddModule<NXKit.XForms.Layout.LayoutModule>();
                 var d = XDocument.Load(typeof(Default).Assembly.GetManifestResourceStream("NXKit.Test.Web.Site.Resources.form.xml"));

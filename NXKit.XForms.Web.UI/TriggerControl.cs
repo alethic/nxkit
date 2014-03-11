@@ -72,7 +72,7 @@ namespace NXKit.XForms.Web.UI
             {
                 case "DOMActivate":
                     Visual.DispatchEvent<DOMActivateEvent>();
-                    View.Engine.Invoke();
+                    View.Document.Invoke();
                     break;
             }
         }
