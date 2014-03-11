@@ -64,6 +64,7 @@ namespace NXKit
         /// <param name="visual"></param>
         public virtual void AnnotateVisual(Visual visual)
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
 
         }
 

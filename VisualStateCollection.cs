@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Runtime.Serialization;
 
 using NXKit.Util;
 
@@ -11,10 +12,32 @@ namespace NXKit
     /// Associates serializable state information with <see cref="Visual"/> instances.
     /// </summary>
     [Serializable]
-    public class VisualStateCollection
+    public class VisualStateCollection :
+        ISerializable
     {
 
-        Dictionary<string, Dictionary<Type, object>> store;
+        readonly Dictionary<string, Dictionary<Type, object>> store;
+        
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        public VisualStateCollection()
+        {
+            this.store = new Dictionary<string, Dictionary<Type, object>>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        public VisualStateCollection(SerializationInfo info, StreamingContext context)
+        {
+            this.store = new Dictionary<string, Dictionary<Type, object>>();
+
+            foreach (var kvp in info)
+                store.Add(kvp.Name, (Dictionary<Type, object>)kvp.Value);
+        }
 
         /// <summary>
         /// Gets the state object of the specified type for the specified <see cref="Visual"/>.
@@ -27,9 +50,6 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(visual != null);
             Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentNullException>(getDefaultValue != null);
-
-            if (store == null)
-                store = new Dictionary<string, Dictionary<Type, object>>();
 
             var visualStore = store.GetOrDefault(visual.UniqueId);
             if (visualStore == null)
@@ -54,6 +74,12 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(visual != null);
 
             return (T)Get(visual, typeof(T), () => new T());
+        }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            foreach (var kvp in store)
+                info.AddValue(kvp.Key, kvp.Value);
         }
 
     }
