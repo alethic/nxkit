@@ -7,28 +7,16 @@ namespace NXKit.XForms
 {
 
     [Visual("group")]
-    public class XFormsGroupVisual : XFormsSingleNodeBindingVisual, IRelevancyScope, INavigationCategoryVisual
+    public class XFormsGroupVisual :
+        XFormsSingleNodeBindingVisual,
+        ISupportsUiCommonAttributes,
+        IRelevancyScope, 
+        INavigationCategoryVisual
     {
 
         protected override IEnumerable<Visual> CreateChildren()
         {
             return CreateElementChildren(Element);
-        }
-
-        public XName Appearance
-        {
-            get
-            {
-                var appearanceAttr = Module.GetAttributeValue(Element, "appearance");
-                if (appearanceAttr == null)
-                    return null;
-
-                var nc = new XFormsXsltContext(this);
-                var st = appearanceAttr.Split(':');
-                var ns = st.Length == 2 ? nc.LookupNamespace(st[0]) : null;
-                var lp = st.Length == 2 ? st[1] : st[0];
-                return XName.Get(lp, ns);
-            }
         }
 
         public string Label

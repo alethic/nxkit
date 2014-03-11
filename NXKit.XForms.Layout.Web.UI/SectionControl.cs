@@ -65,6 +65,14 @@ namespace NXKit.XForms.Layout.Web.UI
                 writer.RenderEndTag();
             }
 
+            if (Common.HintControl != null)
+            {
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "Layout_Hint");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                Common.HintControl.RenderControl(writer);
+                writer.RenderEndTag();
+            }
+
             base.Render(writer);
 
             writer.RenderEndTag();

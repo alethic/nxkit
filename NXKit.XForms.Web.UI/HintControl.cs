@@ -2,38 +2,41 @@
 
 using NXKit.Web.UI;
 
-namespace NXKit.XForms.Layout.Web.UI
+namespace NXKit.XForms.Web.UI
 {
 
     [VisualControlTypeDescriptor]
-    public class ParagraphControlDescriptor : VisualControlTypeDescriptor
+    public class HintControlDescriptor : 
+        VisualControlTypeDescriptor
     {
 
         public override bool CanHandleVisual(Visual visual)
         {
-            return visual is ParagraphVisual;
+            return visual is XFormsHintVisual;
         }
 
         public override bool IsContent(Visual visual)
         {
-            return true;
+            return false;
         }
 
         public override VisualControl CreateControl(View view, Visual visual)
         {
-            return new ParagraphControl(view, (ParagraphVisual)visual);
+            return new HintControl(view, (XFormsHintVisual)visual);
         }
 
     }
 
-    public class ParagraphControl : VisualContentControl<ParagraphVisual>
+    public class HintControl : 
+        VisualContentControl<XFormsHintVisual>
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="view"></param>
         /// <param name="visual"></param>
-        public ParagraphControl(View view, ParagraphVisual visual)
+        public HintControl(View view, XFormsHintVisual visual)
             : base(view, visual)
         {
 
@@ -46,10 +49,11 @@ namespace NXKit.XForms.Layout.Web.UI
 
         protected override void Render(HtmlTextWriter writer)
         {
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "Layout_Paragraph");
-            writer.RenderBeginTag(HtmlTextWriterTag.P);
-            base.Render(writer);
-            writer.RenderEndTag();
+            if (Visual.Binding != null)
+                // ignore child visual's if we have a binding
+                writer.WriteEncodedText(Visual.Binding.Value ?? "");
+            else
+                base.Render(writer);
         }
 
     }

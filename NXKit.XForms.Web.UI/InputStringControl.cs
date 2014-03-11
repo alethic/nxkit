@@ -65,9 +65,9 @@ namespace NXKit.XForms.Web.UI
             var labelVisual = Visual.Children.OfType<XFormsLabelVisual>().FirstOrDefault();
             if (labelVisual != null)
             {
-                if (Visual.GetAppearance() == Constants.XForms_1_0 + "full")
+                if (Visual.Appearance() == Constants.XForms_1_0 + "full")
                     ctl.Label = labelVisual.ToText();
-                if (Visual.GetAppearance() == Constants.XForms_1_0 + "minimal")
+                if (Visual.Appearance() == Constants.XForms_1_0 + "minimal")
                     ctl.EmptyMessage = labelVisual.ToText();
             }
 

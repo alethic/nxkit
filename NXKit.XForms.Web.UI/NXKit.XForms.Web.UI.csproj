@@ -98,6 +98,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HintControl.cs" />
     <Compile Include="VisualExtensions.cs" />
     <Compile Include="BeginRenderEventArgs.cs" />
     <Compile Include="CommonControlCollection.cs" />

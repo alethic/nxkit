@@ -5,7 +5,11 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
-    public class XFormsSingleNodeBindingVisual : XFormsBindingVisual
+    /// <summary>
+    /// Base implementation for an XForms visual which implements Single-Node Binding.
+    /// </summary>
+    public class XFormsSingleNodeBindingVisual : 
+        XFormsBindingVisual
     {
 
         XFormsEvaluationContext context;

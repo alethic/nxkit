@@ -129,7 +129,7 @@ namespace NXKit.XForms.Web.UI
             var labelVisual = Visual.FindLabelVisual();
             var labelText = labelVisual != null ? labelVisual.ToText() : null;
             lbl.Text = labelText;
-            lbl.Visible = ctl.Visible && labelText != null && Visual.GetAppearance() == Constants.XForms_1_0 + "full";
+            lbl.Visible = ctl.Visible && labelText != null && Visual.Appearance() == Constants.XForms_1_0 + "full";
 
             // ensure items are refreshed
             UpdateRadioButtonItems();

@@ -148,6 +148,7 @@
             </f:section>
             <f:section>
                 <xf:label>Coverage Selection</xf:label>
+                <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
                 <f:table>
                     <f:table-row>
                         <f:table-cell>Applicant</f:table-cell>

@@ -86,7 +86,7 @@ namespace NXKit.XForms.Web.UI
                 writer.RenderEndTag();
             }
 
-            if (Visual.Appearance == NXKit.XForms.Layout.Constants.Layout_1_0 + "sequence")
+            if (Visual.Appearance() == NXKit.XForms.Layout.Constants.Layout_1_0 + "sequence")
             {
                 writer.AddAttribute(HtmlTextWriterAttribute.Class, "Layout_Sequence");
                 writer.RenderBeginTag(HtmlTextWriterTag.Ol);

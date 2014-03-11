@@ -5,19 +5,19 @@ using NXKit.Util;
 namespace NXKit.XForms
 {
 
-    public static class UiCommonExtensions
+    public static class SupportsUiCommonAttributesExtensions
     {
 
         /// <summary>
         /// Author-optional attribute to define an appearance hint. If absent, the user agent may freely choose any suitable rendering.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="visual"></param>
+        /// <param name="self"></param>
         /// <returns></returns>
-        public static XName GetAppearance<T>(this T visual)
-            where T : StructuralVisual, IUiCommon
+        public static XName Appearance<T>(this T self)
+            where T : StructuralVisual, ISupportsUiCommonAttributes
         {
-            var a = visual.Document.GetModule<XFormsModule>().ResolveAttribute(visual.Element, "appearance");
+            var a = self.Document.GetModule<XFormsModule>().ResolveAttribute(self.Element, "appearance");
             return a != null ? a.ValueAsXName() : null;
         }
 

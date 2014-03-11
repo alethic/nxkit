@@ -5,8 +5,16 @@ using System.Linq;
 namespace NXKit.XForms
 {
 
+    /// <summary>
+    /// This element provides a descriptive label for the containing form control. The descriptive label can be
+    /// presented visually and made available to accessibility software so the visually-impaired user can obtain a
+    /// short description of form controls while navigating among them.
+    /// </summary>
     [Visual("label")]
-    public class XFormsLabelVisual : XFormsSingleNodeBindingVisual, ITextVisual
+    public class XFormsLabelVisual :
+        XFormsSingleNodeBindingVisual,
+        ISupportsCommonAttributes,
+        ITextVisual
     {
 
         protected override IEnumerable<Visual> CreateChildren()

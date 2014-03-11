@@ -20,7 +20,7 @@ namespace NXKit.XForms.Web.UI
 
         protected override void CreateChildControls()
         {
-            var appearance = Visual.GetAppearance();
+            var appearance = Visual.Appearance();
 
             if (appearance == Constants.XForms_1_0 + "full")
                 CreateSelectFullControl();

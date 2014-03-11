@@ -6,7 +6,7 @@ namespace NXKit.XForms
     [Visual("select1")]
     public class XFormsSelect1Visual :
         XFormsSingleNodeBindingVisual,
-        IUiCommon
+        ISupportsUiCommonAttributes
     {
 
         bool selectedItemVisualCached;

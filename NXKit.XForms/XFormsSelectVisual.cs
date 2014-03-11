@@ -4,7 +4,7 @@
     [Visual("select")]
     public class XFormsSelectVisual : 
         XFormsSingleNodeBindingVisual,
-        IUiCommon
+        ISupportsUiCommonAttributes
     {
 
         public bool Incremental

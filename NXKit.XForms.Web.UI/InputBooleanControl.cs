@@ -52,7 +52,7 @@ namespace NXKit.XForms.Web.UI
         {
             ctl = new CheckBox();
             ctl.ID = "ctl";
-            ctl.AutoPostBack = Visual.Incremental;
+            ctl.AutoPostBack = Visual.Incremental();
             ctl.CheckedChanged += ctl_CheckedChanged;
             Controls.Add(ctl);
         }
