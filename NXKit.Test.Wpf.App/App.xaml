@@ -1,0 +1,17 @@
+﻿<Application
+    x:Class="NXKit.Test.Wpf.App.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:nxkit="http://github.com/wasabii/nxkit"
+    xmlns:nxkit_layout="clr-namespace:NXKit.XForms.Layout;assembly=NXKit.XForms.Layout"
+    StartupUri="MainWindow.xaml">
+    <Application.Resources>
+
+        <DataTemplate
+            DataType="{x:Type nxkit_layout:FormVisual}">
+            <TextBlock
+                Text="a visual" />
+        </DataTemplate>
+        
+    </Application.Resources>
+</Application>

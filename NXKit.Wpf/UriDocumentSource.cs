@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 
-namespace NXKit.Wpf.UI
+namespace NXKit.Wpf
 {
 
     public class UriDocumentSource :
         FrameworkElement,
-        IDocumentSource,
-        IResolver
+        IDocumentSource
     {
 
         public static readonly DependencyProperty UriProperty =
             DependencyProperty.Register("Uri", typeof(Uri), typeof(UriDocumentSource),
                 new PropertyMetadata(Uri_PropertyChanged));
+
+        public static readonly DependencyProperty ModulesProperty =
+            DependencyProperty.Register("Modules", typeof(IEnumerable<Type>), typeof(UriDocumentSource),
+                new PropertyMetadata(Modules_PropertyChanged));
 
         static readonly DependencyPropertyKey DocumentPropertyKey =
             DependencyProperty.RegisterReadOnly("Document", typeof(Engine), typeof(UriDocumentSource),
@@ -25,6 +29,11 @@ namespace NXKit.Wpf.UI
         static void Uri_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
         {
             ((UriDocumentSource)d).OnUriChanged();
+        }
+
+        static void Modules_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
+        {
+            ((UriDocumentSource)d).OnModulesChanged();
         }
 
         static void Document_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
@@ -59,6 +68,17 @@ namespace NXKit.Wpf.UI
                 UriChanged(this, EventArgs.Empty);
         }
 
+        public IEnumerable<Type> Modules
+        {
+            get { return (IEnumerable<Type>)GetValue(ModulesProperty); }
+            set { SetValue(ModulesProperty, value); }
+        }
+
+        void OnModulesChanged()
+        {
+            Load();
+        }
+
         /// <summary>
         /// Gets the <see cref="Engine"/> loaded from the <see cref="Uri"/>.
         /// </summary>
@@ -81,17 +101,16 @@ namespace NXKit.Wpf.UI
         /// </summary>
         void Load()
         {
-            var stream = Uri != null ? Application.GetResourceStream(Uri) : null;
-        }
+            if (Uri != null && Modules != null)
+            {
+                var cfg = new EngineConfiguration();
+                foreach (var moduleType in Modules)
+                    cfg.AddModule(moduleType);
 
-        Stream IResolver.Get(string href, string baseUri)
-        {
-            return null;
-        }
-
-        Stream IResolver.Put(string href, string baseUri, Stream stream)
-        {
-            return null;
+                Document = new Engine(cfg, Uri, new Resolver());
+            }
+            else
+                Document = null;
         }
 
     }

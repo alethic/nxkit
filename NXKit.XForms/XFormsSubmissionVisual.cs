@@ -40,8 +40,13 @@ namespace NXKit.XForms
                 // transform DOM into string
                 var t = d.ToString(SaveOptions.DisableFormatting);
 
+                // normalize uri with base
+                var u = new Uri(action);
+                if (Element.BaseUri != null && !u.IsAbsoluteUri)
+                    u = new Uri(new Uri(Element.BaseUri), u);
+
                 // put data
-                var resource = Engine.Resolver.Put(action, Element.BaseUri, new MemoryStream(Encoding.UTF8.GetBytes(t)));
+                var resource = Engine.Resolver.Put(u, new MemoryStream(Encoding.UTF8.GetBytes(t)));
 
                 if (resource != null)
                     throw new NotSupportedException("Cannot return new data from a Put.");

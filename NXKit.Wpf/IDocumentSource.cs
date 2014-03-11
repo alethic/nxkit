@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NXKit.Wpf.UI
+namespace NXKit.Wpf
 {
 
     /// <summary>

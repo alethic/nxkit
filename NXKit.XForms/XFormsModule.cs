@@ -240,8 +240,13 @@ namespace NXKit.XForms
                 {
                     try
                     {
+                        // normalize uri with base
+                        var u = new Uri(instanceSrc);
+                        if (instance.Element.BaseUri != null && !u.IsAbsoluteUri)
+                            u = new Uri(new Uri(instance.Element.BaseUri), u);
+
                         // return resource as a stream
-                        var resource = Engine.Resolver.Get(instanceSrc, instance.Element.BaseUri);
+                        var resource = Engine.Resolver.Get(u);
                         if (resource == null)
                             throw new FileNotFoundException("Could not load resource", instanceSrc);
 

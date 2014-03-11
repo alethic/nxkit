@@ -11,10 +11,24 @@ namespace NXKit.Wpf.UI
 
         public static readonly DependencyProperty SourceProperty =
             DependencyProperty.Register("Source", typeof(IDocumentSource), typeof(View),
-            new PropertyMetadata(Source_PropertyChanged));
+                new PropertyMetadata(Source_PropertyChanged));
+
+        static readonly DependencyPropertyKey RootVisualPropertyKey =
+            DependencyProperty.RegisterReadOnly("RootVisual", typeof(Visual), typeof(View),
+                new PropertyMetadata(RootVisual_PropertyChanged));
 
         public static readonly DependencyProperty RootVisualProperty =
-            DependencyProperty.Register("RootVisual", typeof(Visual), typeof(View));
+            RootVisualPropertyKey.DependencyProperty;
+
+        static void Source_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
+        {
+            ((View)d).OnSourceChanged((IDocumentSource)args.OldValue, (IDocumentSource)args.NewValue);
+        }
+
+        static void RootVisual_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
+        {
+
+        }
 
         static View()
         {
@@ -27,16 +41,7 @@ namespace NXKit.Wpf.UI
             set { SetValue(SourceProperty, value); }
         }
 
-        static void Source_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
-        {
-            var v = (View)d;
-            var o = (IDocumentSource)args.OldValue;
-            var n = (IDocumentSource)args.NewValue;
-
-            v.SourceChanged(o, n);
-        }
-
-        void SourceChanged(IDocumentSource oldValue, IDocumentSource newValue)
+        void OnSourceChanged(IDocumentSource oldValue, IDocumentSource newValue)
         {
             if (oldValue != null)
                 oldValue.DocumentChanged -= Source_DocumentChanged;
@@ -60,7 +65,7 @@ namespace NXKit.Wpf.UI
         public Visual RootVisual
         {
             get { return (Visual)GetValue(RootVisualProperty); }
-            set { SetValue(RootVisualProperty, value); }
+            private set { SetValue(RootVisualPropertyKey, value); }
         }
 
     }
