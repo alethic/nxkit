@@ -2,7 +2,9 @@
 {
 
     [Visual("input")]
-    public class XFormsInputVisual : XFormsSingleNodeBindingVisual
+    public class XFormsInputVisual :
+        XFormsSingleNodeBindingVisual,
+        IUiCommon
     {
 
         public bool Incremental

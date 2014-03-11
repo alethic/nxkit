@@ -40,11 +40,13 @@ namespace NXKit.XForms.Web.UI
 
         protected override void CreateChildControls()
         {
-            if (Visual.Appearance == Constants.XForms_1_0 + "full")
+            var appearance = Visual.GetAppearance();
+
+            if (appearance == Constants.XForms_1_0 + "full")
                 CreateSelect1FullControl();
-            else if (Visual.Appearance == Constants.XForms_1_0 + "compact")
+            else if (appearance == Constants.XForms_1_0 + "compact")
                 CreateSelect1CompactControl();
-            else if (Visual.Appearance == Constants.XForms_1_0 + "minimal")
+            else if (appearance == Constants.XForms_1_0 + "minimal")
                 CreateSelect1MinimalControl();
             else
                 CreateSelect1MinimalControl();

@@ -49,7 +49,7 @@ namespace NXKit.XForms.Web.UI
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        private VisualControl<XFormsInputVisual> CreateInputControl(XFormsInputVisual visual)
+         VisualControl<XFormsInputVisual> CreateInputControl(XFormsInputVisual visual)
         {
             if (Visual.Type == XmlSchemaConstants.XMLSchema + "boolean")
                 return new InputBooleanControl(View, Visual);

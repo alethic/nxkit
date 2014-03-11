@@ -1,11 +1,12 @@
 ﻿using System.Linq;
-using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
 
     [Visual("select1")]
-    public class XFormsSelect1Visual : XFormsSingleNodeBindingVisual
+    public class XFormsSelect1Visual :
+        XFormsSingleNodeBindingVisual,
+        IUiCommon
     {
 
         bool selectedItemVisualCached;
@@ -14,22 +15,6 @@ namespace NXKit.XForms
         public bool Incremental
         {
             get { return Module.GetAttributeValue(Element, "incremental") == "true"; }
-        }
-
-        public XName Appearance
-        {
-            get
-            {
-                var appearance = Module.GetAttributeValue(Element, "appearance");
-                if (appearance == null)
-                    return null;
-
-                var nc = new XFormsXsltContext(this);
-                var st = appearance.Split(':');
-                var ns = st.Length == 2 ? nc.LookupNamespace(st[0]) : Element.Name.NamespaceName;
-                var lp = st.Length == 2 ? st[1] : st[0];
-                return XName.Get(lp, ns);
-            }
         }
 
         public XFormsSelection Selection

@@ -14,9 +14,10 @@ namespace NXKit.XForms.Web.UI
     public class Select1FullControl : VisualControl<XFormsSelect1Visual>, IScriptControl
     {
 
-        private RadioButtonList ctl;
+        RadioButtonList ctl;
+        Label lbl;
 
-        private Dictionary<XFormsItemVisual, ListItem> itemCache =
+        Dictionary<XFormsItemVisual, ListItem> itemCache =
             new Dictionary<XFormsItemVisual, ListItem>();
 
         /// <summary>
@@ -37,9 +38,14 @@ namespace NXKit.XForms.Web.UI
             ctl.AutoPostBack = Visual.Incremental || true;
             ctl.SelectedIndexChanged += ctl_SelectedIndexChanged;
 
+            lbl = new Label();
+            lbl.ID = "lbl";
+            lbl.AssociatedControlID = ctl.ID;
+
             UpdateRadioButtonItems();
 
             Controls.Add(ctl);
+            Controls.Add(lbl);
         }
 
         private void UpdateRadioButtonItems()
@@ -120,6 +126,11 @@ namespace NXKit.XForms.Web.UI
 
             ctl.Enabled = !Visual.ReadOnly;
 
+            var labelVisual = Visual.FindLabelVisual();
+            var labelText = labelVisual != null ? labelVisual.ToText() : null;
+            lbl.Text = labelText;
+            lbl.Visible = ctl.Visible && labelText != null && Visual.GetAppearance() == Constants.XForms_1_0 + "full";
+
             // ensure items are refreshed
             UpdateRadioButtonItems();
         }
@@ -132,7 +143,8 @@ namespace NXKit.XForms.Web.UI
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
             writer.AddAttribute(HtmlTextWriterAttribute.Class, "XForms_Select1 XForms_Select1_Full");
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
-            base.Render(writer);
+            lbl.RenderControl(writer);
+            ctl.RenderControl(writer);
             writer.RenderEndTag();
         }
 

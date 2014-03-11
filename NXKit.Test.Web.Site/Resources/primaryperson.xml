@@ -1,4 +1,6 @@
-<person>
+<person
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <firstname />
     <middlename />
     <lastname />
@@ -6,7 +8,7 @@
     <heightinches />
     <weight />
     <socialsecuritynumber />
-    <dateofbirth />
+    <dateofbirth xsi:type="xsd:date" />
     <gender />
     <telephone1 />
     <telephone2 />

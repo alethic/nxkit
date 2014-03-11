@@ -7,9 +7,17 @@ using System.Xml.Linq;
 namespace NXKit.Util
 {
 
+    /// <summary>
+    /// Provides extension methods for working with <see cref="XObject"/> instances.
+    /// </summary>
     public static class XObjectExtensions
     {
 
+        /// <summary>
+        /// Obtains the ancestors of the given <see cref="XObject"/>
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
         public static IEnumerable<XElement> Ancestors(this XObject self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
@@ -17,6 +25,12 @@ namespace NXKit.Util
             return self.Parent != null ? self.Parent.AncestorsAndSelf() : Enumerable.Empty<XElement>();
         }
 
+        /// <summary>
+        /// 
+        /// Obtains the ancestors of the given <see cref="XObject"/>, including the specified instance.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
         public static IEnumerable<XObject> AncestorsAndSelf(this XObject self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
