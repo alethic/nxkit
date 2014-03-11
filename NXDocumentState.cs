@@ -9,15 +9,18 @@ using System.Text;
 namespace NXKit
 {
 
+    /// <summary>
+    /// Exported document state for serialization and reload.
+    /// </summary>
     [Serializable]
-    public class EngineState : 
+    public class NXDocumentState : 
         ISerializable
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public EngineState()
+        public NXDocumentState()
         {
 
         }
@@ -25,7 +28,7 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public EngineState(SerializationInfo info, StreamingContext context)
+        public NXDocumentState(SerializationInfo info, StreamingContext context)
         {
             Contract.Requires<ArgumentNullException>(info != null);
 
@@ -33,7 +36,7 @@ namespace NXKit
             var mstm = new MemoryStream((byte[])info.GetValue("Document", typeof(byte[])));
             var gstm = new GZipStream(mstm, CompressionMode.Decompress);
 
-            Configuration = (EngineConfiguration)info.GetValue("Configuration", typeof(EngineConfiguration));
+            Configuration = (NXDocumentConfiguration)info.GetValue("Configuration", typeof(NXDocumentConfiguration));
             Document = new StreamReader(gstm, Encoding.UTF8).ReadToEnd();
             NextElementId = info.GetInt32("NextElementId");
             VisualState = (VisualStateCollection)info.GetValue("VisualState", typeof(VisualStateCollection));
@@ -42,7 +45,7 @@ namespace NXKit
         /// <summary>
         /// Saved engine configuration.
         /// </summary>
-        public EngineConfiguration Configuration { get; set; }
+        public NXDocumentConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Saved document.

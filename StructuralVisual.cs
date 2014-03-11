@@ -32,7 +32,7 @@ namespace NXKit
         /// <param name="engine"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        protected StructuralVisual(IEngine engine, StructuralVisual parent, XNode node)
+        protected StructuralVisual(INXDocument engine, StructuralVisual parent, XNode node)
             : base(engine, parent, node)
         {
             Contract.Requires<ArgumentNullException>(engine != null);

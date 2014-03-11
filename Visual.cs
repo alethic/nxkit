@@ -62,7 +62,7 @@ namespace NXKit
         /// <param name="engine"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        protected Visual(IEngine engine, StructuralVisual parent, XNode node)
+        protected Visual(INXDocument engine, StructuralVisual parent, XNode node)
         {
             Contract.Requires<ArgumentNullException>(engine != null);
 
@@ -75,7 +75,7 @@ namespace NXKit
         /// <param name="engine"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        public void Initialize(IEngine engine, StructuralVisual parent, XNode node)
+        public void Initialize(INXDocument engine, StructuralVisual parent, XNode node)
         {
             Contract.Requires<ArgumentNullException>(engine != null);
 
@@ -86,9 +86,9 @@ namespace NXKit
         }
 
         /// <summary>
-        /// <see cref="IEngine"/> responsible for the visual tree this visual resides within.
+        /// <see cref="INXDocument"/> responsible for the visual tree this visual resides within.
         /// </summary>
-        public IEngine Engine { get; private set; }
+        public INXDocument Engine { get; private set; }
 
         /// <summary>
         /// Parent <see cref="Visual"/>.
@@ -170,10 +170,11 @@ namespace NXKit
         /// <summary>
         /// Private <see cref="org.w3c.dom.events.EventListener"/> implementation for implementing dispatch to a delegate.
         /// </summary>
-        public class DelegateDispatchEventListener : IEventListener
+        public class DelegateDispatchEventListener : 
+            IEventListener
         {
 
-            private EngineEventHandler handler;
+            readonly DocumentEventHandler handler;
 
             /// <summary>
             /// Initializes a new instance.
@@ -181,7 +182,7 @@ namespace NXKit
             /// <param name="observer"></param>
             /// <param name="target"></param>
             /// <param name="handler2"></param>
-            public DelegateDispatchEventListener(EngineEventHandler handler2)
+            public DelegateDispatchEventListener(DocumentEventHandler handler2)
             {
                 this.handler = handler2;
             }
@@ -200,7 +201,7 @@ namespace NXKit
         /// <typeparam name="T"></typeparam>
         /// <param name="handler"></param>
         /// <param name="useCapture"></param>
-        public void AddEventHandler<T>(EngineEventHandler handler, bool useCapture)
+        public void AddEventHandler<T>(DocumentEventHandler handler, bool useCapture)
         {
             string name = null;
 

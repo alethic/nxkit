@@ -12,7 +12,6 @@ namespace NXKit
         public void HandleEvent(Event evt)
         {
             Contract.Requires<ArgumentNullException>(evt != null);
-
             throw new NotImplementedException();
         }
 

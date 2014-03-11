@@ -10,7 +10,7 @@ namespace NXKit
     /// Provides configuration to the NXKit engine.
     /// </summary>
     [Serializable]
-    public class EngineConfiguration
+    public class NXDocumentConfiguration
     {
 
         readonly List<Type> moduleTypes;
@@ -26,7 +26,7 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public EngineConfiguration()
+        public NXDocumentConfiguration()
         {
             this.moduleTypes = new List<Type>();
         }
