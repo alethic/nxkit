@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -45,11 +46,27 @@ namespace NXKit.XForms
 
             Engine.ProcessSubmit += Form_ProcessSubmit;
 
+            if (Engine.RootVisual == null)
+                throw new NullReferenceException("Empty RootVisual.");
+
             // obtain all model visuals
             var models = Engine.RootVisual
-                .Descendants(true)
+                .Descendants(false)
                 .OfType<XFormsModelVisual>()
                 .ToList();
+
+            foreach (var model in models)
+            {
+                // obtain instances
+                var instances = model
+                    .Descendants(false)
+                    .OfType<XFormsInstanceVisual>()
+                    .ToList();
+
+                // initialize the instances
+                foreach (var instance in instances)
+                    instance.State.Initialize(model, instance);
+            }
 
             // perform refresh of just loaded visuals
             if (models.All(i => i.State.Ready))
@@ -223,11 +240,11 @@ namespace NXKit.XForms
         /// <summary>
         /// Loads the instance data associated with the given model.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        internal void ProcessModelInstance(XFormsModelVisual visual)
+        internal void ProcessModelInstance(XFormsModelVisual model)
         {
-            foreach (var instance in visual.Instances)
+            foreach (var instance in model.Instances)
             {
                 // generate required 'id' attribute
                 Engine.GetElementId(instance.Element);
@@ -256,17 +273,18 @@ namespace NXKit.XForms
                         // add to model
                         instance.State.InstanceDocument = instanceDataDocument;
                         instance.State.InstanceElement = instanceDataDocument.Root;
+                        instance.State.Initialize(model, instance);
                     }
                     catch (UriFormatException)
                     {
-                        visual.DispatchEvent<XFormsLinkExceptionEvent>();
+                        model.DispatchEvent<XFormsLinkExceptionEvent>();
                         return;
                     }
                 }
                 else if (instanceChildElements.Length >= 2)
                 {
                     // invalid number of child elements
-                    visual.DispatchEvent<XFormsLinkExceptionEvent>();
+                    model.DispatchEvent<XFormsLinkExceptionEvent>();
                     return;
                 }
                 else if (instanceChildElements.Length == 1)
@@ -279,6 +297,7 @@ namespace NXKit.XForms
                     // add to instance
                     instance.State.InstanceDocument = d;
                     instance.State.InstanceElement = d.Root;
+                    instance.State.Initialize(model, instance);
                 }
             }
         }
@@ -450,7 +469,7 @@ namespace NXKit.XForms
                         var modelItem = GetModelItem(node);
 
                         var ec = new XFormsEvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, node, i + 1, bind.Binding.Nodes.Length);
-                        var nc = new VisualXmlNamespaceContext(bind);
+                        var nc = new XFormsXsltContext(bind);
 
                         // get existing values
                         var oldReadOnly = GetModelItemReadOnly(node);
@@ -575,7 +594,7 @@ namespace NXKit.XForms
                         var modelItem = GetModelItem(node);
 
                         var ec = new XFormsEvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, node, i + 1, bind.Binding.Nodes.Length);
-                        var nc = new VisualXmlNamespaceContext(bind);
+                        var nc = new XFormsXsltContext(bind);
 
                         // get old valid value
                         var oldValid = GetModelItemValid(node);
@@ -685,7 +704,7 @@ namespace NXKit.XForms
         /// <param name="expression"></param>
         /// <param name="rn"></param>
         /// <returns></returns>
-        internal object EvaluateXPath(XFormsEvaluationContext ec, VisualXmlNamespaceContext nc, XFormsVisual visual, string expression, XPathResultType resultType)
+        internal object EvaluateXPath(XFormsEvaluationContext ec, XFormsXsltContext nc, XFormsVisual visual, string expression, XPathResultType resultType)
         {
             if (expression == null)
                 return null;
@@ -714,7 +733,8 @@ namespace NXKit.XForms
 
             // search up visual tree for initial context
             if (ec == null)
-                ec = visual.Ascendants()
+                ec = visual
+                    .Ascendants()
                     .OfType<IEvaluationContextScope>()
                     .Select(i => i.Context)
                     .FirstOrDefault(i => i != null);
@@ -725,8 +745,8 @@ namespace NXKit.XForms
                     .Descendants(true)
                     .TakeWhile(i => !(i is XFormsGroupVisual))
                     .OfType<XFormsModelVisual>()
-                    .First()
-                    .DefaultEvaluationContext;
+                    .Select(i => i.DefaultEvaluationContext)
+                    .FirstOrDefault();
 
             return ec;
         }
@@ -840,6 +860,34 @@ namespace NXKit.XForms
         }
 
         /// <summary>
+        /// Gets the model visual of the specified <see cref="XObject"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        internal XFormsModelVisual GetModelItemModel(XObject self)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(self.Document != null);
+            Contract.Ensures(Contract.Result<XFormsModelVisual>() != null);
+
+            return self.Document.Annotation<XFormsModelVisual>();
+        }
+
+        /// <summary>
+        /// Gets the instance visual of the specified <see cref="XObject"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        internal XFormsInstanceVisual GetModelItemInstance(XObject self)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(self.Document != null);
+            Contract.Ensures(Contract.Result<XFormsInstanceVisual>() != null);
+
+            return self.Document.Annotation<XFormsInstanceVisual>();
+        }
+
+        /// <summary>
         /// Clears the contents of the given instance data node.
         /// </summary>
         /// <param name="ec"></param>
@@ -917,7 +965,7 @@ namespace NXKit.XForms
         {
             var mi = GetModelItem(item);
             if (mi.Id == null)
-                mi.Id = ++ec.Instance.GetState<XFormsInstanceVisualState>().NextItemId;
+                mi.Id = ec.Instance.GetState<XFormsInstanceVisualState>().AllocateItemId();
 
             return (int)mi.Id;
         }
@@ -930,6 +978,9 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal string GetModelItemUniqueId(XFormsEvaluationContext ec, XObject item)
         {
+            Contract.Requires<ArgumentNullException>(ec != null);
+            Contract.Requires<ArgumentNullException>(item != null);
+
             return GetAttributeValue(ec.Instance.Element, "id") + "$" + GetModelItemId(ec, item);
         }
 

@@ -49,7 +49,7 @@ namespace NXKit.XForms
 
             // evaluation context is either own context, or in-scope context
             var ec = Context ?? Binding.Context;
-            var nc = new VisualXmlNamespaceContext(this);
+            var nc = new XFormsXsltContext(this);
 
             var atD = (double?)Module.EvaluateXPath(ec, nc, this, atAttr, XPathResultType.Number);
 

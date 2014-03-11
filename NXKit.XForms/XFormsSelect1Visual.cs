@@ -24,7 +24,7 @@ namespace NXKit.XForms
                 if (appearance == null)
                     return null;
 
-                var nc = new VisualXmlNamespaceContext(this);
+                var nc = new XFormsXsltContext(this);
                 var st = appearance.Split(':');
                 var ns = st.Length == 2 ? nc.LookupNamespace(st[0]) : Element.Name.NamespaceName;
                 var lp = st.Length == 2 ? st[1] : st[0];

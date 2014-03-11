@@ -1,0 +1,13 @@
+<person>
+    <firstname />
+    <middlename />
+    <lastname />
+    <heightfeet />
+    <heightinches />
+    <weight />
+    <socialsecuritynumber />
+    <dateofbirth />
+    <gender />
+    <telephone1 />
+    <telephone2 />
+</person>

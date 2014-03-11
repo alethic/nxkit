@@ -26,7 +26,7 @@ namespace NXKit.XForms.XPathFunctions
             get { return XPathResultType.Number; }
         }
 
-        protected override object Invoke(VisualXmlNamespaceContext context, XPathNavigator navigator, params object[] args)
+        protected override object Invoke(XFormsXsltContext context, XPathNavigator navigator, params object[] args)
         {
             var repeatId = (string)args[0];
             if (repeatId == null)

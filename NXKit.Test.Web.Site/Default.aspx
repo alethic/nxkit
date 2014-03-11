@@ -8,6 +8,7 @@
 
 <head runat="server">
     <title></title>
+    <link rel="stylesheet" href="Default.css" type="text/css" />
 </head>
 
 <body>
@@ -18,8 +19,11 @@
             </Scripts>
         </asp:ScriptManager>
         <xforms:View ID="View" runat="server"
+            CssClass="FormView"
             OnLoad="View_Load"
             OnResourceAction="View_ResourceAction" />
+        <asp:Button ID="Submit" runat="server"
+            Text="Submit" />
     </form>
 </body>
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
@@ -13,11 +15,25 @@ namespace NXKit.XForms
     /// Serialable storage for an instance visual's state.
     /// </summary>
     [Serializable]
-    public class XFormsInstanceVisualState : ISerializable
+    public class XFormsInstanceVisualState :
+        ISerializable
     {
 
-        Tuple<int, XFormsModelItemState>[] deserializedModelItemState;
-        
+        XFormsModelVisual model;
+        XFormsInstanceVisual instance;
+
+        int nextItemId;
+        XDocument instanceDocument;
+        XElement instanceElement;
+        readonly Tuple<int, XFormsModelItemState>[] deserializedModelItemState;
+
+        [ContractInvariantMethod]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
+        void ObjectInvariant()
+        {
+            Contract.Invariant(nextItemId >= 0);
+        }
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -33,10 +49,12 @@ namespace NXKit.XForms
         /// <param name="context"></param>
         public XFormsInstanceVisualState(SerializationInfo info, StreamingContext context)
         {
-            NextItemId = info.GetInt32("NextNodeId");
-            InstanceDocument = XDocument.Parse(info.GetString("InstanceDocument"));
-            InstanceElement = InstanceDocument.Root;
-            deserializedModelItemState = (Tuple<int, XFormsModelItemState>[])info.GetValue("ModelItems", typeof(Tuple<int, XFormsModelItemState>[]));
+            Contract.Requires<ArgumentNullException>(info != null);
+
+            this.nextItemId = info.GetInt32("NextNodeId");
+            this.instanceDocument = XDocument.Parse(info.GetString("InstanceDocument"));
+            this.instanceElement = instanceDocument.Root;
+            this.deserializedModelItemState = (Tuple<int, XFormsModelItemState>[])info.GetValue("ModelItems", typeof(Tuple<int, XFormsModelItemState>[]));
         }
 
         /// <summary>
@@ -44,25 +62,37 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="context"></param>
         [OnDeserialized]
-        private void OnDeserialized(StreamingContext context)
+        void OnDeserialized(StreamingContext context)
         {
             LoadModelItems(deserializedModelItemState);
         }
 
         /// <summary>
-        /// Records the last auto-assigned node id.
+        /// 
         /// </summary>
-        public int NextItemId { get; set; }
+        /// <returns></returns>
+        public int AllocateItemId()
+        {
+            return ++nextItemId;
+        }
 
         /// <summary>
         /// DOM of instance.
         /// </summary>
-        public XDocument InstanceDocument { get; set; }
+        public XDocument InstanceDocument
+        {
+            get { return instanceDocument; }
+            set { instanceDocument = value; instanceDocument.AddAnnotation(instance); instanceDocument.AddAnnotation(model); }
+        }
 
         /// <summary>
         /// Root node of the DOM of the instance.
         /// </summary>
-        public XElement InstanceElement { get; set; }
+        public XElement InstanceElement
+        {
+            get { return instanceElement; }
+            set { instanceElement = value; }
+        }
 
         /// <summary>
         /// Serializes the instance.
@@ -71,9 +101,35 @@ namespace NXKit.XForms
         /// <param name="context"></param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("NextNodeId", NextItemId);
-            info.AddValue("InstanceDocument", InstanceDocument.ToString(SaveOptions.DisableFormatting));
+            info.AddValue("NextNodeId", nextItemId);
+            info.AddValue("InstanceDocument", instanceDocument.ToString(SaveOptions.DisableFormatting));
             info.AddValue("ModelItems", SaveModelItems());
+        }
+
+        /// <summary>
+        /// Configures the state for the specified model and instance.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="instance"></param>
+        internal void Initialize(XFormsModelVisual model, XFormsInstanceVisual instance)
+        {
+            Contract.Requires<ArgumentNullException>(model != null);
+            Contract.Requires<ArgumentNullException>(instance != null);
+
+            this.model = model;
+            this.instance = instance;
+
+            if (instanceDocument != null)
+            {
+                instanceDocument.AddAnnotation(model);
+                instanceDocument.AddAnnotation(instance);
+            }
+
+            if (instanceElement != null)
+            {
+                instanceElement.AddAnnotation(model);
+                instanceElement.AddAnnotation(instance);
+            }
         }
 
         /// <summary>
@@ -81,8 +137,10 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        private XFormsModelItemState GetModelItem(XObject obj)
+        XFormsModelItemState GetModelItem(XObject obj)
         {
+            Contract.Requires<ArgumentNullException>(obj != null);
+
             var modelItem = obj.Annotation<XFormsModelItemState>();
             if (modelItem == null)
                 obj.AddAnnotation(modelItem = new XFormsModelItemState());
@@ -95,7 +153,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        private Tuple<int,XFormsModelItemState>[] SaveModelItems()
+        Tuple<int, XFormsModelItemState>[] SaveModelItems()
         {
             // calculate index positions for instance data node
             var nodeItems = InstanceElement
@@ -123,7 +181,7 @@ namespace NXKit.XForms
                     modelItemProperty.Valid == null)
                     continue;
 
-                saved.Add(new Tuple<int,XFormsModelItemState>(nodeItem.Index, modelItemProperty));
+                saved.Add(new Tuple<int, XFormsModelItemState>(nodeItem.Index, modelItemProperty));
             }
 
             return saved.ToArray();
@@ -133,8 +191,10 @@ namespace NXKit.XForms
         /// Associates
         /// </summary>
         /// <param name="state"></param>
-        private void LoadModelItems(Tuple<int,XFormsModelItemState>[] state)
+        void LoadModelItems(Tuple<int, XFormsModelItemState>[] state)
         {
+            Contract.Requires<ArgumentNullException>(state != null);
+
             // map incoming state by index
             var stateMap = state.ToDictionary(i => i.Item1, i => i.Item2);
 

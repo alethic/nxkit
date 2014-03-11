@@ -4,6 +4,9 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
+    /// <summary>
+    /// Describes a context against which bindings can be applied.
+    /// </summary>
     public class XFormsEvaluationContext
     {
 
@@ -36,27 +39,68 @@ namespace NXKit.XForms
             get { return current; }
         }
 
+        readonly XFormsModelVisual model;
+        readonly XFormsInstanceVisual instance;
+        readonly XObject node;
+        readonly int position;
+        readonly int size;
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="model"></param>
+        /// <param name="instance"></param>
+        /// <param name="node"></param>
+        /// <param name="position"></param>
+        /// <param name="size"></param>
         internal XFormsEvaluationContext(XFormsModelVisual model, XFormsInstanceVisual instance, XObject node, int position, int size)
         {
-            Model = model;
-            Instance = instance;
-            Node = node;
-            Position = position;
-            Size = size;
+            this.model = model;
+            this.instance = instance;
+            this.node = node;
+            this.position = position;
+            this.size = size;
         }
 
-        public XFormsModelVisual Model { get; private set; }
+        /// <summary>
+        /// Model.
+        /// </summary>
+        public XFormsModelVisual Model
+        {
+            get { return model; }
+        }
 
-        public XFormsInstanceVisual Instance { get; private set; }
+        /// <summary>
+        /// Instance within model.
+        /// </summary>
+        public XFormsInstanceVisual Instance
+        {
+            get { return instance; }
+        }
 
-        public XObject Node { get; private set; }
+        /// <summary>
+        /// Node within instance.
+        /// </summary>
+        public XObject Node
+        {
+            get { return node; }
+        }
 
-        public int Position { get; private set; }
+        /// <summary>
+        /// Position of node in a node set.
+        /// </summary>
+        public int Position
+        {
+            get { return position; }
+        }
 
-        public int Size { get; private set; }
+        /// <summary>
+        /// Count of nodes in node set.
+        /// </summary>
+        public int Size
+        {
+            get { return size; }
+        }
 
         /// <summary>
         /// Puts the context into thread local scope. Dipose of this instance to remove it.

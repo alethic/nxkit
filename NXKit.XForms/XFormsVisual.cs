@@ -1,12 +1,11 @@
-﻿using System.Xml.Linq;
-
-namespace NXKit.XForms
+﻿namespace NXKit.XForms
 {
 
     /// <summary>
     /// Base class for XForms <see cref="Visual"/> types.
     /// </summary>
-    public abstract class XFormsVisual : StructuralVisual
+    public abstract class XFormsVisual : 
+        StructuralVisual
     {
 
         /// <summary>
@@ -22,7 +21,7 @@ namespace NXKit.XForms
         /// </summary>
         public override string Id
         {
-            get { return Module.Engine.GetElementId(Element); }
+            get { return Engine.GetElementId(Element); }
         }
 
     }

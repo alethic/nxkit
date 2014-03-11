@@ -9,14 +9,14 @@ namespace NXKit.XForms
     public class XFormsModelItemState : ISerializable
     {
 
-        private bool dispatchReadOnly;
-        private bool dispatchReadWrite;
-        private bool dispatchRequired;
-        private bool dispatchOptional;
-        private bool dispatchEnabled;
-        private bool dispatchDisabled;
-        private bool dispatchValid;
-        private bool dispatchInvalid;
+        bool dispatchReadOnly;
+        bool dispatchReadWrite;
+        bool dispatchRequired;
+        bool dispatchOptional;
+        bool dispatchEnabled;
+        bool dispatchDisabled;
+        bool dispatchValid;
+        bool dispatchInvalid;
 
         /// <summary>
         /// Initializes a new instance.

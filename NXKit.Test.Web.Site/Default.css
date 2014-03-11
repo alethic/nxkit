@@ -1,0 +1,173 @@
+﻿.FormView .Layout_Section
+{
+    margin-bottom: 1em;
+}
+
+.FormView .Layout_Section > h1
+{
+    width: fill-available;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+.FormView .XForms_Select1_Full ol
+{
+    list-style-type: none;
+}
+
+.FormView .Layout_Section > *
+{
+    margin-bottom: 16px;
+}
+
+.FormView ol.Layout_Sequence
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    margin-left: 10px;
+    padding-top: 10px;
+}
+
+.FormView ol.Layout_Sequence > li
+{
+    list-style: none;
+    margin: 0;
+    padding: 5px;
+}
+
+.FormView ol.Layout_Sequence > li > .RadComboBox
+{
+    width: 200px !important;
+}
+
+.FormView ol.Layout_Sequence > li > .XForms_Select1_Minimal > label
+{
+    display: inline-block;
+    width: 150px;
+    text-align: right;
+    font-weight: bold;
+    font-size: 11px;
+    color: #5a7ac7;
+    line-height: 2;
+    padding-right: 32px;
+}
+
+.FormView .Layout_Table
+{
+    margin-left: 10px;
+    border: 1px solid #aaa;
+    font-size: 10pt;
+}
+
+.FormView .Layout_Table table
+{
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+}
+
+.FormView .Layout_Table tr.d0 > *:first-child
+{
+    padding-left: 4px;
+}
+
+.FormView .Layout_Table tr.d1 > *:first-child
+{
+    padding-left: 20px;
+}
+
+.FormView .Layout_Table tr.d2 > *:first-child
+{
+    padding-left: 36px;
+}
+
+.FormView .Layout_Table thead tr
+{
+    font-weight: bold;
+    font-size: 10pt;
+    line-height: 1.2;
+    text-align: left;
+    background-color: #e4e4e4;
+}
+
+.FormView .Layout_Table th
+{
+    padding: 4px;
+}
+
+.FormView .Layout_Table td
+{
+    padding: 2px;
+}
+
+.FormView .Layout_Table tr.d0.nth_2n0
+{
+    background-color: #f4f4f4;
+}
+
+.FormView .Layout_Table tr.d0.nth_2n1
+{
+    background-color: #fafafa;
+}
+
+.FormView .Layout_Table tr.d1.nth_2n0
+{
+    background-color: #fafaff;
+}
+
+.FormView .Layout_Table tr.d1.nth_2n1
+{
+    background-color: #fafaff;
+}
+
+.FormView .Layout_Table tr.d2.nth_2n0
+{
+    background-color: #fafaff;
+}
+
+.FormView .Layout_Table tr.d2.nth_2n1
+{
+    background-color: #fafaff;
+}
+
+.FormView .Layout_Table tr.d0.Layout__Importance_High.nth_2n0
+{
+    background-color: #ffd4f4;
+}
+
+.FormView .Layout_Table tr.d0.Layout__Importance_High.nth_2n1
+{
+    background-color: #ffdafa;
+}
+
+.FormView .Layout_Table tr.d1.Layout__Importance_High.nth_2n0
+{
+    background-color: #ffe4f4;
+}
+
+.FormView .Layout_Table tr.d1.Layout__Importance_High.nth_2n1
+{
+    background-color: #ffeafa;
+}
+
+.FormView .Layout_Table tr.d0 td.Layout__Importance_High
+{
+    font-weight: 700;
+    color: #444;
+    font-size: 9pt;
+}
+
+.FormView .Layout_Table tr.d1 td.Layout__Importance_High
+{
+    font-weight: 600;
+    color: #444;
+    font-size: 9pt;
+}
+
+.FormView .Layout_Table tr.d2 td.Layout__Importance_High
+{
+    font-weight: 500;
+    color: #444;
+    font-size: 9pt;
+}

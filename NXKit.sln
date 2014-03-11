@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Wpf.UI", "NXKi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Layout.Wpf.UI", "NXKit.XForms.Layout.Wpf.UI\NXKit.XForms.Layout.Wpf.UI.csproj", "{102E4D49-7EBD-47A5-9565-ED60D4668E0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Tests", "NXKit.XForms.Tests\NXKit.XForms.Tests.csproj", "{80087881-51FE-4499-8788-5BF5A76CF34B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +108,10 @@ Global
 		{102E4D49-7EBD-47A5-9565-ED60D4668E0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{102E4D49-7EBD-47A5-9565-ED60D4668E0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{102E4D49-7EBD-47A5-9565-ED60D4668E0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80087881-51FE-4499-8788-5BF5A76CF34B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80087881-51FE-4499-8788-5BF5A76CF34B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80087881-51FE-4499-8788-5BF5A76CF34B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80087881-51FE-4499-8788-5BF5A76CF34B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

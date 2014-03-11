@@ -1,875 +1,440 @@
-﻿<f:form xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:f="http://www.isillc.com/XML/forms/Layout-1.0" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
-  <xf:model id="data">
-    <xf:instance xmlns="" id="elections" src="elections.xml" />
-    <xf:instance xmlns="" id="persons" src="persons.xml" />
-    <xf:instance xmlns="" id="relationships" src="relationships.xml" />
-    <xf:instance xmlns="" id="view">
-      <view>
-        <dental>
-          <hhp />
-          <spouse />
-          <children />
-          <family />
-        </dental>
-      </view>
-    </xf:instance>
-    <xf:bind nodeset="lfi/plan" calculate="substring-before(xf:instance()/lfi/election, ':')" />
-    <xf:bind nodeset="lfi/coverage-type" calculate="substring-after(xf:instance()/lfi/election, ':')" />
-    <xf:bind nodeset="disability/elected" type="xsd:boolean" />
-    <xf:bind nodeset="xf:instance('persons')/dependents//dob" type="xsd:date" />
-    <xf:bind nodeset="xf:instance('persons')/beneficiaries//percentage" type="xsd:integer" />
-    <xf:bind nodeset="xf:instance('view')/dental/hhp" relevant="xf:instance()/lfi/coverage-type='E' or xf:instance()/lfi/coverage-type=''" />
-    <xf:bind nodeset="xf:instance('view')/dental/spouse" relevant="xf:instance()/lfi/coverage-type='ES' or xf:instance()/lfi/coverage-type=''" />
-    <xf:bind nodeset="xf:instance('view')/dental/children" relevant="xf:instance()/lfi/coverage-type='EC' or xf:instance()/lfi/coverage-type=''" />
-    <xf:bind nodeset="xf:instance('view')/dental/family" relevant="xf:instance()/lfi/coverage-type='F' or xf:instance()/lfi/coverage-type=''" />
-    <xf:submission ref="xf:instance('elections')" method="put" action="elections.xml" />
-    <xf:submission ref="xf:instance('persons')" method="put" action="persons.xml" />
-  </xf:model>
-  <f:category>
-    <xf:label>Product Selection</xf:label>
-    <f:page>
-      <xf:label>Limited Fixed Indemnity Benefit Plan</xf:label>
-      <f:section xf:ref="lfi">
-        <xf:label>Limited Fixed Indemnity Benefit Plan</xf:label>
-        <f:p>Limited Fixed Indemnity Benefit Insurance Plans are being coordinated by Host Home Providers (HHP) to help meet the insurance needs of you and your family. Additional information regarding the Limited Fixed Indemnity Benefit Plans can be found <f:a href="page1.pdf">here</f:a>.
-        </f:p>
-        <f:table>
-          <f:table-column-group name="choice">
-            <f:table-column importance="high">Benefit</f:table-column>
-            <f:table-column>Value Plan</f:table-column>
-            <f:table-column>Select Plan</f:table-column>
-          </f:table-column-group>
-          <f:table-column-group name="header">
-            <f:table-column importance="high" />
-          </f:table-column-group>
-          <f:table-column-group name="detail">
-            <f:table-column />
-          </f:table-column-group>
-          <f:table-row>
-            <f:table-cell>Doctor's Office Visit</f:table-cell>
-            <f:table-cell>Pays $75 per visit (5 visits)</f:table-cell>
-            <f:table-cell>Pays $50 per visit (5 visits)</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Adult Wellness Visit</f:table-cell>
-            <f:table-cell>Pays $100 per visit (1 visits)</f:table-cell>
-            <f:table-cell>Pays $150 per visit (1 visits)</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Well Child Visit</f:table-cell>
-            <f:table-cell>Pays $100 per visit (3 visits)</f:table-cell>
-            <f:table-cell>Pays $150 per visit (3 visits)</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Outpatient Lab</f:table-cell>
-            <f:table-cell>Pays $30 per visit (4 visits)</f:table-cell>
-            <f:table-cell>Pays $35 per visit (4 visits)</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Outpatient X-Ray</f:table-cell>
-            <f:table-cell>Pays $100 per visit (2 visits)</f:table-cell>
-            <f:table-cell>Pays $125 per visit (2 visits)</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>In-Patient/Out-Patient Surgery Benefits</f:table-cell>
-            <f:table-cell>Pays $1,000 per surgery (1 surgery)</f:table-cell>
-            <f:table-cell>Pays $2,000/$800 per surgery (1 IP &amp; 1 OP surgery)</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>In-Patient/Out-Patient Anesthesia Benefits</f:table-cell>
-            <f:table-cell>Pays $250 per surgery (1 IP or 1 OP surgery)</f:table-cell>
-            <f:table-cell>Pays $500/$200 per surgery (1 IP &amp; 1 OP surgery)</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Ambulance</f:table-cell>
-            <f:table-cell />
-            <f:table-cell>Pays $100 per trip (1 trip)</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Hospital Confinement</f:table-cell>
-            <f:table-cell>Day 1: Pays $500 / Days 2-30: $250 per day</f:table-cell>
-            <f:table-cell>Day 1: Pays $1,000 / Days 2-60: $500 per day</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Maternity</f:table-cell>
-            <f:table-cell>Included</f:table-cell>
-            <f:table-cell>Included</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>ICU Confinement</f:table-cell>
-            <f:table-cell>Pays $250 per day (Maximum of 10 days)</f:table-cell>
-            <f:table-cell>Pays $500 per day (Maximum of 20 days)</f:table-cell>
-            <f:table-row column-group="detail">
-              <f:table-cell>Pays in addition to hospital confinement</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Substance Abuse Confinement</f:table-cell>
-            <f:table-cell>Pays $125 per day (Maximum of 10 days)</f:table-cell>
-            <f:table-cell>Pays $250 per day (Maximum of 20 days)</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Mental Illness Disorder Confinement</f:table-cell>
-            <f:table-cell>Pays $150 per day (Maximum of 10 days)</f:table-cell>
-            <f:table-cell>Pays $250 per day (Maximum of 20 days)</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Skilled Nursing Facility Confinement</f:table-cell>
-            <f:table-cell>Pays $125 per day (Maximum of 20 days)</f:table-cell>
-            <f:table-cell>Pays $250 per day (Maximum of 40 days)</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Accident Medical ($100 deductible per occurence)</f:table-cell>
-            <f:table-cell>Up to $5,000 per occurrence</f:table-cell>
-            <f:table-cell>Up to $5,000 per occurrence</f:table-cell>
-          </f:table-row>
-          <f:table-row column-group="header">
-            <f:table-cell>Accidental Death &amp; Dismemberment</f:table-cell>
-            <f:table-row>
-              <f:table-cell>HHP</f:table-cell>
-              <f:table-cell>$15,000</f:table-cell>
-              <f:table-cell>$15,000</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>Spouse</f:table-cell>
-              <f:table-cell>$7,500</f:table-cell>
-              <f:table-cell>$7,500</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>Child</f:table-cell>
-              <f:table-cell>$3,000</f:table-cell>
-              <f:table-cell>$3,000</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row column-group="header">
-            <f:table-cell>Vision</f:table-cell>
-            <f:table-row>
-              <f:table-cell>Annual Eye Exam - 1 per year</f:table-cell>
-              <f:table-cell />
-              <f:table-cell>Pays $50</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>Frames &amp; Lenses or Contacts - 1 every 2 years</f:table-cell>
-              <f:table-cell />
-              <f:table-cell>Pays $100</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Pharmaceutical Benefits</f:table-cell>
-            <f:table-cell>Discount Drug</f:table-cell>
-            <f:table-cell>Co-Pay Drug</f:table-cell>
-          </f:table-row>
-          <f:table-row column-group="header">
-            <f:table-cell>Discount Drug</f:table-cell>
-            <f:table-row column-group="detail">
-              <f:table-cell>HHSs and their dependents pay the lesser of the pharmacy's usual and customary fee or the contract rate. Discounts are
-available on both generic and brand name drugs. Contraceptive drugs are included. Savings range from 15% to 80% based on
-the drug type (brand or generic) and the participating pharmacy filling the claim. No claim forms required. Prescriptions for 30-
-day supplies can be filled at more than 55,000 participating pharmacies nationwide including all of the national chains and over
-90% of independent pharmacies. For additional savings, you may also utilize our mail order pharmacy for 90 day supplies.</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row column-group="header">
-            <f:table-cell>Co-Pay Drug</f:table-cell>
-            <f:table-row column-group="detail">
-              <f:table-cell>Tier 1 (Most Generics): $10 Co-Pay. Tier 2 (Some Generics &amp; Preferred/Formulary Brand Name): $50 or 50%; whichever is
-greater. Tier 3 (Non-Preferred / Non-Formulary Brand Name): HHSs pay 100% of the cost after pharmacy discounts. Monthly
-Benefit Maximum of $100 HHS / $200 Family. No Deductible. Restricted Formulary.</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row column-group="header">
-            <f:table-cell>Beech Street PPO Network Access</f:table-cell>
-            <f:table-row column-group="detail">
-              <f:table-cell>All plan designs provide covered individuals access to a PPO Network that allows them to take advantage of network
-negotiated rates prior to the above benefits being applied.</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row importance="high">
-            <f:table-cell>Monthly Cost</f:table-cell>
-            <f:table-cell>
-              <xf:select1 ref="election" incremental="false" appearance="full">
-                <xf:item>
-                  <xf:label>Decline</xf:label>
-                  <xf:value />
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell>
-              <xf:select1 ref="election" incremental="false" appearance="full">
-                <xf:item>
-                  <xf:label>Decline</xf:label>
-                  <xf:value />
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-row importance="high">
-              <f:table-cell>HHP Only</f:table-cell>
-              <f:table-cell>
-                <xf:select1 ref="election" incremental="false" appearance="full">
-                  <xf:item>
-                    <xf:label>$95.00</xf:label>
-                    <xf:value>V:E</xf:value>
-                  </xf:item>
-                </xf:select1>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:select1 ref="election" incremental="false" appearance="full">
-                  <xf:item>
-                    <xf:label>$145.00</xf:label>
-                    <xf:value>S:E</xf:value>
-                  </xf:item>
-                </xf:select1>
-              </f:table-cell>
-            </f:table-row>
-            <f:table-row importance="high">
-              <f:table-cell>HHP &amp; Spouse</f:table-cell>
-              <f:table-cell>
-                <xf:select1 ref="election" incremental="false" appearance="full">
-                  <xf:item>
-                    <xf:label>$195.00</xf:label>
-                    <xf:value>V:ES</xf:value>
-                  </xf:item>
-                </xf:select1>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:select1 ref="election" incremental="false" appearance="full">
-                  <xf:item>
-                    <xf:label>$300.00</xf:label>
-                    <xf:value>S:ES</xf:value>
-                  </xf:item>
-                </xf:select1>
-              </f:table-cell>
-            </f:table-row>
-            <f:table-row importance="high">
-              <f:table-cell>HHP &amp; Child(ren)</f:table-cell>
-              <f:table-cell>
-                <xf:select1 ref="election" incremental="false" appearance="full">
-                  <xf:item>
-                    <xf:label>$155.00</xf:label>
-                    <xf:value>V:EC</xf:value>
-                  </xf:item>
-                </xf:select1>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:select1 ref="election" incremental="false" appearance="full">
-                  <xf:item>
-                    <xf:label>$230.00</xf:label>
-                    <xf:value>S:EC</xf:value>
-                  </xf:item>
-                </xf:select1>
-              </f:table-cell>
-            </f:table-row>
-            <f:table-row importance="high">
-              <f:table-cell>HHP &amp; Family</f:table-cell>
-              <f:table-cell>
-                <xf:select1 ref="election" incremental="false" appearance="full">
-                  <xf:item>
-                    <xf:label>$260.00</xf:label>
-                    <xf:value>V:F</xf:value>
-                  </xf:item>
-                </xf:select1>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:select1 ref="election" incremental="false" appearance="full">
-                  <xf:item>
-                    <xf:label>$420.00</xf:label>
-                    <xf:value>S:F</xf:value>
-                  </xf:item>
-                </xf:select1>
-              </f:table-cell>
-            </f:table-row>
-          </f:table-row>
-        </f:table>
-      </f:section>
-    </f:page>
-    <f:page>
-      <xf:label>Dental &amp; Vision</xf:label>
-      <f:section xf:ref="dental">
-        <xf:label>Dental &amp; Free Vision Exam</xf:label>
-        <f:p>A Dental Benefit Plan is being coordinated by Host Home Providers (HHP) to help meet the insurance needs of you and your family. Additional information regarding the Dental Benefit Plan can be found <f:a href="page2.pdf">here</f:a>.</f:p>
-        <f:p>To access a provider visit: <f:a href="https://www.something.com">www.something.com</f:a></f:p>
-        <f:table>
-          <f:table-column-group>
-            <f:table-column importance="high">Category</f:table-column>
-            <f:table-column>Plan Pays</f:table-column>
-          </f:table-column-group>
-          <f:table-column-group name="header">
-            <f:table-column importance="high" />
-          </f:table-column-group>
-          <f:table-row column-group="header">
-            <f:table-cell>Type 1: Preventive &amp; Diagnostic</f:table-cell>
-            <f:table-row>
-              <f:table-cell>a. Oral exams, including prophylaxis</f:table-cell>
-              <f:table-cell>$36.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>b. Bitewings, per film</f:table-cell>
-              <f:table-cell>$4.80</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>c. X-ray, panoramic or cephalometric</f:table-cell>
-              <f:table-cell>$36.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>d. Sealants / topical fluoride</f:table-cell>
-              <f:table-cell>$10.20</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>e. Space maintainers</f:table-cell>
-              <f:table-cell>$108.00</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row column-group="header">
-            <f:table-cell>Type 2: Major Restorative</f:table-cell>
-            <f:table-row>
-              <f:table-cell>a. Crowns, bridges &amp; dentures</f:table-cell>
-              <f:table-cell>$180.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>b. Pre-fabricated crowns</f:table-cell>
-              <f:table-cell>$60.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>c. Crown build-up procedures</f:table-cell>
-              <f:table-cell>$48.00</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row column-group="header">
-            <f:table-cell>Type 3: Minor Restorative</f:table-cell>
-            <f:table-row>
-              <f:table-cell>a. Fillings</f:table-cell>
-              <f:table-cell>$42.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>b. Crown, bridge and denture repairs</f:table-cell>
-              <f:table-cell>$24.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>c. Relining or rebasing dentures</f:table-cell>
-              <f:table-cell>$60.00</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row column-group="header">
-            <f:table-cell>Type 4: Endodontics</f:table-cell>
-            <f:table-row>
-              <f:table-cell>a. Root canals, apicoectomies</f:table-cell>
-              <f:table-cell>$192.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>b. Root amputation</f:table-cell>
-              <f:table-cell>$96.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>c. Therapeutic pulpotomy, retrograde fillings, apexification, hemisection</f:table-cell>
-              <f:table-cell>$48.00</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row column-group="header">
-            <f:table-cell>Type 5: Periodontics (Lifetime Maximum of $500)</f:table-cell>
-            <f:table-row>
-              <f:table-cell>a. Tissue grafts or bone surgery</f:table-cell>
-              <f:table-cell>$96.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>b. Gingivectomy (per quadrant), periodontal scaling, periodontal splinting, root planning</f:table-cell>
-              <f:table-cell>$60.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>c. Gingival curettage (per quadrant)</f:table-cell>
-              <f:table-cell>$36.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>b. Gingivectomy (per tooth)</f:table-cell>
-              <f:table-cell>$24.00</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row column-group="header">
-            <f:table-cell>Type 6: Oral Surgery</f:table-cell>
-            <f:table-row>
-              <f:table-cell>a. Surgeries Level 1 (ex. Removal of exostosis)</f:table-cell>
-              <f:table-cell>$128.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>b. Surgeries Level 2 (ex. Removal of impacted tooth)</f:table-cell>
-              <f:table-cell>$66.00</f:table-cell>
-            </f:table-row>
-            <f:table-row>
-              <f:table-cell>c. Surgeries Level 3 (ex. Simple extraction)</f:table-cell>
-              <f:table-cell>$36.00</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row column-group="header">
-            <f:table-cell>Type 7: General Anesthesia and IV</f:table-cell>
-            <f:table-row>
-              <f:table-cell>a. IV, first half hour general, each additional 1/4 hour general</f:table-cell>
-              <f:table-cell>$72.00</f:table-cell>
-            </f:table-row>
-          </f:table-row>
-          <f:table-row column-group="header">
-            <f:table-cell>Type 8: Orthodontia</f:table-cell>
-            <f:table-cell>$500.00</f:table-cell>
-          </f:table-row>
-          <f:table-row importance="high">
-            <f:table-cell>Monthly Cost</f:table-cell>
-            <f:table-cell>
-              <xf:select1 ref="coverage-type" appearance="full">
-                <xf:label />
-                <xf:item>
-                  <xf:label>Decline</xf:label>
-                  <xf:value />
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <xf:group ref="xf:instance('view')/dental/hhp">
-              <f:table-row importance="high">
-                <f:table-cell>HHP Only</f:table-cell>
-                <f:table-cell>
-                  <xf:select1 ref="xf:instance()/dental/coverage-type" appearance="full">
-                    <xf:label />
+﻿<f:form xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:f="http://www.isillc.com/XML/forms/Layout-1.0"
+        xmlns:xf="http://www.w3.org/2002/xforms"
+        xmlns:ev="http://www.w3.org/2001/xml-events">
+    <xf:model id="data">
+        <xf:instance xmlns=""
+                     id="primaryperson"
+                     src="primaryperson.xml" />
+        <xf:instance xmlns=""
+                     id="secondaryperson"
+                     src="secondaryperson.xml" />
+        <xf:instance xmlns=""
+                     id="primaryelections"
+                     src="primaryelections.xml" />
+        <xf:instance xmlns=""
+                     id="secondaryelections"
+                     src="secondaryelections.xml" />
+        <xf:instance xmlns=""
+                     id="primaryquestions"
+                     src="primaryquestions.xml" />
+        <xf:instance xmlns=""
+                     id="secondaryquestions"
+                     src="secondaryquestions.xml" />
+        <xf:instance xmlns=""
+                     id="relationships"
+                     src="relationships.xml" />
+        <xf:instance xmlns=""
+                     id="beneficiaries"
+                     src="beneficiaries.xml" />
+        <xf:bind nodeset="xf:instance('beneficiaries')//percentage"
+                 type="xsd:integer" />
+        <xf:submission ref="xf:instance('primaryperson')"
+                       method="put"
+                       action="primaryperson.xml" />
+        <xf:submission ref="xf:instance('secondaryperson')"
+                       method="put"
+                       action="secondaryperson.xml" />
+        <xf:submission ref="xf:instance('primaryelections')"
+                       method="put"
+                       action="primaryelections.xml" />
+        <xf:submission ref="xf:instance('secondaryelections')"
+                       method="put"
+                       action="secondaryelections.xml" />
+        <xf:submission ref="xf:instance('primaryquestions')"
+                       method="put"
+                       action="primaryquestions.xml" />
+        <xf:submission ref="xf:instance('secondaryquestions')"
+                       method="put"
+                       action="secondaryquestions.xml" />
+        <xf:submission ref="xf:instance('beneficiaries')"
+                       method="put"
+                       action="beneficiaries.xml" />
+    </xf:model>
+    <f:category>
+        <xf:label>Enrollment Information</xf:label>
+        <f:page>
+            <xf:label>Request For Coverage</xf:label>
+            <f:section xf:ref="xf:instance('primaryperson')">
+                <xf:label>Additional Information About You</xf:label>
+                <xf:input ref="heightfeet"
+                          appearance="minimal">
+                    <xf:label>Feet</xf:label>
+                </xf:input>
+                <xf:input ref="heightinches"
+                          appearance="minimal">
+                    <xf:label>Inches</xf:label>
+                </xf:input>
+                <xf:input ref="weight"
+                          appearance="minimal">
+                    <xf:label>Weight</xf:label>
+                </xf:input>
+                <xf:select1 ref="gender"
+                            appearance="full">
                     <xf:item>
-                      <xf:label>$21.63</xf:label>
-                      <xf:value>E</xf:value>
+                        <xf:label>Male</xf:label>
+                        <xf:value>M</xf:value>
                     </xf:item>
-                  </xf:select1>
-                </f:table-cell>
-              </f:table-row>
-            </xf:group>
-            <xf:group ref="xf:instance('view')/dental/spouse">
-              <f:table-row importance="high">
-                <f:table-cell>HHP &amp; Spouse </f:table-cell>
-                <f:table-cell>
-                  <xf:select1 ref="xf:instance()/dental/coverage-type" appearance="full">
-                    <xf:item>
-                      <xf:label>$37.63</xf:label>
-                      <xf:value>S</xf:value>
-                    </xf:item>
-                  </xf:select1>
-                </f:table-cell>
-              </f:table-row>
-            </xf:group>
-            <xf:group ref="xf:instance('view')/dental/children">
-              <f:table-row importance="high">
-                <f:table-cell>HHP &amp; Children </f:table-cell>
-                <f:table-cell>
-                  <xf:select1 ref="xf:instance()/dental/coverage-type" appearance="full">
-                    <xf:item>
-                      <xf:label>$50.63</xf:label>
-                      <xf:value>C</xf:value>
-                    </xf:item>
-                  </xf:select1>
-                </f:table-cell>
-              </f:table-row>
-            </xf:group>
-            <xf:group ref="xf:instance('view')/dental/family">
-              <f:table-row importance="high">
-                <f:table-cell>HHP &amp; Family </f:table-cell>
-                <f:table-cell>
-                  <xf:select1 ref="xf:instance()/dental/coverage-type" appearance="full">
-                    <xf:item>
-                      <xf:label>$66.63</xf:label>
-                      <xf:value>F</xf:value>
-                    </xf:item>
-                  </xf:select1>
-                </f:table-cell>
-              </f:table-row>
-            </xf:group>
-          </f:table-row>
-        </f:table>
-      </f:section>
-    </f:page>
-    <f:page>
-      <xf:label>Additional Programs</xf:label>
-      <f:section xf:ref="optional-life">
-        <xf:label>Optional Life</xf:label>
-        <f:p>Optional Life Insurance helps provide financial protection by promising to pay a benefit in the event of an covered death. Additional information regarding the Optional Life Instance can be found <f:a href="page2.pdf">here</f:a>.
-        </f:p>
-        <f:p>HHP Cost per Month</f:p>
-        <f:table>
-          <f:table-column-group>
-            <f:table-column importance="high">Coverage</f:table-column>
-            <f:table-column>Age &lt;= 45</f:table-column>
-            <f:table-column>Age 45-59</f:table-column>
-            <f:table-column>Age 60+</f:table-column>
-          </f:table-column-group>
-          <f:table-row>
-            <f:table-cell>
-              <xf:select1 ref="coverage-amount" appearance="full">
-                <xf:item>
-                  <xf:label>$10,000</xf:label>
-                  <xf:value>10000</xf:value>
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell>$1.80</f:table-cell>
-            <f:table-cell>$7.10</f:table-cell>
-            <f:table-cell>$33.80</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>
-              <xf:select1 ref="coverage-amount" appearance="full">
-                <xf:item>
-                  <xf:label>$25,000</xf:label>
-                  <xf:value>25000</xf:value>
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell>$4.50</f:table-cell>
-            <f:table-cell>$17.75</f:table-cell>
-            <f:table-cell>$84.50</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>
-              <xf:select1 ref="coverage-amount" appearance="full">
-                <xf:item>
-                  <xf:label>$50,000</xf:label>
-                  <xf:value>50000</xf:value>
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell>$9.00</f:table-cell>
-            <f:table-cell>$35.50</f:table-cell>
-            <f:table-cell>$169.00</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>
-              <xf:select1 ref="coverage-amount" appearance="full">
-                <xf:item>
-                  <xf:label>$75,000</xf:label>
-                  <xf:value>75000</xf:value>
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell>$13.50</f:table-cell>
-            <f:table-cell>$53.25</f:table-cell>
-            <f:table-cell>$253.50</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>
-              <xf:select1 ref="coverage-amount" appearance="full">
-                <xf:item>
-                  <xf:label>$100,000</xf:label>
-                  <xf:value>100000</xf:value>
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell>$18.00</f:table-cell>
-            <f:table-cell>$71.00</f:table-cell>
-            <f:table-cell>$338.00</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>
-              <xf:select1 ref="coverage-amount" appearance="full">
-                <xf:item>
-                  <xf:label>Decline</xf:label>
-                  <xf:value />
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell />
-            <f:table-cell />
-            <f:table-cell />
-          </f:table-row>
-        </f:table>
-        <f:p>Age Reduction</f:p>
-        <f:table>
-          <f:table-row>
-            <f:table-cell>age 65–69</f:table-cell>
-            <f:table-cell>65%</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>age 70-74</f:table-cell>
-            <f:table-cell>50%</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>age 75-79</f:table-cell>
-            <f:table-cell>35%</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>age 80-84</f:table-cell>
-            <f:table-cell>25%</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>age 85-89</f:table-cell>
-            <f:table-cell>20%</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>age 90-94</f:table-cell>
-            <f:table-cell>15%</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>age 95+</f:table-cell>
-            <f:table-cell>10%</f:table-cell>
-          </f:table-row>
-        </f:table>
-      </f:section>
-      <f:section xf:ref="dependent-life">
-        <xf:label>Dependent Life</xf:label>
-        <f:p>Dependent Life Insurance allows insured members to provide life insurance for their spouse and/or child(ren). This provides additional financial security for HHPs and their families. Additional information regarding the Dependent Life Insurance can be found <f:a href="page2.pdf">here</f:a>.
-        </f:p>
-        <f:table>
-          <f:table-column-group>
-            <f:table-column importance="high">Coverage</f:table-column>
-            <f:table-column>Rate</f:table-column>
-          </f:table-column-group>
-          <f:table-row>
-            <f:table-cell>
-              <xf:select1 ref="coverage-type" appearance="full">
-                <xf:item>
-                  <xf:label>Spouse</xf:label>
-                  <xf:value>S</xf:value>
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell>$25,000</f:table-cell>
-            <f:table-cell>$13.20</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>
-              <xf:select1 ref="coverage-type" appearance="full">
-                <xf:item>
-                  <xf:label>Children</xf:label>
-                  <xf:value>C</xf:value>
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell>$10,000</f:table-cell>
-            <f:table-cell>$1.80</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>
-              <xf:select1 ref="coverage-type" appearance="full">
-                <xf:item>
-                  <xf:label>Spouse &amp; Children</xf:label>
-                  <xf:value>F</xf:value>
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell />
-            <f:table-cell>$15.00</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>
-              <xf:select1 ref="coverage-type" appearance="full">
-                <xf:item>
-                  <xf:label>Decline Dependent Life</xf:label>
-                  <xf:value />
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell />
-            <f:table-cell />
-          </f:table-row>
-        </f:table>
-      </f:section>
-      <f:section xf:ref="disability">
-        <xf:label>Short Term Disability</xf:label>
-        <f:p>Short Term Disability provides financial protection for eligible HHPs by promising to pay a percentage of weekly pre-disability earnings in the event of a covered disability. Additional information regarding the Short Term Disability can be found <f:a href="page2.pdf">here</f:a>.
-        </f:p>
-        <f:table>
-          <f:table-column-group>
-            <f:table-column />
-            <f:table-column />
-          </f:table-column-group>
-          <f:table-row>
-            <f:table-cell>Weekly Pre-disability Earnings</f:table-cell>
-            <f:table-cell>50% up to $500</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Weekly Benefit Maximum</f:table-cell>
-            <f:table-cell>$250</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Elimination Period (Accident/Sickness)</f:table-cell>
-            <f:table-cell>15 days</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>Maximum Benefit Period</f:table-cell>
-            <f:table-cell>13 weeks</f:table-cell>
-          </f:table-row>
-        </f:table>
-        <f:table>
-          <f:table-column-group>
-            <f:table-column>Coverage</f:table-column>
-            <f:table-column>Rate</f:table-column>
-          </f:table-column-group>
-          <f:table-row>
-            <f:table-cell>
-              <xf:select1 ref="elected" appearance="full">
-                <xf:item>
-                  <xf:label>Accept</xf:label>
-                  <xf:value>true</xf:value>
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell>$20.00</f:table-cell>
-          </f:table-row>
-          <f:table-row>
-            <f:table-cell>
-              <xf:select1 ref="elected" appearance="full">
-                <xf:item>
-                  <xf:label>Decline</xf:label>
-                  <xf:value>false</xf:value>
-                </xf:item>
-              </xf:select1>
-            </f:table-cell>
-            <f:table-cell />
-          </f:table-row>
-        </f:table>
-      </f:section>
-    </f:page>
-    <f:page>
-      <xf:label>Additional Info</xf:label>
-      <f:section>
-        <xf:label>Dependents</xf:label>
-        <f:p>If you are enrolling any of your dependents (spouse or child(ren)), please be sure to include their information below; otherwise, their enrollment may be delayed or coverage declined.</f:p>
-        <f:table>
-          <f:table-column-group>
-            <f:table-column>Name</f:table-column>
-            <f:table-column>Social Security Number</f:table-column>
-            <f:table-column>Date of Birth</f:table-column>
-            <f:table-column>Gender</f:table-column>
-          </f:table-column-group>
-          <xf:repeat nodeset="xf:instance('persons')/dependents/dependent[@type='spouse']">
-            <f:table-row>
-              <f:table-cell>
-                <xf:input ref="name" appearance="minimal">
-                  <xf:label>Spouse</xf:label>
-                  <xf:alert>Enter the spouses name.</xf:alert>
-                </xf:input>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:input ref="ssn">
-                  <xf:label />
-                  <xf:alert>Social security number must be at least 4 characters.</xf:alert>
-                </xf:input>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:input ref="dob">
-                  <xf:label />
-                </xf:input>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:select1 ref="gender">
-                  <xf:label />
-                  <xf:item>
-                    <xf:label>Male</xf:label>
-                    <xf:value>M</xf:value>
-                  </xf:item>
-                  <xf:item>
-                    <xf:label>Female</xf:label>
-                    <xf:value>F</xf:value>
-                  </xf:item>
                 </xf:select1>
-              </f:table-cell>
-            </f:table-row>
-          </xf:repeat>
-          <xf:repeat nodeset="xf:instance('persons')/dependents/dependent[@type='child']">
-            <f:table-row>
-              <f:table-cell>
-                <xf:input ref="name" appearance="minimal">
-                  <xf:label>Child</xf:label>
-                  <xf:alert>Enter the child's name.</xf:alert>
-                </xf:input>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:input ref="ssn">
-                  <xf:label />
-                  <xf:alert>Social security number must be at least 4 characters.</xf:alert>
-                </xf:input>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:input ref="dob">
-                  <xf:label />
-                </xf:input>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:select1 ref="gender">
-                  <xf:label />
-                  <xf:item>
-                    <xf:label>Male</xf:label>
-                    <xf:value>M</xf:value>
-                  </xf:item>
-                  <xf:item>
-                    <xf:label>Female</xf:label>
-                    <xf:value>F</xf:value>
-                  </xf:item>
+                <xf:select1 ref="gender"
+                            appearance="full">
+                    <xf:item>
+                        <xf:label>Female</xf:label>
+                        <xf:value>F</xf:value>
+                    </xf:item>
                 </xf:select1>
-              </f:table-cell>
-            </f:table-row>
-          </xf:repeat>
-        </f:table>
-      </f:section>
-    </f:page>
-    <f:page>
-      <xf:label>Additional Beneficiaries</xf:label>
-      <f:section>
-        <xf:label>Accidental Death &amp; Dismemberment – Fairmont Speciality Services</xf:label>
-        <f:p>The benefits package being offered by your employer automatically includes $15,000 Accidental Death &amp; Dismemberment benefits through Fairmont Specialty Services. Please enter your beneficiary information below.</f:p>
-        <f:table>
-          <f:table-column-group>
-            <f:table-column>Name</f:table-column>
-            <f:table-column>Social Security Number</f:table-column>
-            <f:table-column>Percentage</f:table-column>
-            <f:table-column>Relationship</f:table-column>
-          </f:table-column-group>
-          <xf:repeat nodeset="xf:instance('persons')/beneficiaries/add/beneficiary">
-            <f:table-row>
-              <f:table-cell>
-                <xf:input ref="name" appearance="minimal">
-                  <xf:label />
+                <xf:input ref="socialsecuritynumber"
+                          appearance="full">
+                    <xf:label>SSN</xf:label>
                 </xf:input>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:input ref="ssn">
-                  <xf:label />
+                <xf:input ref="dateofbirth"
+                          appearance="minimal">
+                    <xf:label>Date of Birth</xf:label>
                 </xf:input>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:range ref="percentage" start="0" step="5" end="100">
-                  <xf:label />
-                </xf:range>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:input ref="relationship" />
-              </f:table-cell>
-            </f:table-row>
-          </xf:repeat>
-        </f:table>
-      </f:section>
-      <f:section>
-        <xf:label>Optional Life</xf:label>
-        <f:p>The benefits package being offered by your employer offers Optional Life benefits through The Standard. If you have selected the Optional Life benefits, please enter your beneficiary information below.</f:p>
-        <f:table>
-          <f:table-column-group>
-            <f:table-column>Name</f:table-column>
-            <f:table-column>Social Security Number</f:table-column>
-            <f:table-column>Percentage</f:table-column>
-            <f:table-column>Relationship</f:table-column>
-          </f:table-column-group>
-          <xf:repeat nodeset="xf:instance('persons')/beneficiaries/life/beneficiary">
-            <f:table-row>
-              <f:table-cell>
-                <xf:input ref="name" appearance="minimal">
-                  <xf:label />
+                <xf:input ref="telephone1"
+                          appearance="minimal">
+                    <xf:label>Home Phone</xf:label>
                 </xf:input>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:input ref="ssn">
-                  <xf:label />
+                <xf:input ref="telephone2"
+                          appearance="minimal">
+                    <xf:label>Work Phone</xf:label>
                 </xf:input>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:input ref="percentage">
-                  <xf:label />
+            </f:section>
+            <f:section xf:ref="xf:instance('secondaryperson')">
+                <xf:label>Your Spouse's Information</xf:label>
+                <xf:label>Complete if your spouse or domestic partner (DP) is requesting coverage.</xf:label>
+                <xf:input ref="firstname"
+                          appearance="minimal">
+                    <xf:label>First Name</xf:label>
                 </xf:input>
-              </f:table-cell>
-              <f:table-cell>
-                <xf:input ref="relationship" />
-              </f:table-cell>
-            </f:table-row>
-          </xf:repeat>
-        </f:table>
-      </f:section>
-    </f:page>
-  </f:category>
+                <xf:input ref="middlename"
+                          appearance="minimal">
+                    <xf:label>MI</xf:label>
+                </xf:input>
+                <xf:input ref="lastname"
+                          appearance="minimal">
+                    <xf:label>Last Name</xf:label>
+                </xf:input>
+                <xf:input ref="heightfeet"
+                          appearance="minimal">
+                    <xf:label>Feet</xf:label>
+                </xf:input>
+                <xf:input ref="heightinches"
+                          appearance="minimal">
+                    <xf:label>Inches</xf:label>
+                </xf:input>
+                <xf:input ref="weight"
+                          appearance="minimal">
+                    <xf:label>Weight</xf:label>
+                </xf:input>
+                <xf:select1 ref="gender"
+                            appearance="full">
+                    <xf:item>
+                        <xf:label>Male</xf:label>
+                        <xf:value>M</xf:value>
+                    </xf:item>
+                </xf:select1>
+                <xf:select1 ref="gender"
+                            appearance="full">
+                    <xf:item>
+                        <xf:label>Female</xf:label>
+                        <xf:value>F</xf:value>
+                    </xf:item>
+                </xf:select1>
+                <xf:input ref="socialsecuritynumber"
+                          appearance="minimal">
+                    <xf:label>SSN</xf:label>
+                </xf:input>
+                <xf:input ref="dateofbirth"
+                          appearance="minimal">
+                    <xf:label>Date of Birth</xf:label>
+                </xf:input>
+            </f:section>
+            <f:section>
+                <xf:label>Coverage Selection</xf:label>
+                <f:table>
+                    <f:table-row>
+                        <f:table-cell>Applicant</f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('primaryelections')/term-life/coverage-amount"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>$75,000</xf:label>
+                                    <xf:value>75000</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                            <xf:select1 ref="xf:instance('primaryelections')/term-life/coverage-amount"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>$100,000</xf:label>
+                                    <xf:value>100000</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                            <xf:select1 ref="xf:instance('primaryelections')/term-life/coverage-amount"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>$150,000</xf:label>
+                                    <xf:value>150000</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                        <f:table-cell>Spouse/DP*</f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('secondaryelections')/term-life/coverage-amount"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>$75,000</xf:label>
+                                    <xf:value>75000</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                            <xf:select1 ref="xf:instance('secondaryelections')/term-life/coverage-amount"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>$100,000</xf:label>
+                                    <xf:value>100000</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                            <xf:select1 ref="xf:instance('secondaryelections')/term-life/coverage-amount"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>$150,000</xf:label>
+                                    <xf:value>150000</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                    </f:table-row>
+                </f:table>
+            </f:section>
+            <f:section>
+                <xf:label>Health Questions</xf:label>
+                <f:table>
+                    <f:table-row>
+                        <f:table-cell>Applicant</f:table-cell>
+                        <f:table-cell>Spouse/DP</f:table-cell>
+                        <f:table-cell>Please answer the following questions by choosing 'Yes' or 'No'.</f:table-cell>
+                    </f:table-row>
+                    <f:table-row>
+                        <f:table-cell>1. Within the last 12 months, have you used tobacco or nicotine in any form?</f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('primaryquestions')/question1/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('secondaryquestions')/question1/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                    </f:table-row>
+                    <f:table-row>
+                        <f:table-cell>2. Within the last five years, have you been treated for or diagnosed with any of the following: circulatory or respiratory disease or disorder; chest pain; high blood pressure; cancer or tumors; diabetes; disease or disorder of the heart, lungs, kidneys, liver, genitourinary system; arthritis or other musculoskeletal condition; alcoholism; mental or nervous disorder, or have you been diagnosed with, or treated by a member of the medical profession for Acquired Immune Deficiency Syndrome (AIDS) or AIDS-Related Complex (ARC)?</f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('primaryquestions')/question2/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('secondaryquestions')/question2/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                    </f:table-row>
+                    <f:table-row>
+                        <f:table-cell>3. Are you currently taking any medication or being treated for any condition, including pregnancy, or disease not mentioned in the previous questions?</f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('primaryquestions')/question3/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('secondaryquestions')/question3/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                    </f:table-row>
+                    <f:table-row>
+                        <f:table-cell>4. Within the last five years, have you been counseled, treated or hospitalized for the use of alcohol or drugs?</f:table-cell>
+                    <f:table-cell>
+                            <xf:select1 ref="xf:instance('primaryquestions')/question4/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:select1 ref="xf:instance('secondaryquestions')/question4/answer"
+                                        appearance="full">
+                                <xf:item>
+                                    <xf:label>No</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Yes</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </f:table-cell>
+                    </f:table-row>
+                    <f:table-row>
+                        <f:table>
+                            <f:table-row>
+                                <f:table-cell>
+                                    <xf:input ref="xf:instance('primaryquestions')/question4/condition"
+                                              appearance="minimal">
+                                        <xf:label>Condition</xf:label>
+                                    </xf:input>
+                                </f:table-cell>
+                                <f:table-cell>
+                                    <xf:input ref="xf:instance('primaryquestions')/question4/dates"
+                                              appearance="minimal">
+                                        <xf:label>Dates</xf:label>
+                                    </xf:input>
+                                </f:table-cell>
+                                <f:table-cell>
+                                    <xf:input ref="xf:instance('primaryquestions')/question4/currentstatus"
+                                              appearance="minimal">
+                                        <xf:label>Current Status</xf:label>
+                                    </xf:input>
+                                </f:table-cell>
+                            </f:table-row>
+                            <f:table-row>
+                                <f:table-cell>
+                                    <xf:input ref="xf:instance('primaryquestions')/question4/physicianname"
+                                              appearance="minimal">
+                                        <xf:label>Physician Name</xf:label>
+                                    </xf:input>
+                                </f:table-cell>
+                                <f:table-cell>
+                                    <xf:input ref="xf:instance('primaryquestions')/question4/physicianaddress"
+                                              appearance="minimal">
+                                        <xf:label>Physician Address</xf:label>
+                                    </xf:input>
+                                </f:table-cell>
+                                <f:table-cell>
+                                    <xf:input ref="xf:instance('primaryquestions')/question4/physiciantelephone"
+                                              appearance="minimal">
+                                        <xf:label>Physician Phone Number</xf:label>
+                                    </xf:input>
+                                </f:table-cell>
+                            </f:table-row>
+                        </f:table>
+                    </f:table-row>
+                </f:table>
+            </f:section>
+            <f:section>
+                <xf:label>Beneficiaries</xf:label>
+                <f:p>Please list all beneficiaries you wish to name.</f:p>
+                <f:table>
+                    <f:table-column-group>
+                        <f:table-column>First Name</f:table-column>
+                        <f:table-column>MI</f:table-column>
+                        <f:table-column>Last Name</f:table-column>
+                        <f:table-column>Social Security Number</f:table-column>
+                        <f:table-column>Phone Number</f:table-column>
+                        <f:table-column>Relationship</f:table-column>
+                        <f:table-column>Percentage</f:table-column>
+                    </f:table-column-group>
+                    <xf:repeat nodeset="xf:instance('beneficiaries')/beneficiary">
+                        <f:table-row>
+                            <f:table-cell>
+                                <xf:input ref="firstname"
+                                          appearance="minimal">
+                                    <xf:label />
+                                </xf:input>
+                            </f:table-cell>
+                            <f:table-cell>
+                                <xf:input ref="middlename"
+                                          appearance="minimal">
+                                    <xf:label />
+                                </xf:input>
+                            </f:table-cell>
+                            <f:table-cell>
+                                <xf:input ref="lastname"
+                                          appearance="minimal">
+                                    <xf:label />
+                                </xf:input>
+                            </f:table-cell>
+                            <f:table-cell>
+                                <xf:input ref="socialsecuritynumber"
+                                          appearance="minimal">
+                                    <xf:label />
+                                </xf:input>
+                            </f:table-cell>
+                            <f:table-cell>
+                                <xf:input ref="telephone"
+                                          appearance="minimal">
+                                    <xf:label />
+                                </xf:input>
+                            </f:table-cell>
+                            <f:table-cell>
+                                <xf:input ref="relationship" />
+                            </f:table-cell>
+                            <f:table-cell>
+                                <xf:range ref="percentage"
+                                          start="0"
+                                          step="5"
+                                          end="100">
+                                    <xf:label />
+                                </xf:range>
+                            </f:table-cell>
+                        </f:table-row>
+                    </xf:repeat>
+                </f:table>
+            </f:section>
+        </f:page>
+    </f:category>
 </f:form>

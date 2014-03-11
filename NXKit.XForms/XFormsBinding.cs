@@ -11,23 +11,33 @@ namespace NXKit.XForms
     public class XFormsBinding
     {
 
-        private bool resultCached;
-        private object result;
-        private bool nodeCached;
-        private XObject node;
-        private bool nodesCached;
-        private XObject[] nodes;
-        private bool valueCached;
-        private string value;
+        readonly XFormsVisual visual;
+        readonly XFormsEvaluationContext context;
+        readonly string xpath;
+
+        bool resultCached;
+        object result;
+        bool nodeCached;
+        XObject node;
+        bool nodesCached;
+        XObject[] nodes;
+        bool valueCached;
+        string value;
+        bool resultContextCached;
+        XFormsEvaluationContext resultContext;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="form"></param>
+        /// <param name="visual"></param>
+        /// <param name="ec">Context in which to begin evaluation</param>
+        /// <param name="xp"></param>
         internal XFormsBinding(IEngine form, XFormsVisual visual, XFormsEvaluationContext ec, string xp)
         {
-            Visual = visual;
-            Context = ec;
-            XPathExpression = xp;
+            this.visual = visual;
+            this.context = ec;
+            this.xpath = xp;
         }
 
         /// <summary>
@@ -41,17 +51,26 @@ namespace NXKit.XForms
         /// <summary>
         /// <see cref="Visual"/> to which this binding is related.
         /// </summary>
-        public XFormsVisual Visual { get; private set; }
+        public XFormsVisual Visual
+        {
+            get { return visual; }
+        }
 
         /// <summary>
         /// Gets the <see cref="XFormsEvaluationContext"/> used to resolve this binding.
         /// </summary>
-        public XFormsEvaluationContext Context { get; private set; }
+        public XFormsEvaluationContext Context
+        {
+            get { return context; }
+        }
 
         /// <summary>
         /// Gets the XPath expression that describes this binding.
         /// </summary>
-        public string XPathExpression { get; private set; }
+        public string XPathExpression
+        {
+            get { return xpath; }
+        }
 
         /// <summary>
         /// Gets the raw result from the binding.
@@ -64,11 +83,11 @@ namespace NXKit.XForms
                 {
                     try
                     {
-                        result = Module.EvaluateXPath(Context, new VisualXmlNamespaceContext(Visual), Visual, XPathExpression, XPathResultType.NodeSet);
+                        result = Module.EvaluateXPath(Context, new XFormsXsltContext(Visual), Visual, XPathExpression, XPathResultType.NodeSet);
                     }
                     catch
                     {
-                        result = Module.EvaluateXPath(Context, new VisualXmlNamespaceContext(Visual), Visual, XPathExpression, XPathResultType.Any);
+                        result = Module.EvaluateXPath(Context, new XFormsXsltContext(Visual), Visual, XPathExpression, XPathResultType.Any);
                     }
 
                     resultCached = true;
