@@ -11,22 +11,22 @@ namespace NXKit.XForms.Tests
         IResolver
     {
 
-        readonly Dictionary<string, string> map;
+        readonly Dictionary<Uri, string> map;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public ResourceSetResolver()
         {
-            this.map = new Dictionary<string, string>();
+            this.map = new Dictionary<Uri, string>();
         }
 
-        public Stream Get(string href, string baseUri)
+        public Stream Get(Uri href)
         {
             return new MemoryStream(Encoding.UTF8.GetBytes(map[href]));
         }
 
-        public Stream Put(string href, string baseUri, Stream stream)
+        public Stream Put(Uri uri, Stream stream)
         {
             throw new NotImplementedException();
         }
