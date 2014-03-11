@@ -4,40 +4,36 @@ using System.IO;
 namespace NXKit.Web.UI
 {
 
-    public class ResourceActionEventArgs : EventArgs
+    public class ResourceActionEventArgs : 
+        EventArgs
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="method"></param>
-        /// <param name="baseUri"></param>
-        /// <param name="href"></param>
-        internal ResourceActionEventArgs(ResourceActionMethod method, string href, string baseUri)
+        /// <param name="uri"></param>
+        internal ResourceActionEventArgs(ResourceActionMethod method, Uri uri)
         {
             Method = method;
-            Href = href;
-            BaseUri = baseUri;
+            Uri = uri;
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="method"></param>
-        /// <param name="baseUri"></param>
-        /// <param name="href"></param>
+        /// <param name="uri"></param>
         /// <param name="body"></param>
-        internal ResourceActionEventArgs(ResourceActionMethod method, string href, string baseUri, Stream body)
-            : this(method, href, baseUri)
+        internal ResourceActionEventArgs(ResourceActionMethod method, Uri uri, Stream body)
+            : this(method, uri)
         {
             Body = body;
         }
 
         public ResourceActionMethod Method { get; private set; }
 
-        public string Href { get; private set; }
-
-        public string BaseUri { get; private set; }
+        public Uri Uri { get; private set; }
 
         public Stream Body { get; private set; }
 

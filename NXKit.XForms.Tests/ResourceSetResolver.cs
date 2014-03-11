@@ -8,7 +8,7 @@ namespace NXKit.XForms.Tests
 
     class ResourceSetResolver :
         Dictionary<string, string>,
-        IResourceResolver
+        IResolver
     {
 
         readonly Dictionary<string, string> map;

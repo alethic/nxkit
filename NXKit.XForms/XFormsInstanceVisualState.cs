@@ -23,8 +23,7 @@ namespace NXKit.XForms
         XFormsInstanceVisual instance;
 
         int nextItemId;
-        XDocument instanceDocument;
-        XElement instanceElement;
+        XDocument document;
         readonly Tuple<int, XFormsModelItemState>[] deserializedModelItemState;
 
         [ContractInvariantMethod]
@@ -52,8 +51,7 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(info != null);
 
             this.nextItemId = info.GetInt32("NextNodeId");
-            this.instanceDocument = XDocument.Parse(info.GetString("InstanceDocument"));
-            this.instanceElement = instanceDocument.Root;
+            this.document = info.GetString("Document") != null ? XDocument.Parse(info.GetString("Document")) : null;
             this.deserializedModelItemState = (Tuple<int, XFormsModelItemState>[])info.GetValue("ModelItems", typeof(Tuple<int, XFormsModelItemState>[]));
         }
 
@@ -79,31 +77,25 @@ namespace NXKit.XForms
         /// <summary>
         /// DOM of instance.
         /// </summary>
-        public XDocument InstanceDocument
+        public XDocument Document
         {
-            get { return instanceDocument; }
-            set { instanceDocument = value; instanceDocument.AddAnnotation(instance); instanceDocument.AddAnnotation(model); }
+            get { return document; }
         }
 
         /// <summary>
-        /// Root node of the DOM of the instance.
+        /// Configures the instance document.
         /// </summary>
-        public XElement InstanceElement
+        void Initialize(XDocument document)
         {
-            get { return instanceElement; }
-            set { instanceElement = value; }
-        }
+            if (document != null)
+            {
+                if (model != null)
+                    document.AddAnnotation(model);
+                if (instance != null)
+                    document.AddAnnotation(instance);
+            }
 
-        /// <summary>
-        /// Serializes the instance.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("NextNodeId", nextItemId);
-            info.AddValue("InstanceDocument", instanceDocument.ToString(SaveOptions.DisableFormatting));
-            info.AddValue("ModelItems", SaveModelItems());
+            this.document = document;
         }
 
         /// <summary>
@@ -119,17 +111,33 @@ namespace NXKit.XForms
             this.model = model;
             this.instance = instance;
 
-            if (instanceDocument != null)
-            {
-                instanceDocument.AddAnnotation(model);
-                instanceDocument.AddAnnotation(instance);
-            }
+            Initialize(document);
+        }
 
-            if (instanceElement != null)
-            {
-                instanceElement.AddAnnotation(model);
-                instanceElement.AddAnnotation(instance);
-            }
+        /// <summary>
+        /// Configures the state for the specified model and instance.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="instance"></param>
+        internal void Initialize(XFormsModelVisual model, XFormsInstanceVisual instance, XDocument document)
+        {
+            Contract.Requires<ArgumentNullException>(model != null);
+            Contract.Requires<ArgumentNullException>(instance != null);
+
+            Initialize(model, instance);
+            Initialize(document);
+        }
+
+        /// <summary>
+        /// Serializes the instance.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("NextNodeId", nextItemId);
+            info.AddValue("Document", document != null ? document.ToString(SaveOptions.DisableFormatting) : null);
+            info.AddValue("ModelItems", SaveModelItems());
         }
 
         /// <summary>
@@ -155,8 +163,11 @@ namespace NXKit.XForms
         /// <returns></returns>
         Tuple<int, XFormsModelItemState>[] SaveModelItems()
         {
+            if (document == null)
+                return null;
+
             // calculate index positions for instance data node
-            var nodeItems = InstanceElement
+            var nodeItems = document.Root
                 .DescendantsAndSelf()
                 .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
                 .Where(i => i is XElement || i is XAttribute)
@@ -199,7 +210,7 @@ namespace NXKit.XForms
             var stateMap = state.ToDictionary(i => i.Item1, i => i.Item2);
 
             // calculate index positions for instance data node
-            var nodeItems = InstanceElement
+            var nodeItems = Document.Root
                 .DescendantsAndSelf()
                 .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
                 .Where(i => i is XElement || i is XAttribute)

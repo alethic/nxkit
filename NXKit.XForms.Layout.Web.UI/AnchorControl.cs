@@ -58,7 +58,7 @@ namespace NXKit.XForms.Layout.Web.UI
                 }
                 else if (Uri.TryCreate(Visual.Href, UriKind.Relative, out uri))
                 {
-                    var resolvedUriStr = View.ResolveResourceClientUrl(uri.ToString(), null);
+                    var resolvedUriStr = View.ResolveResourceClientUrl(uri);
                     if (resolvedUriStr != null && Uri.TryCreate(resolvedUriStr, UriKind.RelativeOrAbsolute, out uri))
                     {
                         writer.AddAttribute(HtmlTextWriterAttribute.Href, uri.ToString());

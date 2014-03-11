@@ -39,19 +39,19 @@ namespace NXKit.Web.UI
                 this.control = control;
             }
 
-            public Stream Get(string href, string baseUri)
+            public Stream Get(Uri uri)
             {
-                return Resolve(ResourceActionMethod.Get, href, baseUri, null);
+                return Resolve(ResourceActionMethod.Get, uri, null);
             }
 
-            public Stream Put(string href, string baseUri, Stream body)
+            public Stream Put(Uri uri, Stream body)
             {
-                return Resolve(ResourceActionMethod.Put, href, baseUri, body);
+                return Resolve(ResourceActionMethod.Put, uri, body);
             }
 
-            Stream Resolve(ResourceActionMethod method, string href, string baseUri, Stream body)
+            Stream Resolve(ResourceActionMethod method, Uri uri, Stream body)
             {
-                var args = new ResourceActionEventArgs(method, href, baseUri, body);
+                var args = new ResourceActionEventArgs(method, uri, body);
                 control.OnResourceAction(args);
 
                 // return result
@@ -195,12 +195,12 @@ namespace NXKit.Web.UI
         /// <summary>
         /// Attempts to resolve a resource's local uri to a URI suitable for offering a link to the user.
         /// </summary>
-        /// <param name="href"></param>
+        /// <param name="uri"></param>
         /// <param name="baseUri"></param>
         /// <returns></returns>
-        public string ResolveResourceClientUrl(string href, string baseUri)
+        public string ResolveResourceClientUrl(Uri uri)
         {
-            var args = new ResourceActionEventArgs(ResourceActionMethod.ResolveClientUrl, href, baseUri);
+            var args = new ResourceActionEventArgs(ResourceActionMethod.ResolveClientUrl, uri);
             OnResourceAction(args);
 
             return args.ReferenceUri;

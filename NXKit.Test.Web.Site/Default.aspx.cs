@@ -6,7 +6,8 @@ using NXKit.Web.UI;
 namespace NXKit.Test.Web.Site
 {
 
-    public partial class Default : System.Web.UI.Page
+    public partial class Default :
+        System.Web.UI.Page
     {
 
         protected override void OnLoad(EventArgs args)
@@ -31,8 +32,11 @@ namespace NXKit.Test.Web.Site
             if (args.Method != ResourceActionMethod.Get)
                 return;
 
+            if (args.Uri.IsAbsoluteUri)
+                return;
+
             // attempt to load requested resource as embedded resource
-            args.Result = typeof(Default).Assembly.GetManifestResourceStream("NXKit.Test.Web.Site.Resources." + args.Href);
+            args.Result = typeof(Default).Assembly.GetManifestResourceStream("NXKit.Test.Web.Site.Resources." + args.Uri.ToString());
         }
 
     }

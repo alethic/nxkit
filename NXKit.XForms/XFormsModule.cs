@@ -258,8 +258,8 @@ namespace NXKit.XForms
                     try
                     {
                         // normalize uri with base
-                        var u = new Uri(instanceSrc);
-                        if (instance.Element.BaseUri != null && !u.IsAbsoluteUri)
+                        var u = new Uri(instanceSrc, UriKind.RelativeOrAbsolute);
+                        if (instance.Element.BaseUri.TrimToNull() != null && !u.IsAbsoluteUri)
                             u = new Uri(new Uri(instance.Element.BaseUri), u);
 
                         // return resource as a stream
@@ -271,33 +271,21 @@ namespace NXKit.XForms
                         var instanceDataDocument = XDocument.Load(resource);
 
                         // add to model
-                        instance.State.InstanceDocument = instanceDataDocument;
-                        instance.State.InstanceElement = instanceDataDocument.Root;
-                        instance.State.Initialize(model, instance);
+                        instance.State.Initialize(model, instance, instanceDataDocument);
                     }
                     catch (UriFormatException)
                     {
                         model.DispatchEvent<XFormsLinkExceptionEvent>();
-                        return;
                     }
                 }
                 else if (instanceChildElements.Length >= 2)
                 {
                     // invalid number of child elements
                     model.DispatchEvent<XFormsLinkExceptionEvent>();
-                    return;
                 }
                 else if (instanceChildElements.Length == 1)
                 {
-                    var instanceDataNode = instanceChildElements.First();
-
-                    // clone node into new document
-                    var d = new XDocument(instanceDataNode);
-
-                    // add to instance
-                    instance.State.InstanceDocument = d;
-                    instance.State.InstanceElement = d.Root;
-                    instance.State.Initialize(model, instance);
+                    instance.State.Initialize(model, instance, new XDocument(instanceChildElements[0]));
                 }
             }
         }
@@ -381,7 +369,7 @@ namespace NXKit.XForms
                 // for each each instance underneath the model
                 foreach (var instance in model.Instances)
                 {
-                    var instanceModelItems = instance.State.InstanceElement
+                    var instanceModelItems = instance.State.Document.Root
                         .DescendantsAndSelf()
                         .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
                         .Where(i => i is XElement || i is XAttribute)

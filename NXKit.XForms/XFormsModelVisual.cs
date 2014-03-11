@@ -76,7 +76,7 @@ namespace NXKit.XForms
             {
                 // default context is only available once instances have been instantiated 
                 if (State != null && Instances.Any())
-                    return new XFormsEvaluationContext(this, Instances.First(), Instances.First().State.InstanceElement, 1, 1);
+                    return new XFormsEvaluationContext(this, Instances.First(), Instances.First().State.Document.Root, 1, 1);
                 else
                     return null;
             }
@@ -104,7 +104,7 @@ namespace NXKit.XForms
 
             // attempt to load model instance data, if possible; if no instance loaded, exit
             Module.ProcessModelInstance(this);
-            if (!Instances.Any(i => i.State.InstanceDocument != null))
+            if (!Instances.Any(i => i.State.Document != null))
                 return;
 
             Module.RebuildModel(this);

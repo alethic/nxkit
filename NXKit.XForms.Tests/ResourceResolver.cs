@@ -6,28 +6,28 @@ namespace NXKit.XForms.Tests
 {
 
     class ResourceResolver :
-        IResourceResolver
+        IResolver
     {
 
-        readonly Func<string, string, Stream> getFunc;
-        readonly Func<string, string, Stream, Stream> putFunc;
+        readonly Func<string, Stream> getFunc;
+        readonly Func<string, Stream, Stream> putFunc;
 
         public ResourceResolver(
-            Func<string, string, Stream> getFunc,
-            Func<string, string, Stream, Stream> putFunc)
+            Func<string, Stream> getFunc,
+            Func<string, Stream, Stream> putFunc)
         {
             Contract.Requires<ArgumentNullException>(getFunc != null);
             Contract.Requires<ArgumentNullException>(putFunc != null);
         }
 
-        public Stream Get(string href, string baseUri)
+        public Stream Get(string href)
         {
-            return getFunc(href, baseUri);
+            return getFunc(href);
         }
 
-        public Stream Put(string href, string baseUri, Stream stream)
+        public Stream Put(string href, Stream stream)
         {
-            return putFunc(href, baseUri, stream);
+            return putFunc(href, stream);
         }
 
     }
