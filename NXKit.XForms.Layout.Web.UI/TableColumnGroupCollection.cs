@@ -8,7 +8,8 @@ using NXKit.Web.UI;
 namespace NXKit.XForms.Layout.Web.UI
 {
 
-    public class TableColumnGroupCollection : IEnumerable<TableColumnGroup>
+    public class TableColumnGroupCollection :
+        IEnumerable<TableColumnGroup>
     {
 
         TableColumnGroup[] columnGroups;

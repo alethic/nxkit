@@ -1,7 +1,6 @@
 ﻿using System.Xml.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using NXKit.Util;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NXKit.Util.Tests
 {

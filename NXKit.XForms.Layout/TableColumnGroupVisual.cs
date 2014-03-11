@@ -4,7 +4,9 @@ namespace NXKit.XForms.Layout
 {
 
     [Visual("table-column-group")]
-    public class TableColumnGroupVisual : LayoutVisual
+    public class TableColumnGroupVisual :
+        LayoutVisual,
+        ITableColumnGroupContainer
     {
 
         public string Name

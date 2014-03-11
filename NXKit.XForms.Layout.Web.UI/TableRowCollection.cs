@@ -5,10 +5,11 @@ using System.Linq;
 namespace NXKit.XForms.Layout.Web.UI
 {
 
-    public class TableRowCollection : IEnumerable<TableRow>
+    public class TableRowCollection :
+        IEnumerable<TableRow>
     {
 
-        private TableRow[] rows;
+        TableRow[] rows;
 
         /// <summary>
         /// Initializes a new instance.

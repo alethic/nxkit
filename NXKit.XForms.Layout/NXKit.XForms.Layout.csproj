@@ -88,6 +88,7 @@
     <Compile Include="CategoryVisual.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="FormVisual.cs" />
+    <Compile Include="ITableColumnGroupContainer.cs" />
     <Compile Include="LayoutHelper.cs" />
     <Compile Include="Importance.cs" />
     <Compile Include="ImportanceAnnotation.cs" />

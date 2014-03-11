@@ -12,6 +12,26 @@ namespace NXKit.Util
     {
 
         /// <summary>
+        /// Obtains the default namespace to be applied to the given attribute value.
+        /// </summary>
+        /// <param name="attribute"></param>
+        /// <returns></returns>
+        static XNamespace GetDefaultNamespace(XAttribute attribute)
+        {
+            return attribute.Name.Namespace.NamespaceName != "" ? attribute.Name.Namespace : attribute.Parent.Name.Namespace;
+        }
+
+        /// <summary>
+        /// Obtains the fully qualified version of the <see cref="XAttribute"/>'s name.
+        /// </summary>
+        /// <param name="attribute"></param>
+        /// <returns></returns>
+        public static XName FullyQualifiedName(this XAttribute attribute)
+        {
+            return GetDefaultNamespace(attribute) + attribute.Name.LocalName;
+        }
+
+        /// <summary>
         /// Obtains the value of the specified node as an <see cref="XName"/> given it's current location in the document hierarchy.
         /// </summary>
         /// <param name="attribute"></param>
@@ -40,16 +60,6 @@ namespace NXKit.Util
                 GetDefaultNamespace(attribute);
 
             return ns + localName;
-        }
-
-        /// <summary>
-        /// Obtains the default namespace to be applied to the given attribute value.
-        /// </summary>
-        /// <param name="attribute"></param>
-        /// <returns></returns>
-        static XNamespace GetDefaultNamespace(XAttribute attribute)
-        {
-            return attribute.Name.Namespace.NamespaceName != "" ? attribute.Name.Namespace : attribute.Parent.Name.Namespace;
         }
 
     }

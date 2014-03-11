@@ -2,7 +2,9 @@
 {
 
     [Visual("table")]
-    public class TableVisual : LayoutVisual
+    public class TableVisual : 
+        LayoutVisual,
+        ITableColumnGroupContainer
     {
 
         public Importance Importance

@@ -205,11 +205,41 @@
             <f:section>
                 <xf:label>Health Questions</xf:label>
                 <f:table>
+                    <f:table-column-group name="primary">
+                        <xf:label>Applicant</xf:label>
+                        <f:table-column name="primary_yes">
+                            Yes
+                        </f:table-column>
+                        <f:table-column name="primary_no">
+                            No
+                        </f:table-column>
+                    </f:table-column-group>
+                    <f:table-column-group name="secondary">
+                        <xf:label>Spouse/DP</xf:label>
+                        <f:table-column name="secondary_yes">
+                            Yes
+                        </f:table-column>
+                        <f:table-column name="secondary_no">
+                            No
+                        </f:table-column>
+                    </f:table-column-group>
+                    <f:table-column-group>
+                        <f:table-column name="question">
+                            Please answer the following questions by checking “Yes” or “No.”
+                        </f:table-column>
+                    </f:table-column-group>
                     <f:table-row>
-                        <f:table-cell></f:table-cell>
-                        <f:table-cell>Applicant</f:table-cell>
-                        <f:table-cell>Spouse</f:table-cell>
+                        <f:table-row column-group="primary">
+                            <f:table-cell>Y</f:table-cell>
+                            <f:table-cell>N</f:table-cell>
+                        </f:table-row>
+                        <f:table-row column-group="secondary">
+                            <f:table-cell>Y</f:table-cell>
+                            <f:table-cell>N</f:table-cell>
+                        </f:table-row>
                     </f:table-row>
+                </f:table>
+                <f:table>
                     <f:table-row>
                         <f:table-cell>1. Within the last 12 months, have you used tobacco or nicotine in any form?</f:table-cell>
                         <f:table-cell>

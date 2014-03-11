@@ -16,6 +16,7 @@ namespace NXKit.XForms.Layout.Web.UI
             Table = table;
             Index = index;
             Visual = visual;
+            //ColumnGroups = new TableColumnGroupCollection(view, visual);
             Columns = new TableColumnCollection(view, this, visual);
         }
 
@@ -24,6 +25,8 @@ namespace NXKit.XForms.Layout.Web.UI
         public Table Table { get; private set; }
 
         public TableColumnGroupVisual Visual { get; private set; }
+
+        public TableColumnGroupCollection ColumnGroups { get; private set; }
 
         public TableColumnCollection Columns { get; private set; }
 
