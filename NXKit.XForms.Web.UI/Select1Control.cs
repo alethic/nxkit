@@ -1,11 +1,14 @@
-﻿using NXKit.Web.UI;
-using NXKit.XForms;
+﻿using System;
+using System.Diagnostics.Contracts;
+
+using NXKit.Web.UI;
 
 namespace NXKit.XForms.Web.UI
 {
 
     [VisualControlTypeDescriptor]
-    public class Select1ControlDescriptor : VisualControlTypeDescriptor
+    public class Select1ControlDescriptor :
+        VisualControlTypeDescriptor
     {
 
         public override bool CanHandleVisual(Visual visual)
@@ -25,17 +28,20 @@ namespace NXKit.XForms.Web.UI
 
     }
 
-    public class Select1Control : VisualControl<XFormsSelect1Visual>
+    public class Select1Control :
+        VisualControl<XFormsSelect1Visual>
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="view"></param>
         /// <param name="visual"></param>
         public Select1Control(View view, XFormsSelect1Visual visual)
             : base(view, visual)
         {
-
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
         }
 
         protected override void CreateChildControls()
@@ -52,21 +58,21 @@ namespace NXKit.XForms.Web.UI
                 CreateSelect1MinimalControl();
         }
 
-        private void CreateSelect1FullControl()
+        void CreateSelect1FullControl()
         {
             var ctl = new Select1FullControl(View, Visual);
             ctl.ID = "full";
             Controls.Add(ctl);
         }
 
-        private void CreateSelect1CompactControl()
+        void CreateSelect1CompactControl()
         {
             var ctl = new Select1CompactControl(View, Visual);
             ctl.ID = "compact";
             Controls.Add(ctl);
         }
 
-        private void CreateSelect1MinimalControl()
+        void CreateSelect1MinimalControl()
         {
             var ctl = new Select1MinimalControl(View, Visual);
             ctl.ID = "minimal";
