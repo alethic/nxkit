@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Web.UI.WebControls;
 
 using Telerik.Web.UI;
 
-using NXKit.XForms;
 using NXKit.Web.UI;
 
 namespace NXKit.XForms.Web.UI
 {
 
-    public class InputIntegerControl : VisualControl<XFormsInputVisual>
+    public class InputIntegerControl : 
+        SingleNodeBindingVisualControl<XFormsInputVisual>
     {
 
-        private RadNumericTextBox ctl;
-        private CustomValidator val;
+        RadNumericTextBox ctl;
+        CustomValidator val;
 
         /// <summary>
         /// Initializes a new instance.
@@ -23,30 +24,19 @@ namespace NXKit.XForms.Web.UI
         public InputIntegerControl(NXKit.Web.UI.View view, XFormsInputVisual visual)
             : base(view, visual)
         {
-            Visual.AddEventHandler<XFormsValueChangedEvent>(Visual_ValueChanged, false);
-            Visual.AddEventHandler<XFormsReadOnlyEvent>(Visual_ReadOnlyChanged, false);
-            Visual.AddEventHandler<XFormsReadWriteEvent>(Visual_ReadOnlyChanged, false);
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
         }
 
-        /// <summary>
-        /// Invoked when the value of the Visual changes.
-        /// </summary>
-        /// <param name="ev"></param>
-        private void Visual_ValueChanged(Event ev)
+        protected override void OnVisualValueChanged()
         {
-            EnsureChildControls();
-
+            base.OnVisualValueChanged();
             ctl.Text = BindingUtil.Get<string>(Visual.Binding);
         }
 
-        /// <summary>
-        /// Invoked when the read-only state of the Visual changes.
-        /// </summary>
-        /// <param name="ev"></param>
-        private void Visual_ReadOnlyChanged(Event ev)
+        protected override void OnVisualReadOnlyOrReadWrite()
         {
-            EnsureChildControls();
-
+            base.OnVisualReadOnlyOrReadWrite();
             ctl.ReadOnly = Visual.ReadOnly;
         }
 
@@ -90,7 +80,12 @@ namespace NXKit.XForms.Web.UI
             Controls.Add(decorator);
         }
 
-        private void validator_ServerValidate(object source, ServerValidateEventArgs args)
+        void ctl_TextChanged(object sender, EventArgs args)
+        {
+            BindingUtil.Set(Visual.Binding, ctl.Value);
+        }
+
+        void validator_ServerValidate(object source, ServerValidateEventArgs args)
         {
             // skip irrelevant controls; can't be invalid
             if (!Visual.Relevant)
@@ -113,11 +108,6 @@ namespace NXKit.XForms.Web.UI
                 if (alertVisual != null)
                     val.ErrorMessage = alertVisual.ToText();
             }
-        }
-
-        private void ctl_TextChanged(object sender, EventArgs args)
-        {
-            BindingUtil.Set(Visual.Binding, ctl.Value);
         }
 
     }

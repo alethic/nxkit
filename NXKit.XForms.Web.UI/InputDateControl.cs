@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Linq;
+using System.Diagnostics.Contracts;
 using System.Web.UI;
 
 using Telerik.Web.UI;
 using Telerik.Web.UI.Calendar;
 
-using NXKit.XForms;
 using NXKit.Web.UI;
 
 namespace NXKit.XForms.Web.UI
 {
 
-    public class InputDateControl : VisualControl<XFormsInputVisual>
+    public class InputDateControl :
+        SingleNodeBindingVisualControl<XFormsInputVisual>
     {
 
         RadDatePicker ctl;
@@ -23,30 +23,18 @@ namespace NXKit.XForms.Web.UI
         public InputDateControl(View view, XFormsInputVisual visual)
             : base(view, visual)
         {
-            Visual.AddEventHandler<XFormsValueChangedEvent>(Visual_ValueChanged, false);
-            Visual.AddEventHandler<XFormsReadOnlyEvent>(Visual_ReadOnlyChanged, false);
-            Visual.AddEventHandler<XFormsReadWriteEvent>(Visual_ReadOnlyChanged, false);
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
         }
 
-        /// <summary>
-        /// Invoked when the value of the Visual changes.
-        /// </summary>
-        /// <param name="ev"></param>
-        private void Visual_ValueChanged(Event ev)
+        protected override void OnVisualValueChanged()
         {
-            EnsureChildControls();
-
+            base.OnVisualValueChanged();
             ctl.SelectedDate = BindingUtil.Get<DateTime?>(Visual.Binding);
         }
 
-        /// <summary>
-        /// Invoked when the read-only state of the Visual changes.
-        /// </summary>
-        /// <param name="ev"></param>
-        private void Visual_ReadOnlyChanged(Event ev)
+        protected override void OnVisualReadOnlyOrReadWrite()
         {
-            EnsureChildControls();
-
             ctl.Enabled = !Visual.ReadOnly;
         }
 
@@ -66,12 +54,12 @@ namespace NXKit.XForms.Web.UI
 
             var labelVisual = Visual.FindLabelVisual();
             if (labelVisual != null)
-                ctl.DateInput.EmptyMessage = labelVisual.ToText();
+                ctl.DateInput.Label = labelVisual.ToText();
 
             Controls.Add(ctl);
         }
 
-        private void ctl_SelectedDateChanged(object sender, SelectedDateChangedEventArgs args)
+        void ctl_SelectedDateChanged(object sender, SelectedDateChangedEventArgs args)
         {
             BindingUtil.Set(Visual.Binding, ctl.SelectedDate);
         }
