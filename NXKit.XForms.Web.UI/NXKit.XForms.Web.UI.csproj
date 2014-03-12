@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HintControl.cs" />
+    <Compile Include="SingleNodeBindingVisualControl.cs" />
     <Compile Include="SingleNodeBindingVisualContentControl.cs" />
     <Compile Include="VisualExtensions.cs" />
     <Compile Include="BeginRenderEventArgs.cs" />
