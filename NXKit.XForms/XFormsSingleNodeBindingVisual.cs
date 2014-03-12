@@ -61,11 +61,28 @@ namespace NXKit.XForms
         {
             get
             {
-                if (Binding != null && Binding.Node != null && !Binding.Relevant)
+                // 8.1.1 Implementation Requirements Common to All Form Controls
+
+                // the Single Node Binding is expressed and resolves to empty nodeset
+                if (Binding == null)
+                    return true;
+
+                // the Single Node Binding is expressed and resolves to empty nodeset
+                if (Binding.Node == null)
                     return false;
 
-                if (Ascendants().OfType<IRelevancyScope>().Any(i => !i.Relevant))
+                // the Single Node Binding is expressed and resolves to a non-relevant instance node
+                if (Binding.Relevant == false)
                     return false;
+
+                // the form control is contained by a non-relevant switch or group (which includes a non-relevant repeat item)
+                var scope = Ascendants().OfType<IRelevancyScope>().FirstOrDefault();
+                if (scope != null)
+                    if (scope.Relevant == false)
+                        return false;
+
+                // the form control is contained by a non-selected case element of a switch
+                // TODO
 
                 return true;
             }

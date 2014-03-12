@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NXKit.Web.UI;
+﻿using NXKit.Web.UI;
 
 namespace NXKit.XForms.Web.UI
 {
@@ -28,11 +23,6 @@ namespace NXKit.XForms.Web.UI
         public override bool IsOpaque(Visual visual)
         {
             return false;
-        }
-
-        public override VisualControl CreateControl(View view, Visual visual)
-        {
-            return new InputControl(view, (XFormsInputVisual)visual);
         }
 
     }
