@@ -57,6 +57,8 @@ namespace NXKit.Web.UI
 
         }
 
+        FormPage currentPage;
+
         /// <summary>
         /// Set of <see cref="VisualControlTypeDescriptor"/> instances that generate <see cref="VisualControls"/>.
         /// </summary>
@@ -220,13 +222,32 @@ namespace NXKit.Web.UI
             if (Document == null)
                 return null;
 
-            return FormNavigation.CreateNavigations(null, Document.RootVisual);
+            return FormNavigation.CreateNavigations(null, Document.RootVisual).ToList();
         }
 
         /// <summary>
-        /// Gets or sets the currently rendered page.
+        /// Gets or sets the current page.
         /// </summary>
-        public FormPage CurrentPage { get; set; }
+        public FormPage CurrentPage
+        {
+            get { return currentPage; }
+            set { currentPage = value; OnCurrentPageChanged(EventArgs.Empty); }
+        }
+
+        /// <summary>
+        /// Raised when the current page is changed.
+        /// </summary>
+        public event EventHandler CurrentPageChanged;
+
+        /// <summary>
+        /// Raises the CurrentPageChanged event.
+        /// </summary>
+        /// <param name="args"></param>
+        void OnCurrentPageChanged(EventArgs args)
+        {
+            if (CurrentPageChanged != null)
+                CurrentPageChanged(this, args);
+        }
 
         /// <summary>
         /// Invoked on the Init phase.
