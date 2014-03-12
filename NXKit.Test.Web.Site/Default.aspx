@@ -22,8 +22,12 @@
             CssClass="FormView"
             OnLoad="View_Load"
             OnResourceAction="View_ResourceAction" />
-        <asp:Button ID="Submit" runat="server"
-            Text="Submit" />
+        <asp:Button ID="NextButton" runat="server"
+            Text="Next"
+            OnClick="NextButton_Click" />
+        <asp:Button ID="PrevButton" runat="server"
+            Text="Previous"
+            OnClick="PrevButton_Click" />
     </form>
 </body>
 

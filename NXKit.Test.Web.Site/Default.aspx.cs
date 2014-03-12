@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using NXKit.Web.UI;
 
 namespace NXKit.Test.Web.Site
@@ -35,6 +35,22 @@ namespace NXKit.Test.Web.Site
 
             // attempt to load requested resource as embedded resource
             args.Result = typeof(Default).Assembly.GetManifestResourceStream("NXKit.Test.Web.Site.Resources." + args.Uri.ToString());
+        }
+
+        protected void NextButton_Click(object sender, EventArgs args)
+        {
+            var l = new LinkedList<FormNavigation>(View.Navigations);
+            var n = l.Find(View.CurrentPage);
+            if (n.Next != null)
+                View.Navigate(n.Next.Value);
+        }
+
+        protected void PrevButton_Click(object sender, EventArgs args)
+        {
+            var l = new LinkedList<FormNavigation>(View.Navigations);
+            var n = l.Find(View.CurrentPage);
+            if (n.Previous != null)
+                View.Navigate(n.Previous.Value);
         }
 
     }

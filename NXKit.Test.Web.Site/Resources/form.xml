@@ -4,11 +4,21 @@
         xmlns:ev="http://www.w3.org/2001/xml-events">
     <xf:model id="data">
         <xf:instance xmlns=""
+                     id="misc">
+            <data>
+                <secondary>false</secondary>
+            </data>
+        </xf:instance>
+        <xf:bind nodeset="xf:instance('misc')/secondary"
+                 type="xsd:boolean" />
+        <xf:instance xmlns=""
                      id="primaryperson"
                      src="primaryperson.xml" />
         <xf:instance xmlns=""
                      id="secondaryperson"
                      src="secondaryperson.xml" />
+        <xf:bind nodeset="xf:instance('secondaryperson')"
+                 relevant="xf:instance('misc')/secondary = 'true'"/>
         <xf:instance xmlns=""
                      id="primaryelections"
                      src="primaryelections.xml" />
@@ -55,6 +65,13 @@
         <xf:label>Enrollment Information</xf:label>
         <f:page>
             <xf:label>Request For Coverage</xf:label>
+            <f:section xf:ref="xf:instance('data')">
+                <f:p>This coverage is awesome and lots of nice stuff can be said about it.</f:p>
+                <xf:input ref="secondary"
+                          appearance="full">
+                    <xf:label>Yes, I'd like to take advantage of this offer for my spouse or other partner or whatever and stuff and we will fill in the contents of the rest of this text later.</xf:label>
+                </xf:input>
+            </f:section>
             <f:section xf:ref="xf:instance('primaryperson')">
                 <xf:label>Additional Information About You</xf:label>
                 <xf:input ref="heightfeet"
@@ -98,6 +115,8 @@
                     <xf:label>Work Phone</xf:label>
                 </xf:input>
             </f:section>
+        </f:page>
+        <f:page>
             <f:section xf:ref="xf:instance('secondaryperson')">
                 <xf:label>Your Spouse's Information</xf:label>
                 <xf:label>Complete if your spouse or domestic partner (DP) is requesting coverage.</xf:label>
