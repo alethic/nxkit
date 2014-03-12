@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -143,10 +142,12 @@ namespace NXKit.XForms
             {
                 if (!nodesCached)
                 {
-                    if (Result is string)
-                        nodes = null;
-                    else if (Result is IEnumerable)
-                        nodes = ((IEnumerable)Result).OfType<XObject>().ToArray();
+                    if (Result is XPathNodeIterator)
+                        return ((XPathNodeIterator)Result)
+                            .Cast<XPathNavigator>()
+                            .Select(i => i.UnderlyingObject)
+                            .Cast<XObject>()
+                            .ToArray();
 
                     nodesCached = true;
                 }

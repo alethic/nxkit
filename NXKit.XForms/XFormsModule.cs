@@ -702,9 +702,8 @@ namespace NXKit.XForms
             using (ec.Scope())
             {
                 var nv = ((XNode)ec.Node).CreateNavigator();
-                var nd = ((XNode)ec.Node).XPathEvaluate(expression, nc);
-                //var xp = XPathExpression.Compile(expression, nc);
-                //var nd = nv.Evaluate(xp, nv.Select("."));
+                var xp = XPathExpression.Compile(expression, nc);
+                var nd = nv.Evaluate(xp);
 
                 return nd;
             }
