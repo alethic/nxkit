@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web.UI;
 
 using NXKit.Web.UI;
 
@@ -7,7 +8,8 @@ namespace NXKit.XForms.Layout.Web.UI
 {
 
     [VisualControlTypeDescriptor]
-    public class CategoryControlDescriptor : VisualControlTypeDescriptor
+    public class CategoryControlDescriptor :
+        VisualControlTypeDescriptor
     {
 
         public override bool CanHandleVisual(Visual visual)
@@ -27,7 +29,8 @@ namespace NXKit.XForms.Layout.Web.UI
 
     }
 
-    public class CategoryControl : VisualContentControl<CategoryVisual>
+    public class CategoryControl :
+        VisualContentControl<CategoryVisual>
     {
 
         /// <summary>
@@ -51,6 +54,14 @@ namespace NXKit.XForms.Layout.Web.UI
                 if (ctl != null)
                     ctl.Visible = View.CurrentPage.Visual == page;
             }
+        }
+
+        protected override void Render(System.Web.UI.HtmlTextWriter writer)
+        {
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "Layout_Category");
+            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+            base.Render(writer);
+            writer.RenderEndTag();
         }
 
     }
