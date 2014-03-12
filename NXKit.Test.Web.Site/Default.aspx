@@ -22,12 +22,13 @@
             CssClass="FormView"
             OnLoad="View_Load"
             OnResourceAction="View_ResourceAction" />
+        <asp:Button ID="PrevButton" runat="server"
+            Text="Previous"
+            CausesValidation="false"
+            OnClick="PrevButton_Click" />
         <asp:Button ID="NextButton" runat="server"
             Text="Next"
             OnClick="NextButton_Click" />
-        <asp:Button ID="PrevButton" runat="server"
-            Text="Previous"
-            OnClick="PrevButton_Click" />
     </form>
 </body>
 

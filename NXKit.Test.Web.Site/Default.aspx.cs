@@ -39,18 +39,42 @@ namespace NXKit.Test.Web.Site
 
         protected void NextButton_Click(object sender, EventArgs args)
         {
+            View.Document.Invoke();
+
             var l = new LinkedList<FormNavigation>(View.Navigations);
-            var n = l.Find(View.CurrentPage);
-            if (n.Next != null)
-                View.Navigate(n.Next.Value);
+            var p = l.Find(View.CurrentPage);
+
+            do
+            {
+                p = p.Next;
+            }
+            while (p != null && !p.Value.Relevant);
+
+            if (p != null)
+                View.Navigate(p.Value);
+
+            if (View.CurrentPage == null)
+                View.Navigate(l.First.Value);
         }
 
         protected void PrevButton_Click(object sender, EventArgs args)
         {
+            View.Document.Invoke();
+
             var l = new LinkedList<FormNavigation>(View.Navigations);
-            var n = l.Find(View.CurrentPage);
-            if (n.Previous != null)
-                View.Navigate(n.Previous.Value);
+            var p = l.Find(View.CurrentPage);
+
+            do
+            {
+                p = p.Previous;
+            }
+            while (p != null && !p.Value.Relevant);
+
+            if (p != null)
+                View.Navigate(p.Value);
+
+            if (View.CurrentPage == null)
+                View.Navigate(l.First.Value);
         }
 
     }
