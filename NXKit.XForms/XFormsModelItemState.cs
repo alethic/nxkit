@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
 
@@ -33,6 +34,8 @@ namespace NXKit.XForms
         /// <param name="context"></param>
         public XFormsModelItemState(SerializationInfo info, StreamingContext context)
         {
+            Contract.Requires<ArgumentNullException>(info != null);
+
             Id = (int?)info.GetValue("Id", typeof(int?));
             Type = (XName)info.GetValue("Type", typeof(XName));
             ReadOnly = (bool?)info.GetValue("ReadOnly", typeof(bool?));

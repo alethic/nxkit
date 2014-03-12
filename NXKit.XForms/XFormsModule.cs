@@ -978,6 +978,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal XName GetModelItemType(XObject item)
         {
+            Contract.Requires<ArgumentNullException>(item != null);
+
             return GetModelItem(item).Type ?? NXKit.XmlSchemaConstants.XMLSchema + "string";
         }
 
@@ -988,6 +990,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal bool GetModelItemReadOnly(XObject item)
         {
+            Contract.Requires<ArgumentNullException>(item != null);
+
             return item.AncestorsAndSelf().Any(i => GetModelItem(i).ReadOnly ?? false);
         }
 
@@ -998,6 +1002,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal bool GetModelItemRequired(XObject item)
         {
+            Contract.Requires<ArgumentNullException>(item != null);
+
             return GetModelItem(item).Required ?? false;
         }
 
@@ -1008,6 +1014,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal bool GetModelItemRelevant(XObject item)
         {
+            Contract.Requires<ArgumentNullException>(item != null);
+
             return item.AncestorsAndSelf().All(i => GetModelItem(i).Relevant ?? true);
         }
 
@@ -1018,6 +1026,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal bool GetModelItemValid(XObject item)
         {
+            Contract.Requires<ArgumentNullException>(item != null);
+
             return GetModelItem(item).Valid ?? true;
         }
 
@@ -1027,6 +1037,8 @@ namespace NXKit.XForms
         /// <param name="visual"></param>
         internal void InvokeAction(IActionVisual visual)
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
             var outermostAction = !executingOutermostActionHandler;
             if (outermostAction)
                 executingOutermostActionHandler = true;
@@ -1043,13 +1055,6 @@ namespace NXKit.XForms
         internal void RaiseMessage(XFormsMessageVisual visual)
         {
             throw new NotImplementedException();
-
-            //var ec = visual.BindingContext;
-            //if (ec == null)
-            //    return;
-
-            //// add the visual to the set of messages to be raised
-            //ec.Model.State.Messages.Add(visual);
         }
 
         /// <summary>
