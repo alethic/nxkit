@@ -17,6 +17,17 @@
         <xf:instance xmlns=""
                      id="primaryperson"
                      src="primaryperson.xml" />
+        <xf:bind nodeset="xf:instance('primaryperson')/heightfeet"
+                 required="true()"
+                 type="xsd:int"/>
+        <xf:bind nodeset="xf:instance('primaryperson')/heightinches"
+                 required="true()"
+                 type="xsd:int"/>
+        <xf:bind nodeset="xf:instance('primaryperson')/weight"
+                 required="true()"
+                 type="xsd:int"/>
+        <xf:bind nodeset="xf:instance('primaryperson')/dateofbirth"
+                 type="xsd:date"/>
         <xf:instance xmlns=""
                      id="secondaryperson"
                      src="secondaryperson.xml" />
@@ -77,21 +88,27 @@
         </f:section>
         <f:section xf:ref="xf:instance('primaryperson')">
             <xf:label>Additional Information About You</xf:label>
-            <xf:input ref="heightfeet"
-                      appearance="full">
-                <xf:label>Feet</xf:label>
-            </xf:input>
-            <xf:input ref="heightinches"
-                      appearance="full">
-                <xf:label>Inches</xf:label>
-            </xf:input>
-            <xf:input ref="weight"
-                      appearance="full">
-                <xf:label>Weight</xf:label>
-            </xf:input>
-            <xf:select1 ref="gender"
-                        appearance="full">
-                <xf:label>Gender</xf:label>
+            <xf:group>
+                <xf:range ref="heightfeet"
+                          start="2"
+                          end="15"
+                          step="1">
+                    <xf:label>Feet</xf:label>
+                </xf:range>
+                <xf:range ref="heightinches"
+                          start="0"
+                          end="11"
+                          step="1">
+                    <xf:label>Inches</xf:label>
+                </xf:range>
+                <xf:range ref="weight"
+                          start="50"
+                          end="500"
+                          step="5">
+                    <xf:label>Weight</xf:label>
+                </xf:range>
+            <xf:select1 ref="gender">
+                <xf:label>Sex</xf:label>
                 <xf:item>
                     <xf:label>Male</xf:label>
                     <xf:value>M</xf:value>
@@ -101,20 +118,17 @@
                     <xf:value>F</xf:value>
                 </xf:item>
             </xf:select1>
-            <xf:input ref="socialsecuritynumber"
-                      appearance="full">
+            </xf:group>
+            <xf:input ref="socialsecuritynumber">
                 <xf:label>SSN</xf:label>
             </xf:input>
-            <xf:input ref="dateofbirth"
-                      appearance="full">
+            <xf:input ref="dateofbirth">
                 <xf:label>Date of Birth</xf:label>
             </xf:input>
-            <xf:input ref="telephone1"
-                      appearance="full">
+            <xf:input ref="telephone1">
                 <xf:label>Home Phone</xf:label>
             </xf:input>
-            <xf:input ref="telephone2"
-                      appearance="full">
+            <xf:input ref="telephone2">
                 <xf:label>Work Phone</xf:label>
             </xf:input>
         </f:section>
