@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Web.UI;
 
@@ -8,13 +9,17 @@ using NXKit.Util;
 namespace NXKit.Web.UI
 {
 
-    public class VisualControlCollection : Control
+    /// <summary>
+    /// Provides a <see cref="Control"/> type that generates a <see cref="Control"/> hierarchy for a given <see 
+    /// cref="StructuralVisual"/>.
+    /// </summary>
+    public class VisualControlCollection : 
+        Control
     {
 
-        /// <summary>
-        /// Maintains <see cref="VisualControl"/> instances for children visuals.
-        /// </summary>
-        private Dictionary<Visual, VisualControl> cache = new Dictionary<Visual, VisualControl>();
+        readonly View view;
+        readonly StructuralVisual visual;
+        readonly Dictionary<Visual, VisualControl> cache = new Dictionary<Visual, VisualControl>();
 
         /// <summary>
         /// Initializes a new instance.
@@ -23,19 +28,28 @@ namespace NXKit.Web.UI
         /// <param name="visual"></param>
         public VisualControlCollection(View view, StructuralVisual visual)
         {
-            View = view;
-            Visual = visual;
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
+
+            this.view = view;
+            this.visual = visual;
         }
 
         /// <summary>
         /// Gets a reference to the <see cref="View"/>.
         /// </summary>
-        public View View { get; private set; }
+        public View View
+        {
+            get { return view; }
+        }
 
         /// <summary>
         /// Gets a reference to the <see cref="Visual"/> associated with this manager.
         /// </summary>
-        public StructuralVisual Visual { get; private set; }
+        public StructuralVisual Visual
+        {
+            get { return visual; }
+        }
 
         /// <summary>
         /// Invoked for the Init phase.
@@ -76,8 +90,7 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         public virtual VisualControl GetOrCreateControl(Visual visual)
         {
-            if (visual == null)
-                throw new ArgumentNullException("visual");
+            Contract.Requires<ArgumentNullException>(visual != null);
 
             // return existing control
             var control = cache.GetOrDefault(visual);
