@@ -241,6 +241,9 @@ namespace NXKit
             // initialize modules
             foreach (var module in modules)
                 module.Initialize(this);
+
+            // ensure document has been invoked at least once
+            Invoke();
         }
 
         /// <summary>
