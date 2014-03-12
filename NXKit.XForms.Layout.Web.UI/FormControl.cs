@@ -1,11 +1,13 @@
 ﻿
+using System.Web.UI;
 using NXKit.Web.UI;
 
 namespace NXKit.XForms.Layout.Web.UI
 {
 
     [VisualControlTypeDescriptor]
-    public class FormControlDescriptor : VisualControlTypeDescriptor
+    public class FormControlDescriptor : 
+        VisualControlTypeDescriptor
     {
 
         public override bool CanHandleVisual(Visual visual)
@@ -25,7 +27,8 @@ namespace NXKit.XForms.Layout.Web.UI
 
     }
 
-    public class FormControl : VisualContentControl<FormVisual>
+    public class FormControl : 
+        VisualContentControl<FormVisual>
     {
 
         /// <summary>
@@ -36,6 +39,14 @@ namespace NXKit.XForms.Layout.Web.UI
             : base(view, visual)
         {
 
+        }
+
+        protected override void Render(System.Web.UI.HtmlTextWriter writer)
+        {
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "Layout_Form");
+            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+            base.Render(writer);
+            writer.RenderEndTag();
         }
 
     }
