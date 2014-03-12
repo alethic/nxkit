@@ -29,7 +29,7 @@ namespace NXKit.XForms.Web.UI
     }
 
     public class Select1Control :
-        VisualControl<XFormsSelect1Visual>
+        SingleNodeBindingVisualControl<XFormsSelect1Visual>
     {
 
         /// <summary>
