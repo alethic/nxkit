@@ -6,10 +6,26 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
+    /// <summary>
+    /// Records additional information associated with a model item.
+    /// </summary>
     [Serializable]
-    public class XFormsModelItemState : ISerializable
+    class XFormsModelItemState :
+        ISerializable
     {
 
+        int? id;
+        XName type;
+        bool? readOnly;
+        bool? required;
+        bool? relevant;
+        bool? valid;
+
+        bool clear;
+        XElement newElement;
+        string newValue;
+
+        bool dispatchValueChanged;
         bool dispatchReadOnly;
         bool dispatchReadWrite;
         bool dispatchRequired;
@@ -22,7 +38,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsModelItemState()
+        internal XFormsModelItemState()
         {
 
         }
@@ -32,25 +48,41 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public XFormsModelItemState(SerializationInfo info, StreamingContext context)
+        internal XFormsModelItemState(SerializationInfo info, StreamingContext context)
         {
             Contract.Requires<ArgumentNullException>(info != null);
 
-            Id = (int?)info.GetValue("Id", typeof(int?));
-            Type = (XName)info.GetValue("Type", typeof(XName));
-            ReadOnly = (bool?)info.GetValue("ReadOnly", typeof(bool?));
-            Required = (bool?)info.GetValue("Required", typeof(bool?));
-            Relevant = (bool?)info.GetValue("Relevant", typeof(bool?));
-            Valid = (bool?)info.GetValue("Valid", typeof(bool?));
+            id = (int?)info.GetValue("Id", typeof(int?));
+            type = (XName)info.GetValue("Type", typeof(XName));
+            readOnly = (bool?)info.GetValue("ReadOnly", typeof(bool?));
+            required = (bool?)info.GetValue("Required", typeof(bool?));
+            relevant = (bool?)info.GetValue("Relevant", typeof(bool?));
+            valid = (bool?)info.GetValue("Valid", typeof(bool?));
         }
 
-        public int? Id { get; set; }
+        public int? Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
 
-        public XName Type { get; set; }
+        public XName Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
 
-        public bool DispatchValueChanged { get; set; }
+        public bool DispatchValueChanged
+        {
+            get { return dispatchValueChanged; }
+            set { dispatchValueChanged = value; }
+        }
 
-        public bool? ReadOnly { get; set; }
+        public bool? ReadOnly
+        {
+            get { return readOnly; }
+            set { readOnly = value; }
+        }
 
         public bool DispatchReadOnly
         {
@@ -64,7 +96,11 @@ namespace NXKit.XForms
             set { dispatchReadWrite = value; if (dispatchReadWrite) dispatchReadOnly = false; }
         }
 
-        public bool? Required { get; set; }
+        public bool? Required
+        {
+            get { return required; }
+            set { required = value; }
+        }
 
         public bool DispatchRequired
         {
@@ -78,7 +114,11 @@ namespace NXKit.XForms
             set { dispatchOptional = value; if (dispatchOptional) dispatchRequired = false; }
         }
 
-        public bool? Relevant { get; set; }
+        public bool? Relevant
+        {
+            get { return relevant; }
+            set { relevant = value; }
+        }
 
         public bool DispatchEnabled
         {
@@ -92,7 +132,11 @@ namespace NXKit.XForms
             set { dispatchDisabled = value; if (dispatchDisabled) dispatchEnabled = false; }
         }
 
-        public bool? Valid { get; set; }
+        public bool? Valid
+        {
+            get { return valid; }
+            set { valid = value; }
+        }
 
         public bool DispatchValid
         {
@@ -106,20 +150,41 @@ namespace NXKit.XForms
             set { dispatchInvalid = value; if (dispatchInvalid) dispatchValid = false; }
         }
 
-        public bool Clear { get; set; }
+        /// <summary>
+        /// Indicates that the model item is to be removed.
+        /// </summary>
+        public bool Remove
+        {
+            get { return clear; }
+            set { clear = value; }
+        }
 
-        public XElement NewElement { get; set; }
+        /// <summary>
+        /// New <see cref="XElement"/> scheduled to be set as the value of the model item.
+        /// </summary>
+        public XElement NewElement
+        {
+            get { return newElement; }
+            set { newElement = value; newValue = null; }
+        }
 
-        public string NewValue { get; set; }
+        /// <summary>
+        /// New <see cref="string"/> scheduled to be set as the value of the model item.
+        /// </summary>
+        public string NewValue
+        {
+            get { return newValue; }
+            set { newValue = value; newElement = null; }
+        }
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Id", Id);
-            info.AddValue("Type", Type);
-            info.AddValue("ReadOnly", ReadOnly);
-            info.AddValue("Required", Required);
-            info.AddValue("Relevant", Relevant);
-            info.AddValue("Valid", Valid);
+            info.AddValue("Id", id);
+            info.AddValue("Type", type);
+            info.AddValue("ReadOnly", readOnly);
+            info.AddValue("Required", required);
+            info.AddValue("Relevant", relevant);
+            info.AddValue("Valid", valid);
         }
 
     }
