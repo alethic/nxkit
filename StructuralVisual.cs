@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+
 using NXKit.Util;
 
 namespace NXKit
@@ -11,7 +12,8 @@ namespace NXKit
     /// <summary>
     /// Represents a structural node in the visual tree.
     /// </summary>
-    public abstract class StructuralVisual : Visual
+    public abstract class StructuralVisual : 
+        Visual
     {
 
         string uniqueId;
@@ -29,13 +31,13 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="engine"></param>
+        /// <param name="document"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        protected StructuralVisual(INXDocument engine, StructuralVisual parent, XNode node)
-            : base(engine, parent, node)
+        protected StructuralVisual(INXDocument document, StructuralVisual parent, XNode node)
+            : base(document, parent, node)
         {
-            Contract.Requires<ArgumentNullException>(engine != null);
+            Contract.Requires<ArgumentNullException>(document != null);
         }
 
         /// <summary>
