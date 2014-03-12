@@ -7,10 +7,13 @@
                      id="misc">
             <data>
                 <secondary>false</secondary>
+                <secondary_enabled />
             </data>
         </xf:instance>
         <xf:bind nodeset="xf:instance('misc')/secondary"
                  type="xsd:boolean" />
+        <xf:bind nodeset="xf:instance('misc')/secondary_enabled"
+                 relevant="xf:instance('misc')/secondary = 'true'"/>
         <xf:instance xmlns=""
                      id="primaryperson"
                      src="primaryperson.xml" />
@@ -31,6 +34,8 @@
         <xf:instance xmlns=""
                      id="secondaryquestions"
                      src="secondaryquestions.xml" />
+        <xf:bind nodeset="xf:instance('secondaryquestions')"
+                 relevant="xf:instance('misc')/secondary = 'true'"/>
         <xf:instance xmlns=""
                      id="relationships"
                      src="relationships.xml" />
@@ -61,426 +66,356 @@
                        method="put"
                        action="beneficiaries.xml" />
     </xf:model>
-    <f:category>
-        <xf:label>Enrollment Information</xf:label>
-        <f:page>
-            <xf:label>Request For Coverage</xf:label>
-            <f:section xf:ref="xf:instance('data')">
-                <f:p>This coverage is awesome and lots of nice stuff can be said about it.</f:p>
-                <xf:input ref="secondary"
-                          appearance="full">
-                    <xf:label>Yes, I'd like to take advantage of this offer for my spouse or other partner or whatever and stuff and we will fill in the contents of the rest of this text later.</xf:label>
-                </xf:input>
-            </f:section>
-            <f:section xf:ref="xf:instance('primaryperson')">
-                <xf:label>Additional Information About You</xf:label>
-                <xf:input ref="heightfeet"
-                          appearance="full">
-                    <xf:label>Feet</xf:label>
-                </xf:input>
-                <xf:input ref="heightinches"
-                          appearance="full">
-                    <xf:label>Inches</xf:label>
-                </xf:input>
-                <xf:input ref="weight"
-                          appearance="full">
-                    <xf:label>Weight</xf:label>
-                </xf:input>
-                <xf:select1 ref="gender"
-                            appearance="full">
-                    <xf:label>Gender</xf:label>
-                    <xf:item>
-                        <xf:label>Male</xf:label>
-                        <xf:value>M</xf:value>
-                    </xf:item>
-                    <xf:item>
-                        <xf:label>Female</xf:label>
-                        <xf:value>F</xf:value>
-                    </xf:item>
-                </xf:select1>
-                <xf:input ref="socialsecuritynumber"
-                          appearance="full">
-                    <xf:label>SSN</xf:label>
-                </xf:input>
-                <xf:input ref="dateofbirth"
-                          appearance="full">
-                    <xf:label>Date of Birth</xf:label>
-                </xf:input>
-                <xf:input ref="telephone1"
-                          appearance="full">
-                    <xf:label>Home Phone</xf:label>
-                </xf:input>
-                <xf:input ref="telephone2"
-                          appearance="full">
-                    <xf:label>Work Phone</xf:label>
-                </xf:input>
-            </f:section>
-        </f:page>
-        <f:page>
-            <f:section xf:ref="xf:instance('secondaryperson')">
-                <xf:label>Your Spouse's Information</xf:label>
-                <xf:label>Complete if your spouse or domestic partner (DP) is requesting coverage.</xf:label>
-                <xf:input ref="firstname"
-                          appearance="full">
-                    <xf:label>First Name</xf:label>
-                </xf:input>
-                <xf:input ref="middlename"
-                          appearance="full">
-                    <xf:label>MI</xf:label>
-                </xf:input>
-                <xf:input ref="lastname"
-                          appearance="full">
-                    <xf:label>Last Name</xf:label>
-                </xf:input>
-                <xf:input ref="heightfeet"
-                          appearance="full">
-                    <xf:label>Feet</xf:label>
-                </xf:input>
-                <xf:input ref="heightinches"
-                          appearance="full">
-                    <xf:label>Inches</xf:label>
-                </xf:input>
-                <xf:input ref="weight"
-                          appearance="full">
-                    <xf:label>Weight</xf:label>
-                </xf:input>
-                <xf:select1 ref="gender"
-                            appearance="full">
-                    <xf:label>Gender</xf:label>
-                    <xf:item>
-                        <xf:label>Male</xf:label>
-                        <xf:value>M</xf:value>
-                    </xf:item>
-                    <xf:item>
-                        <xf:label>Female</xf:label>
-                        <xf:value>F</xf:value>
-                    </xf:item>
-                </xf:select1>
-                <xf:input ref="socialsecuritynumber"
-                          appearance="full">
-                    <xf:label>SSN</xf:label>
-                </xf:input>
-                <xf:input ref="dateofbirth"
-                          appearance="full">
-                    <xf:label>Date of Birth</xf:label>
-                </xf:input>
-            </f:section>
-            <f:section>
-                <xf:label>Coverage Selection</xf:label>
-                <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
-                <f:table>
+    <f:page>
+        <xf:label>Applicant Enrollment</xf:label>
+        <f:section>
+            <f:p>This coverage is awesome and lots of nice stuff can be said about it.</f:p>
+            <xf:input ref="xf:instance('misc')/secondary"
+                      appearance="full">
+                <xf:label>Yes, I'd like to take advantage of this offer for my spouse or other partner or whatever and stuff and we will fill in the contents of the rest of this text later.</xf:label>
+            </xf:input>
+        </f:section>
+        <f:section xf:ref="xf:instance('primaryperson')">
+            <xf:label>Additional Information About You</xf:label>
+            <xf:input ref="heightfeet"
+                      appearance="full">
+                <xf:label>Feet</xf:label>
+            </xf:input>
+            <xf:input ref="heightinches"
+                      appearance="full">
+                <xf:label>Inches</xf:label>
+            </xf:input>
+            <xf:input ref="weight"
+                      appearance="full">
+                <xf:label>Weight</xf:label>
+            </xf:input>
+            <xf:select1 ref="gender"
+                        appearance="full">
+                <xf:label>Gender</xf:label>
+                <xf:item>
+                    <xf:label>Male</xf:label>
+                    <xf:value>M</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Female</xf:label>
+                    <xf:value>F</xf:value>
+                </xf:item>
+            </xf:select1>
+            <xf:input ref="socialsecuritynumber"
+                      appearance="full">
+                <xf:label>SSN</xf:label>
+            </xf:input>
+            <xf:input ref="dateofbirth"
+                      appearance="full">
+                <xf:label>Date of Birth</xf:label>
+            </xf:input>
+            <xf:input ref="telephone1"
+                      appearance="full">
+                <xf:label>Home Phone</xf:label>
+            </xf:input>
+            <xf:input ref="telephone2"
+                      appearance="full">
+                <xf:label>Work Phone</xf:label>
+            </xf:input>
+        </f:section>
+        <f:section xf:ref="xf:instance('primaryelections')/term-life">
+            <xf:label>Coverage Election</xf:label>
+            <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
+            <xf:select1 ref="coverage-amount"
+                        appearance="full">
+                <xf:item>
+                    <xf:label>$75,000</xf:label>
+                    <xf:value>75000</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>$100,000</xf:label>
+                    <xf:value>100000</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>$150,000</xf:label>
+                    <xf:value>150000</xf:value>
+                </xf:item>
+            </xf:select1>
+        </f:section>
+        <f:section xf:ref="xf:instance('primaryquestions')">
+            <xf:label>Health Questions</xf:label>
+            <xf:hint>Please answer the following questions by checking “Yes” or “No.”</xf:hint>
+            <xf:select1 ref="question1/answer"
+                        appearance="full">
+                <xf:label>1. Within the last 12 months, have you used tobacco or nicotine in any form?</xf:label>
+                <xf:item>
+                    <xf:label>No</xf:label>
+                    <xf:value>false</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Yes</xf:label>
+                    <xf:value>true</xf:value>
+                </xf:item>
+            </xf:select1>
+            <xf:select1 ref="question2/answer"
+                        appearance="full">
+                <xf:label>2. Within the last five years, have you been treated for or diagnosed with any of the following: circulatory or respiratory disease or disorder; chest pain; high blood pressure; cancer or tumors; diabetes; disease or disorder of the heart, lungs, kidneys, liver, genitourinary system; arthritis or other musculoskeletal condition; alcoholism; mental or nervous disorder, or have you been diagnosed with, or treated by a member of the medical profession for Acquired Immune Deficiency Syndrome (AIDS) or AIDS-Related Complex (ARC)?</xf:label>
+                <xf:item>
+                    <xf:label>No</xf:label>
+                    <xf:value>false</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Yes</xf:label>
+                    <xf:value>true</xf:value>
+                </xf:item>
+            </xf:select1>
+            <xf:select1 ref="question3/answer"
+                        appearance="full">
+                <xf:label>3. Are you currently taking any medication or being treated for any condition, including pregnancy, or disease not mentioned in the previous questions?</xf:label>
+                <xf:item>
+                    <xf:label>No</xf:label>
+                    <xf:value>false</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Yes</xf:label>
+                    <xf:value>true</xf:value>
+                </xf:item>
+            </xf:select1>
+            <xf:select1 ref="question4/answer"
+                        appearance="full">
+                <xf:label>4. Within the last five years, have you been counseled, treated or hospitalized for the use of alcohol or drugs?</xf:label>
+                <xf:item>
+                    <xf:label>No</xf:label>
+                    <xf:value>false</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Yes</xf:label>
+                    <xf:value>true</xf:value>
+                </xf:item>
+            </xf:select1>
+        </f:section>
+    </f:page>
+    <f:page xf:ref="xf:instance('misc')/secondary_enabled">
+        <xf:label>Spousal Enrollment</xf:label>
+        <f:section xf:ref="xf:instance('secondaryperson')">
+            <xf:label>Spouse Information</xf:label>
+            <xf:input ref="firstname"
+                      appearance="full">
+                <xf:label>First Name</xf:label>
+            </xf:input>
+            <xf:input ref="middlename"
+                      appearance="full">
+                <xf:label>MI</xf:label>
+            </xf:input>
+            <xf:input ref="lastname"
+                      appearance="full">
+                <xf:label>Last Name</xf:label>
+            </xf:input>
+            <xf:input ref="heightfeet"
+                      appearance="full">
+                <xf:label>Feet</xf:label>
+            </xf:input>
+            <xf:input ref="heightinches"
+                      appearance="full">
+                <xf:label>Inches</xf:label>
+            </xf:input>
+            <xf:input ref="weight"
+                      appearance="full">
+                <xf:label>Weight</xf:label>
+            </xf:input>
+            <xf:select1 ref="gender"
+                        appearance="full">
+                <xf:label>Gender</xf:label>
+                <xf:item>
+                    <xf:label>Male</xf:label>
+                    <xf:value>M</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Female</xf:label>
+                    <xf:value>F</xf:value>
+                </xf:item>
+            </xf:select1>
+            <xf:input ref="socialsecuritynumber"
+                      appearance="full">
+                <xf:label>SSN</xf:label>
+            </xf:input>
+            <xf:input ref="dateofbirth"
+                      appearance="full">
+                <xf:label>Date of Birth</xf:label>
+            </xf:input>
+        </f:section>
+        <f:section xf:ref="xf:instance('secondaryelections')/term-life">
+            <xf:label>Coverage Selection</xf:label>
+            <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
+            <xf:select1 ref="coverage-amount"
+                        appearance="full">
+                <xf:item>
+                    <xf:label>$75,000</xf:label>
+                    <xf:value>75000</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>$100,000</xf:label>
+                    <xf:value>100000</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>$150,000</xf:label>
+                    <xf:value>150000</xf:value>
+                </xf:item>
+            </xf:select1>
+        </f:section>
+        <f:section xf:ref="xf:instance('secondaryquestions')">
+            <xf:label>Health Questions</xf:label>
+            <xf:select1 ref="question1/answer"
+                        appearance="full">
+                <xf:label>1. Within the last 12 months, have you used tobacco or nicotine in any form?</xf:label>
+                <xf:item>
+                    <xf:label>No</xf:label>
+                    <xf:value>false</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Yes</xf:label>
+                    <xf:value>true</xf:value>
+                </xf:item>
+            </xf:select1>
+            <xf:select1 ref="question2/answer"
+                        appearance="full">
+                <xf:label>2. Within the last five years, have you been treated for or diagnosed with any of the following: circulatory or respiratory disease or disorder; chest pain; high blood pressure; cancer or tumors; diabetes; disease or disorder of the heart, lungs, kidneys, liver, genitourinary system; arthritis or other musculoskeletal condition; alcoholism; mental or nervous disorder, or have you been diagnosed with, or treated by a member of the medical profession for Acquired Immune Deficiency Syndrome (AIDS) or AIDS-Related Complex (ARC)?</xf:label>
+                <xf:item>
+                    <xf:label>No</xf:label>
+                    <xf:value>false</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Yes</xf:label>
+                    <xf:value>true</xf:value>
+                </xf:item>
+            </xf:select1>
+            <xf:select1 ref="question3/answer"
+                        appearance="full">
+                <xf:label>3. Are you currently taking any medication or being treated for any condition, including pregnancy, or disease not mentioned in the previous questions?</xf:label>
+                <xf:item>
+                    <xf:label>No</xf:label>
+                    <xf:value>false</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Yes</xf:label>
+                    <xf:value>true</xf:value>
+                </xf:item>
+            </xf:select1>
+            <xf:select1 ref="question4/answer"
+                        appearance="full">
+                <xf:label>4. Within the last five years, have you been counseled, treated or hospitalized for the use of alcohol or drugs?</xf:label>
+                <xf:item>
+                    <xf:label>No</xf:label>
+                    <xf:value>false</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Yes</xf:label>
+                    <xf:value>true</xf:value>
+                </xf:item>
+            </xf:select1>
+        </f:section>
+    </f:page>
+    <f:page>
+        <xf:label>Additional Information</xf:label>
+        <f:section>
+            <xf:label>Health Information</xf:label>
+            <f:table>
+                <f:table-row>
+                    <f:table-cell>
+                        <xf:input ref="xf:instance('primaryquestions')/question4/condition"
+                                  appearance="minimal">
+                            <xf:label>Condition</xf:label>
+                        </xf:input>
+                    </f:table-cell>
+                    <f:table-cell>
+                        <xf:input ref="xf:instance('primaryquestions')/question4/dates"
+                                  appearance="minimal">
+                            <xf:label>Dates</xf:label>
+                        </xf:input>
+                    </f:table-cell>
+                    <f:table-cell>
+                        <xf:input ref="xf:instance('primaryquestions')/question4/currentstatus"
+                                  appearance="minimal">
+                            <xf:label>Current Status</xf:label>
+                        </xf:input>
+                    </f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>
+                        <xf:input ref="xf:instance('primaryquestions')/question4/physicianname"
+                                  appearance="minimal">
+                            <xf:label>Physician Name</xf:label>
+                        </xf:input>
+                    </f:table-cell>
+                    <f:table-cell>
+                        <xf:input ref="xf:instance('primaryquestions')/question4/physicianaddress"
+                                  appearance="minimal">
+                            <xf:label>Physician Address</xf:label>
+                        </xf:input>
+                    </f:table-cell>
+                    <f:table-cell>
+                        <xf:input ref="xf:instance('primaryquestions')/question4/physiciantelephone"
+                                  appearance="minimal">
+                            <xf:label>Physician Phone Number</xf:label>
+                        </xf:input>
+                    </f:table-cell>
+                </f:table-row>
+            </f:table>
+        </f:section>
+        <f:section>
+            <xf:label>Beneficiaries</xf:label>
+            <f:p>Please list all beneficiaries you wish to name.</f:p>
+            <f:table>
+                <f:table-column-group>
+                    <f:table-column>First Name</f:table-column>
+                    <f:table-column>MI</f:table-column>
+                    <f:table-column>Last Name</f:table-column>
+                    <f:table-column>Social Security Number</f:table-column>
+                    <f:table-column>Phone Number</f:table-column>
+                    <f:table-column>Relationship</f:table-column>
+                    <f:table-column>Percentage</f:table-column>
+                </f:table-column-group>
+                <xf:repeat nodeset="xf:instance('beneficiaries')/beneficiary">
                     <f:table-row>
-                        <f:table-cell>Applicant</f:table-cell>
                         <f:table-cell>
-                            <xf:select1 ref="xf:instance('primaryelections')/term-life/coverage-amount"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>$75,000</xf:label>
-                                    <xf:value>75000</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                            <xf:select1 ref="xf:instance('primaryelections')/term-life/coverage-amount"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>$100,000</xf:label>
-                                    <xf:value>100000</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                            <xf:select1 ref="xf:instance('primaryelections')/term-life/coverage-amount"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>$150,000</xf:label>
-                                    <xf:value>150000</xf:value>
-                                </xf:item>
-                            </xf:select1>
+                            <xf:input ref="firstname"
+                                      appearance="minimal">
+                                <xf:label />
+                            </xf:input>
                         </f:table-cell>
-                        <f:table-cell>Spouse/DP*</f:table-cell>
                         <f:table-cell>
-                            <xf:select1 ref="xf:instance('secondaryelections')/term-life/coverage-amount"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>$75,000</xf:label>
-                                    <xf:value>75000</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                            <xf:select1 ref="xf:instance('secondaryelections')/term-life/coverage-amount"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>$100,000</xf:label>
-                                    <xf:value>100000</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                            <xf:select1 ref="xf:instance('secondaryelections')/term-life/coverage-amount"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>$150,000</xf:label>
-                                    <xf:value>150000</xf:value>
-                                </xf:item>
-                            </xf:select1>
+                            <xf:input ref="middlename"
+                                      appearance="minimal">
+                                <xf:label />
+                            </xf:input>
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:input ref="lastname"
+                                      appearance="minimal">
+                                <xf:label />
+                            </xf:input>
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:input ref="socialsecuritynumber"
+                                      appearance="minimal">
+                                <xf:label />
+                            </xf:input>
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:input ref="telephone"
+                                      appearance="minimal">
+                                <xf:label />
+                            </xf:input>
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:input ref="relationship" />
+                        </f:table-cell>
+                        <f:table-cell>
+                            <xf:range ref="percentage"
+                                      start="0"
+                                      step="5"
+                                      end="100">
+                                <xf:label />
+                            </xf:range>
                         </f:table-cell>
                     </f:table-row>
-                </f:table>
-            </f:section>
-            <f:section>
-                <xf:label>Health Questions</xf:label>
-                <f:table>
-                    <f:table-column-group name="primary">
-                        <xf:label>Applicant</xf:label>
-                        <f:table-column name="primary_yes">
-                            Yes
-                        </f:table-column>
-                        <f:table-column name="primary_no">
-                            No
-                        </f:table-column>
-                    </f:table-column-group>
-                    <f:table-column-group name="secondary">
-                        <xf:label>Spouse/DP</xf:label>
-                        <f:table-column name="secondary_yes">
-                            Yes
-                        </f:table-column>
-                        <f:table-column name="secondary_no">
-                            No
-                        </f:table-column>
-                    </f:table-column-group>
-                    <f:table-column-group>
-                        <f:table-column name="question">
-                            Please answer the following questions by checking “Yes” or “No.”
-                        </f:table-column>
-                    </f:table-column-group>
-                    <f:table-row>
-                        <f:table-row column-group="primary">
-                            <f:table-cell>Y</f:table-cell>
-                            <f:table-cell>N</f:table-cell>
-                        </f:table-row>
-                        <f:table-row column-group="secondary">
-                            <f:table-cell>Y</f:table-cell>
-                            <f:table-cell>N</f:table-cell>
-                        </f:table-row>
-                    </f:table-row>
-                </f:table>
-                <f:table>
-                    <f:table-row>
-                        <f:table-cell>1. Within the last 12 months, have you used tobacco or nicotine in any form?</f:table-cell>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('primaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('secondaryquestions')/question1/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
-                    </f:table-row>
-                    <f:table-row>
-                        <f:table-cell>2. Within the last five years, have you been treated for or diagnosed with any of the following: circulatory or respiratory disease or disorder; chest pain; high blood pressure; cancer or tumors; diabetes; disease or disorder of the heart, lungs, kidneys, liver, genitourinary system; arthritis or other musculoskeletal condition; alcoholism; mental or nervous disorder, or have you been diagnosed with, or treated by a member of the medical profession for Acquired Immune Deficiency Syndrome (AIDS) or AIDS-Related Complex (ARC)?</f:table-cell>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('primaryquestions')/question2/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('secondaryquestions')/question2/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
-                    </f:table-row>
-                    <f:table-row>
-                        <f:table-cell>3. Are you currently taking any medication or being treated for any condition, including pregnancy, or disease not mentioned in the previous questions?</f:table-cell>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('primaryquestions')/question3/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('secondaryquestions')/question3/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
-                    </f:table-row>
-                    <f:table-row>
-                        <f:table-cell>4. Within the last five years, have you been counseled, treated or hospitalized for the use of alcohol or drugs?</f:table-cell>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('primaryquestions')/question4/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
-                        <f:table-cell>
-                            <xf:select1 ref="xf:instance('secondaryquestions')/question4/answer"
-                                        appearance="full">
-                                <xf:item>
-                                    <xf:label>No</xf:label>
-                                    <xf:value>false</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Yes</xf:label>
-                                    <xf:value>true</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </f:table-cell>
-                    </f:table-row>
-                    <f:table-row>
-                        <f:table>
-                            <f:table-row>
-                                <f:table-cell>
-                                    <xf:input ref="xf:instance('primaryquestions')/question4/condition"
-                                              appearance="minimal">
-                                        <xf:label>Condition</xf:label>
-                                    </xf:input>
-                                </f:table-cell>
-                                <f:table-cell>
-                                    <xf:input ref="xf:instance('primaryquestions')/question4/dates"
-                                              appearance="minimal">
-                                        <xf:label>Dates</xf:label>
-                                    </xf:input>
-                                </f:table-cell>
-                                <f:table-cell>
-                                    <xf:input ref="xf:instance('primaryquestions')/question4/currentstatus"
-                                              appearance="minimal">
-                                        <xf:label>Current Status</xf:label>
-                                    </xf:input>
-                                </f:table-cell>
-                            </f:table-row>
-                            <f:table-row>
-                                <f:table-cell>
-                                    <xf:input ref="xf:instance('primaryquestions')/question4/physicianname"
-                                              appearance="minimal">
-                                        <xf:label>Physician Name</xf:label>
-                                    </xf:input>
-                                </f:table-cell>
-                                <f:table-cell>
-                                    <xf:input ref="xf:instance('primaryquestions')/question4/physicianaddress"
-                                              appearance="minimal">
-                                        <xf:label>Physician Address</xf:label>
-                                    </xf:input>
-                                </f:table-cell>
-                                <f:table-cell>
-                                    <xf:input ref="xf:instance('primaryquestions')/question4/physiciantelephone"
-                                              appearance="minimal">
-                                        <xf:label>Physician Phone Number</xf:label>
-                                    </xf:input>
-                                </f:table-cell>
-                            </f:table-row>
-                        </f:table>
-                    </f:table-row>
-                </f:table>
-            </f:section>
-            <f:section>
-                <xf:label>Beneficiaries</xf:label>
-                <f:p>Please list all beneficiaries you wish to name.</f:p>
-                <f:table>
-                    <f:table-column-group>
-                        <f:table-column>First Name</f:table-column>
-                        <f:table-column>MI</f:table-column>
-                        <f:table-column>Last Name</f:table-column>
-                        <f:table-column>Social Security Number</f:table-column>
-                        <f:table-column>Phone Number</f:table-column>
-                        <f:table-column>Relationship</f:table-column>
-                        <f:table-column>Percentage</f:table-column>
-                    </f:table-column-group>
-                    <xf:repeat nodeset="xf:instance('beneficiaries')/beneficiary">
-                        <f:table-row>
-                            <f:table-cell>
-                                <xf:input ref="firstname"
-                                          appearance="minimal">
-                                    <xf:label />
-                                </xf:input>
-                            </f:table-cell>
-                            <f:table-cell>
-                                <xf:input ref="middlename"
-                                          appearance="minimal">
-                                    <xf:label />
-                                </xf:input>
-                            </f:table-cell>
-                            <f:table-cell>
-                                <xf:input ref="lastname"
-                                          appearance="minimal">
-                                    <xf:label />
-                                </xf:input>
-                            </f:table-cell>
-                            <f:table-cell>
-                                <xf:input ref="socialsecuritynumber"
-                                          appearance="minimal">
-                                    <xf:label />
-                                </xf:input>
-                            </f:table-cell>
-                            <f:table-cell>
-                                <xf:input ref="telephone"
-                                          appearance="minimal">
-                                    <xf:label />
-                                </xf:input>
-                            </f:table-cell>
-                            <f:table-cell>
-                                <xf:input ref="relationship" />
-                            </f:table-cell>
-                            <f:table-cell>
-                                <xf:range ref="percentage"
-                                          start="0"
-                                          step="5"
-                                          end="100">
-                                    <xf:label />
-                                </xf:range>
-                            </f:table-cell>
-                        </f:table-row>
-                    </xf:repeat>
-                </f:table>
-            </f:section>
-        </f:page>
-    </f:category>
+                </xf:repeat>
+            </f:table>
+        </f:section>
+    </f:page>
 </f:form>
