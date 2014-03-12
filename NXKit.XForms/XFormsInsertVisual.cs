@@ -93,7 +93,7 @@ namespace NXKit.XForms
                 miB.Relevant = miA.Relevant;
                 miB.ReadOnly = miA.ReadOnly;
                 miB.Required = miA.Required;
-                miB.Clear = false;
+                miB.Remove = false;
                 miB.NewElement = null;
                 miB.NewValue = null;
             }

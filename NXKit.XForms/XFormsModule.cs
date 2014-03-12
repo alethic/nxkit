@@ -381,7 +381,7 @@ namespace NXKit.XForms
                         var node = i.Node;
                         var modelItem = i.ModelItem;
 
-                        if (modelItem.Clear)
+                        if (modelItem.Remove)
                         {
                             if (node is XElement)
                                 ((XElement)node).RemoveNodes();
@@ -390,7 +390,7 @@ namespace NXKit.XForms
                             else
                                 throw new Exception();
 
-                            modelItem.Clear = false;
+                            modelItem.Remove = false;
                             modelItem.DispatchValueChanged = true;
 
                             // prompt model to act
@@ -882,7 +882,7 @@ namespace NXKit.XForms
         internal void ClearModelItem(XFormsEvaluationContext ec, XObject item)
         {
             var mi = GetModelItem(item);
-            mi.Clear = true;
+            mi.Remove = true;
 
             ec.Model.State.RecalculateFlag = true;
         }
