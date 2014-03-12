@@ -2,7 +2,9 @@
 {
 
     [Visual( "page")]
-    public class PageVisual : XFormsGroupVisual, INavigationPageVisual
+    public class PageVisual :
+        XFormsGroupVisual,
+        INavigationPageVisual
     {
 
         public Importance Importance

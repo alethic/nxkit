@@ -6,7 +6,8 @@ using NXKit.XForms;
 namespace NXKit.XForms.Layout
 {
 
-    public class LayoutVisual : StructuralVisual
+    public class LayoutVisual :
+        StructuralVisual
     {
 
         /// <summary>

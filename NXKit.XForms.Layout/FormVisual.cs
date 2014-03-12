@@ -4,7 +4,8 @@ namespace NXKit.XForms.Layout
 {
 
     [Visual("form")]
-    public class FormVisual : LayoutVisual
+    public class FormVisual : 
+        LayoutVisual
     {
 
         public override string Id
