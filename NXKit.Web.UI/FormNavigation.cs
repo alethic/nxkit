@@ -4,6 +4,9 @@ using System.Linq;
 namespace NXKit.Web.UI
 {
 
+    /// <summary>
+    /// Describes a point in the view which can be navigated to.
+    /// </summary>
     public abstract class FormNavigation
     {
 
@@ -82,6 +85,17 @@ namespace NXKit.Web.UI
                 foreach (var child in ((FormSection)this).Children)
                     foreach (var child2 in child.Descendants(true))
                         yield return child2;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var n = obj as FormNavigation;
+            return n != null ? n.Id == Id : false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
         }
 
     }

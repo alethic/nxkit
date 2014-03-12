@@ -8,8 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Xml;
-using System.Xml.Linq;
 
 namespace NXKit.Web.UI
 {
