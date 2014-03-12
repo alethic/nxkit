@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Xml.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,10 +9,8 @@ namespace NXKit.XForms.Tests.XPathFunctions
     public class InstanceTests
     {
 
-        static readonly XNamespace NS_XFORMS = "http://www.w3.org/2002/xforms";
-
         [TestMethod]
-        public void Test_default()
+        public void Test_default_instance_resolution()
         {
             var c = new NXDocumentConfiguration();
             c.AddModule<XFormsModule>();
@@ -41,7 +38,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
         }
 
         [TestMethod]
-        public void Test_specified_id()
+        public void Test_specified_instance_resolution()
         {
             var c = new NXDocumentConfiguration();
             c.AddModule<XFormsModule>();
