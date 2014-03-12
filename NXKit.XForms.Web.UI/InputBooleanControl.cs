@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Web.UI;
 using System.Web.UI.WebControls;
-
 using NXKit.Web.UI;
 
 namespace NXKit.XForms.Web.UI
 {
 
-    public class InputBooleanControl : VisualControl<XFormsInputVisual>
+    public class InputBooleanControl :
+        VisualControl<XFormsInputVisual>
     {
 
-        private CheckBox ctl;
+        CheckBox ctl;
 
         /// <summary>
         /// Initializes a new instance.
@@ -38,7 +39,7 @@ namespace NXKit.XForms.Web.UI
         /// Invoked when the read-only state of the Visual changes.
         /// </summary>
         /// <param name="ev"></param>
-        private void Visual_ReadOnlyChanged(Event ev)
+        void Visual_ReadOnlyChanged(Event ev)
         {
             EnsureChildControls();
 
@@ -57,9 +58,26 @@ namespace NXKit.XForms.Web.UI
             Controls.Add(ctl);
         }
 
-        private void ctl_CheckedChanged(object sender, EventArgs args)
+        void ctl_CheckedChanged(object sender, EventArgs args)
         {
             BindingUtil.Set(Visual.Binding, ctl.Checked);
+        }
+
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
+
+            var labelVisual = Visual.FindLabelVisual();
+            var labelText = labelVisual != null ? labelVisual.ToText() : null;
+            ctl.Text = labelText;
+        }
+
+        protected override void Render(System.Web.UI.HtmlTextWriter writer)
+        {
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "XForms_Input XForms_Input__boolean");
+            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+            base.Render(writer);
+            writer.RenderEndTag();
         }
 
     }
