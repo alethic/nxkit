@@ -1,12 +1,16 @@
-﻿using System.Web.UI;
-
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Web.UI;
 using NXKit.Web.UI;
+using NXKit.XForms.Web.UI;
 
 namespace NXKit.XForms.Layout.Web.UI
 {
 
     [VisualControlTypeDescriptor]
-    public class PageControlDescriptor : VisualControlTypeDescriptor
+    public class PageControlDescriptor :
+        VisualControlTypeDescriptor
     {
 
         public override bool CanHandleVisual(Visual visual)
@@ -26,7 +30,8 @@ namespace NXKit.XForms.Layout.Web.UI
 
     }
 
-    public class PageControl : VisualContentControl<PageVisual>
+    public class PageControl :
+        SingleNodeBindingVisualContentControl<PageVisual>
     {
 
         /// <summary>
@@ -36,7 +41,50 @@ namespace NXKit.XForms.Layout.Web.UI
         public PageControl(View view, PageVisual visual)
             : base(view, visual)
         {
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
 
+            View.CurrentPageChanged += View_CurrentPageChanged;
+        }
+
+        void View_CurrentPageChanged(object sender, EventArgs args)
+        {
+            Refresh();
+        }
+
+        protected override void OnLoadComplete(EventArgs args)
+        {
+            base.OnLoadComplete(args);
+
+            Refresh();
+        }
+
+        protected override void OnVisualEnabled()
+        {
+            base.OnVisualEnabled();
+
+            Refresh();
+        }
+
+        protected override void OnVisualDisabled()
+        {
+            base.OnVisualDisabled();
+
+            Refresh();
+        }
+
+        /// <summary>
+        /// Recalculates the state of the page control.
+        /// </summary>
+        void Refresh()
+        {
+            // find ourselves, and check if we're the active relevant page
+            Visible = View.Navigations
+                .Where(i => i.Visual is PageVisual)
+                .Where(i => i.Visual == Visual)
+                .Where(i => i.Visual == View.CurrentPage.Visual)
+                .Where(i => i.Visual.Relevant)
+                .Any();
         }
 
         protected override void Render(HtmlTextWriter writer)
