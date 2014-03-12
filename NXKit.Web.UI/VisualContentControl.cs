@@ -1,11 +1,20 @@
-﻿using System.Web.UI;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Web.UI;
 
 namespace NXKit.Web.UI
 {
 
-    public class VisualContentControl<T> : VisualControl<T>
-         where T : StructuralVisual
+    /// <summary>
+    /// Base <see cref="VisualControl"/> type to assist with <see cref="Visual"/> instances that contain further content.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public abstract class VisualContentControl<T> :
+        VisualControl<T>
+        where T : StructuralVisual
     {
+
+        VisualControlCollection content;
 
         /// <summary>
         /// Initializes a new instance.
@@ -15,13 +24,17 @@ namespace NXKit.Web.UI
         public VisualContentControl(View view, T visual)
             : base(view, visual)
         {
-
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
         }
 
         /// <summary>
         /// Contains child visual controls.
         /// </summary>
-        protected VisualControlCollection Content { get; private set; }
+        protected VisualControlCollection Content
+        {
+            get { return content; }
+        }
 
         /// <summary>
         /// Creates the <see cref="VisualContentControlCollection"/>.
@@ -32,21 +45,20 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Creates the child control hierarchy.
+        /// Creates the control hierarchy.
         /// </summary>
         protected override void CreateChildControls()
         {
             Controls.Clear();
-
-            // recreate container
-            Controls.Add(Content = CreateContentControlCollection());
+            Controls.Add(content = CreateContentControlCollection());
         }
 
+        /// <summary>
+        /// Writes the HTML for the control to the output.
+        /// </summary>
+        /// <param name="writer"></param>
         protected override void Render(HtmlTextWriter writer)
         {
-            EnsureChildControls();
-
-            // render only visual content container by default
             Content.RenderControl(writer);
         }
 

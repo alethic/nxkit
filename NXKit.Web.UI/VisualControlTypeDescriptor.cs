@@ -1,6 +1,12 @@
-﻿namespace NXKit.Web.UI
+﻿using System;
+using System.Diagnostics.Contracts;
+
+namespace NXKit.Web.UI
 {
 
+    /// <summary>
+    /// Describes a mapping of <see cref="Visual"/> type to <see cref="VisualControl"/> type.
+    /// </summary>
     public abstract class VisualControlTypeDescriptor
     {
 
@@ -11,6 +17,8 @@
         /// <returns></returns>
         public virtual bool CanHandleVisual(Visual visual)
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
             return false;
         }
 
@@ -21,6 +29,8 @@
         /// <returns></returns>
         public virtual bool IsOpaque(Visual visual)
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
             return true;
         }
 
@@ -30,6 +40,8 @@
         /// <returns></returns>
         public virtual bool IsContent(Visual visual)
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
             return false;
         }
 
@@ -41,6 +53,9 @@
         /// <returns></returns>
         public virtual VisualControl CreateControl(View view, Visual visual)
         {
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
+
             return null;
         }
 
