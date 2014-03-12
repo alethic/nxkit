@@ -3,7 +3,7 @@
 
     [Visual("table")]
     public class TableVisual : 
-        LayoutVisual,
+        XFormsGroupVisual,
         ITableColumnGroupContainer
     {
 

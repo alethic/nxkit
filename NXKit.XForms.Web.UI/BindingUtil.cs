@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Xml;
-
-using NXKit.XForms;
 
 namespace NXKit.XForms.Web.UI
 {
 
+    /// <summary>
+    /// Provides methods to assist in setting underlying binding values.
+    /// </summary>
     public static class BindingUtil
     {
 
@@ -17,6 +19,8 @@ namespace NXKit.XForms.Web.UI
         /// <param name="value"></param>
         public static void Set(XFormsBinding binding, object value)
         {
+            Contract.Requires<ArgumentNullException>(binding != null);
+
             if (binding.Type == XmlSchemaConstants.XMLSchema + "boolean")
                 binding.SetValue(ToXsdBoolean((bool?)value));
             else if (binding.Type == XmlSchemaConstants.XMLSchema + "date")
@@ -42,6 +46,9 @@ namespace NXKit.XForms.Web.UI
         /// <returns></returns>
         public static object Get(XFormsBinding binding, Type type)
         {
+            Contract.Requires<ArgumentNullException>(binding != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+
             if ((binding == null || string.IsNullOrEmpty(binding.Value)) && type.IsValueType)
                 return Activator.CreateInstance(type);
             else if ((binding == null || string.IsNullOrEmpty(binding.Value)))

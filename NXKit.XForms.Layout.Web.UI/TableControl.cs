@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Web.UI;
@@ -11,7 +12,8 @@ namespace NXKit.XForms.Layout.Web.UI
 {
 
     [VisualControlTypeDescriptor]
-    public class TableControlDescriptor : VisualControlTypeDescriptor
+    public class TableControlDescriptor :
+        VisualControlTypeDescriptor
     {
 
         public override bool CanHandleVisual(Visual visual)
@@ -31,35 +33,34 @@ namespace NXKit.XForms.Layout.Web.UI
 
     }
 
-    public class TableControl : VisualControl<TableVisual>, IScriptControl
+    public class TableControl : 
+        SingleNodeBindingVisualControl<TableVisual>, 
+        IScriptControl
     {
+
+        readonly Table model;
+        TableControlColumnHeaderControlCollection columnHeaderControls;
+        TableControlCellControlCollection cellControls;
+        TriggerControlCollection triggerControls;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="view"></param>
         /// <param name="visual"></param>
         public TableControl(View view, TableVisual visual)
             : base(view, visual)
         {
-            Model = new Table(View, visual);
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual!= null);
+
+            this.model = new Table(View, visual);
         }
 
-        public Table Model { get; private set; }
-
-        /// <summary>
-        /// Maintains the collection of column header controls
-        /// </summary>
-        private TableControlColumnHeaderControlCollection ColumnHeaderControls { get; set; }
-
-        /// <summary>
-        /// Maintains the collection of cell controls.
-        /// </summary>
-        private TableControlCellControlCollection CellControls { get; set; }
-
-        /// <summary>
-        /// Maintains the collection of trigger controls.
-        /// </summary>
-        private TriggerControlCollection TriggerControls { get; set; }
+        public Table Model
+        {
+            get { return model; }
+        }
 
         /// <summary>
         /// Creates the child control hierarchy.
@@ -68,9 +69,9 @@ namespace NXKit.XForms.Layout.Web.UI
         {
             base.CreateChildControls();
 
-            Controls.Add(ColumnHeaderControls = new TableControlColumnHeaderControlCollection(View, this));
-            Controls.Add(CellControls = new TableControlCellControlCollection(View, this));
-            Controls.Add(TriggerControls = new TriggerControlCollection(View, Visual));
+            Controls.Add(columnHeaderControls = new TableControlColumnHeaderControlCollection(View, this));
+            Controls.Add(cellControls = new TableControlCellControlCollection(View, this));
+            Controls.Add(triggerControls = new TriggerControlCollection(View, Visual));
         }
 
         protected override void OnPreRender(EventArgs args)
@@ -96,7 +97,6 @@ namespace NXKit.XForms.Layout.Web.UI
                     width += 100 % columnGroup.Columns.Length;
 
                 writer.AddStyleAttribute(HtmlTextWriterStyle.Width, width + "%");
-
                 writer.RenderBeginTag(HtmlTextWriterTag.Col);
                 writer.RenderEndTag();
             }
@@ -143,7 +143,7 @@ namespace NXKit.XForms.Layout.Web.UI
                     writer.RenderBeginTag(HtmlTextWriterTag.Th);
 
                     // render individual cell contents
-                    var ctl = column.Visual != null ? ColumnHeaderControls.GetOrCreateControl(column.Visual) : null;
+                    var ctl = column.Visual != null ? columnHeaderControls.GetOrCreateControl(column.Visual) : null;
                     if (ctl != null)
                         ctl.RenderControl(writer);
 
@@ -161,7 +161,7 @@ namespace NXKit.XForms.Layout.Web.UI
 
             writer.AddAttribute(HtmlTextWriterAttribute.Class, "Triggers");
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
-            TriggerControls.RenderControl(writer);
+            triggerControls.RenderControl(writer);
             writer.RenderEndTag();
 
             writer.RenderEndTag();
@@ -248,7 +248,7 @@ namespace NXKit.XForms.Layout.Web.UI
             // render each cell
             foreach (var cell in row.Cells)
             {
-                var ctl = CellControls.GetOrCreateControl(cell.Visual);
+                var ctl = cellControls.GetOrCreateControl(cell.Visual);
                 if (ctl != null)
                 {
                     // build cell css
