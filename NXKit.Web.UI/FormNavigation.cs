@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace NXKit.Web.UI
@@ -18,6 +20,8 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         internal static IEnumerable<FormNavigation> CreateNavigations(FormSection parent, StructuralVisual visual)
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
             if (visual is INavigationSectionVisual)
                 yield return new FormSection(parent, (INavigationSectionVisual)visual);
             else if (visual is INavigationPageVisual)
@@ -34,6 +38,8 @@ namespace NXKit.Web.UI
         /// <param name="parent"></param>
         internal FormNavigation(FormSection parent, INavigationVisual visual)
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
             Parent = parent;
             Visual = visual;
         }
