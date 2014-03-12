@@ -8,7 +8,8 @@ namespace NXKit.XForms.Web.UI
 {
 
     [VisualControlTypeDescriptor]
-    public class GroupControlDescriptor : VisualControlTypeDescriptor
+    public class GroupControlDescriptor :
+        VisualControlTypeDescriptor
     {
 
         public override bool CanHandleVisual(Visual visual)
@@ -28,7 +29,8 @@ namespace NXKit.XForms.Web.UI
 
     }
 
-    public class GroupControl : VisualContentControl<XFormsGroupVisual>
+    public class GroupControl :
+        VisualContentControl<XFormsGroupVisual>
     {
 
         /// <summary>

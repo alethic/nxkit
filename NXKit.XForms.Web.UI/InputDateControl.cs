@@ -14,14 +14,14 @@ namespace NXKit.XForms.Web.UI
     public class InputDateControl : VisualControl<XFormsInputVisual>
     {
 
-        private RadDatePicker ctl;
+        RadDatePicker ctl;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public InputDateControl(View view,XFormsInputVisual visual)
-            : base(view,visual)
+        public InputDateControl(View view, XFormsInputVisual visual)
+            : base(view, visual)
         {
             Visual.AddEventHandler<XFormsValueChangedEvent>(Visual_ValueChanged, false);
             Visual.AddEventHandler<XFormsReadOnlyEvent>(Visual_ReadOnlyChanged, false);
