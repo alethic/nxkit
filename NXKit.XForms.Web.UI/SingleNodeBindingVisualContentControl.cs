@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Web.UI;
 
 using NXKit.Web.UI;
 
@@ -11,9 +12,11 @@ namespace NXKit.XForms.Web.UI
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class SingleNodeBindingVisualContentControl<T> :
-        VisualContentControl<T>
+        SingleNodeBindingVisualControl<T>
         where T : XFormsSingleNodeBindingVisual
     {
+
+        VisualControlCollection content;
 
         /// <summary>
         /// Initializes a new instance.
@@ -25,35 +28,40 @@ namespace NXKit.XForms.Web.UI
         {
             Contract.Requires<ArgumentNullException>(view != null);
             Contract.Requires<ArgumentNullException>(visual != null);
-
-            visual.AddEventHandler<XFormsEnabledEvent>(Visual_Enabled, false);
-            visual.AddEventHandler<XFormsDisabledEvent>(Visual_Disabled, false);
-        }
-
-        void Visual_Enabled(Event evt)
-        {
-            OnVisualEnabled();
         }
 
         /// <summary>
-        /// Invoked when the underlying visual is enabled.
+        /// Contains child visual controls.
         /// </summary>
-        protected virtual void OnVisualEnabled()
+        protected VisualControlCollection Content
         {
-
-        }
-
-        void Visual_Disabled(Event evt)
-        {
-            OnVisualDisabled();
+            get { return content; }
         }
 
         /// <summary>
-        /// Invoked when the underlying visual is disabled.
+        /// Creates the <see cref="VisualContentControlCollection"/>.
         /// </summary>
-        protected virtual void OnVisualDisabled()
+        protected virtual VisualControlCollection CreateContentControlCollection()
         {
+            return new VisualContentControlCollection(View, Visual);
+        }
 
+        /// <summary>
+        /// Creates the control hierarchy.
+        /// </summary>
+        protected override void CreateChildControls()
+        {
+            Controls.Clear();
+            Controls.Add(content = CreateContentControlCollection());
+        }
+
+        /// <summary>
+        /// Writes the HTML for the control to the output.
+        /// </summary>
+        /// <param name="writer"></param>
+        protected override void Render(HtmlTextWriter writer)
+        {
+            Content.RenderControl(writer);
         }
 
     }
