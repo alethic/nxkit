@@ -17,36 +17,6 @@ namespace NXKit
         IEventTarget
     {
 
-        /// <summary>
-        /// Manages the lifetime of the currently in scope <see cref="Visual"/>.
-        /// </summary>
-        public sealed class ThreadScope :
-            IDisposable
-        {
-
-            internal ThreadScope(Visual visual)
-            {
-                Visual.current = visual;
-            }
-
-
-            public void Dispose()
-            {
-                Visual.current = null;
-            }
-        }
-
-        [ThreadStatic]
-        static Visual current;
-
-        /// <summary>
-        /// Gets the currently in-scope visual.
-        /// </summary>
-        public static Visual Current
-        {
-            get { return current; }
-        }
-
         bool addedEventRaised = false;
         EventListenerMap listenerMap;
 
@@ -302,7 +272,7 @@ namespace NXKit
         /// </summary>
         /// <param name="visual"></param>
         /// <param name="evt"></param>
-        private void HandleDefaultAction(Event evt)
+         void HandleDefaultAction(Event evt)
         {
             Contract.Requires<ArgumentNullException>(evt != null);
 
@@ -393,15 +363,6 @@ namespace NXKit
             }
 
             return !evt.PreventDefaultSet;
-        }
-
-        /// <summary>
-        /// Puts the <see cref="Visual"/> into thread local scope. Dipose of this instance to remove it.
-        /// </summary>
-        /// <returns></returns>
-        public ThreadScope Scope()
-        {
-            return new ThreadScope(this);
         }
 
     }
