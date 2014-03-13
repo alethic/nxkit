@@ -20,7 +20,7 @@ namespace NXKit
         /// <returns></returns>
         public static int GetPriority(Type type)
         {
-            return type.GetCustomAttributes<PriorityAttribute>(false).Select(i => i.Priority).FirstOrDefault();
+            return type.GetCustomAttributes<PriorityAttribute>(true).Select(i => i.Priority).FirstOrDefault();
         }
 
         readonly int priority;
