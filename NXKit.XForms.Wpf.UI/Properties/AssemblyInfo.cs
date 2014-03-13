@@ -23,5 +23,5 @@ using System.Windows.Markup;
     ResourceDictionaryLocation.SourceAssembly
 )]
 
-[assembly: XmlnsDefinition("http://github.com/wasabii/nxkit/xforms", "NXKit.XForms.Wpf.UI")]
-[assembly: XmlnsPrefix("http://github.com/wasabii/nxkit/xforms", "nx_xforms")]
+[assembly: XmlnsDefinition("http://schemas.nxkit.org/nxkit/2014/xaml/presentation/xforms", "NXKit.XForms.Wpf.UI")]
+[assembly: XmlnsPrefix("http://schemas.nxkit.org/nxkit/2014/xaml/presentation/xforms", "nx_xforms")]

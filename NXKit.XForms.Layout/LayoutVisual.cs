@@ -1,7 +1,4 @@
 ﻿using System.Linq;
-using System.Xml.Linq;
-
-using NXKit.XForms;
 
 namespace NXKit.XForms.Layout
 {

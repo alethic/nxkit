@@ -17,5 +17,5 @@ using System.Windows.Markup;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: XmlnsDefinition("http://github.com/wasabii/nxkit", "NXKit.Wpf")]
-[assembly: XmlnsPrefix("http://github.com/wasabii/nxkit", "nx")]
+[assembly: XmlnsDefinition("http://schemas.nxkit.org/nxkit/2014/xaml/presentation", "NXKit.Wpf")]
+[assembly: XmlnsPrefix("http://schemas.nxkit.org/nxkit/2014/xaml/presentation", "nx")]

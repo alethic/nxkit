@@ -1,8 +1,27 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:nxkit="clr-namespace:NXKit;assembly=NXKit"
+    xmlns:nx="http://schemas.nxkit.org/nxkit/2014/xaml"
     xmlns:local="clr-namespace:NXKit.Wpf.UI">
+    
+    <DataTemplate
+        DataType="{x:Type nx:Visual}">
+        <TextBlock
+            Text="&lt;unknown&gt;"
+            Foreground="Red" />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type nx:TextVisual}">
+        <TextBlock
+            Text="{Binding Text}" />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type nx:StructuralVisual}">
+        <ItemsControl
+            ItemsSource="{Binding Children}" />
+    </DataTemplate>
 
     <Style
         TargetType="{x:Type local:View}">

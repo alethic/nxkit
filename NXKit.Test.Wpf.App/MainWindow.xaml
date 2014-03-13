@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:NXKit.Test.Wpf.App"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    xmlns:nxkit="http://github.com/wasabii/nxkit"
+    xmlns:nx="http://schemas.nxkit.org/nxkit/2014/xaml/presentation"
     Title="MainWindow"
     Height="480"
     Width="640">
@@ -26,11 +26,11 @@
         <Grid.DataContext>
             <local:MainViewModel />
         </Grid.DataContext>
-        <nxkit:View>
-            <nxkit:View.Source>
-                <nxkit:UriDocumentSource
+        <nx:View>
+            <nx:View.Source>
+                <nx:UriDocumentSource
                     Uri="Form.xml">
-                    <nxkit:UriDocumentSource.Modules>
+                    <nx:UriDocumentSource.Modules>
                         <x:Array
                             xmlns:sys="clr-namespace:System;assembly=mscorlib"
                             Type="sys:Type">
@@ -41,9 +41,9 @@
                                 xmlns:t="clr-namespace:NXKit.XForms.Layout;assembly=NXKit.XForms.Layout"
                                 Type="t:LayoutModule" />
                         </x:Array>
-                    </nxkit:UriDocumentSource.Modules>
-                </nxkit:UriDocumentSource>
-            </nxkit:View.Source>
-        </nxkit:View>
+                    </nx:UriDocumentSource.Modules>
+                </nx:UriDocumentSource>
+            </nx:View.Source>
+        </nx:View>
     </Grid>
 </Window>
