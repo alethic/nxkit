@@ -10,9 +10,9 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Represents a structural node in the visual tree.
+    /// Represents a content node in the visual tree.
     /// </summary>
-    public abstract class StructuralVisual : 
+    public abstract class ContentVisual : 
         Visual
     {
 
@@ -23,7 +23,7 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public StructuralVisual()
+        public ContentVisual()
         {
 
         }
@@ -34,7 +34,7 @@ namespace NXKit
         /// <param name="document"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        protected StructuralVisual(INXDocument document, StructuralVisual parent, XNode node)
+        protected ContentVisual(INXDocument document, ContentVisual parent, XNode node)
             : base(document, parent, node)
         {
             Contract.Requires<ArgumentNullException>(document != null);
@@ -74,7 +74,7 @@ namespace NXKit
             if (namingScope == null)
                 return Id;
             else
-                return ((StructuralVisual)namingScope).UniqueId + "_" + Id;
+                return ((ContentVisual)namingScope).UniqueId + "_" + Id;
         }
 
         /// <summary>
@@ -169,8 +169,8 @@ namespace NXKit
                 yield return this;
 
             foreach (var child in Children)
-                if (child is StructuralVisual)
-                    foreach (var descendant in ((StructuralVisual)child).Descendants(true))
+                if (child is ContentVisual)
+                    foreach (var descendant in ((ContentVisual)child).Descendants(true))
                         yield return descendant;
                 else
                     yield return child;
@@ -191,8 +191,8 @@ namespace NXKit
                 yield return this;
 
             foreach (var child in Children)
-                if (child is StructuralVisual)
-                    foreach (var descendant in ((StructuralVisual)child).Descendants(true, predicate))
+                if (child is ContentVisual)
+                    foreach (var descendant in ((ContentVisual)child).Descendants(true, predicate))
                         yield return descendant;
                 else if (predicate(child))
                     yield return child;
@@ -210,8 +210,8 @@ namespace NXKit
             yield return this;
 
             foreach (var child in Children)
-                if (child is StructuralVisual)
-                    foreach (var descendant in ((StructuralVisual)child).DescendantsIncludeNS(ns))
+                if (child is ContentVisual)
+                    foreach (var descendant in ((ContentVisual)child).DescendantsIncludeNS(ns))
                         yield return descendant;
                 else
                     yield return child;

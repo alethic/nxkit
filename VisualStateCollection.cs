@@ -45,7 +45,7 @@ namespace NXKit
         /// <param name="visual"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        object Get(StructuralVisual visual, Type type, Func<object> getDefaultValue)
+        object Get(ContentVisual visual, Type type, Func<object> getDefaultValue)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
             Contract.Requires<ArgumentNullException>(type != null);
@@ -68,7 +68,7 @@ namespace NXKit
         /// <typeparam name="T"></typeparam>
         /// <param name="visual"></param>
         /// <returns></returns>
-        public T Get<T>(StructuralVisual visual)
+        public T Get<T>(ContentVisual visual)
             where T : new()
         {
             Contract.Requires<ArgumentNullException>(visual != null);
