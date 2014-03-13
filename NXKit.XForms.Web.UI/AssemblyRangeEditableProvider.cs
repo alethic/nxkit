@@ -38,8 +38,7 @@ namespace NXKit.XForms.Web.UI
         public Control Create(View view, XFormsRangeVisual visual)
         {
             // scan assembly for marked type
-            return assembly.GetTypes()
-                .Where(i => typeof(IRangeEditable).IsAssignableFrom(i))
+            return types
                 .Where(i => XFormsXsdTypeAttribute.Predicate(i, visual.Binding))
                 .Select(i => CreateEditable(i, view, visual))
                 .FirstOrDefault(i => i != null);

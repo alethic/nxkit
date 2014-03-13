@@ -17,7 +17,7 @@ namespace NXKit.XForms.Web.UI
     {
 
         readonly Assembly assembly;
-        readonly Type[] editableTypes;
+        readonly Type[] types;
 
         /// <summary>
         /// Initializes a new instance.
@@ -28,7 +28,7 @@ namespace NXKit.XForms.Web.UI
             Contract.Requires<ArgumentNullException>(assembly != null);
 
             this.assembly = assembly;
-            this.editableTypes = assembly.GetTypes()
+            this.types = assembly.GetTypes()
                 .Where(i => i.IsClass && !i.IsAbstract && !i.IsGenericTypeDefinition)
                 .Where(i => typeof(IInputEditable).IsAssignableFrom(i))
                 .OrderByDescending(i => PriorityAttribute.GetPriority(i))
@@ -38,7 +38,7 @@ namespace NXKit.XForms.Web.UI
         public Control Create(View view, XFormsInputVisual visual)
         {
             // scan assembly for marked type
-            return editableTypes
+            return types
                 .Where(i => XFormsXsdTypeAttribute.Predicate(i, visual.Binding))
                 .Select(i => CreateEditable(i, view, visual))
                 .FirstOrDefault(i => i != null);
