@@ -1,9 +1,9 @@
 ﻿<f:form xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        xmlns:f="http://www.isillc.com/XML/forms/Layout-1.0"
+        xmlns:f="http://schemas.nxkit.org/nxkit/2014/xforms-layout"
         xmlns:xf="http://www.w3.org/2002/xforms"
         xmlns:ev="http://www.w3.org/2001/xml-events">
     <xf:model id="data">
-        
+
         <xf:instance id="misc">
             <data xmlns="">
                 <secondary>false</secondary>
@@ -14,7 +14,7 @@
                  type="xsd:boolean" />
         <xf:bind nodeset="xf:instance('misc')/secondary_enabled"
                  relevant="xf:instance('misc')/secondary='true'"/>
-        
+
         <xf:instance id="primaryperson"
                      src="primaryperson.xml" />
         <xf:bind nodeset="xf:instance('primaryperson')/heightfeet"
@@ -28,7 +28,7 @@
                  type="xsd:int"/>
         <xf:bind nodeset="xf:instance('primaryperson')/dateofbirth"
                  type="xsd:date"/>
-                 
+
         <xf:instance id="secondaryperson"
                      src="secondaryperson.xml" />
         <xf:bind nodeset="xf:instance('secondaryperson')"
@@ -44,33 +44,33 @@
                  type="xsd:int"/>
         <xf:bind nodeset="xf:instance('secondaryperson')/dateofbirth"
                  type="xsd:date"/>
-                 
+
         <xf:instance id="primaryelections"
                      src="primaryelections.xml" />
-        
+
         <xf:instance id="secondaryelections"
                      src="secondaryelections.xml" />
-        
+
         <xf:instance id="primaryquestions"
                      src="questions.xml" />
         <xf:bind nodeset="xf:instance('primaryquestions')//healthinfo"
                  relevant="../answer='true' and ./@enable='true'" />
-        
+
         <xf:instance id="secondaryquestions"
                      src="questions.xml" />
         <xf:bind nodeset="xf:instance('secondaryquestions')"
                  relevant="xf:instance('misc')/secondary='true'"/>
         <xf:bind nodeset="xf:instance('secondaryquestions')//healthinfo"
                  relevant="../answer='true' and ./@enable='true'" />
-                     
+
         <xf:instance id="relationships"
                      src="relationships.xml" />
-                     
+
         <xf:instance id="beneficiaries"
                      src="beneficiaries.xml" />
         <xf:bind nodeset="xf:instance('beneficiaries')//percentage"
                  type="xsd:integer" />
-                       
+
         <xf:submission ref="xf:instance('primaryperson')"
                        method="put"
                        action="primaryperson.xml" />
@@ -175,7 +175,8 @@
             <xf:label>Health Questions</xf:label>
             <xf:hint>Please answer the following questions by checking “Yes” or “No.”</xf:hint>
             <xf:repeat nodeset="question">
-                <xf:select1 ref="answer" incremental="true">
+                <xf:select1 ref="answer"
+                            incremental="true">
                     <xf:label ref="../text" />
                     <xf:item>
                         <xf:label>No</xf:label>
@@ -286,7 +287,8 @@
             <xf:label>Health Questions</xf:label>
             <xf:hint>Please answer the following questions by checking “Yes” or “No.”</xf:hint>
             <xf:repeat nodeset="question">
-                <xf:select1 ref="answer" incremental="true">
+                <xf:select1 ref="answer"
+                            incremental="true">
                     <xf:label ref="../text" />
                     <xf:item>
                         <xf:label>No</xf:label>

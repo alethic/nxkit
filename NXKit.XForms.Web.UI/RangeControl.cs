@@ -1,11 +1,14 @@
-﻿using NXKit.Web.UI;
-using NXKit.XForms;
+﻿using System;
+using System.Diagnostics.Contracts;
+
+using NXKit.Web.UI;
 
 namespace NXKit.XForms.Web.UI
 {
 
     [VisualControlTypeDescriptor]
-    public class RangeControlDescriptor : VisualControlTypeDescriptor
+    public class RangeControlDescriptor : 
+        VisualControlTypeDescriptor
     {
 
         public override bool CanHandleVisual(Visual visual)
@@ -25,17 +28,20 @@ namespace NXKit.XForms.Web.UI
 
     }
 
-    public class RangeControl : VisualControl<XFormsRangeVisual>
+    public class RangeControl : 
+        VisualControl<XFormsRangeVisual>
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="view"></param>
         /// <param name="visual"></param>
         public RangeControl(View view, XFormsRangeVisual visual)
             : base(view, visual)
         {
-
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
         }
 
         protected override void CreateChildControls()
@@ -50,7 +56,7 @@ namespace NXKit.XForms.Web.UI
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        private VisualControl<XFormsRangeVisual> CreateRangeControl(XFormsRangeVisual visual)
+        VisualControl<XFormsRangeVisual> CreateRangeControl(XFormsRangeVisual visual)
         {
             if (Visual.Type == XmlSchemaConstants.XMLSchema + "integer" ||
                 Visual.Type == XmlSchemaConstants.XMLSchema + "int")
@@ -58,7 +64,7 @@ namespace NXKit.XForms.Web.UI
             else if (Visual.Type == XmlSchemaConstants.XMLSchema + "date")
                 return new RangeDateControl(View, Visual);
             else
-                return null;
+                throw new NotSupportedException();
         }
 
     }
