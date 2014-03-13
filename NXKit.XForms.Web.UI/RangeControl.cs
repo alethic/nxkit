@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-
+using System.Web.UI;
 using NXKit.Web.UI;
 
 namespace NXKit.XForms.Web.UI
@@ -32,6 +32,12 @@ namespace NXKit.XForms.Web.UI
         VisualControl<XFormsRangeVisual>
     {
 
+        static readonly IRangeEditableProvider editableProvider =
+            new DefaultRangeEditableProvider();
+
+        Control ctl;
+        VisualControl lbl;
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -46,25 +52,38 @@ namespace NXKit.XForms.Web.UI
 
         protected override void CreateChildControls()
         {
-            var ctl = CreateRangeControl(Visual);
+            ctl = editableProvider.Create(View, Visual);
             ctl.ID = Visual.Type != null ? Visual.Type.LocalName : "default";
             Controls.Add(ctl);
+
+            var lblVisual = Visual.FindLabelVisual();
+            if (lblVisual != null)
+            {
+                lbl = new LabelControl(View, lblVisual);
+                lbl.ID = "lbl";
+                Controls.Add(lbl);
+            }
         }
 
-        /// <summary>
-        /// Creates a Range control based on the bound data type.
-        /// </summary>
-        /// <param name="visual"></param>
-        /// <returns></returns>
-        VisualControl<XFormsRangeVisual> CreateRangeControl(XFormsRangeVisual visual)
+        protected override void Render(HtmlTextWriter writer)
         {
-            if (Visual.Type == XmlSchemaConstants.XMLSchema + "integer" ||
-                Visual.Type == XmlSchemaConstants.XMLSchema + "int")
-                return new RangeIntegerControl(View, Visual);
-            else if (Visual.Type == XmlSchemaConstants.XMLSchema + "date")
-                return new RangeDateControl(View, Visual);
-            else
-                throw new NotSupportedException();
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "xforms-range");
+            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+
+            if (lbl != null)
+            {
+                // target control if it can be targeted
+                if (ctl is IFocusTarget)
+                    writer.AddAttribute(HtmlTextWriterAttribute.For, ((IFocusTarget)ctl).TargetID);
+
+                writer.RenderBeginTag(HtmlTextWriterTag.Label);
+                lbl.RenderControl(writer);
+                writer.RenderEndTag();
+            }
+
+            ctl.RenderControl(writer);
+
+            writer.RenderEndTag();
         }
 
     }

@@ -132,15 +132,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyOutputViewProvider.cs" />
+    <Compile Include="AssemblyRangeEditableProvider.cs" />
+    <Compile Include="AssemblyInputEditableProvider.cs" />
+    <Compile Include="DefaultOutputViewProvider.cs" />
+    <Compile Include="DefaultRangeEditableProvider.cs" />
+    <Compile Include="DefaultInputEditableProvider.cs" />
     <Compile Include="HintControl.cs" />
+    <Compile Include="IFocusTarget.cs" />
+    <Compile Include="InputEditableDefault.cs" />
+    <Compile Include="OutputView.cs" />
+    <Compile Include="IOutputView.cs" />
+    <Compile Include="IOutputViewProvider.cs" />
+    <Compile Include="OutputViewDefault.cs" />
+    <Compile Include="RangeEditable.cs" />
+    <Compile Include="IRangeEditableProvider.cs" />
+    <Compile Include="IRangeEditable.cs" />
+    <Compile Include="IInputEditable.cs" />
+    <Compile Include="IInputEditableProvider.cs" />
+    <Compile Include="InputEditable.cs" />
     <Compile Include="RepeatControl.cs" />
     <Compile Include="SingleNodeBindingVisualControl.cs" />
     <Compile Include="SingleNodeBindingVisualContentControl.cs" />
     <Compile Include="VisualExtensions.cs" />
     <Compile Include="BeginRenderEventArgs.cs" />
     <Compile Include="CommonControlCollection.cs" />
-    <Compile Include="RangeDateControl.cs" />
-    <Compile Include="RangeIntegerControl.cs" />
+    <Compile Include="RangeEditableDate.cs" />
+    <Compile Include="RangeEditableInteger.cs" />
     <Compile Include="RangeControl.cs" />
     <Compile Include="OutputControl.cs" />
     <Compile Include="TriggerControl.cs" />
@@ -154,16 +172,17 @@
     <Compile Include="Select1MinimalControl.cs" />
     <Compile Include="Select1Control.cs" />
     <Compile Include="GroupControl.cs" />
-    <Compile Include="InputIntegerControl.cs" />
-    <Compile Include="InputTimeControl.cs" />
-    <Compile Include="InputDateControl.cs" />
-    <Compile Include="InputBooleanControl.cs" />
-    <Compile Include="InputStringControl.cs" />
+    <Compile Include="InputEditableInteger.cs" />
+    <Compile Include="InputEditableTime.cs" />
+    <Compile Include="InputEditableDate.cs" />
+    <Compile Include="InputEditableBoolean.cs" />
+    <Compile Include="InputEditableString.cs" />
     <Compile Include="InputControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BindingUtil.cs" />
     <Compile Include="TriggerControlCollection.cs" />
     <Compile Include="WebResources.cs" />
+    <Compile Include="XFormsXsdTypeAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
@@ -194,7 +213,7 @@
     <EmbeddedResource Include="Select1MinimalControl.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="InputStringControl.js" />
+    <EmbeddedResource Include="InputEditableString.js" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NXKit.XForms.Web.UI.nuspec">

@@ -10,8 +10,9 @@ using NXKit.Web.UI;
 namespace NXKit.XForms.Web.UI
 {
 
-    public class InputDateControl :
-        SingleNodeBindingVisualControl<XFormsInputVisual>
+    [XFormsXsdType(XmlSchemaConstants.XMLSchema_NS, "date")]
+    public class InputEditableDate :
+        InputEditable
     {
 
         RadDatePicker ctl;
@@ -19,8 +20,9 @@ namespace NXKit.XForms.Web.UI
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="view"></param>
         /// <param name="visual"></param>
-        public InputDateControl(View view, XFormsInputVisual visual)
+        public InputEditableDate(View view, XFormsInputVisual visual)
             : base(view, visual)
         {
             Contract.Requires<ArgumentNullException>(view != null);
@@ -29,7 +31,6 @@ namespace NXKit.XForms.Web.UI
 
         protected override void OnVisualValueChanged()
         {
-            base.OnVisualValueChanged();
             ctl.SelectedDate = BindingUtil.Get<DateTime?>(Visual.Binding);
         }
 
@@ -51,11 +52,6 @@ namespace NXKit.XForms.Web.UI
             // TODO set to constraint, if any
             ctl.MinDate = DateTime.MinValue;
             ctl.MaxDate = DateTime.MaxValue;
-
-            var labelVisual = Visual.FindLabelVisual();
-            if (labelVisual != null)
-                ctl.DateInput.Label = labelVisual.ToText();
-
             Controls.Add(ctl);
         }
 
@@ -64,15 +60,15 @@ namespace NXKit.XForms.Web.UI
             BindingUtil.Set(Visual.Binding, ctl.SelectedDate);
         }
 
-        protected override void Render(HtmlTextWriter writer)
-        {
-            // client-side control element
-            writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "XForms_Input XForms_Input_Date");
-            writer.RenderBeginTag(HtmlTextWriterTag.Div);
-            base.Render(writer);
-            writer.RenderEndTag();
-        }
+        //protected override void Render(HtmlTextWriter writer)
+        //{
+        //    // client-side control element
+        //    writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
+        //    writer.AddAttribute(HtmlTextWriterAttribute.Class, "XForms_Input XForms_Input_Date");
+        //    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+        //    base.Render(writer);
+        //    writer.RenderEndTag();
+        //}
 
     }
 

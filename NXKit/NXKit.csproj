@@ -134,6 +134,7 @@
     <Compile Include="IStructuralVisual.cs" />
     <Compile Include="ITextVisual.cs" />
     <Compile Include="IVisual.cs" />
+    <Compile Include="PriorityAttribute.cs" />
     <Compile Include="SingleUriResolver.cs" />
     <Compile Include="UnknownRootVisual.cs" />
     <Compile Include="XmlSchemaConstants.cs" />

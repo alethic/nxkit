@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Web.UI;
+
 using NXKit.Web.UI;
 
 namespace NXKit.XForms.Web.UI
 {
 
     [VisualControlTypeDescriptor]
-    public class InputControlDescriptor : 
+    public class InputControlDescriptor :
         VisualControlTypeDescriptor
     {
 
@@ -31,12 +33,16 @@ namespace NXKit.XForms.Web.UI
         VisualControl<XFormsInputVisual>
     {
 
+        static readonly IInputEditableProvider editableProvider =
+            new DefaultInputEditableProvider();
+
+        Control ctl;
         VisualControl lbl;
-        VisualControl ctl;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="view"></param>
         /// <param name="visual"></param>
         public InputControl(View view, XFormsInputVisual visual)
             : base(view, visual)
@@ -47,6 +53,9 @@ namespace NXKit.XForms.Web.UI
 
         protected override void CreateChildControls()
         {
+            ctl = editableProvider.Create(View, Visual);
+            Controls.Add(ctl);
+
             var lblVisual = Visual.FindLabelVisual();
             if (lblVisual != null)
             {
@@ -54,35 +63,27 @@ namespace NXKit.XForms.Web.UI
                 lbl.ID = "lbl";
                 Controls.Add(lbl);
             }
-
-            ctl = CreateInputControl(Visual);
-            ctl.ID = Visual.Type != null ? Visual.Type.LocalName : "default";
-            Controls.Add(ctl);
         }
 
-        /// <summary>
-        /// Creates an input control based on the bound data type.
-        /// </summary>
-        /// <param name="visual"></param>
-        /// <returns></returns>
-         VisualControl<XFormsInputVisual> CreateInputControl(XFormsInputVisual visual)
+        protected override void Render(HtmlTextWriter writer)
         {
-            if (Visual.Type == XmlSchemaConstants.XMLSchema + "boolean")
-                return new InputBooleanControl(View, Visual);
-            else if (Visual.Type == XmlSchemaConstants.XMLSchema + "date")
-                return new InputDateControl(View, Visual);
-            else if (Visual.Type == XmlSchemaConstants.XMLSchema + "time")
-                return new InputTimeControl(View, Visual);
-            else if (Visual.Type == XmlSchemaConstants.XMLSchema + "int")
-                return new InputIntegerControl(View, Visual);
-            else if (Visual.Type == XmlSchemaConstants.XMLSchema + "integer")
-                return new InputIntegerControl(View, Visual);
-            else if (Visual.Type == XmlSchemaConstants.XMLSchema + "long")
-                return new InputIntegerControl(View, Visual);
-            else if (Visual.Type == XmlSchemaConstants.XMLSchema + "short")
-                return new InputIntegerControl(View, Visual);
-            else
-                return new InputStringControl(View, Visual);
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "xforms-input");
+            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+
+            if (lbl != null)
+            {
+                // target control if it can be targeted
+                if (ctl is IFocusTarget)
+                    writer.AddAttribute(HtmlTextWriterAttribute.For, ((IFocusTarget)ctl).TargetID);
+
+                writer.RenderBeginTag(HtmlTextWriterTag.Label);
+                lbl.RenderControl(writer);
+                writer.RenderEndTag();
+            }
+
+            ctl.RenderControl(writer);
+
+            writer.RenderEndTag();
         }
 
     }

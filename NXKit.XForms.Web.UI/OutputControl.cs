@@ -1,12 +1,15 @@
-﻿using System.Web.UI;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Web.UI;
+
 using NXKit.Web.UI;
-using NXKit.XForms;
 
 namespace NXKit.XForms.Web.UI
 {
 
     [VisualControlTypeDescriptor]
-    public class OutputControlDescriptor : VisualControlTypeDescriptor
+    public class OutputControlDescriptor :
+        VisualControlTypeDescriptor
     {
 
         public override bool CanHandleVisual(Visual visual)
@@ -26,8 +29,15 @@ namespace NXKit.XForms.Web.UI
 
     }
 
-    public class OutputControl : VisualControl<XFormsOutputVisual>
+    public class OutputControl :
+        VisualControl<XFormsOutputVisual>
     {
+
+        static readonly IOutputViewProvider viewProvider =
+            new DefaultOutputViewProvider();
+
+        Control ctl;
+        VisualControl lbl;
 
         /// <summary>
         /// Initializes a new instance.
@@ -37,12 +47,54 @@ namespace NXKit.XForms.Web.UI
         public OutputControl(View view, XFormsOutputVisual visual)
             : base(view, visual)
         {
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
+        }
 
+        protected override void CreateChildControls()
+        {
+            ctl = CreateOutputControl(Visual);
+            ctl.ID = Visual.Type != null ? Visual.Type.LocalName : "default";
+            Controls.Add(ctl);
+
+            var lblVisual = Visual.FindLabelVisual();
+            if (lblVisual != null)
+            {
+                lbl = new LabelControl(View, lblVisual);
+                lbl.ID = "lbl";
+                Controls.Add(lbl);
+            }
+        }
+
+        /// <summary>
+        /// Creates an output control based on the bound data type.
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <returns></returns>
+        Control CreateOutputControl(XFormsOutputVisual visual)
+        {
+            return viewProvider.Create(View, visual);
         }
 
         protected override void Render(HtmlTextWriter writer)
         {
-            Visual.WriteText(writer);
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "xforms-output");
+            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+
+            if (lbl != null)
+            {
+                // target control if it can be targeted
+                if (ctl is IFocusTarget)
+                    writer.AddAttribute(HtmlTextWriterAttribute.For, ((IFocusTarget)ctl).TargetID);
+
+                writer.RenderBeginTag(HtmlTextWriterTag.Label);
+                lbl.RenderControl(writer);
+                writer.RenderEndTag();
+            }
+
+            ctl.RenderControl(writer);
+
+            writer.RenderEndTag();
         }
 
     }

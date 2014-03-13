@@ -10,8 +10,10 @@ using NXKit.Web.UI;
 namespace NXKit.XForms.Web.UI
 {
 
-    public class InputIntegerControl : 
-        SingleNodeBindingVisualControl<XFormsInputVisual>
+    [XFormsXsdType(XmlSchemaConstants.XMLSchema_NS, "integer")]
+    [XFormsXsdType(XmlSchemaConstants.XMLSchema_NS, "int")]
+    public class InputEditableInteger :
+        InputEditable
     {
 
         RadNumericTextBox ctl;
@@ -21,11 +23,16 @@ namespace NXKit.XForms.Web.UI
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public InputIntegerControl(NXKit.Web.UI.View view, XFormsInputVisual visual)
+        public InputEditableInteger(NXKit.Web.UI.View view, XFormsInputVisual visual)
             : base(view, visual)
         {
             Contract.Requires<ArgumentNullException>(view != null);
             Contract.Requires<ArgumentNullException>(visual != null);
+        }
+
+        public override string TargetID
+        {
+            get { return ctl.ClientID; }
         }
 
         protected override void OnVisualValueChanged()

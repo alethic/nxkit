@@ -10,8 +10,9 @@ using NXKit.Web.UI;
 namespace NXKit.XForms.Web.UI
 {
 
-    public class InputStringControl :
-        SingleNodeBindingVisualControl<XFormsInputVisual>,
+    [XFormsXsdType(XmlSchemaConstants.XMLSchema_NS, "string")]
+    public class InputEditableString :
+        InputEditable,
         IScriptControl
     {
 
@@ -23,7 +24,7 @@ namespace NXKit.XForms.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public InputStringControl(NXKit.Web.UI.View view, XFormsInputVisual visual)
+        public InputEditableString(NXKit.Web.UI.View view, XFormsInputVisual visual)
             : base(view, visual)
         {
             Contract.Requires<ArgumentNullException>(view != null);
@@ -36,23 +37,22 @@ namespace NXKit.XForms.Web.UI
         protected override void CreateChildControls()
         {
             ctl = new TextBox();
-            ctl.ID = "ctl";
+            ctl.ID = "txt";
             ctl.EnableViewState = true;
             ctl.TextChanged += ctl_TextChanged;
-
             Controls.Add(ctl);
 
             val = new CustomValidator();
             val.ValidationGroup = View.ValidationGroup;
             val.ControlToValidate = ctl.ID;
             val.ValidateEmptyText = true;
-            val.ServerValidate += validator_ServerValidate;
+            val.ServerValidate += val_ServerValidate;
             val.Text = "";
             val.Display = ValidatorDisplay.None;
             Controls.Add(val);
         }
 
-        void validator_ServerValidate(object source, ServerValidateEventArgs args)
+        void val_ServerValidate(object source, ServerValidateEventArgs args)
         {
             // skip irrelevant controls; can't be invalid
             if (!Visual.Relevant)
@@ -75,6 +75,11 @@ namespace NXKit.XForms.Web.UI
                 if (alertVisual != null)
                     val.ErrorMessage = alertVisual.ToText();
             }
+        }
+
+        public override string TargetID
+        {
+            get { return ctl.ClientID; }
         }
 
         protected override void OnVisualValueChanged()
@@ -100,33 +105,31 @@ namespace NXKit.XForms.Web.UI
         protected override void OnPreRender(EventArgs args)
         {
             base.OnPreRender(args);
-            ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
+            //ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
         }
 
         protected override void Render(HtmlTextWriter writer)
         {
-            ScriptManager.GetCurrent(Page).RegisterScriptDescriptors(this);
+            //ScriptManager.GetCurrent(Page).RegisterScriptDescriptors(this);
 
             // client-side control element
-            writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "XForms_Input XForms_Input_String");
-            writer.RenderBeginTag(HtmlTextWriterTag.Div);
-            base.Render(writer);
-            writer.RenderEndTag();
+            ctl.RenderControl(writer);
         }
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
-            var desc = new ScriptControlDescriptor("NXKit.XForms.Web.UI.InputStringControl", ClientID);
-            desc.AddComponentProperty("view", View.ClientID);
-            desc.AddProperty("modelItemId", Visual.Binding != null ? Visual.Binding.NodeUniqueId : null);
-            desc.AddComponentProperty("radTextBox", ctl.ClientID);
-            yield return desc;
+            //var desc = new ScriptControlDescriptor("NXKit.XForms.Web.UI.InputStringControl", ClientID);
+            //desc.AddComponentProperty("view", View.ClientID);
+            //desc.AddProperty("modelItemId", Visual.Binding != null ? Visual.Binding.NodeUniqueId : null);
+            //desc.AddComponentProperty("radTextBox", ctl.ClientID);
+            //yield return desc;
+            yield break;
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference("NXKit.XForms.Web.UI.InputStringControl.js", typeof(InputStringControl).Assembly.FullName);
+            //yield return new ScriptReference("NXKit.XForms.Web.UI.InputStringControl.js", typeof(InputStringControl).Assembly.FullName);
+            yield break;
         }
 
     }

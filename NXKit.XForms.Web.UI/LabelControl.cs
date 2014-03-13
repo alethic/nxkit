@@ -1,12 +1,15 @@
-﻿using System.Web.UI;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Web.UI;
+
 using NXKit.Web.UI;
-using NXKit.XForms;
 
 namespace NXKit.XForms.Web.UI
 {
 
     [VisualControlTypeDescriptor]
-    public class LabelControlDescriptor : VisualControlTypeDescriptor
+    public class LabelControlDescriptor : 
+        VisualControlTypeDescriptor
     {
 
         public override bool CanHandleVisual(Visual visual)
@@ -26,7 +29,8 @@ namespace NXKit.XForms.Web.UI
 
     }
 
-    public class LabelControl : VisualContentControl<XFormsLabelVisual>
+    public class LabelControl : 
+        VisualContentControl<XFormsLabelVisual>
     {
 
         /// <summary>
@@ -37,7 +41,8 @@ namespace NXKit.XForms.Web.UI
         public LabelControl(View view, XFormsLabelVisual visual)
             : base(view, visual)
         {
-
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
         }
 
         protected override VisualControlCollection CreateContentControlCollection()
