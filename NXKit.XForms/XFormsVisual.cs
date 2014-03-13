@@ -5,7 +5,7 @@
     /// Base class for XForms <see cref="Visual"/> types.
     /// </summary>
     public abstract class XFormsVisual : 
-        StructuralVisual
+        ContentVisual
     {
 
         /// <summary>

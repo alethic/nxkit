@@ -11,7 +11,7 @@ namespace NXKit.Web.UI
     /// <typeparam name="T"></typeparam>
     public abstract class VisualContentControl<T> :
         VisualControl<T>
-        where T : StructuralVisual
+        where T : ContentVisual
     {
 
         VisualControlCollection content;

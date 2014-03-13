@@ -25,13 +25,13 @@ namespace NXKit.XForms.Layout.Web.UI
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        private static IEnumerable<TableRowVisual> GetRows(StructuralVisual visual)
+        private static IEnumerable<TableRowVisual> GetRows(ContentVisual visual)
         {
             foreach (var child in visual.Children)
                 if (child is TableRowVisual)
                     yield return (TableRowVisual)child;
-                else if (child is StructuralVisual)
-                    foreach (var child2 in GetRows((StructuralVisual)child))
+                else if (child is ContentVisual)
+                    foreach (var child2 in GetRows((ContentVisual)child))
                         yield return child2;
         }
 

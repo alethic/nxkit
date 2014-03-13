@@ -11,7 +11,7 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public VisualContentControlCollection(View view, StructuralVisual visual, bool includeTextAsContent = false)
+        public VisualContentControlCollection(View view, ContentVisual visual, bool includeTextAsContent = false)
             : base(view, visual)
         {
             IncludeTextAsContent = includeTextAsContent;

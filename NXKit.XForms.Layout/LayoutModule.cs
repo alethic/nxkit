@@ -54,9 +54,9 @@ namespace NXKit.XForms.Layout
             base.AnnotateVisual(visual);
 
             // set importance annotation if marked
-            if (visual is StructuralVisual)
+            if (visual is ContentVisual)
             {
-                var attr = GetAttributeValue(((StructuralVisual)visual).Element, "importance");
+                var attr = GetAttributeValue(((ContentVisual)visual).Element, "importance");
                 if (attr == "high")
                     visual.Annotations.Set<ImportanceAnnotation>(new ImportanceAnnotation(Importance.High));
                 else if (attr == "low")

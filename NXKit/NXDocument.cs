@@ -113,7 +113,7 @@ namespace NXKit
         readonly VisualStateCollection visualState;
         int nextElementId;
 
-        StructuralVisual rootVisual;
+        ContentVisual rootVisual;
         Module[] modules;
 
         [ContractInvariantMethod]
@@ -329,7 +329,7 @@ namespace NXKit
         /// <summary>
         /// Gets a reference to the root <see cref="Visual"/> instance for navigating the visual tree.
         /// </summary>
-        public StructuralVisual RootVisual
+        public ContentVisual RootVisual
         {
             get { return rootVisual ?? (rootVisual = CreateRootVisual()); }
         }
@@ -338,11 +338,11 @@ namespace NXKit
         /// Creates a new root <see cref="Visual"/> instance for navigating the visual tree.
         /// </summary>
         /// <returns></returns>
-        StructuralVisual CreateRootVisual()
+        ContentVisual CreateRootVisual()
         {
-            Contract.Ensures(Contract.Result<StructuralVisual>() != null);
+            Contract.Ensures(Contract.Result<ContentVisual>() != null);
 
-            return (StructuralVisual)((INXDocument)this).CreateVisual(null, Xml.Root) ?? new UnknownRootVisual(this, null, Xml.Root);
+            return (ContentVisual)((INXDocument)this).CreateVisual(null, Xml.Root) ?? new UnknownRootVisual(this, null, Xml.Root);
         }
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace NXKit
         /// <param name="parent"></param>
         /// <param name="node"></param>
         /// <returns></returns>
-        Visual INXDocument.CreateVisual(StructuralVisual parent, XNode node)
+        Visual INXDocument.CreateVisual(ContentVisual parent, XNode node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
 

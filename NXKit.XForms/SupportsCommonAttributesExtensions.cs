@@ -17,7 +17,7 @@ namespace NXKit.XForms
         /// <param name="name"></param>
         /// <returns></returns>
         public static XAttribute AnyAttribute<T>(this T self, XName name)
-            where T : StructuralVisual, ISupportsCommonAttributes
+            where T : ContentVisual, ISupportsCommonAttributes
         {
             return self.Element.Attribute(name);
         }

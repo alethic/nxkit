@@ -14,7 +14,7 @@ namespace NXKit.XForms.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public TriggerControlCollection(View view, StructuralVisual visual)
+        public TriggerControlCollection(View view, ContentVisual visual)
             : base(view, visual)
         {
 

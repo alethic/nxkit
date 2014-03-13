@@ -34,7 +34,7 @@ namespace NXKit
         /// <param name="document"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        protected Visual(INXDocument document, StructuralVisual parent, XNode node)
+        protected Visual(INXDocument document, ContentVisual parent, XNode node)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
@@ -47,7 +47,7 @@ namespace NXKit
         /// <param name="document"></param>
         /// <param name="parent"></param>
         /// <param name="node"></param>
-        public void Initialize(INXDocument document, StructuralVisual parent, XNode node)
+        public void Initialize(INXDocument document, ContentVisual parent, XNode node)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
@@ -65,7 +65,7 @@ namespace NXKit
         /// <summary>
         /// Parent <see cref="Visual"/>.
         /// </summary>
-        public StructuralVisual Parent { get; private set; }
+        public ContentVisual Parent { get; private set; }
 
         /// <summary>
         /// Gets a reference to the underlying DOM node.
@@ -83,7 +83,7 @@ namespace NXKit
         /// Yields each ascendant visual.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<StructuralVisual> Ascendants()
+        public IEnumerable<ContentVisual> Ascendants()
         {
             var node = this.Parent;
             while (node != null)
@@ -106,7 +106,7 @@ namespace NXKit
         {
             // discover the root visual
             var rootVisual = Ascendants()
-                .Prepend(this as StructuralVisual)
+                .Prepend(this as ContentVisual)
                 .First(i => i != null && i.Parent == null);
 
             // naming scope of current visual
@@ -116,7 +116,7 @@ namespace NXKit
                 .ToArray();
 
             // search all descendents of the root element that are sharing naming scopes with myself
-            foreach (var visual in rootVisual.DescendantsIncludeNS(namingScopes).OfType<StructuralVisual>())
+            foreach (var visual in rootVisual.DescendantsIncludeNS(namingScopes).OfType<ContentVisual>())
                 if (visual.Id == id)
                     return visual;
 

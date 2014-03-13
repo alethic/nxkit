@@ -9,7 +9,7 @@
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        public static Importance GetImportance(StructuralVisual visual)
+        public static Importance GetImportance(ContentVisual visual)
         {
             var attr = visual.Document.GetModule<LayoutModule>().GetAttributeValue(visual.Element, "importance");
 

@@ -10,7 +10,7 @@ namespace NXKit.Tests
     {
 
         public class TestVisual :
-            StructuralVisual
+            ContentVisual
         {
 
             public override string Id

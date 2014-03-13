@@ -18,7 +18,7 @@
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type nx:StructuralVisual}">
+        DataType="{x:Type nx:ContentVisual}">
         <ItemsControl
             ItemsSource="{Binding Children}" />
     </DataTemplate>
@@ -30,13 +30,6 @@
             <Setter.Value>
                 <ControlTemplate
                     TargetType="{x:Type local:View}">
-                    <ControlTemplate.Resources>
-                        <DataTemplate
-                            DataType="nxkit:Visual">
-                            <TextBlock
-                                Text="a visual" />
-                        </DataTemplate>
-                    </ControlTemplate.Resources>
                     <Border
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"

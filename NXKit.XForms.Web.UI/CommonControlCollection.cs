@@ -19,7 +19,7 @@ namespace NXKit.XForms.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public CommonControlCollection(View view, StructuralVisual visual)
+        public CommonControlCollection(View view, ContentVisual visual)
             : base(view, visual)
         {
 

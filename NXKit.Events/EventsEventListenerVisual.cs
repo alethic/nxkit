@@ -1,7 +1,7 @@
 ﻿namespace NXKit.Events
 {
 
-    public class EventsEventListenerVisual : StructuralVisual, IEventHandlerVisual
+    public class EventsEventListenerVisual : ContentVisual, IEventHandlerVisual
     {
 
         public override string Id

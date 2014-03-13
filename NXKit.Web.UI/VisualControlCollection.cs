@@ -11,14 +11,14 @@ namespace NXKit.Web.UI
 
     /// <summary>
     /// Provides a <see cref="Control"/> type that generates a <see cref="Control"/> hierarchy for a given <see 
-    /// cref="StructuralVisual"/>.
+    /// cref="ContentVisual"/>.
     /// </summary>
     public class VisualControlCollection : 
         Control
     {
 
         readonly View view;
-        readonly StructuralVisual visual;
+        readonly ContentVisual visual;
         readonly Dictionary<Visual, VisualControl> cache = new Dictionary<Visual, VisualControl>();
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public VisualControlCollection(View view, StructuralVisual visual)
+        public VisualControlCollection(View view, ContentVisual visual)
         {
             Contract.Requires<ArgumentNullException>(view != null);
             Contract.Requires<ArgumentNullException>(visual != null);
@@ -46,7 +46,7 @@ namespace NXKit.Web.UI
         /// <summary>
         /// Gets a reference to the <see cref="Visual"/> associated with this manager.
         /// </summary>
-        public StructuralVisual Visual
+        public ContentVisual Visual
         {
             get { return visual; }
         }

@@ -5,6 +5,12 @@
     xmlns:nx_xforms_layout="http://schemas.nxkit.org/nxkit/2014/xaml/xforms-layout"
     xmlns:local="clr-namespace:NXKit.XForms.Layout.Wpf.UI">
     
-    
+    <DataTemplate
+        DataType="{x:Type nx_xforms_layout:FormVisual}">
+        <ItemsControl
+            BorderThickness="1"
+            BorderBrush="Yellow"
+            ItemsSource="{Binding Children}" />
+    </DataTemplate>
     
 </ResourceDictionary>

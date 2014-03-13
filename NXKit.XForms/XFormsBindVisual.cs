@@ -1,10 +1,9 @@
-﻿using System.Xml.Linq;
-
-namespace NXKit.XForms
+﻿namespace NXKit.XForms
 {
 
     [Visual("bind")]
-    public class XFormsBindVisual : XFormsBindingVisual
+    public class XFormsBindVisual :
+        XFormsBindingVisual
     {
 
         public override void Refresh()
@@ -19,11 +18,12 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Provides the default evaluation context for child elements, the first element.
+        /// TODO should provide a context to nested bind elements.
         /// </summary>
-        public override XFormsEvaluationContext Context
+        /// <returns></returns>
+        protected override XFormsEvaluationContext CreateEvaluationContext()
         {
-            get { return null; }
+            return null;
         }
 
     }

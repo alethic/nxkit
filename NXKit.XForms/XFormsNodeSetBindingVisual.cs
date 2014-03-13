@@ -1,50 +1,31 @@
-﻿using System.Xml.Linq;
-
-namespace NXKit.XForms
+﻿namespace NXKit.XForms
 {
 
-    public abstract class XFormsNodeSetBindingVisual : XFormsBindingVisual
+    /// <summary>
+    /// Abstract base <see cref="Visual"/> implementation for node-set binding elements.
+    /// </summary>
+    public abstract class XFormsNodeSetBindingVisual :
+        XFormsBindingVisual
     {
 
-        bool contextCached;
-        XFormsEvaluationContext context;
-
         /// <summary>
-        /// Provides the default evaluation context for child elements, the first element.
+        /// Provides an evaluation context for children. Node-set bindings provide the first node result.
         /// </summary>
-        public override XFormsEvaluationContext Context
+        /// <returns></returns>
+        protected override XFormsEvaluationContext CreateEvaluationContext()
         {
-            get
-            {
-                if (!contextCached)
-                {
-                    context = null;
+            if (Binding != null &&
+                Binding.Nodes != null &&
+                Binding.Nodes.Length >= 1)
+                return new XFormsEvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.Nodes[0], 1, Binding.Nodes.Length);
 
-                    if (Binding != null &&
-                        Binding.Nodes != null &&
-                        Binding.Nodes.Length >= 1)
-                        context = new XFormsEvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.Nodes[0], 1, Binding.Nodes.Length);
-
-                    contextCached = true;
-                }
-
-                return context;
-            }
+            return null;
         }
-
-        /// <summary>
-        /// Gets a reference to the node-set binding.
-        /// </summary>
-        public XFormsBinding Binding { get; private set; }
 
         public override void Refresh()
         {
             // rebuild binding
             Binding = Module.ResolveNodeSetBinding(this);
-
-            // rebuild cached values
-            context = null;
-            contextCached = false;
 
             base.Refresh();
 

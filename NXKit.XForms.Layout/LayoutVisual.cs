@@ -3,8 +3,11 @@
 namespace NXKit.XForms.Layout
 {
 
-    public class LayoutVisual :
-        StructuralVisual
+    /// <summary>
+    /// Abstract class for layout <see cref="Visual"/>s.
+    /// </summary>
+    public abstract class LayoutVisual :
+        ContentVisual
     {
 
         /// <summary>

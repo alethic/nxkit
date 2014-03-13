@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -9,35 +8,6 @@ namespace NXKit.XForms
     /// </summary>
     public class XFormsEvaluationContext
     {
-
-        /// <summary>
-        /// Manages the life-time of the evaluation context scope.
-        /// </summary>
-        public sealed class ThreadScope : IDisposable
-        {
-
-            internal ThreadScope(XFormsEvaluationContext context)
-            {
-                XFormsEvaluationContext.current = context;
-            }
-
-
-            public void Dispose()
-            {
-                XFormsEvaluationContext.current = null;
-            }
-        }
-
-        [ThreadStatic]
-        private static XFormsEvaluationContext current;
-
-        /// <summary>
-        /// Gets the currently in-scope evaluation context.
-        /// </summary>
-        public static XFormsEvaluationContext Current
-        {
-            get { return current; }
-        }
 
         readonly XFormsModelVisual model;
         readonly XFormsInstanceVisual instance;
@@ -100,15 +70,6 @@ namespace NXKit.XForms
         public int Size
         {
             get { return size; }
-        }
-
-        /// <summary>
-        /// Puts the context into thread local scope. Dipose of this instance to remove it.
-        /// </summary>
-        /// <returns></returns>
-        public ThreadScope Scope()
-        {
-            return new ThreadScope(this);
         }
 
     }

@@ -55,7 +55,7 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         private IEnumerable<FormNavigation> CreateChildren(IStructuralVisual visual)
         {
-            foreach (var child in visual.Children.OfType<StructuralVisual>())
+            foreach (var child in visual.Children.OfType<ContentVisual>())
                 foreach (var nav in FormNavigation.CreateNavigations(this, child))
                     yield return nav;
         }

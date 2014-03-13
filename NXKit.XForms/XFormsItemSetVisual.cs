@@ -58,9 +58,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Provides no context to children, as children are dynamically generated item.
         /// </summary>
-        public override XFormsEvaluationContext Context
+        protected override XFormsEvaluationContext CreateEvaluationContext()
         {
-            get { return null; }
+            return null;
         }
 
     }

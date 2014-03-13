@@ -33,7 +33,7 @@ namespace NXKit
         /// <summary>
         /// Gets a reference to the root visual of the form.
         /// </summary>
-        StructuralVisual RootVisual { get; }
+        ContentVisual RootVisual { get; }
 
         /// <summary>
         /// Gets the <see cref="VisualStateCollection"/>.
@@ -46,7 +46,7 @@ namespace NXKit
         /// <param name="parent"></param>
         /// <param name="node"></param>
         /// <returns></returns>
-        Visual CreateVisual(StructuralVisual parent, XNode node);
+        Visual CreateVisual(ContentVisual parent, XNode node);
 
         /// <summary>
         /// Handles any outstanding actions in the form.

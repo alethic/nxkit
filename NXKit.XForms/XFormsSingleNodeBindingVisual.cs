@@ -12,38 +12,26 @@ namespace NXKit.XForms
         XFormsBindingVisual
     {
 
-        XFormsEvaluationContext context;
-        bool contextCached;
-
         /// <summary>
-        /// Gets the evaluation context contributed to visuals within this visual's scope.
+        /// Provides an evaluation context for children nodes. Single-Node Bindings provide the single bound node.
         /// </summary>
-        public override XFormsEvaluationContext Context
+        /// <returns></returns>
+        protected override XFormsEvaluationContext CreateEvaluationContext()
         {
-            get
+            if (Binding != null &&
+                Binding.Node != null &&
+                Binding.Node.Document != null)
             {
-                if (!contextCached)
-                {
-                    context = null;
+                var model = Binding.Node.Document.Annotation<XFormsModelVisual>();
+                Contract.Assert(model != null);
 
-                    if (Binding != null &&
-                        Binding.Node != null &&
-                        Binding.Node.Document != null)
-                    {
-                        var model = Binding.Node.Document.Annotation<XFormsModelVisual>();
-                        Contract.Assert(model != null);
+                var instance = Binding.Node.Document.Annotation<XFormsInstanceVisual>();
+                Contract.Assert(instance != null);
 
-                        var instance = Binding.Node.Document.Annotation<XFormsInstanceVisual>();
-                        Contract.Assert(instance != null);
-
-                        context = new XFormsEvaluationContext(model, instance, Binding.Node, 1, 1);
-                    }
-
-                    contextCached = true;
-                }
-
-                return context;
+                return new XFormsEvaluationContext(model, instance, Binding.Node, 1, 1);
             }
+
+            return null;
         }
 
         /// <summary>
@@ -111,10 +99,6 @@ namespace NXKit.XForms
         {
             // rebuild binding
             Binding = Module.ResolveSingleNodeBinding(this);
-
-            // rebuild cached values
-            context = null;
-            contextCached = false;
 
             base.Refresh();
         }

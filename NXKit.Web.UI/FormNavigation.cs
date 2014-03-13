@@ -18,7 +18,7 @@ namespace NXKit.Web.UI
         /// <param name="parent"></param>
         /// <param name="visual"></param>
         /// <returns></returns>
-        internal static IEnumerable<FormNavigation> CreateNavigations(FormSection parent, StructuralVisual visual)
+        internal static IEnumerable<FormNavigation> CreateNavigations(FormSection parent, ContentVisual visual)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
 
@@ -27,7 +27,7 @@ namespace NXKit.Web.UI
             else if (visual is INavigationPageVisual)
                 yield return new FormPage(parent, (INavigationPageVisual)visual);
             else
-                foreach (var childVisual in visual.Children.OfType<StructuralVisual>())
+                foreach (var childVisual in visual.Children.OfType<ContentVisual>())
                     foreach (var child in CreateNavigations(parent, childVisual))
                         yield return child;
         }

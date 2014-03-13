@@ -6,7 +6,7 @@ namespace NXKit.XForms.Web.UI
     public static class VisualExtensions
     {
 
-        public static XFormsLabelVisual FindLabelVisual(this StructuralVisual visual)
+        public static XFormsLabelVisual FindLabelVisual(this ContentVisual visual)
         {
             return visual.Children.OfType<XFormsLabelVisual>().FirstOrDefault();
         }

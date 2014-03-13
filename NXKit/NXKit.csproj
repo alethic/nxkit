@@ -149,7 +149,7 @@
     <Compile Include="INamingScope.cs" />
     <Compile Include="NXDocument.cs" />
     <Compile Include="NXDocumentState.cs" />
-    <Compile Include="StructuralVisual.cs" />
+    <Compile Include="ContentVisual.cs" />
     <Compile Include="TextVisual.cs" />
     <Compile Include="VisualAnnotation.cs" />
     <Compile Include="VisualAnnotationCollection.cs" />

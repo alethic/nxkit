@@ -116,13 +116,13 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        public IEnumerable<Visual> OpaqueChildren(StructuralVisual visual)
+        public IEnumerable<Visual> OpaqueChildren(ContentVisual visual)
         {
             foreach (var child in visual.Children)
-                if (!IsOpaque(child) && child is StructuralVisual)
+                if (!IsOpaque(child) && child is ContentVisual)
                 {
                     // if child is transparent, recurse
-                    foreach (var child2 in OpaqueChildren((StructuralVisual)child))
+                    foreach (var child2 in OpaqueChildren((ContentVisual)child))
                         yield return child2;
                 }
                 else
@@ -405,7 +405,7 @@ namespace NXKit.Web.UI
         /// <param name="control"></param>
         internal void SetVisualControlId(VisualControl control)
         {
-            var structural = control.Visual as StructuralVisual;
+            var structural = control.Visual as ContentVisual;
             if (structural != null)
             {
                 // discover first parent visual control
