@@ -53,6 +53,7 @@ namespace NXKit.XForms.Web.UI
         {
             Controls.Clear();
             Controls.Add(content = CreateContentControlCollection());
+            content.ID = "content";
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace NXKit.XForms.Web.UI
         /// <param name="writer"></param>
         protected override void Render(HtmlTextWriter writer)
         {
-            Content.RenderControl(writer);
+            content.RenderControl(writer);
         }
 
     }

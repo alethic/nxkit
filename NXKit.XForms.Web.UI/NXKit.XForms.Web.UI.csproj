@@ -132,14 +132,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblySelect1EditableProvider.cs" />
     <Compile Include="AssemblyOutputViewProvider.cs" />
     <Compile Include="AssemblyRangeEditableProvider.cs" />
     <Compile Include="AssemblyInputEditableProvider.cs" />
+    <Compile Include="DefaultSelect1EditableProvider.cs" />
     <Compile Include="DefaultOutputViewProvider.cs" />
     <Compile Include="DefaultRangeEditableProvider.cs" />
     <Compile Include="DefaultInputEditableProvider.cs" />
     <Compile Include="HintControl.cs" />
     <Compile Include="IFocusTarget.cs" />
+    <Compile Include="Select1Editable.cs" />
+    <Compile Include="ISelect1EditableProvider.cs" />
+    <Compile Include="ISelect1Editable.cs" />
     <Compile Include="InputEditableDefault.cs" />
     <Compile Include="OutputView.cs" />
     <Compile Include="IOutputView.cs" />
@@ -152,6 +157,11 @@
     <Compile Include="IInputEditableProvider.cs" />
     <Compile Include="InputEditable.cs" />
     <Compile Include="RepeatControl.cs" />
+    <Compile Include="Select1EditableDefaultCompact.cs" />
+    <Compile Include="Select1EditableDefault.cs" />
+    <Compile Include="Select1EditableString.cs" />
+    <Compile Include="Select1EditableDefaultMinimal.cs" />
+    <Compile Include="Select1EditableDefaultFull.cs" />
     <Compile Include="SingleNodeBindingVisualControl.cs" />
     <Compile Include="SingleNodeBindingVisualContentControl.cs" />
     <Compile Include="VisualExtensions.cs" />
@@ -166,10 +176,10 @@
     <Compile Include="SelectFullControl.cs" />
     <Compile Include="SelectMinimalControl.cs" />
     <Compile Include="SelectControl.cs" />
-    <Compile Include="Select1CompactControl.cs" />
-    <Compile Include="Select1FullControl.cs" />
+    <Compile Include="Select1EditableStringCompact.cs" />
+    <Compile Include="Select1EditableStringFull.cs" />
     <Compile Include="LabelControl.cs" />
-    <Compile Include="Select1MinimalControl.cs" />
+    <Compile Include="Select1EditableStringMinimal.cs" />
     <Compile Include="Select1Control.cs" />
     <Compile Include="GroupControl.cs" />
     <Compile Include="InputEditableInteger.cs" />
@@ -182,6 +192,7 @@
     <Compile Include="BindingUtil.cs" />
     <Compile Include="TriggerControlCollection.cs" />
     <Compile Include="WebResources.cs" />
+    <Compile Include="XFormsAppearanceAttribute - Copy.cs" />
     <Compile Include="XFormsXsdTypeAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -207,10 +218,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Select1FullControl.js" />
+    <EmbeddedResource Include="Select1EditableStringFull.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Select1MinimalControl.js" />
+    <EmbeddedResource Include="Select1EditableStringMinimal.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="InputEditableString.js" />

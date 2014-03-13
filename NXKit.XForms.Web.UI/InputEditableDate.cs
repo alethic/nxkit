@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using System.Web.UI;
 
 using Telerik.Web.UI;
 using Telerik.Web.UI.Calendar;
@@ -59,16 +58,6 @@ namespace NXKit.XForms.Web.UI
         {
             BindingUtil.Set(Visual.Binding, ctl.SelectedDate);
         }
-
-        //protected override void Render(HtmlTextWriter writer)
-        //{
-        //    // client-side control element
-        //    writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
-        //    writer.AddAttribute(HtmlTextWriterAttribute.Class, "XForms_Input XForms_Input_Date");
-        //    writer.RenderBeginTag(HtmlTextWriterTag.Div);
-        //    base.Render(writer);
-        //    writer.RenderEndTag();
-        //}
 
     }
 

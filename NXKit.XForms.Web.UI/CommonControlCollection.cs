@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
-
-using NXKit.XForms;
 using System.Web.UI;
+
 using NXKit.Web.UI;
 
 namespace NXKit.XForms.Web.UI
@@ -22,7 +23,8 @@ namespace NXKit.XForms.Web.UI
         public CommonControlCollection(View view, ContentVisual visual)
             : base(view, visual)
         {
-
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
         }
 
         protected override IEnumerable<Visual> GetVisuals()

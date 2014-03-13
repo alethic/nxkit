@@ -36,7 +36,7 @@ namespace NXKit.XForms.Web.UI
             new DefaultRangeEditableProvider();
 
         Control ctl;
-        VisualControl lbl;
+        CommonControlCollection common;
 
         /// <summary>
         /// Initializes a new instance.
@@ -52,17 +52,11 @@ namespace NXKit.XForms.Web.UI
 
         protected override void CreateChildControls()
         {
-            ctl = editableProvider.Create(View, Visual);
-            ctl.ID = Visual.Type != null ? Visual.Type.LocalName : "default";
-            Controls.Add(ctl);
+            Controls.Add(ctl = editableProvider.Create(View, Visual));
+            ctl.ID = "ctl";
 
-            var lblVisual = Visual.FindLabelVisual();
-            if (lblVisual != null)
-            {
-                lbl = new LabelControl(View, lblVisual);
-                lbl.ID = "lbl";
-                Controls.Add(lbl);
-            }
+            Controls.Add(common = new CommonControlCollection(View, Visual));
+            common.ID = "common";
         }
 
         protected override void Render(HtmlTextWriter writer)
@@ -70,14 +64,14 @@ namespace NXKit.XForms.Web.UI
             writer.AddAttribute(HtmlTextWriterAttribute.Class, "xforms-range");
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
 
-            if (lbl != null)
+            if (common.LabelControl != null)
             {
                 // target control if it can be targeted
                 if (ctl is IFocusTarget)
                     writer.AddAttribute(HtmlTextWriterAttribute.For, ((IFocusTarget)ctl).TargetID);
 
                 writer.RenderBeginTag(HtmlTextWriterTag.Label);
-                lbl.RenderControl(writer);
+                common.LabelControl.RenderControl(writer);
                 writer.RenderEndTag();
             }
 

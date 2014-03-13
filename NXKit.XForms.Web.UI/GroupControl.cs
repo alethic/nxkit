@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Web.UI;
 
+using NXKit.Util;
 using NXKit.Web.UI;
 
 namespace NXKit.XForms.Web.UI
@@ -30,26 +32,29 @@ namespace NXKit.XForms.Web.UI
     }
 
     public class GroupControl :
-        VisualContentControl<XFormsGroupVisual>
+        SingleNodeBindingVisualContentControl<XFormsGroupVisual>
     {
+
+        CommonControlCollection common;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="view"></param>
         /// <param name="visual"></param>
         public GroupControl(View view, XFormsGroupVisual visual)
             : base(view, visual)
         {
-
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
         }
-
-        public CommonControlCollection Common { get; private set; }
 
         protected override void CreateChildControls()
         {
             base.CreateChildControls();
 
-            Controls.Add(Common = new CommonControlCollection(View, Visual));
+            Controls.Add(common = new CommonControlCollection(View, Visual));
+            common.ID = "common";
         }
 
         /// <summary>
@@ -69,41 +74,22 @@ namespace NXKit.XForms.Web.UI
 
         protected override void Render(HtmlTextWriter writer)
         {
-            if (!Visual.Relevant)
-                return;
-
             // obtain additional css classes if available
             var args = new BeginRenderEventArgs();
             OnBeginRender(args);
-            var classAttr = string.Join(" ", args.CssClasses.Distinct());
 
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "XForms_Group " + classAttr);
-            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, string.Join(" ", args.CssClasses.Distinct().Prepend("xforms-group")));
+            writer.RenderBeginTag(HtmlTextWriterTag.Fieldset);
 
-            if (Common.LabelControl != null)
+            if (common.LabelControl != null)
             {
-                writer.RenderBeginTag(HtmlTextWriterTag.H1);
-                Common.LabelControl.RenderControl(writer);
+                writer.RenderBeginTag(HtmlTextWriterTag.Legend);
+                common.LabelControl.RenderControl(writer);
                 writer.RenderEndTag();
             }
 
-            if (Visual.Appearance() == NXKit.XForms.Layout.Constants.Layout_1_0 + "sequence")
-            {
-                writer.AddAttribute(HtmlTextWriterAttribute.Class, "Layout_Sequence");
-                writer.RenderBeginTag(HtmlTextWriterTag.Ol);
-
-                foreach (Control control in Content.Controls)
-                {
-                    writer.RenderBeginTag(HtmlTextWriterTag.Li);
-                    control.RenderControl(writer);
-                    writer.RenderEndTag();
-                }
-
-                writer.RenderEndTag();
-            }
-            else
-                base.Render(writer);
+            base.Render(writer);
 
             writer.RenderEndTag();
         }

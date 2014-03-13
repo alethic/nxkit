@@ -3,63 +3,59 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Web.UI;
+using System.Web.UI.WebControls;
+
 using NXKit.Util;
 using NXKit.Web.UI;
-using Telerik.Web.UI;
 
 namespace NXKit.XForms.Web.UI
 {
 
-    public class Select1MinimalControl :
-        SingleNodeBindingVisualControl<XFormsSelect1Visual>,
+    [XFormsXsdType(XmlSchemaConstants.XMLSchema_NS, "string")]
+    [XFormsAppearance(Constants.XForms_1_0_NS, "full")]
+    public class Select1EditableStringFull :
+        Select1Editable,
         IScriptControl
     {
 
-        RadComboBox ctl;
-        CommonControlCollection common;
+        RadioButtonList ctl;
 
-        Dictionary<XFormsItemVisual, RadComboBoxItem> itemCache =
-           new Dictionary<XFormsItemVisual, RadComboBoxItem>();
-
-        Dictionary<XFormsLabelVisual, LabelControl> itemLabelControlCache =
-           new Dictionary<XFormsLabelVisual, LabelControl>();
+        Dictionary<XFormsItemVisual, ListItem> itemCache =
+            new Dictionary<XFormsItemVisual, ListItem>();
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="view"></param>
         /// <param name="visual"></param>
-        public Select1MinimalControl(View view, XFormsSelect1Visual visual)
+        public Select1EditableStringFull(NXKit.Web.UI.View view, XFormsSelect1Visual visual)
             : base(view, visual)
         {
             Contract.Requires<ArgumentNullException>(view != null);
             Contract.Requires<ArgumentNullException>(visual != null);
         }
 
+        public override string TargetID
+        {
+            get { return ctl.ClientID; }
+        }
+
         protected override void CreateChildControls()
         {
-            Controls.Add(common = new CommonControlCollection(View, Visual));
-
-            ctl = new RadComboBox();
+            ctl = new RadioButtonList();
             ctl.ID = "ctl";
-            ctl.AutoPostBack = Visual.Incremental;
-            ctl.EnableViewState = false;
-            ctl.AllowCustomText = Visual.Selection == XFormsSelection.Open;
+            ctl.RepeatLayout = RepeatLayout.OrderedList;
+            ctl.AutoPostBack = Visual.Incremental || true;
             ctl.SelectedIndexChanged += ctl_SelectedIndexChanged;
-            ctl.TextChanged += ctl_TextChanged;
 
-            UpdateRadComboBoxItems();
+            UpdateRadioButtonItems();
 
             Controls.Add(ctl);
         }
 
-        /// <summary>
-        /// Rebuilds the combo box item set.
-        /// </summary>
-        void UpdateRadComboBoxItems()
+        void UpdateRadioButtonItems()
         {
             // track added items
-            var items = new LinkedList<RadComboBoxItem>();
+            var items = new LinkedList<ListItem>();
 
             // currently selected item visual
             var selectedItemVisual = Visual.SelectedItemVisual;
@@ -68,28 +64,22 @@ namespace NXKit.XForms.Web.UI
             {
                 if (itemVisual.Selectable != null)
                 {
-                    var relevant = true;
-
                     // skip non-relevant items
                     if (itemVisual.Selectable is XFormsValueVisual)
                         if (!((XFormsValueVisual)itemVisual.Selectable).Relevant)
-                            relevant = false;
+                            continue;
                     if (itemVisual.Selectable is XFormsCopyVisual)
                         if (!((XFormsCopyVisual)itemVisual.Selectable).Relevant)
-                            relevant = false;
+                            continue;
 
-                    // obtain or create new item
-                    var ctlItem = itemCache.GetOrAdd(itemVisual, i => new RadComboBoxItem());
-                    ctlItem.DataItem = itemVisual;
+                    // generate new item
+                    var ctlItem = itemCache.GetOrAdd(itemVisual, i => new ListItem());
                     ctlItem.Value = itemVisual.Selectable.GetValueHashCode().ToString();
 
                     // add label if available
                     var labelVisual = itemVisual.FindLabelVisual();
                     if (labelVisual != null)
-                    {
                         ctlItem.Text = labelVisual.ToText();
-                        ctlItem.Controls.AddAt(0, itemLabelControlCache.GetOrAdd(labelVisual, i => new LabelControl(View, labelVisual)));
-                    }
                     else
                         ctlItem.Text = "unknown";
 
@@ -100,7 +90,6 @@ namespace NXKit.XForms.Web.UI
 
                     // update selection
                     ctlItem.Selected = selectedItemVisual != null && itemVisual == selectedItemVisual;
-                    ctlItem.Visible = relevant;
 
                     // indicate item is still in combo box
                     items.AddLast(ctlItem);
@@ -108,38 +97,22 @@ namespace NXKit.XForms.Web.UI
             }
 
             // remove any items that were not just added
-            foreach (var ctlItem in ctl.Items.ToList())
+            foreach (var ctlItem in ctl.Items.Cast<ListItem>().ToList())
                 if (!items.Contains(ctlItem))
                     ctl.Items.Remove(ctlItem);
-
-            // no item selected, but value available, and selection open
-            if (Visual.Selection == XFormsSelection.Open && selectedItemVisual == null)
-                ctl.Text = Visual.Binding != null ? Visual.Binding.Value : "";
         }
 
-        void ctl_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs args)
+        void ctl_SelectedIndexChanged(object sender, EventArgs args)
         {
-            OnValueChanged();
-        }
-
-        void ctl_TextChanged(object sender, EventArgs args)
-        {
-            OnValueChanged();
-        }
-
-        void OnValueChanged()
-        {
-            var selectedItem = (RadComboBoxItem)ctl.SelectedItem;
-            if (selectedItem == null)
-            {
-                BindingUtil.Set(Visual.Binding, ctl.Text);
+            var item = ctl.SelectedItem;
+            if (item == null)
                 return;
-            }
 
             // look up the item visual
-            var itemVisual = (XFormsItemVisual)((RadComboBoxItem)ctl.SelectedItem).DataItem;
-            if (itemVisual == null)
-                return;
+            var itemVisual = Visual
+                .Descendants()
+                .OfType<XFormsItemVisual>()
+                .FirstOrDefault(i => i.Selectable != null && i.Selectable.GetValueHashCode().ToString() == item.Value);
 
             // no change in selection made
             if (itemVisual == Visual.SelectedItemVisual)
@@ -150,25 +123,19 @@ namespace NXKit.XForms.Web.UI
                 Visual.SetSelectedItemVisual(itemVisual);
         }
 
-        protected override void OnVisualEnabledOrDisabled()
-        {
-            ctl.Visible = Visual.Relevant;
-        }
-
         protected override void OnVisualReadOnlyOrReadWrite()
         {
             ctl.Enabled = !Visual.ReadOnly;
         }
 
-        protected override void OnVisualValueChanged()
-        {
-            UpdateRadComboBoxItems();
-        }
-
         protected override void OnPreRender(EventArgs args)
         {
             base.OnPreRender(args);
+
             ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
+
+            // ensure items are refreshed
+            UpdateRadioButtonItems();
         }
 
         protected override void Render(HtmlTextWriter writer)
@@ -176,35 +143,24 @@ namespace NXKit.XForms.Web.UI
             ScriptManager.GetCurrent(Page).RegisterScriptDescriptors(this);
 
             // client-side control element
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "XForms_Select1_Minimal");
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "xforms-full");
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
-
-            if (common.LabelControl != null)
-            {
-                writer.AddAttribute(HtmlTextWriterAttribute.For, ctl.ClientID);
-                writer.RenderBeginTag(HtmlTextWriterTag.Label);
-                common.LabelControl.RenderControl(writer);
-                writer.RenderEndTag();
-            }
-
             ctl.RenderControl(writer);
-
             writer.RenderEndTag();
         }
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
-            var desc = new ScriptControlDescriptor("NXKit.XForms.Web.UI.Select1MinimalControl", ClientID);
+            var desc = new ScriptControlDescriptor("NXKit.XForms.Web.UI.Select1EditableStringFull", ClientID);
             desc.AddComponentProperty("view", View.ClientID);
             desc.AddProperty("modelItemId", Visual.Binding != null ? Visual.Binding.NodeUniqueId : null);
-            desc.AddComponentProperty("radComboBox", ctl.ClientID);
             yield return desc;
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference("NXKit.XForms.Web.UI.Select1MinimalControl.js", typeof(Select1MinimalControl).Assembly.FullName);
+            yield return new ScriptReference("NXKit.XForms.Web.UI.Select1EditableStringFull.js", typeof(Select1EditableStringFull).Assembly.FullName);
         }
 
     }

@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("NXKit.XForms.Web.UI")]
-[assembly: AssemblyCopyright("Copyright © Jerome Haltom 2013")]
+[assembly: AssemblyCopyright("Copyright © Jerome Haltom 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
