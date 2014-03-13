@@ -3,7 +3,8 @@
 namespace NXKit.XForms.XPathFunctions
 {
 
-    internal class PositionFunction : XPathFunction
+    internal class PositionFunction :
+        XPathFunction
     {
 
         public override XPathResultType[] ArgTypes
@@ -28,7 +29,7 @@ namespace NXKit.XForms.XPathFunctions
 
         protected override object Invoke(XFormsXsltContext context, XPathNavigator navigator, params object[] args)
         {
-            return XFormsEvaluationContext.Current.Position;
+            return context.EvaluationContext.Position;
         }
 
     }

@@ -10,28 +10,45 @@ namespace NXKit.XForms
 {
 
     /// <summary>
-    /// Proxies the namespace context of a node to other systems.
+    /// Provides a <see cref="XsltContext"/> for XForms visual operations.
     /// </summary>
     public class XFormsXsltContext :
         XsltContext
     {
 
         readonly Visual visual;
+        readonly XFormsEvaluationContext evaluationContext;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        internal XFormsXsltContext(Visual visual)
+        /// <param name="evaluationContext"></param>
+        internal XFormsXsltContext(
+            Visual visual, 
+            XFormsEvaluationContext evaluationContext)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
+            Contract.Requires<ArgumentNullException>(evaluationContext != null);
 
             this.visual = visual;
+            this.evaluationContext = evaluationContext;
         }
 
+        /// <summary>
+        /// Gets the <see cref="Visual"/> associated with the XSLT operation.
+        /// </summary>
         public Visual Visual
         {
             get { return visual; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="XFormsEvaluationContext"/> associated with the XSLT operation.
+        /// </summary>
+        public XFormsEvaluationContext EvaluationContext
+        {
+            get { return evaluationContext; }
         }
 
         public override bool Whitespace
@@ -77,7 +94,7 @@ namespace NXKit.XForms
             return element.GetPrefixOfNamespace(namespaceName);
         }
 
-        public override IXsltContextFunction ResolveFunction(string prefix, string name, XPathResultType[] ArgTypes)
+        public override IXsltContextFunction ResolveFunction(string prefix, string name, XPathResultType[] argTypes)
         {
             var ns = (XNamespace)LookupNamespace(prefix);
             if (ns == Constants.XForms_1_0)
@@ -86,6 +103,8 @@ namespace NXKit.XForms
                 {
                     case "instance":
                         return new InstanceFunction();
+                    case "position":
+                        return new PositionFunction();
                 }
             }
 

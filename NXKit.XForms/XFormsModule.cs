@@ -457,7 +457,7 @@ namespace NXKit.XForms
                         var modelItem = GetModelItem(node);
 
                         var ec = new XFormsEvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, node, i + 1, bind.Binding.Nodes.Length);
-                        var nc = new XFormsXsltContext(bind);
+                        var nc = new XFormsXsltContext(bind, ec);
 
                         // get existing values
                         var oldReadOnly = GetModelItemReadOnly(node);
@@ -495,7 +495,7 @@ namespace NXKit.XForms
                         // recalculate read-only value
                         if (readonlyAttr != null)
                         {
-                            var obj = EvaluateXPath(ec, nc, bind, readonlyAttr, XPathResultType.Any);
+                            var obj = EvaluateXPath(bind, ec, readonlyAttr, XPathResultType.Any);
                             if (obj is bool)
                                 modelItem.ReadOnly = (bool)obj;
                             else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
@@ -507,7 +507,7 @@ namespace NXKit.XForms
                         // recalculate required value
                         if (requiredAttr != null)
                         {
-                            var obj = EvaluateXPath(ec, nc, bind, requiredAttr, XPathResultType.Any);
+                            var obj = EvaluateXPath(bind, ec, requiredAttr, XPathResultType.Any);
                             if (obj is bool)
                                 modelItem.Required = (bool)obj;
                             else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
@@ -517,7 +517,7 @@ namespace NXKit.XForms
                         // recalculate relevant value
                         if (relevantAttr != null)
                         {
-                            var obj = EvaluateXPath(ec, nc, bind, relevantAttr, XPathResultType.Any);
+                            var obj = EvaluateXPath(bind, ec, relevantAttr, XPathResultType.Any);
                             if (obj is bool)
                                 modelItem.Relevant = (bool)obj;
                             else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
@@ -582,13 +582,12 @@ namespace NXKit.XForms
                         var modelItem = GetModelItem(node);
 
                         var ec = new XFormsEvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, node, i + 1, bind.Binding.Nodes.Length);
-                        var nc = new XFormsXsltContext(bind);
 
                         // get old valid value
                         var oldValid = GetModelItemValid(node);
 
                         // recalculate valid
-                        var st = (string)EvaluateXPath(ec, nc, bind, constraintAttr, XPathResultType.String);
+                        var st = (string)EvaluateXPath(bind, ec, constraintAttr, XPathResultType.String);
                         if (!string.IsNullOrWhiteSpace(st))
                             modelItem.Valid = bool.Parse(st);
 
@@ -688,24 +687,45 @@ namespace NXKit.XForms
         /// <summary>
         /// Evaluates the given XPath expression.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="visual"></param>
+        /// <param name="evaluationContext"></param>
         /// <param name="expression"></param>
-        /// <param name="rn"></param>
+        /// <param name="resultType"></param>
         /// <returns></returns>
-        internal object EvaluateXPath(XFormsEvaluationContext ec, XFormsXsltContext nc, XFormsVisual visual, string expression, XPathResultType resultType)
+        internal object EvaluateXPath(Visual visual, XFormsEvaluationContext evaluationContext, string expression, XPathResultType resultType)
         {
-            if (expression == null)
+            Contract.Requires<ArgumentNullException>(visual != null);
+            Contract.Requires<ArgumentNullException>(evaluationContext != null);
+            Contract.Requires<ArgumentNullException>(expression != null);
+
+            var nc = new XFormsXsltContext(visual, evaluationContext);
+            var nv = ((XNode)evaluationContext.Node).CreateNavigator();
+            var xp = XPathExpression.Compile(expression, nc);
+            var nd = nv.Evaluate(xp);
+
+            return ConvertXPath(nd, resultType);
+        }
+
+        /// <summary>
+        /// Converts an XPath evaluation result into the specified type.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="resultType"></param>
+        object ConvertXPath(object result, XPathResultType resultType)
+        {
+            if (result == null)
                 return null;
 
-            // put the evaluation context in thread-local scope for the duration of execution, so it's available to functions
-            using (visual.Scope())
-            using (ec.Scope())
+            switch (resultType)
             {
-                var nv = ((XNode)ec.Node).CreateNavigator();
-                var xp = XPathExpression.Compile(expression, nc);
-                var nd = nv.Evaluate(xp);
-
-                return nd;
+                case XPathResultType.Number:
+                    return Convert.ToDouble(result);
+                case XPathResultType.Boolean:
+                    return Convert.ToBoolean(result);
+                case XPathResultType.String:
+                    return Convert.ToString(result);
+                default:
+                    return result;
             }
         }
 

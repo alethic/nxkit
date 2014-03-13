@@ -49,9 +49,8 @@ namespace NXKit.XForms
 
             // evaluation context is either own context, or in-scope context
             var ec = Context ?? Binding.Context;
-            var nc = new XFormsXsltContext(this);
 
-            var atD = (double?)Module.EvaluateXPath(ec, nc, this, atAttr, XPathResultType.Number);
+            var atD = (double?)Module.EvaluateXPath(this, ec, atAttr, XPathResultType.Number);
 
             if ((atD ?? double.NaN) == double.NaN)
             {

@@ -28,6 +28,7 @@
             OnClick="PrevButton_Click" />
         <asp:Button ID="NextButton" runat="server"
             Text="Next"
+            CausesValidation="true"
             OnClick="NextButton_Click" />
     </form>
 </body>

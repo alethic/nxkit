@@ -7,6 +7,9 @@ using System.Xml.XPath;
 namespace NXKit.XForms
 {
 
+    /// <summary>
+    /// Manages a binding to a model item.
+    /// </summary>
     public class XFormsBinding
     {
 
@@ -80,15 +83,7 @@ namespace NXKit.XForms
             {
                 if (!resultCached)
                 {
-                    try
-                    {
-                        result = Module.EvaluateXPath(Context, new XFormsXsltContext(Visual), Visual, XPathExpression, XPathResultType.NodeSet);
-                    }
-                    catch
-                    {
-                        result = Module.EvaluateXPath(Context, new XFormsXsltContext(Visual), Visual, XPathExpression, XPathResultType.Any);
-                    }
-
+                    result = Module.EvaluateXPath(Visual, Context, XPathExpression, XPathResultType.NodeSet);
                     resultCached = true;
                 }
 
@@ -143,7 +138,7 @@ namespace NXKit.XForms
                 if (!nodesCached)
                 {
                     if (Result is XPathNodeIterator)
-                        return ((XPathNodeIterator)Result)
+                        nodes = ((XPathNodeIterator)Result)
                             .Cast<XPathNavigator>()
                             .Select(i => i.UnderlyingObject)
                             .Cast<XObject>()

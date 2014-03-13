@@ -1,9 +1,13 @@
-﻿using System.Xml.Linq;
-
+﻿
 namespace NXKit.XForms
 {
 
-    public abstract class XFormsBindingVisual : XFormsVisual, IEvaluationContextScope
+    /// <summary>
+    /// Abstract implementation for all visuals that support binding expressions.
+    /// </summary>
+    public abstract class XFormsBindingVisual : 
+        XFormsVisual, 
+        IEvaluationContextScope
     {
 
         /// <summary>

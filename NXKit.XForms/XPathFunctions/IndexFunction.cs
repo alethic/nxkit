@@ -32,7 +32,7 @@ namespace NXKit.XForms.XPathFunctions
             if (repeatId == null)
                 return double.NaN;
 
-            var repeatVisual = (XFormsRepeatVisual)Visual.Current.ResolveId(repeatId);
+            var repeatVisual = (XFormsRepeatVisual)context.Visual.ResolveId(repeatId);
             if (repeatVisual == null)
                 return double.NaN;
 

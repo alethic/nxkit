@@ -2,7 +2,7 @@
 {
 
     /// <summary>
-    /// Describes a <see cref="Visual"/> which is capable of providing an evaluation context.
+    /// Marks a <see cref="Visual"/> which is capable of providing an evaluation context to children.
     /// </summary>
     public interface IEvaluationContextScope
     {
