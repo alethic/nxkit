@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Windows.Markup;
 
 [assembly: AssemblyTitle("NXKit")]
 [assembly: AssemblyDescription("")]
@@ -15,3 +16,6 @@ using System.Runtime.InteropServices;
 [assembly: Guid("912bb615-8509-4bdf-9a41-1010a389be8c")]
 
 [assembly: InternalsVisibleTo("NXKit.Tests")]
+
+[assembly: XmlnsDefinition("http://schemas.nxkit.org/nxkit/2014/xaml", "NXKit")]
+[assembly: XmlnsPrefix("http://schemas.nxkit.org/nxkit/2014/xaml", "nx")]
