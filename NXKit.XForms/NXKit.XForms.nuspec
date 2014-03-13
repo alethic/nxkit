@@ -7,7 +7,7 @@
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
         <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
-        <projectUrl>https://github.com/wasabii/nxkit</projectUrl>
+        <projectUrl>https://github.com/nxkit</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
         <description>
             NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
@@ -15,7 +15,7 @@
             NXKit.XForms contains the processing model for handing W3C XForms documents.
         </description>
         <releaseNotes />
-        <copyright>Copyright © 2013 Jerome Haltom</copyright>
+        <copyright>Copyright © 2014 Jerome Haltom</copyright>
         <tags>xml xforms</tags>
         <dependencies>
             <dependency
