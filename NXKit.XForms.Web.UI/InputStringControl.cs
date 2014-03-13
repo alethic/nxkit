@@ -5,8 +5,6 @@ using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-using Telerik.Web.UI;
-
 using NXKit.Web.UI;
 
 namespace NXKit.XForms.Web.UI
@@ -17,7 +15,7 @@ namespace NXKit.XForms.Web.UI
         IScriptControl
     {
 
-        RadTextBox ctl;
+        TextBox ctl;
         CustomValidator val;
 
         /// <summary>
@@ -37,14 +35,10 @@ namespace NXKit.XForms.Web.UI
         /// </summary>
         protected override void CreateChildControls()
         {
-            ctl = new RadTextBox();
+            ctl = new TextBox();
             ctl.ID = "ctl";
             ctl.EnableViewState = true;
             ctl.TextChanged += ctl_TextChanged;
-
-            var labelVisual = Visual.Children.OfType<XFormsLabelVisual>().FirstOrDefault();
-            if (labelVisual != null)
-                ctl.Label = labelVisual.ToText();
 
             Controls.Add(ctl);
 
@@ -56,11 +50,6 @@ namespace NXKit.XForms.Web.UI
             val.Text = "";
             val.Display = ValidatorDisplay.None;
             Controls.Add(val);
-
-            var decorator = new RadInputValidationDecorator();
-            decorator.ValidationGroup = View.ValidationGroup;
-            decorator.TargetControlID = ctl.ID;
-            Controls.Add(decorator);
         }
 
         void validator_ServerValidate(object source, ServerValidateEventArgs args)

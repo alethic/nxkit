@@ -128,7 +128,7 @@ namespace NXKit.Web.UI
             // register script control
             ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
 
-            var ctl = FindControl(TargetControlID) as RadInputControl;
+            var ctl = FindControl(TargetControlID) as TextBox;
             if (ctl == null)
                 throw new Exception("Could not locate RadInput control by TargetControlID.");
 

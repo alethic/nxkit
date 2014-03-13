@@ -1,10 +1,13 @@
-﻿using NXKit.Web.UI;
+﻿using System;
+using System.Diagnostics.Contracts;
+using NXKit.Web.UI;
 
 namespace NXKit.XForms.Web.UI
 {
 
     [VisualControlTypeDescriptor]
-    public class InputControlDescriptor : VisualControlTypeDescriptor
+    public class InputControlDescriptor : 
+        VisualControlTypeDescriptor
     {
 
         public override bool CanHandleVisual(Visual visual)
@@ -24,8 +27,12 @@ namespace NXKit.XForms.Web.UI
 
     }
 
-    public class InputControl : VisualControl<XFormsInputVisual>
+    public class InputControl :
+        VisualControl<XFormsInputVisual>
     {
+
+        VisualControl lbl;
+        VisualControl ctl;
 
         /// <summary>
         /// Initializes a new instance.
@@ -34,12 +41,21 @@ namespace NXKit.XForms.Web.UI
         public InputControl(View view, XFormsInputVisual visual)
             : base(view, visual)
         {
-
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
         }
 
         protected override void CreateChildControls()
         {
-            var ctl = CreateInputControl(Visual);
+            var lblVisual = Visual.FindLabelVisual();
+            if (lblVisual != null)
+            {
+                lbl = new LabelControl(View, lblVisual);
+                lbl.ID = "lbl";
+                Controls.Add(lbl);
+            }
+
+            ctl = CreateInputControl(Visual);
             ctl.ID = Visual.Type != null ? Visual.Type.LocalName : "default";
             Controls.Add(ctl);
         }
