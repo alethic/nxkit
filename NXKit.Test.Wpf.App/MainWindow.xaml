@@ -11,7 +11,18 @@
     Title="MainWindow"
     Height="480"
     Width="640">
-    <Grid>
+    <Grid
+        x:Name="LayoutRoot">
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary
+                        Source="pack://application:,,,/NXKit.XForms.Wpf.UI;component/Themes/Generic.xaml" />
+                    <ResourceDictionary
+                        Source="pack://application:,,,/NXKit.XForms.Layout.Wpf.UI;component/Themes/Generic.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
         <Grid.DataContext>
             <local:MainViewModel />
         </Grid.DataContext>

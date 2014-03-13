@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:nxkit="clr-namespace:NXKit;assembly=NXKit"
     xmlns:local="clr-namespace:NXKit.Wpf.UI">
-    
+
     <Style
         TargetType="{x:Type local:View}">
         <Setter

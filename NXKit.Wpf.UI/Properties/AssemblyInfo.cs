@@ -14,13 +14,13 @@ using System.Windows.Markup;
 
 [assembly: ComVisible(false)]
 
-[assembly:ThemeInfo(
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: ThemeInfo(
     ResourceDictionaryLocation.None,
     ResourceDictionaryLocation.SourceAssembly
 )]
-
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: XmlnsDefinition("http://github.com/wasabii/nxkit", "NXKit.Wpf.UI")]
 [assembly: XmlnsPrefix("http://github.com/wasabii/nxkit", "nx")]

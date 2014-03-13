@@ -35,12 +35,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -107,9 +105,17 @@
       <Project>{41357532-48cc-4c5c-9cf3-dca24c00bda2}</Project>
       <Name>NXKit.Wpf</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Layout.Wpf.UI\NXKit.XForms.Layout.Wpf.UI.csproj">
+      <Project>{102e4d49-7ebd-47a5-9565-ed60d4668e0a}</Project>
+      <Name>NXKit.XForms.Layout.Wpf.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
       <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
       <Name>NXKit.XForms.Layout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Wpf.UI\NXKit.XForms.Wpf.UI.csproj">
+      <Project>{30411c50-08c0-4814-97d4-76263a6c25a1}</Project>
+      <Name>NXKit.XForms.Wpf.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
       <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>

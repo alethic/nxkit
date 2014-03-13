@@ -1,0 +1,10 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:nx="http://github.com/wasabii/nxkit"
+    xmlns:nx_xforms="http://github.com/wasabii/nxkit/xforms"
+    xmlns:local="clr-namespace:NXKit.XForms.Wpf.UI">
+    
+    
+
+</ResourceDictionary>
