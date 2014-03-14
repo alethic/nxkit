@@ -44,7 +44,7 @@ namespace NXKit.Web
     }
 
     [ContractClassFor(typeof(VisualWriter))]
-    class VisualWriter_Contract :
+    abstract class VisualWriter_Contract :
         VisualWriter
     {
 
