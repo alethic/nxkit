@@ -18,14 +18,14 @@ namespace NXKit
 
         string uniqueId;
         Visual[] children;
-        Dictionary<XNode, Visual> nodeChildren = new Dictionary<XNode, Visual>();
+        readonly Dictionary<XNode, Visual> nodeChildren;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public ContentVisual()
         {
-
+            this.nodeChildren = new Dictionary<XNode, Visual>();
         }
 
         /// <summary>
@@ -51,11 +51,13 @@ namespace NXKit
         /// <summary>
         /// Unique identifier for the <see cref="Visual"/> within the current naming scope.
         /// </summary>
+        [Interactive]
         public abstract string Id { get; }
 
         /// <summary>
         /// Returns a unique identifier for this visual, considering naming scopes.
         /// </summary>
+        [Interactive]
         public string UniqueId
         {
             get { return uniqueId ?? (uniqueId = CreateUniqueId()); }

@@ -4,17 +4,23 @@ using System.Xml.Linq;
 namespace NXKit
 {
 
-    public class TextVisual : Visual, ITextVisual
+    /// <summary>
+    /// Represents a simple text node.
+    /// </summary>
+    public class TextVisual : 
+        Visual, 
+        ITextVisual
     {
 
+        [Interactive]
         public string Text
         {
             get { return ((XText)Node).Value; }
         }
 
-        public void WriteText(TextWriter w)
+        public void WriteText(TextWriter writer)
         {
-            w.Write(Text);
+            writer.Write(Text);
         }
 
     }
