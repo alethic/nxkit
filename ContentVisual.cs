@@ -78,11 +78,11 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Children <see cref="Visual"/>s.
+        /// Gets the set of children <see cref="Visual"/>s underneath this <see cref="ContentVisual"/>.
         /// </summary>
-        public IEnumerable<Visual> Children
+        public IEnumerable<Visual> Visuals
         {
-            get { return children ?? (children = CreateChildren().ToArray()); }
+            get { return children ?? (children = CreateVisuals().ToArray()); }
         }
 
         /// <summary>
@@ -90,16 +90,16 @@ namespace NXKit
         /// new <see cref="Visual"/> instances from existing children nodes by invoking CreateNodeChildren.
         /// </summary>
         /// <returns></returns>
-        protected virtual IEnumerable<Visual> CreateChildren()
+        protected virtual IEnumerable<Visual> CreateVisuals()
         {
-            return CreateElementChildren(Element);
+            return CreateElementVisuals(Element);
         }
 
         /// <summary>
         /// Creates visual nodes from existing children nodes.
         /// </summary>
         /// <returns></returns>
-        protected IEnumerable<Visual> CreateElementChildren(XElement element, bool includeTextContent = false)
+        protected IEnumerable<Visual> CreateElementVisuals(XElement element, bool includeTextContent = false)
         {
             var childNodeList = element.Nodes().ToArray();
             for (int i = 0; i < childNodeList.Length; i++)
@@ -138,7 +138,7 @@ namespace NXKit
         /// <summary>
         /// Raised when the children of this <see cref="Visual"/> have been invalidated.
         /// </summary>
-        public event EventHandler<EventArgs> ChildrenInvalidated;
+        public event EventHandler<EventArgs> VisualsInvalidated;
 
         /// <summary>
         /// Raises the ChildrenInvalidated event.
@@ -146,8 +146,8 @@ namespace NXKit
         /// <param name="args"></param>
         void OnChildrenInvalidated(EventArgs args)
         {
-            if (ChildrenInvalidated != null)
-                ChildrenInvalidated(this, args);
+            if (VisualsInvalidated != null)
+                VisualsInvalidated(this, args);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace NXKit
             if (includeSelf)
                 yield return this;
 
-            foreach (var child in Children)
+            foreach (var child in Visuals)
                 if (child is ContentVisual)
                     foreach (var descendant in ((ContentVisual)child).Descendants(true))
                         yield return descendant;
@@ -190,7 +190,7 @@ namespace NXKit
             if (includeSelf)
                 yield return this;
 
-            foreach (var child in Children)
+            foreach (var child in Visuals)
                 if (child is ContentVisual)
                     foreach (var descendant in ((ContentVisual)child).Descendants(true, predicate))
                         yield return descendant;
@@ -209,7 +209,7 @@ namespace NXKit
 
             yield return this;
 
-            foreach (var child in Children)
+            foreach (var child in Visuals)
                 if (child is ContentVisual)
                     foreach (var descendant in ((ContentVisual)child).DescendantsIncludeNS(ns))
                         yield return descendant;
