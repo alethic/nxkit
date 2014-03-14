@@ -1,24 +1,24 @@
-﻿Type.registerNamespace('NXKit.XForms.Web.UI');
+﻿Type.registerNamespace('_NXKit.XForms.Web.UI');
 
-NXKit.XForms.Web.UI.InputEditableString = function (element)
+_NXKit.XForms.Web.UI.InputEditableString = function (element)
 {
-    NXKit.XForms.Web.UI.InputEditableString.initializeBase(this, [element]);
+    _NXKit.XForms.Web.UI.InputEditableString.initializeBase(this, [element]);
 
     this._view = null;
     this._modelItemId = null;
     this._radTextBox = null;
 };
 
-NXKit.XForms.Web.UI.InputEditableString.prototype =
+_NXKit.XForms.Web.UI.InputEditableString.prototype =
 {
     initialize: function ()
     {
-        NXKit.XForms.Web.UI.InputEditableString.callBaseMethod(this, 'initialize');
+        _NXKit.XForms.Web.UI.InputEditableString.callBaseMethod(this, 'initialize');
     },
 
     dispose: function ()
     {
-        NXKit.XForms.Web.UI.InputEditableString.callBaseMethod(this, 'dispose');
+        _NXKit.XForms.Web.UI.InputEditableString.callBaseMethod(this, 'dispose');
     },
 
     get_view: function ()
@@ -87,7 +87,7 @@ NXKit.XForms.Web.UI.InputEditableString.prototype =
     },
 };
 
-NXKit.XForms.Web.UI.InputEditableString.registerClass('NXKit.XForms.Web.UI.InputEditableString', Sys.UI.Control);
+_NXKit.XForms.Web.UI.InputEditableString.registerClass('_NXKit.XForms.Web.UI.InputEditableString', Sys.UI.Control);
 
 if (typeof(Sys) !== 'undefined')
     Sys.Application.notifyScriptLoaded();

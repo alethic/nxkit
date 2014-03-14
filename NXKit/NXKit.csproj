@@ -119,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultResolver.cs" />
+    <Compile Include="IO\VisualWriter.cs" />
     <Compile Include="NXDocumentConfiguration.cs" />
     <Compile Include="EventListenerMap.cs" />
     <Compile Include="EventPhase.cs" />
@@ -131,7 +132,7 @@
     <Compile Include="INavigationPageVisual.cs" />
     <Compile Include="INavigationSectionVisual.cs" />
     <Compile Include="INavigationVisual.cs" />
-    <Compile Include="IStructuralVisual.cs" />
+    <Compile Include="IContentVisual.cs" />
     <Compile Include="ITextVisual.cs" />
     <Compile Include="IVisual.cs" />
     <Compile Include="PriorityAttribute.cs" />

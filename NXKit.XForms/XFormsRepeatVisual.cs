@@ -21,7 +21,7 @@ namespace NXKit.XForms
         /// Dynamically generate repeat items, reusing existing instances if available.
         /// </summary>
         /// <returns></returns>
-        protected override IEnumerable<Visual> CreateChildren()
+        protected override IEnumerable<Visual> CreateVisuals()
         {
             if (Binding == null ||
                 Binding.Nodes == null)

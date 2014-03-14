@@ -8,7 +8,7 @@ namespace NXKit.XForms.Web.UI
 
         public static XFormsLabelVisual FindLabelVisual(this ContentVisual visual)
         {
-            return visual.Children.OfType<XFormsLabelVisual>().FirstOrDefault();
+            return visual.Visuals.OfType<XFormsLabelVisual>().FirstOrDefault();
         }
 
     }

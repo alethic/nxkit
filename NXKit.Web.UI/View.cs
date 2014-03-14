@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using NXKit.Web.IO;
 
 namespace NXKit.Web.UI
 {
@@ -118,7 +119,7 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         public IEnumerable<Visual> OpaqueChildren(ContentVisual visual)
         {
-            foreach (var child in visual.Children)
+            foreach (var child in visual.Visuals)
                 if (!IsOpaque(child) && child is ContentVisual)
                 {
                     // if child is transparent, recurse
@@ -598,16 +599,33 @@ namespace NXKit.Web.UI
             }
         }
 
+        /// <summary>
+        /// Serializes the visual tree to JSON for client-side components.
+        /// </summary>
+        /// <returns></returns>
+        string SerializeVisualTree()
+        {
+            using (var s = new StringWriter())
+            using (var w = new JsonVisualWriter(s))
+            {
+                w.Write(Document.RootVisual);
+                return s.ToString();
+            }
+        }
+
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
-            var desc = new ScriptControlDescriptor("NXKit.Web.UI.View", ClientID);
-            yield return desc;
+            var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
+            d.AddProperty("visual", SerializeVisualTree());
+            yield return d;
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
+            yield return new ScriptReference("NXKit.Web.UI.TypeScript.View.js", typeof(View).Assembly.FullName);
             yield return new ScriptReference("NXKit.Web.UI.View.js", typeof(View).Assembly.FullName);
         }
+
     }
 
 }

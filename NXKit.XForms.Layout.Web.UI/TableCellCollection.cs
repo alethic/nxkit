@@ -28,7 +28,7 @@ namespace NXKit.XForms.Layout.Web.UI
         /// <returns></returns>
         private static IEnumerable<TableCellVisual> GetCells(ContentVisual visual)
         {
-            foreach (var child in visual.Children)
+            foreach (var child in visual.Visuals)
                 if (child is TableCellVisual)
                     yield return (TableCellVisual)child;
                 else if (child is TableRowVisual)

@@ -218,12 +218,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Select1EditableStringFull.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Select1EditableStringMinimal.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="InputEditableString.js" />
   </ItemGroup>
   <ItemGroup>

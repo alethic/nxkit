@@ -16,7 +16,7 @@ namespace NXKit.XForms
         /// Dynamically generate itemset items.
         /// </summary>
         /// <returns></returns>
-        protected override IEnumerable<Visual> CreateChildren()
+        protected override IEnumerable<Visual> CreateVisuals()
         {
             if (Binding == null ||
                 Binding.Nodes == null)

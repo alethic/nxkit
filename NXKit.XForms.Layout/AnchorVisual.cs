@@ -8,10 +8,10 @@ namespace NXKit.XForms.Layout
     public class AnchorVisual : LayoutVisual
     {
 
-        protected override IEnumerable<Visual> CreateChildren()
+        protected override IEnumerable<Visual> CreateVisuals()
         {
             // preserve text nodes
-            return CreateElementChildren(Element, true);
+            return CreateElementVisuals(Element, true);
         }
 
         public string Href

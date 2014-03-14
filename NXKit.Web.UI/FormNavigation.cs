@@ -27,7 +27,7 @@ namespace NXKit.Web.UI
             else if (visual is INavigationPageVisual)
                 yield return new FormPage(parent, (INavigationPageVisual)visual);
             else
-                foreach (var childVisual in visual.Children.OfType<ContentVisual>())
+                foreach (var childVisual in visual.Visuals.OfType<ContentVisual>())
                     foreach (var child in CreateNavigations(parent, childVisual))
                         yield return child;
         }

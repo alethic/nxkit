@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -14,9 +13,9 @@ namespace NXKit.XForms
         INavigationCategoryVisual
     {
 
-        protected override IEnumerable<Visual> CreateChildren()
+        protected override IEnumerable<Visual> CreateVisuals()
         {
-            return CreateElementChildren(Element);
+            return CreateElementVisuals(Element);
         }
 
         public string Label
@@ -27,7 +26,7 @@ namespace NXKit.XForms
         string GetLabel()
         {
             var b = new StringWriter();
-            var l = Children.OfType<XFormsLabelVisual>().FirstOrDefault();
+            var l = Visuals.OfType<XFormsLabelVisual>().FirstOrDefault();
             if (l != null)
                 l.WriteText(b);
             else

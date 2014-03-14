@@ -71,7 +71,7 @@ namespace NXKit.XForms.Web.UI
 
             if (!args.IsValid)
             {
-                var alertVisual = Visual.Children.OfType<XFormsAlertVisual>().FirstOrDefault();
+                var alertVisual = Visual.Visuals.OfType<XFormsAlertVisual>().FirstOrDefault();
                 if (alertVisual != null)
                     val.ErrorMessage = alertVisual.ToText();
             }

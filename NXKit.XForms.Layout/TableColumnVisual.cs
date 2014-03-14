@@ -8,9 +8,9 @@ namespace NXKit.XForms.Layout
     public class TableColumnVisual : LayoutVisual
     {
 
-        protected override IEnumerable<Visual> CreateChildren()
+        protected override IEnumerable<Visual> CreateVisuals()
         {
-            return CreateElementChildren(Element, true);
+            return CreateElementVisuals(Element, true);
         }
 
         public Importance Importance

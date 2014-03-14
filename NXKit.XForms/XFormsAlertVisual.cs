@@ -13,7 +13,7 @@ namespace NXKit.XForms
             if (Binding != null)
                 w.Write(Binding.Value ?? "");
             else
-                foreach (var c in Children.OfType<ITextVisual>())
+                foreach (var c in Visuals.OfType<ITextVisual>())
                     c.WriteText(w);
         }
 

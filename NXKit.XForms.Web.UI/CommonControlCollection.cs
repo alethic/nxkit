@@ -95,10 +95,10 @@ namespace NXKit.XForms.Web.UI
         public override void Update()
         {
             // find visuals
-            LabelVisual = Visual.Children.OfType<XFormsLabelVisual>().FirstOrDefault();
-            HelpVisual = Visual.Children.OfType<XFormsHelpVisual>().FirstOrDefault();
-            HintVisual = Visual.Children.OfType<XFormsHintVisual>().FirstOrDefault();
-            AlertVisual = Visual.Children.OfType<XFormsAlertVisual>().FirstOrDefault();
+            LabelVisual = Visual.Visuals.OfType<XFormsLabelVisual>().FirstOrDefault();
+            HelpVisual = Visual.Visuals.OfType<XFormsHelpVisual>().FirstOrDefault();
+            HintVisual = Visual.Visuals.OfType<XFormsHintVisual>().FirstOrDefault();
+            AlertVisual = Visual.Visuals.OfType<XFormsAlertVisual>().FirstOrDefault();
 
             base.Update();
         }

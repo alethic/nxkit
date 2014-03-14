@@ -18,7 +18,7 @@ namespace NXKit.XForms
             get { return state ?? (state = GetState<XFormsInstanceVisualState>()); }
         }
 
-        protected override IEnumerable<Visual> CreateChildren()
+        protected override IEnumerable<Visual> CreateVisuals()
         {
             // an instance has no visual children
             yield break;

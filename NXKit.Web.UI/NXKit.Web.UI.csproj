@@ -107,6 +107,10 @@
     <DocumentationFile>bin\Release\NXKit.Web.UI.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -151,10 +155,7 @@
     <Compile Include="VisualControlTypeDescriptor.cs" />
     <Compile Include="VisualControlTypeDescriptorAttribute.cs" />
     <Compile Include="VisualExtensions.cs" />
-    <Compile Include="WebResources.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="View.js" />
+    <Compile Include="Properties\WebResources.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="RadValidationDecorator.js" />
@@ -164,23 +165,42 @@
       <Project>{1e5fae9e-f890-487b-bfcd-e3ed5c4f8d41}</Project>
       <Name>NXKit.Util</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NXKit.Web\NXKit.Web.csproj">
+      <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
+      <Name>NXKit.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
       <Name>NXKit</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\NXKit.Web\View.js.map">
+      <Link>TypeScript\View.js.map</Link>
+    </EmbeddedResource>
     <None Include="NXKit.Web.UI.nuspec" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="View.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\NXKit.Web\View.js">
+      <Link>TypeScript\View.js</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="..\packages\GitFlowVersionTask.0.3.0\Build\GitFlowVersionTask.targets" Condition="Exists('..\packages\GitFlowVersionTask.0.3.0\Build\GitFlowVersionTask.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptIncludeComments>false</TypeScriptIncludeComments>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
 </Project>

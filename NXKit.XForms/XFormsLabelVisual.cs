@@ -17,9 +17,9 @@ namespace NXKit.XForms
         ITextVisual
     {
 
-        protected override IEnumerable<Visual> CreateChildren()
+        protected override IEnumerable<Visual> CreateVisuals()
         {
-            return CreateElementChildren(Element, includeTextContent: true);
+            return CreateElementVisuals(Element, includeTextContent: true);
         }
 
         public void WriteText(TextWriter w)
@@ -27,7 +27,7 @@ namespace NXKit.XForms
             if (Binding != null)
                 w.Write(Binding.Value ?? "");
             else
-                foreach (var c in Children.OfType<ITextVisual>())
+                foreach (var c in Visuals.OfType<ITextVisual>())
                     c.WriteText(w);
         }
 

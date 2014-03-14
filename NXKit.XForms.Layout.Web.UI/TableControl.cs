@@ -123,7 +123,7 @@ namespace NXKit.XForms.Layout.Web.UI
                 var columnGroup = Model.ColumnGroups[columnGroupIndex];
 
                 // skip group if no columns with headers
-                if (!columnGroup.Columns.Any(i => i.Visual != null && i.Visual.Children.Any()))
+                if (!columnGroup.Columns.Any(i => i.Visual != null && i.Visual.Visuals.Any()))
                     continue;
 
                 writer.AddAttribute(HtmlTextWriterAttribute.Class, "h g" + columnGroupIndex);

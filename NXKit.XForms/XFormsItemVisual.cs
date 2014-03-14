@@ -21,7 +21,7 @@ namespace NXKit.XForms
             {
                 if (!labelVisualCached)
                 {
-                    labelVisual = Children.OfType<XFormsLabelVisual>().SingleOrDefault();
+                    labelVisual = Visuals.OfType<XFormsLabelVisual>().SingleOrDefault();
                     labelVisualCached = true;
                 }
 
@@ -38,7 +38,7 @@ namespace NXKit.XForms
             {
                 if (!selectableCached)
                 {
-                    selectable = Children.OfType<ISelectableVisual>().SingleOrDefault();
+                    selectable = Visuals.OfType<ISelectableVisual>().SingleOrDefault();
                     selectableCached = true;
                 }
 

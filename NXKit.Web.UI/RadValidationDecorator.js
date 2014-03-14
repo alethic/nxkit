@@ -1,6 +1,6 @@
-﻿Type.registerNamespace("NXKit.Web.UI.RadValidationDecorator");
+﻿Type.registerNamespace("_NXKit.Web.UI.RadValidationDecorator");
 
-NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_ValidationFunction = function (source, arguments)
+_NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_ValidationFunction = function (source, arguments)
 {
     if (source.controltovalidate == undefined)
         return;
@@ -21,28 +21,28 @@ NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_ValidationFuncti
         if (!validator.isvalid)
         {
             // not valid, update input and exit
-            NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(txt, true);
+            _NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(txt, true);
             return;
         }
     }
 
     // if we made it this far, all validators are valid
-    NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(txt, false);
+    _NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(txt, false);
 }
 
-NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid = function (ctl, invalid)
+_NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid = function (ctl, invalid)
 {
     ctl._invalid = invalid;
     ctl.updateCssClass();
 }
 
-NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_LoadInvalidate = function (ctl)
+_NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_LoadInvalidate = function (ctl)
 {
     // set invalid state
-    NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(ctl, true);
+    _NXKit.Web.UI.RadValidationDecorator.RadInputValidationDecorator_SetInvalid(ctl, true);
 }
 
-NXKit.Web.UI.RadValidationDecorator.RadComboBoxValidationDecorator_ValidationFunction = function (source, arguments)
+_NXKit.Web.UI.RadValidationDecorator.RadComboBoxValidationDecorator_ValidationFunction = function (source, arguments)
 {
     if (source.controltovalidate == undefined)
         return;

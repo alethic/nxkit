@@ -181,16 +181,18 @@ namespace NXKit.XForms.Web.UI
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
-            var desc = new ScriptControlDescriptor("NXKit.XForms.Web.UI.Select1EditableStringMinimal", ClientID);
-            desc.AddComponentProperty("view", View.ClientID);
-            desc.AddProperty("modelItemId", Visual.Binding != null ? Visual.Binding.NodeUniqueId : null);
-            desc.AddComponentProperty("radComboBox", ctl.ClientID);
-            yield return desc;
+            //var desc = new ScriptControlDescriptor("_NXKit.XForms.Web.UI.Select1EditableStringMinimal", ClientID);
+            //desc.AddComponentProperty("view", View.ClientID);
+            //desc.AddProperty("modelItemId", Visual.Binding != null ? Visual.Binding.NodeUniqueId : null);
+            //desc.AddComponentProperty("radComboBox", ctl.ClientID);
+            //yield return desc;
+            yield break;
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference("NXKit.XForms.Web.UI.Select1EditableStringMinimal.js", typeof(Select1EditableStringMinimal).Assembly.FullName);
+            //yield return new ScriptReference("NXKit.XForms.Web.UI.Select1EditableStringMinimal.js", typeof(Select1EditableStringMinimal).Assembly.FullName);
+            yield break;
         }
 
     }

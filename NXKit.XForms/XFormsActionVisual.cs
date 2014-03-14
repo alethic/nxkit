@@ -15,7 +15,7 @@ namespace NXKit.XForms
 
         public void Invoke()
         {
-            foreach (var action in Children.OfType<IActionVisual>())
+            foreach (var action in Visuals.OfType<IActionVisual>())
                 Module.InvokeAction(action);
         }
 

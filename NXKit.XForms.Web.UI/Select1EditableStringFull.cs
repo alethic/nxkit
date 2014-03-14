@@ -152,15 +152,17 @@ namespace NXKit.XForms.Web.UI
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
-            var desc = new ScriptControlDescriptor("NXKit.XForms.Web.UI.Select1EditableStringFull", ClientID);
-            desc.AddComponentProperty("view", View.ClientID);
-            desc.AddProperty("modelItemId", Visual.Binding != null ? Visual.Binding.NodeUniqueId : null);
-            yield return desc;
+            //var desc = new ScriptControlDescriptor("_NXKit.XForms.Web.UI.Select1EditableStringFull", ClientID);
+            //desc.AddComponentProperty("view", View.ClientID);
+            //desc.AddProperty("modelItemId", Visual.Binding != null ? Visual.Binding.NodeUniqueId : null);
+            //yield return desc;
+            yield break;
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference("NXKit.XForms.Web.UI.Select1EditableStringFull.js", typeof(Select1EditableStringFull).Assembly.FullName);
+            //yield return new ScriptReference("NXKit.XForms.Web.UI.Select1EditableStringFull.js", typeof(Select1EditableStringFull).Assembly.FullName);
+            yield break;
         }
 
     }

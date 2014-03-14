@@ -18,7 +18,7 @@ namespace NXKit.Web.UI
         internal FormSection(FormSection parent, INavigationSectionVisual visual)
             : base(parent, visual)
         {
-            Visual.ChildrenInvalidated += Visual_ChildrenInvalidated;
+            Visual.VisualsInvalidated += Visual_ChildrenInvalidated;
         }
 
         /// <summary>
@@ -53,9 +53,9 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        private IEnumerable<FormNavigation> CreateChildren(IStructuralVisual visual)
+        private IEnumerable<FormNavigation> CreateChildren(IContentVisual visual)
         {
-            foreach (var child in visual.Children.OfType<ContentVisual>())
+            foreach (var child in visual.Visuals.OfType<ContentVisual>())
                 foreach (var nav in FormNavigation.CreateNavigations(this, child))
                     yield return nav;
         }

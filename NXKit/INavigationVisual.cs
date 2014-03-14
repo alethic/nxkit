@@ -1,7 +1,7 @@
 ﻿namespace NXKit
 {
 
-    public interface INavigationVisual : IStructuralVisual
+    public interface INavigationVisual : IContentVisual
     {
 
         string UniqueId { get; }

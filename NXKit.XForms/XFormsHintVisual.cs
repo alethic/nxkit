@@ -12,9 +12,9 @@ namespace NXKit.XForms
         ISupportsCommonAttributes
     {
 
-        protected override IEnumerable<Visual> CreateChildren()
+        protected override IEnumerable<Visual> CreateVisuals()
         {
-            return CreateElementChildren(Element, includeTextContent: true);
+            return CreateElementVisuals(Element, includeTextContent: true);
         }
 
     }

@@ -42,7 +42,7 @@ namespace NXKit.XForms.Layout.Web.UI
         /// <returns></returns>
         private static IEnumerable<TableRowVisual> GetRows(ContentVisual visual)
         {
-            foreach (var child in visual.Children)
+            foreach (var child in visual.Visuals)
                 if (child is TableRowVisual)
                     yield return (TableRowVisual)child;
                 else if (child is ContentVisual)

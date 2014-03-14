@@ -41,7 +41,7 @@ namespace NXKit.XForms
         /// Creates the children in a defined order.
         /// </summary>
         /// <returns></returns>
-        protected override IEnumerable<Visual> CreateChildren()
+        protected override IEnumerable<Visual> CreateVisuals()
         {
             var childNodeList = Element.Elements().ToArray();
 
@@ -63,7 +63,7 @@ namespace NXKit.XForms
         /// </summary>
         public IEnumerable<XFormsInstanceVisual> Instances
         {
-            get { return Children.OfType<XFormsInstanceVisual>(); }
+            get { return Visuals.OfType<XFormsInstanceVisual>(); }
         }
 
         /// <summary>
