@@ -15,6 +15,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.js" type="text/javascript"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.js" type="text/javascript"></script>
     <script src="Content/semantic/packaged/javascript/semantic.js" type="text/javascript"></script>
+    <script src="Content/knockout/knockout.js" type="text/javascript"></script>
     <script src="Content/kendoui/js/kendo.all.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -93,6 +94,19 @@
 <asp:ScriptManager runat="server" />
 
 <div class="main container">
+
+    <script id="NXKit.Visual" type="text/html">
+        <p>no template for <span data-bind="text: type"></span>.</p>
+    </script>
+
+    <script id="NXKit.XForms.Layout.FormVisual" type="text/html">
+        <div class="xforms-layout-form">
+            <h1 data-bind="text: type"></h1>
+            <div data-bind="foreach: visuals">
+                <div data-bind="template : { name: template }" />
+            </div>
+        </div>
+    </script>
 
     <xforms:View ID="View" runat="server"
         CssClass="FormView"

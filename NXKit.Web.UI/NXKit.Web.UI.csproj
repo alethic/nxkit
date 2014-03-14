@@ -178,6 +178,9 @@
     <EmbeddedResource Include="..\NXKit.Web\View.js.map">
       <Link>TypeScript\View.js.map</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\NXKit.Web\Event.js.map">
+      <Link>TypeScript\Event.js.map</Link>
+    </EmbeddedResource>
     <None Include="NXKit.Web.UI.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -187,6 +190,11 @@
   <ItemGroup>
     <EmbeddedResource Include="..\NXKit.Web\View.js">
       <Link>TypeScript\View.js</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\NXKit.Web\Event.js">
+      <Link>TypeScript\Event.js</Link>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

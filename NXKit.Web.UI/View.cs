@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+
 using NXKit.Web.IO;
 
 namespace NXKit.Web.UI
@@ -434,28 +435,28 @@ namespace NXKit.Web.UI
         /// </summary>
         protected override void CreateChildControls()
         {
-            Controls.Clear();
+            //Controls.Clear();
 
-            contents = new UpdatePanel();
-            contents.UpdateMode = UpdatePanelUpdateMode.Always;
-            Controls.Add(contents);
+            //contents = new UpdatePanel();
+            //contents.UpdateMode = UpdatePanelUpdateMode.Always;
+            //Controls.Add(contents);
 
-            // generate body in update panel
-            if (Document != null)
-            {
-                var rootVisualControl = CreateVisualControl(Document.RootVisual);
-                if (rootVisualControl != null)
-                    SetVisualControlId(rootVisualControl);
+            //// generate body in update panel
+            //if (Document != null)
+            //{
+            //    var rootVisualControl = CreateVisualControl(Document.RootVisual);
+            //    if (rootVisualControl != null)
+            //        SetVisualControlId(rootVisualControl);
 
-                // traps validation to ensure form is run
-                validator = new CustomValidator();
-                validator.ValidateEmptyText = true;
-                validator.ValidationGroup = ValidationGroup;
-                validator.ServerValidate += validator_ServerValidate;
-                contents.ContentTemplateContainer.Controls.Add(validator);
+            //    // traps validation to ensure form is run
+            //    validator = new CustomValidator();
+            //    validator.ValidateEmptyText = true;
+            //    validator.ValidationGroup = ValidationGroup;
+            //    validator.ServerValidate += validator_ServerValidate;
+            //    contents.ContentTemplateContainer.Controls.Add(validator);
 
-                contents.ContentTemplateContainer.Controls.Add(rootVisualControl);
-            }
+            //    contents.ContentTemplateContainer.Controls.Add(rootVisualControl);
+            //}
         }
 
         private void validator_ServerValidate(object source, ServerValidateEventArgs args)
@@ -530,10 +531,8 @@ namespace NXKit.Web.UI
 
             // render form and contents
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
-            if (CssClass != null)
-                writer.AddAttribute(HtmlTextWriterAttribute.Class, CssClass);
+            writer.AddAttribute("data-bind", "template: { name: template }");
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
-            base.Render(writer);
             writer.RenderEndTag();
         }
 
@@ -616,12 +615,13 @@ namespace NXKit.Web.UI
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
             var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
-            d.AddProperty("visual", SerializeVisualTree());
+            d.AddProperty("model", SerializeVisualTree());
             yield return d;
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
+            yield return new ScriptReference("NXKit.Web.UI.TypeScript.Event.js", typeof(View).Assembly.FullName);
             yield return new ScriptReference("NXKit.Web.UI.TypeScript.View.js", typeof(View).Assembly.FullName);
             yield return new ScriptReference("NXKit.Web.UI.View.js", typeof(View).Assembly.FullName);
         }

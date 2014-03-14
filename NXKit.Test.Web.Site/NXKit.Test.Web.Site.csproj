@@ -895,6 +895,7 @@
     <Content Include="Content\kendoui\js\kendo.view.min.js" />
     <Content Include="Content\kendoui\js\kendo.web.min.js" />
     <Content Include="Content\kendoui\js\kendo.window.min.js" />
+    <Content Include="Content\knockout\knockout.js" />
     <Content Include="Content\normalize.css" />
     <Content Include="Default.aspx" />
     <EmbeddedResource Include="Resources\form.xml" />

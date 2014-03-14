@@ -20,12 +20,12 @@ _NXKit.Web.UI.View.prototype = {
         return this._object;
     },
 
-    get_visual: function () {
-        return this._object.visual;
+    get_model: function () {
+        return this._object.model;
     },
 
-    set_visual: function (value) {
-        this._object.visual = value;
+    set_model: function (value) {
+        this._object.model = value;
     },
 
 };
