@@ -72,6 +72,4 @@ NXKit.Web.UI.View.prototype =
 };
 
 NXKit.Web.UI.View.registerClass('NXKit.Web.UI.View', Sys.UI.Control);
-
-if (typeof (Sys) !== 'undefined')
     Sys.Application.notifyScriptLoaded();

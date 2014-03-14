@@ -51,6 +51,7 @@ namespace NXKit.Web.UI
         {
             Controls.Clear();
             Controls.Add(content = CreateContentControlCollection());
+            content.ID = "content";
         }
 
         /// <summary>
@@ -59,7 +60,18 @@ namespace NXKit.Web.UI
         /// <param name="writer"></param>
         protected override void Render(HtmlTextWriter writer)
         {
-            Content.RenderControl(writer);
+            foreach (var control in content)
+                RenderContentItem(writer, control);
+        }
+
+        /// <summary>
+        /// Writes the HTML for a single control in the content collection.
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="control"></param>
+        protected virtual void RenderContentItem(HtmlTextWriter writer, Control control)
+        {
+            control.RenderControl(writer);
         }
 
     }

@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Linq;
+using System.Diagnostics.Contracts;
 using System.Web.UI;
 
 using NXKit.Web.UI;
+using NXKit.XForms.Web.UI;
 
 namespace NXKit.XForms.Layout.Web.UI
 {
@@ -33,34 +34,52 @@ namespace NXKit.XForms.Layout.Web.UI
         VisualContentControl<CategoryVisual>
     {
 
+        CommonControlCollection common;
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="view"></param>
         /// <param name="visual"></param>
         public CategoryControl(View view, CategoryVisual visual)
             : base(view, visual)
         {
-
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
         }
 
-        protected override void OnPreRender(EventArgs args)
+        protected override void CreateChildControls()
         {
-            base.OnPreRender(args);
+            base.CreateChildControls();
 
-            foreach (var page in View.OpaqueChildren(Visual).OfType<PageVisual>())
-            {
-                // only make current page visible
-                var ctl = Content.GetOrCreateControl(page);
-                if (ctl != null)
-                    ctl.Visible = View.CurrentPage.Visual == page;
-            }
+            Controls.Add(common = new CommonControlCollection(View, Visual));
+            common.ID = "common";
         }
 
-        protected override void Render(System.Web.UI.HtmlTextWriter writer)
+        protected override void Render(HtmlTextWriter writer)
         {
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "Layout_Category");
+            writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "xforms-layout-category");
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
+
+            if (common.LabelControl != null)
+            {
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "xforms-label");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                common.LabelControl.RenderControl(writer);
+                writer.RenderEndTag();
+            }
+
+            if (common.HintControl != null)
+            {
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "xforms-hint");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                common.HintControl.RenderControl(writer);
+                writer.RenderEndTag();
+            }
+
             base.Render(writer);
+
             writer.RenderEndTag();
         }
 

@@ -504,11 +504,6 @@ namespace NXKit.Web.UI
             if (!Visible)
                 return;
 
-            if (Page.Request.ServerVariables["HTTPS"] == "on")
-                Page.ClientScript.RegisterClientScriptInclude("jq171", "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js");
-            else
-                Page.ClientScript.RegisterClientScriptInclude("jq171", "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js");
-            Page.ClientScript.RegisterClientScriptBlock(typeof(View), "View_jQuery", "var View_jQuery = jQuery.noConflict();\n", true);
             ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
 
             // process any changes

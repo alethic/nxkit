@@ -80,11 +80,12 @@ namespace NXKit.XForms.Web.UI
 
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
             writer.AddAttribute(HtmlTextWriterAttribute.Class, string.Join(" ", args.CssClasses.Distinct().Prepend("xforms-group")));
-            writer.RenderBeginTag(HtmlTextWriterTag.Fieldset);
+            writer.RenderBeginTag(HtmlTextWriterTag.Div);
 
             if (common.LabelControl != null)
             {
-                writer.RenderBeginTag(HtmlTextWriterTag.Legend);
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "xforms-label");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
                 common.LabelControl.RenderControl(writer);
                 writer.RenderEndTag();
             }
