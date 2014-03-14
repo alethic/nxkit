@@ -1,5 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics.Contracts;
+using System.Linq;
+using NXKit.Util;
 
 namespace NXKit.Web
 {
@@ -25,6 +28,48 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="visual"></param>
         public abstract void Write(Visual visual);
+
+        /// <summary>
+        /// Gets the type of the specified <see cref="Visual"/>.
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <returns></returns>
+        protected virtual Type GetVisualType(Visual visual)
+        {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
+            return TypeDescriptor.GetReflectionType(visual);
+        }
+
+        /// <summary>
+        /// Gets the base types of the specified <see cref="Visual"/>.
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <returns></returns>
+        protected virtual Type[] GetVisualBaseTypes(Visual visual)
+        {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
+            return TypeDescriptor.GetReflectionType(visual).BaseType
+                .Recurse(i => i.BaseType)
+                .TakeWhile(i => typeof(Visual).IsAssignableFrom(i))
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Gets the properties of the specified <see cref="Visual"/>.
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <returns></returns>
+        protected PropertyDescriptor[] GetVisualProperties(Visual visual)
+        {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
+            return TypeDescriptor.GetProperties(visual)
+                .Cast<PropertyDescriptor>()
+                .Where(i => i.Attributes.OfType<InteractiveAttribute>().Any())
+                .ToArray();
+        }
 
         /// <summary>
         /// Flushes whatever is in the buffer to the underlying streams.

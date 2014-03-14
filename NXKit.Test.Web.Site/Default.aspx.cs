@@ -39,42 +39,42 @@ namespace NXKit.Test.Web.Site
 
         protected void NextButton_Click(object sender, EventArgs args)
         {
-            View.Document.Invoke();
+            //View.Document.Invoke();
 
-            var l = new LinkedList<FormNavigation>(View.Navigations);
-            var p = l.Find(View.CurrentPage);
+            //var l = new LinkedList<FormNavigation>(View.Navigations);
+            //var p = l.Find(View.CurrentPage);
 
-            do
-            {
-                p = p.Next;
-            }
-            while (p != null && !p.Value.Relevant);
+            //do
+            //{
+            //    p = p.Next;
+            //}
+            //while (p != null && !p.Value.Relevant);
 
-            if (p != null)
-                View.Navigate(p.Value);
+            //if (p != null)
+            //    View.Navigate(p.Value);
 
-            if (View.CurrentPage == null)
-                View.Navigate(l.First.Value);
+            //if (View.CurrentPage == null)
+            //    View.Navigate(l.First.Value);
         }
 
         protected void PrevButton_Click(object sender, EventArgs args)
         {
-            View.Document.Invoke();
+            //View.Document.Invoke();
 
-            var l = new LinkedList<FormNavigation>(View.Navigations);
-            var p = l.Find(View.CurrentPage);
+            //var l = new LinkedList<FormNavigation>(View.Navigations);
+            //var p = l.Find(View.CurrentPage);
 
-            do
-            {
-                p = p.Previous;
-            }
-            while (p != null && !p.Value.Relevant);
+            //do
+            //{
+            //    p = p.Previous;
+            //}
+            //while (p != null && !p.Value.Relevant);
 
-            if (p != null)
-                View.Navigate(p.Value);
+            //if (p != null)
+            //    View.Navigate(p.Value);
 
-            if (View.CurrentPage == null)
-                View.Navigate(l.First.Value);
+            //if (View.CurrentPage == null)
+            //    View.Navigate(l.First.Value);
         }
 
     }

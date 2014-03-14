@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
@@ -13,8 +14,20 @@ using NXKit.Util;
 namespace NXKit.XForms
 {
 
-    public class XFormsModule : Module
+    public class XFormsModule :
+        Module
     {
+
+        ///// <summary>
+        ///// Initializes the static instance.
+        ///// </summary>
+        //static XFormsModule()
+        //{
+        //    // inject custom type descriptors for our Visual types
+        //    foreach (var type in typeof(XFormsModule).Assembly.GetTypes())
+        //        if (typeof(Visual).IsAssignableFrom(type))
+        //            TypeDescriptor.AddProviderTransparent(new XFormsTypeDescriptionProvider(TypeDescriptor.GetProvider(type), type), type);
+        //}
 
         /// <summary>
         /// Map of <see cref="XName"/> to <see cref="Visual"/> type.

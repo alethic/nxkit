@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq;
-using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.IO;
 
 using Newtonsoft.Json;
-using NXKit.Util;
+using Newtonsoft.Json.Linq;
 
 namespace NXKit.Web.IO
 {
@@ -41,6 +39,17 @@ namespace NXKit.Web.IO
         }
 
         /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="writer"></param>
+        public JsonVisualWriter(JTokenWriter writer)
+        {
+            Contract.Requires<ArgumentNullException>(writer != null);
+
+            this.writer = writer;
+        }
+
+        /// <summary>
         /// Gets the underlying <see cref="JsonWriter"/>.
         /// </summary>
         public JsonWriter JsonWriter
@@ -58,32 +67,35 @@ namespace NXKit.Web.IO
 
             // write type of visual
             writer.WritePropertyName("Type");
-            writer.WriteValue(TypeDescriptor.GetReflectionType(visual).FullName);
+            writer.WriteValue(GetVisualType(visual).FullName);
 
             // write type inheritance hierarchy.
-            var types = TypeDescriptor.GetReflectionType(visual).BaseType
-                .Recurse(i => i.BaseType)
-                .TakeWhile(i => typeof(Visual).IsAssignableFrom(i))
-                .ToList();
-            if (types.Count > 0)
+            var types = GetVisualBaseTypes(visual);
+            if (types.Length > 0)
             {
                 writer.WritePropertyName("BaseTypes");
                 writer.WriteStartArray();
                 foreach (var type in types)
-                    writer.WriteValue(TypeDescriptor.GetReflectionType(type).FullName);
+                    writer.WriteValue(type.FullName);
                 writer.WriteEndArray();
             }
 
-            // write properties of visual
-            writer.WritePropertyName("Properties");
-            writer.WriteStartObject();
-            foreach (PropertyDescriptor p in TypeDescriptor.GetProperties(visual))
-                if (p.PropertyType == typeof(string))
+            // write interactive properties
+            var properties = GetVisualProperties(visual);
+            if (properties.Length > 0)
+            {
+                writer.WritePropertyName("Properties");
+                writer.WriteStartObject();
+                foreach (var property in properties)
                 {
-                    writer.WritePropertyName(p.Name);
-                    writer.WriteValue(p.GetValue(visual));
+                    writer.WritePropertyName(property.Name);
+                    
+                    // serialize value independently to handle custom conversion
+                    new JsonSerializer()
+                        .Serialize(writer, property.GetValue(visual));
                 }
-            writer.WriteEndObject();
+                writer.WriteEndObject();
+            }
 
             // dealing with a content visual
             if (visual is ContentVisual)

@@ -99,6 +99,15 @@
         <p>no template for <span data-bind="text: type"></span>.</p>
     </script>
 
+    <script id="NXKit.ContentVisual" type="text/html">
+        <div data-bind="foreach: visuals">
+            <div data-bind="template: { name: template }" />
+        </div>
+    </script>
+    <script id="NXKit.TextVisual" type="text/html">
+        <span data-bind="text: properties.Text"></span>
+    </script>
+
     <script id="NXKit.XForms.Layout.FormVisual" type="text/html">
         <div class="xforms-layout-form">
             <h1 data-bind="text: type"></h1>
@@ -106,6 +115,18 @@
                 <div data-bind="template : { name: template }" />
             </div>
         </div>
+    </script>
+
+    <script id="NXKit.XForms.XFormsGroupVisual" type="text/html">
+        <div class="xforms-group ui segment">
+            <div data-bind="foreach: visuals">
+                <div data-bind="template: { name: template }" />
+            </div>
+        </div>
+    </script>
+
+    <script id="NXKit.XForms.XFormsInputVisual" type="text/html">
+        <input type="text" data-bind="value: properties.Value" />
     </script>
 
     <xforms:View ID="View" runat="server"

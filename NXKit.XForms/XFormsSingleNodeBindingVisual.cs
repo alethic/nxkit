@@ -37,6 +37,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the type of the bound data.
         /// </summary>
+        [Interactive]
         public XName Type
         {
             get { return Binding != null ? Binding.Type : null; }
@@ -45,6 +46,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets whether or not this visual is enabled.
         /// </summary>
+        [Interactive]
         public virtual bool Relevant
         {
             get
@@ -79,6 +81,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets whether or not this visual is read-only.
         /// </summary>
+        [Interactive]
         public bool ReadOnly
         {
             get { return Binding != null ? Binding.ReadOnly : true; }
@@ -87,6 +90,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets whether or not this visual is required.
         /// </summary>
+        [Interactive]
         public bool Required
         {
             get { return Binding != null ? Binding.Required : false; }

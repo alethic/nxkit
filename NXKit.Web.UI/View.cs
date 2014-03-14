@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
-using System.Text;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Web.UI;
-using System.Web.UI.WebControls;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NXKit.Web.IO;
 
 namespace NXKit.Web.UI
@@ -18,7 +19,8 @@ namespace NXKit.Web.UI
     public class View :
         Control,
         INamingContainer,
-        IPostBackEventHandler,
+        IPostBackDataHandler,
+        ICallbackEventHandler,
         IScriptControl
     {
 
@@ -59,124 +61,45 @@ namespace NXKit.Web.UI
 
         }
 
-        FormPage currentPage;
-
-        /// <summary>
-        /// Set of <see cref="VisualControlTypeDescriptor"/> instances that generate <see cref="VisualControls"/>.
-        /// </summary>
-        [ImportMany(typeof(VisualControlTypeDescriptor))]
-        List<VisualControlTypeDescriptor> visualControlDescriptors;
-
-        /// <summary>
-        /// Loaded modules.
-        /// </summary>
-        [ImportMany(typeof(FormModule), RequiredCreationPolicy = CreationPolicy.NonShared)]
-        List<FormModule> modules;
-
-        UpdatePanel contents;
-        CustomValidator validator;
-
-        IEnumerable<FormNavigation> navigations;
+        string cssClass;
+        string validationGroup;
+        NXDocument document;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public View()
         {
-            var c = new CompositionContainer(new ApplicationCatalog());
-            c.ComposeExportedValue(FormModule.ViewParameter, this);
-            c.ComposeParts(this);
-        }
 
-        /// <summary>
-        /// Resolves the <see cref="VisualControlTypeDescriptor"/> capable of handling <paramref name="visual"/>.
-        /// </summary>
-        /// <param name="visual"></param>
-        /// <returns></returns>
-        public VisualControlTypeDescriptor ResolveVisualControlDescriptor(Visual visual)
-        {
-            return visualControlDescriptors.FirstOrDefault(i => i.CanHandleVisual(visual));
-        }
-
-        /// <summary>
-        /// Returns whether the visual should be considered opaque.
-        /// </summary>
-        /// <param name="visual"></param>
-        /// <returns></returns>
-        bool IsOpaque(Visual visual)
-        {
-            var d = ResolveVisualControlDescriptor(visual);
-            if (d == null)
-                return true;
-
-            return d.IsOpaque(visual);
-        }
-
-        /// <summary>
-        /// Returns the set of 'children' visuals which are children either directly or by virtue of being contained as
-        /// children of transparent visuals.
-        /// </summary>
-        /// <param name="visual"></param>
-        /// <returns></returns>
-        public IEnumerable<Visual> OpaqueChildren(ContentVisual visual)
-        {
-            foreach (var child in visual.Visuals)
-                if (!IsOpaque(child) && child is ContentVisual)
-                {
-                    // if child is transparent, recurse
-                    foreach (var child2 in OpaqueChildren((ContentVisual)child))
-                        yield return child2;
-                }
-                else
-                    // child is not transparent, and is therefor an opaque child
-                    yield return child;
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="VisualControl"/> for the specified visual if available, else <c>null</c>.
-        /// </summary>
-        /// <param name="visual"></param>
-        /// <returns></returns>
-        internal VisualControl CreateVisualControl(Visual visual)
-        {
-            var type = ResolveVisualControlDescriptor(visual);
-            if (type != null)
-                return type.CreateControl(this, visual);
-
-            return null;
-        }
-
-        /// <summary>
-        /// Raised when a new <see cref="VisualControl"/> is added to the control hierarchy.
-        /// </summary>
-        public event VisualControlAddedEventHandler VisualControlAdded;
-
-        /// <summary>
-        /// Invokes the VisualControlAdded event.
-        /// </summary>
-        /// <param name="args"></param>
-        internal void OnVisualControlAdded(VisualControlAddedEventArgs args)
-        {
-            if (VisualControlAdded != null)
-                VisualControlAdded(args);
         }
 
         /// <summary>
         /// Gets or sets the Cascading Style Sheet (CSS) class rendered by the Web server control on the client.
         /// </summary>
         [ThemeableAttribute(true)]
-        public string CssClass { get; set; }
+        public string CssClass
+        {
+            get { return cssClass; }
+            set { cssClass = value; }
+        }
 
         /// <summary>
         /// Gets or sets the group of controls for which the <see cref="View"/> control causes validation when it posts back to the server.
         /// </summary>
         [ThemeableAttribute(false)]
-        public string ValidationGroup { get; set; }
+        public string ValidationGroup
+        {
+            get { return validationGroup; }
+            set { validationGroup = value; }
+        }
 
         /// <summary>
         /// Gets a reference to the <see cref="Document"/>.
         /// </summary>
-        public NXDocument Document { get; private set; }
+        public NXDocument Document
+        {
+            get { return document; }
+        }
 
         /// <summary>
         /// Raised when the forms processor attempts to perform an action on a resource.
@@ -187,8 +110,10 @@ namespace NXKit.Web.UI
         /// Raises the ResolveResource event.
         /// </summary>
         /// <param name="args"></param>
-        private void OnResourceAction(ResourceActionEventArgs args)
+        void OnResourceAction(ResourceActionEventArgs args)
         {
+            Contract.Requires<ArgumentNullException>(args != null);
+
             if (ResourceAction != null)
                 ResourceAction(this, args);
         }
@@ -201,87 +126,11 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         public string ResolveResourceClientUrl(Uri uri)
         {
+            Contract.Requires<ArgumentNullException>(uri != null);
+
             var args = new ResourceActionEventArgs(ResourceActionMethod.ResolveClientUrl, uri);
             OnResourceAction(args);
-
             return args.ReferenceUri;
-        }
-
-        /// <summary>
-        /// Gets a reference to the root navigation item, providing the possible navigation points of the form.
-        /// </summary>
-        public IEnumerable<FormNavigation> Navigations
-        {
-            get { return navigations ?? (navigations = CreateNavigations()); }
-        }
-
-        /// <summary>
-        /// Creates the root navigation item.
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerable<FormNavigation> CreateNavigations()
-        {
-            if (Document == null)
-                return null;
-
-            return FormNavigation.CreateNavigations(null, Document.RootVisual).ToList();
-        }
-
-        /// <summary>
-        /// Gets or sets the current page.
-        /// </summary>
-        public FormPage CurrentPage
-        {
-            get { return currentPage; }
-            set { currentPage = value; OnCurrentPageChanged(EventArgs.Empty); }
-        }
-
-        /// <summary>
-        /// Raised when the current page is changed.
-        /// </summary>
-        public event EventHandler CurrentPageChanged;
-
-        /// <summary>
-        /// Raises the CurrentPageChanged event.
-        /// </summary>
-        /// <param name="args"></param>
-        void OnCurrentPageChanged(EventArgs args)
-        {
-            if (CurrentPageChanged != null)
-                CurrentPageChanged(this, args);
-        }
-
-        /// <summary>
-        /// Invoked on the Init phase.
-        /// </summary>
-        /// <param name="args"></param>
-        protected override void OnInit(EventArgs args)
-        {
-            base.OnInit(args);
-
-            Page.RegisterRequiresControlState(this);
-        }
-
-        /// <summary>
-        /// Resets the form view to display no form.
-        /// </summary>
-        public void Reset()
-        {
-            navigations = null;
-            Document = null;
-            CurrentPage = null;
-        }
-
-        /// <summary>
-        /// Configures the control.
-        /// </summary>
-        void Navigate()
-        {
-            // recreate on new form
-            navigations = null;
-
-            // set currently viewed page to first available, or none
-            Navigate(null);
         }
 
         /// <summary>
@@ -292,10 +141,8 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            Document = new NXDocument(new ResourceResolver(this), uri);
-            Document.Invoke();
-
-            Navigate();
+            document = new NXDocument(new ResourceResolver(this), uri);
+            document.Invoke();
         }
 
         /// <summary>
@@ -320,10 +167,8 @@ namespace NXKit.Web.UI
             Contract.Requires<ArgumentNullException>(configuration != null);
 
             // construct a engine instance
-            Document = new NXDocument(new ResourceResolver(this), uri, configuration);
-            Document.Invoke();
-
-            Navigate();
+            document = new NXDocument(new ResourceResolver(this), uri, configuration);
+            document.Invoke();
         }
 
         /// <summary>
@@ -340,282 +185,110 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Loads available control state.
-        /// </summary>
-        /// <param name="savedState"></param>
-        protected override void LoadControlState(object savedState)
-        {
-            var state = (object[])savedState;
-            base.LoadControlState(state[0]);
-
-            // reload processor state
-            var formState = (NXDocumentState)state[1];
-            if (formState != null)
-            {
-                navigations = null;
-
-                Document = new NXDocument(new ResourceResolver(this), formState);
-                Document.Invoke();
-
-                // find current page node from state
-                Navigate(Navigations
-                    .SelectMany(i => i.Descendants(true))
-                    .FirstOrDefault(i => i.Id == (string)state[2]));
-
-                // set current page to first if none found
-                if (CurrentPage == null)
-                    Navigate(Navigations.FirstOrDefault());
-            }
-        }
-
-        /// <summary>
-        /// Persists required control state.
-        /// </summary>
-        /// <returns></returns>
-        protected override object SaveControlState()
-        {
-            if (Document != null)
-                Document.Invoke();
-
-            var state = new object[4];
-            state[0] = base.SaveControlState();
-
-            // save processor configuration
-            state[1] = Document != null ? Document.Save() : null;
-
-            // save current navigation item
-            state[2] = CurrentPage != null ? CurrentPage.Id : null;
-
-            return state;
-        }
-
-        /// <summary>
-        /// Invoked on the Load phase.
-        /// </summary>
-        /// <param name="args"></param>
-        protected override void OnLoad(EventArgs args)
-        {
-            base.OnLoad(args);
-
-            // processor was just created, ensure child control hierarchy
-            EnsureChildControls();
-        }
-
-        /// <summary>
-        /// Sets the ID of the <see cref="VisualControl"/> properly based on it's location in the visual hierarchy.
-        /// </summary>
-        /// <param name="control"></param>
-        internal void SetVisualControlId(VisualControl control)
-        {
-            var structural = control.Visual as ContentVisual;
-            if (structural != null)
-            {
-                // discover first parent visual control
-                var parentVisualControl = control.Ascendents()
-                    .OfType<VisualControl>()
-                    .FirstOrDefault();
-                if (parentVisualControl == null)
-                    return;
-
-                // set of visuals not rendered between control and parent visual control
-                var parentVisuals = structural.Ascendants()
-                    .TakeWhile(i => i != parentVisualControl.Visual);
-
-                // separate each new visual's id to build the final ID
-                var b = new StringBuilder(structural.Id);
-                foreach (var parentVisual in parentVisuals)
-                    b.Insert(0, "_").Insert(0, parentVisual.Id);
-
-                control.ID = b.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Creates the required control hierarchy.
-        /// </summary>
-        protected override void CreateChildControls()
-        {
-            //Controls.Clear();
-
-            //contents = new UpdatePanel();
-            //contents.UpdateMode = UpdatePanelUpdateMode.Always;
-            //Controls.Add(contents);
-
-            //// generate body in update panel
-            //if (Document != null)
-            //{
-            //    var rootVisualControl = CreateVisualControl(Document.RootVisual);
-            //    if (rootVisualControl != null)
-            //        SetVisualControlId(rootVisualControl);
-
-            //    // traps validation to ensure form is run
-            //    validator = new CustomValidator();
-            //    validator.ValidateEmptyText = true;
-            //    validator.ValidationGroup = ValidationGroup;
-            //    validator.ServerValidate += validator_ServerValidate;
-            //    contents.ContentTemplateContainer.Controls.Add(validator);
-
-            //    contents.ContentTemplateContainer.Controls.Add(rootVisualControl);
-            //}
-        }
-
-        private void validator_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            // ensure form is run before children are validated
-            Document.Invoke();
-
-            args.IsValid = true;
-        }
-
-        /// <summary>
-        /// Navigates to the given <see cref="FormNavigation"/>.
-        /// </summary>
-        /// <param name="nav"></param>
-        public void Navigate(FormNavigation nav)
-        {
-            FormPage newPage = null;
-
-            // start at first navigation, if null
-            if (nav == null)
-                nav = Navigations.FirstOrDefault();
-
-            if (nav is FormPage)
-                // nav item is a page
-                newPage = (FormPage)nav;
-            else if (nav is FormSection)
-                newPage = ((FormSection)nav).Descendants(false).OfType<FormPage>().FirstOrDefault();
-            else
-                throw new InvalidOperationException();
-
-            // only change page if required
-            if (CurrentPage != newPage)
-                CurrentPage = newPage;
-        }
-
-        /// <summary>
-        /// Invoked for the PreRender phase.
+        /// Raises the PreRender event.
         /// </summary>
         /// <param name="args"></param>
         protected override void OnPreRender(EventArgs args)
         {
             base.OnPreRender(args);
-
-            if (Document == null)
-                return;
-
-            if (!Visible)
-                return;
-
             ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
-
-            // process any changes
-            Document.Invoke();
-
-            // prime unique ids required for rendering navigations
-            Navigations
-                .SelectMany(i => i.Descendants(true))
-                .Select(i => i.Id)
-                .ToList();
         }
 
         /// <summary>
-        /// Renders the form.
+        /// Gets the client-side save state as a string.
+        /// </summary>
+        /// <returns></returns>
+        string GetSaveString()
+        {
+            // serialize document state to save field
+            using (var stm = new MemoryStream())
+            using (var zip = new GZipStream(stm, CompressionMode.Compress))
+            {
+                new BinaryFormatter().Serialize(zip, document.Save());
+                zip.Close();
+                return Convert.ToBase64String(stm.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Gets the client-side data as a <see cref="JObject"/>
+        /// </summary>
+        /// <returns></returns>
+        JObject GetDataJObject()
+        {
+            // serialize document state to data field
+            using (var str = new JTokenWriter())
+            using (var wrt = new JsonVisualWriter(str))
+            {
+                wrt.Write(document.RootVisual);
+                wrt.Close();
+                return (JObject)str.Token;
+            }
+        }
+
+        /// <summary>
+        /// Gets the client-side data as a <see cref="string"/>.
+        /// </summary>
+        /// <returns></returns>
+        string GetDataString()
+        {
+            // serialize document state to data field
+            using (var str = new StringWriter())
+            using (var wrt = new JsonVisualWriter(str))
+            {
+                wrt.Write(document.RootVisual);
+                wrt.Close();
+                return str.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Renders the server control to the client.
         /// </summary>
         /// <param name="writer"></param>
         protected override void Render(HtmlTextWriter writer)
         {
-            if (Document == null)
-                return;
-
             ScriptManager.GetCurrent(Page).RegisterScriptDescriptors(this);
 
-            // render form and contents
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
+            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+
+            writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_body");
             writer.AddAttribute("data-bind", "template: { name: template }");
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
             writer.RenderEndTag();
-        }
+            writer.WriteLine();
 
-        /// <summary>
-        /// Renders a tree of navigation items.
-        /// </summary>
-        /// <param name="writer"></param>
-        /// <param name="items"></param>
-        private void RenderNavigations(HtmlTextWriter writer, IEnumerable<FormNavigation> items)
-        {
-            var relevantItems = items.Where(i => i.Relevant);
-
-            // skip if no relevant descendants
-            if (relevantItems.Any())
+            if (document != null)
             {
-                writer.RenderBeginTag(HtmlTextWriterTag.Ul);
-                foreach (var item in relevantItems)
-                {
-                    writer.RenderBeginTag(HtmlTextWriterTag.Li);
-
-                    if (item is FormSection)
-                        writer.RenderBeginTag(HtmlTextWriterTag.Span);
-                    else
-                    {
-                        writer.AddAttribute(HtmlTextWriterAttribute.Href, Page.ClientScript.GetPostBackClientHyperlink(this, "navigate:" + item.Id));
-                        writer.RenderBeginTag(HtmlTextWriterTag.A);
-                    }
-
-                    writer.WriteEncodedText(item.Label ?? "unknown");
-
-                    writer.RenderEndTag();
-
-                    // render children of navigation item
-                    if (item is FormSection)
-                        RenderNavigations(writer, ((FormSection)item).Children);
-
-                    writer.RenderEndTag();
-                }
+                // serialize visual state to data field
+                writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_data");
+                writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
+                writer.AddAttribute(HtmlTextWriterAttribute.Value, GetDataString());
+                writer.RenderBeginTag(HtmlTextWriterTag.Input);
                 writer.RenderEndTag();
+                writer.WriteLine();
+
+                // serialize document state to save field
+                writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_save");
+                writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
+                writer.AddAttribute(HtmlTextWriterAttribute.Value, GetSaveString());
+                writer.RenderBeginTag(HtmlTextWriterTag.Input);
+                writer.RenderEndTag();
+                writer.WriteLine();
             }
-        }
 
-        /// <summary>
-        /// Initiates a submission of the form.
-        /// </summary>
-        public void Submit()
-        {
-            if (Document != null)
-                Document.Submit();
-        }
-
-        void IPostBackEventHandler.RaisePostBackEvent(string eventArgument)
-        {
-            var args = eventArgument.Split(':');
-
-            switch (args[0])
-            {
-                case "navigate":
-                    Navigate(Navigations
-                        .SelectMany(i => i.Descendants(true))
-                        .FirstOrDefault(i => i.Id == args[1]));
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Serializes the visual tree to JSON for client-side components.
-        /// </summary>
-        /// <returns></returns>
-        string SerializeVisualTree()
-        {
-            using (var s = new StringWriter())
-            using (var w = new JsonVisualWriter(s))
-            {
-                w.Write(Document.RootVisual);
-                return s.ToString();
-            }
+            writer.RenderEndTag();
+            writer.WriteLine();
         }
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
             var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
-            d.AddProperty("model", SerializeVisualTree());
+            d.AddElementProperty("body", ClientID + "_body");
+            d.AddElementProperty("data", ClientID + "_data");
+            d.AddElementProperty("save", ClientID + "_save");
+            d.AddProperty("push", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self"));
             yield return d;
         }
 
@@ -624,6 +297,111 @@ namespace NXKit.Web.UI
             yield return new ScriptReference("NXKit.Web.UI.TypeScript.Event.js", typeof(View).Assembly.FullName);
             yield return new ScriptReference("NXKit.Web.UI.TypeScript.View.js", typeof(View).Assembly.FullName);
             yield return new ScriptReference("NXKit.Web.UI.View.js", typeof(View).Assembly.FullName);
+        }
+
+        /// <summary>
+        /// Loads the <see cref="NXDocument"/> from the given saved state.
+        /// </summary>
+        /// <param name="save"></param>
+        void LoadDocumentFromSave(string save)
+        {
+            using (var stm = new MemoryStream(Convert.FromBase64String(save)))
+            using (var zip = new GZipStream(stm, CompressionMode.Decompress))
+            {
+                // deserialize value into state
+                var state = (NXDocumentState)new BinaryFormatter().Deserialize(zip);
+                if (state == null)
+                    throw new NullReferenceException();
+
+                document = new NXDocument(new ResourceResolver(this), state);
+                document.Invoke();
+            }
+        }
+
+        bool IPostBackDataHandler.LoadPostData(string postDataKey, NameValueCollection postCollection)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IPostBackDataHandler.RaisePostDataChangedEvent()
+        {
+            throw new NotImplementedException();
+        }
+
+        string ICallbackEventHandler.GetCallbackResult()
+        {
+            return JsonConvert.SerializeObject(new
+            {
+                Save = GetSaveString(),
+                Data = GetDataJObject(),
+            });
+        }
+
+        void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
+        {
+            dynamic args = JObject.Parse(eventArgument);
+
+            // attempt to load our document instance
+            var save = (string)args.Save;
+            if (save != null)
+                LoadDocumentFromSave(save);
+
+            // dispatch action
+            switch ((string)args.Action)
+            {
+                case "Push":
+                    ClientPush((JObject)args.Args.Data);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Client has sent us a complete object tree.
+        /// </summary>
+        /// <param name="data"></param>
+        void ClientPush(JObject data)
+        {
+            VisitAndPush(data, document.RootVisual);
+        }
+
+        void VisitAndPush(JObject s, Visual d)
+        {
+            if (s.Value<string>("Type") != d.GetType().FullName)
+                throw new Exception();
+
+            var sProperties = s.Value<JObject>("Properties")
+                .Properties()
+                .OrderBy(i => i.Name)
+                .ToArray();
+
+            var dProperties = TypeDescriptor.GetProperties(d)
+                .Cast<PropertyDescriptor>()
+                .Where(i => i.Attributes.OfType<InteractiveAttribute>().Any())
+                .OrderBy(i => i.Name)
+                .ToArray();
+
+            // join property lists by name
+            var pL = dProperties
+                .Join(sProperties, i => i.Name, i => i.Name, (dP, sP) => new { sP, dP })
+                .Where(i => !i.dP.IsReadOnly);
+
+            // set all properties in the destination with their matching value from the source
+            foreach (var i in pL)
+                i.dP.SetValue(d, i.sP.Value.Value<string>());
+
+            if (d is ContentVisual)
+            {
+                var sVisuals = s.Value<JArray>("Visuals")
+                    .Values<JObject>()
+                    .ToArray();
+
+                var dVisuals = ((ContentVisual)d)
+                    .Visuals
+                    .ToArray();
+
+                foreach (var i in sVisuals.Zip(dVisuals, (sV, dV) => new { sV, dV }))
+                    VisitAndPush(i.sV, i.dV);
+            }
         }
 
     }

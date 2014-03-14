@@ -131,6 +131,7 @@
     <Compile Include="SupportsCommonAttributesExtensions.cs" />
     <Compile Include="SupportsUiCommonAttributesExtensions.cs" />
     <Compile Include="VisualAttribute.cs" />
+    <Compile Include="XFormsTypeDescriptionProvider.cs" />
     <Compile Include="XFormsXsltContext.cs" />
     <Compile Include="XFormsActionVisual.cs" />
     <Compile Include="XFormsAlertVisual.cs" />
