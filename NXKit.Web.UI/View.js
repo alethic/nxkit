@@ -35,7 +35,6 @@ NXKit.Web.UI.ValueChangedEventArgs.prototype =
 
 NXKit.Web.UI.ValueChangedEventArgs.registerClass('NXKit.Web.UI.ValueChangedEventArgs', Sys.EventArgs);
 
-
 NXKit.Web.UI.View = function (element)
 {
     NXKit.Web.UI.View.initializeBase(this, [element]);
@@ -74,6 +73,4 @@ NXKit.Web.UI.View.prototype =
 };
 
 NXKit.Web.UI.View.registerClass('NXKit.Web.UI.View', Sys.UI.Control);
-
-if (typeof(Sys) !== 'undefined')
-    Sys.Application.notifyScriptLoaded();
+Sys.Application.notifyScriptLoaded();

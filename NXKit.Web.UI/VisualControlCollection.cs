@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -13,8 +14,9 @@ namespace NXKit.Web.UI
     /// Provides a <see cref="Control"/> type that generates a <see cref="Control"/> hierarchy for a given <see 
     /// cref="ContentVisual"/>.
     /// </summary>
-    public class VisualControlCollection : 
-        Control
+    public class VisualControlCollection :
+        Control,
+        IEnumerable<VisualControl>
     {
 
         readonly View view;
@@ -149,6 +151,16 @@ namespace NXKit.Web.UI
             base.OnPreRender(args);
 
             Update();
+        }
+
+        public IEnumerator<VisualControl> GetEnumerator()
+        {
+            return Controls.Cast<VisualControl>().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
     }

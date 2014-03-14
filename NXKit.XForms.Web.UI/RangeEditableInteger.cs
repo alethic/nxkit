@@ -13,7 +13,7 @@ namespace NXKit.XForms.Web.UI
         RangeEditable
     {
 
-        RadNumericTextBox ctl;
+        TextBox ctl;
 
         /// <summary>
         /// Initializes a new instance.
@@ -27,52 +27,49 @@ namespace NXKit.XForms.Web.UI
             Contract.Requires<ArgumentNullException>(visual != null);
         }
 
-        /// <summary>
-        /// Creates the child control hierarchy.
-        /// </summary>
-        protected override void CreateChildControls()
-        {
-            ctl = new RadNumericTextBox();
-            ctl.ID = "ctl";
-            ctl.Value = BindingUtil.Get<double?>(Visual.Binding);
-            ctl.Type = NumericType.Percent;
-            ctl.Width = Unit.Pixel(150);
-            ctl.ShowSpinButtons = true;
-            ctl.IncrementSettings.Step = 5;
-            ctl.NumberFormat.DecimalDigits = 0;
-            ctl.NumberFormat.NegativePattern = "-n";
-            ctl.NumberFormat.PositivePattern = "n";
-            ctl.NumberFormat.GroupSeparator = "";
-            ctl.TextChanged += ctl_TextChanged;
-
-            int start;
-            if (int.TryParse(Visual.Start, out start))
-                ctl.MinValue = start;
-
-            int end;
-            if (int.TryParse(Visual.End, out end))
-                ctl.MaxValue = end;
-
-            int step;
-            if (int.TryParse(Visual.Step, out step))
-                ctl.IncrementSettings.Step = step;
-
-            Controls.Add(ctl);
-        }
-
-        void ctl_TextChanged(object sender, EventArgs args)
-        {
-            BindingUtil.Set(Visual.Binding, ctl.Value);
-        }
-
         public override string TargetID
         {
             get { return ctl.ClientID; }
         }
 
+        /// <summary>
+        /// Creates the child control hierarchy.
+        /// </summary>
+        protected override void CreateChildControls()
+        {
+            ctl = new TextBox();
+            ctl.ValidationGroup = View.ValidationGroup;
+            ctl.ID = "ctl";
+            ctl.Text = ((int?)BindingUtil.Get<double?>(Visual.Binding)).ToString();
+            ctl.TextMode = TextBoxMode.Number;
+            ctl.TextChanged += ctl_TextChanged;
+            Controls.Add(ctl);
+
+            int start;
+            if (int.TryParse(Visual.Start, out start))
+                ctl.Attributes["min"] = start.ToString();
+
+            int end;
+            if (int.TryParse(Visual.End, out end))
+                ctl.Attributes["max"] = end.ToString();
+
+            int step;
+            if (int.TryParse(Visual.Step, out step))
+                ctl.Attributes["step"] = step.ToString();
+        }
+
+        void ctl_TextChanged(object sender, EventArgs args)
+        {
+            int i;
+            if (int.TryParse(ctl.Text, out i))
+                BindingUtil.Set(Visual.Binding, (double?)i);
+            else
+                BindingUtil.Set(Visual.Binding, null);
+        }
+
         protected override void OnVisualValueChanged()
         {
-            ctl.Value = BindingUtil.Get<double?>(Visual.Binding);
+            ctl.Text = ((int?)BindingUtil.Get<double?>(Visual.Binding)).ToString();
         }
 
         protected override void OnVisualReadOnlyOrReadWrite()

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-
-using Telerik.Web.UI;
-using Telerik.Web.UI.Calendar;
-
-using NXKit.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace NXKit.XForms.Web.UI
 {
@@ -14,14 +10,14 @@ namespace NXKit.XForms.Web.UI
         InputEditable
     {
 
-        RadDatePicker ctl;
+        TextBox ctl;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="view"></param>
         /// <param name="visual"></param>
-        public InputEditableDate(View view, XFormsInputVisual visual)
+        public InputEditableDate(NXKit.Web.UI.View view, XFormsInputVisual visual)
             : base(view, visual)
         {
             Contract.Requires<ArgumentNullException>(view != null);
@@ -30,7 +26,7 @@ namespace NXKit.XForms.Web.UI
 
         protected override void OnVisualValueChanged()
         {
-            ctl.SelectedDate = BindingUtil.Get<DateTime?>(Visual.Binding);
+            ctl.Text = Convert.ToString(BindingUtil.Get<DateTime?>(Visual.Binding));
         }
 
         protected override void OnVisualReadOnlyOrReadWrite()
@@ -43,20 +39,22 @@ namespace NXKit.XForms.Web.UI
         /// </summary>
         protected override void CreateChildControls()
         {
-            ctl = new RadDatePicker();
+            ctl = new TextBox();
             ctl.ID = "ctl";
-            ctl.Calendar.EnableMonthYearFastNavigation = true;
-            ctl.SelectedDateChanged += ctl_SelectedDateChanged;
-
-            // TODO set to constraint, if any
-            ctl.MinDate = DateTime.MinValue;
-            ctl.MaxDate = DateTime.MaxValue;
+            ctl.TextMode = TextBoxMode.Date;
+            ctl.Attributes["min"] = DateTime.MinValue.ToShortDateString();
+            ctl.Attributes["max"] = DateTime.MaxValue.ToShortDateString();
+            ctl.TextChanged += ctl_TextChanged;
             Controls.Add(ctl);
         }
 
-        void ctl_SelectedDateChanged(object sender, SelectedDateChangedEventArgs args)
+        void ctl_TextChanged(object sender, EventArgs args)
         {
-            BindingUtil.Set(Visual.Binding, ctl.SelectedDate);
+            DateTime d;
+            if (DateTime.TryParse(ctl.Text, out d))
+                BindingUtil.Set(Visual.Binding, d);
+            else
+                BindingUtil.Set(Visual.Binding, null);
         }
 
     }

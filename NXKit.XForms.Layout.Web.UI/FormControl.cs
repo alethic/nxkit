@@ -1,5 +1,7 @@
-﻿
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.Web.UI;
+
 using NXKit.Web.UI;
 
 namespace NXKit.XForms.Layout.Web.UI
@@ -34,16 +36,18 @@ namespace NXKit.XForms.Layout.Web.UI
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="view"></param>
         /// <param name="visual"></param>
         public FormControl(View view, FormVisual visual)
             : base(view, visual)
         {
-
+            Contract.Requires<ArgumentNullException>(view != null);
+            Contract.Requires<ArgumentNullException>(visual != null);
         }
 
         protected override void Render(System.Web.UI.HtmlTextWriter writer)
         {
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "Layout_Form");
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "xforms-layout-form");
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
             base.Render(writer);
             writer.RenderEndTag();
