@@ -16,15 +16,10 @@ _NXKit.Web.UI.View.prototype = {
     initialize: function () {
         var self = this;
         _NXKit.Web.UI.View.callBaseMethod(self, 'initialize');
-
-        Sys.WebForms.PageRequestManager.getInstance().add_pageLoaded(function (s, a) {
-            self._pageLoadedHandler(s, a);
-        });
     },
 
     dispose: function () {
         var self = this;
-
         _NXKit.Web.UI.View.callBaseMethod(self, 'dispose');
     },
 
@@ -77,17 +72,17 @@ _NXKit.Web.UI.View.prototype = {
             // generate new view
             if (self._view == null) {
                 self._view = new NXKit.Web.View(self._body);
-                self._view.onPushRequest.add(function (data) {
-                    self.onPushRequest(data);
+                self._view.CallbackRequest.add(function (data) {
+                    self.onCallbackRequest(data);
                 });
             }
 
             // update view with data
-            self._view.data = $(self._data).val();
+            self._view.Data = $(self._data).val();
         }
     },
 
-    onPushRequest: function (data) {
+    onCallbackRequest: function (data) {
         var self = this;
 
         // generate event argument to pass to server
@@ -101,13 +96,13 @@ _NXKit.Web.UI.View.prototype = {
 
         // initiate server request
         var cb = function (args) {
-            self._onPushRequestEnd(args);
+            self.onCallbackRequestEnd(args);
         };
 
         eval(self._push);
     },
 
-    _onPushRequestEnd: function (result) {
+    onCallbackRequestEnd: function (result) {
         var self = this;
 
         // result contains new save and data values
@@ -115,12 +110,8 @@ _NXKit.Web.UI.View.prototype = {
         $(self._save).val(args.Save);
         $(self._data).val(JSON.stringify(args.Data));
 
-        self._view.data = $(self._data).val();
+        self._view.Data = $(self._data).val();
     },
-
-    _pageLoadedHandler: function (sender, args) {
-        console.debug('loaded');
-    }
 
 };
 

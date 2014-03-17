@@ -25,15 +25,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Allocates a new ID within the scope.
-        /// </summary>
-        /// <returns></returns>
-        public string AllocateId()
-        {
-            return (nextId++).ToString();
-        }
-
-        /// <summary>
         /// Obtains the evaluation context for this visual.
         /// </summary>
         public XFormsEvaluationContext Context

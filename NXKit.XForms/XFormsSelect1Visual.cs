@@ -12,17 +12,34 @@ namespace NXKit.XForms
         bool selectedItemVisualCached;
         XFormsItemVisual selectedItemVisual;
 
+        [Interactive]
         public bool Incremental
         {
             get { return Module.GetAttributeValue(Element, "incremental") == "true"; }
         }
 
+        [Interactive]
         public XFormsSelection Selection
         {
-            get
-            {
-                return Module.GetAttributeValue(Element, "selection") == "open" ? XFormsSelection.Open : XFormsSelection.Closed;
-            }
+            get { return Module.GetAttributeValue(Element, "selection") == "open" ? XFormsSelection.Open : XFormsSelection.Closed; }
+        }
+
+        protected override void SetValue(object value)
+        {
+            // deselect current visual
+            if (SelectedItemVisual != null &&
+                SelectedItemVisual.Selectable != null)
+                SelectedItemVisual.Selectable.Deselect(this);
+
+            // clear selected visual state
+            selectedItemVisualCached = true;
+            selectedItemVisual = null;
+            GetState<XFormsSelect1State>().SelectedVisualId = null;
+
+            // set node value
+            if (Binding != null &&
+                Binding.Node != null)
+                base.SetValue(value);
         }
 
         /// <summary>
@@ -30,42 +47,50 @@ namespace NXKit.XForms
         /// </summary>
         public XFormsItemVisual SelectedItemVisual
         {
-            get
-            {
-                if (!selectedItemVisualCached)
-                {
-                    foreach (var itemVisual in Descendants().OfType<XFormsItemVisual>())
-                    {
-                        // find selectable visuals underneath item
-                        if (itemVisual.Selectable == null)
-                            continue;
-
-                        if (itemVisual.Selectable.Selected(this))
-                        {
-                            selectedItemVisual = itemVisual;
-                            break;
-                        }
-                    }
-
-                    selectedItemVisualCached = true;
-                }
-
-                return selectedItemVisual;
-            }
+            get { return GetSelectedItemVisual(); }
+            set { SetSelectedItemVisual(value); }
         }
 
         /// <summary>
-        /// Sets the selected item.
+        /// Implements the getter for SelectedItemVisual.
+        /// </summary>
+        /// <returns></returns>
+        XFormsItemVisual GetSelectedItemVisual()
+        {
+            if (!selectedItemVisualCached)
+            {
+                foreach (var itemVisual in Descendants().OfType<XFormsItemVisual>())
+                {
+                    // find selectable visuals underneath item
+                    if (itemVisual.Selectable == null)
+                        continue;
+
+                    if (itemVisual.Selectable.Selected(this))
+                    {
+                        selectedItemVisual = itemVisual;
+                        break;
+                    }
+                }
+
+                selectedItemVisualCached = true;
+            }
+
+            return selectedItemVisual;
+        }
+
+        /// <summary>
+        /// Implements the setter for SelectedItemVisual.
         /// </summary>
         /// <param name="visual"></param>
-        public void SetSelectedItemVisual(XFormsItemVisual visual)
+        void SetSelectedItemVisual(XFormsItemVisual visual)
         {
             // deselect current visual
             if (SelectedItemVisual != null &&
                 SelectedItemVisual.Selectable != null)
                 SelectedItemVisual.Selectable.Deselect(this);
 
-            if (visual.Selectable != null)
+            if (visual != null &&
+                visual.Selectable != null)
             {
                 // pre-cache
                 selectedItemVisualCached = true;
@@ -79,25 +104,22 @@ namespace NXKit.XForms
             }
         }
 
-        /// <summary>
-        /// Sets the selected value.
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetValue(string value)
+        [Interactive]
+        public string SelectedItemVisualId
         {
-            // deselect current visual
-            if (SelectedItemVisual != null &&
-                SelectedItemVisual.Selectable != null)
-                SelectedItemVisual.Selectable.Deselect(this);
+            get { return SelectedItemVisual != null ? SelectedItemVisual.UniqueId : null; }
+            set { SetSelectedItemVisualId(value); }
+        }
 
-            // clear selected visual state
-            selectedItemVisualCached = true;
-            selectedItemVisual = null;
-            GetState<XFormsSelect1State>().SelectedVisualId = null;
-
-            // set node value
-            if (Binding != null && Binding.Node != null)
-                Binding.SetValue(value);
+        /// <summary>
+        /// Implements the setter for SelectedItemVisualId.
+        /// </summary>
+        /// <param name="id"></param>
+        void SetSelectedItemVisualId(string id)
+        {
+            SelectedItemVisual = Descendants()
+                .OfType<XFormsItemVisual>()
+                .FirstOrDefault(i => i.UniqueId == id);
         }
 
         public override void Refresh()

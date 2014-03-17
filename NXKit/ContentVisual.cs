@@ -12,10 +12,11 @@ namespace NXKit
     /// <summary>
     /// Represents a content node in the visual tree.
     /// </summary>
-    public abstract class ContentVisual : 
+    public abstract class ContentVisual :
         Visual
     {
 
+        string uniqueId;
         Visual[] children;
         readonly Dictionary<XNode, Visual> nodeChildren;
 
@@ -45,6 +46,37 @@ namespace NXKit
         public XElement Element
         {
             get { return (XElement)Node; }
+        }
+
+        /// <summary>
+        /// Unique identifier for the <see cref="Visual"/> within the current naming scope.
+        /// </summary>
+        [Interactive]
+        public abstract string Id { get; }
+
+        /// <summary>
+        /// Returns a unique identifier for this visual, considering naming scopes.
+        /// </summary>
+        [Interactive]
+        public string UniqueId
+        {
+            get { return uniqueId ?? (uniqueId = CreateUniqueId()); }
+        }
+
+        /// <summary>
+        /// Implements the getter for UniqueId.
+        /// </summary>
+        /// <returns></returns>
+        string CreateUniqueId()
+        {
+            var namingScope = Ascendants()
+                .OfType<INamingScope>()
+                .FirstOrDefault();
+
+            if (namingScope == null)
+                return Id;
+            else
+                return ((ContentVisual)namingScope).UniqueId + "_" + Id;
         }
 
         /// <summary>

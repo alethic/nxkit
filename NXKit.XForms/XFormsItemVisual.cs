@@ -4,7 +4,8 @@ namespace NXKit.XForms
 {
 
     [Visual("item")]
-    public class XFormsItemVisual : XFormsVisual
+    public class XFormsItemVisual :
+        XFormsVisual
     {
 
         bool labelVisualCached;

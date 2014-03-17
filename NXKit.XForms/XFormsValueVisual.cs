@@ -6,7 +6,9 @@ namespace NXKit.XForms
 {
 
     [Visual("value")]
-    public class XFormsValueVisual : XFormsSingleNodeBindingVisual, ISelectableVisual
+    public class XFormsValueVisual : 
+        XFormsSingleNodeBindingVisual, 
+        ISelectableVisual
     {
 
         /// <summary>

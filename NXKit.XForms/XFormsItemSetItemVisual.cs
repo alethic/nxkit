@@ -1,9 +1,10 @@
-﻿using System.Xml.Linq;
-
-namespace NXKit.XForms
+﻿namespace NXKit.XForms
 {
 
-    public class XFormsItemSetItemVisual : XFormsItemVisual, IEvaluationContextScope, INamingScope
+    public class XFormsItemSetItemVisual :
+        XFormsItemVisual, 
+        IEvaluationContextScope,
+        INamingScope
     {
 
         public override string Id

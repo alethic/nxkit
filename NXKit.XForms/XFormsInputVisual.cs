@@ -12,16 +12,6 @@
         ISupportsIncrementalAttribute
     {
 
-        /// <summary>
-        /// Gets or sets the value of the bound data.
-        /// </summary>
-        [Interactive]
-        public object Value
-        {
-            get { return Binding != null ? Binding.Value : null; }
-            set { if (Binding != null) Binding.SetValue(value != null ? value.ToString() : null); }
-        }
-
     }
 
 }

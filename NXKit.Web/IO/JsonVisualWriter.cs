@@ -16,12 +16,23 @@ namespace NXKit.Web.IO
     {
 
         readonly JsonWriter writer;
+        readonly JsonSerializer serializer;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        JsonVisualWriter()
+        {
+            this.serializer = new JsonSerializer();
+            this.serializer.Converters.Add(new XNameJsonConverter());
+        }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="writer"></param>
         public JsonVisualWriter(TextWriter writer)
+            : this()
         {
             Contract.Requires<ArgumentNullException>(writer != null);
 
@@ -43,6 +54,7 @@ namespace NXKit.Web.IO
         /// </summary>
         /// <param name="writer"></param>
         public JsonVisualWriter(JTokenWriter writer)
+            : this()
         {
             Contract.Requires<ArgumentNullException>(writer != null);
 
@@ -93,8 +105,7 @@ namespace NXKit.Web.IO
 
                     // serialize value independently to handle custom conversion
                     writer.WritePropertyName("Value");
-                    new JsonSerializer()
-                        .Serialize(writer, property.GetValue(visual));
+                    serializer.Serialize(writer, property.GetValue(visual));
 
                     // each value gets a version so the client can keep track of changed nodes
                     writer.WritePropertyName("Version");

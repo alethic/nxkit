@@ -8,7 +8,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Base implementation for an XForms visual which implements Single-Node Binding.
     /// </summary>
-    public class XFormsSingleNodeBindingVisual : 
+    public class XFormsSingleNodeBindingVisual :
         XFormsBindingVisual
     {
 
@@ -32,6 +32,26 @@ namespace NXKit.XForms
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Gets or sets the value of the bound data.
+        /// </summary>
+        [Interactive]
+        public object Value
+        {
+            get { return Binding != null ? Binding.Value : null; }
+            set { SetValue(value); }
+        }
+
+        /// <summary>
+        /// Implements the setter for Value. Override this method to store bound values differently.
+        /// </summary>
+        /// <param name="value"></param>
+        protected virtual void SetValue(object value)
+        {
+            if (Binding != null)
+                Binding.SetValue(value != null ? value.ToString() : null);
         }
 
         /// <summary>

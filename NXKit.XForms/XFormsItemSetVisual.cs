@@ -7,7 +7,9 @@ namespace NXKit.XForms
 {
 
     [Visual("itemset")]
-    public class XFormsItemSetVisual : XFormsNodeSetBindingVisual, INamingScope
+    public class XFormsItemSetVisual :
+        XFormsNodeSetBindingVisual, 
+        INamingScope
     {
 
         Dictionary<XObject, XFormsItemSetItemVisual> items = new Dictionary<XObject, XFormsItemSetItemVisual>();
