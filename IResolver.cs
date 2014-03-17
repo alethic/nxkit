@@ -19,7 +19,7 @@ namespace NXKit
     }
 
     [ContractClassFor(typeof(IResolver))]
-    class IResolver_Contract :
+    abstract class IResolver_Contract :
         IResolver
     {
 

@@ -366,8 +366,6 @@ namespace NXKit
         /// <returns></returns>
         Visual INXDocument.CreateVisual(ContentVisual parent, XNode node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-
             if (node is XText)
             {
                 var v = new TextVisual();

@@ -17,7 +17,7 @@ namespace NXKit
     {
 
         readonly Dictionary<string, Dictionary<Type, object>> store;
-        
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -32,8 +32,9 @@ namespace NXKit
         /// <param name="info"></param>
         /// <param name="context"></param>
         public VisualStateCollection(SerializationInfo info, StreamingContext context)
+            : this()
         {
-            this.store = new Dictionary<string, Dictionary<Type, object>>();
+            Contract.Requires<ArgumentNullException>(info != null);
 
             foreach (var kvp in info)
                 store.Add(kvp.Name, (Dictionary<Type, object>)kvp.Value);
