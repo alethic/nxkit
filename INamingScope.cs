@@ -12,17 +12,6 @@
         /// </summary>
         string UniqueId { get; }
 
-        /// <summary>
-        /// Generates a new UniqueID within the scope.
-        /// </summary>
-        string GenerateUniqueId(string id);
-
-        /// <summary>
-        /// Allocates a new ID within the scope.
-        /// </summary>
-        /// <returns></returns>
-        string AllocateId();
-
     }
 
 }
