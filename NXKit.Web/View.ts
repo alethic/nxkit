@@ -4,17 +4,84 @@
 module NXKit.Web {
 
     export interface IPushRequestEvent extends IEvent {
-        add(listener: (visual: Visual, name: string, value: any) => void): void;
-        remove(listener: (visual: Visual, name: string, value: any) => void): void;
-        trigger(visual: Visual, name: string, value: any): void;
+        add(listener: (visual: Visual) => void): void;
+        remove(listener: (visual: Visual) => void): void;
+        trigger(data: any): void;
+    }
+
+    export interface IPropertyValueChangedEvent extends IEvent {
+        add(listener: (property: Property) => void): void;
+        remove(listener: (property: Property) => void): void;
+        trigger(property: Property): void;
+    }
+
+    export interface PropertyList {
+        [name: string]: Property;
+    }
+
+    export class Property {
+
+        _value: KnockoutObservable<any>;
+        _version: KnockoutObservable<number>;
+
+        /**
+         * Raised when the Property's value has changed.
+         */
+        public onValueChanged: IPropertyValueChangedEvent = new TypedEvent();
+
+        constructor(source: any) {
+            var self = this;
+
+            self._value = ko.observable<any>();
+            self._value.subscribe(_ => {
+                // version is set below zero when integrating changes
+                if (self._version() >= 0) {
+                    self._version(self._version() + 1);
+                    self.onValueChanged.trigger(self);
+                }
+            });
+
+            self._version = ko.observable<number>();
+            self._version.subscribe(_ => {
+                console.debug('version+1');
+            });
+
+            if (source != null)
+                self.update(source);
+        }
+
+        get value(): KnockoutObservable<any> {
+            return this._value;
+        }
+
+        get version(): KnockoutObservable<number> {
+            return this._version
+        }
+
+        public update(source: any) {
+            var self = this;
+            if (self._value() !== source.Value) {
+                self._version(-1);
+                self._value(source.Value);
+                self._version(0);
+            }
+        }
+
+        public toData(): any {
+            return {
+                Value: this.value(),
+                Version: this.version(),
+            }
+        }
+
     }
 
     export class Visual {
 
         _type: string;
         _baseTypes: string[];
-        _properties: any;
-        _visuals: KnockoutObservableArray<any>;
+        _properties: Property[];
+        _visuals: KnockoutObservableArray<Visual>;
 
         /**
          * Raised when the Visual has changes to be pushed to the server.
@@ -27,8 +94,8 @@ module NXKit.Web {
         constructor(source: any) {
             this._type = null;
             this._baseTypes = new Array<string>();
-            this._properties = {};
-            this._visuals = ko.observableArray();
+            this._properties = new Array<Property>();
+            this._visuals = ko.observableArray<Visual>();
 
             // update from source data
             if (source != null)
@@ -99,17 +166,17 @@ module NXKit.Web {
         /**
          * Updates the property given by the specified name with the specified value.
          */
-        updateProperty(name: string, value: any) {
-            if (this._properties[name] == undefined) {
-                // create new observable and subscribe to changes
-                var o = ko.observable(value);
-                o.subscribe((v) => {
-                    this.pushRequest(this, name, this._properties[name]());
+        updateProperty(name: string, source: any) {
+            var self = this;
+            var prop: Property = self._properties[name];
+            if (prop == null) {
+                prop = self._properties[name] = new Property(source);
+                prop.onValueChanged.add(_ => {
+                    self.pushRequest(self);
                 });
-                this._properties[name] = o;
+            } else {
+                prop.update(source);
             }
-            else
-                this._properties[name](value);
         }
 
         /**
@@ -120,18 +187,47 @@ module NXKit.Web {
             // TODO merge into list
             for (var source in sources) {
                 var v = new Visual(sources[source]);
-                v.onPushRequest.add((visual, name, value) => {
-                    this.pushRequest(visual, name, value);
+                v.onPushRequest.add(_ => {
+                    this.pushRequest(_);
                 });
                 this._visuals.push(v);
             }
         }
 
+        public toData(): any {
+            return {
+                Type: this._type,
+                BaseTypes: this._baseTypes,
+                Properties: this.propertiesToData(),
+                Visuals: this.visualsToData(),
+            }
+        }
+
+        /**
+         * Transforms the given Property array into a list of data to push.
+         */
+        propertiesToData(): any {
+            var l = {};
+            for (var p in this._properties) {
+                l[p] = this._properties[p].toData();
+            }
+            return l;
+        }
+
+        /**
+         * Transforms the given Property array into a list of data to push.
+         */
+        visualsToData(): any[] {
+            return ko.utils.arrayMap(this._visuals(), v => {
+                return v.toData();
+            });
+        }
+
         /**
          * Initiates a push of new values to the server.
          */
-        pushRequest(visual: Visual, name: string, value: any) {
-            this.onPushRequest.trigger(visual, name, value);
+        pushRequest(visual: Visual) {
+            this.onPushRequest.trigger(visual);
         }
 
         /**
@@ -191,13 +287,15 @@ module NXKit.Web {
         }
 
         set data(value: any) {
+            var self = this;
+
             if (typeof (value) === 'string')
-                this._data = JSON.parse(<string>value);
+                self._data = JSON.parse(<string>value);
             else
-                this._data = value;
+                self._data = value;
 
             // raise the value changed event
-            this._refresh();
+            self._refresh();
         }
 
         /**
@@ -208,15 +306,17 @@ module NXKit.Web {
 
             var self = this;
             self._root = new Visual(self._data);
-            self._root.onPushRequest.add((visual: Visual, name: string, value: any) => self._onPushRequest(visual, name, value));
+            self._root.onPushRequest.add(_ => self._onPushRequest(_));
             self._applyBindings();
         }
 
         /**
          * Invoked when the view model initiates a request to push updates.
          */
-        _onPushRequest(visual: Visual, name: string, value: any) {
-            this.onPushRequest.trigger(visual, name, value);
+        _onPushRequest(visual: Visual) {
+            var self = this;
+
+            self.onPushRequest.trigger(self._root.toData());
         }
 
         /**

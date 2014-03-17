@@ -77,8 +77,8 @@ _NXKit.Web.UI.View.prototype = {
             // generate new view
             if (self._view == null) {
                 self._view = new NXKit.Web.View(self._body);
-                self._view.onPushRequest.add(function (visual, name, value) {
-                    self._onPushRequest(visual, name, value);
+                self._view.onPushRequest.add(function (data) {
+                    self.onPushRequest(data);
                 });
             }
 
@@ -87,7 +87,7 @@ _NXKit.Web.UI.View.prototype = {
         }
     },
 
-    _onPushRequest: function (visual, name, value) {
+    onPushRequest: function (data) {
         var self = this;
 
         // generate event argument to pass to server
@@ -95,7 +95,7 @@ _NXKit.Web.UI.View.prototype = {
             Action: 'Push',
             Save: $(self._save).val(),
             Args: {
-                Data: self._view.data,
+                Data: data,
             },
         });
 

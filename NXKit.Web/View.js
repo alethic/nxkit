@@ -3,6 +3,66 @@
 var NXKit;
 (function (NXKit) {
     (function (Web) {
+        var Property = (function () {
+            function Property(source) {
+                /**
+                * Raised when the Property's value has changed.
+                */
+                this.onValueChanged = new NXKit.Web.TypedEvent();
+                var self = this;
+
+                self._value = ko.observable();
+                self._value.subscribe(function (_) {
+                    // version is set below zero when integrating changes
+                    if (self._version() >= 0) {
+                        self._version(self._version() + 1);
+                        self.onValueChanged.trigger(self);
+                    }
+                });
+
+                self._version = ko.observable();
+                self._version.subscribe(function (_) {
+                    console.debug('version+1');
+                });
+
+                if (source != null)
+                    self.update(source);
+            }
+            Object.defineProperty(Property.prototype, "value", {
+                get: function () {
+                    return this._value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(Property.prototype, "version", {
+                get: function () {
+                    return this._version;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Property.prototype.update = function (source) {
+                var self = this;
+                if (self._value() !== source.Value) {
+                    self._version(-1);
+                    self._value(source.Value);
+                    self._version(0);
+                }
+            };
+
+            Property.prototype.toData = function () {
+                return {
+                    Value: this.value(),
+                    Version: this.version()
+                };
+            };
+            return Property;
+        })();
+        Web.Property = Property;
+
         var Visual = (function () {
             /**
             * Initializes a new instance from the given initial data.
@@ -14,7 +74,7 @@ var NXKit;
                 this.onPushRequest = new NXKit.Web.TypedEvent();
                 this._type = null;
                 this._baseTypes = new Array();
-                this._properties = {};
+                this._properties = new Array();
                 this._visuals = ko.observableArray();
 
                 // update from source data
@@ -101,17 +161,17 @@ var NXKit;
             /**
             * Updates the property given by the specified name with the specified value.
             */
-            Visual.prototype.updateProperty = function (name, value) {
-                var _this = this;
-                if (this._properties[name] == undefined) {
-                    // create new observable and subscribe to changes
-                    var o = ko.observable(value);
-                    o.subscribe(function (v) {
-                        _this.pushRequest(_this, name, _this._properties[name]());
+            Visual.prototype.updateProperty = function (name, source) {
+                var self = this;
+                var prop = self._properties[name];
+                if (prop == null) {
+                    prop = self._properties[name] = new Property(source);
+                    prop.onValueChanged.add(function (_) {
+                        self.pushRequest(self);
                     });
-                    this._properties[name] = o;
-                } else
-                    this._properties[name](value);
+                } else {
+                    prop.update(source);
+                }
             };
 
             /**
@@ -121,18 +181,47 @@ var NXKit;
                 var _this = this;
                 for (var source in sources) {
                     var v = new Visual(sources[source]);
-                    v.onPushRequest.add(function (visual, name, value) {
-                        _this.pushRequest(visual, name, value);
+                    v.onPushRequest.add(function (_) {
+                        _this.pushRequest(_);
                     });
                     this._visuals.push(v);
                 }
             };
 
+            Visual.prototype.toData = function () {
+                return {
+                    Type: this._type,
+                    BaseTypes: this._baseTypes,
+                    Properties: this.propertiesToData(),
+                    Visuals: this.visualsToData()
+                };
+            };
+
+            /**
+            * Transforms the given Property array into a list of data to push.
+            */
+            Visual.prototype.propertiesToData = function () {
+                var l = {};
+                for (var p in this._properties) {
+                    l[p] = this._properties[p].toData();
+                }
+                return l;
+            };
+
+            /**
+            * Transforms the given Property array into a list of data to push.
+            */
+            Visual.prototype.visualsToData = function () {
+                return ko.utils.arrayMap(this._visuals(), function (v) {
+                    return v.toData();
+                });
+            };
+
             /**
             * Initiates a push of new values to the server.
             */
-            Visual.prototype.pushRequest = function (visual, name, value) {
-                this.onPushRequest.trigger(visual, name, value);
+            Visual.prototype.pushRequest = function (visual) {
+                this.onPushRequest.trigger(visual);
             };
 
             Object.defineProperty(Visual.prototype, "template", {
@@ -192,13 +281,15 @@ var NXKit;
                     return this._data;
                 },
                 set: function (value) {
+                    var self = this;
+
                     if (typeof (value) === 'string')
-                        this._data = JSON.parse(value);
+                        self._data = JSON.parse(value);
                     else
-                        this._data = value;
+                        self._data = value;
 
                     // raise the value changed event
-                    this._refresh();
+                    self._refresh();
                 },
                 enumerable: true,
                 configurable: true
@@ -213,8 +304,8 @@ var NXKit;
 
                 var self = this;
                 self._root = new Visual(self._data);
-                self._root.onPushRequest.add(function (visual, name, value) {
-                    return self._onPushRequest(visual, name, value);
+                self._root.onPushRequest.add(function (_) {
+                    return self._onPushRequest(_);
                 });
                 self._applyBindings();
             };
@@ -222,8 +313,10 @@ var NXKit;
             /**
             * Invoked when the view model initiates a request to push updates.
             */
-            View.prototype._onPushRequest = function (visual, name, value) {
-                this.onPushRequest.trigger(visual, name, value);
+            View.prototype._onPushRequest = function (visual) {
+                var self = this;
+
+                self.onPushRequest.trigger(self._root.toData());
             };
 
             /**

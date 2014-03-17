@@ -7,15 +7,27 @@ namespace NXKit.XForms
 {
 
     [Visual("repeat")]
-    public class XFormsRepeatVisual : XFormsNodeSetBindingVisual, INamingScope
+    public class XFormsRepeatVisual :
+        XFormsNodeSetBindingVisual,
+        INamingScope
     {
 
+        int nextId;
         bool startIndexCached;
         int startIndex;
         bool numberCached;
         int? number;
 
         Dictionary<XObject, XFormsRepeatItemVisual> items = new Dictionary<XObject, XFormsRepeatItemVisual>();
+
+        /// <summary>
+        /// Allocates a new ID for this naming scope.
+        /// </summary>
+        /// <returns></returns>
+        public string AllocateId()
+        {
+            return (nextId++).ToString();
+        }
 
         /// <summary>
         /// Dynamically generate repeat items, reusing existing instances if available.
@@ -41,7 +53,7 @@ namespace NXKit.XForms
         /// <param name="position"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-         XFormsRepeatItemVisual GetOrCreateItem(XFormsModelVisual model, XFormsInstanceVisual instance, XObject node, int position, int size)
+        XFormsRepeatItemVisual GetOrCreateItem(XFormsModelVisual model, XFormsInstanceVisual instance, XObject node, int position, int size)
         {
             // new context for child
             var ec = new XFormsEvaluationContext(model, instance, node, position, size);

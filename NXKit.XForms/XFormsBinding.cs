@@ -25,8 +25,6 @@ namespace NXKit.XForms
         XObject[] nodes;
         bool valueCached;
         string value;
-        bool resultContextCached;
-        XFormsEvaluationContext resultContext;
 
         /// <summary>
         /// Initializes a new instance.
@@ -250,8 +248,6 @@ namespace NXKit.XForms
         {
             if (Node != null)
                 Module.ClearModelItem(Context, Node);
-            else
-                throw new InvalidOperationException();
         }
 
         /// <summary>
@@ -262,8 +258,6 @@ namespace NXKit.XForms
         {
             if (Node != null)
                 Module.SetModelItemValue(Context, Node, newValue);
-            else
-                throw new InvalidOperationException();
         }
 
     }

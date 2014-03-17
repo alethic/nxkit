@@ -17,6 +17,7 @@ namespace NXKit
         IEventTarget
     {
 
+        int nextId;
         bool addedEventRaised = false;
         EventListenerMap listenerMap;
 
@@ -55,6 +56,79 @@ namespace NXKit
             Parent = parent;
             Node = node;
             Annotations = new VisualAnnotationCollection();
+        }
+
+        /// <summary>
+        /// Unique identifier for the <see cref="Visual"/> within the current naming scope.
+        /// </summary>
+        public virtual string Id
+        {
+            get { return GetId(); }
+        }
+
+        /// <summary>
+        /// Attempts to acquire the Id for this <see cref="Visual"/>.
+        /// </summary>
+        /// <returns></returns>
+        string GetId()
+        {
+            // visual is associated with an element that has an id attribute
+            if (Node is XElement)
+                if (((XElement)Node).Attribute("id") != null)
+                    return (string)((XElement)Node).Attribute("id");
+
+            return GenerateId();
+        }
+
+        /// <summary>
+        /// Allocates a new Id within the current naming scope.
+        /// </summary>
+        /// <returns></returns>
+        string GenerateId()
+        {
+            var namingScope = Ascendants()
+                .OfType<INamingScope>()
+                .FirstOrDefault();
+            if (namingScope == null)
+                throw new InvalidOperationException("NamingScope not found.");
+            
+            return namingScope.AllocateId();
+        }
+
+        /// <summary>
+        /// Allocates a new ID.
+        /// </summary>
+        /// <returns></returns>
+        public string AllocateId()
+        {
+            return (nextId++).ToString();
+        }
+
+        /// <summary>
+        /// Returns a unique identifier for this visual, considering naming scopes.
+        /// </summary>
+        public string UniqueId
+        {
+            get { return GetUniqueId(); }
+        }
+
+        /// <summary>
+        /// Implements the getter for UniqueId.
+        /// </summary>
+        /// <returns></returns>
+        string GetUniqueId()
+        {
+            // visual is associated with an element that has an id attribute, this must be globally unique
+            if (Node is XElement)
+                if (((XElement)Node).Attribute("id") != null)
+                    return (string)((XElement)Node).Attribute("id");
+
+            // otherwise, attempt to generate one from our id attribute
+            var namingScope = Ascendants()
+                .OfType<INamingScope>()
+                .FirstOrDefault();
+
+            return namingScope != null ? namingScope.GenerateUniqueId(Id) : Id;
         }
 
         /// <summary>
@@ -132,7 +206,9 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(visual != null);
 
-            return visual.Ascendants().OfType<INamingScope>().Append(null).First();
+            return visual.Ascendants()
+                .OfType<INamingScope>()
+                .FirstOrDefault();
         }
 
         #endregion
@@ -272,7 +348,7 @@ namespace NXKit
         /// </summary>
         /// <param name="visual"></param>
         /// <param name="evt"></param>
-         void HandleDefaultAction(Event evt)
+        void HandleDefaultAction(Event evt)
         {
             Contract.Requires<ArgumentNullException>(evt != null);
 

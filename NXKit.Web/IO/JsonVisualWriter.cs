@@ -89,10 +89,18 @@ namespace NXKit.Web.IO
                 foreach (var property in properties)
                 {
                     writer.WritePropertyName(property.Name);
-                    
+                    writer.WriteStartObject();
+
                     // serialize value independently to handle custom conversion
+                    writer.WritePropertyName("Value");
                     new JsonSerializer()
                         .Serialize(writer, property.GetValue(visual));
+
+                    // each value gets a version so the client can keep track of changed nodes
+                    writer.WritePropertyName("Version");
+                    writer.WriteValue(0);
+
+                    writer.WriteEndObject();
                 }
                 writer.WriteEndObject();
             }

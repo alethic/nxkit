@@ -82,11 +82,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -1284,6 +1280,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NXKit.Web\NXKit.Web.csproj">
+      <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
+      <Name>NXKit.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
       <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
       <Name>NXKit.XForms.Layout</Name>
@@ -1291,14 +1291,6 @@
     <ProjectReference Include="..\NXKit.Web.UI\NXKit.Web.UI.csproj">
       <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
       <Name>NXKit.Web.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.XForms.Layout.Web.UI\NXKit.XForms.Layout.Web.UI.csproj">
-      <Project>{50d97152-a727-4f10-9de6-5002e7d6e7a6}</Project>
-      <Name>NXKit.XForms.Layout.Web.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.XForms.Web.UI\NXKit.XForms.Web.UI.csproj">
-      <Project>{4e56f9a0-8d52-433b-af43-9a3d2a1b522e}</Project>
-      <Name>NXKit.XForms.Web.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
       <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>

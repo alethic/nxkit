@@ -8,8 +8,11 @@ using System.IO.Compression;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Web.UI;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+using NXKit.Util;
 using NXKit.Web.IO;
 
 namespace NXKit.Web.UI
@@ -362,6 +365,7 @@ namespace NXKit.Web.UI
         void ClientPush(JObject data)
         {
             VisitAndPush(data, document.RootVisual);
+            document.Invoke();
         }
 
         void VisitAndPush(JObject s, Visual d)
@@ -383,11 +387,12 @@ namespace NXKit.Web.UI
             // join property lists by name
             var pL = dProperties
                 .Join(sProperties, i => i.Name, i => i.Name, (dP, sP) => new { sP, dP })
-                .Where(i => !i.dP.IsReadOnly);
+                .Where(i => !i.dP.IsReadOnly)
+                .Where(i => ((JObject)i.sP.Value).Value<int>("Version") > 0);
 
             // set all properties in the destination with their matching value from the source
             foreach (var i in pL)
-                i.dP.SetValue(d, i.sP.Value.Value<string>());
+                i.dP.SetValue(d, ((JObject)i.sP.Value).Value<string>("Value"));
 
             if (d is ContentVisual)
             {

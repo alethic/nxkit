@@ -65,27 +65,6 @@
                 .addClass('ui three fields');
         };
 
-        $().ready(init);
-        $().ready(function () { Sys.WebForms.PageRequestManager.getInstance().add_endRequest(init) });
-        
-        $().ready(function () {
-            var page = Sys.WebForms.PageRequestManager.getInstance();
-
-            page.add_beginRequest(function (sender, args) {
-
-            });
-
-            page.add_endRequest(function (sender, args) {
-
-            });
-
-            page.add_pageLoaded(function (sender, args) {
-
-            });
-
-            page.beginAsyncPostBack(null, 'TARGET_STUFF', 'ARGUMENT', false);
-        });
-
     </script>
 </head>
 
@@ -105,7 +84,7 @@
         </div>
     </script>
     <script id="NXKit.TextVisual" type="text/html">
-        <span data-bind="text: properties.Text"></span>
+        <span data-bind="text: properties.Text.value"></span>
     </script>
 
     <script id="NXKit.XForms.Layout.FormVisual" type="text/html">
@@ -126,7 +105,7 @@
     </script>
 
     <script id="NXKit.XForms.XFormsInputVisual" type="text/html">
-        <input type="text" data-bind="value: properties.Value" />
+        <input type="text" data-bind="value: properties.Value.value" />
     </script>
 
     <xforms:View ID="View" runat="server"
