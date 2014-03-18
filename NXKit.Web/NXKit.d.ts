@@ -15,8 +15,9 @@ declare module NXKit.Web.XForms {
     class VisualViewModel extends VisualViewModel {
         static ControlVisualTypes: string[];
         static MetadataVisualTypes: string[];
-        static GetRelevant(visual: Visual): boolean;
-        static GetAppearance(visual: Visual): string;
+        static GetValueAsString(visual: Visual): KnockoutComputed<string>;
+        static GetRelevant(visual: Visual): KnockoutComputed<boolean>;
+        static GetAppearance(visual: Visual): KnockoutComputed<string>;
         static IsMetadataVisual(visual: Visual): boolean;
         static GetLabel(visual: Visual): Visual;
         static GetHelp(visual: Visual): Visual;
@@ -27,8 +28,9 @@ declare module NXKit.Web.XForms {
         static GetControlVisuals(visual: Visual): Visual[];
         static GetContents(visual: Visual): Visual[];
         constructor(context: KnockoutBindingContext, visual: Visual);
-        public Relevant : boolean;
-        public Appearance : string;
+        public ValueAsString : KnockoutComputed<string>;
+        public Relevant : KnockoutComputed<boolean>;
+        public Appearance : KnockoutComputed<string>;
         public Label : Visual;
         public Help : Visual;
         public Contents : Visual[];
@@ -228,6 +230,7 @@ declare module NXKit.Web.XForms {
 declare module NXKit.Web.XForms {
     class LabelViewModel extends VisualViewModel {
         constructor(context: KnockoutBindingContext, visual: Visual);
+        public Text : KnockoutComputed<string>;
     }
 }
 declare module NXKit.Web.XForms {

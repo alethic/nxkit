@@ -60,18 +60,31 @@ var NXKit;
                     _super.call(this, context, visual);
                     var self = this;
                 }
+                VisualViewModel.GetValueAsString = function (visual) {
+                    return ko.computed(function () {
+                        if (visual != null && visual.Properties['Value'] != null)
+                            return visual.Properties['Value'].ValueAsString();
+                        else
+                            return null;
+                    });
+                };
+
                 VisualViewModel.GetRelevant = function (visual) {
-                    if (visual != null && visual.Properties['Relevant'] != null && visual.Properties['Relevant'].Value != null)
-                        return visual.Properties['Relevant'].ValueAsBoolean();
-                    else
-                        return null;
+                    return ko.computed(function () {
+                        if (visual != null && visual.Properties['Relevant'] != null)
+                            return visual.Properties['Relevant'].ValueAsBoolean();
+                        else
+                            return null;
+                    });
                 };
 
                 VisualViewModel.GetAppearance = function (visual) {
-                    if (visual != null && visual.Properties['Appearance'] != null && visual.Properties['Appearance'].Value() != null)
-                        return visual.Properties['Appearance'].ValueAsString();
-                    else
-                        return null;
+                    return ko.computed(function () {
+                        if (visual != null && visual.Properties['Appearance'] != null)
+                            return visual.Properties['Appearance'].ValueAsString();
+                        else
+                            return null;
+                    });
                 };
 
                 VisualViewModel.IsMetadataVisual = function (visual) {
@@ -130,6 +143,14 @@ var NXKit;
                         return !_this.IsMetadataVisual(_);
                     });
                 };
+
+                Object.defineProperty(VisualViewModel.prototype, "ValueAsString", {
+                    get: function () {
+                        return VisualViewModel.GetValueAsString(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
 
                 Object.defineProperty(VisualViewModel.prototype, "Relevant", {
                     get: function () {
@@ -268,7 +289,7 @@ var NXKit;
                 Object.defineProperty(GroupLayoutManager.prototype, "Layout", {
                     get: function () {
                         var l = this.Level;
-                        var a = this.Appearance;
+                        var a = this.Appearance();
 
                         if (l == 1 && a == "full")
                             return 1 /* Fluid */;
@@ -367,10 +388,12 @@ var NXKit;
 
                 self._valueAsString = ko.computed({
                     read: function () {
-                        return String(self._value());
+                        var s = self._value() != null ? String(self._value()).trim() : null;
+                        return s ? s : null;
                     },
                     write: function (value) {
-                        return self._value(value);
+                        var s = value != null ? value.trim() : null;
+                        return self._value(s ? s : null);
                     }
                 });
 
@@ -836,6 +859,13 @@ var NXKit;
                     _super.call(this, context, visual);
                     var self = this;
                 }
+                Object.defineProperty(LabelViewModel.prototype, "Text", {
+                    get: function () {
+                        return this.ValueAsString;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 return LabelViewModel;
             })(NXKit.Web.XForms.VisualViewModel);
             XForms.LabelViewModel = LabelViewModel;

@@ -72,7 +72,7 @@ module NXKit.Web.XForms {
 
         get Layout(): GroupLayout {
             var l = this.Level;
-            var a = this.Appearance;
+            var a = this.Appearance();
 
             if (l == 1 && a == "full")
                 return GroupLayout.Fluid;

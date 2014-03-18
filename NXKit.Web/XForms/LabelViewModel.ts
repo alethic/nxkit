@@ -11,6 +11,10 @@ module NXKit.Web.XForms {
             var self = this;
         }
 
+        get Text(): KnockoutComputed<string> {
+            return this.ValueAsString;
+        }
+
     }
 
 }

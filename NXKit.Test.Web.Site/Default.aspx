@@ -18,6 +18,7 @@
     <script src="Content/semantic/packaged/javascript/semantic.js" type="text/javascript"></script>
     <script src="Content/knockout/knockout.js" type="text/javascript"></script>
     <script src="Content/knockout/knockout-projections.js" type="text/javascript"></script>
+    <script src="Content/knockout/knockout-semantic.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -37,33 +38,6 @@
 
                     });
                 }
-
-                ko.bindingHandlers.dropdown = {
-                    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                        setTimeout(function () {
-                            $(element).dropdown();
-                            $(element).dropdown('setting', {
-                                onChange: function (value) {
-                                    var v1 = $(element).dropdown('get value');
-                                    var v2 = ko.unwrap(valueAccessor());
-                                    if (typeof v1 === 'string') {
-                                        if (v1 != v2)
-                                            valueAccessor()(v1);
-                                    }
-                                },
-                            });
-                        }, 2000);
-                    },
-                    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                        setTimeout(function () {
-                            var v1 = ko.unwrap(valueAccessor());
-                            var v2 = $(element).dropdown('get value');
-                            if (typeof v2 === 'string')
-                                if (v1 != v2)
-                                    $(element).dropdown('set value', v1);
-                        }, 1000);
-                    },
-                };
 
             </script>
 
@@ -85,7 +59,6 @@
 
             <script id="NXKit.XForms.Layout.FormVisual" type="text/html">
                 <div class="xforms-layout-form">
-                    <h1 data-bind="text: Type"></h1>
                     <!-- ko foreach: Visuals -->
                     <!-- ko template: {
                         data: $data, 
@@ -98,7 +71,6 @@
 
             <script id="NXKit.XForms.Layout.PageVisual" type="text/html">
                 <div class="xforms-layout-page">
-                    <h1 data-bind="text: Type"></h1>
                     <!-- ko foreach: Visuals -->
                     <!-- ko template: {
                         data: $data, 
@@ -111,7 +83,6 @@
 
             <script id="NXKit.XForms.Layout.SectionVisual" type="text/html">
                 <div class="xforms-layout-section">
-                    <h1 data-bind="text: Type"></h1>
                     <!-- ko foreach: Visuals -->
                     <!-- ko template: {
                         data: $data, 
@@ -125,11 +96,17 @@
             <script id="NXKit.XForms.XFormsLabelVisual" type="text/html">
                 <!-- ko with: new NXKit.Web.XForms.LabelViewModel($context, $data) -->
                 <span class="xforms-label">
+                    <!-- ko if: Text -->
+                    <span data-bind="text: Text" />
+                    <!-- /ko -->
+
+                    <!-- ko ifnot: Text -->
                     <!-- ko foreach: Visual.Visuals -->
-                    <!-- ko template: { 
-                        data: $data, 
-                        name: $data.Template 
+                    <!-- ko template: {
+                        data: $data,
+                        name: $data.Template
                     } -->
+                    <!-- /ko -->
                     <!-- /ko -->
                     <!-- /ko -->
                 </span>
@@ -434,15 +411,13 @@
             </script>
 
             <script id="NXKit.XForms.XFormsRepeatItemVisual" type="text/html">
-                <div class="xforms-repeat-item ui segment">
-                    <!-- ko foreach: Visuals -->
-                    <!-- ko template: { 
-                        data: $data, 
-                        name: $data.Template 
-                    } -->
-                    <!-- /ko -->
-                    <!-- /ko -->
-                </div>
+                <!-- ko foreach: Visuals -->
+                <!-- ko template: { 
+                    data: $data, 
+                    name: $data.Template 
+                } -->
+                <!-- /ko -->
+                <!-- /ko -->
             </script>
 
             <script id="NXKit.XForms.XFormsInputVisual" type="text/html">

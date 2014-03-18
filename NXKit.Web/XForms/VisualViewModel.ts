@@ -20,22 +20,34 @@ module NXKit.Web.XForms {
             'NXKit.XForms.XFormsAlertVisual',
         ];
 
-        static GetRelevant(visual: Visual): boolean {
-            if (visual != null &&
-                visual.Properties['Relevant'] != null &&
-                visual.Properties['Relevant'].Value != null)
-                return visual.Properties['Relevant'].ValueAsBoolean();
-            else
-                return null;
+        static GetValueAsString(visual: Visual): KnockoutComputed<string> {
+            return ko.computed(() => {
+                if (visual != null &&
+                    visual.Properties['Value'] != null)
+                    return visual.Properties['Value'].ValueAsString();
+                else
+                    return null;
+            });
         }
 
-        static GetAppearance(visual: Visual): string {
-            if (visual != null &&
-                visual.Properties['Appearance'] != null &&
-                visual.Properties['Appearance'].Value() != null)
-                return visual.Properties['Appearance'].ValueAsString();
-            else
-                return null;
+        static GetRelevant(visual: Visual): KnockoutComputed<boolean> {
+            return ko.computed(() => {
+                if (visual != null &&
+                    visual.Properties['Relevant'] != null)
+                    return visual.Properties['Relevant'].ValueAsBoolean();
+                else
+                    return null;
+            });
+        }
+
+        static GetAppearance(visual: Visual): KnockoutComputed<string> {
+            return ko.computed(() => {
+                if (visual != null &&
+                    visual.Properties['Appearance'] != null)
+                    return visual.Properties['Appearance'].ValueAsString();
+                else
+                    return null;
+            });
         }
 
         static IsMetadataVisual(visual: Visual): boolean {
@@ -88,11 +100,15 @@ module NXKit.Web.XForms {
             var self = this;
         }
 
-        get Relevant(): boolean {
+        get ValueAsString(): KnockoutComputed<string> {
+            return VisualViewModel.GetValueAsString(this.Visual);
+        }
+
+        get Relevant(): KnockoutComputed<boolean> {
             return VisualViewModel.GetRelevant(this.Visual);
         }
 
-        get Appearance(): string {
+        get Appearance(): KnockoutComputed<string> {
             return VisualViewModel.GetAppearance(this.Visual);
         }
 

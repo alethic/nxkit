@@ -41,8 +41,14 @@ module NXKit.Web {
             });
 
             self._valueAsString = ko.computed({
-                read: () => String(self._value()),
-                write: (value: string) => self._value(value),
+                read: () => {
+                    var s = self._value() != null ? String(self._value()).trim() : null;
+                    return s ? s : null;
+                },
+                write: (value: string) => {
+                    var s = value != null ? value.trim() : null;
+                    return self._value(s ? s : null);
+                },
             });
 
             self._valueAsBoolean = ko.computed({
