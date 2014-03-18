@@ -103,6 +103,8 @@
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="View.ts" />
+    <Fakes Include="XForms.ts" />
+    <TypeScriptCompile Include="XFormsGroup.ts" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Test.html" />

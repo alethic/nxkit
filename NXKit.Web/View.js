@@ -3,6 +3,31 @@
 var NXKit;
 (function (NXKit) {
     (function (Web) {
+        var VisualViewModel = (function () {
+            function VisualViewModel(context, visual) {
+                var self = this;
+                self._context = context;
+                self._visual = visual;
+            }
+            Object.defineProperty(VisualViewModel.prototype, "Context", {
+                get: function () {
+                    return this._context;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(VisualViewModel.prototype, "Visual", {
+                get: function () {
+                    return this._visual;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return VisualViewModel;
+        })();
+        Web.VisualViewModel = VisualViewModel;
+
         var Property = (function () {
             function Property(source) {
                 /**

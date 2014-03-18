@@ -46,88 +46,6 @@
                     });
                 }
 
-                var metadataVisualTypes = [
-                    'NXKit.XForms.XFormsLabelVisual',
-                    'NXKit.XForms.XFormsHelpVisual',
-                    'NXKit.XForms.XFormsHintVisual',
-                    'NXKit.XForms.XFormsAlertVisual',
-                ];
-
-                function IsMetadataVisual(visual) {
-                    return ko.computed(function () {
-                        return metadataVisualTypes.some(function (_) {
-                            visual.Type == _;
-                        });
-                    });
-                }
-
-                function GetLabel(visual) {
-                    return ko.computed(function () {
-                        return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                            return _.Type == 'NXKit.XForms.XFormsLabelVisual';
-                        });
-                    });
-                }
-
-                function GetHelp(visual) {
-                    return ko.computed(function () {
-                        return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                            return _.Type == 'NXKit.XForms.XFormsHelpVisual';
-                        });
-                    });
-                }
-
-                function GetHint(visual) {
-                    return ko.computed(function () {
-                        return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                            return _.Type == 'NXKit.XForms.XFormsHintVisual';
-                        });
-                    });
-                }
-
-                function GetAlert(visual) {
-                    return ko.computed(function () {
-                        return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                            return _.Type == 'NXKit.XForms.XFormsAlertVisual';
-                        });
-                    });
-                }
-
-                function RenderableContents(visual) {
-                    return visual.Visuals.filter(function (_) {
-                        return !IsMetadataVisual(_);
-                    });
-                };
-
-                var controlVisualTypes = [
-                    'NXKit.XForms.XFormsInputVisual',
-                    'NXKit.XForms.XFormsRangeVisual',
-                    'NXKit.XForms.XFormsSelect1Visual',
-                    'NXKit.XForms.XFormsSelectVisual',
-                ];
-
-                function IsControlVisual(visual) {
-                    return ko.computed(function () {
-                        return controlVisualTypes.some(function (_) {
-                            visual.Type == _;
-                        });
-                    });
-                }
-
-                function HasControlVisual(visual) {
-                    return ko.computed(function () {
-                        return visual.Visuals().some(function (i) {
-                            return IsControlVisual(i)();
-                        });
-                    });
-                }
-
-                function GetControlVisuals(visual) {
-                    return visual.Visuals.filter(function (i) {
-                        return IsControlVisual(i)();
-                    });
-                }
-
                 function GetGroupColumnLength() {
                     return ko.computed(function () {
 
@@ -179,32 +97,34 @@
             </script>
 
             <script id="NXKit.XForms.XFormsGroupVisual" type="text/html">
+                <!-- ko with: new NXKit.Web.XForms.GroupViewModel($context, $data) -->
                 <div class="xforms-group ui segment" data-bind="
-    fadeVisible: Properties.Relevant.ValueAsBoolean,
+    fadeVisible: $data.Visual.Properties.Relevant.ValueAsBoolean,
     css: {
-        form: HasControlVisual($data),
+        form: NXKit.Web.XForms.VisualViewModel.HasControlVisual($data.Visual),
     }">
-                    <!-- ko if: GetLabel($data) -->
-                    <!-- ko if: GetAppearance(GetLabel($data)())() == 'full' -->
+                    <!-- ko if: $data.Label -->
+                    <!-- ko if: GetAppearance($data.Label)() == 'full' -->
                     <div class="ui top attached label" data-bind="
     template: {
-        data: GetLabel($data),
-        name: GetLabel($data)().Template
+        data: $data.Label,
+        name: $data.Label.Template
     }" />
-                    <!-- ko if: GetHelp($data) -->
+                    <!-- ko if: $data.Help -->
                     <div class="ui float right label" data-bind="
     template: {
-        data: GetHelp($data),
-        name: GetHelp($data).Template
+        data: $data.Help,
+        name: $data.Help.Template
     }" />
                     <!-- /ko -->
                     <!-- /ko -->
                     <!-- /ko -->
-                    <!-- ko foreach: RenderableContents($data) -->
+                    <!-- ko foreach: Contents -->
                     <!-- ko template: { name: Template } -->
                     <!-- /ko -->
                     <!-- /ko -->
                 </div>
+                <!-- /ko -->
             </script>
 
             <script id="NXKit.XForms.XFormsRepeatVisual" type="text/html">
@@ -224,9 +144,9 @@
             </script>
 
             <script id="NXKit.XForms.XFormsInputVisual" type="text/html">
-                <!-- ko if: GetLabel($data) -->
+                <!-- ko if: NXKit.Web.XForms.VisualViewModel.GetLabel($data) -->
                 <label data-bind="attr: { 'for': GetUniqueId($data) }">
-                    <!-- ko template: { data: $data, name: GetLabel($data).Template } -->
+                    <!-- ko template: { data: $data, name: NXKit.Web.XForms.VisualViewModel.GetLabel($data).Template } -->
                     <!-- /ko -->
                 </label>
                 <!-- /ko -->
@@ -345,8 +265,8 @@
                     <option data-bind="
     value: Properties.UniqueId.Value,
     template: {
-        data: GetLabel($data),
-        name: GetLabel($data).Template
+        data: NXKit.Web.XForms.VisualViewModel.GetLabel($data),
+        name: NXKit.Web.XForms.VisualViewModel.GetLabel($data).Template
     }" />
                 </select>
             </script>

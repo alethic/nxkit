@@ -21,18 +21,39 @@ module NXKit.Web {
         trigger(data: any): void;
     }
 
+    export class VisualViewModel {
+
+        private _context: KnockoutBindingContext;
+        private _visual: Visual;
+
+        constructor(context: KnockoutBindingContext, visual: Visual) {
+            var self = this;
+            self._context = context;
+            self._visual = visual;
+        }
+
+        get Context(): KnockoutBindingContext {
+            return this._context;
+        }
+
+        get Visual(): Visual {
+            return this._visual;
+        }
+
+    }
+
     export interface PropertyList {
         [name: string]: Property;
     }
 
     export class Property {
 
-        _value: KnockoutObservable<any>;
-        _version: KnockoutObservable<number>;
+        private _value: KnockoutObservable<any>;
+        private _version: KnockoutObservable<number>;
 
-        _valueAsBoolean: KnockoutComputed<boolean>;
-        _valueAsNumber: KnockoutComputed<number>;
-        _valueAsDate: KnockoutComputed<Date>;
+        private _valueAsBoolean: KnockoutComputed<boolean>;
+        private _valueAsNumber: KnockoutComputed<number>;
+        private _valueAsDate: KnockoutComputed<Date>;
 
         /**
          * Raised when the Property's value has changed.
