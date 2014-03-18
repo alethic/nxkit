@@ -17,6 +17,13 @@ var NXKit;
                     _super.call(this, context, visual);
                     var self = this;
                 }
+                VisualViewModel.GetAppearance = function (visual) {
+                    if (visual != null && visual.Properties.Appearance != null && visual.Properties.Appearance.Value() != null)
+                        return visual.Properties.Appearance.Value();
+                    else
+                        return "full";
+                };
+
                 VisualViewModel.IsMetadataVisual = function (visual) {
                     return this.MetadataVisualTypes.some(function (_) {
                         return visual.Type == _;
@@ -67,12 +74,44 @@ var NXKit;
                     });
                 };
 
-                VisualViewModel.GetRenderableContents = function (visual) {
+                VisualViewModel.GetContents = function (visual) {
                     var _this = this;
                     return visual.Visuals.filter(function (_) {
                         return !_this.IsMetadataVisual(_);
                     });
                 };
+
+                Object.defineProperty(VisualViewModel.prototype, "Label", {
+                    get: function () {
+                        return VisualViewModel.GetLabel(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(VisualViewModel.prototype, "Help", {
+                    get: function () {
+                        return VisualViewModel.GetHelp(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(VisualViewModel.prototype, "Contents", {
+                    get: function () {
+                        return VisualViewModel.GetContents(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(VisualViewModel.prototype, "Appearance", {
+                    get: function () {
+                        return VisualViewModel.GetAppearance(this);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 VisualViewModel.ControlVisualTypes = [
                     'NXKit.XForms.XFormsInputVisual',
                     'NXKit.XForms.XFormsRangeVisual',

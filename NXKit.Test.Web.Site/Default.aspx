@@ -31,21 +31,6 @@
                     return prefix + "__" + (type != null ? type.replace(/[{}:/]/g, '_') : "unknown");
                 }
 
-                function GetUniqueId(visual) {
-                    return visual != null ? visual.Properties.UniqueId : null;
-                }
-
-                function GetAppearance(visual) {
-                    return ko.computed(function () {
-                        if (visual != null &&
-                            visual.Properties.Appearance != null &&
-                            visual.Properties.Appearance.Value() != null)
-                            return visual.Properties.Appearance.Value();
-                        else
-                            return "full";
-                    });
-                }
-
                 function GetGroupColumnLength() {
                     return ko.computed(function () {
 
@@ -103,24 +88,27 @@
     css: {
         form: NXKit.Web.XForms.VisualViewModel.HasControlVisual($data.Visual),
     }">
-                    <!-- ko if: $data.Label -->
-                    <!-- ko if: GetAppearance($data.Label)() == 'full' -->
+                    <!-- ko if: Label -->
+                    <!-- ko if: $data.Appear4ance == 'full' -->
                     <div class="ui top attached label" data-bind="
     template: {
-        data: $data.Label,
-        name: $data.Label.Template
+        data: Label,
+        name: Label.Template
     }" />
-                    <!-- ko if: $data.Help -->
+                    <!-- ko if: Help -->
                     <div class="ui float right label" data-bind="
     template: {
-        data: $data.Help,
-        name: $data.Help.Template
+        data: Help,
+        name: Help.Template
     }" />
                     <!-- /ko -->
                     <!-- /ko -->
                     <!-- /ko -->
                     <!-- ko foreach: Contents -->
-                    <!-- ko template: { name: Template } -->
+                    <!-- ko template: {
+                        data: $data,
+                        name: Template,
+                    } -->
                     <!-- /ko -->
                     <!-- /ko -->
                 </div>
@@ -144,13 +132,21 @@
             </script>
 
             <script id="NXKit.XForms.XFormsInputVisual" type="text/html">
-                <!-- ko if: NXKit.Web.XForms.VisualViewModel.GetLabel($data) -->
-                <label data-bind="attr: { 'for': GetUniqueId($data) }">
-                    <!-- ko template: { data: $data, name: NXKit.Web.XForms.VisualViewModel.GetLabel($data).Template } -->
+                <!-- ko with: new NXKit.Web.XForms.VisualViewModel($context, $data) -->
+                <!-- ko if: Label -->
+                <label data-bind="attr: { 'for': 'UniqueId' }">
+                    <!-- ko template: { 
+                        data: Label, 
+                        name: Label.Template 
+                    } -->
                     <!-- /ko -->
                 </label>
                 <!-- /ko -->
-                <!-- ko template: { name: TypeToTemplate('NXKit.XForms.XFormsInputVisual', Properties.Type != null ? Properties.Type.Value() : null) } -->
+                <!-- ko template: { 
+                        data: Visual,
+                        name: TypeToTemplate('NXKit.XForms.XFormsInputVisual', Visual.Properties.Type != null ? Visual.Properties.Type.Value() : null),
+                    } -->
+                <!-- /ko -->
                 <!-- /ko -->
             </script>
 

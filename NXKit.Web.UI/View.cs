@@ -297,10 +297,7 @@ namespace NXKit.Web.UI
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference("NXKit.Web.UI.TypeScript.Event.js", typeof(View).Assembly.FullName);
-            yield return new ScriptReference("NXKit.Web.UI.TypeScript.View.js", typeof(View).Assembly.FullName);
-            yield return new ScriptReference("NXKit.Web.UI.TypeScript.XForms.js", typeof(View).Assembly.FullName);
-            yield return new ScriptReference("NXKit.Web.UI.TypeScript.XFormsGroup.js", typeof(View).Assembly.FullName);
+            yield return new ScriptReference("NXKit.Web.UI.TypeScript.NXKit.js", typeof(View).Assembly.FullName);
             yield return new ScriptReference("NXKit.Web.UI.View.js", typeof(View).Assembly.FullName);
         }
 

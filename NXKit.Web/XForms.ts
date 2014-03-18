@@ -1,6 +1,5 @@
 ﻿/// <reference path="Scripts/typings/jquery/jquery.d.ts" />
 /// <reference path="Scripts/typings/knockout/knockout.d.ts" />
-/// <reference path="View.ts" />
 
 module NXKit.Web.XForms {
 
@@ -20,9 +19,13 @@ module NXKit.Web.XForms {
             'NXKit.XForms.XFormsAlertVisual',
         ];
 
-        constructor(context: KnockoutBindingContext, visual: Visual) {
-            super(context, visual);
-            var self = this;
+        static GetAppearance(visual): string {
+            if (visual != null &&
+                visual.Properties.Appearance != null &&
+                visual.Properties.Appearance.Value() != null)
+                return visual.Properties.Appearance.Value();
+            else
+                return "full";
         }
 
         static IsMetadataVisual(visual): boolean {
@@ -65,9 +68,30 @@ module NXKit.Web.XForms {
                 this.IsControlVisual(_));
         }
 
-        static GetRenderableContents(visual): KnockoutObservableArray<Visual> {
+        static GetContents(visual): KnockoutObservableArray<Visual> {
             return visual.Visuals.filter((_) =>
                 !this.IsMetadataVisual(_));
+        }
+
+        constructor(context: KnockoutBindingContext, visual: Visual) {
+            super(context, visual);
+            var self = this;
+        }
+
+        get Label(): Visual {
+            return VisualViewModel.GetLabel(this.Visual);
+        }
+
+        get Help(): Visual {
+            return VisualViewModel.GetHelp(this.Visual);
+        }
+
+        get Contents(): KnockoutObservableArray<Visual> {
+            return VisualViewModel.GetContents(this.Visual);
+        }
+
+        get Appearance(): string {
+            return VisualViewModel.GetAppearance(this);
         }
 
     }

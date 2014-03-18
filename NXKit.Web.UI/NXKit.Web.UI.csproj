@@ -142,6 +142,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\NXKit.Web\NXKit.js.map">
+      <Link>TypeScript\NXKit.js.map</Link>
+    </EmbeddedResource>
     <None Include="NXKit.Web.UI.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -149,23 +152,8 @@
     <EmbeddedResource Include="View.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\NXKit.Web\View.js">
-      <Link>TypeScript\View.js</Link>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\NXKit.Web\Event.js">
-      <Link>TypeScript\Event.js</Link>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\NXKit.Web\XFormsGroup.js">
-      <Link>TypeScript\XFormsGroup.js</Link>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\NXKit.Web\XForms.js">
-      <Link>TypeScript\XForms.js</Link>
+    <EmbeddedResource Include="..\NXKit.Web\NXKit.js">
+      <Link>TypeScript\NXKit.js</Link>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

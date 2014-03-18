@@ -12,18 +12,6 @@ module NXKit.Web.XForms {
             var self = this;
         }
 
-        get Label(): Visual {
-            return VisualViewModel.GetLabel(this.Visual);
-        }
-
-        get Help(): Visual {
-            return VisualViewModel.GetHelp(this.Visual);
-        }
-
-        get Contents(): KnockoutObservableArray<Visual> {
-            return VisualViewModel.GetRenderableContents(this.Visual);
-        }
-
     }
 
 }

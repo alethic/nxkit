@@ -18,29 +18,6 @@ var NXKit;
                     _super.call(this, context, visual);
                     var self = this;
                 }
-                Object.defineProperty(GroupViewModel.prototype, "Label", {
-                    get: function () {
-                        return NXKit.Web.XForms.VisualViewModel.GetLabel(this.Visual);
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-
-                Object.defineProperty(GroupViewModel.prototype, "Help", {
-                    get: function () {
-                        return NXKit.Web.XForms.VisualViewModel.GetHelp(this.Visual);
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-
-                Object.defineProperty(GroupViewModel.prototype, "Contents", {
-                    get: function () {
-                        return NXKit.Web.XForms.VisualViewModel.GetRenderableContents(this.Visual);
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
                 return GroupViewModel;
             })(NXKit.Web.XForms.VisualViewModel);
             XForms.GroupViewModel = GroupViewModel;

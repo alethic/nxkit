@@ -99,11 +99,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Event.ts" />
+    <TypeScriptCompile Include="TypedEvent.ts" />
+    <TypeScriptCompile Include="Property.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="View.ts" />
-    <Fakes Include="XForms.ts" />
+    <TypeScriptCompile Include="Visual.ts" />
+    <TypeScriptCompile Include="XForms.ts" />
+    <TypeScriptCompile Include="VisualViewModel.ts" />
     <TypeScriptCompile Include="XFormsGroup.ts" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +118,10 @@
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptOutFile>NXKit.js</TypeScriptOutFile>
+    <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES5</TypeScriptTarget>

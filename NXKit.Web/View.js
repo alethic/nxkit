@@ -9,6 +9,10 @@ var NXKit;
                 self._context = context;
                 self._visual = visual;
             }
+            VisualViewModel.GetUniqueId = function (visual) {
+                return visual != null ? visual.Properties.UniqueId : null;
+            };
+
             Object.defineProperty(VisualViewModel.prototype, "Context", {
                 get: function () {
                     return this._context;
@@ -20,6 +24,14 @@ var NXKit;
             Object.defineProperty(VisualViewModel.prototype, "Visual", {
                 get: function () {
                     return this._visual;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(VisualViewModel.prototype, "UniqueId", {
+                get: function () {
+                    return VisualViewModel.GetUniqueId(this);
                 },
                 enumerable: true,
                 configurable: true
