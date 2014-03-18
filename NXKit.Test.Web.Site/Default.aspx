@@ -16,7 +16,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.js" type="text/javascript"></script>
     <script src="Content/semantic/packaged/javascript/semantic.js" type="text/javascript"></script>
     <script src="Content/knockout/knockout.js" type="text/javascript"></script>
-    <script src="Content/kendoui/js/kendo.all.min.js" type="text/javascript"></script>
+    <script src="Content/knockout/knockout-projections.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -31,9 +31,106 @@
                     return prefix + "__" + (type != null ? type.replace(/[{}:/]/g, '_') : "unknown");
                 }
 
+                function GetUniqueId(visual) {
+                    return visual != null ? visual.Properties.UniqueId : null;
+                }
+
+                function GetAppearance(visual) {
+                    return ko.computed(function () {
+                        if (visual != null &&
+                            visual.Properties.Appearance != null &&
+                            visual.Properties.Appearance.Value() != null)
+                            return visual.Properties.Appearance.Value();
+                        else
+                            return "full";
+                    });
+                }
+
+                var metadataVisualTypes = [
+                    'NXKit.XForms.XFormsLabelVisual',
+                    'NXKit.XForms.XFormsHelpVisual',
+                    'NXKit.XForms.XFormsHintVisual',
+                    'NXKit.XForms.XFormsAlertVisual',
+                ];
+
+                function IsMetadataVisual(visual) {
+                    return ko.computed(function () {
+                        return metadataVisualTypes.some(function (_) {
+                            visual.Type == _;
+                        });
+                    });
+                }
+
                 function GetLabel(visual) {
-                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                        return _.Type == 'NXKit.XForms.XFormsLabelVisual';
+                    return ko.computed(function () {
+                        return ko.utils.arrayFirst(visual.Visuals(), function (_) {
+                            return _.Type == 'NXKit.XForms.XFormsLabelVisual';
+                        });
+                    });
+                }
+
+                function GetHelp(visual) {
+                    return ko.computed(function () {
+                        return ko.utils.arrayFirst(visual.Visuals(), function (_) {
+                            return _.Type == 'NXKit.XForms.XFormsHelpVisual';
+                        });
+                    });
+                }
+
+                function GetHint(visual) {
+                    return ko.computed(function () {
+                        return ko.utils.arrayFirst(visual.Visuals(), function (_) {
+                            return _.Type == 'NXKit.XForms.XFormsHintVisual';
+                        });
+                    });
+                }
+
+                function GetAlert(visual) {
+                    return ko.computed(function () {
+                        return ko.utils.arrayFirst(visual.Visuals(), function (_) {
+                            return _.Type == 'NXKit.XForms.XFormsAlertVisual';
+                        });
+                    });
+                }
+
+                function RenderableContents(visual) {
+                    return visual.Visuals.filter(function (_) {
+                        return !IsMetadataVisual(_);
+                    });
+                };
+
+                var controlVisualTypes = [
+                    'NXKit.XForms.XFormsInputVisual',
+                    'NXKit.XForms.XFormsRangeVisual',
+                    'NXKit.XForms.XFormsSelect1Visual',
+                    'NXKit.XForms.XFormsSelectVisual',
+                ];
+
+                function IsControlVisual(visual) {
+                    return ko.computed(function () {
+                        return controlVisualTypes.some(function (_) {
+                            visual.Type == _;
+                        });
+                    });
+                }
+
+                function HasControlVisual(visual) {
+                    return ko.computed(function () {
+                        return visual.Visuals().some(function (i) {
+                            return IsControlVisual(i)();
+                        });
+                    });
+                }
+
+                function GetControlVisuals(visual) {
+                    return visual.Visuals.filter(function (i) {
+                        return IsControlVisual(i)();
+                    });
+                }
+
+                function GetGroupColumnLength() {
+                    return ko.computed(function () {
+
                     });
                 }
 
@@ -45,47 +142,96 @@
 
             <script id="NXKit.XForms.Layout.ParagraphVisual" type="text/html">
                 <div class="xforms-layout-paragraph">
-                    <div data-bind="foreach: Visuals ">
-                        <div data-bind="template: { name: Template }" />
-                    </div>
+                    <!-- ko foreach: Visuals -->
+                    <!-- ko template: { name: Template } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
                 </div>
             </script>
 
             <script id="NXKit.XForms.Layout.FormVisual" type="text/html">
                 <div class="xforms-layout-form">
                     <h1 data-bind="text: Type"></h1>
-                    <div data-bind="foreach: Visuals ">
-                        <div data-bind="template: { name: Template }" />
-                    </div>
+                    <!-- ko foreach: Visuals -->
+                    <!-- ko template: { name: Template } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
                 </div>
             </script>
 
             <script id="NXKit.XForms.XFormsLabelVisual" type="text/html">
-                <div data-bind="foreach: Visuals ">
-                    <div data-bind="template: { name: Template }" />
-                </div>
+                <span class="xforms-label">
+                    <!-- ko foreach: Visuals -->
+                    <!-- ko template: { name: Template } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </span>
+            </script>
+
+            <script id="NXKit.XForms.XFormsHelpVisual" type="text/html">
+                <span class="xforms-help">
+                    <i class="help icon" />
+                    <!-- ko foreach: Visuals -->
+                    <!-- ko template: { name: Template } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </span>
             </script>
 
             <script id="NXKit.XForms.XFormsGroupVisual" type="text/html">
-                <div class="xforms-group ui segment" data-bind="foreach: Visuals, visible: Properties.Relevant.ValueAsBoolean">
-                    <div data-bind="template: { name: Template }" />
+                <div class="xforms-group ui segment" data-bind="
+    fadeVisible: Properties.Relevant.ValueAsBoolean,
+    css: {
+        form: HasControlVisual($data),
+    }">
+                    <!-- ko if: GetLabel($data) -->
+                    <!-- ko if: GetAppearance(GetLabel($data)())() == 'full' -->
+                    <div class="ui top attached label" data-bind="
+    template: {
+        data: GetLabel($data),
+        name: GetLabel($data)().Template
+    }" />
+                    <!-- ko if: GetHelp($data) -->
+                    <div class="ui float right label" data-bind="
+    template: {
+        data: GetHelp($data),
+        name: GetHelp($data).Template
+    }" />
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <!-- ko foreach: RenderableContents($data) -->
+                    <!-- ko template: { name: Template } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
                 </div>
             </script>
 
             <script id="NXKit.XForms.XFormsRepeatVisual" type="text/html">
-                <div class="xforms-repeat" data-bind="foreach: Visuals ">
-                    <div data-bind="template: { name: Template }" />
-                </div>
+                <!-- ko foreach: Visuals -->
+                <!-- ko template: { name: Template } -->
+                <!-- /ko -->
+                <!-- /ko -->
             </script>
 
             <script id="NXKit.XForms.XFormsRepeatItemVisual" type="text/html">
-                <div class="xforms-repeat-item ui segment" data-bind="foreach: Visuals ">
-                    <div data-bind="template: { name: Template }" />
+                <div class="xforms-repeat-item ui segment">
+                    <!-- ko foreach: Visuals -->
+                    <!-- ko template: { name: Template } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
                 </div>
             </script>
 
             <script id="NXKit.XForms.XFormsInputVisual" type="text/html">
-                <div data-bind="template: { name: TypeToTemplate('NXKit.XForms.XFormsInputVisual', Properties.Type != null ? Properties.Type.Value() : null) }" />
+                <!-- ko if: GetLabel($data) -->
+                <label data-bind="attr: { 'for': GetUniqueId($data) }">
+                    <!-- ko template: { data: $data, name: GetLabel($data).Template } -->
+                    <!-- /ko -->
+                </label>
+                <!-- /ko -->
+                <!-- ko template: { name: TypeToTemplate('NXKit.XForms.XFormsInputVisual', Properties.Type != null ? Properties.Type.Value() : null) } -->
+                <!-- /ko -->
             </script>
 
             <script id="NXKit.XForms.XFormsInputVisual__unknown" type="text/html">
@@ -98,8 +244,34 @@
 
             <script id="NXKit.XForms.XFormsInputVisual___http___www.w3.org_2001_XMLSchema_boolean" type="text/html">
                 <div class="ui checkbox">
+                    <label>stuff</label>
                     <input type="checkbox" data-bind="checked: Properties.Value.ValueAsBoolean" />
                 </div>
+            </script>
+
+            <script type="text/javascript">
+
+                ko.bindingHandlers.fadeVisible = {
+                    init: function (element, valueAccessor) {
+                        var value = valueAccessor();
+                        $(element).toggle(ko.utils.unwrapObservable(value));
+                    },
+                    update: function (element, valueAccessor) {
+                        var value = valueAccessor();
+                        ko.utils.unwrapObservable(value) ? $(element).fadeIn() : $(element).fadeOut();
+                    }
+                };
+
+                //$(document).ready(function () {
+                //    $(document).bind('DOMNodeInserted', function (event) {
+                //        $(event.target)
+                //            .filter('.ui.checkbox')
+                //            .checkbox();
+                //    });
+
+                //    $('.ui.checkbox')
+                //        .checkbox();
+                //});
             </script>
 
             <script id="NXKit.XForms.XFormsInputVisual___http___www.w3.org_2001_XMLSchema_date" type="text/html">
@@ -107,7 +279,8 @@
             </script>
 
             <script id="NXKit.XForms.XFormsInputVisual___http___www.w3.org_2001_XMLSchema_int" type="text/html">
-                <div data-bind="template: { name: 'NXKit.XForms.XFormsInputVisual___http___www.w3.org_2001_XMLSchema_integer' }" />
+                <!-- ko template: { name: 'NXKit.XForms.XFormsInputVisual___http___www.w3.org_2001_XMLSchema_integer' } -->
+                <!-- /ko -->
             </script>
 
             <script id="NXKit.XForms.XFormsInputVisual___http___www.w3.org_2001_XMLSchema_integer" type="text/html">
@@ -115,7 +288,8 @@
             </script>
 
             <script id="NXKit.XForms.XFormsRangeVisual" type="text/html">
-                <div data-bind="template: { name: TypeToTemplate('NXKit.XForms.XFormsRangeVisual', Properties.Type.Value()) }" />
+                <!-- ko template: { name: TypeToTemplate('NXKit.XForms.XFormsRangeVisual', Properties.Type.Value()) } -->
+                <!-- /ko -->
             </script>
 
             <script id="NXKit.XForms.XFormsRangeVisual__unknown" type="text/html">
@@ -123,7 +297,8 @@
             </script>
 
             <script id="NXKit.XForms.XFormsRangeVisual___http___www.w3.org_2001_XMLSchema_int" type="text/html">
-                <div data-bind="template: { name: 'NXKit.XForms.XFormsRangeVisual___http___www.w3.org_2001_XMLSchema_integer' }" />
+                <!-- ko template: { name: 'NXKit.XForms.XFormsRangeVisual___http___www.w3.org_2001_XMLSchema_integer' } -->
+                <!-- /ko -->
             </script>
 
             <script id="NXKit.XForms.XFormsRangeVisual___http___www.w3.org_2001_XMLSchema_integer" type="text/html">
@@ -139,7 +314,8 @@
             </script>
 
             <script id="NXKit.XForms.XFormsSelect1Visual" type="text/html">
-                <div data-bind="template: { name: TypeToTemplate('NXKit.XForms.XFormsSelect1Visual', Properties.Type != null ? Properties.Type.Value() : null) }" />
+                <!-- ko template: { name: TypeToTemplate('NXKit.XForms.XFormsSelect1Visual', Properties.Type != null ? Properties.Type.Value() : null) } -->
+                <!-- /ko -->
             </script>
 
             <script id="NXKit.XForms.XFormsSelect1Visual__unknown" type="text/html">
