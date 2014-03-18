@@ -4,8 +4,8 @@ module NXKit.Web {
 
     export class VisualViewModel {
 
-        public static GetUniqueId(visual): string {
-            return visual != null ? visual.Properties.UniqueId : null;
+        public static GetUniqueId(visual: Visual): string {
+            return visual != null ? visual.Properties['UniqueId'].ValueAsString() : null;
         }
 
         private _context: KnockoutBindingContext;
@@ -26,7 +26,7 @@ module NXKit.Web {
         }
 
         public get UniqueId(): string {
-            return VisualViewModel.GetUniqueId(this);
+            return VisualViewModel.GetUniqueId(this.Visual);
         }
 
     }

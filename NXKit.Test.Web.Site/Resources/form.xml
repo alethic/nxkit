@@ -95,15 +95,16 @@
     </xf:model>
     <f:page>
         <xf:label>Applicant Enrollment</xf:label>
-        <f:section>
+        <xf:group>
             <f:p>This coverage is awesome and lots of nice stuff can be said about it.</f:p>
             <xf:input ref="xf:instance('misc')/secondary"
                       appearance="full">
                 <xf:label>Yes, I'd like to take advantage of this offer for my spouse or other partner or whatever and stuff and we will fill in the contents of the rest of this text later.</xf:label>
             </xf:input>
-        </f:section>
-        <f:section xf:ref="xf:instance('primaryperson')">
+        </xf:group>
+        <xf:group ref="xf:instance('primaryperson')">
             <xf:label>Additional Information About You</xf:label>
+            <xf:help>Enter stuff!</xf:help>
             <xf:group>
                 <xf:label>Physical Characteristics</xf:label>
                 <xf:range ref="heightfeet"
@@ -151,8 +152,8 @@
                     <xf:label>Work Phone</xf:label>
                 </xf:input>
             </xf:group>
-        </f:section>
-        <f:section xf:ref="xf:instance('primaryelections')/term-life">
+        </xf:group>
+        <xf:group ref="xf:instance('primaryelections')/term-life">
             <xf:label>Coverage Election</xf:label>
             <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
             <xf:select1 ref="coverage-amount"
@@ -170,8 +171,8 @@
                     <xf:value>150000</xf:value>
                 </xf:item>
             </xf:select1>
-        </f:section>
-        <f:section xf:ref="xf:instance('primaryquestions')">
+        </xf:group>
+        <xf:group ref="xf:instance('primaryquestions')">
             <xf:label>Health Questions</xf:label>
             <xf:hint>Please answer the following questions by checking “Yes” or “No.”</xf:hint>
             <xf:repeat nodeset="question">
@@ -208,11 +209,11 @@
                     </xf:input>
                 </xf:group>
             </xf:repeat>
-        </f:section>
+        </xf:group>
     </f:page>
     <f:page xf:ref="xf:instance('misc')/secondary_enabled">
         <xf:label>Spousal Enrollment</xf:label>
-        <f:section xf:ref="xf:instance('secondaryperson')">
+        <xf:group ref="xf:instance('secondaryperson')">
             <xf:label>Spouse Information</xf:label>
             <xf:group>
                 <xf:label>Name</xf:label>
@@ -264,8 +265,8 @@
             <xf:input ref="socialsecuritynumber">
                 <xf:label>Social Security Number</xf:label>
             </xf:input>
-        </f:section>
-        <f:section xf:ref="xf:instance('secondaryelections')/term-life">
+        </xf:group>
+        <xf:group ref="xf:instance('secondaryelections')/term-life">
             <xf:label>Coverage Selection</xf:label>
             <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
             <xf:select1 ref="coverage-amount">
@@ -282,8 +283,8 @@
                     <xf:value>150000</xf:value>
                 </xf:item>
             </xf:select1>
-        </f:section>
-        <f:section xf:ref="xf:instance('secondaryquestions')">
+        </xf:group>
+        <xf:group ref="xf:instance('secondaryquestions')">
             <xf:label>Health Questions</xf:label>
             <xf:hint>Please answer the following questions by checking “Yes” or “No.”</xf:hint>
             <xf:repeat nodeset="question">
@@ -320,11 +321,11 @@
                     </xf:input>
                 </xf:group>
             </xf:repeat>
-        </f:section>
+        </xf:group>
     </f:page>
     <f:page>
         <xf:label>Additional Information</xf:label>
-        <f:section>
+        <xf:group>
             <xf:label>Beneficiaries</xf:label>
             <f:p>Please list all beneficiaries you wish to name.</f:p>
             <f:table>
@@ -383,6 +384,6 @@
                     </f:table-row>
                 </xf:repeat>
             </f:table>
-        </f:section>
+        </xf:group>
     </f:page>
 </f:form>

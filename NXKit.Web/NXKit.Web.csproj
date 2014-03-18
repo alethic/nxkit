@@ -84,9 +84,12 @@
     <Compile Include="IO\JsonVisualWriter.cs" />
     <Compile Include="IO\XNameJsonConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <TypeScriptCompile Include="XForms\GroupLayoutManager.ts" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.Util\NXKit.Util.csproj">
@@ -105,9 +108,11 @@
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="View.ts" />
     <TypeScriptCompile Include="Visual.ts" />
-    <TypeScriptCompile Include="XForms.ts" />
+    <TypeScriptCompile Include="XForms\Select1ViewModel.ts" />
+    <TypeScriptCompile Include="XForms\LabelViewModel.ts" />
+    <TypeScriptCompile Include="XForms\VisualViewModel.ts" />
     <TypeScriptCompile Include="VisualViewModel.ts" />
-    <TypeScriptCompile Include="XFormsGroup.ts" />
+    <TypeScriptCompile Include="XForms\GroupViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Test.html" />

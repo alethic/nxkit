@@ -1,6 +1,69 @@
 ﻿/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
 /// <reference path="Scripts/typings/jquery/jquery.d.ts" />
 declare module NXKit.Web {
+    class VisualViewModel {
+        static GetUniqueId(visual: Visual): string;
+        private _context;
+        private _visual;
+        constructor(context: KnockoutBindingContext, visual: Visual);
+        public Context : KnockoutBindingContext;
+        public Visual : Visual;
+        public UniqueId : string;
+    }
+}
+declare module NXKit.Web.XForms {
+    class VisualViewModel extends VisualViewModel {
+        static ControlVisualTypes: string[];
+        static MetadataVisualTypes: string[];
+        static GetRelevant(visual: Visual): boolean;
+        static GetAppearance(visual: Visual): string;
+        static IsMetadataVisual(visual: Visual): boolean;
+        static GetLabel(visual: Visual): Visual;
+        static GetHelp(visual: Visual): Visual;
+        static GetHint(visual: Visual): Visual;
+        static GetAlert(visual: Visual): Visual;
+        static IsControlVisual(visual: Visual): boolean;
+        static HasControlVisual(visual: Visual): boolean;
+        static GetControlVisuals(visual: Visual): Visual[];
+        static GetContents(visual: Visual): Visual[];
+        constructor(context: KnockoutBindingContext, visual: Visual);
+        public Relevant : boolean;
+        public Appearance : string;
+        public Label : Visual;
+        public Help : Visual;
+        public Contents : Visual[];
+    }
+}
+declare module NXKit.Web.XForms {
+    enum GroupLayout {
+        Fluid = 1,
+        Single = 2,
+        Double = 3,
+        Expand = 4,
+    }
+    interface IGroupLayoutFunc {
+        (): GroupLayout;
+    }
+    class GroupLayoutItem {
+        constructor();
+    }
+    class GroupLayoutItemGroup extends GroupLayoutItem {
+        public _getLayout: IGroupLayoutFunc;
+        constructor(getLayout: IGroupLayoutFunc);
+        public Layout : GroupLayout;
+    }
+    class GroupLayoutSingleItemGroupFromGroup extends GroupLayoutItem {
+        public _visual: Visual;
+        constructor(visual: Visual);
+        public Visual : Visual;
+    }
+    class GroupLayoutManager extends VisualViewModel {
+        constructor(context: KnockoutBindingContext, visual: Visual);
+        public Level : number;
+        public Layout : GroupLayout;
+    }
+}
+declare module NXKit.Web {
     interface IEvent {
         add(listener: () => void): void;
         remove(listener: () => void): void;
@@ -22,6 +85,7 @@ declare module NXKit.Web {
     class Property {
         private _value;
         private _version;
+        private _valueAsString;
         private _valueAsBoolean;
         private _valueAsNumber;
         private _valueAsDate;
@@ -31,6 +95,7 @@ declare module NXKit.Web {
         public ValueChanged: IPropertyValueChangedEvent;
         constructor(source: any);
         public Value : KnockoutObservable<any>;
+        public ValueAsString : KnockoutComputed<string>;
         public ValueAsBoolean : KnockoutComputed<boolean>;
         public ValueAsNumber : KnockoutComputed<number>;
         public ValueAsDate : KnockoutComputed<Date>;
@@ -77,10 +142,16 @@ declare module NXKit.Web {
         remove(listener: (visual: Visual, property: Property) => void): void;
         trigger(visual: Visual, property: Property): void;
     }
+    interface IPropertyMap {
+        [name: string]: Property;
+    }
+    class PropertyMap implements IPropertyMap {
+        [name: string]: Property;
+    }
     class Visual {
         public _type: string;
         public _baseTypes: string[];
-        public _properties: Property[];
+        public _properties: IPropertyMap;
         public _visuals: KnockoutObservableArray<Visual>;
         /**
         * Raised when the Visual has changes to be pushed to the server.
@@ -101,7 +172,7 @@ declare module NXKit.Web {
         /**
         * Gets the interactive properties of this visual.
         */
-        public Properties : any;
+        public Properties : IPropertyMap;
         /**
         * Gets the content of this visual.
         */
@@ -150,35 +221,13 @@ declare module NXKit.Web {
     }
 }
 declare module NXKit.Web.XForms {
-    class VisualViewModel extends VisualViewModel {
-        static ControlVisualTypes: string[];
-        static MetadataVisualTypes: string[];
-        static GetAppearance(visual: any): string;
-        static IsMetadataVisual(visual: any): boolean;
-        static GetLabel(visual: any): Visual;
-        static GetHelp(visual: any): Visual;
-        static GetHint(visual: any): Visual;
-        static GetAlert(visual: any): Visual;
-        static IsControlVisual(visual: any): boolean;
-        static HasControlVisual(visual: any): boolean;
-        static GetControlVisuals(visual: any): KnockoutObservableArray<Visual>;
-        static GetContents(visual: any): KnockoutObservableArray<Visual>;
+    class Select1ViewModel extends VisualViewModel {
         constructor(context: KnockoutBindingContext, visual: Visual);
-        public Label : Visual;
-        public Help : Visual;
-        public Contents : KnockoutObservableArray<Visual>;
-        public Appearance : string;
     }
 }
-declare module NXKit.Web {
-    class VisualViewModel {
-        static GetUniqueId(visual: any): string;
-        private _context;
-        private _visual;
+declare module NXKit.Web.XForms {
+    class LabelViewModel extends VisualViewModel {
         constructor(context: KnockoutBindingContext, visual: Visual);
-        public Context : KnockoutBindingContext;
-        public Visual : Visual;
-        public UniqueId : string;
     }
 }
 declare module NXKit.Web.XForms {

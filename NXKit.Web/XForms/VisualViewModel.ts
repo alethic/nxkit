@@ -1,5 +1,6 @@
-﻿/// <reference path="Scripts/typings/jquery/jquery.d.ts" />
-/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
+﻿/// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="../VisualViewModel.ts" />
 
 module NXKit.Web.XForms {
 
@@ -19,63 +20,80 @@ module NXKit.Web.XForms {
             'NXKit.XForms.XFormsAlertVisual',
         ];
 
-        static GetAppearance(visual): string {
+        static GetRelevant(visual: Visual): boolean {
             if (visual != null &&
-                visual.Properties.Appearance != null &&
-                visual.Properties.Appearance.Value() != null)
-                return visual.Properties.Appearance.Value();
+                visual.Properties['Relevant'] != null &&
+                visual.Properties['Relevant'].Value != null)
+                return visual.Properties['Relevant'].ValueAsBoolean();
             else
-                return "full";
+                return null;
         }
 
-        static IsMetadataVisual(visual): boolean {
+        static GetAppearance(visual: Visual): string {
+            if (visual != null &&
+                visual.Properties['Appearance'] != null &&
+                visual.Properties['Appearance'].Value() != null)
+                return visual.Properties['Appearance'].ValueAsString();
+            else
+                return null;
+        }
+
+        static IsMetadataVisual(visual: Visual): boolean {
             return this.MetadataVisualTypes.some((_) =>
                 visual.Type == _);
         }
 
-        static GetLabel(visual): Visual {
+        static GetLabel(visual: Visual): Visual {
             return ko.utils.arrayFirst(visual.Visuals(), (_: Visual) =>
                 _.Type == 'NXKit.XForms.XFormsLabelVisual');
         }
 
-        static GetHelp(visual): Visual {
+        static GetHelp(visual: Visual): Visual {
             return ko.utils.arrayFirst(visual.Visuals(), (_: Visual) =>
                 _.Type == 'NXKit.XForms.XFormsHelpVisual');
         }
 
-        static GetHint(visual): Visual {
+        static GetHint(visual: Visual): Visual {
             return ko.utils.arrayFirst(visual.Visuals(), (_: Visual) =>
                 _.Type == 'NXKit.XForms.XFormsHintVisual');
         }
 
-        static GetAlert(visual): Visual {
+        static GetAlert(visual: Visual): Visual {
             return ko.utils.arrayFirst(visual.Visuals(), (_: Visual) =>
                 _.Type == 'NXKit.XForms.XFormsAlertVisual');
         }
 
-        static IsControlVisual(visual): boolean {
+        static IsControlVisual(visual: Visual): boolean {
             return this.ControlVisualTypes.some((_) =>
                 visual.Type == _);
         }
 
-        static HasControlVisual(visual): boolean {
+        static HasControlVisual(visual: Visual): boolean {
             return visual.Visuals().some(_ =>
                 this.IsControlVisual(_));
         }
 
-        static GetControlVisuals(visual): KnockoutObservableArray<Visual> {
-            return visual.Visuals.filter((_) =>
+        static GetControlVisuals(visual: Visual): Visual[] {
+            return visual.Visuals().filter((_) =>
                 this.IsControlVisual(_));
         }
 
-        static GetContents(visual): KnockoutObservableArray<Visual> {
-            return visual.Visuals.filter((_) =>
+        static GetContents(visual: Visual): Visual[] {
+            return visual.Visuals().filter((_) =>
                 !this.IsMetadataVisual(_));
         }
 
         constructor(context: KnockoutBindingContext, visual: Visual) {
             super(context, visual);
             var self = this;
+        }
+
+        get Relevant(): boolean {
+            return VisualViewModel.GetRelevant(this.Visual);
+        }
+
+        get Appearance(): string {
+            return VisualViewModel.GetAppearance(this.Visual);
         }
 
         get Label(): Visual {
@@ -86,12 +104,8 @@ module NXKit.Web.XForms {
             return VisualViewModel.GetHelp(this.Visual);
         }
 
-        get Contents(): KnockoutObservableArray<Visual> {
+        get Contents(): Visual[] {
             return VisualViewModel.GetContents(this.Visual);
-        }
-
-        get Appearance(): string {
-            return VisualViewModel.GetAppearance(this);
         }
 
     }

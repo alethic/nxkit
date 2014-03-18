@@ -13,6 +13,7 @@ module NXKit.Web {
         private _value: KnockoutObservable<any>;
         private _version: KnockoutObservable<number>;
 
+        private _valueAsString: KnockoutComputed<string>;
         private _valueAsBoolean: KnockoutComputed<boolean>;
         private _valueAsNumber: KnockoutComputed<number>;
         private _valueAsDate: KnockoutComputed<Date>;
@@ -37,6 +38,20 @@ module NXKit.Web {
             self._version = ko.observable<number>();
             self._version.subscribe(_ => {
 
+            });
+
+            self._valueAsString = ko.computed({
+                read: () => String(self._value()),
+                write: (value: string) => self._value(value),
+            });
+
+            self._valueAsBoolean = ko.computed({
+                read: function () {
+                    return self._value() === true || self._value() == 'true' || self._value() == 'True';
+                },
+                write: function (value: boolean) {
+                    self._value(value === true ? "true" : "false");
+                },
             });
 
             self._valueAsBoolean = ko.computed({
@@ -77,6 +92,10 @@ module NXKit.Web {
 
         public get Value(): KnockoutObservable<any> {
             return this._value;
+        }
+
+        public get ValueAsString(): KnockoutComputed<string> {
+            return this._valueAsString;
         }
 
         public get ValueAsBoolean(): KnockoutComputed<boolean> {

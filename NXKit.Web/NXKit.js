@@ -1,4 +1,299 @@
-﻿var NXKit;
+﻿/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        var VisualViewModel = (function () {
+            function VisualViewModel(context, visual) {
+                var self = this;
+                self._context = context;
+                self._visual = visual;
+            }
+            VisualViewModel.GetUniqueId = function (visual) {
+                return visual != null ? visual.Properties['UniqueId'].ValueAsString() : null;
+            };
+
+            Object.defineProperty(VisualViewModel.prototype, "Context", {
+                get: function () {
+                    return this._context;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(VisualViewModel.prototype, "Visual", {
+                get: function () {
+                    return this._visual;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(VisualViewModel.prototype, "UniqueId", {
+                get: function () {
+                    return VisualViewModel.GetUniqueId(this.Visual);
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return VisualViewModel;
+        })();
+        Web.VisualViewModel = VisualViewModel;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="../VisualViewModel.ts" />
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (XForms) {
+            var VisualViewModel = (function (_super) {
+                __extends(VisualViewModel, _super);
+                function VisualViewModel(context, visual) {
+                    _super.call(this, context, visual);
+                    var self = this;
+                }
+                VisualViewModel.GetRelevant = function (visual) {
+                    if (visual != null && visual.Properties['Relevant'] != null && visual.Properties['Relevant'].Value != null)
+                        return visual.Properties['Relevant'].ValueAsBoolean();
+                    else
+                        return null;
+                };
+
+                VisualViewModel.GetAppearance = function (visual) {
+                    if (visual != null && visual.Properties['Appearance'] != null && visual.Properties['Appearance'].Value() != null)
+                        return visual.Properties['Appearance'].ValueAsString();
+                    else
+                        return null;
+                };
+
+                VisualViewModel.IsMetadataVisual = function (visual) {
+                    return this.MetadataVisualTypes.some(function (_) {
+                        return visual.Type == _;
+                    });
+                };
+
+                VisualViewModel.GetLabel = function (visual) {
+                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
+                        return _.Type == 'NXKit.XForms.XFormsLabelVisual';
+                    });
+                };
+
+                VisualViewModel.GetHelp = function (visual) {
+                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
+                        return _.Type == 'NXKit.XForms.XFormsHelpVisual';
+                    });
+                };
+
+                VisualViewModel.GetHint = function (visual) {
+                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
+                        return _.Type == 'NXKit.XForms.XFormsHintVisual';
+                    });
+                };
+
+                VisualViewModel.GetAlert = function (visual) {
+                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
+                        return _.Type == 'NXKit.XForms.XFormsAlertVisual';
+                    });
+                };
+
+                VisualViewModel.IsControlVisual = function (visual) {
+                    return this.ControlVisualTypes.some(function (_) {
+                        return visual.Type == _;
+                    });
+                };
+
+                VisualViewModel.HasControlVisual = function (visual) {
+                    var _this = this;
+                    return visual.Visuals().some(function (_) {
+                        return _this.IsControlVisual(_);
+                    });
+                };
+
+                VisualViewModel.GetControlVisuals = function (visual) {
+                    var _this = this;
+                    return visual.Visuals().filter(function (_) {
+                        return _this.IsControlVisual(_);
+                    });
+                };
+
+                VisualViewModel.GetContents = function (visual) {
+                    var _this = this;
+                    return visual.Visuals().filter(function (_) {
+                        return !_this.IsMetadataVisual(_);
+                    });
+                };
+
+                Object.defineProperty(VisualViewModel.prototype, "Relevant", {
+                    get: function () {
+                        return VisualViewModel.GetRelevant(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(VisualViewModel.prototype, "Appearance", {
+                    get: function () {
+                        return VisualViewModel.GetAppearance(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(VisualViewModel.prototype, "Label", {
+                    get: function () {
+                        return VisualViewModel.GetLabel(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(VisualViewModel.prototype, "Help", {
+                    get: function () {
+                        return VisualViewModel.GetHelp(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(VisualViewModel.prototype, "Contents", {
+                    get: function () {
+                        return VisualViewModel.GetContents(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                VisualViewModel.ControlVisualTypes = [
+                    'NXKit.XForms.XFormsInputVisual',
+                    'NXKit.XForms.XFormsRangeVisual',
+                    'NXKit.XForms.XFormsSelect1Visual',
+                    'NXKit.XForms.XFormsSelectVisual'
+                ];
+
+                VisualViewModel.MetadataVisualTypes = [
+                    'NXKit.XForms.XFormsLabelVisual',
+                    'NXKit.XForms.XFormsHelpVisual',
+                    'NXKit.XForms.XFormsHintVisual',
+                    'NXKit.XForms.XFormsAlertVisual'
+                ];
+                return VisualViewModel;
+            })(NXKit.Web.VisualViewModel);
+            XForms.VisualViewModel = VisualViewModel;
+        })(Web.XForms || (Web.XForms = {}));
+        var XForms = Web.XForms;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="VisualViewModel.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (XForms) {
+            (function (GroupLayout) {
+                GroupLayout[GroupLayout["Fluid"] = 1] = "Fluid";
+                GroupLayout[GroupLayout["Single"] = 2] = "Single";
+                GroupLayout[GroupLayout["Double"] = 3] = "Double";
+                GroupLayout[GroupLayout["Expand"] = 4] = "Expand";
+            })(XForms.GroupLayout || (XForms.GroupLayout = {}));
+            var GroupLayout = XForms.GroupLayout;
+
+            var GroupLayoutItem = (function () {
+                function GroupLayoutItem() {
+                }
+                return GroupLayoutItem;
+            })();
+            XForms.GroupLayoutItem = GroupLayoutItem;
+
+            var GroupLayoutItemGroup = (function (_super) {
+                __extends(GroupLayoutItemGroup, _super);
+                function GroupLayoutItemGroup(getLayout) {
+                    _super.call(this);
+                    this._getLayout = getLayout;
+                }
+                Object.defineProperty(GroupLayoutItemGroup.prototype, "Layout", {
+                    get: function () {
+                        return this._getLayout();
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                return GroupLayoutItemGroup;
+            })(GroupLayoutItem);
+            XForms.GroupLayoutItemGroup = GroupLayoutItemGroup;
+
+            var GroupLayoutSingleItemGroupFromGroup = (function (_super) {
+                __extends(GroupLayoutSingleItemGroupFromGroup, _super);
+                function GroupLayoutSingleItemGroupFromGroup(visual) {
+                    _super.call(this);
+                    this._visual = visual;
+                }
+                Object.defineProperty(GroupLayoutSingleItemGroupFromGroup.prototype, "Visual", {
+                    get: function () {
+                        return this._visual;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                return GroupLayoutSingleItemGroupFromGroup;
+            })(GroupLayoutItem);
+            XForms.GroupLayoutSingleItemGroupFromGroup = GroupLayoutSingleItemGroupFromGroup;
+
+            var GroupLayoutManager = (function (_super) {
+                __extends(GroupLayoutManager, _super);
+                function GroupLayoutManager(context, visual) {
+                    _super.call(this, context, visual);
+                }
+                Object.defineProperty(GroupLayoutManager.prototype, "Level", {
+                    get: function () {
+                        var ctx = this.Context;
+                        while ((ctx = ctx.$parentContext) != null)
+                            if (ctx.$data instanceof GroupLayoutManager)
+                                return ctx.$data.Level + 1;
+
+                        return 1;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(GroupLayoutManager.prototype, "Layout", {
+                    get: function () {
+                        var l = this.Level;
+                        var a = this.Appearance;
+
+                        if (l == 1 && a == "full")
+                            return 1 /* Fluid */;
+                        if (l == 1)
+                            return 1 /* Fluid */;
+
+                        if (l == 2 && a == "full")
+                            return 1 /* Fluid */;
+                        if (l == 2)
+                            return 1 /* Fluid */;
+
+                        return 2 /* Single */;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                return GroupLayoutManager;
+            })(NXKit.Web.XForms.VisualViewModel);
+            XForms.GroupLayoutManager = GroupLayoutManager;
+        })(Web.XForms || (Web.XForms = {}));
+        var XForms = Web.XForms;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
 (function (NXKit) {
     (function (Web) {
         var TypedEvent = (function () {
@@ -70,6 +365,24 @@ var NXKit;
                 self._version.subscribe(function (_) {
                 });
 
+                self._valueAsString = ko.computed({
+                    read: function () {
+                        return String(self._value());
+                    },
+                    write: function (value) {
+                        return self._value(value);
+                    }
+                });
+
+                self._valueAsBoolean = ko.computed({
+                    read: function () {
+                        return self._value() === true || self._value() == 'true' || self._value() == 'True';
+                    },
+                    write: function (value) {
+                        self._value(value === true ? "true" : "false");
+                    }
+                });
+
                 self._valueAsBoolean = ko.computed({
                     read: function () {
                         return self._value() === true || self._value() == 'true' || self._value() == 'True';
@@ -108,6 +421,14 @@ var NXKit;
             Object.defineProperty(Property.prototype, "Value", {
                 get: function () {
                     return this._value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(Property.prototype, "ValueAsString", {
+                get: function () {
+                    return this._valueAsString;
                 },
                 enumerable: true,
                 configurable: true
@@ -267,6 +588,13 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
+        var PropertyMap = (function () {
+            function PropertyMap() {
+            }
+            return PropertyMap;
+        })();
+        Web.PropertyMap = PropertyMap;
+
         var Visual = (function () {
             /**
             * Initializes a new instance from the given initial data.
@@ -278,7 +606,7 @@ var NXKit;
                 this.ValueChanged = new NXKit.Web.TypedEvent();
                 this._type = null;
                 this._baseTypes = new Array();
-                this._properties = new Array();
+                this._properties = new PropertyMap();
                 this._visuals = ko.observableArray();
 
                 // update from source data
@@ -474,187 +802,51 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
-/// <reference path="Scripts/typings/jquery/jquery.d.ts" />
-/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
+/// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="VisualViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
         (function (XForms) {
-            var VisualViewModel = (function (_super) {
-                __extends(VisualViewModel, _super);
-                function VisualViewModel(context, visual) {
+            var Select1ViewModel = (function (_super) {
+                __extends(Select1ViewModel, _super);
+                function Select1ViewModel(context, visual) {
                     _super.call(this, context, visual);
                     var self = this;
                 }
-                VisualViewModel.GetAppearance = function (visual) {
-                    if (visual != null && visual.Properties.Appearance != null && visual.Properties.Appearance.Value() != null)
-                        return visual.Properties.Appearance.Value();
-                    else
-                        return "full";
-                };
-
-                VisualViewModel.IsMetadataVisual = function (visual) {
-                    return this.MetadataVisualTypes.some(function (_) {
-                        return visual.Type == _;
-                    });
-                };
-
-                VisualViewModel.GetLabel = function (visual) {
-                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                        return _.Type == 'NXKit.XForms.XFormsLabelVisual';
-                    });
-                };
-
-                VisualViewModel.GetHelp = function (visual) {
-                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                        return _.Type == 'NXKit.XForms.XFormsHelpVisual';
-                    });
-                };
-
-                VisualViewModel.GetHint = function (visual) {
-                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                        return _.Type == 'NXKit.XForms.XFormsHintVisual';
-                    });
-                };
-
-                VisualViewModel.GetAlert = function (visual) {
-                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                        return _.Type == 'NXKit.XForms.XFormsAlertVisual';
-                    });
-                };
-
-                VisualViewModel.IsControlVisual = function (visual) {
-                    return this.ControlVisualTypes.some(function (_) {
-                        return visual.Type == _;
-                    });
-                };
-
-                VisualViewModel.HasControlVisual = function (visual) {
-                    var _this = this;
-                    return visual.Visuals().some(function (_) {
-                        return _this.IsControlVisual(_);
-                    });
-                };
-
-                VisualViewModel.GetControlVisuals = function (visual) {
-                    var _this = this;
-                    return visual.Visuals.filter(function (_) {
-                        return _this.IsControlVisual(_);
-                    });
-                };
-
-                VisualViewModel.GetContents = function (visual) {
-                    var _this = this;
-                    return visual.Visuals.filter(function (_) {
-                        return !_this.IsMetadataVisual(_);
-                    });
-                };
-
-                Object.defineProperty(VisualViewModel.prototype, "Label", {
-                    get: function () {
-                        return VisualViewModel.GetLabel(this.Visual);
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-
-                Object.defineProperty(VisualViewModel.prototype, "Help", {
-                    get: function () {
-                        return VisualViewModel.GetHelp(this.Visual);
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-
-                Object.defineProperty(VisualViewModel.prototype, "Contents", {
-                    get: function () {
-                        return VisualViewModel.GetContents(this.Visual);
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-
-                Object.defineProperty(VisualViewModel.prototype, "Appearance", {
-                    get: function () {
-                        return VisualViewModel.GetAppearance(this);
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                VisualViewModel.ControlVisualTypes = [
-                    'NXKit.XForms.XFormsInputVisual',
-                    'NXKit.XForms.XFormsRangeVisual',
-                    'NXKit.XForms.XFormsSelect1Visual',
-                    'NXKit.XForms.XFormsSelectVisual'
-                ];
-
-                VisualViewModel.MetadataVisualTypes = [
-                    'NXKit.XForms.XFormsLabelVisual',
-                    'NXKit.XForms.XFormsHelpVisual',
-                    'NXKit.XForms.XFormsHintVisual',
-                    'NXKit.XForms.XFormsAlertVisual'
-                ];
-                return VisualViewModel;
-            })(NXKit.Web.VisualViewModel);
-            XForms.VisualViewModel = VisualViewModel;
+                return Select1ViewModel;
+            })(NXKit.Web.XForms.VisualViewModel);
+            XForms.Select1ViewModel = Select1ViewModel;
         })(Web.XForms || (Web.XForms = {}));
         var XForms = Web.XForms;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
-/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="VisualViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
-        var VisualViewModel = (function () {
-            function VisualViewModel(context, visual) {
-                var self = this;
-                self._context = context;
-                self._visual = visual;
-            }
-            VisualViewModel.GetUniqueId = function (visual) {
-                return visual != null ? visual.Properties.UniqueId : null;
-            };
-
-            Object.defineProperty(VisualViewModel.prototype, "Context", {
-                get: function () {
-                    return this._context;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(VisualViewModel.prototype, "Visual", {
-                get: function () {
-                    return this._visual;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(VisualViewModel.prototype, "UniqueId", {
-                get: function () {
-                    return VisualViewModel.GetUniqueId(this);
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return VisualViewModel;
-        })();
-        Web.VisualViewModel = VisualViewModel;
+        (function (XForms) {
+            var LabelViewModel = (function (_super) {
+                __extends(LabelViewModel, _super);
+                function LabelViewModel(context, visual) {
+                    _super.call(this, context, visual);
+                    var self = this;
+                }
+                return LabelViewModel;
+            })(NXKit.Web.XForms.VisualViewModel);
+            XForms.LabelViewModel = LabelViewModel;
+        })(Web.XForms || (Web.XForms = {}));
+        var XForms = Web.XForms;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
-/// <reference path="Scripts/typings/jquery/jquery.d.ts" />
-/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
-/// <reference path="View.ts" />
-/// <reference path="XForms.ts" />
+/// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="VisualViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {

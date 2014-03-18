@@ -10,6 +10,7 @@
     <title></title>
 
     <link rel="stylesheet" type="text/css" href="Content/normalize.css" />
+    <link rel="stylesheet/less" type="text/css" href="Content/semantic/packaged/css/semantic.css" />
     <link rel="stylesheet/less" type="text/css" href="Content/styles.less" />
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.js" type="text/javascript"></script>
@@ -37,6 +38,33 @@
                     });
                 }
 
+                ko.bindingHandlers.dropdown = {
+                    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                        setTimeout(function () {
+                            $(element).dropdown();
+                            $(element).dropdown('setting', {
+                                onChange: function (value) {
+                                    var v1 = $(element).dropdown('get value');
+                                    var v2 = ko.unwrap(valueAccessor());
+                                    if (typeof v1 === 'string') {
+                                        if (v1 != v2)
+                                            valueAccessor()(v1);
+                                    }
+                                },
+                            });
+                        }, 2000);
+                    },
+                    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                        setTimeout(function () {
+                            var v1 = ko.unwrap(valueAccessor());
+                            var v2 = $(element).dropdown('get value');
+                            if (typeof v2 === 'string')
+                                if (v1 != v2)
+                                    $(element).dropdown('set value', v1);
+                        }, 1000);
+                    },
+                };
+
             </script>
 
             <script id="NXKit.TextVisual" type="text/html">
@@ -46,7 +74,10 @@
             <script id="NXKit.XForms.Layout.ParagraphVisual" type="text/html">
                 <div class="xforms-layout-paragraph">
                     <!-- ko foreach: Visuals -->
-                    <!-- ko template: { name: Template } -->
+                    <!-- ko template: {
+                        data: $data,
+                        name: $data.Template
+                    } -->
                     <!-- /ko -->
                     <!-- /ko -->
                 </div>
@@ -56,68 +87,348 @@
                 <div class="xforms-layout-form">
                     <h1 data-bind="text: Type"></h1>
                     <!-- ko foreach: Visuals -->
-                    <!-- ko template: { name: Template } -->
+                    <!-- ko template: {
+                        data: $data, 
+                        name: $data.Template 
+                    } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+            </script>
+
+            <script id="NXKit.XForms.Layout.PageVisual" type="text/html">
+                <div class="xforms-layout-page">
+                    <h1 data-bind="text: Type"></h1>
+                    <!-- ko foreach: Visuals -->
+                    <!-- ko template: {
+                        data: $data, 
+                        name: $data.Template 
+                    } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+            </script>
+
+            <script id="NXKit.XForms.Layout.SectionVisual" type="text/html">
+                <div class="xforms-layout-section">
+                    <h1 data-bind="text: Type"></h1>
+                    <!-- ko foreach: Visuals -->
+                    <!-- ko template: {
+                        data: $data, 
+                        name: $data.Template 
+                    } -->
                     <!-- /ko -->
                     <!-- /ko -->
                 </div>
             </script>
 
             <script id="NXKit.XForms.XFormsLabelVisual" type="text/html">
+                <!-- ko with: new NXKit.Web.XForms.LabelViewModel($context, $data) -->
                 <span class="xforms-label">
-                    <!-- ko foreach: Visuals -->
-                    <!-- ko template: { name: Template } -->
-                    <!-- /ko -->
-                    <!-- /ko -->
-                </span>
-            </script>
-
-            <script id="NXKit.XForms.XFormsHelpVisual" type="text/html">
-                <span class="xforms-help">
-                    <i class="help icon" />
-                    <!-- ko foreach: Visuals -->
-                    <!-- ko template: { name: Template } -->
-                    <!-- /ko -->
-                    <!-- /ko -->
-                </span>
-            </script>
-
-            <script id="NXKit.XForms.XFormsGroupVisual" type="text/html">
-                <!-- ko with: new NXKit.Web.XForms.GroupViewModel($context, $data) -->
-                <div class="xforms-group ui segment" data-bind="
-    fadeVisible: $data.Visual.Properties.Relevant.ValueAsBoolean,
-    css: {
-        form: NXKit.Web.XForms.VisualViewModel.HasControlVisual($data.Visual),
-    }">
-                    <!-- ko if: Label -->
-                    <!-- ko if: $data.Appear4ance == 'full' -->
-                    <div class="ui top attached label" data-bind="
-    template: {
-        data: Label,
-        name: Label.Template
-    }" />
-                    <!-- ko if: Help -->
-                    <div class="ui float right label" data-bind="
-    template: {
-        data: Help,
-        name: Help.Template
-    }" />
-                    <!-- /ko -->
-                    <!-- /ko -->
-                    <!-- /ko -->
-                    <!-- ko foreach: Contents -->
-                    <!-- ko template: {
-                        data: $data,
-                        name: Template,
+                    <!-- ko foreach: Visual.Visuals -->
+                    <!-- ko template: { 
+                        data: $data, 
+                        name: $data.Template 
                     } -->
                     <!-- /ko -->
                     <!-- /ko -->
+                </span>
+                <!-- /ko -->
+            </script>
+
+            <script id="NXKit.XForms.XFormsHelpVisual" type="text/html">
+                <!-- ko with: new NXKit.Web.VisualViewModel($context, $data) -->
+                <div class="ui modal" data-bind="attr: {
+    id: $data.UniqueId
+}">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        title
+                    </div>
+                    <div class="content">
+                        stuff
+                    </div>
+                    <div class="actions">
+                        <div class="ui button">Close</div>
+                    </div>
                 </div>
                 <!-- /ko -->
             </script>
 
+            <script id="NXKit.XForms.XFormsGroupVisual" type="text/html">
+                <!-- ko with: new NXKit.Web.XForms.GroupViewModel($context, $data) -->
+                <!-- ko if: $data.Relevant -->
+
+                <!-- ko with: new NXKit.Web.XForms.GroupLayoutManager($context, $data.Visual) -->
+                <!-- ko template: {
+                    data: $parent,
+                    name: 'NXKit.XForms.GroupViewModel__Level_' + $data.Level + '__Layout_' + $data.Layout,
+                } -->
+                <!-- /ko -->
+                <!-- /ko -->
+
+                <!-- /ko -->
+                <!-- /ko -->
+            </script>
+
+            <script id="NXKit.XForms.GroupViewModel__Level_1__Layout_1" type="text/html">
+                <div class="xforms-group ui form segment level1 single">
+
+                    <!-- ko with: Label -->
+                    <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+                    <h2 class="ui header" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                    <!-- ko with: Help -->
+                    <div class="ui right green corner label">
+                        <i class="help icon"></i>
+                        <!-- ko template: {
+                            data: $data,
+                            name: 'NXKit.XForms.XFormsHelpVisual',
+                        } -->
+                        <!-- /ko -->
+                    </div>
+                    <!-- /ko -->
+
+                    <!-- ko foreach: $data.Contents -->
+                    <!-- ko template: {
+                        data: $data,
+                        name: $data.Template,
+                    } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                </div>
+            </script>
+
+            <script id="NXKit.XForms.GroupViewModel__Level_1__Layout_2" type="text/html">
+                <div class="xforms-group ui form segment level1 double">
+
+                    <!-- ko with: Label -->
+                    <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+                    <div class="ui top attached label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                    <!-- ko with: Help -->
+                    <div class="ui float right label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+
+                    <!-- ko foreach: $data.Contents -->
+                    <!-- ko template: {
+                        data: $data,
+                        name: $data.Template,
+                    } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                </div>
+            </script>
+
+            <script id="NXKit.XForms.GroupViewModel__Level_2__Layout_1" type="text/html">
+
+                <!-- ko with: Label -->
+                <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+                <div class="ui red ribbon label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                <!-- /ko -->
+                <!-- /ko -->
+
+                <div class="two fields">
+
+                    <!-- ko foreach: $data.Contents -->
+                    <!-- ko template: {
+                        data: $data,
+                        name: $data.Template,
+                    } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                </div>
+            </script>
+
+            <script id="NXKit.XForms.GroupViewModel__Level_2__Layout_2" type="text/html">
+                <div class="xforms-group ui form segment level2 double">
+
+                    <!-- ko with: Label -->
+                    <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+                    <div class="ui top attached label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                    <!-- ko with: Help -->
+                    <div class="ui float right label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+
+                    <!-- ko foreach: $data.Contents -->
+                    <!-- ko template: {
+                        data: $data,
+                        name: $data.Template,
+                    } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                </div>
+            </script>
+
+            <script id="NXKit.XForms.GroupViewModel__Level_2__Layout_4" type="text/html">
+                <div class="xforms-group ui form segment level2 fluid">
+
+                    <!-- ko with: Label -->
+                    <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+                    <div class="ui top attached label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                    <!-- ko with: Help -->
+                    <div class="ui float right label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+
+                    <!-- ko foreach: $data.Contents -->
+                    <!-- ko template: {
+                        data: $data,
+                        name: $data.Template,
+                    } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                </div>
+            </script>
+
+            <script id="NXKit.XForms.GroupViewModel__Level_3__Layout_1" type="text/html">
+                <div class="xforms-group ui form segment level3 single">
+
+                    <!-- ko with: Label -->
+                    <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+                    <div class="ui top attached label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                    <!-- ko with: Help -->
+                    <div class="ui float right label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+
+                    <!-- ko foreach: $data.Contents -->
+                    <!-- ko template: {
+                        data: $data,
+                        name: $data.Template,
+                    } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                </div>
+            </script>
+
+            <script id="NXKit.XForms.GroupViewModel__Level_4__Layout_1" type="text/html">
+                <div class="xforms-group ui form segment level4 single">
+
+                    <!-- ko with: Label -->
+                    <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+                    <div class="ui top attached label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                    <!-- ko with: Help -->
+                    <div class="ui float right label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+
+                    <!-- ko foreach: $data.Contents -->
+                    <!-- ko template: {
+                        data: $data,
+                        name: $data.Template,
+                    } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                </div>
+            </script>
+
+            <script id="NXKit.XForms.GroupViewModel__Level_4__Layout_4" type="text/html">
+                <div class="xforms-group ui form segment level4 fluid">
+
+                    <!-- ko with: Label -->
+                    <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+                    <div class="ui top attached label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                    <!-- ko with: Help -->
+                    <div class="ui float right label" data-bind="
+    template: {
+        data: $data,
+        name: $data.Template
+    }" />
+                    <!-- /ko -->
+
+                    <!-- ko foreach: $data.Contents -->
+                    <!-- ko template: {
+                        data: $data,
+                        name: $data.Template,
+                    } -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                </div>
+            </script>
+
             <script id="NXKit.XForms.XFormsRepeatVisual" type="text/html">
                 <!-- ko foreach: Visuals -->
-                <!-- ko template: { name: Template } -->
+                <!-- ko template: { 
+                    data: $data, 
+                    name: $data.Template 
+                } -->
                 <!-- /ko -->
                 <!-- /ko -->
             </script>
@@ -125,7 +436,10 @@
             <script id="NXKit.XForms.XFormsRepeatItemVisual" type="text/html">
                 <div class="xforms-repeat-item ui segment">
                     <!-- ko foreach: Visuals -->
-                    <!-- ko template: { name: Template } -->
+                    <!-- ko template: { 
+                        data: $data, 
+                        name: $data.Template 
+                    } -->
                     <!-- /ko -->
                     <!-- /ko -->
                 </div>
@@ -133,20 +447,27 @@
 
             <script id="NXKit.XForms.XFormsInputVisual" type="text/html">
                 <!-- ko with: new NXKit.Web.XForms.VisualViewModel($context, $data) -->
-                <!-- ko if: Label -->
-                <label data-bind="attr: { 'for': 'UniqueId' }">
-                    <!-- ko template: { 
-                        data: Label, 
-                        name: Label.Template 
-                    } -->
+
+                <div class="field">
+
+                    <!-- ko if: Label -->
+                    <label data-bind="attr: { 'for': UniqueId }">
+                        <!-- ko template: { 
+                            data: Label, 
+                            name: Label.Template 
+                        } -->
+                        <!-- /ko -->
+                    </label>
                     <!-- /ko -->
-                </label>
-                <!-- /ko -->
-                <!-- ko template: { 
+
+                    <!-- ko template: { 
                         data: Visual,
                         name: TypeToTemplate('NXKit.XForms.XFormsInputVisual', Visual.Properties.Type != null ? Visual.Properties.Type.Value() : null),
                     } -->
-                <!-- /ko -->
+                    <!-- /ko -->
+
+                </div>
+
                 <!-- /ko -->
             </script>
 
@@ -195,7 +516,9 @@
             </script>
 
             <script id="NXKit.XForms.XFormsInputVisual___http___www.w3.org_2001_XMLSchema_int" type="text/html">
-                <!-- ko template: { name: 'NXKit.XForms.XFormsInputVisual___http___www.w3.org_2001_XMLSchema_integer' } -->
+                <!-- ko template: { 
+                    name: 'NXKit.XForms.XFormsInputVisual___http___www.w3.org_2001_XMLSchema_integer' 
+                } -->
                 <!-- /ko -->
             </script>
 
@@ -204,7 +527,28 @@
             </script>
 
             <script id="NXKit.XForms.XFormsRangeVisual" type="text/html">
-                <!-- ko template: { name: TypeToTemplate('NXKit.XForms.XFormsRangeVisual', Properties.Type.Value()) } -->
+                <!-- ko with: new NXKit.Web.XForms.VisualViewModel($context, $data) -->
+
+                <div class="field">
+
+                    <!-- ko if: Label -->
+                    <label data-bind="attr: { 'for': UniqueId }">
+                        <!-- ko template: { 
+                            data: Label, 
+                            name: Label.Template 
+                        } -->
+                        <!-- /ko -->
+                    </label>
+                    <!-- /ko -->
+
+                    <!-- ko template: { 
+                        data: Visual,
+                        name: TypeToTemplate('NXKit.XForms.XFormsRangeVisual', Visual.Properties.Type.Value()) 
+                    } -->
+                    <!-- /ko -->
+
+                </div>
+
                 <!-- /ko -->
             </script>
 
@@ -213,7 +557,9 @@
             </script>
 
             <script id="NXKit.XForms.XFormsRangeVisual___http___www.w3.org_2001_XMLSchema_int" type="text/html">
-                <!-- ko template: { name: 'NXKit.XForms.XFormsRangeVisual___http___www.w3.org_2001_XMLSchema_integer' } -->
+                <!-- ko template: { 
+                    name: 'NXKit.XForms.XFormsRangeVisual___http___www.w3.org_2001_XMLSchema_integer' 
+                } -->
                 <!-- /ko -->
             </script>
 
@@ -230,7 +576,28 @@
             </script>
 
             <script id="NXKit.XForms.XFormsSelect1Visual" type="text/html">
-                <!-- ko template: { name: TypeToTemplate('NXKit.XForms.XFormsSelect1Visual', Properties.Type != null ? Properties.Type.Value() : null) } -->
+                <!-- ko with: new NXKit.Web.XForms.Select1ViewModel($context, $data) -->
+
+                <div class="field">
+
+                    <!-- ko if: Label -->
+                    <label data-bind="attr: { 'for': UniqueId }">
+                        <!-- ko template: { 
+                            data: Label, 
+                            name: Label.Template 
+                        } -->
+                        <!-- /ko -->
+                    </label>
+                    <!-- /ko -->
+
+                    <!-- ko template: { 
+                        data: $data,
+                        name: TypeToTemplate('NXKit.XForms.XFormsSelect1Visual', $data.Visual.Properties.Type != null ? $data.Visual.Properties.Type.Value() : null),
+                    } -->
+                    <!-- /ko -->
+
+                </div>
+
                 <!-- /ko -->
             </script>
 
@@ -255,16 +622,20 @@
             </script>
 
             <script id="NXKit.XForms.XFormsSelect1Visual___http___www.w3.org_2001_XMLSchema_string" type="text/html">
-                <select data-bind="
-    value: Properties.SelectedItemVisualId.Value,
-    foreach: GetSelect1Items($data)">
-                    <option data-bind="
-    value: Properties.UniqueId.Value,
-    template: {
-        data: NXKit.Web.XForms.VisualViewModel.GetLabel($data),
-        name: NXKit.Web.XForms.VisualViewModel.GetLabel($data).Template
-    }" />
-                </select>
+                <div class="ui fluid selection dropdown" data-bind="dropdown: $data.Visual.Properties['SelectedItemVisualId'].Value">
+                    <input type="hidden" />
+                    <div class="text">Select</div>
+                    <i class="dropdown icon"></i>
+                    <div class="ui menu" data-bind="foreach: GetSelect1Items($data.Visual)">
+                        <div class="item" data-bind="attr: { 'data-value': $data.Properties['UniqueId'].Value }">
+                            <!-- ko template: {
+                                data: NXKit.Web.XForms.VisualViewModel.GetLabel($data),
+                                name: NXKit.Web.XForms.VisualViewModel.GetLabel($data).Template
+                            } -->
+                            <!-- /ko -->
+                        </div>
+                    </div>
+                </div>
             </script>
 
             <script id="NXKit.XForms.XFormsSelect1Visual___http___www.w3.org_2001_XMLSchema_boolean" type="text/html">

@@ -8,11 +8,19 @@ module NXKit.Web {
         trigger(visual: Visual, property: Property): void;
     }
 
+    export interface IPropertyMap {
+        [name: string]: Property;
+    }
+
+    export class PropertyMap implements IPropertyMap {
+        [name: string]: Property;
+    }
+
     export class Visual {
 
         _type: string;
         _baseTypes: string[];
-        _properties: Property[];
+        _properties: IPropertyMap;
         _visuals: KnockoutObservableArray<Visual>;
 
         /**
@@ -26,7 +34,7 @@ module NXKit.Web {
         constructor(source: any) {
             this._type = null;
             this._baseTypes = new Array<string>();
-            this._properties = new Array<Property>();
+            this._properties = new PropertyMap();
             this._visuals = ko.observableArray<Visual>();
 
             // update from source data
@@ -51,7 +59,7 @@ module NXKit.Web {
         /**
          * Gets the interactive properties of this visual.
          */
-        public get Properties(): any {
+        public get Properties(): IPropertyMap {
             return this._properties;
         }
 
