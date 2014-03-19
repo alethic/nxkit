@@ -4,11 +4,11 @@
 
 module NXKit.Web.XForms {
 
-    export class GroupViewModel extends NXKit.Web.XForms.VisualViewModel {
+    export class GroupViewModel
+        extends VisualViewModel {
 
         constructor(context: KnockoutBindingContext, visual: Visual) {
             super(context, visual);
-            var self = this;
         }
 
     }

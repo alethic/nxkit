@@ -1,4 +1,7 @@
 ﻿/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="Utils.ts" />
+/// <reference path="Visual.ts" />
+/// <reference path="LayoutManager.ts" />
 
 module NXKit.Web {
 
@@ -27,6 +30,14 @@ module NXKit.Web {
 
         public get UniqueId(): string {
             return VisualViewModel.GetUniqueId(this.Visual);
+        }
+
+        public get LayoutManager(): LayoutManager {
+            return Utils.GetLayoutManager(this._context);
+        }
+
+        public get Template(): string {
+            return this.LayoutManager.GetVisualTemplate(this._visual);
         }
 
     }

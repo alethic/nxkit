@@ -257,7 +257,7 @@ namespace NXKit.Web.UI
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
 
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_body");
-            writer.AddAttribute("data-bind", "template: { name: Template }");
+            writer.AddAttribute("data-bind", "nxkit_visual_template: $data");
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
             writer.RenderEndTag();
             writer.WriteLine();
