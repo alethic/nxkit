@@ -42,6 +42,10 @@ module NXKit.Web {
                 this.Update(source);
         }
 
+        public get IsVisual(): boolean {
+            return true;
+        }
+
         /**
          * Gets the type of this visual.
          */
@@ -183,29 +187,6 @@ module NXKit.Web {
          */
         OnValueChanged(visual: Visual, property: Property) {
             this.ValueChanged.trigger(visual, property);
-        }
-
-        /**
-         * Gets the template that should be used to render this Visual.
-         */
-        public get Template(): any {
-            // result standard template
-            var node = document.getElementById(this._type);
-
-            // attempt to resolve fall-back templates
-            for (var i in this._baseTypes)
-                if (node == null)
-                    node = document.getElementById(this._baseTypes[i]);
-
-            // no template found, invent an error
-            if (node == null)
-                node = $('<script />', {
-                    'type': 'text/html',
-                    'id': this._type,
-                    'text': '<p>no template for ' + this._type + '</p>',
-                }).appendTo('body')[0];
-
-            return node.id;
         }
 
     }

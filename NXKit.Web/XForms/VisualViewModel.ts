@@ -4,7 +4,8 @@
 
 module NXKit.Web.XForms {
 
-    export class VisualViewModel extends NXKit.Web.VisualViewModel {
+    export class VisualViewModel
+        extends NXKit.Web.VisualViewModel {
 
         public static ControlVisualTypes = [
             'NXKit.XForms.XFormsInputVisual',

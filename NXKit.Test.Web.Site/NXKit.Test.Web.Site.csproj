@@ -895,9 +895,11 @@
     <Content Include="Content\kendoui\js\kendo.web.min.js" />
     <Content Include="Content\kendoui\js\kendo.window.min.js" />
     <Content Include="Content\knockout\knockout-projections.js" />
-    <Content Include="Content\knockout\knockout-semantic.js" />
+    <Content Include="Content\nxkit\nxkit-knockout-semantic.js" />
+    <Content Include="Content\nxkit\nxkit-knockout-transitions.js" />
     <Content Include="Content\knockout\knockout.js" />
     <Content Include="Content\normalize.css" />
+    <Content Include="Content\nxkit\nxkit-knockout.js" />
     <Content Include="Default.aspx" />
     <EmbeddedResource Include="Resources\form.xml" />
     <EmbeddedResource Include="Resources\elections.xml" />

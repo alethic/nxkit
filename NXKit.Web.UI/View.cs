@@ -257,8 +257,11 @@ namespace NXKit.Web.UI
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
 
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_body");
-            writer.AddAttribute("data-bind", "template: { name: Template }");
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
+            writer.WriteLine(@"<!-- ko with: new NXKit.Web.DefaultLayoutManager($context) -->");
+            writer.WriteLine(@"<!-- ko nxkit_template: $parent -->");
+            writer.WriteLine(@"<!-- /ko -->");
+            writer.WriteLine(@"<!-- /ko -->");
             writer.RenderEndTag();
             writer.WriteLine();
 

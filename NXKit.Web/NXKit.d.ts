@@ -1,68 +1,127 @@
 ﻿/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
 /// <reference path="Scripts/typings/jquery/jquery.d.ts" />
 declare module NXKit.Web {
-    class VisualViewModel {
-        static GetUniqueId(visual: Visual): string;
+    interface IVisualPropertyValueChangedEvent extends IEvent {
+        add(listener: (visual: Visual, property: Property) => void): void;
+        remove(listener: (visual: Visual, property: Property) => void): void;
+        trigger(visual: Visual, property: Property): void;
+    }
+    interface IPropertyMap {
+        [name: string]: Property;
+    }
+    class PropertyMap implements IPropertyMap {
+        [name: string]: Property;
+    }
+    class Visual {
+        public _type: string;
+        public _baseTypes: string[];
+        public _properties: IPropertyMap;
+        public _visuals: KnockoutObservableArray<Visual>;
+        /**
+        * Raised when the Visual has changes to be pushed to the server.
+        */
+        public ValueChanged: IVisualPropertyValueChangedEvent;
+        /**
+        * Initializes a new instance from the given initial data.
+        */
+        constructor(source: any);
+        public IsVisual : boolean;
+        /**
+        * Gets the type of this visual.
+        */
+        public Type : string;
+        /**
+        * Gets the inheritence hierarchy of this visual.
+        */
+        public BaseTypes : string[];
+        /**
+        * Gets the interactive properties of this visual.
+        */
+        public Properties : IPropertyMap;
+        /**
+        * Gets the content of this visual.
+        */
+        public Visuals : KnockoutObservableArray<Visual>;
+        /**
+        * Integrates the data given by the visual parameter into this Visual.
+        */
+        public Update(source: any): void;
+        /**
+        * Updates the type of this Visual with the new value.
+        */
+        public UpdateType(type: string): void;
+        /**
+        * Updates the base types of this Visual with the new set of values.
+        */
+        public UpdateBaseTypes(baseTypes: string[]): void;
+        /**
+        * Integrates the set of properties given with this Visual.
+        */
+        public UpdateProperties(source: any): void;
+        /**
+        * Updates the property given by the specified name with the specified value.
+        */
+        public UpdateProperty(name: string, source: any): void;
+        /**
+        * Integrates the set of content Visuals with the given object values.
+        */
+        public UpdateVisuals(sources: any[]): void;
+        public ToData(): any;
+        /**
+        * Transforms the given Property array into a list of data to push.
+        */
+        public PropertiesToData(): any;
+        /**
+        * Transforms the given Property array into a list of data to push.
+        */
+        public VisualsToData(): any[];
+        /**
+        * Initiates a push of new values to the server.
+        */
+        public OnValueChanged(visual: Visual, property: Property): void;
+    }
+}
+declare module NXKit.Web {
+    class LayoutManager {
         private _context;
+        constructor(context: KnockoutBindingContext);
+        public Context : KnockoutBindingContext;
+        public GetTemplates(data: any): HTMLElement[];
+        public GetTemplate(data: any): string;
+    }
+}
+declare module NXKit.Web {
+    class VisualLayoutManager extends LayoutManager {
         private _visual;
         constructor(context: KnockoutBindingContext, visual: Visual);
-        public Context : KnockoutBindingContext;
         public Visual : Visual;
-        public UniqueId : string;
+    }
+}
+declare module NXKit.Web {
+    class DefaultLayoutManager extends LayoutManager {
+        constructor(context: KnockoutBindingContext);
+        public GetTemplates_Test_Value(name: string, data1: JQuery, data2: any): boolean;
+        public GetTemplates(data: any): HTMLElement[];
+    }
+}
+declare module NXKit.Web.Utils {
+    function GenerateGuid(): string;
+    function GetTemplateName(data: any, viewModel: any, context: KnockoutBindingContext): string;
+    function GetTemplateViewModel(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any;
+    function GetTemplateData(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any;
+}
+declare module NXKit.Web.XForms.Layout {
+    class FormLayoutManager extends VisualLayoutManager {
+        constructor(context: KnockoutBindingContext, visual: Visual);
     }
 }
 declare module NXKit.Web.XForms {
-    class VisualViewModel extends VisualViewModel {
-        static ControlVisualTypes: string[];
-        static MetadataVisualTypes: string[];
-        static GetValueAsString(visual: Visual): KnockoutComputed<string>;
-        static GetRelevant(visual: Visual): KnockoutComputed<boolean>;
-        static GetAppearance(visual: Visual): KnockoutComputed<string>;
-        static IsMetadataVisual(visual: Visual): boolean;
-        static GetLabel(visual: Visual): Visual;
-        static GetHelp(visual: Visual): Visual;
-        static GetHint(visual: Visual): Visual;
-        static GetAlert(visual: Visual): Visual;
-        static IsControlVisual(visual: Visual): boolean;
-        static HasControlVisual(visual: Visual): boolean;
-        static GetControlVisuals(visual: Visual): Visual[];
-        static GetContents(visual: Visual): Visual[];
-        constructor(context: KnockoutBindingContext, visual: Visual);
-        public ValueAsString : KnockoutComputed<string>;
-        public Relevant : KnockoutComputed<boolean>;
-        public Appearance : KnockoutComputed<string>;
-        public Label : Visual;
-        public Help : Visual;
-        public Contents : Visual[];
-    }
-}
-declare module NXKit.Web.XForms {
-    enum GroupLayout {
-        Fluid = 1,
-        Single = 2,
-        Double = 3,
-        Expand = 4,
-    }
-    interface IGroupLayoutFunc {
-        (): GroupLayout;
-    }
-    class GroupLayoutItem {
-        constructor();
-    }
-    class GroupLayoutItemGroup extends GroupLayoutItem {
-        public _getLayout: IGroupLayoutFunc;
-        constructor(getLayout: IGroupLayoutFunc);
-        public Layout : GroupLayout;
-    }
-    class GroupLayoutSingleItemGroupFromGroup extends GroupLayoutItem {
-        public _visual: Visual;
-        constructor(visual: Visual);
-        public Visual : Visual;
-    }
-    class GroupLayoutManager extends VisualViewModel {
-        constructor(context: KnockoutBindingContext, visual: Visual);
+    class GroupLayoutManager extends VisualLayoutManager {
+        private _viewModel;
+        constructor(context: KnockoutBindingContext, viewModel: GroupViewModel);
+        public ViewModel : GroupViewModel;
         public Level : number;
-        public Layout : GroupLayout;
+        public Layout : number;
     }
 }
 declare module NXKit.Web {
@@ -139,87 +198,44 @@ declare module NXKit.Web {
     }
 }
 declare module NXKit.Web {
-    interface IVisualPropertyValueChangedEvent extends IEvent {
-        add(listener: (visual: Visual, property: Property) => void): void;
-        remove(listener: (visual: Visual, property: Property) => void): void;
-        trigger(visual: Visual, property: Property): void;
+    class VisualViewModel {
+        static GetUniqueId(visual: Visual): string;
+        private _context;
+        private _visual;
+        constructor(context: KnockoutBindingContext, visual: Visual);
+        public Context : KnockoutBindingContext;
+        public Visual : Visual;
+        public UniqueId : string;
     }
-    interface IPropertyMap {
-        [name: string]: Property;
+}
+declare module NXKit.Web.XForms {
+    class VisualViewModel extends VisualViewModel {
+        static ControlVisualTypes: string[];
+        static MetadataVisualTypes: string[];
+        static GetValueAsString(visual: Visual): KnockoutComputed<string>;
+        static GetRelevant(visual: Visual): KnockoutComputed<boolean>;
+        static GetAppearance(visual: Visual): KnockoutComputed<string>;
+        static IsMetadataVisual(visual: Visual): boolean;
+        static GetLabel(visual: Visual): Visual;
+        static GetHelp(visual: Visual): Visual;
+        static GetHint(visual: Visual): Visual;
+        static GetAlert(visual: Visual): Visual;
+        static IsControlVisual(visual: Visual): boolean;
+        static HasControlVisual(visual: Visual): boolean;
+        static GetControlVisuals(visual: Visual): Visual[];
+        static GetContents(visual: Visual): Visual[];
+        constructor(context: KnockoutBindingContext, visual: Visual);
+        public ValueAsString : KnockoutComputed<string>;
+        public Relevant : KnockoutComputed<boolean>;
+        public Appearance : KnockoutComputed<string>;
+        public Label : Visual;
+        public Help : Visual;
+        public Contents : Visual[];
     }
-    class PropertyMap implements IPropertyMap {
-        [name: string]: Property;
-    }
-    class Visual {
-        public _type: string;
-        public _baseTypes: string[];
-        public _properties: IPropertyMap;
-        public _visuals: KnockoutObservableArray<Visual>;
-        /**
-        * Raised when the Visual has changes to be pushed to the server.
-        */
-        public ValueChanged: IVisualPropertyValueChangedEvent;
-        /**
-        * Initializes a new instance from the given initial data.
-        */
-        constructor(source: any);
-        /**
-        * Gets the type of this visual.
-        */
-        public Type : string;
-        /**
-        * Gets the inheritence hierarchy of this visual.
-        */
-        public BaseTypes : string[];
-        /**
-        * Gets the interactive properties of this visual.
-        */
-        public Properties : IPropertyMap;
-        /**
-        * Gets the content of this visual.
-        */
-        public Visuals : KnockoutObservableArray<Visual>;
-        /**
-        * Integrates the data given by the visual parameter into this Visual.
-        */
-        public Update(source: any): void;
-        /**
-        * Updates the type of this Visual with the new value.
-        */
-        public UpdateType(type: string): void;
-        /**
-        * Updates the base types of this Visual with the new set of values.
-        */
-        public UpdateBaseTypes(baseTypes: string[]): void;
-        /**
-        * Integrates the set of properties given with this Visual.
-        */
-        public UpdateProperties(source: any): void;
-        /**
-        * Updates the property given by the specified name with the specified value.
-        */
-        public UpdateProperty(name: string, source: any): void;
-        /**
-        * Integrates the set of content Visuals with the given object values.
-        */
-        public UpdateVisuals(sources: any[]): void;
-        public ToData(): any;
-        /**
-        * Transforms the given Property array into a list of data to push.
-        */
-        public PropertiesToData(): any;
-        /**
-        * Transforms the given Property array into a list of data to push.
-        */
-        public VisualsToData(): any[];
-        /**
-        * Initiates a push of new values to the server.
-        */
-        public OnValueChanged(visual: Visual, property: Property): void;
-        /**
-        * Gets the template that should be used to render this Visual.
-        */
-        public Template : any;
+}
+declare module NXKit.Web.XForms.Layout {
+    class FormViewModel extends VisualViewModel {
+        constructor(context: KnockoutBindingContext, visual: Visual);
     }
 }
 declare module NXKit.Web.XForms {
