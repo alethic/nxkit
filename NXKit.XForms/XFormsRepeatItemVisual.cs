@@ -13,7 +13,6 @@ namespace NXKit.XForms
         IRelevancyScope
     {
 
-        int nextId;
         XFormsEvaluationContext context;
 
         /// <summary>

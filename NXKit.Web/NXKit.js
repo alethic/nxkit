@@ -206,14 +206,30 @@ var NXKit;
         var LayoutManager = (function () {
             function LayoutManager(context) {
                 this._context = null;
+                this._parent = null;
                 var self = this;
 
                 if (context == null)
                     throw new Error('context: null');
 
                 self._context = context;
+
+                // calculates the parent layout manager
+                self._parent = ko.computed(function () {
+                    var l = [self._context.$data].concat(self._context.$parents);
+                    for (var i in l) {
+                        var p = l[i];
+                        if (p instanceof LayoutManager)
+                            if (p != self)
+                                return p;
+                    }
+                    return null;
+                });
             }
             Object.defineProperty(LayoutManager.prototype, "Context", {
+                /**
+                * Gets the context inside which this layout manager was created.
+                */
                 get: function () {
                     return this._context;
                 },
@@ -221,35 +237,62 @@ var NXKit;
                 configurable: true
             });
 
-            LayoutManager.prototype.GetTemplates = function (data) {
-                var l = this._context.$parents;
-                for (var i in l) {
-                    var p = l[i];
-                    if (p instanceof LayoutManager)
-                        if (p != this)
-                            return p.GetTemplates(data);
-                }
+            Object.defineProperty(LayoutManager.prototype, "Parent", {
+                /**
+                * Gets the parent layout manager.
+                */
+                get: function () {
+                    return this._parent();
+                },
+                enumerable: true,
+                configurable: true
+            });
 
-                // return empty array
+            /**
+            * Gets the templates provided by this layout manager for the given data.
+            */
+            LayoutManager.prototype.GetLocalTemplates = function (data) {
                 return new Array();
             };
 
+            /**
+            * Gets the set of available templates for the given data.
+            */
+            LayoutManager.prototype.GetTemplates = function (data) {
+                // append parent templates to local templates
+                return this.GetLocalTemplates(data).concat(this.Parent != null ? this.Parent.GetTemplates(data) : new Array());
+            };
+
+            /**
+            * Gets the fallback template for the given data.
+            */
+            LayoutManager.prototype.GetUnknownTemplate = function (data) {
+                return $('<script />', {
+                    'type': 'text/html',
+                    'text': '<span class="ui red label">' + JSON.stringify(data) + '</span>'
+                }).appendTo('body')[0];
+            };
+
+            /**
+            * Gets the appropriate template for the given data.
+            */
             LayoutManager.prototype.GetTemplate = function (data) {
-                // locate first matching template
-                var node = this.GetTemplates(data)[0];
+                return this.GetTemplates(data)[0] || this.GetUnknownTemplate(data);
+            };
 
-                // no template found, invent an error
-                if (node == null) {
-                    node = $('<script />', {
-                        'type': 'text/html',
-                        'text': '<span class="ui red label">' + JSON.stringify(data) + '</span>'
-                    }).appendTo('body')[0];
-                }
+            /**
+            * Gets the template that applies for the given data.
+            */
+            LayoutManager.prototype.GetTemplateName = function (data) {
+                var node = this.GetTemplate(data);
+                if (node == null)
+                    throw new Error('GetTemplate: no template located');
 
-                // if the node has a missing id
-                if (!node.id)
+                // ensure the node has a valid and unique id
+                if (node.id == '')
                     node.id = 'NXKit.Web__' + NXKit.Web.Utils.GenerateGuid().replace(/-/g, '');
 
+                // caller expects the id
                 return node.id;
             };
             return LayoutManager;
@@ -357,14 +400,14 @@ var NXKit;
             function GetTemplateName(data, viewModel, context) {
                 // if the passed context stores a layout manager, get the template from it
                 if (context.$data instanceof NXKit.Web.LayoutManager)
-                    return context.$data.GetTemplate(data);
+                    return context.$data.GetTemplateName(data);
 
                 // otherwise search up the tree for the first layout manager
                 var l = context.$parents;
                 for (var i in l) {
                     var p = l[i];
                     if (p instanceof NXKit.Web.LayoutManager)
-                        return p.GetTemplate(data);
+                        return p.GetTemplateName(data);
                 }
 
                 return null;

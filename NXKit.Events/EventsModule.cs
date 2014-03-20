@@ -1,4 +1,6 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.Events
 {
@@ -6,10 +8,12 @@ namespace NXKit.Events
     /// <summary>
     /// Introduces XML events support into the NXKit model.
     /// </summary>
-    public class EventsModule : Module
+    public class EventsModule : 
+        Module
     {
 
-        class EventListener : IEventListener
+        class EventListener : 
+            IEventListener
         {
 
             IEventHandlerVisual handler;
@@ -22,6 +26,8 @@ namespace NXKit.Events
             /// <param name="handler" />
             public EventListener(Visual observer, Visual target, IEventHandlerVisual handler)
             {
+                Contract.Requires<ArgumentNullException>(handler != null);
+
                 this.handler = handler;
             }
 

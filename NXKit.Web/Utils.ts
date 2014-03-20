@@ -21,14 +21,14 @@ module NXKit.Web.Utils {
 
         // if the passed context stores a layout manager, get the template from it
         if (context.$data instanceof LayoutManager)
-            return (<LayoutManager>context.$data).GetTemplate(data);
+            return (<LayoutManager>context.$data).GetTemplateName(data);
 
         // otherwise search up the tree for the first layout manager
         var l = context.$parents;
         for (var i in l) {
             var p = l[i];
             if (p instanceof LayoutManager)
-                return (<LayoutManager>p).GetTemplate(data);
+                return (<LayoutManager>p).GetTemplateName(data);
         }
 
         return null;

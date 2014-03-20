@@ -4,6 +4,14 @@ using System.Diagnostics.Contracts;
 namespace NXKit
 {
 
+    [ContractClass(typeof(IEventListener_Contract))]
+    public interface IEventListener
+    {
+
+        void HandleEvent(Event evt);
+
+    }
+
     [ContractClassFor(typeof(IEventListener))]
     abstract class IEventListener_Contract :
          IEventListener
@@ -14,14 +22,6 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(evt != null);
             throw new NotImplementedException();
         }
-
-    }
-
-    [ContractClass(typeof(IEventListener_Contract))]
-    public interface IEventListener
-    {
-
-        void HandleEvent(Event evt);
 
     }
 

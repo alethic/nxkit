@@ -84,10 +84,36 @@ declare module NXKit.Web {
 declare module NXKit.Web {
     class LayoutManager {
         private _context;
+        private _parent;
         constructor(context: KnockoutBindingContext);
+        /**
+        * Gets the context inside which this layout manager was created.
+        */
         public Context : KnockoutBindingContext;
+        /**
+        * Gets the parent layout manager.
+        */
+        public Parent : LayoutManager;
+        /**
+        * Gets the templates provided by this layout manager for the given data.
+        */
+        public GetLocalTemplates(data: any): HTMLElement[];
+        /**
+        * Gets the set of available templates for the given data.
+        */
         public GetTemplates(data: any): HTMLElement[];
-        public GetTemplate(data: any): string;
+        /**
+        * Gets the fallback template for the given data.
+        */
+        public GetUnknownTemplate(data: any): HTMLElement;
+        /**
+        * Gets the appropriate template for the given data.
+        */
+        public GetTemplate(data: any): HTMLElement;
+        /**
+        * Gets the template that applies for the given data.
+        */
+        public GetTemplateName(data: any): string;
     }
 }
 declare module NXKit.Web {
