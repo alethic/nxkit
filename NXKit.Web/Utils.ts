@@ -2,6 +2,9 @@
 
 module NXKit.Web.Utils {
 
+    /**
+     * Generates a unique identifier.
+     */
     export function GenerateGuid(): string {
         // http://www.ietf.org/rfc/rfc4122.txt
 
@@ -17,23 +20,23 @@ module NXKit.Web.Utils {
         return s.join("");
     }
 
-    export function GetTemplateName(data: any, viewModel: any, context: KnockoutBindingContext): string {
-
-        // if the passed context stores a layout manager, get the template from it
-        if (context.$data instanceof LayoutManager)
-            return (<LayoutManager>context.$data).GetTemplateName(data);
-
-        // otherwise search up the tree for the first layout manager
-        var l = context.$parents;
-        for (var i in l) {
-            var p = l[i];
-            if (p instanceof LayoutManager)
-                return (<LayoutManager>p).GetTemplateName(data);
-        }
-
-        return null;
+    /**
+     * Returns the entire context item chain from the specified context upwards.
+     */
+    export function GetContextItems(context: KnockoutBindingContext): any[] {
+        return [context.$data].concat(context.$parents);
     }
 
+    /**
+     * Gets the layout manager in scope of the given binding context.
+     */
+    export function GetLayoutManager(context: KnockoutBindingContext): LayoutManager {
+        return <LayoutManager>ko.utils.arrayFirst(GetContextItems(context), _ => _ instanceof LayoutManager);
+    }
+
+    /**
+     * Gets the recommended view model for the given binding information.
+     */
     export function GetTemplateViewModel(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any {
         var value = valueAccessor() || viewModel;
 
@@ -57,34 +60,18 @@ module NXKit.Web.Utils {
         return null;
     }
 
-    export function GetTemplateData(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any {
-        // extract data to be used to search for a template
-        var data: any = {};
-        var value = valueAccessor();
+    /**
+     * Extracts template index data from the given binding information.
+     */
+    export function GetTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any {
+        return GetLayoutManager(bindingContext).ParseTemplateBinding(valueAccessor, viewModel, bindingContext, {});
+    }
 
-        // value is itself a visual
-        if (value != null &&
-            ko.unwrap(value) instanceof Visual)
-            return {
-                visual: (<Visual>ko.unwrap(value)).Type,
-            };
-
-        // specified visual value
-        if (value != null &&
-            value.visual != null &&
-            ko.unwrap(value.visual) instanceof Visual)
-            data.visual = (<Visual>ko.unwrap(value.visual)).Type;
-
-        if (data.visual == null)
-            if (viewModel instanceof Visual)
-                data.visual = (<Visual>viewModel).Type;
-
-        // specified data type
-        if (value != null &&
-            value.type != null)
-            data.type = ko.unwrap(value.type);
-
-        return data;
+    /**
+     * Determines the named template from the given extracted data and context.
+     */
+    export function GetTemplateName(bindingContext: KnockoutBindingContext, data: any): string {
+        return GetLayoutManager(bindingContext).GetTemplateName(data);
     }
 
 }

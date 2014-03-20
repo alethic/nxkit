@@ -28,7 +28,7 @@ module NXKit.Web {
                 return null;
             });
         }
-        
+
         /**
          * Gets the context inside which this layout manager was created.
          */
@@ -44,19 +44,26 @@ module NXKit.Web {
         }
 
         /**
+         * Parses the given template binding information for a data structure to pass to the template lookup procedures.
+         */
+        public ParseTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, data: any): any {
+            return this.Parent != null ? this.Parent.ParseTemplateBinding(valueAccessor, viewModel, bindingContext, data || {}) : data || {};
+        }
+
+        /**
          * Gets the templates provided by this layout manager for the given data.
          */
-        public GetLocalTemplates(data: any): HTMLElement[] {
+        public GetLocalTemplates(): HTMLElement[] {
             return new Array<HTMLElement>();
         }
 
         /**
          * Gets the set of available templates for the given data.
          */
-        public GetTemplates(data: any): HTMLElement[]{
+        public GetTemplates(): HTMLElement[] {
             // append parent templates to local templates
-            return this.GetLocalTemplates(data)
-                .concat(this.Parent != null ? this.Parent.GetTemplates(data) : new Array<HTMLElement>());
+            return this.GetLocalTemplates()
+                .concat(this.Parent != null ? this.Parent.GetTemplates() : new Array<HTMLElement>());
         }
 
         /**
@@ -68,12 +75,52 @@ module NXKit.Web {
                 'text': '<span class="ui red label">' + JSON.stringify(data) + '</span>',
             }).appendTo('body')[0];
         }
-        
+
+        /**
+         * Extracts a JSON representation of a template node's data-nxkit bindings.
+         */
+        public GetTemplateNodeData(node: HTMLElement): any {
+            // check whether we've already cached the node data
+            var d = $(node).data('nxkit');
+            if (d != null)
+                return d;
+
+            // begin collecting data from node attributes
+            d = {};
+            for (var i = 0; i < node.attributes.length; i++) {
+                var a = node.attributes.item(i);
+                if (a.nodeName.indexOf('data-nxkit-') == 0) {
+                    var n = a.nodeName.substring(11);
+                    d[n] = $(node).data('nxkit-' + n);
+                }
+            }
+
+            // store new data on the node, and return
+            return $(node).data('nxkit', d).data('nxkit');
+        }
+
+        /**
+         * Tests whether a template node matches the given data.
+         */
+        public TemplatePredicate(node: HTMLElement, data: any): boolean {
+            var d1 = JSON.stringify(this.GetTemplateNodeData(node));
+            var d2 = JSON.stringify(data);
+            return d1 == d2;
+        }
+
+        /**
+         * Tests each given node against the predicate function.
+         */
+        private TemplateFilter(nodes: HTMLElement[], data: any): HTMLElement[] {
+            var self = this;
+            return nodes.filter(_ => self.TemplatePredicate(_, data));
+        }
+
         /**
          * Gets the appropriate template for the given data.
          */
         public GetTemplate(data: any): HTMLElement {
-            return this.GetTemplates(data)[0] || this.GetUnknownTemplate(data);
+            return this.TemplateFilter(this.GetTemplates(), data)[0] || this.GetUnknownTemplate(data);
         }
 
         /**

@@ -11,30 +11,45 @@ module NXKit.Web {
             super(context);
         }
 
-        GetTemplates_Test_Value(name: string, data1: JQuery, data2: any) {
-            var value1 = data1.data('nxkit-' + name) || null;
-            var value2 = data2[name] || null;
-            return value1 == value2;
+        /**
+         * Parses the given template binding information for a data structure to pass to the template lookup procedures.
+         */
+        public ParseTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, data: any): any {
+            data = super.ParseTemplateBinding(valueAccessor, viewModel, bindingContext, data);
+
+            // extract data to be used to search for a template
+            var value = valueAccessor();
+
+            // value is itself a visual
+            if (value != null &&
+                ko.unwrap(value) instanceof Visual) {
+                data.visual = (<Visual>ko.unwrap(value)).Type;
+                return data;
+            }
+
+            // specified visual value
+            if (value != null &&
+                value.visual != null &&
+                ko.unwrap(value.visual) instanceof Visual)
+                data.visual = (<Visual>ko.unwrap(value.visual)).Type;
+
+            if (data.visual == null)
+                if (viewModel instanceof Visual)
+                    data.visual = (<Visual>viewModel).Type;
+
+            // specified data type
+            if (value != null &&
+                value.type != null)
+                data.type = ko.unwrap(value.type);
+
+            return data;
         }
 
-        public GetTemplates(data: any): HTMLElement[] {
-            var self = this;
-            return <HTMLElement[]>$('script[type="text/html"]').filter(function (): boolean {
-
-                for (var i in data)
-                    if (!self.GetTemplates_Test_Value(i, $(this), data))
-                        return false;
-
-                for (var n = 0; n < (<HTMLElement>this).attributes.length; n++) {
-                    var attr = (<HTMLElement>this).attributes.item(n);
-                    if (attr.nodeName.indexOf('data-nxkit-') == 0)
-                        if (!self.GetTemplates_Test_Value(attr.nodeName.substring(11), $(this), data))
-                            return false;
-                }
-
-                return true;
-
-            }).toArray();
+        /**
+         * Gets all available templates currently in the document.
+         */
+        public GetLocalTemplates(): HTMLElement[] {
+            return <HTMLElement[]>$('script[type="text/html"]').toArray();
         }
 
     }

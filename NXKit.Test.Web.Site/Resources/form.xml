@@ -55,6 +55,8 @@
                      src="questions.xml" />
         <xf:bind nodeset="xf:instance('primaryquestions')//healthinfo"
                  relevant="../answer='true' and ./@enable='true'" />
+        <xf:bind nodeset="xf:instance('primaryquestions')//healthinfo/*"
+                 type="xsd:string" />
 
         <xf:instance id="secondaryquestions"
                      src="questions.xml" />

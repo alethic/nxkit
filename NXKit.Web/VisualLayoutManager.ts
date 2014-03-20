@@ -13,7 +13,7 @@ module NXKit.Web {
         constructor(context: KnockoutBindingContext, visual: Visual) {
             super(context);
 
-            if (visual == null)
+            if (!(visual instanceof Visual))
                 throw new Error('visual: null');
 
             this._visual = visual;

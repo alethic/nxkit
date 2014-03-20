@@ -3,11 +3,9 @@
     convert_value_accessor: function (valueAccessor, viewModel, bindingContext) {
         return ko.computed(function (_) {
 
-            var inpu = ko.unwrap(valueAccessor);
-
             var data = NXKit.Web.Utils.GetTemplateViewModel(valueAccessor, viewModel, bindingContext);
-            var indx = NXKit.Web.Utils.GetTemplateData(valueAccessor, viewModel, bindingContext);
-            var name = NXKit.Web.Utils.GetTemplateName(indx, viewModel, bindingContext);
+            var opts = NXKit.Web.Utils.GetTemplateBinding(valueAccessor, viewModel, bindingContext);
+            var name = NXKit.Web.Utils.GetTemplateName(bindingContext, opts);
              
             return {
                 data: data,

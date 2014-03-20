@@ -16,6 +16,13 @@ module NXKit.Web {
 
         constructor(context: KnockoutBindingContext, visual: Visual) {
             var self = this;
+
+            if (context == null)
+                throw new Error('context: null');
+
+            if (!(visual instanceof Visual))
+                throw new Error('visual: null');
+
             self._context = context;
             self._visual = visual;
         }
