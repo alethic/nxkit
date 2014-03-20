@@ -61,8 +61,8 @@
                 <div class="xforms-layout-form">
                     <!-- ko foreach: Visuals -->
                     <!-- ko template: {
-                        data: $data, 
-                        name: $data.Template 
+                        data: $data,
+                        name: $data.Template
                     } -->
                     <!-- /ko -->
                     <!-- /ko -->
@@ -73,8 +73,8 @@
                 <div class="xforms-layout-page">
                     <!-- ko foreach: Visuals -->
                     <!-- ko template: {
-                        data: $data, 
-                        name: $data.Template 
+                        data: $data,
+                        name: $data.Template
                     } -->
                     <!-- /ko -->
                     <!-- /ko -->
