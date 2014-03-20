@@ -103,9 +103,9 @@ module NXKit.Web {
          * Tests whether a template node matches the given data.
          */
         public TemplatePredicate(node: HTMLElement, data: any): boolean {
-            var d1 = JSON.stringify(this.GetTemplateNodeData(node));
-            var d2 = JSON.stringify(data);
-            return d1 == d2;
+            var d1 = this.GetTemplateNodeData(node);
+            var d2 = data;
+            return Utils.DeepEquals(d1, d2);
         }
 
         /**

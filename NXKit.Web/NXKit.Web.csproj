@@ -84,13 +84,9 @@
     <Compile Include="IO\JsonVisualWriter.cs" />
     <Compile Include="IO\XNameJsonConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <TypeScriptCompile Include="VisualLayoutManager.ts" />
     <TypeScriptCompile Include="DefaultLayoutManager.ts" />
     <TypeScriptCompile Include="LayoutManager.ts" />
     <TypeScriptCompile Include="Utils.ts" />
-    <TypeScriptCompile Include="XForms\GroupGridViewModel.ts" />
-    <TypeScriptCompile Include="XForms\GroupLevel1LayoutManager.ts" />
-    <TypeScriptCompile Include="XForms\Layout\FormLayoutManager.ts" />
     <TypeScriptCompile Include="XForms\GroupLayoutManager.ts" />
   </ItemGroup>
   <ItemGroup>
@@ -115,10 +111,10 @@
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="View.ts" />
     <TypeScriptCompile Include="Visual.ts" />
+    <TypeScriptCompile Include="XForms\Layout\FormViewModel.ts" />
+    <TypeScriptCompile Include="XForms\Layout\PageViewModel.ts" />
     <TypeScriptCompile Include="XForms\Layout\ParagraphViewModel.ts" />
     <TypeScriptCompile Include="XForms\Layout\SectionViewModel.ts" />
-    <TypeScriptCompile Include="XForms\Layout\PageViewModel.ts" />
-    <TypeScriptCompile Include="XForms\Layout\FormViewModel.ts" />
     <TypeScriptCompile Include="XForms\Select1ViewModel.ts" />
     <TypeScriptCompile Include="XForms\LabelViewModel.ts" />
     <TypeScriptCompile Include="XForms\VisualViewModel.ts" />

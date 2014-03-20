@@ -1,4 +1,6 @@
-﻿declare module NXKit.Web {
+﻿/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="Scripts/typings/jquery/jquery.d.ts" />
+declare module NXKit.Web {
     interface IVisualPropertyValueChangedEvent extends IEvent {
         add(listener: (visual: Visual, property: Property) => void): void;
         remove(listener: (visual: Visual, property: Property) => void): void;
@@ -143,6 +145,58 @@ declare module NXKit.Web {
         public GetLocalTemplates(): HTMLElement[];
     }
 }
+declare module NXKit.Web.Utils {
+    /**
+    * Tests two objects for equality.
+    */
+    function DeepEquals(a: any, b: any): boolean;
+    /**
+    * Generates a unique identifier.
+    */
+    function GenerateGuid(): string;
+    /**
+    * Returns the entire context item chain from the specified context upwards.
+    */
+    function GetContextItems(context: KnockoutBindingContext): any[];
+    /**
+    * Gets the layout manager in scope of the given binding context.
+    */
+    function GetLayoutManager(context: KnockoutBindingContext): LayoutManager;
+    /**
+    * Gets the recommended view model for the given binding information.
+    */
+    function GetTemplateViewModel(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any;
+    /**
+    * Extracts template index data from the given binding information.
+    */
+    function GetTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any;
+    /**
+    * Determines the named template from the given extracted data and context.
+    */
+    function GetTemplateName(bindingContext: KnockoutBindingContext, data: any): string;
+}
+declare module NXKit.Web.XForms {
+    class GroupLayoutManager extends LayoutManager {
+        constructor(context: KnockoutBindingContext);
+        /**
+        * Applies the 'level' and 'layout' bindings to the template search.
+        */
+        public ParseTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, data: any): any;
+    }
+}
+declare module NXKit.Web {
+    interface IEvent {
+        add(listener: () => void): void;
+        remove(listener: () => void): void;
+        trigger(...a: any[]): void;
+    }
+    class TypedEvent implements IEvent {
+        public _listeners: any[];
+        public add(listener: () => void): void;
+        public remove(listener?: () => void): void;
+        public trigger(...a: any[]): void;
+    }
+}
 declare module NXKit.Web {
     interface IPropertyValueChangedEvent extends IEvent {
         add(listener: (property: Property) => void): void;
@@ -170,45 +224,6 @@ declare module NXKit.Web {
         public Update(source: any): void;
         public ToData(): any;
     }
-}
-declare module NXKit.Web {
-    interface IEvent {
-        add(listener: () => void): void;
-        remove(listener: () => void): void;
-        trigger(...a: any[]): void;
-    }
-    class TypedEvent implements IEvent {
-        public _listeners: any[];
-        public add(listener: () => void): void;
-        public remove(listener?: () => void): void;
-        public trigger(...a: any[]): void;
-    }
-}
-declare module NXKit.Web.Utils {
-    /**
-    * Generates a unique identifier.
-    */
-    function GenerateGuid(): string;
-    /**
-    * Returns the entire context item chain from the specified context upwards.
-    */
-    function GetContextItems(context: KnockoutBindingContext): any[];
-    /**
-    * Gets the layout manager in scope of the given binding context.
-    */
-    function GetLayoutManager(context: KnockoutBindingContext): LayoutManager;
-    /**
-    * Gets the recommended view model for the given binding information.
-    */
-    function GetTemplateViewModel(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any;
-    /**
-    * Extracts template index data from the given binding information.
-    */
-    function GetTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any;
-    /**
-    * Determines the named template from the given extracted data and context.
-    */
-    function GetTemplateName(bindingContext: KnockoutBindingContext, data: any): string;
 }
 declare module NXKit.Web {
     interface ICallbackRequestEvent extends IEvent {
@@ -240,13 +255,6 @@ declare module NXKit.Web {
         * Applies the bindings to the view if possible.
         */
         public ApplyBindings(): void;
-    }
-}
-declare module NXKit.Web {
-    class VisualLayoutManager extends LayoutManager {
-        private _visual;
-        constructor(context: KnockoutBindingContext, visual: Visual);
-        public Visual : Visual;
     }
 }
 declare module NXKit.Web {
@@ -285,49 +293,6 @@ declare module NXKit.Web.XForms {
         public Contents : Visual[];
     }
 }
-declare module NXKit.Web.XForms {
-    class GroupGridViewModel extends GroupViewModel {
-        private _count;
-        constructor(context: KnockoutBindingContext, visual: Visual, count: number);
-        /**
-        * Gets the visuals laid out in column order.
-        */
-        public Columns : Visual[][];
-    }
-}
-declare module NXKit.Web.XForms {
-    class GroupLayoutManager extends VisualLayoutManager {
-        private _viewModel;
-        private _groupParent;
-        constructor(context: KnockoutBindingContext, viewModel: GroupViewModel);
-        public ParseTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, data: any): any;
-        public ViewModel : GroupViewModel;
-        public GroupParent : GroupLayoutManager;
-        public Level : number;
-    }
-}
-declare module NXKit.Web.XForms {
-    class GroupLevel1LayoutManager extends VisualLayoutManager {
-        constructor(context: KnockoutBindingContext, viewModel: GroupViewModel);
-        public Layout : string;
-    }
-}
-declare module NXKit.Web.XForms {
-    class GroupViewModel extends VisualViewModel {
-        constructor(context: KnockoutBindingContext, visual: Visual);
-    }
-}
-declare module NXKit.Web.XForms {
-    class LabelViewModel extends VisualViewModel {
-        constructor(context: KnockoutBindingContext, visual: Visual);
-        public Text : KnockoutComputed<string>;
-    }
-}
-declare module NXKit.Web.XForms.Layout {
-    class FormLayoutManager extends VisualLayoutManager {
-        constructor(context: KnockoutBindingContext, visual: Visual);
-    }
-}
 declare module NXKit.Web.XForms.Layout {
     class FormViewModel extends VisualViewModel {
         constructor(context: KnockoutBindingContext, visual: Visual);
@@ -351,5 +316,83 @@ declare module NXKit.Web.XForms.Layout {
 declare module NXKit.Web.XForms {
     class Select1ViewModel extends VisualViewModel {
         constructor(context: KnockoutBindingContext, visual: Visual);
+    }
+}
+declare module NXKit.Web.XForms {
+    class LabelViewModel extends VisualViewModel {
+        constructor(context: KnockoutBindingContext, visual: Visual);
+        public Text : KnockoutComputed<string>;
+    }
+}
+declare module NXKit.Web.XForms {
+    module GroupViewModel_ {
+        /**
+        * Represents a sub-item of a top-level group.
+        */
+        class Item {
+            private _visual;
+            private _level;
+            constructor(visual: Visual, level: number);
+            public Visual : Visual;
+            public Level : number;
+            public Label : Visual;
+            public GetLabel(): Visual;
+            public Layout : any;
+            public GetLayout(): any;
+        }
+        /**
+        * Describes an item that will render a raw visual.
+        */
+        class VisualItem extends Item {
+            private _itemVisual;
+            constructor(visual: Visual, itemVisual: Visual, level: number);
+            public ItemVisual : Visual;
+            public GetLabel(): Visual;
+            public GetLayout(): any;
+        }
+        /**
+        * Describes a sub-item of a top-level group that will render a single underlying item.
+        */
+        class SingleItem extends Item {
+            private _item;
+            constructor(visual: Visual, level: number);
+            public Item : Item;
+            public GetLabel(): Visual;
+            public GetLayout(): any;
+        }
+        /**
+        * Describes a sub-item of a top-level group which will render two items.
+        */
+        class DoubleItem extends Item {
+            private _item1;
+            private _item2;
+            constructor(visual: Visual, level: number);
+            public Item1 : Item;
+            public Item2 : Item;
+            public GetLabel(): Visual;
+            public GetLayout(): any;
+        }
+        class GroupItem extends Item {
+            private _groupVisual;
+            private _items;
+            constructor(visual: Visual, groupVisual: Visual, level: number);
+            public Items : Item[];
+            public GetLabel(): Visual;
+            public GetLayout(): any;
+        }
+    }
+    class GroupViewModel extends VisualViewModel {
+        private _count;
+        constructor(context: KnockoutBindingContext, visual: Visual, count: number);
+        /**
+        * Gets the set of contents expressed as template binding objects.
+        */
+        public BindingContents : GroupViewModel_.Item[];
+        private GetBindingContents();
+        /**
+        * Gets the set of contents expressed as template binding objects.
+        */
+        private GetGroupItem(visual, level);
+        private GetItems(visual, level);
     }
 }

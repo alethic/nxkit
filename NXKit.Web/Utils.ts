@@ -3,6 +3,55 @@
 module NXKit.Web.Utils {
 
     /**
+     * Tests two objects for equality.
+     */
+    export function DeepEquals(a: any, b: any): boolean {
+
+        if (a == null &&
+            b === null)
+            return true;
+
+        if (typeof a !== typeof b)
+            return false;
+
+        if (typeof a === 'boolean' &&
+            typeof b === 'boolean')
+            return a === b;
+
+        if (typeof a === 'string' &&
+            typeof b === 'string')
+            return a === b;
+
+        if (typeof a === 'number' &&
+            typeof b === 'number')
+            return a === b;
+
+        if (typeof a === 'function' &&
+            typeof b === 'function')
+            return a.toString() === b.toString();
+
+        for (var i in a) {
+            if (a.hasOwnProperty(i)) {
+                if (!b.hasOwnProperty(i))
+                    return false;
+                if (!Utils.DeepEquals(a[i], b[i]))
+                    return false;
+            }
+        }
+
+        for (var i in b) {
+            if (b.hasOwnProperty(i)) {
+                if (!a.hasOwnProperty(i))
+                    return false;
+                if (!Utils.DeepEquals(b[i], a[i]))
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Generates a unique identifier.
      */
     export function GenerateGuid(): string {

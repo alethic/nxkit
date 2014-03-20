@@ -1,26 +1,19 @@
 ﻿/// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
 /// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
-/// <reference path="../VisualLayoutManager.ts" />
+/// <reference path="../LayoutManager.ts" />
 
 module NXKit.Web.XForms {
 
     export class GroupLayoutManager
-        extends NXKit.Web.VisualLayoutManager {
+        extends NXKit.Web.LayoutManager {
 
-        private _viewModel: GroupViewModel;
-        private _groupParent: KnockoutComputed<GroupLayoutManager>;
-
-        constructor(context: KnockoutBindingContext, viewModel: GroupViewModel) {
-            super(context, viewModel.Visual);
-
-            if (!(viewModel instanceof GroupViewModel))
-                throw new Error('viewModel: null');
-
-            this._viewModel = viewModel;
-            this._groupParent = <KnockoutComputed<GroupLayoutManager>>ko.computed(() =>
-                ko.utils.arrayFirst(Utils.GetContextItems(this.Context), _ => _ instanceof GroupLayoutManager));
+        constructor(context: KnockoutBindingContext) {
+            super(context);
         }
 
+        /**
+         * Applies the 'level' and 'layout' bindings to the template search.
+         */
         public ParseTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, data: any): any {
             data = super.ParseTemplateBinding(valueAccessor, viewModel, bindingContext, data);
 
@@ -39,18 +32,6 @@ module NXKit.Web.XForms {
                 data.layout = ko.unwrap(value.layout);
 
             return data;
-        }
-
-        get ViewModel(): GroupViewModel {
-            return this._viewModel;
-        }
-
-        get GroupParent(): GroupLayoutManager {
-            return this._groupParent();
-        }
-
-        get Level(): number {
-            return this.GroupParent != null ? this.GroupParent.Level + 1 : 1;
         }
 
     }
