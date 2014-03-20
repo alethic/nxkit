@@ -27,7 +27,7 @@ namespace NXKit
         /// </summary>
         public virtual Type[] DependsOn
         {
-            get { return new Type[0]; }
+            get { Contract.Ensures(Contract.Result<Type[]>() != null); return new Type[0]; }
         }
 
         /// <summary>
