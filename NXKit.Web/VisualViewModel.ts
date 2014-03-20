@@ -1,7 +1,4 @@
-﻿/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
-/// <reference path="Utils.ts" />
-/// <reference path="Visual.ts" />
-/// <reference path="LayoutManager.ts" />
+﻿/// <reference path="Visual.ts" />
 
 module NXKit.Web {
 

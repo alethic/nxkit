@@ -12,7 +12,6 @@ using System.Web.UI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-using NXKit.Util;
 using NXKit.Web.IO;
 
 namespace NXKit.Web.UI
@@ -301,6 +300,8 @@ namespace NXKit.Web.UI
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
             yield return new ScriptReference("NXKit.Web.UI.TypeScript.NXKit.js", typeof(View).Assembly.FullName);
+            yield return new ScriptReference("NXKit.Web.UI.TypeScript.NXKit.XForms.js", typeof(View).Assembly.FullName);
+            yield return new ScriptReference("NXKit.Web.UI.TypeScript.NXKit.XForms.Layout.js", typeof(View).Assembly.FullName);
             yield return new ScriptReference("NXKit.Web.UI.View.js", typeof(View).Assembly.FullName);
         }
 

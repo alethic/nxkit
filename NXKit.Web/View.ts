@@ -1,5 +1,5 @@
-﻿/// <reference path="Scripts/typings/jquery/jquery.d.ts" />
-/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
+﻿/// <reference path="Visual.ts" />
+/// <reference path="TypedEvent.ts" />
 
 module NXKit.Web {
 

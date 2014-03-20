@@ -1,4 +1,5 @@
-﻿/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
+﻿/// <reference path="TypedEvent.ts" />
+/// <reference path="Property.ts" />
 
 module NXKit.Web {
 

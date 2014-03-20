@@ -79,6 +79,9 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AspNet.ScriptManager.jQuery">
+      <HintPath>..\packages\AspNet.ScriptManager.jQuery.2.1.0\lib\net45\AspNet.ScriptManager.jQuery.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -895,11 +898,8 @@
     <Content Include="Content\kendoui\js\kendo.web.min.js" />
     <Content Include="Content\kendoui\js\kendo.window.min.js" />
     <Content Include="Content\knockout\knockout-projections.js" />
-    <Content Include="Content\nxkit\nxkit-knockout-semantic.js" />
-    <Content Include="Content\nxkit\nxkit-knockout-transitions.js" />
     <Content Include="Content\knockout\knockout.js" />
     <Content Include="Content\normalize.css" />
-    <Content Include="Content\nxkit\nxkit-knockout.js" />
     <Content Include="Default.aspx" />
     <EmbeddedResource Include="Resources\form.xml" />
     <EmbeddedResource Include="Resources\elections.xml" />
@@ -1102,6 +1102,14 @@
     <Content Include="Content\semantic\uncompressed\views\item.css" />
     <Content Include="Content\semantic\uncompressed\views\list.css" />
     <Content Include="Content\semantic\uncompressed\views\statistic.css" />
+    <Content Include="packages.config" />
+    <None Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.0.js" />
+    <Content Include="Scripts\jquery-2.1.0.min.js" />
+    <Content Include="Scripts\knockout-3.1.0.debug.js" />
+    <Content Include="Scripts\knockout-3.1.0.js" />
+    <Content Include="Scripts\less-1.7.0.js" />
+    <Content Include="Scripts\less-1.7.0.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -1117,7 +1125,9 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Content\nxkit\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Content\semantic\less\collections\breadcrumb.less" />
     <Content Include="Content\semantic\less\collections\form.less" />
@@ -1309,6 +1319,7 @@
     <Content Include="Content\font-awesome\scss\_spinning.scss" />
     <Content Include="Content\font-awesome\scss\_stacked.scss" />
     <Content Include="Content\font-awesome\scss\_variables.scss" />
+    <Content Include="Scripts\jquery-2.1.0.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

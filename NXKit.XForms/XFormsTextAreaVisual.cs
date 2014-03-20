@@ -2,7 +2,10 @@
 {
 
     [Visual("textarea")]
-    public class XFormsTextAreaVisual : XFormsSingleNodeBindingVisual
+    public class XFormsTextAreaVisual :
+        XFormsSingleNodeBindingVisual,
+        ISupportsUiCommonAttributes,
+        ISupportsIncrementalAttribute
     {
 
         public bool Incremental

@@ -12,20 +12,18 @@
     <link rel="stylesheet" type="text/css" href="Content/normalize.css" />
     <link rel="stylesheet/less" type="text/css" href="Content/semantic/packaged/css/semantic.css" />
     <link rel="stylesheet/less" type="text/css" href="Content/styles.less" />
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.js" type="text/javascript"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.js" type="text/javascript"></script>
-    <script src="Content/semantic/packaged/javascript/semantic.js" type="text/javascript"></script>
-    <script src="Content/knockout/knockout.js" type="text/javascript"></script>
-    <script src="Content/knockout/knockout-projections.js" type="text/javascript"></script>
-    <script src="Content/nxkit/nxkit-knockout.js" type="text/javascript"></script>
-    <script src="Content/nxkit/nxkit-knockout-semantic.js" type="text/javascript"></script>
-    <script src="Content/nxkit/nxkit-knockout-transitions.js" type="text/javascript"></script>
 </head>
 
 <body>
     <form id="form1" runat="server">
-        <asp:ScriptManager runat="server" />
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="less" />
+                <asp:ScriptReference Name="semantic" />
+                <asp:ScriptReference Name="knockout" />
+            </Scripts>
+        </asp:ScriptManager>
 
         <div class="main container">
 
@@ -98,27 +96,8 @@
             </script>
 
             <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsHelpVisual">
-                <!-- ko with: new NXKit.Web.VisualViewModel($context, $data) -->
-                <div class="ui modal" data-bind="attr: {
-    id: $data.UniqueId
-}">
-                    <i class="close icon"></i>
-                    <div class="header">
-                        title
-                    </div>
-                    <div class="content">
-                        stuff
-                    </div>
-                    <div class="actions">
-                        <div class="ui button">Close</div>
-                    </div>
-                </div>
-                <!-- /ko -->
-            </script>
-
-            <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsHintVisual">
-                <!-- ko with: new NXKit.Web.XForms.HintViewModel($context, $data) -->
-                <span class="xforms-hint">
+                <!-- ko with: new NXKit.Web.XForms.HelpViewModel($context, $data) -->
+                <div class="xforms-help">
                     <!-- ko if: Text -->
                     <span data-bind="text: Text" />
                     <!-- /ko -->
@@ -129,8 +108,33 @@
                     <!-- /ko -->
                     <!-- /ko -->
                     <!-- /ko -->
-                </span>
+                </div>
                 <!-- /ko -->
+            </script>
+
+            <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsHintVisual">
+                <!-- ko with: new NXKit.Web.XForms.HintViewModel($context, $data) -->
+                <div class="xforms-hint">
+                    <!-- ko if: Text -->
+                    <span data-bind="text: Text" />
+                    <!-- /ko -->
+
+                    <!-- ko ifnot: Text -->
+                    <!-- ko foreach: Visual.Visuals -->
+                    <!-- ko nxkit_template -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+                <!-- /ko -->
+            </script>
+
+            <script type="text/javascript">
+
+                function ShowModal(id) {
+                    $('#' + id).modal('show');
+                }
+
             </script>
 
             <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual">
@@ -145,10 +149,32 @@
                     <!-- /ko -->
 
                     <!-- ko with: Help -->
-                    <div class="ui right green corner label">
+
+                    <div class="ui modal" data-bind="attr: { 'id': $parent.UniqueId }">
+                        <div class="header">
+                            <!-- ko with: $parent.Label -->
+                            <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+                            <!-- ko nxkit_template -->
+                            <!-- /ko -->
+                            <!-- /ko -->
+                            <!-- /ko -->
+                        </div>
+                        <div class="content">
+                            <div class="left">
+                                <i class="help icon"></i>
+                            </div>
+                            <div class="right">
+                                <!-- ko nxkit_template -->
+                                <!-- /ko -->
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <div class="ui button">OK</div>
+                        </div>
+                    </div>
+
+                    <div class="ui right green corner label" data-bind="click: function () { ShowModal($parent.UniqueId); }">
                         <i class="link help icon"></i>
-                        <!-- ko nxkit_template -->
-                        <!-- /ko -->
                     </div>
                     <!-- /ko -->
 
@@ -169,7 +195,7 @@
                 </div>
 
                 <!-- ko with: Help -->
-                <div class="ui bottom attached info message">
+                <div class="ui bottom attached info message" data-bind="click: function () { ShowModal($parent.UniqueId); }">
                     <i class="link help icon"></i>
                     Are you sure you know what you're doing?
                 </div>
@@ -207,7 +233,14 @@
 
                         <!-- ko with: Label -->
                         <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-                        <label data-bind="nxkit_template: $data" />
+                        <label>
+                            <!-- ko nxkit_template -->
+                            <!-- /ko -->
+
+                            <!-- ko with: $parent.Help -->
+                            <i class="help icon"></i>
+                            <!-- /ko -->
+                        </label>
                         <!-- /ko -->
                         <!-- /ko -->
 
@@ -324,9 +357,9 @@
 
             <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="2" data-nxkit-layout="group">
 
-                <div class="xforms-group" data-bind="nxkit_visible: Relevant">
+                <div class="xforms-group" style="margin-bottom: 10px;" data-bind="nxkit_visible: Relevant">
 
-                   <%-- <!-- ko with: Label -->
+                    <%-- <!-- ko with: Label -->
                     <!-- ko if: ($data.Appearance || 'full') == 'full' -->
                     <div class="ui top attached header" data-bind="nxkit_template: $data" />
                     <!-- /ko -->
@@ -417,17 +450,17 @@
             </script>
 
             <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsInputVisual">
-                <!-- ko with: new NXKit.Web.XForms.VisualViewModel($context, $data) -->
-                <!-- ko nxkit_template: { 
+                <!-- ko with: new NXKit.Web.XForms.InputViewModel($context, $data) -->
+                <!-- ko nxkit_template: {
                     visual: Visual,
-                    type: Visual.Properties.Type != null && Visual.Properties.Type.ValueAsString() != null ? Visual.Properties.Type.ValueAsString() : 'unknown',
+                    type: Type,
                 } -->
                 <!-- /ko -->
                 <!-- /ko -->
             </script>
 
             <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsInputVisual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
-                <input type="text" data-bind="value: Properties.Value.Value" />
+                <input type="text" data-bind="value: Properties.Value.ValueAsString" />
             </script>
 
             <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsInputVisual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}boolean">
@@ -438,7 +471,7 @@
             </script>
 
             <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsInputVisual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}date">
-                <input type="date" data-bind="value: Properties.Value.Value" />
+                <input type="date" data-bind="value: Properties.Value.ValueAsString" />
             </script>
 
             <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsInputVisual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}int">
@@ -454,13 +487,27 @@
             </script>
 
             <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsRangeVisual">
-                <!-- ko with: new NXKit.Web.XForms.VisualViewModel($context, $data) -->
+                <!-- ko with: new NXKit.Web.XForms.RangeViewModel($context, $data) -->
                 <!-- ko nxkit_template: { 
                     visual: Visual,
-                    type: Visual.Properties.Type != null ? Visual.Properties.Type.Value : 'foo',
+                    type: Type,
                 } -->
                 <!-- /ko -->
                 <!-- /ko -->
+            </script>
+
+            <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsTextAreaVisual">
+                <!-- ko with: new NXKit.Web.XForms.TextAreaViewModel($context, $data) -->
+                <!-- ko nxkit_template: { 
+                    visual: Visual,
+                    type: Type,
+                } -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </script>
+
+            <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsTextAreaVisual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
+                <textarea data-bind="value: Properties.Value.ValueAsString" />
             </script>
 
             <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsRangeVisual__unknown">
@@ -492,7 +539,7 @@
                 <!-- ko nxkit_template: { 
                     visual: Visual,
                     data: $data,
-                    type: Visual.Properties.Type != null && Visual.Properties.Type.ValueAsString() != null ? Visual.Properties.Type.ValueAsString : 'unknown',
+                    type: Type,
                 } -->
                 <!-- /ko -->
                 <!-- /ko -->
@@ -515,13 +562,13 @@
             </script>
 
             <script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsSelect1Visual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
-                <div class="ui fluid selection dropdown" data-bind="nxkit_dropdown: $data.Visual.Properties['SelectedItemVisualId'].Value">
+                <div class="ui fluid selection dropdown" data-bind="nxkit_dropdown: SelectedItemVisualId">
                     <input type="hidden" />
                     <div class="text">Select</div>
                     <i class="dropdown icon"></i>
                     <div class="ui menu" data-bind="foreach: GetSelect1Items($data.Visual)">
-                        <div class="item" data-bind="attr: { 'data-value': $data.Properties['UniqueId'].Value }">
-                            <!-- ko nxkit_template: NXKit.Web.XForms.VisualViewModel.GetLabel($data) -->
+                        <div class="item" data-bind="attr: { 'data-value': $data.Properties['UniqueId'].ValueAsString }">
+                            <!-- ko nxkit_template: NXKit.Web.XForms.XFormsVisualViewModel.GetLabel($data) -->
                             <!-- /ko -->
                         </div>
                     </div>

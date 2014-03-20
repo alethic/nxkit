@@ -86,8 +86,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <TypeScriptCompile Include="DefaultLayoutManager.ts" />
     <TypeScriptCompile Include="LayoutManager.ts" />
+    <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
     <TypeScriptCompile Include="Utils.ts" />
-    <TypeScriptCompile Include="XForms\GroupLayoutManager.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -111,19 +111,12 @@
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="View.ts" />
     <TypeScriptCompile Include="Visual.ts" />
-    <TypeScriptCompile Include="XForms\HintViewModel.ts" />
-    <TypeScriptCompile Include="XForms\Layout\FormViewModel.ts" />
-    <TypeScriptCompile Include="XForms\Layout\PageViewModel.ts" />
-    <TypeScriptCompile Include="XForms\Layout\ParagraphViewModel.ts" />
-    <TypeScriptCompile Include="XForms\Layout\SectionViewModel.ts" />
-    <TypeScriptCompile Include="XForms\Select1ViewModel.ts" />
-    <TypeScriptCompile Include="XForms\LabelViewModel.ts" />
-    <TypeScriptCompile Include="XForms\VisualViewModel.ts" />
     <TypeScriptCompile Include="VisualViewModel.ts" />
-    <TypeScriptCompile Include="XForms\GroupViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Test.html" />
+    <TypeScriptCompile Include="Scripts\nxkit-knockout-semantic.ts" />
+    <TypeScriptCompile Include="Scripts\nxkit-knockout-transitions.ts" />
+    <TypeScriptCompile Include="Scripts\nxkit-knockout.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
@@ -132,9 +125,10 @@
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
-    <TypeScriptOutFile>NXKit.js</TypeScriptOutFile>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+      <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+    <TypeScriptOutFile>NXKit.js</TypeScriptOutFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES5</TypeScriptTarget>

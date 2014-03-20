@@ -1,6 +1,4 @@
-﻿/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
-
-module NXKit.Web.Utils {
+﻿module NXKit.Web.Utils {
 
     /**
      * Tests two objects for equality.

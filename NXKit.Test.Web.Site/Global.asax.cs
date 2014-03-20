@@ -9,43 +9,24 @@ namespace NXKit.Test.Web.Site
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            ScriptManager.ScriptResourceMapping.AddDefinition("jquery", new ScriptResourceDefinition
+            ScriptManager.ScriptResourceMapping.AddDefinition("less", new ScriptResourceDefinition
             {
-                Path = "~/Scripts/jquery-2.0.3.min.js",
-                DebugPath = "~/Scripts/jquery-2.0.3.js",
-                CdnPath = "http://ajax.microsoft.com/ajax/jQuery/jquery-2.0.3.min.js",
-                CdnDebugPath = "http://ajax.microsoft.com/ajax/jQuery/jquery-2.0.3.js"
+                Path = "~/Scripts/less-1.7.0.min.js",
+                DebugPath = "~/Scripts/less-1.7.0.js",
+                CdnPath = "//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js",
+                CdnDebugPath = "//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.js"
             });
-        }
 
-        protected void Session_Start(object sender, EventArgs e)
-        {
+            ScriptManager.ScriptResourceMapping.AddDefinition("semantic", new ScriptResourceDefinition
+            {
+                Path = "~/Content/semantic/packaged/javascript/semantic.js",
+            });
 
-        }
-
-        protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Application_AuthenticateRequest(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Application_Error(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Session_End(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Application_End(object sender, EventArgs e)
-        {
-
+            ScriptManager.ScriptResourceMapping.AddDefinition("knockout", new ScriptResourceDefinition
+            {
+                Path = "~/Scripts/knockout-3.1.0.min.js",
+                DebugPath = "~/Scripts/knockout-3.1.0.js",
+            });
         }
 
     }

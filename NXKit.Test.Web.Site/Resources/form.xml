@@ -106,7 +106,7 @@
         </xf:group>
         <xf:group ref="xf:instance('primaryperson')">
             <xf:label>Additional Information About You</xf:label>
-            <xf:help>Enter stuff!</xf:help>
+            <xf:help>Complete the form by providing your physical characterists, personal information, and contact information.</xf:help>
             <xf:group>
                 <xf:label>Physical Characteristics</xf:label>
                 <xf:range ref="heightfeet"
@@ -141,6 +141,7 @@
             </xf:group>
             <xf:input ref="dateofbirth">
                 <xf:label>Date of Birth</xf:label>
+                <xf:help>Provide your date of birth to continue.</xf:help>
             </xf:input>
             <xf:input ref="socialsecuritynumber">
                 <xf:label>Social Security Number</xf:label>
