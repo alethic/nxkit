@@ -1,90 +1,52 @@
 ﻿/// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
 /// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
-/// <reference path="VisualViewModel.ts" />
+/// <reference path="../VisualLayoutManager.ts" />
 
 module NXKit.Web.XForms {
 
-    export enum GroupLayout {
+    export class GroupLayoutManager
+        extends NXKit.Web.VisualLayoutManager {
 
-        Fluid  = 1,
-        Single = 2,
-        Double = 3,
-        Expand = 4,
+        private _viewModel: GroupViewModel;
 
-    }
+        constructor(context: KnockoutBindingContext, viewModel: GroupViewModel) {
+            super(context, viewModel.Visual);
 
-    export interface IGroupLayoutFunc {
-        (): GroupLayout;
-    }
+            if (viewModel == null)
+                throw new Error('viewModel: null');
 
-    export class GroupLayoutItem {
-
-        constructor() {
-
+            this._viewModel = viewModel;
         }
 
-    }
-
-    export class GroupLayoutItemGroup extends GroupLayoutItem {
-
-        _getLayout: IGroupLayoutFunc;
-
-        constructor(getLayout: IGroupLayoutFunc) {
-            super();
-            this._getLayout = getLayout;
-        }
-
-        get Layout(): GroupLayout {
-            return this._getLayout();
-        }
-
-    }
-
-    export class GroupLayoutSingleItemGroupFromGroup extends GroupLayoutItem {
-
-        _visual: Visual;
-
-        constructor(visual: Visual) {
-            super();
-            this._visual = visual;
-        }
-
-        get Visual(): Visual {
-            return this._visual;
-        }
-
-    }
-
-    export class GroupLayoutManager extends NXKit.Web.XForms.VisualViewModel {
-
-        constructor(context: KnockoutBindingContext, visual: Visual) {
-            super(context, visual);
+        get ViewModel(): GroupViewModel {
+            return this._viewModel;
         }
 
         get Level(): number {
-            var ctx = this.Context;
-            while ((ctx = ctx.$parentContext) != null)
-                if (ctx.$data instanceof GroupLayoutManager)
-                    return (<GroupLayoutManager>ctx.$data).Level + 1;
+            for (var i in this.Context.$parents) {
+                var l = this.Context.$parents[i];
+                if (i instanceof GroupLayoutManager)
+                    return (<GroupLayoutManager>l).Level + 1;
+            }
 
             return 1;
         }
 
-        get Layout(): GroupLayout {
+        get Layout(): number {
             var l = this.Level;
-            var a = this.Appearance();
+            var a = this.ViewModel.Appearance();
 
             if (l == 1 && a == "full")
-                return GroupLayout.Fluid;
+                return 1;
             if (l == 1)
-                return GroupLayout.Fluid;
+                return 1;
 
             if (l == 2 && a == "full")
-                return GroupLayout.Fluid;
+                return 1;
             if (l == 2)
-                return GroupLayout.Fluid;
+                return 1;
 
-            return GroupLayout.Single;
+            return 1;
         }
 
     }

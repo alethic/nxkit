@@ -2,28 +2,6 @@
 
 module NXKit.Web.Utils {
 
-    export function DeepEquals(a: any, b: any): boolean {
-        for (var i in a) {
-            if (a.hasOwnProperty(i)) {
-                if (!b.hasOwnProperty(i))
-                    return false;
-                if (a[i] != b[i])
-                    return false;
-            }
-        }
-
-        for (var i in b) {
-            if (b.hasOwnProperty(i)) {
-                if (!a.hasOwnProperty(i))
-                    return false;
-                if (b[i] != a[i])
-                    return false;
-            }
-        }
-
-        return true;
-    }
-
     export function GenerateGuid(): string {
         // http://www.ietf.org/rfc/rfc4122.txt
 
@@ -39,40 +17,74 @@ module NXKit.Web.Utils {
         return s.join("");
     }
 
-    export function GetLayoutManager(context: KnockoutBindingContext): LayoutManager {
-        // advance through context until we find a layout manager
-        var ctx = context;
-        while (ctx != null) {
-            if (ctx.$data instanceof LayoutManager)
-                return <LayoutManager>ctx.$data;
+    export function GetTemplateName(data: any, viewModel: any, context: KnockoutBindingContext): string {
 
-            ctx = ctx.$parentContext || null;
+        // if the passed context stores a layout manager, get the template from it
+        if (context.$data instanceof LayoutManager)
+            return (<LayoutManager>context.$data).GetTemplate(data);
+
+        // otherwise search up the tree for the first layout manager
+        var l = context.$parents;
+        for (var i in l) {
+            var p = l[i];
+            if (p instanceof LayoutManager)
+                return (<LayoutManager>p).GetTemplate(data);
         }
 
-        // return the layout manager
-        return new DefaultLayoutManager(context);
+        return null;
     }
 
-    export function GetVisualTemplateData(data: any): any {
-        // extract 
-
-        var _: any = {};
-        if (data == null)
-            return _;
-
-        // specified visual value
-        if (data.visual != null &&
-            data.visual instanceof Visual)
-            _.visual = data.visual.Type;
+    export function GetTemplateViewModel(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any {
+        var value = valueAccessor() || viewModel;
 
         // value itself is a visual
-        if (data instanceof Visual)
-            _.visual = data.visual.Type;
+        if (value != null &&
+            ko.unwrap(value) instanceof Visual)
+            return ko.unwrap(value);
 
-        if (data.type != null)
-            _.type = data.type;
+        // specified data value
+        if (value != null &&
+            value.data != null)
+            return ko.unwrap(value.data);
 
-        return _;
+        // specified visual value
+        if (value != null &&
+            value.visual != null &&
+            ko.unwrap(value.visual) instanceof Visual)
+            return ko.unwrap(value.visual);
+
+        // default to existing context
+        return null;
+    }
+
+    export function GetTemplateData(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any {
+        // extract data to be used to search for a template
+        var data: any = {};
+        var value = valueAccessor();
+
+        // value is itself a visual
+        if (value != null &&
+            ko.unwrap(value) instanceof Visual)
+            return {
+                visual: (<Visual>ko.unwrap(value)).Type,
+            };
+
+        // specified visual value
+        if (value != null &&
+            value.visual != null &&
+            ko.unwrap(value.visual) instanceof Visual)
+            data.visual = (<Visual>ko.unwrap(value.visual)).Type;
+
+        if (data.visual == null)
+            if (viewModel instanceof Visual)
+                data.visual = (<Visual>viewModel).Type;
+
+        // specified data type
+        if (value != null &&
+            value.type != null)
+            data.type = ko.unwrap(value.type);
+
+        return data;
     }
 
 }

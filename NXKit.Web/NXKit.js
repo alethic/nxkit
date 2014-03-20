@@ -205,7 +205,12 @@ var NXKit;
     (function (Web) {
         var LayoutManager = (function () {
             function LayoutManager(context) {
+                this._context = null;
                 var self = this;
+
+                if (context == null)
+                    throw new Error('context: null');
+
                 self._context = context;
             }
             Object.defineProperty(LayoutManager.prototype, "Context", {
@@ -216,13 +221,36 @@ var NXKit;
                 configurable: true
             });
 
-            LayoutManager.prototype.GetTemplate = function (descriptor) {
-                console.error('LayoutManager.GetTemplate not implemented');
-                return null;
+            LayoutManager.prototype.GetTemplates = function (data) {
+                var l = this._context.$parents;
+                for (var i in l) {
+                    var p = l[i];
+                    if (p instanceof LayoutManager)
+                        if (p != this)
+                            return p.GetTemplates(data);
+                }
+
+                // return empty array
+                return new Array();
             };
 
-            LayoutManager.prototype.GetVisualTemplate = function (visual) {
-                return this.GetTemplate({ Type: visual.Type });
+            LayoutManager.prototype.GetTemplate = function (data) {
+                // locate first matching template
+                var node = this.GetTemplates(data)[0];
+
+                // no template found, invent an error
+                if (node == null) {
+                    node = $('<script />', {
+                        'type': 'text/html',
+                        'text': '<span class="ui red label">' + JSON.stringify(data) + '</span>'
+                    }).appendTo('body')[0];
+                }
+
+                // if the node has a missing id
+                if (!node.id)
+                    node.id = 'NXKit.Web__' + NXKit.Web.Utils.GenerateGuid().replace(/-/g, '');
+
+                return node.id;
             };
             return LayoutManager;
         })();
@@ -232,6 +260,7 @@ var NXKit;
 })(NXKit || (NXKit = {}));
 /// <reference path="Scripts/typings/jquery/jquery.d.ts" />
 /// <reference path="Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="Visual.ts" />
 /// <reference path="LayoutManager.ts" />
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -242,30 +271,290 @@ var __extends = this.__extends || function (d, b) {
 var NXKit;
 (function (NXKit) {
     (function (Web) {
+        var VisualLayoutManager = (function (_super) {
+            __extends(VisualLayoutManager, _super);
+            function VisualLayoutManager(context, visual) {
+                _super.call(this, context);
+
+                if (visual == null)
+                    throw new Error('visual: null');
+
+                this._visual = visual;
+            }
+            Object.defineProperty(VisualLayoutManager.prototype, "Visual", {
+                get: function () {
+                    return this._visual;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return VisualLayoutManager;
+        })(NXKit.Web.LayoutManager);
+        Web.VisualLayoutManager = VisualLayoutManager;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="Scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="LayoutManager.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
         var DefaultLayoutManager = (function (_super) {
             __extends(DefaultLayoutManager, _super);
             function DefaultLayoutManager(context) {
                 _super.call(this, context);
             }
-            DefaultLayoutManager.prototype.GetTemplate = function (data) {
-                var _this = this;
-                var node = $('script').filter(function (_) {
-                    return NXKit.Web.Utils.DeepEquals($(_this).data(), data);
-                })[0];
+            DefaultLayoutManager.prototype.GetTemplates_Test_Value = function (name, data1, data2) {
+                var value1 = data1.data('nxkit-' + name) || null;
+                var value2 = data2[name] || null;
+                return value1 == value2;
+            };
 
-                // no template found, invent an error
-                if (node == null)
-                    node = $('<script />', {
-                        'id': 'NXKit.Web__Unknown',
-                        'type': 'text/html',
-                        'text': '<span class="error">no template</span>'
-                    }).appendTo('body')[0];
+            DefaultLayoutManager.prototype.GetTemplates = function (data) {
+                var self = this;
+                return $('script[type="text/html"]').filter(function () {
+                    for (var i in data)
+                        if (!self.GetTemplates_Test_Value(i, $(this), data))
+                            return false;
 
-                return node.id;
+                    for (var n = 0; n < this.attributes.length; n++) {
+                        var attr = this.attributes.item(n);
+                        if (attr.nodeName.indexOf('data-nxkit-') == 0)
+                            if (!self.GetTemplates_Test_Value(attr.nodeName.substring(11), $(this), data))
+                                return false;
+                    }
+
+                    return true;
+                }).toArray();
             };
             return DefaultLayoutManager;
         })(NXKit.Web.LayoutManager);
         Web.DefaultLayoutManager = DefaultLayoutManager;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Utils) {
+            function GenerateGuid() {
+                // http://www.ietf.org/rfc/rfc4122.txt
+                var s = [];
+                var hexDigits = "0123456789abcdef";
+                for (var i = 0; i < 36; i++) {
+                    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+                }
+                s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+                s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+                s[8] = s[13] = s[18] = s[23] = "-";
+
+                return s.join("");
+            }
+            Utils.GenerateGuid = GenerateGuid;
+
+            function GetTemplateName(data, viewModel, context) {
+                // if the passed context stores a layout manager, get the template from it
+                if (context.$data instanceof NXKit.Web.LayoutManager)
+                    return context.$data.GetTemplate(data);
+
+                // otherwise search up the tree for the first layout manager
+                var l = context.$parents;
+                for (var i in l) {
+                    var p = l[i];
+                    if (p instanceof NXKit.Web.LayoutManager)
+                        return p.GetTemplate(data);
+                }
+
+                return null;
+            }
+            Utils.GetTemplateName = GetTemplateName;
+
+            function GetTemplateViewModel(valueAccessor, viewModel, bindingContext) {
+                var value = valueAccessor() || viewModel;
+
+                // value itself is a visual
+                if (value != null && ko.unwrap(value) instanceof NXKit.Web.Visual)
+                    return ko.unwrap(value);
+
+                // specified data value
+                if (value != null && value.data != null)
+                    return ko.unwrap(value.data);
+
+                // specified visual value
+                if (value != null && value.visual != null && ko.unwrap(value.visual) instanceof NXKit.Web.Visual)
+                    return ko.unwrap(value.visual);
+
+                // default to existing context
+                return null;
+            }
+            Utils.GetTemplateViewModel = GetTemplateViewModel;
+
+            function GetTemplateData(valueAccessor, viewModel, bindingContext) {
+                // extract data to be used to search for a template
+                var data = {};
+                var value = valueAccessor();
+
+                // value is itself a visual
+                if (value != null && ko.unwrap(value) instanceof NXKit.Web.Visual)
+                    return {
+                        visual: ko.unwrap(value).Type
+                    };
+
+                // specified visual value
+                if (value != null && value.visual != null && ko.unwrap(value.visual) instanceof NXKit.Web.Visual)
+                    data.visual = ko.unwrap(value.visual).Type;
+
+                if (data.visual == null)
+                    if (viewModel instanceof NXKit.Web.Visual)
+                        data.visual = viewModel.Type;
+
+                // specified data type
+                if (value != null && value.type != null)
+                    data.type = ko.unwrap(value.type);
+
+                return data;
+            }
+            Utils.GetTemplateData = GetTemplateData;
+        })(Web.Utils || (Web.Utils = {}));
+        var Utils = Web.Utils;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="../../Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="../../VisualLayoutManager.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (XForms) {
+            (function (Layout) {
+                var FormLayoutManager = (function (_super) {
+                    __extends(FormLayoutManager, _super);
+                    function FormLayoutManager(context, visual) {
+                        _super.call(this, context, visual);
+                    }
+                    return FormLayoutManager;
+                })(NXKit.Web.VisualLayoutManager);
+                Layout.FormLayoutManager = FormLayoutManager;
+            })(XForms.Layout || (XForms.Layout = {}));
+            var Layout = XForms.Layout;
+        })(Web.XForms || (Web.XForms = {}));
+        var XForms = Web.XForms;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="../VisualLayoutManager.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (XForms) {
+            var GroupLayoutManager = (function (_super) {
+                __extends(GroupLayoutManager, _super);
+                function GroupLayoutManager(context, viewModel) {
+                    _super.call(this, context, viewModel.Visual);
+
+                    if (viewModel == null)
+                        throw new Error('viewModel: null');
+
+                    this._viewModel = viewModel;
+                }
+                Object.defineProperty(GroupLayoutManager.prototype, "ViewModel", {
+                    get: function () {
+                        return this._viewModel;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(GroupLayoutManager.prototype, "Level", {
+                    get: function () {
+                        for (var i in this.Context.$parents) {
+                            var l = this.Context.$parents[i];
+                            if (i instanceof GroupLayoutManager)
+                                return l.Level + 1;
+                        }
+
+                        return 1;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(GroupLayoutManager.prototype, "Layout", {
+                    get: function () {
+                        var l = this.Level;
+                        var a = this.ViewModel.Appearance();
+
+                        if (l == 1 && a == "full")
+                            return 1;
+                        if (l == 1)
+                            return 1;
+
+                        if (l == 2 && a == "full")
+                            return 1;
+                        if (l == 2)
+                            return 1;
+
+                        return 1;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                return GroupLayoutManager;
+            })(NXKit.Web.VisualLayoutManager);
+            XForms.GroupLayoutManager = GroupLayoutManager;
+        })(Web.XForms || (Web.XForms = {}));
+        var XForms = Web.XForms;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        var TypedEvent = (function () {
+            function TypedEvent() {
+                this._listeners = [];
+            }
+            TypedEvent.prototype.add = function (listener) {
+                /// <summary>Registers a new listener for the event.</summary>
+                /// <param name="listener">The callback function to register.</param>
+                this._listeners.push(listener);
+            };
+
+            TypedEvent.prototype.remove = function (listener) {
+                /// <summary>Unregisters a listener from the event.</summary>
+                /// <param name="listener">The callback function that was registered. If missing then all listeners will be removed.</param>
+                if (typeof listener === 'function') {
+                    for (var i = 0, l = this._listeners.length; i < l; l++) {
+                        if (this._listeners[i] === listener) {
+                            this._listeners.splice(i, 1);
+                            break;
+                        }
+                    }
+                } else {
+                    this._listeners = [];
+                }
+            };
+
+            TypedEvent.prototype.trigger = function () {
+                var a = [];
+                for (var _i = 0; _i < (arguments.length - 0); _i++) {
+                    a[_i] = arguments[_i + 0];
+                }
+                /// <summary>Invokes all of the listeners for this event.</summary>
+                /// <param name="args">Optional set of arguments to pass to listners.</param>
+                var context = {};
+                var listeners = this._listeners.slice(0);
+                for (var i = 0, l = listeners.length; i < l; i++) {
+                    listeners[i].apply(context, a || []);
+                }
+            };
+            return TypedEvent;
+        })();
+        Web.TypedEvent = TypedEvent;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
@@ -418,136 +707,6 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        var TypedEvent = (function () {
-            function TypedEvent() {
-                this._listeners = [];
-            }
-            TypedEvent.prototype.add = function (listener) {
-                /// <summary>Registers a new listener for the event.</summary>
-                /// <param name="listener">The callback function to register.</param>
-                this._listeners.push(listener);
-            };
-
-            TypedEvent.prototype.remove = function (listener) {
-                /// <summary>Unregisters a listener from the event.</summary>
-                /// <param name="listener">The callback function that was registered. If missing then all listeners will be removed.</param>
-                if (typeof listener === 'function') {
-                    for (var i = 0, l = this._listeners.length; i < l; l++) {
-                        if (this._listeners[i] === listener) {
-                            this._listeners.splice(i, 1);
-                            break;
-                        }
-                    }
-                } else {
-                    this._listeners = [];
-                }
-            };
-
-            TypedEvent.prototype.trigger = function () {
-                var a = [];
-                for (var _i = 0; _i < (arguments.length - 0); _i++) {
-                    a[_i] = arguments[_i + 0];
-                }
-                /// <summary>Invokes all of the listeners for this event.</summary>
-                /// <param name="args">Optional set of arguments to pass to listners.</param>
-                var context = {};
-                var listeners = this._listeners.slice(0);
-                for (var i = 0, l = listeners.length; i < l; i++) {
-                    listeners[i].apply(context, a || []);
-                }
-            };
-            return TypedEvent;
-        })();
-        Web.TypedEvent = TypedEvent;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Utils) {
-            function DeepEquals(a, b) {
-                for (var i in a) {
-                    if (a.hasOwnProperty(i)) {
-                        if (!b.hasOwnProperty(i))
-                            return false;
-                        if (a[i] != b[i])
-                            return false;
-                    }
-                }
-
-                for (var i in b) {
-                    if (b.hasOwnProperty(i)) {
-                        if (!a.hasOwnProperty(i))
-                            return false;
-                        if (b[i] != a[i])
-                            return false;
-                    }
-                }
-
-                return true;
-            }
-            Utils.DeepEquals = DeepEquals;
-
-            function GenerateGuid() {
-                // http://www.ietf.org/rfc/rfc4122.txt
-                var s = [];
-                var hexDigits = "0123456789abcdef";
-                for (var i = 0; i < 36; i++) {
-                    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-                }
-                s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
-                s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
-                s[8] = s[13] = s[18] = s[23] = "-";
-
-                return s.join("");
-            }
-            Utils.GenerateGuid = GenerateGuid;
-
-            function GetLayoutManager(context) {
-                // advance through context until we find a layout manager
-                var ctx = context;
-                while (ctx != null) {
-                    if (ctx.$data instanceof NXKit.Web.LayoutManager)
-                        return ctx.$data;
-
-                    ctx = ctx.$parentContext || null;
-                }
-
-                // return the layout manager
-                return new NXKit.Web.DefaultLayoutManager(context);
-            }
-            Utils.GetLayoutManager = GetLayoutManager;
-
-            function GetVisualTemplateData(data) {
-                // extract
-                var _ = {};
-                if (data == null)
-                    return _;
-
-                // specified visual value
-                if (data.visual != null && data.visual instanceof NXKit.Web.Visual)
-                    _.visual = data.visual.Type;
-
-                // value itself is a visual
-                if (data instanceof NXKit.Web.Visual)
-                    _.visual = data.visual.Type;
-
-                if (data.type != null)
-                    _.type = data.type;
-
-                return _;
-            }
-            Utils.GetVisualTemplateData = GetVisualTemplateData;
-        })(Web.Utils || (Web.Utils = {}));
-        var Utils = Web.Utils;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
 /// <reference path="Scripts/typings/jquery/jquery.d.ts" />
 /// <reference path="Scripts/typings/knockout/knockout.d.ts" />
 var NXKit;
@@ -645,33 +804,6 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
-/// <reference path="Scripts/typings/jquery/jquery.d.ts" />
-/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
-/// <reference path="Visual.ts" />
-/// <reference path="LayoutManager.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        var VisualLayoutManager = (function (_super) {
-            __extends(VisualLayoutManager, _super);
-            function VisualLayoutManager(context, visual) {
-                _super.call(this, context);
-
-                this._visual = visual;
-            }
-            Object.defineProperty(VisualLayoutManager.prototype, "Visual", {
-                get: function () {
-                    return this._visual;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return VisualLayoutManager;
-        })(NXKit.Web.LayoutManager);
-        Web.VisualLayoutManager = VisualLayoutManager;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
 /// <reference path="Scripts/typings/knockout/knockout.d.ts" />
 /// <reference path="Utils.ts" />
 /// <reference path="Visual.ts" />
@@ -708,22 +840,6 @@ var NXKit;
             Object.defineProperty(VisualViewModel.prototype, "UniqueId", {
                 get: function () {
                     return VisualViewModel.GetUniqueId(this.Visual);
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(VisualViewModel.prototype, "LayoutManager", {
-                get: function () {
-                    return NXKit.Web.Utils.GetLayoutManager(this._context);
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(VisualViewModel.prototype, "Template", {
-                get: function () {
-                    return this.LayoutManager.GetVisualTemplate(this._visual);
                 },
                 enumerable: true,
                 configurable: true
@@ -899,176 +1015,6 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
-/// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
-/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
-/// <reference path="VisualViewModel.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (XForms) {
-            (function (GroupLayout) {
-                GroupLayout[GroupLayout["Fluid"] = 1] = "Fluid";
-                GroupLayout[GroupLayout["Single"] = 2] = "Single";
-                GroupLayout[GroupLayout["Double"] = 3] = "Double";
-                GroupLayout[GroupLayout["Expand"] = 4] = "Expand";
-            })(XForms.GroupLayout || (XForms.GroupLayout = {}));
-            var GroupLayout = XForms.GroupLayout;
-
-            var GroupLayoutItem = (function () {
-                function GroupLayoutItem() {
-                }
-                return GroupLayoutItem;
-            })();
-            XForms.GroupLayoutItem = GroupLayoutItem;
-
-            var GroupLayoutItemGroup = (function (_super) {
-                __extends(GroupLayoutItemGroup, _super);
-                function GroupLayoutItemGroup(getLayout) {
-                    _super.call(this);
-                    this._getLayout = getLayout;
-                }
-                Object.defineProperty(GroupLayoutItemGroup.prototype, "Layout", {
-                    get: function () {
-                        return this._getLayout();
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                return GroupLayoutItemGroup;
-            })(GroupLayoutItem);
-            XForms.GroupLayoutItemGroup = GroupLayoutItemGroup;
-
-            var GroupLayoutSingleItemGroupFromGroup = (function (_super) {
-                __extends(GroupLayoutSingleItemGroupFromGroup, _super);
-                function GroupLayoutSingleItemGroupFromGroup(visual) {
-                    _super.call(this);
-                    this._visual = visual;
-                }
-                Object.defineProperty(GroupLayoutSingleItemGroupFromGroup.prototype, "Visual", {
-                    get: function () {
-                        return this._visual;
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                return GroupLayoutSingleItemGroupFromGroup;
-            })(GroupLayoutItem);
-            XForms.GroupLayoutSingleItemGroupFromGroup = GroupLayoutSingleItemGroupFromGroup;
-
-            var GroupLayoutManager = (function (_super) {
-                __extends(GroupLayoutManager, _super);
-                function GroupLayoutManager(context, visual) {
-                    _super.call(this, context, visual);
-                }
-                Object.defineProperty(GroupLayoutManager.prototype, "Level", {
-                    get: function () {
-                        var ctx = this.Context;
-                        while ((ctx = ctx.$parentContext) != null)
-                            if (ctx.$data instanceof GroupLayoutManager)
-                                return ctx.$data.Level + 1;
-
-                        return 1;
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-
-                Object.defineProperty(GroupLayoutManager.prototype, "Layout", {
-                    get: function () {
-                        var l = this.Level;
-                        var a = this.Appearance();
-
-                        if (l == 1 && a == "full")
-                            return 1 /* Fluid */;
-                        if (l == 1)
-                            return 1 /* Fluid */;
-
-                        if (l == 2 && a == "full")
-                            return 1 /* Fluid */;
-                        if (l == 2)
-                            return 1 /* Fluid */;
-
-                        return 2 /* Single */;
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                return GroupLayoutManager;
-            })(NXKit.Web.XForms.VisualViewModel);
-            XForms.GroupLayoutManager = GroupLayoutManager;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-/// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
-/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
-/// <reference path="VisualViewModel.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (XForms) {
-            var GroupViewModel = (function (_super) {
-                __extends(GroupViewModel, _super);
-                function GroupViewModel(context, visual) {
-                    _super.call(this, context, visual);
-                }
-                return GroupViewModel;
-            })(NXKit.Web.XForms.VisualViewModel);
-            XForms.GroupViewModel = GroupViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
-/// <reference path="VisualViewModel.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (XForms) {
-            var LabelViewModel = (function (_super) {
-                __extends(LabelViewModel, _super);
-                function LabelViewModel(context, visual) {
-                    _super.call(this, context, visual);
-                }
-                Object.defineProperty(LabelViewModel.prototype, "Text", {
-                    get: function () {
-                        return this.ValueAsString;
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                return LabelViewModel;
-            })(NXKit.Web.XForms.VisualViewModel);
-            XForms.LabelViewModel = LabelViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-/// <reference path="../../Scripts/typings/knockout/knockout.d.ts" />
-/// <reference path="../../VisualLayoutManager.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (XForms) {
-            (function (Layout) {
-                var FormLayoutManager = (function (_super) {
-                    __extends(FormLayoutManager, _super);
-                    function FormLayoutManager(context, visual) {
-                        _super.call(this, context, visual);
-                    }
-                    return FormLayoutManager;
-                })(NXKit.Web.VisualLayoutManager);
-                Layout.FormLayoutManager = FormLayoutManager;
-            })(XForms.Layout || (XForms.Layout = {}));
-            var Layout = XForms.Layout;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
 /// <reference path="../../Scripts/typings/knockout/knockout.d.ts" />
 /// <reference path="../VisualViewModel.ts" />
 var NXKit;
@@ -1105,6 +1051,52 @@ var NXKit;
                 return Select1ViewModel;
             })(NXKit.Web.XForms.VisualViewModel);
             XForms.Select1ViewModel = Select1ViewModel;
+        })(Web.XForms || (Web.XForms = {}));
+        var XForms = Web.XForms;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="VisualViewModel.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (XForms) {
+            var LabelViewModel = (function (_super) {
+                __extends(LabelViewModel, _super);
+                function LabelViewModel(context, visual) {
+                    _super.call(this, context, visual);
+                }
+                Object.defineProperty(LabelViewModel.prototype, "Text", {
+                    get: function () {
+                        return this.ValueAsString;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                return LabelViewModel;
+            })(NXKit.Web.XForms.VisualViewModel);
+            XForms.LabelViewModel = LabelViewModel;
+        })(Web.XForms || (Web.XForms = {}));
+        var XForms = Web.XForms;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="VisualViewModel.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (XForms) {
+            var GroupViewModel = (function (_super) {
+                __extends(GroupViewModel, _super);
+                function GroupViewModel(context, visual) {
+                    _super.call(this, context, visual);
+                }
+                return GroupViewModel;
+            })(NXKit.Web.XForms.VisualViewModel);
+            XForms.GroupViewModel = GroupViewModel;
         })(Web.XForms || (Web.XForms = {}));
         var XForms = Web.XForms;
     })(NXKit.Web || (NXKit.Web = {}));

@@ -1,48 +1,25 @@
 ﻿ko.bindingHandlers.nxkit_template = {
 
-    get_data: function (valueAccessor, bindingContext) {
-        var data = NXKit.Web.Utils.GetVisualTemplateData(valueAccessor());
+    convert_value_accessor: function (valueAccessor, viewModel, bindingContext) {
+        return ko.computed(function (_) {
 
-        // specified data value
-        if (typeof value.data !== 'undefined')
-            return value.data;
+            var inpu = ko.unwrap(valueAccessor);
 
-        // specified visual value
-        if (typeof value.visual !== 'undefined')
-            if (value.hasOwnProperty('IsVisual'))
-                if (value.IsVisual)
-                    return value.visual;
-
-        // value itself is a visual
-        if (value.hasOwnProperty('IsVisual'))
-            if (value.IsVisual)
-                return value;
-
-        // default to existing context
-        return bindingContext.data;
-    },
-
-    convert_value_accessor: function (valueAccessor, bindingContext) {
-        return function () {
+            var data = NXKit.Web.Utils.GetTemplateViewModel(valueAccessor, viewModel, bindingContext);
+            var indx = NXKit.Web.Utils.GetTemplateData(valueAccessor, viewModel, bindingContext);
+            var name = NXKit.Web.Utils.GetTemplateName(indx, viewModel, bindingContext);
+             
             return {
-                data: ko.bindingHandlers.nxkit_template.get_data(valueAccessor, bindingContext),
-                name: NXKit.Web.Utils.GetLayoutManager(bindingContext).GetTemplate(valueAccessor()),
+                data: data,
+                name: name,
             };
-        }
-    },
-
-    get_value_accessor: function (valueAccessor, bindingContext) {
-        bindingContext.nxkit_template = bindingContext.nxkit_template || {};
-        bindingContext.nxkit_template.valueAccessor = bindingContext.nxkit_template.valueAccessor ||
-            ko.bindingHandlers.nxkit_template.convert_value_accessor(valueAccessor, bindingContext);
-
-        return bindingContext.nxkit_template.valueAccessor;
+        });
     },
 
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         return ko.bindingHandlers['template']['init'](
             element,
-            ko.bindingHandlers.nxkit_template.get_value_accessor(valueAccessor, bindingContext),
+            ko.bindingHandlers.nxkit_template.convert_value_accessor(valueAccessor, viewModel, bindingContext),
             allBindings,
             viewModel,
             bindingContext);
@@ -50,7 +27,7 @@
     update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         return ko.bindingHandlers['template']['update'](
             element,
-            ko.bindingHandlers.nxkit_template.get_value_accessor(valueAccessor, bindingContext),
+            ko.bindingHandlers.nxkit_template.convert_value_accessor(valueAccessor, viewModel, bindingContext),
             allBindings,
             viewModel,
             bindingContext);

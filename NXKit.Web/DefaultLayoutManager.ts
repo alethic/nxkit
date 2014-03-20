@@ -11,20 +11,30 @@ module NXKit.Web {
             super(context);
         }
 
-        public GetTemplate(data: any): string {
-            var node = $('script').filter(_ => {
-                return NXKit.Web.Utils.DeepEquals($(this).data(), data);
-            })[0];
+        GetTemplates_Test_Value(name: string, data1: JQuery, data2: any) {
+            var value1 = data1.data('nxkit-' + name) || null;
+            var value2 = data2[name] || null;
+            return value1 == value2;
+        }
 
-            // no template found, invent an error
-            if (node == null)
-                node = $('<script />', {
-                    'id': 'NXKit.Web__Unknown',
-                    'type': 'text/html',
-                    'text': '<span class="error">no template</span>',
-                }).appendTo('body')[0];
+        public GetTemplates(data: any): HTMLElement[] {
+            var self = this;
+            return <HTMLElement[]>$('script[type="text/html"]').filter(function (): boolean {
 
-            return node.id;
+                for (var i in data)
+                    if (!self.GetTemplates_Test_Value(i, $(this), data))
+                        return false;
+
+                for (var n = 0; n < (<HTMLElement>this).attributes.length; n++) {
+                    var attr = (<HTMLElement>this).attributes.item(n);
+                    if (attr.nodeName.indexOf('data-nxkit-') == 0)
+                        if (!self.GetTemplates_Test_Value(attr.nodeName.substring(11), $(this), data))
+                            return false;
+                }
+
+                return true;
+
+            }).toArray();
         }
 
     }

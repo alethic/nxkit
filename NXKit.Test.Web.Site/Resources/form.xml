@@ -96,7 +96,7 @@
     <f:page>
         <xf:label>Applicant Enrollment</xf:label>
         <xf:group>
-            <f:p>This coverage is awesome and lots of nice stuff can be said about it.</f:p>
+            <xf:label>Additional Enrollees</xf:label>
             <xf:input ref="xf:instance('misc')/secondary"
                       appearance="full">
                 <xf:label>Yes, I'd like to take advantage of this offer for my spouse or other partner or whatever and stuff and we will fill in the contents of the rest of this text later.</xf:label>

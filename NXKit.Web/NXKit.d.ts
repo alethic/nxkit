@@ -1,4 +1,6 @@
-﻿declare module NXKit.Web {
+﻿/// <reference path="Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="Scripts/typings/jquery/jquery.d.ts" />
+declare module NXKit.Web {
     interface IVisualPropertyValueChangedEvent extends IEvent {
         add(listener: (visual: Visual, property: Property) => void): void;
         remove(listener: (visual: Visual, property: Property) => void): void;
@@ -84,14 +86,55 @@ declare module NXKit.Web {
         private _context;
         constructor(context: KnockoutBindingContext);
         public Context : KnockoutBindingContext;
-        public GetTemplate(descriptor: any): string;
-        public GetVisualTemplate(visual: Visual): string;
+        public GetTemplates(data: any): HTMLElement[];
+        public GetTemplate(data: any): string;
+    }
+}
+declare module NXKit.Web {
+    class VisualLayoutManager extends LayoutManager {
+        private _visual;
+        constructor(context: KnockoutBindingContext, visual: Visual);
+        public Visual : Visual;
     }
 }
 declare module NXKit.Web {
     class DefaultLayoutManager extends LayoutManager {
         constructor(context: KnockoutBindingContext);
-        public GetTemplate(data: any): string;
+        public GetTemplates_Test_Value(name: string, data1: JQuery, data2: any): boolean;
+        public GetTemplates(data: any): HTMLElement[];
+    }
+}
+declare module NXKit.Web.Utils {
+    function GenerateGuid(): string;
+    function GetTemplateName(data: any, viewModel: any, context: KnockoutBindingContext): string;
+    function GetTemplateViewModel(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any;
+    function GetTemplateData(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any;
+}
+declare module NXKit.Web.XForms.Layout {
+    class FormLayoutManager extends VisualLayoutManager {
+        constructor(context: KnockoutBindingContext, visual: Visual);
+    }
+}
+declare module NXKit.Web.XForms {
+    class GroupLayoutManager extends VisualLayoutManager {
+        private _viewModel;
+        constructor(context: KnockoutBindingContext, viewModel: GroupViewModel);
+        public ViewModel : GroupViewModel;
+        public Level : number;
+        public Layout : number;
+    }
+}
+declare module NXKit.Web {
+    interface IEvent {
+        add(listener: () => void): void;
+        remove(listener: () => void): void;
+        trigger(...a: any[]): void;
+    }
+    class TypedEvent implements IEvent {
+        public _listeners: any[];
+        public add(listener: () => void): void;
+        public remove(listener?: () => void): void;
+        public trigger(...a: any[]): void;
     }
 }
 declare module NXKit.Web {
@@ -121,25 +164,6 @@ declare module NXKit.Web {
         public Update(source: any): void;
         public ToData(): any;
     }
-}
-declare module NXKit.Web {
-    interface IEvent {
-        add(listener: () => void): void;
-        remove(listener: () => void): void;
-        trigger(...a: any[]): void;
-    }
-    class TypedEvent implements IEvent {
-        public _listeners: any[];
-        public add(listener: () => void): void;
-        public remove(listener?: () => void): void;
-        public trigger(...a: any[]): void;
-    }
-}
-declare module NXKit.Web.Utils {
-    function DeepEquals(a: any, b: any): boolean;
-    function GenerateGuid(): string;
-    function GetLayoutManager(context: KnockoutBindingContext): LayoutManager;
-    function GetVisualTemplateData(data: any): any;
 }
 declare module NXKit.Web {
     interface ICallbackRequestEvent extends IEvent {
@@ -174,13 +198,6 @@ declare module NXKit.Web {
     }
 }
 declare module NXKit.Web {
-    class VisualLayoutManager extends LayoutManager {
-        private _visual;
-        constructor(context: KnockoutBindingContext, visual: Visual);
-        public Visual : Visual;
-    }
-}
-declare module NXKit.Web {
     class VisualViewModel {
         static GetUniqueId(visual: Visual): string;
         private _context;
@@ -189,8 +206,6 @@ declare module NXKit.Web {
         public Context : KnockoutBindingContext;
         public Visual : Visual;
         public UniqueId : string;
-        public LayoutManager : LayoutManager;
-        public Template : string;
     }
 }
 declare module NXKit.Web.XForms {
@@ -218,37 +233,13 @@ declare module NXKit.Web.XForms {
         public Contents : Visual[];
     }
 }
-declare module NXKit.Web.XForms {
-    enum GroupLayout {
-        Fluid = 1,
-        Single = 2,
-        Double = 3,
-        Expand = 4,
-    }
-    interface IGroupLayoutFunc {
-        (): GroupLayout;
-    }
-    class GroupLayoutItem {
-        constructor();
-    }
-    class GroupLayoutItemGroup extends GroupLayoutItem {
-        public _getLayout: IGroupLayoutFunc;
-        constructor(getLayout: IGroupLayoutFunc);
-        public Layout : GroupLayout;
-    }
-    class GroupLayoutSingleItemGroupFromGroup extends GroupLayoutItem {
-        public _visual: Visual;
-        constructor(visual: Visual);
-        public Visual : Visual;
-    }
-    class GroupLayoutManager extends VisualViewModel {
+declare module NXKit.Web.XForms.Layout {
+    class FormViewModel extends VisualViewModel {
         constructor(context: KnockoutBindingContext, visual: Visual);
-        public Level : number;
-        public Layout : GroupLayout;
     }
 }
 declare module NXKit.Web.XForms {
-    class GroupViewModel extends VisualViewModel {
+    class Select1ViewModel extends VisualViewModel {
         constructor(context: KnockoutBindingContext, visual: Visual);
     }
 }
@@ -258,18 +249,8 @@ declare module NXKit.Web.XForms {
         public Text : KnockoutComputed<string>;
     }
 }
-declare module NXKit.Web.XForms.Layout {
-    class FormLayoutManager extends VisualLayoutManager {
-        constructor(context: KnockoutBindingContext, visual: Visual);
-    }
-}
-declare module NXKit.Web.XForms.Layout {
-    class FormViewModel extends VisualViewModel {
-        constructor(context: KnockoutBindingContext, visual: Visual);
-    }
-}
 declare module NXKit.Web.XForms {
-    class Select1ViewModel extends VisualViewModel {
+    class GroupViewModel extends VisualViewModel {
         constructor(context: KnockoutBindingContext, visual: Visual);
     }
 }

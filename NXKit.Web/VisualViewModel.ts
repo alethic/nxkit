@@ -32,14 +32,6 @@ module NXKit.Web {
             return VisualViewModel.GetUniqueId(this.Visual);
         }
 
-        public get LayoutManager(): LayoutManager {
-            return Utils.GetLayoutManager(this._context);
-        }
-
-        public get Template(): string {
-            return this.LayoutManager.GetVisualTemplate(this._visual);
-        }
-
     }
 
 }
