@@ -28,6 +28,14 @@ module NXKit.Web.XForms {
                 return this._level;
             }
 
+            public get Relevant(): KnockoutObservable<boolean> {
+                return this.GetRelevant();
+            }
+
+            GetRelevant(): KnockoutObservable<boolean> {
+                return ko.computed<boolean>(() => true);
+            }
+
             public get Label() {
                 return this.GetLabel();
             }
@@ -63,6 +71,10 @@ module NXKit.Web.XForms {
                 return this._itemVisual;
             }
 
+            GetRelevant(): KnockoutObservable<boolean> {
+                return VisualViewModel.GetRelevant(this._itemVisual);
+            }
+
             GetLabel(): Visual {
                 return VisualViewModel.GetLabel(this._itemVisual);
             }
@@ -96,6 +108,10 @@ module NXKit.Web.XForms {
 
             public set Item(item: Item) {
                 this._item = item;
+            }
+
+            GetRelevant(): KnockoutObservable<boolean> {
+                return this.Item.Relevant;
             }
 
             GetLabel(): Visual {
@@ -142,6 +158,10 @@ module NXKit.Web.XForms {
                 this._item2 = item;
             }
 
+            GetRelevant(): KnockoutObservable<boolean> {
+                return ko.computed(() => this._item1.Relevant() && this._item2.Relevant());
+            }
+
             GetLabel(): Visual {
                 return null;
             }
@@ -175,6 +195,10 @@ module NXKit.Web.XForms {
 
             set Items(items: Item[]) {
                 this._items = items;
+            }
+
+            GetRelevant(): KnockoutObservable<boolean> {
+                return VisualViewModel.GetRelevant(this._groupVisual);
             }
 
             GetLabel(): Visual {

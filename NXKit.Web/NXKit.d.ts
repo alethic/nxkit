@@ -272,6 +272,7 @@ declare module NXKit.Web.XForms {
     class VisualViewModel extends VisualViewModel {
         static ControlVisualTypes: string[];
         static MetadataVisualTypes: string[];
+        static TransparentVisualTypes: string[];
         static GetValueAsString(visual: Visual): KnockoutComputed<string>;
         static GetRelevant(visual: Visual): KnockoutComputed<boolean>;
         static GetAppearance(visual: Visual): KnockoutComputed<string>;
@@ -283,6 +284,7 @@ declare module NXKit.Web.XForms {
         static IsControlVisual(visual: Visual): boolean;
         static HasControlVisual(visual: Visual): boolean;
         static GetControlVisuals(visual: Visual): Visual[];
+        static IsTransparentVisual(visual: Visual): boolean;
         static GetContents(visual: Visual): Visual[];
         constructor(context: KnockoutBindingContext, visual: Visual);
         public ValueAsString : KnockoutComputed<string>;
@@ -290,7 +292,14 @@ declare module NXKit.Web.XForms {
         public Appearance : KnockoutComputed<string>;
         public Label : Visual;
         public Help : Visual;
+        public Hint : Visual;
         public Contents : Visual[];
+    }
+}
+declare module NXKit.Web.XForms {
+    class HintViewModel extends VisualViewModel {
+        constructor(context: KnockoutBindingContext, visual: Visual);
+        public Text : KnockoutComputed<string>;
     }
 }
 declare module NXKit.Web.XForms.Layout {
@@ -335,6 +344,8 @@ declare module NXKit.Web.XForms {
             constructor(visual: Visual, level: number);
             public Visual : Visual;
             public Level : number;
+            public Relevant : KnockoutObservable<boolean>;
+            public GetRelevant(): KnockoutObservable<boolean>;
             public Label : Visual;
             public GetLabel(): Visual;
             public Layout : any;
@@ -347,6 +358,7 @@ declare module NXKit.Web.XForms {
             private _itemVisual;
             constructor(visual: Visual, itemVisual: Visual, level: number);
             public ItemVisual : Visual;
+            public GetRelevant(): KnockoutObservable<boolean>;
             public GetLabel(): Visual;
             public GetLayout(): any;
         }
@@ -357,6 +369,7 @@ declare module NXKit.Web.XForms {
             private _item;
             constructor(visual: Visual, level: number);
             public Item : Item;
+            public GetRelevant(): KnockoutObservable<boolean>;
             public GetLabel(): Visual;
             public GetLayout(): any;
         }
@@ -369,6 +382,7 @@ declare module NXKit.Web.XForms {
             constructor(visual: Visual, level: number);
             public Item1 : Item;
             public Item2 : Item;
+            public GetRelevant(): KnockoutObservable<boolean>;
             public GetLabel(): Visual;
             public GetLayout(): any;
         }
@@ -377,6 +391,7 @@ declare module NXKit.Web.XForms {
             private _items;
             constructor(visual: Visual, groupVisual: Visual, level: number);
             public Items : Item[];
+            public GetRelevant(): KnockoutObservable<boolean>;
             public GetLabel(): Visual;
             public GetLayout(): any;
         }

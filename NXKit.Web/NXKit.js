@@ -962,7 +962,7 @@ var NXKit;
                 };
 
                 VisualViewModel.IsMetadataVisual = function (visual) {
-                    return this.MetadataVisualTypes.some(function (_) {
+                    return VisualViewModel.MetadataVisualTypes.some(function (_) {
                         return visual.Type == _;
                     });
                 };
@@ -998,24 +998,41 @@ var NXKit;
                 };
 
                 VisualViewModel.HasControlVisual = function (visual) {
-                    var _this = this;
                     return visual.Visuals().some(function (_) {
-                        return _this.IsControlVisual(_);
+                        return VisualViewModel.IsControlVisual(_);
                     });
                 };
 
                 VisualViewModel.GetControlVisuals = function (visual) {
-                    var _this = this;
                     return visual.Visuals().filter(function (_) {
-                        return _this.IsControlVisual(_);
+                        return VisualViewModel.IsControlVisual(_);
+                    });
+                };
+
+                VisualViewModel.IsTransparentVisual = function (visual) {
+                    return VisualViewModel.TransparentVisualTypes.some(function (_) {
+                        return visual.Type == _;
                     });
                 };
 
                 VisualViewModel.GetContents = function (visual) {
-                    var _this = this;
-                    return visual.Visuals().filter(function (_) {
-                        return !_this.IsMetadataVisual(_);
+                    var l = visual.Visuals().filter(function (_) {
+                        return !VisualViewModel.IsMetadataVisual(_);
                     });
+
+                    var r = new Array();
+                    for (var i = 0; i < l.length; i++) {
+                        var v = l[i];
+                        if (VisualViewModel.IsTransparentVisual(v)) {
+                            var s = VisualViewModel.GetContents(v);
+                            for (var j = 0; j < s.length; j++)
+                                r.push(s[j]);
+                        } else {
+                            r.push(v);
+                        }
+                    }
+
+                    return r;
                 };
 
                 Object.defineProperty(VisualViewModel.prototype, "ValueAsString", {
@@ -1058,6 +1075,14 @@ var NXKit;
                     configurable: true
                 });
 
+                Object.defineProperty(VisualViewModel.prototype, "Hint", {
+                    get: function () {
+                        return VisualViewModel.GetHint(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
                 Object.defineProperty(VisualViewModel.prototype, "Contents", {
                     get: function () {
                         return VisualViewModel.GetContents(this.Visual);
@@ -1078,9 +1103,40 @@ var NXKit;
                     'NXKit.XForms.XFormsHintVisual',
                     'NXKit.XForms.XFormsAlertVisual'
                 ];
+
+                VisualViewModel.TransparentVisualTypes = [
+                    'NXKit.XForms.XFormsRepeatVisual',
+                    'NXKit.XForms.XFormsRepeatItemVisual'
+                ];
                 return VisualViewModel;
             })(NXKit.Web.VisualViewModel);
             XForms.VisualViewModel = VisualViewModel;
+        })(Web.XForms || (Web.XForms = {}));
+        var XForms = Web.XForms;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
+/// <reference path="VisualViewModel.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (XForms) {
+            var HintViewModel = (function (_super) {
+                __extends(HintViewModel, _super);
+                function HintViewModel(context, visual) {
+                    _super.call(this, context, visual);
+                }
+                Object.defineProperty(HintViewModel.prototype, "Text", {
+                    get: function () {
+                        return this.ValueAsString;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                return HintViewModel;
+            })(NXKit.Web.XForms.VisualViewModel);
+            XForms.HintViewModel = HintViewModel;
         })(Web.XForms || (Web.XForms = {}));
         var XForms = Web.XForms;
     })(NXKit.Web || (NXKit.Web = {}));
@@ -1251,6 +1307,20 @@ var NXKit;
                         configurable: true
                     });
 
+                    Object.defineProperty(Item.prototype, "Relevant", {
+                        get: function () {
+                            return this.GetRelevant();
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+
+                    Item.prototype.GetRelevant = function () {
+                        return ko.computed(function () {
+                            return true;
+                        });
+                    };
+
                     Object.defineProperty(Item.prototype, "Label", {
                         get: function () {
                             return this.GetLabel();
@@ -1295,6 +1365,10 @@ var NXKit;
                         configurable: true
                     });
 
+                    VisualItem.prototype.GetRelevant = function () {
+                        return NXKit.Web.XForms.VisualViewModel.GetRelevant(this._itemVisual);
+                    };
+
                     VisualItem.prototype.GetLabel = function () {
                         return NXKit.Web.XForms.VisualViewModel.GetLabel(this._itemVisual);
                     };
@@ -1330,6 +1404,10 @@ var NXKit;
                         configurable: true
                     });
 
+
+                    SingleItem.prototype.GetRelevant = function () {
+                        return this.Item.Relevant;
+                    };
 
                     SingleItem.prototype.GetLabel = function () {
                         return this._item.Label;
@@ -1379,6 +1457,13 @@ var NXKit;
                     });
 
 
+                    DoubleItem.prototype.GetRelevant = function () {
+                        var _this = this;
+                        return ko.computed(function () {
+                            return _this._item1.Relevant() && _this._item2.Relevant();
+                        });
+                    };
+
                     DoubleItem.prototype.GetLabel = function () {
                         return null;
                     };
@@ -1413,6 +1498,10 @@ var NXKit;
                         configurable: true
                     });
 
+
+                    GroupItem.prototype.GetRelevant = function () {
+                        return NXKit.Web.XForms.VisualViewModel.GetRelevant(this._groupVisual);
+                    };
 
                     GroupItem.prototype.GetLabel = function () {
                         return NXKit.Web.XForms.VisualViewModel.GetLabel(this._groupVisual);

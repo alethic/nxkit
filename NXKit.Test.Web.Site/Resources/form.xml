@@ -178,37 +178,40 @@
             <xf:label>Health Questions</xf:label>
             <xf:hint>Please answer the following questions by checking “Yes” or “No.”</xf:hint>
             <xf:repeat nodeset="question">
-                <xf:select1 ref="answer"
-                            incremental="true">
-                    <xf:label ref="../text" />
-                    <xf:item>
-                        <xf:label>No</xf:label>
-                        <xf:value>false</xf:value>
-                    </xf:item>
-                    <xf:item>
-                        <xf:label>Yes</xf:label>
-                        <xf:value>true</xf:value>
-                    </xf:item>
-                </xf:select1>
-                <xf:group ref="healthinfo">
-                    <xf:input ref="condition">
-                        <xf:label>Condition</xf:label>
-                    </xf:input>
-                    <xf:input ref="dates">
-                        <xf:label>Dates</xf:label>
-                    </xf:input>
-                    <xf:input ref="currentstatus">
-                        <xf:label>Current Status</xf:label>
-                    </xf:input>
-                    <xf:input ref="physicianname">
-                        <xf:label>Physician Name</xf:label>
-                    </xf:input>
-                    <xf:input ref="physicianaddress">
-                        <xf:label>Physician Address</xf:label>
-                    </xf:input>
-                    <xf:input ref="physiciantelephone">
-                        <xf:label>Physician Phone Number</xf:label>
-                    </xf:input>
+                <xf:group>
+                    <xf:select1 ref="answer"
+                                incremental="true">
+                        <xf:label ref="../text" />
+                        <xf:item>
+                            <xf:label>No</xf:label>
+                            <xf:value>false</xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Yes</xf:label>
+                            <xf:value>true</xf:value>
+                        </xf:item>
+                    </xf:select1>
+                    <xf:group ref="healthinfo">
+                        <xf:label>Health Questions</xf:label>
+                        <xf:input ref="condition">
+                            <xf:label>Condition</xf:label>
+                        </xf:input>
+                        <xf:input ref="dates">
+                            <xf:label>Dates</xf:label>
+                        </xf:input>
+                        <xf:input ref="currentstatus">
+                            <xf:label>Current Status</xf:label>
+                        </xf:input>
+                        <xf:input ref="physicianname">
+                            <xf:label>Physician Name</xf:label>
+                        </xf:input>
+                        <xf:input ref="physicianaddress">
+                            <xf:label>Physician Address</xf:label>
+                        </xf:input>
+                        <xf:input ref="physiciantelephone">
+                            <xf:label>Physician Phone Number</xf:label>
+                        </xf:input>
+                    </xf:group>
                 </xf:group>
             </xf:repeat>
         </xf:group>
@@ -290,37 +293,39 @@
             <xf:label>Health Questions</xf:label>
             <xf:hint>Please answer the following questions by checking “Yes” or “No.”</xf:hint>
             <xf:repeat nodeset="question">
-                <xf:select1 ref="answer"
-                            incremental="true">
-                    <xf:label ref="../text" />
-                    <xf:item>
-                        <xf:label>No</xf:label>
-                        <xf:value>false</xf:value>
-                    </xf:item>
-                    <xf:item>
-                        <xf:label>Yes</xf:label>
-                        <xf:value>true</xf:value>
-                    </xf:item>
-                </xf:select1>
-                <xf:group ref="healthinfo">
-                    <xf:input ref="condition">
-                        <xf:label>Condition</xf:label>
-                    </xf:input>
-                    <xf:input ref="dates">
-                        <xf:label>Dates</xf:label>
-                    </xf:input>
-                    <xf:input ref="currentstatus">
-                        <xf:label>Current Status</xf:label>
-                    </xf:input>
-                    <xf:input ref="physicianname">
-                        <xf:label>Physician Name</xf:label>
-                    </xf:input>
-                    <xf:input ref="physicianaddress">
-                        <xf:label>Physician Address</xf:label>
-                    </xf:input>
-                    <xf:input ref="physiciantelephone">
-                        <xf:label>Physician Phone Number</xf:label>
-                    </xf:input>
+                <xf:group>
+                    <xf:select1 ref="answer"
+                                incremental="true">
+                        <xf:label ref="../text" />
+                        <xf:item>
+                            <xf:label>No</xf:label>
+                            <xf:value>false</xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Yes</xf:label>
+                            <xf:value>true</xf:value>
+                        </xf:item>
+                    </xf:select1>
+                    <xf:group ref="healthinfo">
+                        <xf:input ref="condition">
+                            <xf:label>Condition</xf:label>
+                        </xf:input>
+                        <xf:input ref="dates">
+                            <xf:label>Dates</xf:label>
+                        </xf:input>
+                        <xf:input ref="currentstatus">
+                            <xf:label>Current Status</xf:label>
+                        </xf:input>
+                        <xf:input ref="physicianname">
+                            <xf:label>Physician Name</xf:label>
+                        </xf:input>
+                        <xf:input ref="physicianaddress">
+                            <xf:label>Physician Address</xf:label>
+                        </xf:input>
+                        <xf:input ref="physiciantelephone">
+                            <xf:label>Physician Phone Number</xf:label>
+                        </xf:input>
+                    </xf:group>
                 </xf:group>
             </xf:repeat>
         </xf:group>

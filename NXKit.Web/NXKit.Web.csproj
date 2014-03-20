@@ -111,6 +111,7 @@
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="View.ts" />
     <TypeScriptCompile Include="Visual.ts" />
+    <TypeScriptCompile Include="XForms\HintViewModel.ts" />
     <TypeScriptCompile Include="XForms\Layout\FormViewModel.ts" />
     <TypeScriptCompile Include="XForms\Layout\PageViewModel.ts" />
     <TypeScriptCompile Include="XForms\Layout\ParagraphViewModel.ts" />

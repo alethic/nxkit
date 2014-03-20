@@ -21,6 +21,11 @@ module NXKit.Web.XForms {
             'NXKit.XForms.XFormsAlertVisual',
         ];
 
+        public static TransparentVisualTypes = [
+            'NXKit.XForms.XFormsRepeatVisual',
+            'NXKit.XForms.XFormsRepeatItemVisual',
+        ];
+
         static GetValueAsString(visual: Visual): KnockoutComputed<string> {
             return ko.computed(() => {
                 if (visual != null &&
@@ -52,8 +57,9 @@ module NXKit.Web.XForms {
         }
 
         static IsMetadataVisual(visual: Visual): boolean {
-            return this.MetadataVisualTypes.some((_) =>
-                visual.Type == _);
+            return VisualViewModel.MetadataVisualTypes
+                .some((_) =>
+                    visual.Type == _);
         }
 
         static GetLabel(visual: Visual): Visual {
@@ -77,23 +83,47 @@ module NXKit.Web.XForms {
         }
 
         static IsControlVisual(visual: Visual): boolean {
-            return this.ControlVisualTypes.some((_) =>
-                visual.Type == _);
+            return this.ControlVisualTypes
+                .some(_ =>
+                    visual.Type == _);
         }
 
         static HasControlVisual(visual: Visual): boolean {
-            return visual.Visuals().some(_ =>
-                this.IsControlVisual(_));
+            return visual.Visuals()
+                .some(_ =>
+                    VisualViewModel.IsControlVisual(_));
         }
 
         static GetControlVisuals(visual: Visual): Visual[] {
-            return visual.Visuals().filter((_) =>
-                this.IsControlVisual(_));
+            return visual.Visuals()
+                .filter(_ =>
+                    VisualViewModel.IsControlVisual(_));
+        }
+
+        static IsTransparentVisual(visual: Visual): boolean {
+            return VisualViewModel.TransparentVisualTypes
+                .some(_ =>
+                    visual.Type == _);
         }
 
         static GetContents(visual: Visual): Visual[] {
-            return visual.Visuals().filter((_) =>
-                !this.IsMetadataVisual(_));
+            var l = visual.Visuals()
+                .filter(_ =>
+                    !VisualViewModel.IsMetadataVisual(_));
+
+            var r = new Array<Visual>();
+            for (var i = 0; i < l.length; i++) {
+                var v = l[i];
+                if (VisualViewModel.IsTransparentVisual(v)) {
+                    var s = VisualViewModel.GetContents(v);
+                    for (var j = 0; j < s.length; j++)
+                        r.push(s[j]);
+                } else {
+                    r.push(v);
+                }
+            }
+
+            return r;
         }
 
         constructor(context: KnockoutBindingContext, visual: Visual) {
@@ -119,6 +149,10 @@ module NXKit.Web.XForms {
 
         get Help(): Visual {
             return VisualViewModel.GetHelp(this.Visual);
+        }
+
+        get Hint(): Visual {
+            return VisualViewModel.GetHint(this.Visual);
         }
 
         get Contents(): Visual[] {
