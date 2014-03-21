@@ -94,6 +94,7 @@
     <TypeScriptCompile Include="Utils.ts" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="NXKit.Web.nuspec" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

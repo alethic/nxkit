@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>$id$</id>
+        <version>$version$</version>
+        <title>$id$</title>
+        <authors>Jerome Haltom</authors>
+        <owners>Jerome Haltom</owners>
+        <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
+        <projectUrl>https://github.com/nxkit</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>
+            NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
+
+            Schema support is available in other NXKit packages.
+        </description>
+        <releaseNotes />
+        <copyright>$copyright$</copyright>
+        <tags>xml xforms</tags>
+        <dependencies>
+            <package
+                id="jquery.TypeScript.DefinitelyTyped" />
+            <package
+                id="knockout.TypeScript.DefinitelyTyped" />
+            <package
+                id="Newtonsoft.Json" />
+            <dependency
+                id="NXKit"
+                version="$version$"/>
+            <dependency
+                id="NXKit.Util"
+                version="$version$"/>
+        </dependencies>
+    </metadata>
+</package>
