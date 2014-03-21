@@ -716,6 +716,7 @@ var NXKit;
                 function ModalBindingHandler() {
                 }
                 ModalBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    // register click handler
                     ko.bindingHandlers.click.init(element, function () {
                         return function () {
                             var id = valueAccessor();
@@ -723,6 +724,11 @@ var NXKit;
                                 $('#' + id).modal('show');
                             }
                         };
+                    }, allBindings, viewModel, bindingContext);
+
+                    // disable event bubbling
+                    ko.bindingHandlers['click-bubble'].init(element, function () {
+                        return false;
                     }, allBindings, viewModel, bindingContext);
                 };
                 return ModalBindingHandler;
