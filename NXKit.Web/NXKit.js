@@ -831,7 +831,7 @@ var NXKit;
                                 if (id) {
                                     $('#' + id).modal('show');
                                 }
-                            }, 1000);
+                            }, 5);
                         };
                     }, allBindings, viewModel, bindingContext);
                 };

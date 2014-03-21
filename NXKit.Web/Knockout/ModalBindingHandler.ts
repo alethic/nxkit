@@ -18,7 +18,7 @@
                         if (id) {
                             $('#' + id).modal('show');
                         }
-                    }, 1000);
+                    }, 5);
                 },
                 // add clickBubble: false binding
                 // TODO broken
