@@ -3,21 +3,6 @@
         static ControlVisualTypes: string[];
         static MetadataVisualTypes: string[];
         static TransparentVisualTypes: string[];
-        static GetValue(visual: Visual): KnockoutComputed<any>;
-        static GetValueAsString(visual: Visual): KnockoutComputed<string>;
-        static GetRelevant(visual: Visual): KnockoutComputed<boolean>;
-        static GetType(visual: Visual): KnockoutComputed<string>;
-        static GetAppearance(visual: Visual): KnockoutComputed<string>;
-        static IsMetadataVisual(visual: Visual): boolean;
-        static GetLabel(visual: Visual): Visual;
-        static GetHelp(visual: Visual): Visual;
-        static GetHint(visual: Visual): Visual;
-        static GetAlert(visual: Visual): Visual;
-        static IsControlVisual(visual: Visual): boolean;
-        static HasControlVisual(visual: Visual): boolean;
-        static GetControlVisuals(visual: Visual): Visual[];
-        static IsTransparentVisual(visual: Visual): boolean;
-        static GetContents(visual: Visual): Visual[];
         constructor(context: KnockoutBindingContext, visual: Visual);
         public Value : KnockoutComputed<any>;
         public ValueAsString : KnockoutComputed<string>;
@@ -169,4 +154,21 @@ declare module NXKit.Web.XForms {
     class TextAreaViewModel extends XFormsVisualViewModel {
         constructor(context: KnockoutBindingContext, visual: Visual);
     }
+}
+declare module NXKit.Web.XForms.Utils {
+    function GetValue(visual: Visual): KnockoutComputed<any>;
+    function GetValueAsString(visual: Visual): KnockoutComputed<string>;
+    function GetRelevant(visual: Visual): KnockoutComputed<boolean>;
+    function GetType(visual: Visual): KnockoutComputed<string>;
+    function GetAppearance(visual: Visual): KnockoutComputed<string>;
+    function IsMetadataVisual(visual: Visual): boolean;
+    function GetLabel(visual: Visual): Visual;
+    function GetHelp(visual: Visual): Visual;
+    function GetHint(visual: Visual): Visual;
+    function GetAlert(visual: Visual): Visual;
+    function IsControlVisual(visual: Visual): boolean;
+    function HasControlVisual(visual: Visual): boolean;
+    function GetControlVisuals(visual: Visual): Visual[];
+    function IsTransparentVisual(visual: Visual): boolean;
+    function GetContents(visual: Visual): Visual[];
 }

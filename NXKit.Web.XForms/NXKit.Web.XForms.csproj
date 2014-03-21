@@ -96,6 +96,7 @@
     <TypeScriptCompile Include="TextAreaViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Utils.ts" />
     <TypeScriptCompile Include="XFormsVisualViewModel.ts" />
   </ItemGroup>
   <ItemGroup>

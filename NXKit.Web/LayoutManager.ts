@@ -46,7 +46,7 @@ module NXKit.Web {
         /**
          * Parses the given template binding information for a data structure to pass to the template lookup procedures.
          */
-        public ParseTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, data: any): any {
+        public ParseTemplateBinding(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext, data: any): any {
             return this.Parent != null ? this.Parent.ParseTemplateBinding(valueAccessor, viewModel, bindingContext, data || {}) : data || {};
         }
 

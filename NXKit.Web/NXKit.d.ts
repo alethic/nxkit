@@ -130,6 +130,10 @@ declare module NXKit.Web.Utils {
     */
     function GenerateGuid(): string;
     /**
+    * Gets the unique document ID of the given visual.
+    */
+    function GetUniqueId(visual: Visual): string;
+    /**
     * Returns the entire context item chain from the specified context upwards.
     */
     function GetContextItems(context: KnockoutBindingContext): any[];
@@ -247,13 +251,24 @@ declare module NXKit.Web {
     }
 }
 declare module NXKit.Web {
+    /**
+    * Base view model class for wrapping a Visual.
+    */
     class VisualViewModel {
-        static GetUniqueId(visual: Visual): string;
         private _context;
         private _visual;
         constructor(context: KnockoutBindingContext, visual: Visual);
+        /**
+        * Gets the binding context available at the time the view model was created.
+        */
         public Context : KnockoutBindingContext;
+        /**
+        * Gets the visual that is wrapped by this view model.
+        */
         public Visual : Visual;
+        /**
+        * Gets the unique document ID of the wrapped visual.
+        */
         public UniqueId : string;
     }
 }

@@ -85,6 +85,7 @@
     <Compile Include="IO\XNameJsonConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <TypeScriptCompile Include="DefaultLayoutManager.ts" />
+    <TypeScriptCompile Include="Knockout\CheckboxBindingHandler.ts" />
     <TypeScriptCompile Include="LayoutManager.ts" />
     <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
     <TypeScriptCompile Include="Utils.ts" />
@@ -114,26 +115,33 @@
     <TypeScriptCompile Include="VisualViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Scripts\nxkit-knockout-semantic.ts" />
-    <TypeScriptCompile Include="Scripts\nxkit-knockout-transitions.ts" />
-    <TypeScriptCompile Include="Scripts\nxkit-knockout.ts" />
+    <TypeScriptCompile Include="Knockout\DropdownBindingHandler.ts" />
+    <TypeScriptCompile Include="Knockout\VisibleBindingHandler.ts" />
+    <TypeScriptCompile Include="Knockout\TemplateBindingHandler.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptTarget>ES5 --module AMD</TypeScriptTarget>
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
-    <TypeScriptSourceMap>true</TypeScriptSourceMap>
-    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
-    <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
-    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
-      <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+    <TypeScriptSourceMap>
+    </TypeScriptSourceMap>
+    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptCompileOnSaveEnabled>False</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
     <TypeScriptOutFile>NXKit.js</TypeScriptOutFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptIncludeComments>false</TypeScriptIncludeComments>
-    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+    <TypeScriptTarget>ES5 --module AMD</TypeScriptTarget>
+    <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
+    <TypeScriptSourceMap>
+    </TypeScriptSourceMap>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+    <TypeScriptOutFile>NXKit.js</TypeScriptOutFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
   <PropertyGroup>

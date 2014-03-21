@@ -568,7 +568,7 @@
                     <i class="dropdown icon"></i>
                     <div class="ui menu" data-bind="foreach: GetSelect1Items($data.Visual)">
                         <div class="item" data-bind="attr: { 'data-value': $data.Properties['UniqueId'].ValueAsString }">
-                            <!-- ko nxkit_template: NXKit.Web.XForms.XFormsVisualViewModel.GetLabel($data) -->
+                            <!-- ko nxkit_template: NXKit.Web.XForms.Utils.GetLabel($data) -->
                             <!-- /ko -->
                         </div>
                     </div>

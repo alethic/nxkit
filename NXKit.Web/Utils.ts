@@ -55,16 +55,23 @@
     export function GenerateGuid(): string {
         // http://www.ietf.org/rfc/rfc4122.txt
 
-        var s = [];
-        var hexDigits = "0123456789abcdef";
+        var s: Array<string> = [];
+        var d = "0123456789abcdef";
         for (var i = 0; i < 36; i++) {
-            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+            s[i] = d.substr(Math.floor(Math.random() * 0x10), 1);
         }
         s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
-        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[19] = d.substr((<any>s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
         s[8] = s[13] = s[18] = s[23] = "-";
 
         return s.join("");
+    }
+
+    /**
+      * Gets the unique document ID of the given visual.
+      */
+    export function GetUniqueId(visual: Visual): string {
+        return visual != null && visual.Properties['UniqueId'] != null ? visual.Properties['UniqueId'].ValueAsString() : null;
     }
 
     /**
@@ -79,46 +86,6 @@
      */
     export function GetLayoutManager(context: KnockoutBindingContext): LayoutManager {
         return <LayoutManager>ko.utils.arrayFirst(GetContextItems(context), _ => _ instanceof LayoutManager);
-    }
-
-    /**
-     * Gets the recommended view model for the given binding information.
-     */
-    export function GetTemplateViewModel(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any {
-        var value = valueAccessor() || viewModel;
-
-        // value itself is a visual
-        if (value != null &&
-            ko.unwrap(value) instanceof Visual)
-            return ko.unwrap(value);
-
-        // specified data value
-        if (value != null &&
-            value.data != null)
-            return ko.unwrap(value.data);
-
-        // specified visual value
-        if (value != null &&
-            value.visual != null &&
-            ko.unwrap(value.visual) instanceof Visual)
-            return ko.unwrap(value.visual);
-
-        // default to existing context
-        return null;
-    }
-
-    /**
-     * Extracts template index data from the given binding information.
-     */
-    export function GetTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any {
-        return GetLayoutManager(bindingContext).ParseTemplateBinding(valueAccessor, viewModel, bindingContext, {});
-    }
-
-    /**
-     * Determines the named template from the given extracted data and context.
-     */
-    export function GetTemplateName(bindingContext: KnockoutBindingContext, data: any): string {
-        return GetLayoutManager(bindingContext).GetTemplateName(data);
     }
 
 }

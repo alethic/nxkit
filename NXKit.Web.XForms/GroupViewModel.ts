@@ -77,15 +77,15 @@ module NXKit.Web.XForms {
             }
 
             GetRelevant(): KnockoutObservable<boolean> {
-                return XFormsVisualViewModel.GetRelevant(this._itemVisual);
+                return Utils.GetRelevant(this._itemVisual);
             }
 
             GetLabel(): Visual {
-                return XFormsVisualViewModel.GetLabel(this._itemVisual);
+                return Utils.GetLabel(this._itemVisual);
             }
 
             GetHelp(): Visual {
-                return XFormsVisualViewModel.GetHelp(this._itemVisual);
+                return Utils.GetHelp(this._itemVisual);
             }
 
             GetLayout(): any {
@@ -115,7 +115,7 @@ module NXKit.Web.XForms {
                     visual: this.Visual,
                     data: this,
                     layout: 'input',
-                    type: XFormsVisualViewModel.GetType(this.InputVisual),
+                    type: Utils.GetType(this.InputVisual),
                     level: this.Level,
                 };
             }
@@ -247,15 +247,15 @@ module NXKit.Web.XForms {
             }
 
             GetRelevant(): KnockoutObservable<boolean> {
-                return XFormsVisualViewModel.GetRelevant(this._groupVisual);
+                return Utils.GetRelevant(this._groupVisual);
             }
 
             GetLabel(): Visual {
-                return XFormsVisualViewModel.GetLabel(this._groupVisual);
+                return Utils.GetLabel(this._groupVisual);
             }
 
             GetHelp(): Visual {
-                return XFormsVisualViewModel.GetHelp(this._groupVisual);
+                return Utils.GetHelp(this._groupVisual);
             }
 
             GetLayout(): any {
@@ -304,7 +304,7 @@ module NXKit.Web.XForms {
 
         private GetItems(visual: Visual, level: number): GroupViewModel_.Item[] {
             var list = new Array<GroupViewModel_.Item>();
-            var cnts = XFormsVisualViewModel.GetContents(visual);
+            var cnts = Utils.GetContents(visual);
             for (var i = 0; i < cnts.length; i++) {
                 var v = cnts[i];
 

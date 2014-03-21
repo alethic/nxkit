@@ -2,11 +2,10 @@
 
 module NXKit.Web {
 
+    /**
+      * Base view model class for wrapping a Visual.
+      */
     export class VisualViewModel {
-
-        public static GetUniqueId(visual: Visual): string {
-            return visual != null ? visual.Properties['UniqueId'].ValueAsString() : null;
-        }
 
         private _context: KnockoutBindingContext;
         private _visual: Visual;
@@ -24,16 +23,25 @@ module NXKit.Web {
             self._visual = visual;
         }
 
+        /**
+          * Gets the binding context available at the time the view model was created.
+          */
         public get Context(): KnockoutBindingContext {
             return this._context;
         }
 
+        /**
+          * Gets the visual that is wrapped by this view model.
+          */
         public get Visual(): Visual {
             return this._visual;
         }
 
+        /**
+          * Gets the unique document ID of the wrapped visual.
+          */
         public get UniqueId(): string {
-            return VisualViewModel.GetUniqueId(this.Visual);
+            return Utils.GetUniqueId(this.Visual);
         }
 
     }

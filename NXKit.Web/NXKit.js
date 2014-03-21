@@ -368,6 +368,7 @@ var NXKit;
             */
             Visual.prototype.PropertiesToData = function () {
                 var l = {};
+
                 for (var p in this._properties) {
                     l[p] = this._properties[p].ToData();
                 }
@@ -449,17 +450,25 @@ var NXKit;
             function GenerateGuid() {
                 // http://www.ietf.org/rfc/rfc4122.txt
                 var s = [];
-                var hexDigits = "0123456789abcdef";
+                var d = "0123456789abcdef";
                 for (var i = 0; i < 36; i++) {
-                    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+                    s[i] = d.substr(Math.floor(Math.random() * 0x10), 1);
                 }
                 s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
-                s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+                s[19] = d.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
                 s[8] = s[13] = s[18] = s[23] = "-";
 
                 return s.join("");
             }
             Utils.GenerateGuid = GenerateGuid;
+
+            /**
+            * Gets the unique document ID of the given visual.
+            */
+            function GetUniqueId(visual) {
+                return visual != null && visual.Properties['UniqueId'] != null ? visual.Properties['UniqueId'].ValueAsString() : null;
+            }
+            Utils.GetUniqueId = GetUniqueId;
 
             /**
             * Returns the entire context item chain from the specified context upwards.
@@ -478,45 +487,6 @@ var NXKit;
                 });
             }
             Utils.GetLayoutManager = GetLayoutManager;
-
-            /**
-            * Gets the recommended view model for the given binding information.
-            */
-            function GetTemplateViewModel(valueAccessor, viewModel, bindingContext) {
-                var value = valueAccessor() || viewModel;
-
-                // value itself is a visual
-                if (value != null && ko.unwrap(value) instanceof NXKit.Web.Visual)
-                    return ko.unwrap(value);
-
-                // specified data value
-                if (value != null && value.data != null)
-                    return ko.unwrap(value.data);
-
-                // specified visual value
-                if (value != null && value.visual != null && ko.unwrap(value.visual) instanceof NXKit.Web.Visual)
-                    return ko.unwrap(value.visual);
-
-                // default to existing context
-                return null;
-            }
-            Utils.GetTemplateViewModel = GetTemplateViewModel;
-
-            /**
-            * Extracts template index data from the given binding information.
-            */
-            function GetTemplateBinding(valueAccessor, viewModel, bindingContext) {
-                return GetLayoutManager(bindingContext).ParseTemplateBinding(valueAccessor, viewModel, bindingContext, {});
-            }
-            Utils.GetTemplateBinding = GetTemplateBinding;
-
-            /**
-            * Determines the named template from the given extracted data and context.
-            */
-            function GetTemplateName(bindingContext, data) {
-                return GetLayoutManager(bindingContext).GetTemplateName(data);
-            }
-            Utils.GetTemplateName = GetTemplateName;
         })(Web.Utils || (Web.Utils = {}));
         var Utils = Web.Utils;
     })(NXKit.Web || (NXKit.Web = {}));
@@ -732,6 +702,68 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var CheckboxBindingHandler = (function () {
+                function CheckboxBindingHandler() {
+                }
+                CheckboxBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    setTimeout(function () {
+                        $(element).checkbox();
+                        $(element).checkbox('setting', {
+                            onEnable: function () {
+                                var v1 = true;
+                                var v2 = ko.unwrap(valueAccessor());
+                                if (typeof v2 === 'boolean') {
+                                    if (v1 != v2)
+                                        valueAccessor()(v1);
+                                } else if (typeof v2 === 'string') {
+                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
+                                    if (v1 != v2_)
+                                        valueAccessor()(v1 ? 'true' : 'false');
+                                }
+                            },
+                            onDisable: function () {
+                                var v1 = false;
+                                var v2 = ko.unwrap(valueAccessor());
+                                if (typeof v2 === 'boolean') {
+                                    if (v1 != v2)
+                                        valueAccessor()(v1);
+                                } else if (typeof v2 === 'string') {
+                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
+                                    if (v1 != v2_)
+                                        valueAccessor()(v1 ? 'true' : 'false');
+                                }
+                            }
+                        });
+                    }, 2000);
+                };
+
+                CheckboxBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    setTimeout(function () {
+                        var v1 = ko.unwrap(valueAccessor());
+                        var v2 = $(element).find('input').val() == 'on' ? true : false;
+                        if (typeof v1 === 'boolean') {
+                            if (v1 != v2)
+                                $(element).checkbox(v1 ? 'enable' : 'disable');
+                        } else if (typeof v1 === 'string') {
+                            var v1_ = v1.toLowerCase() === 'true' ? true : false;
+                            if (v1_ != v2)
+                                $(element).checkbox(v1_ ? 'enable' : 'disable');
+                        }
+                    }, 1000);
+                };
+                return CheckboxBindingHandler;
+            })();
+
+            ko.bindingHandlers['nxkit_checkbox'] = new CheckboxBindingHandler();
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
 /// <reference path="Visual.ts" />
 /// <reference path="TypedEvent.ts" />
 var NXKit;
@@ -833,6 +865,9 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
+        /**
+        * Base view model class for wrapping a Visual.
+        */
         var VisualViewModel = (function () {
             function VisualViewModel(context, visual) {
                 var self = this;
@@ -846,11 +881,10 @@ var NXKit;
                 self._context = context;
                 self._visual = visual;
             }
-            VisualViewModel.GetUniqueId = function (visual) {
-                return visual != null ? visual.Properties['UniqueId'].ValueAsString() : null;
-            };
-
             Object.defineProperty(VisualViewModel.prototype, "Context", {
+                /**
+                * Gets the binding context available at the time the view model was created.
+                */
                 get: function () {
                     return this._context;
                 },
@@ -859,6 +893,9 @@ var NXKit;
             });
 
             Object.defineProperty(VisualViewModel.prototype, "Visual", {
+                /**
+                * Gets the visual that is wrapped by this view model.
+                */
                 get: function () {
                     return this._visual;
                 },
@@ -867,8 +904,11 @@ var NXKit;
             });
 
             Object.defineProperty(VisualViewModel.prototype, "UniqueId", {
+                /**
+                * Gets the unique document ID of the wrapped visual.
+                */
                 get: function () {
-                    return VisualViewModel.GetUniqueId(this.Visual);
+                    return NXKit.Web.Utils.GetUniqueId(this.Visual);
                 },
                 enumerable: true,
                 configurable: true
@@ -879,112 +919,149 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
-ko.bindingHandlers['nxkit_checkbox'] = {
-    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-        setTimeout(function () {
-            $(element).checkbox();
-            $(element).checkbox('setting', {
-                onEnable: function () {
-                    var v1 = true;
-                    var v2 = ko.unwrap(valueAccessor());
-                    if (typeof v2 === 'boolean') {
-                        if (v1 != v2)
-                            valueAccessor()(v1);
-                    } else if (typeof v2 === 'string') {
-                        var v2_ = v2.toLowerCase() === 'true' ? true : false;
-                        if (v1 != v2_)
-                            valueAccessor()(v1 ? 'true' : 'false');
-                    }
-                },
-                onDisable: function () {
-                    var v1 = false;
-                    var v2 = ko.unwrap(valueAccessor());
-                    if (typeof v2 === 'boolean') {
-                        if (v1 != v2)
-                            valueAccessor()(v1);
-                    } else if (typeof v2 === 'string') {
-                        var v2_ = v2.toLowerCase() === 'true' ? true : false;
-                        if (v1 != v2_)
-                            valueAccessor()(v1 ? 'true' : 'false');
-                    }
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var DropdownBindingHandler = (function () {
+                function DropdownBindingHandler() {
                 }
-            });
-        }, 2000);
-    },
-    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-        setTimeout(function () {
-            var v1 = ko.unwrap(valueAccessor());
-            var v2 = $(element).find('input').val() == 'on' ? true : false;
-            if (typeof v1 === 'boolean') {
-                if (v1 != v2)
-                    $(element).checkbox(v1 ? 'enable' : 'disable');
-            } else if (typeof v1 === 'string') {
-                var v1_ = v1.toLowerCase() === 'true' ? true : false;
-                if (v1_ != v2)
-                    $(element).checkbox(v1_ ? 'enable' : 'disable');
-            }
-        }, 1000);
-    }
-};
+                DropdownBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    setTimeout(function () {
+                        $(element).dropdown();
+                        $(element).dropdown('setting', {
+                            onChange: function (value) {
+                                var v1 = $(element).dropdown('get value');
+                                var v2 = ko.unwrap(valueAccessor());
+                                if (typeof v1 === 'string') {
+                                    if (v1 != v2)
+                                        valueAccessor()(v1);
+                                }
+                            }
+                        });
+                    }, 2000);
+                };
 
-ko.bindingHandlers['nxkit_dropdown'] = {
-    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-        setTimeout(function () {
-            $(element).dropdown();
-            $(element).dropdown('setting', {
-                onChange: function (value) {
-                    var v1 = $(element).dropdown('get value');
-                    var v2 = ko.unwrap(valueAccessor());
-                    if (typeof v1 === 'string') {
-                        if (v1 != v2)
-                            valueAccessor()(v1);
-                    }
+                DropdownBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    setTimeout(function () {
+                        var v1 = ko.unwrap(valueAccessor());
+                        var v2 = $(element).dropdown('get value');
+                        if (typeof v2 === 'string')
+                            if (v1 != v2)
+                                $(element).dropdown('set value', v1);
+                    }, 1000);
+                };
+                return DropdownBindingHandler;
+            })();
+
+            ko.bindingHandlers['nxkit_dropdown'] = new DropdownBindingHandler();
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var VisibleBindingHandler = (function () {
+                function VisibleBindingHandler() {
                 }
-            });
-        }, 2000);
-    },
-    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-        setTimeout(function () {
-            var v1 = ko.unwrap(valueAccessor());
-            var v2 = $(element).dropdown('get value');
-            if (typeof v2 === 'string')
-                if (v1 != v2)
-                    $(element).dropdown('set value', v1);
-        }, 1000);
-    }
-};
-ko.bindingHandlers['nxkit_visible'] = {
-    init: function (element, valueAccessor) {
-        var value = valueAccessor();
-        $(element).toggle(ko.utils.unwrapObservable(value));
-        ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
-    },
-    update: function (element, valueAccessor) {
-        var value = valueAccessor();
-        ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
-    }
-};
+                VisibleBindingHandler.prototype.init = function (element, valueAccessor) {
+                    var value = valueAccessor();
+                    $(element).toggle(ko.utils.unwrapObservable(value));
+                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
+                };
+
+                VisibleBindingHandler.prototype.update = function (element, valueAccessor) {
+                    var value = valueAccessor();
+                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
+                };
+                return VisibleBindingHandler;
+            })();
+
+            ko.bindingHandlers['nxkit_visible'] = new VisibleBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_visible'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
 /// <reference path="../Utils.ts" />
-ko.bindingHandlers['nxkit_template'] = {
-    convert_value_accessor: function (valueAccessor, viewModel, bindingContext) {
-        return ko.computed(function (_) {
-            var data = NXKit.Web.Utils.GetTemplateViewModel(valueAccessor, viewModel, bindingContext);
-            var opts = NXKit.Web.Utils.GetTemplateBinding(valueAccessor, viewModel, bindingContext);
-            var name = NXKit.Web.Utils.GetTemplateName(bindingContext, opts);
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var TemplateBindingHandler = (function () {
+                function TemplateBindingHandler() {
+                }
+                TemplateBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    return ko.bindingHandlers.template.init(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
+                };
 
-            return {
-                data: data,
-                name: name
-            };
-        });
-    },
-    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-        return ko.bindingHandlers['template']['init'](element, ko.bindingHandlers['nxkit_template']['convert_value_accessor'](valueAccessor, viewModel, bindingContext), allBindings, viewModel, bindingContext);
-    },
-    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-        return ko.bindingHandlers['template']['update'](element, ko.bindingHandlers['nxkit_template']['convert_value_accessor'](valueAccessor, viewModel, bindingContext), allBindings, viewModel, bindingContext);
-    }
-};
+                TemplateBindingHandler.prototype.update = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    return ko.bindingHandlers.template.update(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
+                };
 
-ko.virtualElements.allowedBindings['nxkit_template'] = true;
-//# sourceMappingURL=NXKit.js.map
+                /**
+                * Converts the given value accessor into a value accessor compatible with the default template implementation.
+                */
+                TemplateBindingHandler.ConvertValueAccessor = function (valueAccessor, viewModel, bindingContext) {
+                    var _this = this;
+                    return ko.computed(function () {
+                        var data = _this.GetTemplateViewModel(valueAccessor, viewModel, bindingContext);
+                        var opts = _this.GetTemplateBinding(valueAccessor, viewModel, bindingContext);
+                        var name = _this.GetTemplateName(bindingContext, opts);
+
+                        return {
+                            data: data,
+                            name: name
+                        };
+                    });
+                };
+
+                /**
+                * Gets the recommended view model for the given binding information.
+                */
+                TemplateBindingHandler.GetTemplateViewModel = function (valueAccessor, viewModel, bindingContext) {
+                    var value = valueAccessor() || viewModel;
+
+                    // value itself is a visual
+                    if (value != null && ko.unwrap(value) instanceof NXKit.Web.Visual)
+                        return ko.unwrap(value);
+
+                    // specified data value
+                    if (value != null && value.data != null)
+                        return ko.unwrap(value.data);
+
+                    // specified visual value
+                    if (value != null && value.visual != null && ko.unwrap(value.visual) instanceof NXKit.Web.Visual)
+                        return ko.unwrap(value.visual);
+
+                    // default to existing context
+                    return null;
+                };
+
+                /**
+                * Extracts template index data from the given binding information.
+                */
+                TemplateBindingHandler.GetTemplateBinding = function (valueAccessor, viewModel, bindingContext) {
+                    return NXKit.Web.Utils.GetLayoutManager(bindingContext).ParseTemplateBinding(valueAccessor, viewModel, bindingContext, {});
+                };
+
+                /**
+                * Determines the named template from the given extracted data and context.
+                */
+                TemplateBindingHandler.GetTemplateName = function (bindingContext, data) {
+                    return NXKit.Web.Utils.GetLayoutManager(bindingContext).GetTemplateName(data);
+                };
+                return TemplateBindingHandler;
+            })();
+
+            ko.bindingHandlers['nxkit_template'] = new TemplateBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_template'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));

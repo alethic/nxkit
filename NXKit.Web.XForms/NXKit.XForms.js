@@ -13,140 +13,9 @@ var NXKit;
                 function XFormsVisualViewModel(context, visual) {
                     _super.call(this, context, visual);
                 }
-                XFormsVisualViewModel.GetValue = function (visual) {
-                    return ko.computed({
-                        read: function () {
-                            if (visual != null && visual.Properties['Value'] != null)
-                                return visual.Properties['Value'].Value();
-                            else
-                                return null;
-                        },
-                        write: function (_) {
-                            if (visual != null && visual.Properties['Value'] != null)
-                                visual.Properties['Value'].Value(_);
-                        }
-                    });
-                };
-
-                XFormsVisualViewModel.GetValueAsString = function (visual) {
-                    return ko.computed({
-                        read: function () {
-                            if (visual != null && visual.Properties['Value'] != null)
-                                return visual.Properties['Value'].ValueAsString();
-                            else
-                                return null;
-                        },
-                        write: function (_) {
-                            if (visual != null && visual.Properties['Value'] != null)
-                                visual.Properties['Value'].Value(_);
-                        }
-                    });
-                };
-
-                XFormsVisualViewModel.GetRelevant = function (visual) {
-                    return ko.computed(function () {
-                        if (visual != null && visual.Properties['Relevant'] != null)
-                            return visual.Properties['Relevant'].ValueAsBoolean();
-                        else
-                            return null;
-                    });
-                };
-
-                XFormsVisualViewModel.GetType = function (visual) {
-                    return ko.computed(function () {
-                        if (visual != null && visual.Properties['Type'] != null)
-                            return visual.Properties['Type'].ValueAsString();
-                        else
-                            return null;
-                    });
-                };
-
-                XFormsVisualViewModel.GetAppearance = function (visual) {
-                    return ko.computed(function () {
-                        if (visual != null && visual.Properties['Appearance'] != null)
-                            return visual.Properties['Appearance'].ValueAsString();
-                        else
-                            return null;
-                    });
-                };
-
-                XFormsVisualViewModel.IsMetadataVisual = function (visual) {
-                    return XFormsVisualViewModel.MetadataVisualTypes.some(function (_) {
-                        return visual.Type == _;
-                    });
-                };
-
-                XFormsVisualViewModel.GetLabel = function (visual) {
-                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                        return _.Type == 'NXKit.XForms.XFormsLabelVisual';
-                    });
-                };
-
-                XFormsVisualViewModel.GetHelp = function (visual) {
-                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                        return _.Type == 'NXKit.XForms.XFormsHelpVisual';
-                    });
-                };
-
-                XFormsVisualViewModel.GetHint = function (visual) {
-                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                        return _.Type == 'NXKit.XForms.XFormsHintVisual';
-                    });
-                };
-
-                XFormsVisualViewModel.GetAlert = function (visual) {
-                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-                        return _.Type == 'NXKit.XForms.XFormsAlertVisual';
-                    });
-                };
-
-                XFormsVisualViewModel.IsControlVisual = function (visual) {
-                    return this.ControlVisualTypes.some(function (_) {
-                        return visual.Type == _;
-                    });
-                };
-
-                XFormsVisualViewModel.HasControlVisual = function (visual) {
-                    return visual.Visuals().some(function (_) {
-                        return XFormsVisualViewModel.IsControlVisual(_);
-                    });
-                };
-
-                XFormsVisualViewModel.GetControlVisuals = function (visual) {
-                    return visual.Visuals().filter(function (_) {
-                        return XFormsVisualViewModel.IsControlVisual(_);
-                    });
-                };
-
-                XFormsVisualViewModel.IsTransparentVisual = function (visual) {
-                    return XFormsVisualViewModel.TransparentVisualTypes.some(function (_) {
-                        return visual.Type == _;
-                    });
-                };
-
-                XFormsVisualViewModel.GetContents = function (visual) {
-                    var l = visual.Visuals().filter(function (_) {
-                        return !XFormsVisualViewModel.IsMetadataVisual(_);
-                    });
-
-                    var r = new Array();
-                    for (var i = 0; i < l.length; i++) {
-                        var v = l[i];
-                        if (XFormsVisualViewModel.IsTransparentVisual(v)) {
-                            var s = XFormsVisualViewModel.GetContents(v);
-                            for (var j = 0; j < s.length; j++)
-                                r.push(s[j]);
-                        } else {
-                            r.push(v);
-                        }
-                    }
-
-                    return r;
-                };
-
                 Object.defineProperty(XFormsVisualViewModel.prototype, "Value", {
                     get: function () {
-                        return XFormsVisualViewModel.GetValue(this.Visual);
+                        return NXKit.Web.XForms.Utils.GetValue(this.Visual);
                     },
                     enumerable: true,
                     configurable: true
@@ -154,7 +23,7 @@ var NXKit;
 
                 Object.defineProperty(XFormsVisualViewModel.prototype, "ValueAsString", {
                     get: function () {
-                        return XFormsVisualViewModel.GetValueAsString(this.Visual);
+                        return NXKit.Web.XForms.Utils.GetValueAsString(this.Visual);
                     },
                     enumerable: true,
                     configurable: true
@@ -162,7 +31,7 @@ var NXKit;
 
                 Object.defineProperty(XFormsVisualViewModel.prototype, "Relevant", {
                     get: function () {
-                        return XFormsVisualViewModel.GetRelevant(this.Visual);
+                        return NXKit.Web.XForms.Utils.GetRelevant(this.Visual);
                     },
                     enumerable: true,
                     configurable: true
@@ -170,7 +39,7 @@ var NXKit;
 
                 Object.defineProperty(XFormsVisualViewModel.prototype, "Type", {
                     get: function () {
-                        return XFormsVisualViewModel.GetType(this.Visual);
+                        return NXKit.Web.XForms.Utils.GetType(this.Visual);
                     },
                     enumerable: true,
                     configurable: true
@@ -178,7 +47,7 @@ var NXKit;
 
                 Object.defineProperty(XFormsVisualViewModel.prototype, "Appearance", {
                     get: function () {
-                        return XFormsVisualViewModel.GetAppearance(this.Visual);
+                        return NXKit.Web.XForms.Utils.GetAppearance(this.Visual);
                     },
                     enumerable: true,
                     configurable: true
@@ -186,7 +55,7 @@ var NXKit;
 
                 Object.defineProperty(XFormsVisualViewModel.prototype, "Label", {
                     get: function () {
-                        return XFormsVisualViewModel.GetLabel(this.Visual);
+                        return NXKit.Web.XForms.Utils.GetLabel(this.Visual);
                     },
                     enumerable: true,
                     configurable: true
@@ -194,7 +63,7 @@ var NXKit;
 
                 Object.defineProperty(XFormsVisualViewModel.prototype, "Help", {
                     get: function () {
-                        return XFormsVisualViewModel.GetHelp(this.Visual);
+                        return NXKit.Web.XForms.Utils.GetHelp(this.Visual);
                     },
                     enumerable: true,
                     configurable: true
@@ -202,7 +71,7 @@ var NXKit;
 
                 Object.defineProperty(XFormsVisualViewModel.prototype, "Hint", {
                     get: function () {
-                        return XFormsVisualViewModel.GetHint(this.Visual);
+                        return NXKit.Web.XForms.Utils.GetHint(this.Visual);
                     },
                     enumerable: true,
                     configurable: true
@@ -210,7 +79,7 @@ var NXKit;
 
                 Object.defineProperty(XFormsVisualViewModel.prototype, "Contents", {
                     get: function () {
-                        return XFormsVisualViewModel.GetContents(this.Visual);
+                        return NXKit.Web.XForms.Utils.GetContents(this.Visual);
                     },
                     enumerable: true,
                     configurable: true
@@ -378,15 +247,15 @@ var NXKit;
                     });
 
                     VisualItem.prototype.GetRelevant = function () {
-                        return NXKit.Web.XForms.XFormsVisualViewModel.GetRelevant(this._itemVisual);
+                        return NXKit.Web.XForms.Utils.GetRelevant(this._itemVisual);
                     };
 
                     VisualItem.prototype.GetLabel = function () {
-                        return NXKit.Web.XForms.XFormsVisualViewModel.GetLabel(this._itemVisual);
+                        return NXKit.Web.XForms.Utils.GetLabel(this._itemVisual);
                     };
 
                     VisualItem.prototype.GetHelp = function () {
-                        return NXKit.Web.XForms.XFormsVisualViewModel.GetHelp(this._itemVisual);
+                        return NXKit.Web.XForms.Utils.GetHelp(this._itemVisual);
                     };
 
                     VisualItem.prototype.GetLayout = function () {
@@ -419,7 +288,7 @@ var NXKit;
                             visual: this.Visual,
                             data: this,
                             layout: 'input',
-                            type: NXKit.Web.XForms.XFormsVisualViewModel.GetType(this.InputVisual),
+                            type: NXKit.Web.XForms.Utils.GetType(this.InputVisual),
                             level: this.Level
                         };
                     };
@@ -562,15 +431,15 @@ var NXKit;
 
 
                     GroupItem.prototype.GetRelevant = function () {
-                        return NXKit.Web.XForms.XFormsVisualViewModel.GetRelevant(this._groupVisual);
+                        return NXKit.Web.XForms.Utils.GetRelevant(this._groupVisual);
                     };
 
                     GroupItem.prototype.GetLabel = function () {
-                        return NXKit.Web.XForms.XFormsVisualViewModel.GetLabel(this._groupVisual);
+                        return NXKit.Web.XForms.Utils.GetLabel(this._groupVisual);
                     };
 
                     GroupItem.prototype.GetHelp = function () {
-                        return NXKit.Web.XForms.XFormsVisualViewModel.GetHelp(this._groupVisual);
+                        return NXKit.Web.XForms.Utils.GetHelp(this._groupVisual);
                     };
 
                     GroupItem.prototype.GetLayout = function () {
@@ -620,7 +489,7 @@ var NXKit;
 
                 GroupViewModel.prototype.GetItems = function (visual, level) {
                     var list = new Array();
-                    var cnts = NXKit.Web.XForms.XFormsVisualViewModel.GetContents(visual);
+                    var cnts = NXKit.Web.XForms.Utils.GetContents(visual);
                     for (var i = 0; i < cnts.length; i++) {
                         var v = cnts[i];
 
@@ -830,6 +699,163 @@ var NXKit;
                 return TextAreaViewModel;
             })(NXKit.Web.XForms.XFormsVisualViewModel);
             XForms.TextAreaViewModel = TextAreaViewModel;
+        })(Web.XForms || (Web.XForms = {}));
+        var XForms = Web.XForms;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (XForms) {
+            (function (Utils) {
+                function GetValue(visual) {
+                    return ko.computed({
+                        read: function () {
+                            if (visual != null && visual.Properties['Value'] != null)
+                                return visual.Properties['Value'].Value();
+                            else
+                                return null;
+                        },
+                        write: function (_) {
+                            if (visual != null && visual.Properties['Value'] != null)
+                                visual.Properties['Value'].Value(_);
+                        }
+                    });
+                }
+                Utils.GetValue = GetValue;
+
+                function GetValueAsString(visual) {
+                    return ko.computed({
+                        read: function () {
+                            if (visual != null && visual.Properties['Value'] != null)
+                                return visual.Properties['Value'].ValueAsString();
+                            else
+                                return null;
+                        },
+                        write: function (_) {
+                            if (visual != null && visual.Properties['Value'] != null)
+                                visual.Properties['Value'].Value(_);
+                        }
+                    });
+                }
+                Utils.GetValueAsString = GetValueAsString;
+
+                function GetRelevant(visual) {
+                    return ko.computed(function () {
+                        if (visual != null && visual.Properties['Relevant'] != null)
+                            return visual.Properties['Relevant'].ValueAsBoolean();
+                        else
+                            return null;
+                    });
+                }
+                Utils.GetRelevant = GetRelevant;
+
+                function GetType(visual) {
+                    return ko.computed(function () {
+                        if (visual != null && visual.Properties['Type'] != null)
+                            return visual.Properties['Type'].ValueAsString();
+                        else
+                            return null;
+                    });
+                }
+                Utils.GetType = GetType;
+
+                function GetAppearance(visual) {
+                    return ko.computed(function () {
+                        if (visual != null && visual.Properties['Appearance'] != null)
+                            return visual.Properties['Appearance'].ValueAsString();
+                        else
+                            return null;
+                    });
+                }
+                Utils.GetAppearance = GetAppearance;
+
+                function IsMetadataVisual(visual) {
+                    return NXKit.Web.XForms.XFormsVisualViewModel.MetadataVisualTypes.some(function (_) {
+                        return visual.Type == _;
+                    });
+                }
+                Utils.IsMetadataVisual = IsMetadataVisual;
+
+                function GetLabel(visual) {
+                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
+                        return _.Type == 'NXKit.XForms.XFormsLabelVisual';
+                    });
+                }
+                Utils.GetLabel = GetLabel;
+
+                function GetHelp(visual) {
+                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
+                        return _.Type == 'NXKit.XForms.XFormsHelpVisual';
+                    });
+                }
+                Utils.GetHelp = GetHelp;
+
+                function GetHint(visual) {
+                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
+                        return _.Type == 'NXKit.XForms.XFormsHintVisual';
+                    });
+                }
+                Utils.GetHint = GetHint;
+
+                function GetAlert(visual) {
+                    return ko.utils.arrayFirst(visual.Visuals(), function (_) {
+                        return _.Type == 'NXKit.XForms.XFormsAlertVisual';
+                    });
+                }
+                Utils.GetAlert = GetAlert;
+
+                function IsControlVisual(visual) {
+                    return this.ControlVisualTypes.some(function (_) {
+                        return visual.Type == _;
+                    });
+                }
+                Utils.IsControlVisual = IsControlVisual;
+
+                function HasControlVisual(visual) {
+                    return visual.Visuals().some(function (_) {
+                        return IsControlVisual(_);
+                    });
+                }
+                Utils.HasControlVisual = HasControlVisual;
+
+                function GetControlVisuals(visual) {
+                    return visual.Visuals().filter(function (_) {
+                        return IsControlVisual(_);
+                    });
+                }
+                Utils.GetControlVisuals = GetControlVisuals;
+
+                function IsTransparentVisual(visual) {
+                    return NXKit.Web.XForms.XFormsVisualViewModel.TransparentVisualTypes.some(function (_) {
+                        return visual.Type == _;
+                    });
+                }
+                Utils.IsTransparentVisual = IsTransparentVisual;
+
+                function GetContents(visual) {
+                    var l = visual.Visuals().filter(function (_) {
+                        return !IsMetadataVisual(_);
+                    });
+
+                    var r = new Array();
+                    for (var i = 0; i < l.length; i++) {
+                        var v = l[i];
+                        if (IsTransparentVisual(v)) {
+                            var s = GetContents(v);
+                            for (var j = 0; j < s.length; j++)
+                                r.push(s[j]);
+                        } else {
+                            r.push(v);
+                        }
+                    }
+
+                    return r;
+                }
+                Utils.GetContents = GetContents;
+            })(XForms.Utils || (XForms.Utils = {}));
+            var Utils = XForms.Utils;
         })(Web.XForms || (Web.XForms = {}));
         var XForms = Web.XForms;
     })(NXKit.Web || (NXKit.Web = {}));

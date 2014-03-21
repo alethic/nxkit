@@ -167,9 +167,10 @@ module NXKit.Web {
          * Transforms the given Property array into a list of data to push.
          */
         PropertiesToData(): any {
-            var l = {};
+            var l: any = {};
+
             for (var p in this._properties) {
-                l[p] = this._properties[p].ToData();
+                l[<string>p] = this._properties[<string>p].ToData();
             }
             return l;
         }

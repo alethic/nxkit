@@ -1125,9 +1125,7 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\nxkit\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Content\semantic\less\collections\breadcrumb.less" />
     <Content Include="Content\semantic\less\collections\form.less" />
