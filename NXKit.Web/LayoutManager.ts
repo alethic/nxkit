@@ -119,24 +119,26 @@ module NXKit.Web {
         /**
          * Gets the appropriate template for the given data.
          */
-        public GetTemplate(data: any): HTMLElement {
-            return this.TemplateFilter(this.GetTemplates(), data)[0] || this.GetUnknownTemplate(data);
+        public GetTemplate(data: any): KnockoutObservable<HTMLElement> {
+            return ko.computed<HTMLElement>(() => this.TemplateFilter(this.GetTemplates(), data)[0] || this.GetUnknownTemplate(data));
         }
 
         /**
          * Gets the template that applies for the given data.
          */
-        public GetTemplateName(data: any): string {
-            var node = this.GetTemplate(data);
-            if (node == null)
-                throw new Error('GetTemplate: no template located');
+        public GetTemplateName(data: any): KnockoutObservable<string> {
+            return ko.computed<string>(() => {
+                var node = this.GetTemplate(data)();
+                if (node == null)
+                    throw new Error('GetTemplate: no template located');
 
-            // ensure the node has a valid and unique id
-            if (node.id == '')
-                node.id = 'NXKit.Web__' + Utils.GenerateGuid().replace(/-/g, '');
+                // ensure the node has a valid and unique id
+                if (node.id == '')
+                    node.id = 'NXKit.Web__' + Utils.GenerateGuid().replace(/-/g, '');
 
-            // caller expects the id
-            return node.id;
+                // caller expects the id
+                return node.id;
+            });
         }
 
     }

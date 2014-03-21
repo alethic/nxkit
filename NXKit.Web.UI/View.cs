@@ -6,12 +6,11 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Web.UI;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
 using NXKit.Web.IO;
 
 namespace NXKit.Web.UI
@@ -25,6 +24,16 @@ namespace NXKit.Web.UI
         ICallbackEventHandler,
         IScriptControl
     {
+
+        static Assembly[] ko_assemblies = new[] {
+            typeof(NXKit.Web.Ref).Assembly,
+        };
+
+        static List<Tuple<string, Func<Stream>>> ko_templates = ko_assemblies
+            .SelectMany(i => i.GetManifestResourceNames()
+                .Where(j => j.EndsWith(".ko.html"))
+                .Select(j => new Tuple<string, Func<Stream>>(j, () => i.GetManifestResourceStream(j))))
+                .ToList();
 
         /// <summary>
         /// Private resolver implementation to dispatch to events.
@@ -242,6 +251,17 @@ namespace NXKit.Web.UI
                 wrt.Close();
                 return str.ToString();
             }
+        }
+
+        protected override void OnLoad(EventArgs args)
+        {
+            base.OnLoad(args);
+
+            // write all available knockout templates
+            foreach (var ko_template in ko_templates)
+                if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), ko_template.Item1))
+                    using (var rdr = new StreamReader(ko_template.Item2()))
+                        Page.ClientScript.RegisterClientScriptBlock(typeof(View), ko_template.Item1, rdr.ReadToEnd(), false);
         }
 
         /// <summary>

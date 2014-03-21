@@ -76,7 +76,7 @@ module NXKit.Web.Knockout {
         /**
          * Determines the named template from the given extracted data and context.
          */
-        static GetTemplateName(bindingContext: KnockoutBindingContext, data: any): string {
+        static GetTemplateName(bindingContext: KnockoutBindingContext, data: any): KnockoutObservable<string> {
             return NXKit.Web.Utils.GetLayoutManager(bindingContext).GetTemplateName(data);
         }
 

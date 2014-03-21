@@ -136,10 +136,6 @@
       <Project>{9499152c-156e-4005-a01f-4d6f1c480c63}</Project>
       <Name>NXKit.Web.XForms.Layout</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.Web.XForms\NXKit.Web.XForms.csproj">
-      <Project>{f106499b-42cc-41cf-9824-39755e25993f}</Project>
-      <Name>NXKit.Web.XForms</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NXKit.Web\NXKit.Web.csproj">
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
       <Name>NXKit.Web</Name>

@@ -620,23 +620,29 @@ var NXKit;
             * Gets the appropriate template for the given data.
             */
             LayoutManager.prototype.GetTemplate = function (data) {
-                return this.TemplateFilter(this.GetTemplates(), data)[0] || this.GetUnknownTemplate(data);
+                var _this = this;
+                return ko.computed(function () {
+                    return _this.TemplateFilter(_this.GetTemplates(), data)[0] || _this.GetUnknownTemplate(data);
+                });
             };
 
             /**
             * Gets the template that applies for the given data.
             */
             LayoutManager.prototype.GetTemplateName = function (data) {
-                var node = this.GetTemplate(data);
-                if (node == null)
-                    throw new Error('GetTemplate: no template located');
+                var _this = this;
+                return ko.computed(function () {
+                    var node = _this.GetTemplate(data)();
+                    if (node == null)
+                        throw new Error('GetTemplate: no template located');
 
-                // ensure the node has a valid and unique id
-                if (node.id == '')
-                    node.id = 'NXKit.Web__' + NXKit.Web.Utils.GenerateGuid().replace(/-/g, '');
+                    // ensure the node has a valid and unique id
+                    if (node.id == '')
+                        node.id = 'NXKit.Web__' + NXKit.Web.Utils.GenerateGuid().replace(/-/g, '');
 
-                // caller expects the id
-                return node.id;
+                    // caller expects the id
+                    return node.id;
+                });
             };
             return LayoutManager;
         })();
