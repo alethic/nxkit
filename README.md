@@ -14,3 +14,15 @@ NXKit.XForms.Layout
 ----------
 
 NXKit.XForms.Layout contains a basic layout module supporting pages and sections.
+
+
+NXKit.Web
+----------
+
+NXKit.Web contains the basics of the new web UI. It uses Knockout.
+
+
+NXKit.Web.UI
+----------
+
+ASP.Net WebForms starting point for NXKit. Contains a View control that you can add to the page, which imports all the neccessary client side objects and script. There will be companion librarys in the future for MVC and such.
