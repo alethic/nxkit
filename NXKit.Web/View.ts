@@ -3,16 +3,19 @@
 
 module NXKit.Web {
 
+    /**
+     * Main NXKit client-side view class. Injects the view interface into a set of HTML elements.
+     */
     export class View {
 
-        _body: HTMLElement;
-        _data: any;
-        _root: Visual;
-        _bind: boolean;
+        private _body: HTMLElement;
+        private _data: any;
+        private _root: Visual;
+        private _bind: boolean;
 
         private _onVisualValueChanged: (visual: Visual, property: Property) => void;
 
-        private _queue: any[];
+        private _queue: Array<(cb: ICallbackComplete) => void>;
         private _queueRunning: boolean;
 
         /**
@@ -94,7 +97,7 @@ module NXKit.Web {
         Push() {
             var self = this;
 
-            this.Queue(function (cb: ICallbackComplete) {
+            this.Queue((cb: ICallbackComplete) => {
                 self.CallbackRequest.trigger(self._root.ToData(), cb);
             });
         }
@@ -123,7 +126,7 @@ module NXKit.Web {
                         });
                     } else {
                         self._queueRunning = false;
-                    }ue
+                    }
                 };
 
                 // initiate queue run

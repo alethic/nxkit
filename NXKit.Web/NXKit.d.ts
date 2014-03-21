@@ -1,86 +1,4 @@
 ﻿declare module NXKit.Web {
-    interface ICallbackRequestEvent extends IEvent {
-        add(listener: () => void): void;
-        remove(listener: () => void): void;
-        trigger(...a: any[]): void;
-        add(listener: (data: any, wh: ICallbackComplete) => void): void;
-        remove(listener: (data: any, wh: ICallbackComplete) => void): void;
-        trigger(data: any, wh: ICallbackComplete): void;
-    }
-}
-declare module NXKit.Web {
-    interface ICallbackComplete {
-        (result: any): void;
-    }
-}
-declare module NXKit.Web {
-    interface IEvent {
-        add(listener: () => void): void;
-        remove(listener: () => void): void;
-        trigger(...a: any[]): void;
-    }
-}
-declare module NXKit.Web {
-    interface IPropertyMap {
-        [name: string]: Property;
-    }
-}
-declare module NXKit.Web {
-    interface IVisualPropertyValueChangedEvent extends IEvent {
-        add(listener: () => void): void;
-        remove(listener: () => void): void;
-        trigger(...a: any[]): void;
-        add(listener: (visual: Visual, property: Property) => void): void;
-        remove(listener: (visual: Visual, property: Property) => void): void;
-        trigger(visual: Visual, property: Property): void;
-    }
-}
-declare module NXKit.Web {
-    interface IPropertyValueChangedEvent extends IEvent {
-        add(listener: () => void): void;
-        remove(listener: () => void): void;
-        trigger(...a: any[]): void;
-        add(listener: (property: Property) => void): void;
-        remove(listener: (property: Property) => void): void;
-        trigger(property: Property): void;
-    }
-}
-declare module NXKit.Web.Utils {
-    /**
-    * Tests two objects for equality.
-    */
-    function DeepEquals(a: any, b: any): boolean;
-    /**
-    * Generates a unique identifier.
-    */
-    function GenerateGuid(): string;
-    /**
-    * Gets the unique document ID of the given visual.
-    */
-    function GetUniqueId(visual: Visual): string;
-    /**
-    * Returns the entire context item chain from the specified context upwards.
-    */
-    function GetContextItems(context: KnockoutBindingContext): any[];
-    /**
-    * Gets the layout manager in scope of the given binding context.
-    */
-    function GetLayoutManager(context: KnockoutBindingContext): LayoutManager;
-}
-declare module NXKit.Web.Knockout {
-}
-declare module NXKit.Web {
-    class LayoutOptions {
-        /**
-        * Gets the full set of currently applied layout option args for the given context.
-        */
-        static GetArgs(bindingContext: KnockoutBindingContext): any;
-        private _args;
-        constructor(args: any);
-        public Args : any;
-    }
-}
-declare module NXKit.Web {
     class TypedEvent implements IEvent {
         public _listeners: any[];
         public add(listener: () => void): void;
@@ -181,6 +99,28 @@ declare module NXKit.Web {
         public OnValueChanged(visual: Visual, property: Property): void;
     }
 }
+declare module NXKit.Web.Utils {
+    /**
+    * Tests two objects for equality.
+    */
+    function DeepEquals(a: any, b: any): boolean;
+    /**
+    * Generates a unique identifier.
+    */
+    function GenerateGuid(): string;
+    /**
+    * Gets the unique document ID of the given visual.
+    */
+    function GetUniqueId(visual: Visual): string;
+    /**
+    * Returns the entire context item chain from the specified context upwards.
+    */
+    function GetContextItems(context: KnockoutBindingContext): any[];
+    /**
+    * Gets the layout manager in scope of the given binding context.
+    */
+    function GetLayoutManager(context: KnockoutBindingContext): LayoutManager;
+}
 declare module NXKit.Web {
     class LayoutManager {
         private _context;
@@ -245,9 +185,75 @@ declare module NXKit.Web {
         public GetLocalTemplates(): HTMLElement[];
     }
 }
+declare module NXKit.Web {
+    interface ICallbackComplete {
+        (result: any): void;
+    }
+}
+declare module NXKit.Web {
+    interface ICallbackRequestEvent extends IEvent {
+        add(listener: () => void): void;
+        remove(listener: () => void): void;
+        trigger(...a: any[]): void;
+        add(listener: (data: any, wh: ICallbackComplete) => void): void;
+        remove(listener: (data: any, wh: ICallbackComplete) => void): void;
+        trigger(data: any, wh: ICallbackComplete): void;
+    }
+}
+declare module NXKit.Web {
+    interface IEvent {
+        add(listener: () => void): void;
+        remove(listener: () => void): void;
+        trigger(...a: any[]): void;
+    }
+}
+declare module NXKit.Web {
+    interface IPropertyMap {
+        [name: string]: Property;
+    }
+}
+declare module NXKit.Web {
+    interface IPropertyValueChangedEvent extends IEvent {
+        add(listener: () => void): void;
+        remove(listener: () => void): void;
+        trigger(...a: any[]): void;
+        add(listener: (property: Property) => void): void;
+        remove(listener: (property: Property) => void): void;
+        trigger(property: Property): void;
+    }
+}
+declare module NXKit.Web {
+    interface IVisualPropertyValueChangedEvent extends IEvent {
+        add(listener: () => void): void;
+        remove(listener: () => void): void;
+        trigger(...a: any[]): void;
+        add(listener: (visual: Visual, property: Property) => void): void;
+        remove(listener: (visual: Visual, property: Property) => void): void;
+        trigger(visual: Visual, property: Property): void;
+    }
+}
 declare module NXKit.Web.Knockout {
 }
 declare module NXKit.Web.Knockout {
+}
+declare module NXKit.Web.Knockout {
+}
+declare module NXKit.Web.Knockout {
+}
+declare module NXKit.Web.Knockout {
+}
+declare module NXKit.Web.Knockout {
+}
+declare module NXKit.Web {
+    class LayoutOptions {
+        /**
+        * Gets the full set of currently applied layout option args for the given context.
+        */
+        static GetArgs(bindingContext: KnockoutBindingContext): any;
+        private _args;
+        constructor(args: any);
+        public Args : any;
+    }
 }
 declare module NXKit.Web {
     class PropertyMap implements IPropertyMap {
@@ -255,11 +261,14 @@ declare module NXKit.Web {
     }
 }
 declare module NXKit.Web {
+    /**
+    * Main NXKit client-side view class. Injects the view interface into a set of HTML elements.
+    */
     class View {
-        public _body: HTMLElement;
-        public _data: any;
-        public _root: Visual;
-        public _bind: boolean;
+        private _body;
+        private _data;
+        private _root;
+        private _bind;
         private _onVisualValueChanged;
         private _queue;
         private _queueRunning;
@@ -313,10 +322,4 @@ declare module NXKit.Web {
         */
         public UniqueId : string;
     }
-}
-declare module NXKit.Web.Knockout {
-}
-declare module NXKit.Web.Knockout {
-}
-declare module NXKit.Web.Knockout {
 }
