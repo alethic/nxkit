@@ -89,6 +89,7 @@
     <TypeScriptCompile Include="Knockout\ModalBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\CheckboxBindingHandler.ts" />
     <TypeScriptCompile Include="LayoutManager.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
     <TypeScriptCompile Include="Utils.ts" />
   </ItemGroup>
@@ -100,7 +101,6 @@
   <ItemGroup>
     <TypeScriptCompile Include="TypedEvent.ts" />
     <TypeScriptCompile Include="Property.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="View.ts" />
     <TypeScriptCompile Include="Visual.ts" />
