@@ -27,11 +27,13 @@ namespace NXKit.Web.UI
 
         static Assembly[] ko_assemblies = new[] {
             typeof(NXKit.Web.Ref).Assembly,
+            typeof(NXKit.Web.XForms.Ref).Assembly,
+            typeof(NXKit.Web.XForms.Layout.Ref).Assembly,
         };
 
         static List<Tuple<string, Func<Stream>>> ko_templates = ko_assemblies
             .SelectMany(i => i.GetManifestResourceNames()
-                .Where(j => j.EndsWith(".ko.html"))
+                .Where(j => j.EndsWith(".html"))
                 .Select(j => new Tuple<string, Func<Stream>>(j, () => i.GetManifestResourceStream(j))))
                 .ToList();
 

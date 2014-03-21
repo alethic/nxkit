@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <div class="ui right green corner label" data-bind="click: function () { ShowModal($parent.UniqueId); }">
+        <div class="ui right green corner label" data-bind="nxkit_modal: $parent.UniqueId">
             <i class="link help icon"></i>
         </div>
         <!-- /ko -->
@@ -53,7 +53,7 @@
     </div>
 
     <!-- ko with: Help -->
-    <div class="ui bottom attached info message" data-bind="click: function () { ShowModal($parent.UniqueId); }">
+    <div class="ui bottom attached info message" data-bind="nxkit_modal: $parent.UniqueId">
         <i class="link help icon"></i>
         Are you sure you know what you're doing?
     </div>

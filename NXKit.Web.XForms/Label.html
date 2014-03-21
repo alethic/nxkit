@@ -1,0 +1,15 @@
+﻿<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsLabelVisual">
+    <!-- ko with: new NXKit.Web.XForms.LabelViewModel($context, $data) -->
+    <span class="xforms-label">
+        <!-- ko if: Text -->
+        <span data-bind="text: Text" />
+        <!-- /ko -->
+        <!-- ko ifnot: Text -->
+        <!-- ko foreach: Visual.Visuals -->
+        <!-- ko nxkit_template -->
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </span>
+    <!-- /ko -->
+</script>

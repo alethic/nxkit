@@ -90,6 +90,27 @@ var NXKit;
     (function (Web) {
         (function (XForms) {
             (function (Layout) {
+                var CategoryViewModel = (function (_super) {
+                    __extends(CategoryViewModel, _super);
+                    function CategoryViewModel(context, visual) {
+                        _super.call(this, context, visual);
+                    }
+                    return CategoryViewModel;
+                })(NXKit.Web.XForms.LayoutVisualViewModel);
+                Layout.CategoryViewModel = CategoryViewModel;
+            })(XForms.Layout || (XForms.Layout = {}));
+            var Layout = XForms.Layout;
+        })(Web.XForms || (Web.XForms = {}));
+        var XForms = Web.XForms;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="LayoutVisualViewModel.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (XForms) {
+            (function (Layout) {
                 var SectionViewModel = (function (_super) {
                     __extends(SectionViewModel, _super);
                     function SectionViewModel(context, visual) {

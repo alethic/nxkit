@@ -712,6 +712,32 @@ var NXKit;
 (function (NXKit) {
     (function (Web) {
         (function (Knockout) {
+            var ModalBindingHandler = (function () {
+                function ModalBindingHandler() {
+                }
+                ModalBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    ko.bindingHandlers.click.init(element, function () {
+                        return function () {
+                            var id = valueAccessor();
+                            if (id) {
+                                $('#' + id).modal('show');
+                            }
+                        };
+                    }, allBindings, viewModel, bindingContext);
+                };
+                return ModalBindingHandler;
+            })();
+
+            ko.bindingHandlers['nxkit_modal'] = new ModalBindingHandler();
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
             var CheckboxBindingHandler = (function () {
                 function CheckboxBindingHandler() {
                 }

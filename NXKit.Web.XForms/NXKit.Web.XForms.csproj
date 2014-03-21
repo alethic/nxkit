@@ -105,10 +105,26 @@
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Group.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Model.html" />
+    <EmbeddedResource Include="Help.html" />
+    <EmbeddedResource Include="Repeat.html" />
+    <EmbeddedResource Include="TextArea.html" />
+    <EmbeddedResource Include="Select1.html" />
+    <EmbeddedResource Include="Range.html" />
+    <EmbeddedResource Include="Input.html" />
+    <EmbeddedResource Include="Hint.html" />
+    <EmbeddedResource Include="Label.html" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Ref.cs" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>

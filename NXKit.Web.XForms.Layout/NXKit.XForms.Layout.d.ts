@@ -19,6 +19,11 @@ declare module NXKit.Web.XForms.Layout {
     }
 }
 declare module NXKit.Web.XForms.Layout {
+    class CategoryViewModel extends LayoutVisualViewModel {
+        constructor(context: KnockoutBindingContext, visual: Visual);
+    }
+}
+declare module NXKit.Web.XForms.Layout {
     class SectionViewModel extends LayoutVisualViewModel {
         constructor(context: KnockoutBindingContext, visual: Visual);
     }
