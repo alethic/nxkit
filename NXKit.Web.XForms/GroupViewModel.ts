@@ -9,16 +9,16 @@ module NXKit.Web.XForms {
           */
         export class Item {
 
-            private _visual: Visual;
+            private _viewModel: GroupViewModel;
             private _level: number;
 
-            constructor(visual: Visual, level: number) {
-                this._visual = visual;
+            constructor(viewModel: GroupViewModel, level: number) {
+                this._viewModel = viewModel;
                 this._level = level;
             }
 
-            public get Visual(): Visual {
-                return this._visual;
+            public get ViewModel(): GroupViewModel {
+                return this._viewModel;
             }
 
             public get Level(): number {
@@ -67,8 +67,8 @@ module NXKit.Web.XForms {
 
             private _itemVisual: Visual;
 
-            constructor(visual: Visual, itemVisual: Visual, level: number) {
-                super(visual, level);
+            constructor(viewModel: GroupViewModel, itemVisual: Visual, level: number) {
+                super(viewModel, level);
                 this._itemVisual = itemVisual;
             }
 
@@ -81,7 +81,12 @@ module NXKit.Web.XForms {
             }
 
             GetLabel(): Visual {
-                return Utils.GetLabel(this._itemVisual);
+                if (this._itemVisual.Type == 'NXKit.XForms.XFormsInputVisual' &&
+                    Utils.GetType(this._itemVisual)() == '{http://www.w3.org/2001/XMLSchema}boolean')
+                    // boolean inputs provide their own label
+                    return null;
+                else
+                    return Utils.GetLabel(this._itemVisual);
             }
 
             GetHelp(): Visual {
@@ -90,7 +95,7 @@ module NXKit.Web.XForms {
 
             GetLayout(): any {
                 return {
-                    visual: this.Visual,
+                    visual: this.ViewModel.Visual,
                     data: this,
                     layout: 'visual',
                     level: this.Level,
@@ -102,8 +107,8 @@ module NXKit.Web.XForms {
         export class InputItem
             extends VisualItem {
 
-            constructor(visual: Visual, inputVisual: Visual, level: number) {
-                super(visual, inputVisual, level);
+            constructor(viewModel: GroupViewModel, inputVisual: Visual, level: number) {
+                super(viewModel, inputVisual, level);
             }
 
             public get InputVisual(): Visual {
@@ -112,7 +117,7 @@ module NXKit.Web.XForms {
 
             GetLayout(): any {
                 return {
-                    visual: this.Visual,
+                    visual: this.ViewModel.Visual,
                     data: this,
                     layout: 'input',
                     type: Utils.GetType(this.InputVisual),
@@ -131,8 +136,8 @@ module NXKit.Web.XForms {
             private _item: Item;
             private _force: boolean;
 
-            constructor(visual: Visual, level: number) {
-                super(visual, level);
+            constructor(viewModel: GroupViewModel, level: number) {
+                super(viewModel, level);
             }
 
             public get Item(): Item {
@@ -165,7 +170,7 @@ module NXKit.Web.XForms {
 
             GetLayout(): any {
                 return {
-                    visual: this.Visual,
+                    visual: this.ViewModel.Visual,
                     data: this,
                     layout: 'single',
                     level: this.Level,
@@ -183,8 +188,8 @@ module NXKit.Web.XForms {
             private _item1: Item;
             private _item2: Item;
 
-            constructor(visual: Visual, level: number) {
-                super(visual, level);
+            constructor(viewModel: GroupViewModel, level: number) {
+                super(viewModel, level);
             }
 
             public get Item1(): Item {
@@ -217,7 +222,7 @@ module NXKit.Web.XForms {
 
             GetLayout(): any {
                 return {
-                    visual: this.Visual,
+                    visual: this.ViewModel.Visual,
                     data: this,
                     layout: 'double',
                     level: this.Level,
@@ -232,8 +237,8 @@ module NXKit.Web.XForms {
             private _groupVisual: Visual;
             private _items: Item[];
 
-            constructor(visual: Visual, groupVisual: Visual, level: number) {
-                super(visual, level);
+            constructor(viewModel: GroupViewModel, groupVisual: Visual, level: number) {
+                super(viewModel, level);
                 this._groupVisual = groupVisual;
                 this._items = new Array<Item>();
             }
@@ -260,7 +265,7 @@ module NXKit.Web.XForms {
 
             GetLayout(): any {
                 return {
-                    visual: this.Visual,
+                    visual: this.ViewModel.Visual,
                     data: this,
                     layout: 'group',
                     level: this.Level,
@@ -297,7 +302,7 @@ module NXKit.Web.XForms {
          * Gets the set of contents expressed as template binding objects.
          */
         private GetGroupItem(visual: Visual, level: number): GroupViewModel_.GroupItem {
-            var item = new GroupViewModel_.GroupItem(this.Visual, visual, level);
+            var item = new GroupViewModel_.GroupItem(this, visual, level);
             item.Items = this.GetItems(visual, level + 1);
             return item;
         }
@@ -314,7 +319,7 @@ module NXKit.Web.XForms {
                     list.push(groupItem);
                     continue;
                 } else if (v.Type == 'NXKit.XForms.XFormsTextAreaVisual') {
-                    var textAreaItem = new GroupViewModel_.SingleItem(v, level);
+                    var textAreaItem = new GroupViewModel_.SingleItem(this, level);
                     textAreaItem.Force = true;
                     list.push(textAreaItem);
                     continue;
@@ -324,9 +329,9 @@ module NXKit.Web.XForms {
                 var item = list.pop();
                 if (item instanceof GroupViewModel_.SingleItem && !(<GroupViewModel_.SingleItem>item).Force) {
                     var item1 = <GroupViewModel_.SingleItem>item;
-                    var item2 = new GroupViewModel_.DoubleItem(this.Visual, level);
+                    var item2 = new GroupViewModel_.DoubleItem(this, level);
                     item2.Item1 = item1.Item;
-                    item2.Item2 = new GroupViewModel_.VisualItem(this.Visual, v, level);
+                    item2.Item2 = new GroupViewModel_.VisualItem(this, v, level);
                     list.push(item2);
                 }
                 else {
@@ -335,8 +340,8 @@ module NXKit.Web.XForms {
                         list.push(item);
 
                     // insert new single item
-                    var item1 = new GroupViewModel_.SingleItem(this.Visual, level);
-                    item1.Item = new GroupViewModel_.VisualItem(this.Visual, v, level);
+                    var item1 = new GroupViewModel_.SingleItem(this, level);
+                    item1.Item = new GroupViewModel_.VisualItem(this, v, level);
                     list.push(item1);
                 }
             }

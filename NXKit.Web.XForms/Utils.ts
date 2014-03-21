@@ -29,7 +29,41 @@
             write: _ => {
                 if (visual != null &&
                     visual.Properties['Value'] != null)
-                    visual.Properties['Value'].Value(_);
+                    visual.Properties['Value'].ValueAsString(_);
+            },
+        });
+    }
+
+    export function GetValueAsBoolean(visual: Visual): KnockoutComputed<boolean> {
+        return ko.computed<boolean>({
+            read: () => {
+                if (visual != null &&
+                    visual.Properties['Value'] != null)
+                    return visual.Properties['Value'].ValueAsBoolean();
+                else
+                    return null;
+            },
+            write: _ => {
+                if (visual != null &&
+                    visual.Properties['Value'] != null)
+                    visual.Properties['Value'].ValueAsBoolean(_);
+            },
+        });
+    }
+
+    export function GetValueAsNumber(visual: Visual): KnockoutComputed<number> {
+        return ko.computed<number>({
+            read: () => {
+                if (visual != null &&
+                    visual.Properties['Value'] != null)
+                    return visual.Properties['Value'].ValueAsNumber();
+                else
+                    return null;
+            },
+            write: _ => {
+                if (visual != null &&
+                    visual.Properties['Value'] != null)
+                    visual.Properties['Value'].ValueAsNumber(_);
             },
         });
     }

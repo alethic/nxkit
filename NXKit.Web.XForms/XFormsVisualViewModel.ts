@@ -34,6 +34,14 @@
             return Utils.GetValueAsString(this.Visual);
         }
 
+        get ValueAsBoolean(): KnockoutComputed<boolean> {
+            return Utils.GetValueAsBoolean(this.Visual);
+        }
+
+        get ValueAsNumber(): KnockoutComputed<number> {
+            return Utils.GetValueAsNumber(this.Visual);
+        }
+
         get Relevant(): KnockoutComputed<boolean> {
             return Utils.GetRelevant(this.Visual);
         }

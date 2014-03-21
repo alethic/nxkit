@@ -24,8 +24,8 @@ namespace NXKit.Test.Web.Site
 
             ScriptManager.ScriptResourceMapping.AddDefinition("knockout", new ScriptResourceDefinition
             {
-                Path = "~/Scripts/knockout-3.1.0.min.js",
-                DebugPath = "~/Scripts/knockout-3.1.0.js",
+                Path = "~/Scripts/knockout-3.1.0.js",
+                DebugPath = "~/Scripts/knockout-3.1.0.debug.js",
             });
         }
 

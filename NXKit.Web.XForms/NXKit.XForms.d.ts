@@ -6,6 +6,8 @@
         constructor(context: KnockoutBindingContext, visual: Visual);
         public Value : KnockoutComputed<any>;
         public ValueAsString : KnockoutComputed<string>;
+        public ValueAsBoolean : KnockoutComputed<boolean>;
+        public ValueAsNumber : KnockoutComputed<number>;
         public Relevant : KnockoutComputed<boolean>;
         public Type : KnockoutComputed<string>;
         public Appearance : KnockoutComputed<string>;
@@ -30,10 +32,10 @@ declare module NXKit.Web.XForms {
         * Represents a sub-item of a top-level group.
         */
         class Item {
-            private _visual;
+            private _viewModel;
             private _level;
-            constructor(visual: Visual, level: number);
-            public Visual : Visual;
+            constructor(viewModel: GroupViewModel, level: number);
+            public ViewModel : GroupViewModel;
             public Level : number;
             public Relevant : KnockoutObservable<boolean>;
             public GetRelevant(): KnockoutObservable<boolean>;
@@ -49,7 +51,7 @@ declare module NXKit.Web.XForms {
         */
         class VisualItem extends Item {
             private _itemVisual;
-            constructor(visual: Visual, itemVisual: Visual, level: number);
+            constructor(viewModel: GroupViewModel, itemVisual: Visual, level: number);
             public ItemVisual : Visual;
             public GetRelevant(): KnockoutObservable<boolean>;
             public GetLabel(): Visual;
@@ -57,7 +59,7 @@ declare module NXKit.Web.XForms {
             public GetLayout(): any;
         }
         class InputItem extends VisualItem {
-            constructor(visual: Visual, inputVisual: Visual, level: number);
+            constructor(viewModel: GroupViewModel, inputVisual: Visual, level: number);
             public InputVisual : Visual;
             public GetLayout(): any;
         }
@@ -67,7 +69,7 @@ declare module NXKit.Web.XForms {
         class SingleItem extends Item {
             private _item;
             private _force;
-            constructor(visual: Visual, level: number);
+            constructor(viewModel: GroupViewModel, level: number);
             public Item : Item;
             public Force : boolean;
             public GetRelevant(): KnockoutObservable<boolean>;
@@ -81,7 +83,7 @@ declare module NXKit.Web.XForms {
         class DoubleItem extends Item {
             private _item1;
             private _item2;
-            constructor(visual: Visual, level: number);
+            constructor(viewModel: GroupViewModel, level: number);
             public Item1 : Item;
             public Item2 : Item;
             public GetRelevant(): KnockoutObservable<boolean>;
@@ -92,7 +94,7 @@ declare module NXKit.Web.XForms {
         class GroupItem extends Item {
             private _groupVisual;
             private _items;
-            constructor(visual: Visual, groupVisual: Visual, level: number);
+            constructor(viewModel: GroupViewModel, groupVisual: Visual, level: number);
             public Items : Item[];
             public GetRelevant(): KnockoutObservable<boolean>;
             public GetLabel(): Visual;
@@ -130,6 +132,7 @@ declare module NXKit.Web.XForms {
 declare module NXKit.Web.XForms {
     class InputViewModel extends XFormsVisualViewModel {
         constructor(context: KnockoutBindingContext, visual: Visual);
+        public ShowLabel : boolean;
     }
 }
 declare module NXKit.Web.XForms {
@@ -158,6 +161,8 @@ declare module NXKit.Web.XForms {
 declare module NXKit.Web.XForms.Utils {
     function GetValue(visual: Visual): KnockoutComputed<any>;
     function GetValueAsString(visual: Visual): KnockoutComputed<string>;
+    function GetValueAsBoolean(visual: Visual): KnockoutComputed<boolean>;
+    function GetValueAsNumber(visual: Visual): KnockoutComputed<number>;
     function GetRelevant(visual: Visual): KnockoutComputed<boolean>;
     function GetType(visual: Visual): KnockoutComputed<string>;
     function GetAppearance(visual: Visual): KnockoutComputed<string>;

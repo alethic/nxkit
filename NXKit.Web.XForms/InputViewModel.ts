@@ -9,6 +9,10 @@ module NXKit.Web.XForms {
             super(context, visual);
         }
 
+        get ShowLabel(): boolean {
+            return !NXKit.Web.LayoutOptions.GetArgs(this.Context).SuppressLabel;
+        }
+
     }
 
 }

@@ -1,36 +1,61 @@
-﻿<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsInputVisual">
+﻿<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsInputVisual">
     <!-- ko with: new NXKit.Web.XForms.InputViewModel($context, $data) -->
     <!-- ko nxkit_template: {
         visual: Visual,
+        data: $data,
         type: Type,
     } -->
     <!-- /ko -->
     <!-- /ko -->
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsInputVisual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
-    <input type="text" data-bind="value: Properties.Value.ValueAsString" />
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsInputVisual"
+        data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
+    <input type="text" data-bind="value: ValueAsString" />
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsInputVisual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}boolean">
-    <div class="ui checkbox" data-bind="nxkit_checkbox: Properties.Value.ValueAsBoolean">
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsInputVisual"
+        data-nxkit-type="{http://www.w3.org/2001/XMLSchema}boolean">
+    <div class="ui checkbox"
+         data-bind="nxkit_checkbox: ValueAsBoolean">
+
         <input type="checkbox" />
-        <label>stuff</label>
+
+        <!-- ko if: ShowLabel -->
+        <!-- ko with: $parent.Label -->
+        <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+        <label data-bind="nxkit_template: $data" />
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- /ko -->
+
     </div>
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsInputVisual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}date">
-    <input type="date" data-bind="value: Properties.Value.ValueAsString" />
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsInputVisual"
+        data-nxkit-type="{http://www.w3.org/2001/XMLSchema}date">
+    <input type="date"
+           data-bind="value: ValueAsString" />
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsInputVisual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}int">
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsInputVisual"
+        data-nxkit-type="{http://www.w3.org/2001/XMLSchema}int">
     <!-- ko nxkit_template: {
-        visual: $data,
+        visual: Visual,
+        data: $data,
         type: '{http://www.w3.org/2001/XMLSchema}integer',
     } -->
     <!-- /ko -->
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsInputVisual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}integer">
-    <input type="number" data-bind="value: Properties.Value.ValueAsNumber" />
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsInputVisual"
+        data-nxkit-type="{http://www.w3.org/2001/XMLSchema}integer">
+    <input type="number"
+           data-bind="value: ValueAsNumber" />
 </script>

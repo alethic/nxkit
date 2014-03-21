@@ -12,6 +12,15 @@
     <link rel="stylesheet" type="text/css" href="Content/normalize.css" />
     <link rel="stylesheet/less" type="text/css" href="Content/semantic/packaged/css/semantic.css" />
     <link rel="stylesheet/less" type="text/css" href="Content/styles.less" />
+
+    <style type="text/css">
+
+        .ui.checkbox label {
+            margin-bottom: 16px !important;
+        }
+
+    </style>
+
 </head>
 
 <body>

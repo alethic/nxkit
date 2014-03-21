@@ -29,6 +29,22 @@ var NXKit;
                     configurable: true
                 });
 
+                Object.defineProperty(XFormsVisualViewModel.prototype, "ValueAsBoolean", {
+                    get: function () {
+                        return NXKit.Web.XForms.Utils.GetValueAsBoolean(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(XFormsVisualViewModel.prototype, "ValueAsNumber", {
+                    get: function () {
+                        return NXKit.Web.XForms.Utils.GetValueAsNumber(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
                 Object.defineProperty(XFormsVisualViewModel.prototype, "Relevant", {
                     get: function () {
                         return NXKit.Web.XForms.Utils.GetRelevant(this.Visual);
@@ -156,13 +172,13 @@ var NXKit;
                 * Represents a sub-item of a top-level group.
                 */
                 var Item = (function () {
-                    function Item(visual, level) {
-                        this._visual = visual;
+                    function Item(viewModel, level) {
+                        this._viewModel = viewModel;
                         this._level = level;
                     }
-                    Object.defineProperty(Item.prototype, "Visual", {
+                    Object.defineProperty(Item.prototype, "ViewModel", {
                         get: function () {
-                            return this._visual;
+                            return this._viewModel;
                         },
                         enumerable: true,
                         configurable: true
@@ -234,8 +250,8 @@ var NXKit;
                 */
                 var VisualItem = (function (_super) {
                     __extends(VisualItem, _super);
-                    function VisualItem(visual, itemVisual, level) {
-                        _super.call(this, visual, level);
+                    function VisualItem(viewModel, itemVisual, level) {
+                        _super.call(this, viewModel, level);
                         this._itemVisual = itemVisual;
                     }
                     Object.defineProperty(VisualItem.prototype, "ItemVisual", {
@@ -251,7 +267,11 @@ var NXKit;
                     };
 
                     VisualItem.prototype.GetLabel = function () {
-                        return NXKit.Web.XForms.Utils.GetLabel(this._itemVisual);
+                        if (this._itemVisual.Type == 'NXKit.XForms.XFormsInputVisual' && NXKit.Web.XForms.Utils.GetType(this._itemVisual)() == '{http://www.w3.org/2001/XMLSchema}boolean')
+                            // boolean inputs provide their own label
+                            return null;
+                        else
+                            return NXKit.Web.XForms.Utils.GetLabel(this._itemVisual);
                     };
 
                     VisualItem.prototype.GetHelp = function () {
@@ -260,7 +280,7 @@ var NXKit;
 
                     VisualItem.prototype.GetLayout = function () {
                         return {
-                            visual: this.Visual,
+                            visual: this.ViewModel.Visual,
                             data: this,
                             layout: 'visual',
                             level: this.Level
@@ -272,8 +292,8 @@ var NXKit;
 
                 var InputItem = (function (_super) {
                     __extends(InputItem, _super);
-                    function InputItem(visual, inputVisual, level) {
-                        _super.call(this, visual, inputVisual, level);
+                    function InputItem(viewModel, inputVisual, level) {
+                        _super.call(this, viewModel, inputVisual, level);
                     }
                     Object.defineProperty(InputItem.prototype, "InputVisual", {
                         get: function () {
@@ -285,7 +305,7 @@ var NXKit;
 
                     InputItem.prototype.GetLayout = function () {
                         return {
-                            visual: this.Visual,
+                            visual: this.ViewModel.Visual,
                             data: this,
                             layout: 'input',
                             type: NXKit.Web.XForms.Utils.GetType(this.InputVisual),
@@ -301,8 +321,8 @@ var NXKit;
                 */
                 var SingleItem = (function (_super) {
                     __extends(SingleItem, _super);
-                    function SingleItem(visual, level) {
-                        _super.call(this, visual, level);
+                    function SingleItem(viewModel, level) {
+                        _super.call(this, viewModel, level);
                     }
                     Object.defineProperty(SingleItem.prototype, "Item", {
                         get: function () {
@@ -342,7 +362,7 @@ var NXKit;
 
                     SingleItem.prototype.GetLayout = function () {
                         return {
-                            visual: this.Visual,
+                            visual: this.ViewModel.Visual,
                             data: this,
                             layout: 'single',
                             level: this.Level
@@ -357,8 +377,8 @@ var NXKit;
                 */
                 var DoubleItem = (function (_super) {
                     __extends(DoubleItem, _super);
-                    function DoubleItem(visual, level) {
-                        _super.call(this, visual, level);
+                    function DoubleItem(viewModel, level) {
+                        _super.call(this, viewModel, level);
                     }
                     Object.defineProperty(DoubleItem.prototype, "Item1", {
                         get: function () {
@@ -401,7 +421,7 @@ var NXKit;
 
                     DoubleItem.prototype.GetLayout = function () {
                         return {
-                            visual: this.Visual,
+                            visual: this.ViewModel.Visual,
                             data: this,
                             layout: 'double',
                             level: this.Level
@@ -413,8 +433,8 @@ var NXKit;
 
                 var GroupItem = (function (_super) {
                     __extends(GroupItem, _super);
-                    function GroupItem(visual, groupVisual, level) {
-                        _super.call(this, visual, level);
+                    function GroupItem(viewModel, groupVisual, level) {
+                        _super.call(this, viewModel, level);
                         this._groupVisual = groupVisual;
                         this._items = new Array();
                     }
@@ -444,7 +464,7 @@ var NXKit;
 
                     GroupItem.prototype.GetLayout = function () {
                         return {
-                            visual: this.Visual,
+                            visual: this.ViewModel.Visual,
                             data: this,
                             layout: 'group',
                             level: this.Level
@@ -482,7 +502,7 @@ var NXKit;
                 * Gets the set of contents expressed as template binding objects.
                 */
                 GroupViewModel.prototype.GetGroupItem = function (visual, level) {
-                    var item = new GroupViewModel_.GroupItem(this.Visual, visual, level);
+                    var item = new GroupViewModel_.GroupItem(this, visual, level);
                     item.Items = this.GetItems(visual, level + 1);
                     return item;
                 };
@@ -499,7 +519,7 @@ var NXKit;
                             list.push(groupItem);
                             continue;
                         } else if (v.Type == 'NXKit.XForms.XFormsTextAreaVisual') {
-                            var textAreaItem = new GroupViewModel_.SingleItem(v, level);
+                            var textAreaItem = new GroupViewModel_.SingleItem(this, level);
                             textAreaItem.Force = true;
                             list.push(textAreaItem);
                             continue;
@@ -509,9 +529,9 @@ var NXKit;
                         var item = list.pop();
                         if (item instanceof GroupViewModel_.SingleItem && !item.Force) {
                             var item1 = item;
-                            var item2 = new GroupViewModel_.DoubleItem(this.Visual, level);
+                            var item2 = new GroupViewModel_.DoubleItem(this, level);
                             item2.Item1 = item1.Item;
-                            item2.Item2 = new GroupViewModel_.VisualItem(this.Visual, v, level);
+                            item2.Item2 = new GroupViewModel_.VisualItem(this, v, level);
                             list.push(item2);
                         } else {
                             // put previous item back into list
@@ -519,8 +539,8 @@ var NXKit;
                                 list.push(item);
 
                             // insert new single item
-                            var item1 = new GroupViewModel_.SingleItem(this.Visual, level);
-                            item1.Item = new GroupViewModel_.VisualItem(this.Visual, v, level);
+                            var item1 = new GroupViewModel_.SingleItem(this, level);
+                            item1.Item = new GroupViewModel_.VisualItem(this, v, level);
                             list.push(item1);
                         }
                     }
@@ -595,6 +615,13 @@ var NXKit;
                 function InputViewModel(context, visual) {
                     _super.call(this, context, visual);
                 }
+                Object.defineProperty(InputViewModel.prototype, "ShowLabel", {
+                    get: function () {
+                        return !NXKit.Web.LayoutOptions.GetArgs(this.Context).SuppressLabel;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 return InputViewModel;
             })(NXKit.Web.XForms.XFormsVisualViewModel);
             XForms.InputViewModel = InputViewModel;
@@ -735,11 +762,43 @@ var NXKit;
                         },
                         write: function (_) {
                             if (visual != null && visual.Properties['Value'] != null)
-                                visual.Properties['Value'].Value(_);
+                                visual.Properties['Value'].ValueAsString(_);
                         }
                     });
                 }
                 Utils.GetValueAsString = GetValueAsString;
+
+                function GetValueAsBoolean(visual) {
+                    return ko.computed({
+                        read: function () {
+                            if (visual != null && visual.Properties['Value'] != null)
+                                return visual.Properties['Value'].ValueAsBoolean();
+                            else
+                                return null;
+                        },
+                        write: function (_) {
+                            if (visual != null && visual.Properties['Value'] != null)
+                                visual.Properties['Value'].ValueAsBoolean(_);
+                        }
+                    });
+                }
+                Utils.GetValueAsBoolean = GetValueAsBoolean;
+
+                function GetValueAsNumber(visual) {
+                    return ko.computed({
+                        read: function () {
+                            if (visual != null && visual.Properties['Value'] != null)
+                                return visual.Properties['Value'].ValueAsNumber();
+                            else
+                                return null;
+                        },
+                        write: function (_) {
+                            if (visual != null && visual.Properties['Value'] != null)
+                                visual.Properties['Value'].ValueAsNumber(_);
+                        }
+                    });
+                }
+                Utils.GetValueAsNumber = GetValueAsNumber;
 
                 function GetRelevant(visual) {
                     return ko.computed(function () {

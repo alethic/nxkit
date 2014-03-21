@@ -1,16 +1,22 @@
-﻿<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual">
+﻿<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual">
+
     <!-- ko with: new NXKit.Web.XForms.GroupLayoutManager($context) -->
     <!-- ko with: new NXKit.Web.XForms.GroupViewModel($context, $parent) -->
-    <div class="xforms-group ui form segment" data-bind="nxkit_visible: Relevant, css: { attached: Help }">
+
+    <div class="xforms-group ui form segment"
+         data-bind="nxkit_visible: Relevant, css: { attached: Help }">
 
         <!-- ko with: Label -->
         <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <h2 class="ui header" data-bind="nxkit_template: $data" />
+        <h2 class="ui header"
+            data-bind="nxkit_template: $data" />
         <!-- /ko -->
         <!-- /ko -->
         <!-- ko with: Help -->
 
-        <div class="ui modal" data-bind="attr: { 'id': $parent.UniqueId }">
+        <div class="ui modal"
+             data-bind="attr: { 'id': $parent.UniqueId }">
             <div class="header">
                 <!-- ko with: $parent.Label -->
                 <!-- ko if: ($data.Appearance || 'full') == 'full' -->
@@ -33,7 +39,8 @@
             </div>
         </div>
 
-        <div class="ui right green corner label" data-bind="nxkit_modal: $parent.UniqueId">
+        <div class="ui right green corner label"
+             data-bind="nxkit_modal: $parent.UniqueId">
             <i class="link help icon"></i>
         </div>
         <!-- /ko -->
@@ -53,79 +60,153 @@
     </div>
 
     <!-- ko with: Help -->
-    <div class="ui bottom attached info message" data-bind="nxkit_modal: $parent.UniqueId">
+    <div class="ui bottom attached info message"
+         data-bind="nxkit_modal: $parent.UniqueId">
         <i class="link help icon"></i>
         Are you sure you know what you're doing?
     </div>
     <!-- /ko -->
     <!-- /ko -->
     <!-- /ko -->
+
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="1" data-nxkit-layout="single">
+<!--
+    HTML for a field label.
+-->
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-layout="field-label">
 
-    <div class="field" data-bind="nxkit_visible: Relevant">
-        <!-- ko with: Item -->
-        <!-- ko with: Label -->
-        <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <label data-bind="nxkit_template: $data" />
+    <!-- ko with: Label -->
+    <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+    <label>
+        <!-- ko nxkit_template -->
         <!-- /ko -->
+        <!-- ko with: $parent.Help -->
+        <i class="help icon"></i>
         <!-- /ko -->
+    </label>
+    <!-- /ko -->
+    <!-- /ko -->
+
+</script>
+
+<!--
+    HTML for a single field with label.
+-->
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-layout="field-with-label">
+
+    <!-- layout: 'field-with-label' -->
+
+    <div class="field"
+         data-bind="nxkit_visible: Relevant">
+
+        <!-- ko nxkit_template: {
+            visual: ViewModel.Visual,
+            data: $data,
+            layout: 'field-label',
+        } -->
+
+        <!-- /ko -->
+        <!-- ko nxkit_layout: {
+            SuppressLabel: true,
+        } -->
         <!-- ko nxkit_template: Layout -->
         <!-- /ko -->
         <!-- /ko -->
+
     </div>
 
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="1" data-nxkit-layout="double">
+<!--
+    HTML for a single field with no label.
+-->
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-layout="field-without-label">
 
-    <div class="two fields" data-bind="nxkit_visible: Relevant">
+    <!-- layout: 'field-without-label' -->
 
-        <!-- ko with: Item1 -->
-        <div class="field" data-bind="nxkit_visible: Relevant">
+    <div class="inline field"
+         data-bind="nxkit_visible: Relevant">
 
-            <!-- ko with: Label -->
-            <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-            <label>
-                <!-- ko nxkit_template -->
-                <!-- /ko -->
-                <!-- ko with: $parent.Help -->
-                <i class="help icon"></i>
-                <!-- /ko -->
-            </label>
-            <!-- /ko -->
-            <!-- /ko -->
-            <!-- ko nxkit_template: Layout -->
-            <!-- /ko -->
-
-        </div>
-        <!-- /ko -->
-        <!-- ko with: Item2 -->
-        <div class="field" data-bind="nxkit_visible: Relevant">
-
-            <!-- ko with: Label -->
-            <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-            <label data-bind="nxkit_template: $data" />
-            <!-- /ko -->
-            <!-- /ko -->
-            <!-- ko nxkit_template: Layout -->
-            <!-- /ko -->
-
-        </div>
+        <!-- ko nxkit_template: Layout -->
         <!-- /ko -->
 
     </div>
 
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="1" data-nxkit-layout="group">
+<!--
+    HTML for a single field.
+-->
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-layout="field">
 
-    <div class="xforms-group secondary" data-bind="nxkit_visible: Relevant">
+    <!-- ko nxkit_template: {
+        visual: ViewModel.Visual,
+        data: $data,
+        layout: Label != null ? 'field-with-label' : 'field-without-label',
+    } -->
+    <!-- /ko -->
+
+</script>
+
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="1"
+        data-nxkit-layout="single">
+
+    <!-- ko nxkit_template: {
+        visual: ViewModel.Visual,
+        data: Item,
+        layout: 'field',
+    }-->
+
+</script>
+
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="1"
+        data-nxkit-layout="double">
+
+    <div class="two fields"
+         data-bind="nxkit_visible: Relevant">
+
+        <!-- ko nxkit_template: {
+            visual: ViewModel.Visual,
+            data: Item1,
+            layout: 'field',
+        }-->
+        <!-- /ko -->
+        <!-- ko nxkit_template: {
+            visual: ViewModel.Visual,
+            data: Item2,
+            layout: 'field',
+        }-->
+        <!-- /ko -->
+
+    </div>
+
+</script>
+
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="1"
+        data-nxkit-layout="group">
+
+    <div class="xforms-group secondary"
+         data-bind="nxkit_visible: Relevant">
 
         <!-- ko with: Label -->
         <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <div class="ui blue ribbon label" data-bind="nxkit_template: $data" />
+        <div class="ui blue ribbon label"
+             data-bind="nxkit_template: $data" />
         <!-- /ko -->
         <!-- /ko -->
         <!-- ko foreach: Items -->
@@ -137,19 +218,28 @@
 
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="1" data-nxkit-layout="visual">
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="1"
+        data-nxkit-layout="visual">
     <!-- ko nxkit_template: ItemVisual -->
     <!-- /ko -->
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="1" data-nxkit-layout="input">
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="1"
+        data-nxkit-layout="input">
 
     <!-- ko nxkit_template: ItemVisual -->
     <!-- /ko -->
 
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="2" data-nxkit-layout="single">
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="2"
+        data-nxkit-layout="single">
 
     <!-- ko with: Item -->
     <div class="field">
@@ -166,7 +256,10 @@
 
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="2" data-nxkit-layout="double">
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="2"
+        data-nxkit-layout="double">
 
     <div class="two fields">
 
@@ -200,17 +293,24 @@
     </div>
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="2" data-nxkit-layout="group">
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="2"
+        data-nxkit-layout="group">
 
-    <div class="xforms-group" style="margin-bottom: 10px;" data-bind="nxkit_visible: Relevant">
+    <div class="xforms-group"
+         style="margin-bottom: 10px;"
+         data-bind="nxkit_visible: Relevant">
 
-        <%-- <!-- ko with: Label -->
+        <!-- ko with: Label -->
         <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <div class="ui top attached header" data-bind="nxkit_template: $data" />
+        <div class="ui top attached header"
+             data-bind="nxkit_template: $data" />
         <!-- /ko -->
-        <!-- /ko -->--%>
+        <!-- /ko -->
 
-        <div class="ui secondary segment" data-bind="css: { attached: Label }">
+        <div class="ui secondary segment"
+             data-bind="css: { attached: Label }">
 
             <!-- ko foreach: Items -->
             <!-- ko nxkit_template: Layout -->
@@ -223,17 +323,26 @@
 
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="2" data-nxkit-layout="visual">
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="2"
+        data-nxkit-layout="visual">
     <!-- ko nxkit_template: ItemVisual -->
     <!-- /ko -->
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="2" data-nxkit-layout="input">
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="2"
+        data-nxkit-layout="input">
     <!-- ko nxkit_template: ItemVisual -->
     <!-- /ko -->
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="3" data-nxkit-layout="double">
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="3"
+        data-nxkit-layout="double">
 
     <div class="two fields">
 
@@ -267,12 +376,18 @@
     </div>
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="3" data-nxkit-layout="visual">
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="3"
+        data-nxkit-layout="visual">
     <!-- ko nxkit_template: ItemVisual -->
     <!-- /ko -->
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsGroupVisual" data-nxkit-level="3" data-nxkit-layout="input">
+<script type="text/html"
+        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-level="3"
+        data-nxkit-layout="input">
     <!-- ko nxkit_template: ItemVisual -->
     <!-- /ko -->
 </script>

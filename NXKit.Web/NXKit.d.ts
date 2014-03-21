@@ -1,4 +1,39 @@
-﻿declare module NXKit.Web {
+﻿declare module NXKit.Web.Utils {
+    /**
+    * Tests two objects for equality.
+    */
+    function DeepEquals(a: any, b: any): boolean;
+    /**
+    * Generates a unique identifier.
+    */
+    function GenerateGuid(): string;
+    /**
+    * Gets the unique document ID of the given visual.
+    */
+    function GetUniqueId(visual: Visual): string;
+    /**
+    * Returns the entire context item chain from the specified context upwards.
+    */
+    function GetContextItems(context: KnockoutBindingContext): any[];
+    /**
+    * Gets the layout manager in scope of the given binding context.
+    */
+    function GetLayoutManager(context: KnockoutBindingContext): LayoutManager;
+}
+declare module NXKit.Web.Knockout {
+}
+declare module NXKit.Web {
+    class LayoutOptions {
+        /**
+        * Gets the full set of currently applied layout option args for the given context.
+        */
+        static GetArgs(bindingContext: KnockoutBindingContext): any;
+        private _args;
+        constructor(args: any);
+        public Args : any;
+    }
+}
+declare module NXKit.Web {
     interface IEvent {
         add(listener: () => void): void;
         remove(listener: () => void): void;
@@ -120,40 +155,6 @@ declare module NXKit.Web {
         public OnValueChanged(visual: Visual, property: Property): void;
     }
 }
-declare module NXKit.Web.Utils {
-    /**
-    * Tests two objects for equality.
-    */
-    function DeepEquals(a: any, b: any): boolean;
-    /**
-    * Generates a unique identifier.
-    */
-    function GenerateGuid(): string;
-    /**
-    * Gets the unique document ID of the given visual.
-    */
-    function GetUniqueId(visual: Visual): string;
-    /**
-    * Returns the entire context item chain from the specified context upwards.
-    */
-    function GetContextItems(context: KnockoutBindingContext): any[];
-    /**
-    * Gets the layout manager in scope of the given binding context.
-    */
-    function GetLayoutManager(context: KnockoutBindingContext): LayoutManager;
-    /**
-    * Gets the recommended view model for the given binding information.
-    */
-    function GetTemplateViewModel(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any;
-    /**
-    * Extracts template index data from the given binding information.
-    */
-    function GetTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): any;
-    /**
-    * Determines the named template from the given extracted data and context.
-    */
-    function GetTemplateName(bindingContext: KnockoutBindingContext, data: any): string;
-}
 declare module NXKit.Web {
     class LayoutManager {
         private _context;
@@ -170,7 +171,7 @@ declare module NXKit.Web {
         /**
         * Parses the given template binding information for a data structure to pass to the template lookup procedures.
         */
-        public ParseTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, data: any): any;
+        public ParseTemplateBinding(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext, data: any): any;
         /**
         * Gets the templates provided by this layout manager for the given data.
         */
@@ -198,11 +199,11 @@ declare module NXKit.Web {
         /**
         * Gets the appropriate template for the given data.
         */
-        public GetTemplate(data: any): HTMLElement;
+        public GetTemplate(data: any): KnockoutObservable<HTMLElement>;
         /**
         * Gets the template that applies for the given data.
         */
-        public GetTemplateName(data: any): string;
+        public GetTemplateName(data: any): KnockoutObservable<string>;
     }
 }
 declare module NXKit.Web {
@@ -217,6 +218,10 @@ declare module NXKit.Web {
         */
         public GetLocalTemplates(): HTMLElement[];
     }
+}
+declare module NXKit.Web.Knockout {
+}
+declare module NXKit.Web.Knockout {
 }
 declare module NXKit.Web {
     interface ICallbackRequestEvent extends IEvent {
@@ -271,4 +276,10 @@ declare module NXKit.Web {
         */
         public UniqueId : string;
     }
+}
+declare module NXKit.Web.Knockout {
+}
+declare module NXKit.Web.Knockout {
+}
+declare module NXKit.Web.Knockout {
 }
