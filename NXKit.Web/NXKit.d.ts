@@ -16,6 +16,21 @@ declare module NXKit.Web {
     }
 }
 declare module NXKit.Web {
+    interface IPropertyMap {
+        [name: string]: Property;
+    }
+}
+declare module NXKit.Web {
+    interface IVisualPropertyValueChangedEvent extends IEvent {
+        add(listener: () => void): void;
+        remove(listener: () => void): void;
+        trigger(...a: any[]): void;
+        add(listener: (visual: Visual, property: Property) => void): void;
+        remove(listener: (visual: Visual, property: Property) => void): void;
+        trigger(visual: Visual, property: Property): void;
+    }
+}
+declare module NXKit.Web {
     interface IPropertyValueChangedEvent extends IEvent {
         add(listener: () => void): void;
         remove(listener: () => void): void;
@@ -92,17 +107,6 @@ declare module NXKit.Web {
     }
 }
 declare module NXKit.Web {
-    interface IVisualPropertyValueChangedEvent extends IEvent {
-        add(listener: (visual: Visual, property: Property) => void): void;
-        remove(listener: (visual: Visual, property: Property) => void): void;
-        trigger(visual: Visual, property: Property): void;
-    }
-    interface IPropertyMap {
-        [name: string]: Property;
-    }
-    class PropertyMap implements IPropertyMap {
-        [name: string]: Property;
-    }
     class Visual {
         public _type: string;
         public _baseTypes: string[];
@@ -239,6 +243,11 @@ declare module NXKit.Web {
 declare module NXKit.Web.Knockout {
 }
 declare module NXKit.Web.Knockout {
+}
+declare module NXKit.Web {
+    class PropertyMap implements IPropertyMap {
+        [name: string]: Property;
+    }
 }
 declare module NXKit.Web {
     class View {

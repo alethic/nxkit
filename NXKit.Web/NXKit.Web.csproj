@@ -94,6 +94,8 @@
     <Compile Include="IO\JsonVisualWriter.cs" />
     <Compile Include="IO\XNameJsonConverter.cs" />
     <TypeScriptCompile Include="IEvent.ts" />
+    <TypeScriptCompile Include="IPropertyMap.ts" />
+    <TypeScriptCompile Include="IVisualPropertyValueChangedEvent.ts" />
     <TypeScriptCompile Include="IPropertyValueChangedEvent.ts" />
     <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
     <TypeScriptCompile Include="LayoutOptions.ts" />
@@ -103,6 +105,7 @@
     <TypeScriptCompile Include="Knockout\ModalBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\CheckboxBindingHandler.ts" />
     <TypeScriptCompile Include="LayoutManager.ts" />
+    <TypeScriptCompile Include="PropertyMap.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
     <TypeScriptCompile Include="Utils.ts" />

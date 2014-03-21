@@ -364,13 +364,6 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
-        var PropertyMap = (function () {
-            function PropertyMap() {
-            }
-            return PropertyMap;
-        })();
-        Web.PropertyMap = PropertyMap;
-
         var Visual = (function () {
             /**
             * Initializes a new instance from the given initial data.
@@ -382,7 +375,7 @@ var NXKit;
                 this.ValueChanged = new NXKit.Web.TypedEvent();
                 this._type = null;
                 this._baseTypes = new Array();
-                this._properties = new PropertyMap();
+                this._properties = new NXKit.Web.PropertyMap();
                 this._visuals = ko.observableArray();
 
                 // update from source data
@@ -869,6 +862,18 @@ var NXKit;
             ko.bindingHandlers['nxkit_checkbox'] = new CheckboxBindingHandler();
         })(Web.Knockout || (Web.Knockout = {}));
         var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        var PropertyMap = (function () {
+            function PropertyMap() {
+            }
+            return PropertyMap;
+        })();
+        Web.PropertyMap = PropertyMap;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
