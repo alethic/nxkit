@@ -1,4 +1,25 @@
-﻿declare module NXKit.Web.Utils {
+﻿declare module NXKit.Web {
+    interface ICallbackRequestEvent extends IEvent {
+        add(listener: (data: any) => void): void;
+        remove(listener: (data: any) => void): void;
+        trigger(data: any): void;
+    }
+}
+declare module NXKit.Web {
+    interface IEvent {
+        add(listener: () => void): void;
+        remove(listener: () => void): void;
+        trigger(...a: any[]): void;
+    }
+}
+declare module NXKit.Web {
+    interface IPropertyValueChangedEvent extends IEvent {
+        add(listener: (property: Property) => void): void;
+        remove(listener: (property: Property) => void): void;
+        trigger(property: Property): void;
+    }
+}
+declare module NXKit.Web.Utils {
     /**
     * Tests two objects for equality.
     */
@@ -34,11 +55,6 @@ declare module NXKit.Web {
     }
 }
 declare module NXKit.Web {
-    interface IEvent {
-        add(listener: () => void): void;
-        remove(listener: () => void): void;
-        trigger(...a: any[]): void;
-    }
     class TypedEvent implements IEvent {
         public _listeners: any[];
         public add(listener: () => void): void;
@@ -47,11 +63,6 @@ declare module NXKit.Web {
     }
 }
 declare module NXKit.Web {
-    interface IPropertyValueChangedEvent extends IEvent {
-        add(listener: (property: Property) => void): void;
-        remove(listener: (property: Property) => void): void;
-        trigger(property: Property): void;
-    }
     class Property {
         private _value;
         private _version;
@@ -224,11 +235,6 @@ declare module NXKit.Web.Knockout {
 declare module NXKit.Web.Knockout {
 }
 declare module NXKit.Web {
-    interface ICallbackRequestEvent extends IEvent {
-        add(listener: (data: any) => void): void;
-        remove(listener: (data: any) => void): void;
-        trigger(data: any): void;
-    }
     class View {
         public _body: HTMLElement;
         public _data: any;

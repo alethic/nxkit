@@ -1,12 +1,7 @@
 ﻿module NXKit.Web {
 
-    export interface IEvent {
-        add(listener: () => void): void;
-        remove(listener: () => void): void;
-        trigger(...a: any[]): void;
-    }
-
-    export class TypedEvent implements IEvent {
+    export class TypedEvent
+        implements IEvent {
 
         _listeners: any[] = [];
 
