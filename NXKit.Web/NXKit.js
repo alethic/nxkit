@@ -1157,15 +1157,17 @@ var NXKit;
             * Applies the bindings to the view if possible.
             */
             View.prototype.ApplyBindings = function () {
+                var self = this;
+
                 // apply bindings to our element and our view model
-                if (this._bind && this._body != null && this._root != null) {
+                if (self._bind && self._body != null && self._root != null) {
                     // clear existing bindings
-                    ko.cleanNode(this._body);
+                    ko.cleanNode(self._body);
 
                     // apply knockout to view node
-                    ko.applyBindings(this._root, this._body);
+                    ko.applyBindings(self._root, self._body);
 
-                    this._bind = false;
+                    self._bind = false;
                 }
             };
             return View;
