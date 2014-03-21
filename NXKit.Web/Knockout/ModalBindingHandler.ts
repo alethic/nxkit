@@ -5,17 +5,26 @@
 
         init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
 
-            // register click handler
-            ko.bindingHandlers.click.init(element,
-                () => function () {
-                    var id = valueAccessor();
-                    if (id) {
-                        $('#' + id).modal('show');
-                    }
-                }, allBindings, viewModel, bindingContext);
+            var f = ko.utils.extend(allBindings(), {
+                clickBubble: false,
+            });
 
-            // disable event bubbling
-            ko.bindingHandlers['click-bubble'].init(element, () => false, allBindings, viewModel, bindingContext);
+            ko.bindingHandlers.click.init(
+                element,
+                // inject click handler that shows modal
+                () => function () {
+                    setTimeout(() => {
+                        var id = valueAccessor();
+                        if (id) {
+                            $('#' + id).modal('show');
+                        }
+                    }, 1000);
+                },
+                // add clickBubble: false binding
+                // TODO broken
+                allBindings,
+                viewModel,
+                bindingContext);
         }
     }
 

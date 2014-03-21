@@ -712,38 +712,6 @@ var NXKit;
 (function (NXKit) {
     (function (Web) {
         (function (Knockout) {
-            var ModalBindingHandler = (function () {
-                function ModalBindingHandler() {
-                }
-                ModalBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    // register click handler
-                    ko.bindingHandlers.click.init(element, function () {
-                        return function () {
-                            var id = valueAccessor();
-                            if (id) {
-                                $('#' + id).modal('show');
-                            }
-                        };
-                    }, allBindings, viewModel, bindingContext);
-
-                    // disable event bubbling
-                    ko.bindingHandlers['click-bubble'].init(element, function () {
-                        return false;
-                    }, allBindings, viewModel, bindingContext);
-                };
-                return ModalBindingHandler;
-            })();
-
-            ko.bindingHandlers['nxkit_modal'] = new ModalBindingHandler();
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
             var CheckboxBindingHandler = (function () {
                 function CheckboxBindingHandler() {
                 }
@@ -797,6 +765,185 @@ var NXKit;
             })();
 
             ko.bindingHandlers['nxkit_checkbox'] = new CheckboxBindingHandler();
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var DropdownBindingHandler = (function () {
+                function DropdownBindingHandler() {
+                }
+                DropdownBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    setTimeout(function () {
+                        $(element).dropdown();
+                        $(element).dropdown('setting', {
+                            onChange: function (value) {
+                                var v1 = $(element).dropdown('get value');
+                                var v2 = ko.unwrap(valueAccessor());
+                                if (typeof v1 === 'string') {
+                                    if (v1 != v2)
+                                        valueAccessor()(v1);
+                                }
+                            }
+                        });
+                    }, 2000);
+                };
+
+                DropdownBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    setTimeout(function () {
+                        var v1 = ko.unwrap(valueAccessor());
+                        var v2 = $(element).dropdown('get value');
+                        if (typeof v2 === 'string')
+                            if (v1 != v2)
+                                $(element).dropdown('set value', v1);
+                    }, 1000);
+                };
+                return DropdownBindingHandler;
+            })();
+
+            ko.bindingHandlers['nxkit_dropdown'] = new DropdownBindingHandler();
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var ModalBindingHandler = (function () {
+                function ModalBindingHandler() {
+                }
+                ModalBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    var f = ko.utils.extend(allBindings(), {
+                        clickBubble: false
+                    });
+
+                    ko.bindingHandlers.click.init(element, // inject click handler that shows modal
+                    function () {
+                        return function () {
+                            setTimeout(function () {
+                                var id = valueAccessor();
+                                if (id) {
+                                    $('#' + id).modal('show');
+                                }
+                            }, 1000);
+                        };
+                    }, allBindings, viewModel, bindingContext);
+                };
+                return ModalBindingHandler;
+            })();
+
+            ko.bindingHandlers['nxkit_modal'] = new ModalBindingHandler();
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="../Utils.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var TemplateBindingHandler = (function () {
+                function TemplateBindingHandler() {
+                }
+                TemplateBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    return ko.bindingHandlers.template.init(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
+                };
+
+                TemplateBindingHandler.prototype.update = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    return ko.bindingHandlers.template.update(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
+                };
+
+                /**
+                * Converts the given value accessor into a value accessor compatible with the default template implementation.
+                */
+                TemplateBindingHandler.ConvertValueAccessor = function (valueAccessor, viewModel, bindingContext) {
+                    var _this = this;
+                    return ko.computed(function () {
+                        var data = _this.GetTemplateViewModel(valueAccessor, viewModel, bindingContext);
+                        var opts = _this.GetTemplateBinding(valueAccessor, viewModel, bindingContext);
+                        var name = _this.GetTemplateName(bindingContext, opts);
+
+                        return {
+                            data: data,
+                            name: name
+                        };
+                    });
+                };
+
+                /**
+                * Gets the recommended view model for the given binding information.
+                */
+                TemplateBindingHandler.GetTemplateViewModel = function (valueAccessor, viewModel, bindingContext) {
+                    var value = valueAccessor() || viewModel;
+
+                    // value itself is a visual
+                    if (value != null && ko.unwrap(value) instanceof NXKit.Web.Visual)
+                        return ko.unwrap(value);
+
+                    // specified data value
+                    if (value != null && value.data != null)
+                        return ko.unwrap(value.data);
+
+                    // specified visual value
+                    if (value != null && value.visual != null && ko.unwrap(value.visual) instanceof NXKit.Web.Visual)
+                        return ko.unwrap(value.visual);
+
+                    // default to existing context
+                    return null;
+                };
+
+                /**
+                * Extracts template index data from the given binding information.
+                */
+                TemplateBindingHandler.GetTemplateBinding = function (valueAccessor, viewModel, bindingContext) {
+                    return NXKit.Web.Utils.GetLayoutManager(bindingContext).ParseTemplateBinding(valueAccessor, viewModel, bindingContext, {});
+                };
+
+                /**
+                * Determines the named template from the given extracted data and context.
+                */
+                TemplateBindingHandler.GetTemplateName = function (bindingContext, data) {
+                    return NXKit.Web.Utils.GetLayoutManager(bindingContext).GetTemplateName(data);
+                };
+                return TemplateBindingHandler;
+            })();
+
+            ko.bindingHandlers['nxkit_template'] = new TemplateBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_template'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var VisibleBindingHandler = (function () {
+                function VisibleBindingHandler() {
+                }
+                VisibleBindingHandler.prototype.init = function (element, valueAccessor) {
+                    var value = valueAccessor();
+                    $(element).toggle(ko.utils.unwrapObservable(value));
+                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
+                };
+
+                VisibleBindingHandler.prototype.update = function (element, valueAccessor) {
+                    var value = valueAccessor();
+                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
+                };
+                return VisibleBindingHandler;
+            })();
+
+            ko.bindingHandlers['nxkit_visible'] = new VisibleBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_visible'] = true;
         })(Web.Knockout || (Web.Knockout = {}));
         var Knockout = Web.Knockout;
     })(NXKit.Web || (NXKit.Web = {}));
@@ -954,152 +1101,6 @@ var NXKit;
             return VisualViewModel;
         })();
         Web.VisualViewModel = VisualViewModel;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var DropdownBindingHandler = (function () {
-                function DropdownBindingHandler() {
-                }
-                DropdownBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    setTimeout(function () {
-                        $(element).dropdown();
-                        $(element).dropdown('setting', {
-                            onChange: function (value) {
-                                var v1 = $(element).dropdown('get value');
-                                var v2 = ko.unwrap(valueAccessor());
-                                if (typeof v1 === 'string') {
-                                    if (v1 != v2)
-                                        valueAccessor()(v1);
-                                }
-                            }
-                        });
-                    }, 2000);
-                };
-
-                DropdownBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    setTimeout(function () {
-                        var v1 = ko.unwrap(valueAccessor());
-                        var v2 = $(element).dropdown('get value');
-                        if (typeof v2 === 'string')
-                            if (v1 != v2)
-                                $(element).dropdown('set value', v1);
-                    }, 1000);
-                };
-                return DropdownBindingHandler;
-            })();
-
-            ko.bindingHandlers['nxkit_dropdown'] = new DropdownBindingHandler();
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var VisibleBindingHandler = (function () {
-                function VisibleBindingHandler() {
-                }
-                VisibleBindingHandler.prototype.init = function (element, valueAccessor) {
-                    var value = valueAccessor();
-                    $(element).toggle(ko.utils.unwrapObservable(value));
-                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
-                };
-
-                VisibleBindingHandler.prototype.update = function (element, valueAccessor) {
-                    var value = valueAccessor();
-                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
-                };
-                return VisibleBindingHandler;
-            })();
-
-            ko.bindingHandlers['nxkit_visible'] = new VisibleBindingHandler();
-            ko.virtualElements.allowedBindings['nxkit_visible'] = true;
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-/// <reference path="../Utils.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var TemplateBindingHandler = (function () {
-                function TemplateBindingHandler() {
-                }
-                TemplateBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                    return ko.bindingHandlers.template.init(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
-                };
-
-                TemplateBindingHandler.prototype.update = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                    return ko.bindingHandlers.template.update(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
-                };
-
-                /**
-                * Converts the given value accessor into a value accessor compatible with the default template implementation.
-                */
-                TemplateBindingHandler.ConvertValueAccessor = function (valueAccessor, viewModel, bindingContext) {
-                    var _this = this;
-                    return ko.computed(function () {
-                        var data = _this.GetTemplateViewModel(valueAccessor, viewModel, bindingContext);
-                        var opts = _this.GetTemplateBinding(valueAccessor, viewModel, bindingContext);
-                        var name = _this.GetTemplateName(bindingContext, opts);
-
-                        return {
-                            data: data,
-                            name: name
-                        };
-                    });
-                };
-
-                /**
-                * Gets the recommended view model for the given binding information.
-                */
-                TemplateBindingHandler.GetTemplateViewModel = function (valueAccessor, viewModel, bindingContext) {
-                    var value = valueAccessor() || viewModel;
-
-                    // value itself is a visual
-                    if (value != null && ko.unwrap(value) instanceof NXKit.Web.Visual)
-                        return ko.unwrap(value);
-
-                    // specified data value
-                    if (value != null && value.data != null)
-                        return ko.unwrap(value.data);
-
-                    // specified visual value
-                    if (value != null && value.visual != null && ko.unwrap(value.visual) instanceof NXKit.Web.Visual)
-                        return ko.unwrap(value.visual);
-
-                    // default to existing context
-                    return null;
-                };
-
-                /**
-                * Extracts template index data from the given binding information.
-                */
-                TemplateBindingHandler.GetTemplateBinding = function (valueAccessor, viewModel, bindingContext) {
-                    return NXKit.Web.Utils.GetLayoutManager(bindingContext).ParseTemplateBinding(valueAccessor, viewModel, bindingContext, {});
-                };
-
-                /**
-                * Determines the named template from the given extracted data and context.
-                */
-                TemplateBindingHandler.GetTemplateName = function (bindingContext, data) {
-                    return NXKit.Web.Utils.GetLayoutManager(bindingContext).GetTemplateName(data);
-                };
-                return TemplateBindingHandler;
-            })();
-
-            ko.bindingHandlers['nxkit_template'] = new TemplateBindingHandler();
-            ko.virtualElements.allowedBindings['nxkit_template'] = true;
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
