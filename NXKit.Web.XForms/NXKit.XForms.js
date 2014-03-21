@@ -53,6 +53,30 @@ var NXKit;
                     configurable: true
                 });
 
+                Object.defineProperty(XFormsVisualViewModel.prototype, "ReadOnly", {
+                    get: function () {
+                        return NXKit.Web.XForms.Utils.GetReadOnly(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(XFormsVisualViewModel.prototype, "Required", {
+                    get: function () {
+                        return NXKit.Web.XForms.Utils.GetRequired(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+                Object.defineProperty(XFormsVisualViewModel.prototype, "Valid", {
+                    get: function () {
+                        return NXKit.Web.XForms.Utils.GetValid(this.Visual);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
                 Object.defineProperty(XFormsVisualViewModel.prototype, "Type", {
                     get: function () {
                         return NXKit.Web.XForms.Utils.GetType(this.Visual);
@@ -206,6 +230,48 @@ var NXKit;
                         });
                     };
 
+                    Object.defineProperty(Item.prototype, "ReadOnly", {
+                        get: function () {
+                            return this.GetReadOnly();
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+
+                    Item.prototype.GetReadOnly = function () {
+                        return ko.computed(function () {
+                            return false;
+                        });
+                    };
+
+                    Object.defineProperty(Item.prototype, "Required", {
+                        get: function () {
+                            return this.GetRequired();
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+
+                    Item.prototype.GetRequired = function () {
+                        return ko.computed(function () {
+                            return false;
+                        });
+                    };
+
+                    Object.defineProperty(Item.prototype, "Valid", {
+                        get: function () {
+                            return this.GetValid();
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+
+                    Item.prototype.GetValid = function () {
+                        return ko.computed(function () {
+                            return true;
+                        });
+                    };
+
                     Object.defineProperty(Item.prototype, "Label", {
                         get: function () {
                             return this.GetLabel();
@@ -264,6 +330,18 @@ var NXKit;
 
                     VisualItem.prototype.GetRelevant = function () {
                         return NXKit.Web.XForms.Utils.GetRelevant(this._itemVisual);
+                    };
+
+                    VisualItem.prototype.GetReadOnly = function () {
+                        return NXKit.Web.XForms.Utils.GetReadOnly(this._itemVisual);
+                    };
+
+                    VisualItem.prototype.GetRequired = function () {
+                        return NXKit.Web.XForms.Utils.GetRequired(this._itemVisual);
+                    };
+
+                    VisualItem.prototype.GetValid = function () {
+                        return NXKit.Web.XForms.Utils.GetValid(this._itemVisual);
                     };
 
                     VisualItem.prototype.GetLabel = function () {
@@ -352,6 +430,18 @@ var NXKit;
                         return this.Item.Relevant;
                     };
 
+                    SingleItem.prototype.GetReadOnly = function () {
+                        return this.Item.ReadOnly;
+                    };
+
+                    SingleItem.prototype.GetRequired = function () {
+                        return this.Item.Required;
+                    };
+
+                    SingleItem.prototype.GetValid = function () {
+                        return this.Item.Valid;
+                    };
+
                     SingleItem.prototype.GetLabel = function () {
                         return this._item.Label;
                     };
@@ -411,6 +501,27 @@ var NXKit;
                         });
                     };
 
+                    DoubleItem.prototype.GetReadOnly = function () {
+                        var _this = this;
+                        return ko.computed(function () {
+                            return _this._item1.ReadOnly() && _this._item2.ReadOnly();
+                        });
+                    };
+
+                    DoubleItem.prototype.GetRequired = function () {
+                        var _this = this;
+                        return ko.computed(function () {
+                            return _this._item1.Required() && _this._item2.Required();
+                        });
+                    };
+
+                    DoubleItem.prototype.GetValid = function () {
+                        var _this = this;
+                        return ko.computed(function () {
+                            return _this._item1.Valid() && _this._item2.Valid();
+                        });
+                    };
+
                     DoubleItem.prototype.GetLabel = function () {
                         return null;
                     };
@@ -452,6 +563,18 @@ var NXKit;
 
                     GroupItem.prototype.GetRelevant = function () {
                         return NXKit.Web.XForms.Utils.GetRelevant(this._groupVisual);
+                    };
+
+                    GroupItem.prototype.GetReadOnly = function () {
+                        return NXKit.Web.XForms.Utils.GetReadOnly(this._groupVisual);
+                    };
+
+                    GroupItem.prototype.GetRequired = function () {
+                        return NXKit.Web.XForms.Utils.GetRequired(this._groupVisual);
+                    };
+
+                    GroupItem.prototype.GetValid = function () {
+                        return NXKit.Web.XForms.Utils.GetValid(this._groupVisual);
                     };
 
                     GroupItem.prototype.GetLabel = function () {
@@ -736,17 +859,24 @@ var NXKit;
     (function (Web) {
         (function (XForms) {
             (function (Utils) {
+                function GetProperty(visual, name) {
+                    if (visual != null && visual.Properties[name] != null)
+                        return visual.Properties[name];
+                    else
+                        return null;
+                }
+                Utils.GetProperty = GetProperty;
+
                 function GetValue(visual) {
                     return ko.computed({
                         read: function () {
-                            if (visual != null && visual.Properties['Value'] != null)
-                                return visual.Properties['Value'].Value();
-                            else
-                                return null;
+                            var p = GetProperty(visual, "Value");
+                            return p != null ? p.Value() : null;
                         },
                         write: function (_) {
-                            if (visual != null && visual.Properties['Value'] != null)
-                                visual.Properties['Value'].Value(_);
+                            var p = GetProperty(visual, "Value");
+                            if (p != null)
+                                p.Value(_);
                         }
                     });
                 }
@@ -755,14 +885,13 @@ var NXKit;
                 function GetValueAsString(visual) {
                     return ko.computed({
                         read: function () {
-                            if (visual != null && visual.Properties['Value'] != null)
-                                return visual.Properties['Value'].ValueAsString();
-                            else
-                                return null;
+                            var p = GetProperty(visual, "Value");
+                            return p != null ? p.ValueAsString() : null;
                         },
                         write: function (_) {
-                            if (visual != null && visual.Properties['Value'] != null)
-                                visual.Properties['Value'].ValueAsString(_);
+                            var p = GetProperty(visual, "Value");
+                            if (p != null)
+                                p.ValueAsString(_);
                         }
                     });
                 }
@@ -771,14 +900,13 @@ var NXKit;
                 function GetValueAsBoolean(visual) {
                     return ko.computed({
                         read: function () {
-                            if (visual != null && visual.Properties['Value'] != null)
-                                return visual.Properties['Value'].ValueAsBoolean();
-                            else
-                                return null;
+                            var p = GetProperty(visual, "Value");
+                            return p != null ? p.ValueAsBoolean() : null;
                         },
                         write: function (_) {
-                            if (visual != null && visual.Properties['Value'] != null)
-                                visual.Properties['Value'].ValueAsBoolean(_);
+                            var p = GetProperty(visual, "Value");
+                            if (p != null)
+                                p.ValueAsBoolean(_);
                         }
                     });
                 }
@@ -787,14 +915,13 @@ var NXKit;
                 function GetValueAsNumber(visual) {
                     return ko.computed({
                         read: function () {
-                            if (visual != null && visual.Properties['Value'] != null)
-                                return visual.Properties['Value'].ValueAsNumber();
-                            else
-                                return null;
+                            var p = GetProperty(visual, "Value");
+                            return p != null ? p.ValueAsNumber() : null;
                         },
                         write: function (_) {
-                            if (visual != null && visual.Properties['Value'] != null)
-                                visual.Properties['Value'].ValueAsNumber(_);
+                            var p = GetProperty(visual, "Value");
+                            if (p != null)
+                                p.ValueAsNumber(_);
                         }
                     });
                 }
@@ -802,30 +929,48 @@ var NXKit;
 
                 function GetRelevant(visual) {
                     return ko.computed(function () {
-                        if (visual != null && visual.Properties['Relevant'] != null)
-                            return visual.Properties['Relevant'].ValueAsBoolean();
-                        else
-                            return null;
+                        var p = GetProperty(visual, "Relevant");
+                        return p != null ? p.ValueAsBoolean() : null;
                     });
                 }
                 Utils.GetRelevant = GetRelevant;
 
+                function GetReadOnly(visual) {
+                    return ko.computed(function () {
+                        var p = GetProperty(visual, "ReadOnly");
+                        return p != null ? p.ValueAsBoolean() : null;
+                    });
+                }
+                Utils.GetReadOnly = GetReadOnly;
+
+                function GetRequired(visual) {
+                    return ko.computed(function () {
+                        var p = GetProperty(visual, "Required");
+                        return p != null ? p.ValueAsBoolean() : null;
+                    });
+                }
+                Utils.GetRequired = GetRequired;
+
+                function GetValid(visual) {
+                    return ko.computed(function () {
+                        var p = GetProperty(visual, "Valid");
+                        return p != null ? p.ValueAsBoolean() : null;
+                    });
+                }
+                Utils.GetValid = GetValid;
+
                 function GetType(visual) {
                     return ko.computed(function () {
-                        if (visual != null && visual.Properties['Type'] != null)
-                            return visual.Properties['Type'].ValueAsString();
-                        else
-                            return null;
+                        var p = GetProperty(visual, "Type");
+                        return p != null ? p.ValueAsString() : null;
                     });
                 }
                 Utils.GetType = GetType;
 
                 function GetAppearance(visual) {
                     return ko.computed(function () {
-                        if (visual != null && visual.Properties['Appearance'] != null)
-                            return visual.Properties['Appearance'].ValueAsString();
-                        else
-                            return null;
+                        var p = GetProperty(visual, "Appearance");
+                        return p != null ? p.ValueAsString() : null;
                     });
                 }
                 Utils.GetAppearance = GetAppearance;

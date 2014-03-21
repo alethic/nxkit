@@ -26,47 +26,59 @@
             super(context, visual);
         }
 
-        get Value(): KnockoutComputed<any> {
+        public get Value(): KnockoutComputed<any> {
             return Utils.GetValue(this.Visual);
         }
 
-        get ValueAsString(): KnockoutComputed<string> {
+        public get ValueAsString(): KnockoutComputed<string> {
             return Utils.GetValueAsString(this.Visual);
         }
 
-        get ValueAsBoolean(): KnockoutComputed<boolean> {
+        public get ValueAsBoolean(): KnockoutComputed<boolean> {
             return Utils.GetValueAsBoolean(this.Visual);
         }
 
-        get ValueAsNumber(): KnockoutComputed<number> {
+        public get ValueAsNumber(): KnockoutComputed<number> {
             return Utils.GetValueAsNumber(this.Visual);
         }
 
-        get Relevant(): KnockoutComputed<boolean> {
+        public get Relevant(): KnockoutComputed<boolean> {
             return Utils.GetRelevant(this.Visual);
         }
 
-        get Type(): KnockoutComputed<string> {
+        public get ReadOnly(): KnockoutComputed<boolean> {
+            return Utils.GetReadOnly(this.Visual);
+        }
+
+        public get Required(): KnockoutComputed<boolean> {
+            return Utils.GetRequired(this.Visual);
+        }
+
+        public get Valid(): KnockoutComputed<boolean> {
+            return Utils.GetValid(this.Visual);
+        }
+
+        public get Type(): KnockoutComputed<string> {
             return Utils.GetType(this.Visual);
         }
 
-        get Appearance(): KnockoutComputed<string> {
+        public get Appearance(): KnockoutComputed<string> {
             return Utils.GetAppearance(this.Visual);
         }
 
-        get Label(): Visual {
+        public get Label(): Visual {
             return Utils.GetLabel(this.Visual);
         }
 
-        get Help(): Visual {
+        public get Help(): Visual {
             return Utils.GetHelp(this.Visual);
         }
 
-        get Hint(): Visual {
+        public get Hint(): Visual {
             return Utils.GetHint(this.Visual);
         }
 
-        get Contents(): Visual[] {
+        public get Contents(): Visual[] {
             return Utils.GetContents(this.Visual);
         }
 

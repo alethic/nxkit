@@ -117,6 +117,15 @@ namespace NXKit.XForms
         }
 
         /// <summary>
+        /// Gets whether or not this visual is bound to valid data.
+        /// </summary>
+        [Interactive]
+        public bool Valid
+        {
+            get { return Binding != null ? Binding.Valid : false; }
+        }
+
+        /// <summary>
         /// Refreshes the visual's state from the model.
         /// </summary>
         public override void Refresh()

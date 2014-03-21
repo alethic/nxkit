@@ -10,16 +10,30 @@ module NXKit.Web {
         _root: Visual;
         _bind: boolean;
 
+        private _onVisualValueChanged: (visual: Visual, property: Property) => void;
+
+        private _queue: any[];
+        private _queueRunning: boolean;
+
         /**
          * Raised when the Visual has changes to be pushed to the server.
          */
         public CallbackRequest: ICallbackRequestEvent = new TypedEvent();
 
         constructor(body: HTMLElement) {
-            this._body = body;
-            this._data = null;
-            this._root = null;
-            this._bind = true;
+            var self = this;
+
+            self._body = body;
+            self._data = null;
+            self._root = null;
+            self._bind = true;
+
+            self._queue = new Array<any>();
+            self._queueRunning = false;
+
+            self._onVisualValueChanged = (visual: Visual, property: Property) => {
+                self.OnRootVisualValueChanged(visual, property);
+            };
         }
 
         get Body(): HTMLElement {
@@ -52,24 +66,69 @@ module NXKit.Web {
         Update() {
             var self = this;
 
-            if (self._root == null)
+            if (self._root == null) {
                 // generate new visual tree
                 self._root = new Visual(self._data);
-            else
+                self._root.ValueChanged.add(self._onVisualValueChanged);
+            }
+            else {
                 // update existing visual tree
+                self._root.ValueChanged.remove(self._onVisualValueChanged);
                 self._root.Update(self._data);
+                self._root.ValueChanged.add(self._onVisualValueChanged);
+            }
 
-            self._root.ValueChanged.add((_, __) => self.OnCallbackRequest());
             self.ApplyBindings();
+        }
+
+        /**
+         * Invoked to handle root visual value change events.
+         */
+        OnRootVisualValueChanged(visual: Visual, property: Property) {
+            this.Push();
         }
 
         /**
          * Invoked when the view model initiates a request to push updates.
          */
-        OnCallbackRequest() {
+        Push() {
             var self = this;
 
-            self.CallbackRequest.trigger(self._root.ToData());
+            this.Queue(function (cb: ICallbackComplete) {
+                self.CallbackRequest.trigger(self._root.ToData(), cb);
+            });
+        }
+
+        /**
+         * Runs any available items in the queue.
+         */
+        Queue(func: (cb: ICallbackComplete) => void) {
+            var self = this;
+
+            // pushes a new event to trigger a callback onto the queue
+            self._queue.push(func);
+
+            // only one runner at a time
+            if (self._queueRunning) {
+                return;
+            } else {
+                self._queueRunning = true;
+
+                // recursive call to work queue
+                var l = () => {
+                    var f = self._queue.shift();
+                    if (f) {
+                        f((result: any) => {
+                            l(); // recurse
+                        });
+                    } else {
+                        self._queueRunning = false;
+                    }ue
+                };
+
+                // initiate queue run
+                l();
+            }
         }
 
         /**

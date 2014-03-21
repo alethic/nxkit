@@ -72,8 +72,8 @@ _NXKit.Web.UI.View.prototype = {
             // generate new view
             if (self._view == null) {
                 self._view = new NXKit.Web.View(self._body);
-                self._view.CallbackRequest.add(function (data) {
-                    self.onCallbackRequest(data);
+                self._view.CallbackRequest.add(function (data, wh) {
+                    self.onCallbackRequest(data, wh);
                 });
             }
 
@@ -82,7 +82,7 @@ _NXKit.Web.UI.View.prototype = {
         }
     },
 
-    onCallbackRequest: function (data) {
+    onCallbackRequest: function (data, wh) {
         var self = this;
 
         // generate event argument to pass to server
@@ -96,13 +96,13 @@ _NXKit.Web.UI.View.prototype = {
 
         // initiate server request
         var cb = function (args) {
-            self.onCallbackRequestEnd(args);
+            self.onCallbackRequestEnd(args, wh);
         };
 
         eval(self._push);
     },
 
-    onCallbackRequestEnd: function (result) {
+    onCallbackRequestEnd: function (result, wh) {
         var self = this;
 
         // result contains new save and data values
@@ -111,6 +111,8 @@ _NXKit.Web.UI.View.prototype = {
         $(self._data).val(JSON.stringify(args.Data));
 
         self._view.Data = $(self._data).val();
+
+        wh();
     },
 
 };

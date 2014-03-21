@@ -888,10 +888,19 @@ var NXKit;
                 * Raised when the Visual has changes to be pushed to the server.
                 */
                 this.CallbackRequest = new NXKit.Web.TypedEvent();
-                this._body = body;
-                this._data = null;
-                this._root = null;
-                this._bind = true;
+                var self = this;
+
+                self._body = body;
+                self._data = null;
+                self._root = null;
+                self._bind = true;
+
+                self._queue = new Array();
+                self._queueRunning = false;
+
+                self._onVisualValueChanged = function (visual, property) {
+                    self.OnRootVisualValueChanged(visual, property);
+                };
             }
             Object.defineProperty(View.prototype, "Body", {
                 get: function () {
@@ -931,26 +940,68 @@ var NXKit;
             View.prototype.Update = function () {
                 var self = this;
 
-                if (self._root == null)
+                if (self._root == null) {
                     // generate new visual tree
                     self._root = new NXKit.Web.Visual(self._data);
-                else
+                    self._root.ValueChanged.add(self._onVisualValueChanged);
+                } else {
                     // update existing visual tree
+                    self._root.ValueChanged.remove(self._onVisualValueChanged);
                     self._root.Update(self._data);
+                    self._root.ValueChanged.add(self._onVisualValueChanged);
+                }
 
-                self._root.ValueChanged.add(function (_, __) {
-                    return self.OnCallbackRequest();
-                });
                 self.ApplyBindings();
+            };
+
+            /**
+            * Invoked to handle root visual value change events.
+            */
+            View.prototype.OnRootVisualValueChanged = function (visual, property) {
+                this.Push();
             };
 
             /**
             * Invoked when the view model initiates a request to push updates.
             */
-            View.prototype.OnCallbackRequest = function () {
+            View.prototype.Push = function () {
                 var self = this;
 
-                self.CallbackRequest.trigger(self._root.ToData());
+                this.Queue(function (cb) {
+                    self.CallbackRequest.trigger(self._root.ToData(), cb);
+                });
+            };
+
+            /**
+            * Runs any available items in the queue.
+            */
+            View.prototype.Queue = function (func) {
+                var self = this;
+
+                // pushes a new event to trigger a callback onto the queue
+                self._queue.push(func);
+
+                // only one runner at a time
+                if (self._queueRunning) {
+                    return;
+                } else {
+                    self._queueRunning = true;
+
+                    // recursive call to work queue
+                    var l = function () {
+                        var f = self._queue.shift();
+                        if (f) {
+                            f(function (result) {
+                                l(); // recurse
+                            });
+                        } else {
+                            self._queueRunning = false;
+                        }
+                    };
+
+                    // initiate queue run
+                    l();
+                }
             };
 
             /**

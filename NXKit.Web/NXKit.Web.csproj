@@ -128,6 +128,7 @@
     <Compile Include="IO\JsonVisualReader.cs" />
     <Compile Include="IO\JsonVisualWriter.cs" />
     <Compile Include="IO\XNameJsonConverter.cs" />
+    <TypeScriptCompile Include="ICallbackComplete.ts" />
     <TypeScriptCompile Include="IEvent.ts" />
     <TypeScriptCompile Include="IPropertyMap.ts" />
     <TypeScriptCompile Include="IVisualPropertyValueChangedEvent.ts" />

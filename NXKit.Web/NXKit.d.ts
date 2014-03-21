@@ -3,9 +3,14 @@
         add(listener: () => void): void;
         remove(listener: () => void): void;
         trigger(...a: any[]): void;
-        add(listener: (data: any) => void): void;
-        remove(listener: (data: any) => void): void;
-        trigger(data: any): void;
+        add(listener: (data: any, wh: ICallbackComplete) => void): void;
+        remove(listener: (data: any, wh: ICallbackComplete) => void): void;
+        trigger(data: any, wh: ICallbackComplete): void;
+    }
+}
+declare module NXKit.Web {
+    interface ICallbackComplete {
+        (result: any): void;
     }
 }
 declare module NXKit.Web {
@@ -255,6 +260,9 @@ declare module NXKit.Web {
         public _data: any;
         public _root: Visual;
         public _bind: boolean;
+        private _onVisualValueChanged;
+        private _queue;
+        private _queueRunning;
         /**
         * Raised when the Visual has changes to be pushed to the server.
         */
@@ -267,9 +275,17 @@ declare module NXKit.Web {
         */
         public Update(): void;
         /**
+        * Invoked to handle root visual value change events.
+        */
+        public OnRootVisualValueChanged(visual: Visual, property: Property): void;
+        /**
         * Invoked when the view model initiates a request to push updates.
         */
-        public OnCallbackRequest(): void;
+        public Push(): void;
+        /**
+        * Runs any available items in the queue.
+        */
+        public Queue(func: (cb: ICallbackComplete) => void): void;
         /**
         * Applies the bindings to the view if possible.
         */

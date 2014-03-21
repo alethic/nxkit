@@ -102,14 +102,18 @@
     <!-- layout: 'field-with-label' -->
 
     <div class="field"
-         data-bind="nxkit_visible: Relevant">
+         data-bind="
+nxkit_visible: Relevant,
+css: {
+    error: !$data.Valid,
+    disabled: $data.ReadOnly,
+}">
 
         <!-- ko nxkit_template: {
             visual: ViewModel.Visual,
             data: $data,
             layout: 'field-label',
         } -->
-
         <!-- /ko -->
         <!-- ko nxkit_layout: {
             SuppressLabel: true,
@@ -132,7 +136,12 @@
     <!-- layout: 'field-without-label' -->
 
     <div class="inline field"
-         data-bind="nxkit_visible: Relevant">
+         data-bind="
+nxkit_visible: Relevant,
+css: {
+    error: !$data.Valid,
+    disabled: $data.ReadOnly,
+}">
 
         <!-- ko nxkit_template: Layout -->
         <!-- /ko -->
@@ -264,7 +273,12 @@
     <div class="two fields">
 
         <!-- ko with: Item1 -->
-        <div class="field">
+        <div class="field" data-bind="
+nxkit_visible: Relevant,
+css: {
+    error: !$data.Valid,
+    disabled: $data.ReadOnly,
+}">
 
             <!-- ko with: Label -->
             <!-- ko if: ($data.Appearance || 'full') == 'full' -->
@@ -277,7 +291,12 @@
         </div>
         <!-- /ko -->
         <!-- ko with: Item2 -->
-        <div class="field">
+        <div class="field" data-bind="
+nxkit_visible: Relevant,
+css: {
+    error: !$data.Valid,
+    disabled: $data.Readonly,
+}">
 
             <!-- ko with: Label -->
             <!-- ko if: ($data.Appearance || 'full') == 'full' -->

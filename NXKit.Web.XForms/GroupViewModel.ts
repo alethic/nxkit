@@ -33,6 +33,30 @@ module NXKit.Web.XForms {
                 return ko.computed<boolean>(() => true);
             }
 
+            public get ReadOnly(): KnockoutObservable<boolean> {
+                return this.GetReadOnly();
+            }
+
+            GetReadOnly(): KnockoutObservable<boolean> {
+                return ko.computed<boolean>(() => false);
+            }
+
+            public get Required(): KnockoutObservable<boolean> {
+                return this.GetRequired();
+            }
+
+            GetRequired(): KnockoutObservable<boolean> {
+                return ko.computed<boolean>(() => false);
+            }
+
+            public get Valid(): KnockoutObservable<boolean> {
+                return this.GetValid();
+            }
+
+            GetValid(): KnockoutObservable<boolean> {
+                return ko.computed<boolean>(() => true);
+            }
+
             public get Label() {
                 return this.GetLabel();
             }
@@ -78,6 +102,18 @@ module NXKit.Web.XForms {
 
             GetRelevant(): KnockoutObservable<boolean> {
                 return Utils.GetRelevant(this._itemVisual);
+            }
+
+            GetReadOnly(): KnockoutObservable<boolean> {
+                return Utils.GetReadOnly(this._itemVisual);
+            }
+
+            GetRequired(): KnockoutObservable<boolean> {
+                return Utils.GetRequired(this._itemVisual);
+            }
+
+            GetValid(): KnockoutObservable<boolean> {
+                return Utils.GetValid(this._itemVisual);
             }
 
             GetLabel(): Visual {
@@ -160,6 +196,18 @@ module NXKit.Web.XForms {
                 return this.Item.Relevant;
             }
 
+            GetReadOnly(): KnockoutObservable<boolean> {
+                return this.Item.ReadOnly;
+            }
+
+            GetRequired(): KnockoutObservable<boolean> {
+                return this.Item.Required;
+            }
+
+            GetValid(): KnockoutObservable<boolean> {
+                return this.Item.Valid;
+            }
+
             GetLabel(): Visual {
                 return this._item.Label;
             }
@@ -212,6 +260,18 @@ module NXKit.Web.XForms {
                 return ko.computed(() => this._item1.Relevant() && this._item2.Relevant());
             }
 
+            GetReadOnly(): KnockoutObservable<boolean> {
+                return ko.computed(() => this._item1.ReadOnly() && this._item2.ReadOnly());
+            }
+
+            GetRequired(): KnockoutObservable<boolean> {
+                return ko.computed(() => this._item1.Required() && this._item2.Required());
+            }
+
+            GetValid(): KnockoutObservable<boolean> {
+                return ko.computed(() => this._item1.Valid() && this._item2.Valid());
+            }
+
             GetLabel(): Visual {
                 return null;
             }
@@ -253,6 +313,18 @@ module NXKit.Web.XForms {
 
             GetRelevant(): KnockoutObservable<boolean> {
                 return Utils.GetRelevant(this._groupVisual);
+            }
+
+            GetReadOnly(): KnockoutObservable<boolean> {
+                return Utils.GetReadOnly(this._groupVisual);
+            }
+
+            GetRequired(): KnockoutObservable<boolean> {
+                return Utils.GetRequired(this._groupVisual);
+            }
+
+            GetValid(): KnockoutObservable<boolean> {
+                return Utils.GetValid(this._groupVisual);
             }
 
             GetLabel(): Visual {

@@ -27,6 +27,7 @@
                  required="true()"
                  type="xsd:int"/>
         <xf:bind nodeset="xf:instance('primaryperson')/dateofbirth"
+                 required="true()"
                  type="xsd:date"/>
 
         <xf:instance id="secondaryperson"

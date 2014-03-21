@@ -1,18 +1,23 @@
 ﻿module NXKit.Web.XForms.Utils {
 
+    export function GetProperty(visual: Visual, name: string): Property {
+        if (visual != null &&
+            visual.Properties[name] != null)
+            return visual.Properties[name];
+        else
+            return null;
+    }
+
     export function GetValue(visual: Visual): KnockoutComputed<any> {
         return ko.computed<any>({
             read: () => {
-                if (visual != null &&
-                    visual.Properties['Value'] != null)
-                    return visual.Properties['Value'].Value();
-                else
-                    return null;
+                var p = GetProperty(visual, "Value");
+                return p != null ? p.Value() : null;
             },
             write: _ => {
-                if (visual != null &&
-                    visual.Properties['Value'] != null)
-                    visual.Properties['Value'].Value(_);
+                var p = GetProperty(visual, "Value");
+                if (p != null)
+                    p.Value(_);
             },
         });
     }
@@ -20,16 +25,13 @@
     export function GetValueAsString(visual: Visual): KnockoutComputed<string> {
         return ko.computed<string>({
             read: () => {
-                if (visual != null &&
-                    visual.Properties['Value'] != null)
-                    return visual.Properties['Value'].ValueAsString();
-                else
-                    return null;
+                var p = GetProperty(visual, "Value");
+                return p != null ? p.ValueAsString() : null;
             },
             write: _ => {
-                if (visual != null &&
-                    visual.Properties['Value'] != null)
-                    visual.Properties['Value'].ValueAsString(_);
+                var p = GetProperty(visual, "Value");
+                if (p != null)
+                    p.ValueAsString(_);
             },
         });
     }
@@ -37,16 +39,13 @@
     export function GetValueAsBoolean(visual: Visual): KnockoutComputed<boolean> {
         return ko.computed<boolean>({
             read: () => {
-                if (visual != null &&
-                    visual.Properties['Value'] != null)
-                    return visual.Properties['Value'].ValueAsBoolean();
-                else
-                    return null;
+                var p = GetProperty(visual, "Value");
+                return p != null ? p.ValueAsBoolean() : null;
             },
             write: _ => {
-                if (visual != null &&
-                    visual.Properties['Value'] != null)
-                    visual.Properties['Value'].ValueAsBoolean(_);
+                var p = GetProperty(visual, "Value");
+                if (p != null)
+                    p.ValueAsBoolean(_);
             },
         });
     }
@@ -54,47 +53,56 @@
     export function GetValueAsNumber(visual: Visual): KnockoutComputed<number> {
         return ko.computed<number>({
             read: () => {
-                if (visual != null &&
-                    visual.Properties['Value'] != null)
-                    return visual.Properties['Value'].ValueAsNumber();
-                else
-                    return null;
+                var p = GetProperty(visual, "Value");
+                return p != null ? p.ValueAsNumber() : null;
             },
             write: _ => {
-                if (visual != null &&
-                    visual.Properties['Value'] != null)
-                    visual.Properties['Value'].ValueAsNumber(_);
+                var p = GetProperty(visual, "Value");
+                if (p != null)
+                    p.ValueAsNumber(_);
             },
         });
     }
 
     export function GetRelevant(visual: Visual): KnockoutComputed<boolean> {
         return ko.computed(() => {
-            if (visual != null &&
-                visual.Properties['Relevant'] != null)
-                return visual.Properties['Relevant'].ValueAsBoolean();
-            else
-                return null;
+            var p = GetProperty(visual, "Relevant");
+            return p != null ? p.ValueAsBoolean() : null;
+        });
+    }
+
+    export function GetReadOnly(visual: Visual): KnockoutComputed<boolean> {
+        return ko.computed(() => {
+            var p = GetProperty(visual, "ReadOnly");
+            return p != null ? p.ValueAsBoolean() : null;
+        });
+    }
+
+    export function GetRequired(visual: Visual): KnockoutComputed<boolean> {
+        return ko.computed(() => {
+            var p = GetProperty(visual, "Required");
+            return p != null ? p.ValueAsBoolean() : null;
+        });
+    }
+
+    export function GetValid(visual: Visual): KnockoutComputed<boolean> {
+        return ko.computed(() => {
+            var p = GetProperty(visual, "Valid");
+            return p != null ? p.ValueAsBoolean() : null;
         });
     }
 
     export function GetType(visual: Visual): KnockoutComputed<string> {
         return ko.computed(() => {
-            if (visual != null &&
-                visual.Properties['Type'] != null)
-                return visual.Properties['Type'].ValueAsString();
-            else
-                return null;
+            var p = GetProperty(visual, "Type");
+            return p != null ? p.ValueAsString() : null;
         });
     }
 
     export function GetAppearance(visual: Visual): KnockoutComputed<string> {
         return ko.computed(() => {
-            if (visual != null &&
-                visual.Properties['Appearance'] != null)
-                return visual.Properties['Appearance'].ValueAsString();
-            else
-                return null;
+            var p = GetProperty(visual, "Appearance");
+            return p != null ? p.ValueAsString() : null;
         });
     }
 
