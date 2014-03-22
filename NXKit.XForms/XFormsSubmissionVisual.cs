@@ -3,13 +3,15 @@ using System.IO;
 using System.Text;
 using System.Xml.Linq;
 
+using NXKit.DOMEvents;
 using NXKit.Util;
 
 namespace NXKit.XForms
 {
 
     [Visual("submission")]
-    public class XFormsSubmissionVisual : XFormsSingleNodeBindingVisual,
+    public class XFormsSubmissionVisual :
+        XFormsSingleNodeBindingVisual,
         IEventDefaultActionHandler<XFormsSubmitEvent>
     {
 

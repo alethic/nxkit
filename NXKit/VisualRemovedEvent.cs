@@ -1,7 +1,10 @@
-﻿namespace NXKit
+﻿using NXKit.DOMEvents;
+
+namespace NXKit
 {
 
-    public class VisualRemovedEvent : Event
+    public class VisualRemovedEvent : 
+        Event
     {
 
         public static readonly string Name = "visual-removed";

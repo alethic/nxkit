@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-using NXKit.DOMEvents;
-
-namespace NXKit
+namespace NXKit.DOMEvents
 {
 
     public class Event :
@@ -17,8 +15,11 @@ namespace NXKit
         bool bubbles;
         bool cancelable;
         ulong timeStamp;
+        bool defaultPrevented;
+        bool isTrusted;
         bool stopPropagationSet;
-        internal bool preventDefaultSet;
+        bool stopImmediatePropagationSet;
+        bool preventDefaultSet;
 
         /// <summary>
         /// Initializes a new instance.
@@ -27,6 +28,18 @@ namespace NXKit
         {
             this.eventPhase = EventPhase.Uninitialized;
             this.timeStamp = (ulong)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="type"></param>
+        public Event(string type)
+            : this()
+        {
+            Contract.Requires<ArgumentNullException>(type != null);
+
+            this.type = type;
         }
 
         /// <summary>
@@ -42,6 +55,21 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(type.Length > 0);
 
             InitEvent(type, canBubble, cancelable);
+        }
+
+        public void InitEvent(string type, bool canBubble, bool cancelable)
+        {
+            if (EventPhase != EventPhase.Uninitialized)
+                throw new InvalidOperationException();
+
+            this.type = type;
+            this.bubbles = canBubble;
+            this.cancelable = cancelable;
+            this.defaultPrevented = false;
+            this.isTrusted = false;
+            this.stopPropagationSet = false;
+            this.stopImmediatePropagationSet = false;
+            this.preventDefaultSet = false;
         }
 
         public string Type
@@ -82,12 +110,12 @@ namespace NXKit
             get { return timeStamp; }
         }
 
-        internal bool StopPropagationSet
+        public bool StopPropagationSet
         {
             get { return stopPropagationSet; }
         }
 
-        internal bool PreventDefaultSet
+        public bool PreventDefaultSet
         {
             get { return preventDefaultSet; }
         }
@@ -102,14 +130,19 @@ namespace NXKit
             preventDefaultSet = true;
         }
 
-        public void InitEvent(string type, bool canBubble, bool cancelable)
+        public void StopImmediatePropagation()
         {
-            if (EventPhase != EventPhase.Uninitialized)
-                throw new InvalidOperationException();
+            stopImmediatePropagationSet = true;
+        }
 
-            this.type = type;
-            this.bubbles = canBubble;
-            this.cancelable = Cancelable;
+        public bool DefaultPrevented
+        {
+            get { return defaultPrevented; }
+        }
+
+        public bool IsTrusted
+        {
+            get { return isTrusted; }
         }
 
     }

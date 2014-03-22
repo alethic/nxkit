@@ -120,14 +120,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultResolver.cs" />
-    <Compile Include="Event.cs" />
     <Compile Include="InteractiveAttribute.cs" />
     <Compile Include="IO\VisualWriter.cs" />
     <Compile Include="NXDocumentConfiguration.cs" />
     <Compile Include="EventListenerMap.cs" />
     <Compile Include="EventListenerData.cs" />
     <Compile Include="HttpResolver.cs" />
-    <Compile Include="IEventDefaultActionHandler.cs" />
     <Compile Include="INavigationCategoryVisual.cs" />
     <Compile Include="INavigationPageVisual.cs" />
     <Compile Include="INavigationSectionVisual.cs" />

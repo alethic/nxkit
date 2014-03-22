@@ -1,7 +1,10 @@
-﻿namespace NXKit
+﻿using NXKit.DOMEvents;
+
+namespace NXKit
 {
 
-    public class VisualAddedEvent : Event
+    public class VisualAddedEvent : 
+        Event
     {
 
         public static readonly string Name = "visual-added";

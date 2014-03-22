@@ -1,4 +1,4 @@
-﻿namespace NXKit
+﻿namespace NXKit.DOMEvents
 {
 
     /// <summary>
@@ -6,7 +6,7 @@
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface IEventDefaultActionHandler<T>
-        where T : Event
+        where T : IEvent
     {
 
         /// <summary>

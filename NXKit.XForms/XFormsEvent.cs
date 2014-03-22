@@ -1,4 +1,6 @@
-﻿namespace NXKit.XForms
+﻿using NXKit.DOMEvents;
+
+namespace NXKit.XForms
 {
 
     public abstract class XFormsEvent : 

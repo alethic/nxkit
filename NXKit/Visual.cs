@@ -74,6 +74,19 @@ namespace NXKit
         public XNode Node { get; private set; }
 
         /// <summary>
+        /// Gets the implemented interface specified by <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T Interface<T>()
+        {
+            return Document.Modules
+                .SelectMany(i => i.GetInterfaces(this))
+                .OfType<T>()
+                .FirstOrDefault();
+        }
+
+        /// <summary>
         /// Additional information attached to this <see cref="Visual"/>.
         /// </summary>
         public VisualAnnotationCollection Annotations { get; private set; }
