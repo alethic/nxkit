@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NXKit.DOMLevel2")]
+[assembly: AssemblyTitle("NXKit.DOM.Events")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NXKit.DOMLevel2")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyProduct("NXKit.DOM.Events")]
+[assembly: AssemblyCopyright("Copyright © Jerome Haltom 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("cd2cf3aa-24a8-4cf7-bf7e-c0407162c8af")]
+[assembly: Guid("9e5c8b2d-9968-4713-a055-fd3ac9543963")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -1,4 +1,7 @@
-﻿namespace NXKit.XForms.Layout
+﻿using System;
+using System.Diagnostics.Contracts;
+
+namespace NXKit.XForms.Layout
 {
 
     public static class LayoutHelper
@@ -11,6 +14,8 @@
         /// <returns></returns>
         public static Importance GetImportance(ContentVisual visual)
         {
+            Contract.Requires<ArgumentNullException>(visual != null);
+
             var attr = visual.Document.GetModule<LayoutModule>().GetAttributeValue(visual.Element, "importance");
 
             // return value based on string

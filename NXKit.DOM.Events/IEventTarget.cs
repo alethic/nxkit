@@ -1,4 +1,4 @@
-﻿namespace NXKit.DOM2.Events
+﻿namespace NXKit.DOM.Events
 {
 
     public interface IEventTarget

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-using NXKit.DOM2.Events;
+using NXKit.DOM.Events;
 
 namespace NXKit.XForms
 {

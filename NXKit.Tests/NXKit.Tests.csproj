@@ -95,9 +95,9 @@
     <Compile Include="SerializationTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NXKit.DOM2.Events\NXKit.DOM2.Events.csproj">
+    <ProjectReference Include="..\NXKit.DOM.Events\NXKit.DOM.Events.csproj">
       <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
-      <Name>NXKit.DOM2.Events</Name>
+      <Name>NXKit.DOM.Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>

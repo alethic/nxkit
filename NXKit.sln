@@ -36,7 +36,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Web.XForms", "NXKit.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Web.XForms.Layout", "NXKit.Web.XForms.Layout\NXKit.Web.XForms.Layout.csproj", "{9499152C-156E-4005-A01F-4D6F1C480C63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.DOM2.Events", "NXKit.DOM2.Events\NXKit.DOM2.Events.csproj", "{AFDA4394-6FC4-48DA-BBD0-D97A77F5AE0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.DOM.Events", "NXKit.DOM.Events\NXKit.DOM.Events.csproj", "{AFDA4394-6FC4-48DA-BBD0-D97A77F5AE0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
