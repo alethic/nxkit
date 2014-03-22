@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 using NXKit.DOMEvents;
 
-namespace NXKit.Events
+namespace NXKit.XmlEvents
 {
 
     /// <summary>

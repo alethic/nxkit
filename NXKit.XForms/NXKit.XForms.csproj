@@ -227,7 +227,7 @@
       <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
       <Name>NXKit.DOMEvents</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.Events\NXKit.XmlEvents.csproj">
+    <ProjectReference Include="..\NXKit.XmlEvents\NXKit.XmlEvents.csproj">
       <Project>{db71b395-df60-470a-b761-b083d7acafe8}</Project>
       <Name>NXKit.XmlEvents</Name>
     </ProjectReference>

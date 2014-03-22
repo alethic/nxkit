@@ -1,6 +1,6 @@
 ﻿using NXKit.DOMEvents;
 
-namespace NXKit.Events
+namespace NXKit.XmlEvents
 {
 
     /// <summary>

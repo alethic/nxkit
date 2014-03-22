@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-using NXKit.Events;
+using NXKit.XmlEvents;
 using NXKit.Util;
 
 namespace NXKit.XForms

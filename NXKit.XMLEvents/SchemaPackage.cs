@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Linq;
 
-namespace NXKit.Events
+namespace NXKit.XmlEvents
 {
 
     /// <summary>

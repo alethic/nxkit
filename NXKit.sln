@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms", "NXKit.XForm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Web.UI", "NXKit.Web.UI\NXKit.Web.UI.csproj", "{434F4E74-1BA0-4579-AB27-B0DC7DF4166C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XmlEvents", "NXKit.Events\NXKit.XmlEvents.csproj", "{DB71B395-DF60-470A-B761-B083D7ACAFE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XmlEvents", "NXKit.XmlEvents\NXKit.XmlEvents.csproj", "{DB71B395-DF60-470A-B761-B083D7ACAFE8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{06088512-EBD1-40EE-915C-639EC7160665}"
 	ProjectSection(SolutionItems) = preProject
