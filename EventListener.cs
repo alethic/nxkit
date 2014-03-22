@@ -1,54 +1,47 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using System.Reflection;
+
+using NXKit.DOM2.Events;
 
 namespace NXKit
 {
 
-    public class EventListener<T> :
+    public class EventListener :
         IEventListener
-        where T : Event
     {
 
         /// <summary>
-        /// Registers a handler action for the given <see cref="Event"/>.
+        /// Registers a handler action for the given event.
         /// </summary>
+        /// <param name="eventType"></param>
         /// <param name="target"></param>
         /// <param name="action"></param>
         /// <param name="useCapture"></param>
-        public static void Register(IEventTarget target, Action<T> action, bool useCapture)
+        public static void Register(string eventType, IEventTarget target, Action<IEvent> action, bool useCapture)
         {
+            Contract.Requires<ArgumentNullException>(eventType != null);
             Contract.Requires<ArgumentNullException>(target != null);
             Contract.Requires<ArgumentNullException>(action != null);
 
-            string name = null;
-
-            var nameField = typeof(T).GetField("Name", BindingFlags.Static | BindingFlags.Public);
-            if (nameField != null)
-                name = (string)nameField.GetValue(null);
-
-            if (name == null)
-                throw new Exception();
-
-            target.AddEventListener(name, new EventListener<T>(action), useCapture);
+            target.AddEventListener(eventType, new EventListener(action), useCapture);
         }
 
-        Action<T> action;
+        Action<IEvent> action;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="action"></param>
-        EventListener(Action<T> action)
+        EventListener(Action<IEvent> action)
         {
             Contract.Requires<ArgumentNullException>(action != null);
 
             this.action = action;
         }
 
-        void IEventListener.HandleEvent(Event @event)
+        void IEventListener.HandleEvent(IEvent @event)
         {
-            action((T)@event);
+            action(@event);
         }
 
     }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 
+using NXKit.DOM2.Events;
 using NXKit.Util;
 
 namespace NXKit
@@ -161,7 +162,7 @@ namespace NXKit
                 this.handler = handler2;
             }
 
-            public void HandleEvent(Event evt)
+            public void HandleEvent(IEvent evt)
             {
                 if (handler != null)
                     handler(evt);
@@ -274,11 +275,12 @@ namespace NXKit
         /// </summary>
         /// <param name="visual"></param>
         /// <param name="evt"></param>
-        void HandleDefaultAction(Event evt)
+        void HandleDefaultAction(IEvent evt)
         {
             Contract.Requires<ArgumentNullException>(evt != null);
 
-            if (evt.PreventDefaultSet)
+            var mev = evt as Event;
+            if (mev.PreventDefaultSet)
                 return;
 
             // type of interface visual needs to implement
@@ -301,14 +303,36 @@ namespace NXKit
         }
 
         /// <summary>
+        /// Dispatchs a new event of type <paramref name="type"/> to this <see cref="Visual"/>.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="canBubble"></param>
+        /// <param name="cancelable"></param>
+        public void DispatchEvent(string type, bool canBubble, bool cancelable)
+        {
+            Contract.Requires<ArgumentNullException>(type != null);
+
+            DispatchEvent(new Event(type, canBubble, cancelable));
+        }
+
+        /// <summary>
         /// Dispatches the specified <see cref="Event"/> to this <see cref="Visual"/>.
         /// </summary>
         /// <param name="evt"></param>
         /// <returns></returns>
-        public void DispatchEvent(Event evt)
+        void DispatchEvent(Event evt)
         {
             if (((IEventTarget)this).DispatchEvent(evt))
                 HandleDefaultAction(evt);
+        }
+        /// <summary>
+        /// Implements <see cref="IEventTarget"/>.DispatchEvent.
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <returns></returns>
+        bool IEventTarget.DispatchEvent(IEvent evt)
+        {
+            return DispatchEventImpl((Event)evt);
         }
 
         /// <summary>
@@ -316,7 +340,7 @@ namespace NXKit
         /// </summary>
         /// <param name="evt"></param>
         /// <returns></returns>
-        bool IEventTarget.DispatchEvent(Event evt)
+        bool DispatchEventImpl(Event evt)
         {
             Contract.Assume(evt != null);
 

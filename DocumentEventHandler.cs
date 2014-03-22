@@ -1,6 +1,8 @@
-﻿namespace NXKit
+﻿using NXKit.DOM2.Events;
+
+namespace NXKit
 {
 
-    public delegate void DocumentEventHandler(Event evt);
+    public delegate void DocumentEventHandler(IEvent evt);
 
 }

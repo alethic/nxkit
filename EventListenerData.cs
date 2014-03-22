@@ -1,4 +1,6 @@
-﻿namespace NXKit
+﻿using NXKit.DOM2.Events;
+
+namespace NXKit
 {
 
     /// <summary>
