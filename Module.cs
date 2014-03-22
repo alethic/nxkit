@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
@@ -66,7 +67,17 @@ namespace NXKit
         public virtual void AnnotateVisual(Visual visual)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
+        }
 
+        /// <summary>
+        /// Gets all available interfaces for the specified <see cref="Visual"/>.
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <returns></returns>
+        public virtual IEnumerable<object> GetInterfaces(Visual visual)
+        {
+            Contract.Requires<ArgumentNullException>(visual != null);
+            yield break;
         }
 
         /// <summary>

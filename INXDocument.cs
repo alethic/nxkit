@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace NXKit
@@ -12,6 +13,11 @@ namespace NXKit
         /// </summary>
         T GetModule<T>()
             where T : Module;
+
+        /// <summary>
+        /// Gets all available modules.
+        /// </summary>
+        IEnumerable<Module> Modules { get; }
 
         /// <summary>
         /// Gets a reference to the DOM of the form.

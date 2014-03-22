@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.IO;
@@ -279,6 +280,14 @@ namespace NXKit
             where T : Module
         {
             return modules.OfType<T>().FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets all the loaded modules.
+        /// </summary>
+        public IEnumerable<Module> Modules
+        {
+            get { return modules; }
         }
 
         /// <summary>
