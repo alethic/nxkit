@@ -1,7 +1,11 @@
-﻿namespace NXKit.XForms.Layout
+﻿using System;
+using System.Diagnostics.Contracts;
+
+namespace NXKit.XForms.Layout
 {
 
-    public class LanguageAnnotation : VisualAnnotation
+    public class LanguageAnnotation : 
+        VisualAnnotation
     {
 
         /// <summary>
@@ -11,6 +15,8 @@
         public LanguageAnnotation(string code)
             : base()
         {
+            Contract.Requires<ArgumentNullException>(code != null);
+
             Code = code.ToLowerInvariant();
         }
 

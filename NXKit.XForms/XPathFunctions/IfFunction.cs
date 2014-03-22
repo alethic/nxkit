@@ -28,10 +28,12 @@ namespace NXKit.XForms.XPathFunctions
 
         protected override object Invoke(XFormsXsltContext context, XPathNavigator navigator, params object[] args)
         {
-            if (args[0] as bool? == true)
+            if (args.Length >= 2 &&
+                args[0] as bool? == true)
                 return args[1];
-            else
+            else if (args.Length >= 3)
                 return args[2];
+            return null;
         }
 
     }
