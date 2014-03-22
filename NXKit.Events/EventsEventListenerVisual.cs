@@ -1,7 +1,11 @@
-﻿namespace NXKit.Events
+﻿using NXKit.DOM2.Events;
+
+namespace NXKit.Events
 {
 
-    public class EventsEventListenerVisual : ContentVisual, IEventHandlerVisual
+    public class EventsEventListenerVisual :
+        ContentVisual,
+        IEventHandlerVisual
     {
 
         public override string Id
@@ -9,7 +13,7 @@
             get { return Document.GetElementId(Element); }
         }
 
-        public void Handle(Event ev)
+        public void Handle(IEvent ev)
         {
 
         }

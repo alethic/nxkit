@@ -142,6 +142,10 @@
     <Compile Include="VisualAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NXKit.DOM2.Events\NXKit.DOM2.Events.csproj">
+      <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
+      <Name>NXKit.DOM2.Events</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
       <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
       <Name>NXKit.XForms</Name>

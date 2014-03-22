@@ -120,16 +120,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultResolver.cs" />
+    <Compile Include="Event.cs" />
     <Compile Include="InteractiveAttribute.cs" />
     <Compile Include="IO\VisualWriter.cs" />
     <Compile Include="NXDocumentConfiguration.cs" />
     <Compile Include="EventListenerMap.cs" />
-    <Compile Include="EventPhase.cs" />
-    <Compile Include="Event.cs" />
     <Compile Include="EventListenerData.cs" />
     <Compile Include="HttpResolver.cs" />
     <Compile Include="IEventDefaultActionHandler.cs" />
-    <Compile Include="IEventListener.cs" />
     <Compile Include="INavigationCategoryVisual.cs" />
     <Compile Include="INavigationPageVisual.cs" />
     <Compile Include="INavigationSectionVisual.cs" />
@@ -145,11 +143,9 @@
     <Compile Include="XmlSchemaConstants.cs" />
     <Compile Include="DocumentEventHandler.cs" />
     <Compile Include="XmlSchemaPackage.cs" />
-    <Compile Include="IEventTarget.cs" />
     <Compile Include="SchemaPackage.cs" />
     <Compile Include="VisualStateCollection.cs" />
     <Compile Include="VisualRemovedEvent.cs" />
-    <Compile Include="DOMActivateEvent.cs" />
     <Compile Include="EventListener.cs" />
     <Compile Include="SchemaContainer.cs" />
     <Compile Include="INamingScope.cs" />
@@ -177,6 +173,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NXKit.DOM2.Events\NXKit.DOM2.Events.csproj">
+      <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
+      <Name>NXKit.DOM2.Events</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.Util\NXKit.Util.csproj">
       <Project>{1e5fae9e-f890-487b-bfcd-e3ed5c4f8d41}</Project>
       <Name>NXKit.Util</Name>

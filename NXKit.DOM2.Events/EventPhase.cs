@@ -1,4 +1,4 @@
-﻿namespace NXKit
+﻿namespace NXKit.DOM2.Events
 {
 
     public enum EventPhase

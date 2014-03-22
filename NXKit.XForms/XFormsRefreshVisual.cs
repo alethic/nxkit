@@ -1,13 +1,15 @@
-﻿using System.Xml.Linq;
+﻿using NXKit.DOM2.Events;
 
 namespace NXKit.XForms
 {
 
     [Visual("refresh")]
-    public class XFormsRefreshVisual : XFormsVisual, IActionVisual
+    public class XFormsRefreshVisual : 
+        XFormsVisual, 
+        IActionVisual
     {
 
-        public void Handle(Event ev)
+        public void Handle(IEvent ev)
         {
             Invoke();
         }

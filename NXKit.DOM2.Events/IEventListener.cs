@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-namespace NXKit
+namespace NXKit.DOM2.Events
 {
 
     [ContractClass(typeof(IEventListener_Contract))]
     public interface IEventListener
     {
 
-        void HandleEvent(Event evt);
+        void HandleEvent(IEvent evt);
 
     }
 
@@ -17,7 +17,7 @@ namespace NXKit
          IEventListener
     {
 
-        public void HandleEvent(Event evt)
+        public void HandleEvent(IEvent evt)
         {
             Contract.Requires<ArgumentNullException>(evt != null);
             throw new NotImplementedException();

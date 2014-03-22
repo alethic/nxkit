@@ -3,14 +3,18 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
+using NXKit.DOM2.Events;
+
 namespace NXKit.XForms
 {
 
     [Visual("delete")]
-    public class XFormsDeleteVisual : XFormsNodeSetBindingVisual, IActionVisual
+    public class XFormsDeleteVisual : 
+        XFormsNodeSetBindingVisual, 
+        IActionVisual
     {
 
-        public void Handle(Event ev)
+        public void Handle(IEvent ev)
         {
             Module.InvokeAction(this);
         }

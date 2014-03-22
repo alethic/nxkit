@@ -2,6 +2,8 @@
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.DOM2.Events;
+
 namespace NXKit.Events
 {
 
@@ -31,7 +33,7 @@ namespace NXKit.Events
                 this.handler = handler;
             }
 
-            public void HandleEvent(Event ev)
+            public void HandleEvent(IEvent ev)
             {
                 handler.Handle(ev);
             }

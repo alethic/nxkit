@@ -1,14 +1,17 @@
 ﻿using System.Linq;
-using System.Xml.Linq;
+
+using NXKit.DOM2.Events;
 
 namespace NXKit.XForms
 {
 
     [Visual("action")]
-    public class XFormsActionVisual : XFormsVisual, IActionVisual
+    public class XFormsActionVisual : 
+        XFormsVisual,
+        IActionVisual
     {
 
-        public void Handle(Event ev)
+        public void Handle(IEvent ev)
         {
             Module.InvokeAction(this);
         }

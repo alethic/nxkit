@@ -1,7 +1,8 @@
 ﻿namespace NXKit.XForms
 {
 
-    public class XFormsDisabledEvent : XFormsEvent
+    public class XFormsDisabledEvent :
+        XFormsEvent
     {
 
         public static readonly string Name = "xforms-disabled";

@@ -3,7 +3,8 @@
 namespace NXKit.XForms
 {
 
-    internal interface IActionVisual : IEventHandlerVisual
+    internal interface IActionVisual : 
+        IEventHandlerVisual
     {
 
         void Invoke();

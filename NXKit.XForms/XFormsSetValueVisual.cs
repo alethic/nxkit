@@ -1,10 +1,13 @@
-﻿using NXKit.Util;
+﻿using NXKit.DOM2.Events;
+using NXKit.Util;
 
 namespace NXKit.XForms
 {
 
     [Visual("setvalue")]
-    public class XFormsSetValueVisual : XFormsSingleNodeBindingVisual, IActionVisual
+    public class XFormsSetValueVisual : 
+        XFormsSingleNodeBindingVisual, 
+        IActionVisual
     {
 
         XFormsBinding valueBinding;
@@ -26,7 +29,7 @@ namespace NXKit.XForms
             }
         }
 
-        public void Handle(Event ev)
+        public void Handle(IEvent ev)
         {
             Module.InvokeAction(this);
         }

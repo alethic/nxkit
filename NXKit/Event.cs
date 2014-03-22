@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
+using NXKit.DOM2.Events;
+
 namespace NXKit
 {
 
-    public class Event
+    public class Event :
+        IEvent
     {
 
         string type;
@@ -101,9 +104,6 @@ namespace NXKit
 
         public void InitEvent(string type, bool canBubble, bool cancelable)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(type.Length > 0);
-
             if (EventPhase != EventPhase.Uninitialized)
                 throw new InvalidOperationException();
 

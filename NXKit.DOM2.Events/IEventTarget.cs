@@ -1,4 +1,4 @@
-﻿namespace NXKit
+﻿namespace NXKit.DOM2.Events
 {
 
     public interface IEventTarget
@@ -8,7 +8,7 @@
 
         void RemoveEventListener(string type, IEventListener listener, bool useCapture);
 
-        bool DispatchEvent(Event evt);
+        bool DispatchEvent(IEvent evt);
 
     }
 

@@ -1,4 +1,6 @@
-﻿namespace NXKit.Events
+﻿using NXKit.DOM2.Events;
+
+namespace NXKit.Events
 {
 
     /// <summary>
@@ -7,7 +9,7 @@
     public interface IEventHandlerVisual
     {
 
-        void Handle(Event ev);
+        void Handle(IEvent ev);
 
     }
 

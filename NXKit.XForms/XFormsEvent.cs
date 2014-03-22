@@ -1,7 +1,8 @@
 ﻿namespace NXKit.XForms
 {
 
-    public abstract class XFormsEvent : Event
+    public abstract class XFormsEvent : 
+        Event
     {
 
         /// <summary>

@@ -1,13 +1,15 @@
-﻿using System.Xml.Linq;
+﻿using NXKit.DOM2.Events;
 
 namespace NXKit.XForms
 {
 
     [Visual("revalidate")]
-    public class XFormsRevalidateVisual : XFormsVisual, IActionVisual
+    public class XFormsRevalidateVisual : 
+        XFormsVisual, 
+        IActionVisual
     {
 
-        public void Handle(Event ev)
+        public void Handle(IEvent ev)
         {
             Invoke();
         }
