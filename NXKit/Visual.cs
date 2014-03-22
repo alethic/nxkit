@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 
-using NXKit.DOM.Events;
+using NXKit.DOMEvents;
 using NXKit.Util;
 
 namespace NXKit

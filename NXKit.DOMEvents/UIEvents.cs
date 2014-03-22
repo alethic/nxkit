@@ -1,4 +1,4 @@
-﻿namespace NXKit.DOM.Events
+﻿namespace NXKit.DOMEvents
 {
 
     /// <summary>

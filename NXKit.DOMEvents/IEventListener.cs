@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-namespace NXKit.DOM.Events
+namespace NXKit.DOMEvents
 {
 
     [ContractClass(typeof(IEventListener_Contract))]

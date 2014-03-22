@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-using NXKit.DOM.Events;
+using NXKit.DOMEvents;
 
 namespace NXKit
 {

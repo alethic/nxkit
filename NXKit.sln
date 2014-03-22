@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms", "NXKit.XForm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Web.UI", "NXKit.Web.UI\NXKit.Web.UI.csproj", "{434F4E74-1BA0-4579-AB27-B0DC7DF4166C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Events", "NXKit.Events\NXKit.Events.csproj", "{DB71B395-DF60-470A-B761-B083D7ACAFE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XmlEvents", "NXKit.Events\NXKit.XmlEvents.csproj", "{DB71B395-DF60-470A-B761-B083D7ACAFE8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{06088512-EBD1-40EE-915C-639EC7160665}"
 	ProjectSection(SolutionItems) = preProject
@@ -36,7 +36,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Web.XForms", "NXKit.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Web.XForms.Layout", "NXKit.Web.XForms.Layout\NXKit.Web.XForms.Layout.csproj", "{9499152C-156E-4005-A01F-4D6F1C480C63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.DOM.Events", "NXKit.DOM.Events\NXKit.DOM.Events.csproj", "{AFDA4394-6FC4-48DA-BBD0-D97A77F5AE0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.DOMEvents", "NXKit.DOMEvents\NXKit.DOMEvents.csproj", "{AFDA4394-6FC4-48DA-BBD0-D97A77F5AE0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

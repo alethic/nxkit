@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NXKit.DOM.Events")]
+[assembly: AssemblyTitle("NXKit.DOMEvents")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NXKit.DOM.Events")]
+[assembly: AssemblyProduct("NXKit.DOMEvents")]
 [assembly: AssemblyCopyright("Copyright © Jerome Haltom 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

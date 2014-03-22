@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-using NXKit.DOM.Events;
+using NXKit.DOMEvents;
 
 namespace NXKit.XForms
 {

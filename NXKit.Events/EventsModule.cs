@@ -2,7 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
-using NXKit.DOM.Events;
+using NXKit.DOMEvents;
 
 namespace NXKit.Events
 {

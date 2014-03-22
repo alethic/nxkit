@@ -7,8 +7,8 @@
     <ProjectGuid>{AFDA4394-6FC4-48DA-BBD0-D97A77F5AE0C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NXKit.DOM.Events</RootNamespace>
-    <AssemblyName>NXKit.DOM.Events</AssemblyName>
+    <RootNamespace>NXKit.DOMEvents</RootNamespace>
+    <AssemblyName>NXKit.DOMEvents</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>

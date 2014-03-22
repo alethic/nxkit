@@ -125,9 +125,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NXKit.DOM.Events\NXKit.DOM.Events.csproj">
+    <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
       <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
-      <Name>NXKit.DOM.Events</Name>
+      <Name>NXKit.DOMEvents</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>

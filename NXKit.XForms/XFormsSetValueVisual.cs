@@ -1,4 +1,4 @@
-﻿using NXKit.DOM.Events;
+﻿using NXKit.DOMEvents;
 using NXKit.Util;
 
 namespace NXKit.XForms
