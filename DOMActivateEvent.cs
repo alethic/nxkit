@@ -1,7 +1,8 @@
 ﻿namespace NXKit
 {
 
-    public class DOMActivateEvent : Event
+    public class DOMActivateEvent :
+        Event
     {
 
         public static readonly string Name = "DOMActivate";

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace NXKit
 {
@@ -6,13 +7,23 @@ namespace NXKit
     public class Event
     {
 
+        string type;
+        IEventTarget target;
+        IEventTarget currentTarget;
+        EventPhase eventPhase;
+        bool bubbles;
+        bool cancelable;
+        ulong timeStamp;
+        bool stopPropagationSet;
+        internal bool preventDefaultSet;
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public Event()
         {
-            EventPhase = EventPhase.Uninitialized;
-            TimeStamp = (ulong)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+            this.eventPhase = EventPhase.Uninitialized;
+            this.timeStamp = (ulong)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
         }
 
         /// <summary>
@@ -24,45 +35,81 @@ namespace NXKit
         public Event(string type, bool canBubble, bool cancelable)
             : this()
         {
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(type.Length > 0);
+
             InitEvent(type, canBubble, cancelable);
         }
 
-        public string Type { get; private set; }
+        public string Type
+        {
+            get { return type; }
+        }
 
-        public IEventTarget Target { get; internal set; }
+        public IEventTarget Target
+        {
+            get { return target; }
+            internal set { target = value; }
+        }
 
-        public IEventTarget CurrentTarget { get; internal set; }
+        public IEventTarget CurrentTarget
+        {
+            get { return currentTarget; }
+            internal set { currentTarget = value; }
+        }
 
-        public EventPhase EventPhase { get; internal set; }
+        public EventPhase EventPhase
+        {
+            get { return eventPhase; }
+            internal set { eventPhase = value; }
+        }
 
-        public bool Bubbles { get; private set; }
+        public bool Bubbles
+        {
+            get { return bubbles; }
+        }
 
-        public bool Cancelable { get; private set; }
+        public bool Cancelable
+        {
+            get { return cancelable; }
+        }
 
-        public ulong TimeStamp { get; private set; }
+        public ulong TimeStamp
+        {
+            get { return timeStamp; }
+        }
 
-        internal bool StopPropagationSet { get; private set; }
+        internal bool StopPropagationSet
+        {
+            get { return stopPropagationSet; }
+        }
 
-        internal bool PreventDefaultSet { get; private set; }
+        internal bool PreventDefaultSet
+        {
+            get { return preventDefaultSet; }
+        }
 
         public void StopPropagation()
         {
-            StopPropagationSet = true;
+            stopPropagationSet = true;
         }
 
         public void PreventDefault()
         {
-            PreventDefaultSet = true;
+            preventDefaultSet = true;
         }
 
         public void InitEvent(string type, bool canBubble, bool cancelable)
         {
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(type.Length > 0);
+
             if (EventPhase != EventPhase.Uninitialized)
                 throw new InvalidOperationException();
 
-            Type = type;
-            Bubbles = canBubble;
-            Cancelable = Cancelable;
+            this.type = type;
+            this.bubbles = canBubble;
+            this.cancelable = Cancelable;
         }
 
     }
