@@ -13,7 +13,7 @@ namespace NXKit.XForms.Layout
     {
 
         /// <summary>
-        /// Map of <see cref="XName"/> to <see cref="Visual"/> type.
+        /// Map of <see cref="XName"/> to <see cref="NXNode"/> type.
         /// </summary>
         static readonly Dictionary<XName, Type> visualTypeMap = typeof(LayoutModule).Assembly.GetTypes()
             .Select(i => new { Type = i, Attribute = i.GetCustomAttribute<VisualAttribute>() })
@@ -31,27 +31,20 @@ namespace NXKit.XForms.Layout
             }
         }
 
-        /// <summary>
-        /// Creates the appropriate <see cref="Visual"/> instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        public override Visual CreateVisual(XName xname)
+        public override NXNode CreateNode(XNode node)
         {
-            if (xname.Namespace != Constants.Layout_1_0)
+            var element = node as XElement;
+            if (element == null)
                 return null;
 
-            var type = visualTypeMap.GetOrDefault(xname);
+            if (element.Name.Namespace != Constants.Layout_1_0)
+                return null;
+
+            var type = visualTypeMap.GetOrDefault(element.Name);
             if (type == null)
                 return null;
 
-            return (Visual)Activator.CreateInstance(type);
-        }
-
-        public override void AnnotateVisual(Visual visual)
-        {
-            base.AnnotateVisual(visual);
+            return (NXNode)Activator.CreateInstance(type, new[] { node });
         }
 
         /// <summary>

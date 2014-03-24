@@ -18,7 +18,18 @@ namespace NXKit.XForms
         bool numberCached;
         int? number;
 
-        Dictionary<XObject, XFormsRepeatItemVisual> items = new Dictionary<XObject, XFormsRepeatItemVisual>();
+        readonly Dictionary<XObject, XFormsRepeatItemVisual> items = new Dictionary<XObject, XFormsRepeatItemVisual>();
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsRepeatVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
+
+        }
 
         /// <summary>
         /// Allocates a new ID for this naming scope.
@@ -33,15 +44,17 @@ namespace NXKit.XForms
         /// Dynamically generate repeat items, reusing existing instances if available.
         /// </summary>
         /// <returns></returns>
-        protected override IEnumerable<Visual> CreateVisuals()
+        protected override void CreateNodes()
         {
+            RemoveNodes();
+
             if (Binding == null ||
                 Binding.Nodes == null)
-                yield break;
+                return;
 
             // obtain or create items
             for (int i = 0; i < Binding.Nodes.Length; i++)
-                yield return GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.Nodes[i], i + 1, Binding.Nodes.Length);
+                Add(GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.Nodes[i], i + 1, Binding.Nodes.Length));
         }
 
         /// <summary>
@@ -62,8 +75,7 @@ namespace NXKit.XForms
             var item = items.GetOrDefault(node);
             if (item == null)
             {
-                item = items[node] = new XFormsRepeatItemVisual();
-                item.Initialize(Document, this, Element);
+                item = items[node] = new XFormsRepeatItemVisual(this, Xml);
                 item.SetContext(ec);
             }
             else
@@ -98,7 +110,7 @@ namespace NXKit.XForms
             {
                 if (!startIndexCached)
                 {
-                    var startIndexAttr = Module.GetAttributeValue(Element, "startindex");
+                    var startIndexAttr = Module.GetAttributeValue(Xml, "startindex");
                     if (startIndexAttr != null)
                         startIndex = int.Parse(startIndexAttr);
                     else
@@ -120,7 +132,7 @@ namespace NXKit.XForms
             {
                 if (!numberCached)
                 {
-                    var numberAttr = Module.GetAttributeValue(Element, "number");
+                    var numberAttr = Module.GetAttributeValue(Xml, "number");
                     if (numberAttr != null)
                         number = int.Parse(numberAttr);
 

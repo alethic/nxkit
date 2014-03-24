@@ -9,9 +9,9 @@ namespace NXKit.XForms
     {
 
         public static bool Incremental<T>(this T self)
-            where T : ContentVisual, ISupportsIncrementalAttribute
+            where T : NXElement, ISupportsIncrementalAttribute
         {
-            var a = self.Document.GetModule<XFormsModule>().ResolveAttribute(self.Element, "incremental");
+            var a = self.Document.Module<XFormsModule>().ResolveAttribute(self.Xml, "incremental");
             return a != null ? a.Value == "true" : false;
         }
 

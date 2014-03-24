@@ -29,11 +29,10 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="form"></param>
         /// <param name="visual"></param>
         /// <param name="ec">Context in which to begin evaluation</param>
         /// <param name="xp"></param>
-        internal XFormsBinding(INXDocument form, XFormsVisual visual, XFormsEvaluationContext ec, string xp)
+        internal XFormsBinding(XFormsVisual visual, XFormsEvaluationContext ec, string xp)
         {
             this.visual = visual;
             this.context = ec;

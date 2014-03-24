@@ -39,7 +39,7 @@ namespace NXKit.XForms.Tests
         {
             var d = GetSampleDocument();
 
-            var inputs = d.RootVisual
+            var inputs = d.Root
                 .Descendants()
                 .OfType<XFormsInputVisual>()
                 .ToList();
@@ -55,14 +55,13 @@ namespace NXKit.XForms.Tests
         {
             var d = GetSampleDocument();
 
-            var inputs = d.RootVisual
+            var inputs = d.Root
                 .Descendants()
                 .OfType<XFormsInputVisual>()
                 .ToList();
 
             int c = 0;
-            inputs[1].Interface<IEventTarget>().AddEventListener()
-            inputs[1].AddEventHandler<XFormsDisabledEvent>(i => c++, false);
+            inputs[1].Interface<IEventTarget>().AddEventHandler(new XFormsDisabledEvent(inputs[1]).Event, false, i => c++);
             inputs[0].Binding.SetValue("false");
             d.Invoke();
             Assert.AreEqual(1, c);
@@ -74,7 +73,7 @@ namespace NXKit.XForms.Tests
         {
             var d = GetSampleDocument();
 
-            var inputs = d.RootVisual
+            var inputs = d.Root
                 .Descendants()
                 .OfType<XFormsInputVisual>()
                 .ToList();

@@ -16,31 +16,31 @@ namespace NXKit.XForms
         XsltContext
     {
 
-        readonly Visual visual;
+        readonly NXNode node;
         readonly XFormsEvaluationContext evaluationContext;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="node"></param>
         /// <param name="evaluationContext"></param>
         internal XFormsXsltContext(
-            Visual visual, 
+            NXNode node, 
             XFormsEvaluationContext evaluationContext)
         {
-            Contract.Requires<ArgumentNullException>(visual != null);
+            Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(evaluationContext != null);
 
-            this.visual = visual;
+            this.node = node;
             this.evaluationContext = evaluationContext;
         }
 
         /// <summary>
         /// Gets the <see cref="Visual"/> associated with the XSLT operation.
         /// </summary>
-        public Visual Visual
+        public NXNode Visual
         {
-            get { return visual; }
+            get { return node; }
         }
 
         /// <summary>
@@ -70,10 +70,9 @@ namespace NXKit.XForms
         {
             Contract.Requires<ArgumentNullException>(prefix != null);
 
-            var element = visual.Node as XElement;
+            var element = node.Xml as XElement;
             if (element == null)
-                element = visual.Parent.Element;
-
+                element = node.Parent.Xml as XElement;
             if (element == null)
                 throw new NullReferenceException();
 
@@ -84,10 +83,9 @@ namespace NXKit.XForms
         {
             Contract.Requires<ArgumentNullException>(namespaceName != null);
 
-            var element = visual.Node as XElement;
+            var element = node.Xml as XElement;
             if (element == null)
-                element = visual.Parent.Element;
-
+                element = node.Parent.Xml as XElement;
             if (element == null)
                 throw new NullReferenceException();
 

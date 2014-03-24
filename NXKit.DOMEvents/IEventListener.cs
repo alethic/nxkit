@@ -8,7 +8,7 @@ namespace NXKit.DOMEvents
     public interface IEventListener
     {
 
-        void HandleEvent(IEvent evt);
+        void HandleEvent(Event evt);
 
     }
 
@@ -17,7 +17,7 @@ namespace NXKit.DOMEvents
          IEventListener
     {
 
-        public void HandleEvent(IEvent evt)
+        public void HandleEvent(Event evt)
         {
             Contract.Requires<ArgumentNullException>(evt != null);
             throw new NotImplementedException();

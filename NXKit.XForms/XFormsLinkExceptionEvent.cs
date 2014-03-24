@@ -9,8 +9,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsLinkExceptionEvent()
-            : base(Name, true, false)
+        public XFormsLinkExceptionEvent(NXNode visual)
+            : base(visual, Name, true, false)
         {
 
         }

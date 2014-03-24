@@ -12,7 +12,7 @@
         /// </summary>
         /// <param name="eventInterface"></param>
         /// <returns></returns>
-        IEvent CreateEvent(string eventInterface);
+        Event CreateEvent(string eventInterface);
 
     }
 

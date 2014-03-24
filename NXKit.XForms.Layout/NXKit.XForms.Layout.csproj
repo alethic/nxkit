@@ -125,8 +125,6 @@
     <Compile Include="ITableColumnGroupContainer.cs" />
     <Compile Include="LayoutHelper.cs" />
     <Compile Include="Importance.cs" />
-    <Compile Include="ImportanceAnnotation.cs" />
-    <Compile Include="LanguageAnnotation.cs" />
     <Compile Include="LayoutModule.cs" />
     <Compile Include="PageVisual.cs" />
     <Compile Include="ParagraphVisual.cs" />

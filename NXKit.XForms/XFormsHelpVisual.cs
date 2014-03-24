@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -12,9 +13,14 @@ namespace NXKit.XForms
         ISupportsCommonAttributes
     {
 
-        protected override IEnumerable<Visual> CreateVisuals()
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsHelpVisual(XElement element)
+            : base(element)
         {
-            return CreateElementVisuals(Element, includeTextContent: true);
+
         }
 
     }

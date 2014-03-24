@@ -2,7 +2,7 @@
 {
 
     /// <summary>
-    /// Indicates that a <see cref="Visual"/> provides a scope under which unique IDs must be generated.
+    /// Indicates that a <see cref="NXNode"/> provides a scope under which unique IDs must be generated.
     /// </summary>
     public interface INamingScope
     {

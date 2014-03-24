@@ -1,10 +1,10 @@
-﻿using NXKit.XmlEvents;
+﻿using NXKit.DOMEvents;
 
 namespace NXKit.XForms
 {
 
     internal interface IActionVisual : 
-        IEventHandlerVisual
+        IEventHandler
     {
 
         void Invoke();

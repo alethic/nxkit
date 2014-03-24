@@ -1,4 +1,5 @@
-﻿using NXKit.Util;
+﻿using System.Xml.Linq;
+using NXKit.Util;
 
 namespace NXKit.XForms.Layout
 {
@@ -9,9 +10,19 @@ namespace NXKit.XForms.Layout
         ITableColumnGroupContainer
     {
 
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public TableColumnGroupVisual(XElement element)
+            : base(element)
+        {
+
+        }
+
         public string Name
         {
-            get { return Module.GetAttributeValue(Element, "name").TrimToNull(); }
+            get { return Module.GetAttributeValue(Xml, "name").TrimToNull(); }
         }
 
     }

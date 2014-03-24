@@ -10,8 +10,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsDisabledEvent()
-            : base(Name, true, false)
+        public XFormsDisabledEvent(NXNode visual)
+            : base(visual, Name, true, false)
         {
 
         }

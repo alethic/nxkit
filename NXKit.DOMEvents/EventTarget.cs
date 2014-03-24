@@ -32,7 +32,7 @@ namespace NXKit.DOMEvents
                 this.handler = handler;
             }
 
-            public void HandleEvent(IEvent evt)
+            public void HandleEvent(Event evt)
             {
                 if (handler != null)
                     handler(evt);
@@ -40,13 +40,13 @@ namespace NXKit.DOMEvents
 
         }
 
-        readonly Visual visual;
+        readonly NXNode visual;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="visual"></param>
-        public EventTarget(Visual visual)
+        public EventTarget(NXNode visual)
         {
             this.visual = visual;
         }
@@ -88,13 +88,9 @@ namespace NXKit.DOMEvents
                 listeners.Remove(data);
         }
 
-        public void DispatchEvent(IEvent @event)
+        public void DispatchEvent(Event evt)
         {
-            var evt = @event as Event;
-            if (evt == null)
-                return;
-
-            var target = visual.Interfaces.OfType<IEventTarget>().FirstOrDefault();
+            var target = visual.Interface<IEventTarget>();
             if (target == null)
                 throw new Exception();
 
@@ -110,11 +106,11 @@ namespace NXKit.DOMEvents
             evt.Target = target;
 
             // path to root from root
-            var path = visual.Ascendants().ToList();
+            var path = visual.Ancestors().ToList();
 
             // capture phase
             evt.EventPhase = EventPhase.Capturing;
-            foreach (var visual_ in path.Reverse<Visual>())
+            foreach (var visual_ in path.Reverse<NXNode>())
             {
                 HandleEventOnVisual(visual_, evt, true);
 
@@ -152,14 +148,14 @@ namespace NXKit.DOMEvents
         }
 
         /// <summary>
-        /// Attempts to handle the event at the given <see cref="Visual"/>.
+        /// Attempts to handle the event at the given <see cref="NXNode"/>.
         /// </summary>
         /// <param name="visual"></param>
         /// <param name="evt"></param>
         /// <param name="useCapture"></param>
-        void HandleEventOnVisual(Visual visual, Event evt, bool useCapture)
+        void HandleEventOnVisual(NXNode visual, Event evt, bool useCapture)
         {
-            evt.CurrentTarget = visual.Interfaces.OfType<IEventTarget>().First();
+            evt.CurrentTarget = visual.Interface<IEventTarget>();
 
             var listenerMap = visual.Storage.OfType<EventListenerMap>().FirstOrDefault();
             if (listenerMap != null)
@@ -180,7 +176,7 @@ namespace NXKit.DOMEvents
         /// <param name="useCapture"></param>
         /// <param name="handler"></param>
         public void AddEventHandler<T>(string type, bool useCapture, EventHandlerDelegate handler)
-            where T : IEvent
+            where T : Event
         {
             AddEventListener(type, new DelegateDispatchEventListener(handler), useCapture);
         }

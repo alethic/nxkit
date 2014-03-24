@@ -1,4 +1,5 @@
-﻿namespace NXKit.XForms
+﻿using System.Xml.Linq;
+namespace NXKit.XForms
 {
 
     [Visual("textarea")]
@@ -8,9 +9,19 @@
         ISupportsIncrementalAttribute
     {
 
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsTextAreaVisual(XElement element)
+            : base(element)
+        {
+
+        }
+
         public bool Incremental
         {
-            get { return Module.GetAttributeValue(Element, "incremental") == "true"; }
+            get { return Module.GetAttributeValue(Xml, "incremental") == "true"; }
         }
 
     }

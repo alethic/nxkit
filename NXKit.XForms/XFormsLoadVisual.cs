@@ -1,4 +1,5 @@
-﻿using NXKit.DOMEvents;
+﻿using System.Xml.Linq;
+using NXKit.DOMEvents;
 
 namespace NXKit.XForms
 {
@@ -9,7 +10,17 @@ namespace NXKit.XForms
         IActionVisual
     {
 
-        public void Handle(IEvent ev)
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsLoadVisual(XElement element)
+            : base(element)
+        {
+
+        }
+
+        public void Handle(Event ev)
         {
             Module.InvokeAction(this);
         }

@@ -5,8 +5,7 @@ namespace NXKit.DOMEvents
 {
 
     public class UIEvent :
-        Event,
-        IUIEvent
+        Event
     {
 
         /// <summary>

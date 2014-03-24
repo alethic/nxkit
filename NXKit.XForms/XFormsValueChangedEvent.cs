@@ -10,8 +10,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsValueChangedEvent()
-            : base(Name, true, false)
+        public XFormsValueChangedEvent(NXNode visual)
+            : base(visual, Name, true, false)
         {
 
         }

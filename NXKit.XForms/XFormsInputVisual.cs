@@ -1,4 +1,6 @@
-﻿namespace NXKit.XForms
+﻿using System.Xml.Linq;
+
+namespace NXKit.XForms
 {
 
     /// <summary>
@@ -11,8 +13,16 @@
         ISupportsUiCommonAttributes,
         ISupportsIncrementalAttribute
     {
+        
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsInputVisual(XElement element)
+            : base(element)
+        {
 
-
+        }
 
     }
 

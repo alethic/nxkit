@@ -9,8 +9,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsDeleteEvent()
-            : base(Name, true, false)
+        public XFormsDeleteEvent(NXNode visual)
+            : base(visual, Name, true, false)
         {
 
         }

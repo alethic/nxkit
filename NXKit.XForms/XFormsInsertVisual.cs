@@ -13,8 +13,19 @@ namespace NXKit.XForms
         XFormsNodeSetBindingVisual, 
         IActionVisual
     {
+        
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsInsertVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
 
-        public void Handle(IEvent ev)
+        }
+
+        public void Handle(Event ev)
         {
             Module.InvokeAction(this);
         }
@@ -52,11 +63,11 @@ namespace NXKit.XForms
             //if (boundNodes.Any(i => i.getNamespaceURI() != qn.getNamespaceURI() || i.getLocalName() != qn.getLocalPart()))
             //    throw new Exception();
 
-            var atAttr = Module.GetAttributeValue(Element, "at");
+            var atAttr = Module.GetAttributeValue(Xml, "at");
             if (atAttr == null)
                 throw new Exception();
 
-            var positionAttr = Module.GetAttributeValue(Element, "position");
+            var positionAttr = Module.GetAttributeValue(Xml, "position");
             if (positionAttr == null)
                 throw new Exception();
 
@@ -122,7 +133,7 @@ namespace NXKit.XForms
             }
 
             // node set visuals that are bound to nodes sharing the same parent
-            var nodeSetVisuals = Module.Document.RootVisual
+            var nodeSetVisuals = Module.Document.Root
                 .Descendants(true)
                 .OfType<XFormsNodeSetBindingVisual>()
                 .Where(i => i.Binding != null)

@@ -12,11 +12,11 @@ namespace NXKit.XForms.Layout
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        public static Importance GetImportance(ContentVisual visual)
+        public static Importance GetImportance(NXElement visual)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
 
-            var attr = visual.Document.GetModule<LayoutModule>().GetAttributeValue(visual.Element, "importance");
+            var attr = visual.Document.Module<LayoutModule>().GetAttributeValue(visual.Xml, "importance");
 
             // return value based on string
             switch (attr)

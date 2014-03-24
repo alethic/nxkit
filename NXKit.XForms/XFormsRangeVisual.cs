@@ -1,4 +1,6 @@
-﻿namespace NXKit.XForms
+﻿using System.Xml.Linq;
+
+namespace NXKit.XForms
 {
 
     [Visual("range")]
@@ -6,28 +8,38 @@
         XFormsSingleNodeBindingVisual
     {
 
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsRangeVisual(XElement element)
+            : base(element)
+        {
+
+        }
+
         [Interactive]
         public bool Incremental
         {
-            get { return Module.GetAttributeValue(Element, "incremental") == "true"; }
+            get { return Module.GetAttributeValue(Xml, "incremental") == "true"; }
         }
 
         [Interactive]
         public string Start
         {
-            get { return Module.GetAttributeValue(Element, "start"); }
+            get { return Module.GetAttributeValue(Xml, "start"); }
         }
 
         [Interactive]
         public string End
         {
-            get { return Module.GetAttributeValue(Element, "end"); }
+            get { return Module.GetAttributeValue(Xml, "end"); }
         }
 
         [Interactive]
         public string Step
         {
-            get { return Module.GetAttributeValue(Element, "step"); }
+            get { return Module.GetAttributeValue(Xml, "step"); }
         }
 
     }

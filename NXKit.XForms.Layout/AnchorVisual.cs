@@ -1,22 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace NXKit.XForms.Layout
 {
 
     [Visual("a")]
-    public class AnchorVisual : LayoutVisual
+    public class AnchorVisual : 
+        LayoutVisual
     {
 
-        protected override IEnumerable<Visual> CreateVisuals()
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public AnchorVisual(XElement element)
+            : base(element)
         {
-            // preserve text nodes
-            return CreateElementVisuals(Element, true);
+
         }
 
         public string Href
         {
-            get { return Document.GetModule<LayoutModule>().GetAttributeValue(Element, "href"); }
+            get { return Document.Module<LayoutModule>().GetAttributeValue(Xml, "href"); }
         }
 
     }

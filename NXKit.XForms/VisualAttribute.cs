@@ -5,7 +5,7 @@ namespace NXKit.XForms
 {
 
     /// <summary>
-    /// Exposes the given <see cref="Visual"/> type.
+    /// Exposes the given <see cref="NXNode"/> type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     internal class VisualAttribute : Attribute
@@ -22,7 +22,7 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the name of <see cref="XElement"/>s handled by the decorated see <see cref="Visual"/>.
+        /// Gets the name of <see cref="XElement"/>s handled by the decorated see <see cref="NXNode"/>.
         /// </summary>
         public string Name { get; private set; }
 

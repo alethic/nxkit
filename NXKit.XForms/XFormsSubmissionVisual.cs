@@ -15,7 +15,17 @@ namespace NXKit.XForms
         IEventDefaultActionHandler
     {
 
-        void IEventDefaultActionHandler.DefaultAction(IEvent evt)
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsSubmissionVisual(XElement element)
+            : base(element)
+        {
+
+        }
+
+        void IEventDefaultActionHandler.DefaultAction(Event evt)
         {
             if (evt.Type != XFormsEvents.Submit)
                 return;
@@ -29,13 +39,12 @@ namespace NXKit.XForms
             {
                 if (!Module.GetModelItemRelevant(node))
                 {
-                    Interface<IEventTarget>().DispatchEvent()
                     DispatchEvent<XFormsSubmitErrorEvent>();
                     return;
                 }
 
-                var action = Module.GetAttributeValue(Element, "action").TrimToNull();
-                var method = Module.GetAttributeValue(Element, "method").TrimToNull();
+                var action = Module.GetAttributeValue(Xml, "action").TrimToNull();
+                var method = Module.GetAttributeValue(Xml, "method").TrimToNull();
 
                 if (method != "put")
                     throw new NotSupportedException("Unsupported submission method.");
@@ -48,8 +57,8 @@ namespace NXKit.XForms
 
                 // normalize uri with base
                 var u = new Uri(action);
-                if (Element.BaseUri != null && !u.IsAbsoluteUri)
-                    u = new Uri(new Uri(Element.BaseUri), u);
+                if (Xml.BaseUri != null && !u.IsAbsoluteUri)
+                    u = new Uri(new Uri(Xml.BaseUri), u);
 
                 // put data
                 var resource = Document.Resolver.Put(u, new MemoryStream(Encoding.UTF8.GetBytes(t)));

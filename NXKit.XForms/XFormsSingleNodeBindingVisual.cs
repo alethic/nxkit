@@ -13,6 +13,16 @@ namespace NXKit.XForms
     {
 
         /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsSingleNodeBindingVisual(XElement element)
+            : base(element)
+        {
+
+        }
+
+        /// <summary>
         /// Provides an evaluation context for children nodes. Single-Node Bindings provide the single bound node.
         /// </summary>
         /// <returns></returns>
@@ -86,7 +96,7 @@ namespace NXKit.XForms
                     return false;
 
                 // the form control is contained by a non-relevant switch or group (which includes a non-relevant repeat item)
-                var scope = Ascendants().OfType<IRelevancyScope>().FirstOrDefault();
+                var scope = this.Ancestors().OfType<IRelevancyScope>().FirstOrDefault();
                 if (scope != null)
                     if (scope.Relevant == false)
                         return false;

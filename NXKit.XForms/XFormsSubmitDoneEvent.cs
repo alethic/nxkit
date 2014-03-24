@@ -9,8 +9,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsSubmitDoneEvent()
-            : base(Name, true, false)
+        public XFormsSubmitDoneEvent(NXNode visual)
+            : base(visual, Name, true, false)
         {
 
         }

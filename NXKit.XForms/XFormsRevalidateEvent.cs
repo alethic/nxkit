@@ -9,8 +9,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsRevalidateEvent()
-            : base(Name, true, true)
+        public XFormsRevalidateEvent(NXNode visual)
+            : base(visual, Name, true, true)
         {
 
         }

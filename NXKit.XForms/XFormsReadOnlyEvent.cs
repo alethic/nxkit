@@ -9,8 +9,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsReadOnlyEvent()
-            : base(Name, true, false)
+        public XFormsReadOnlyEvent(NXNode visual)
+            : base(visual, Name, true, false)
         {
 
         }

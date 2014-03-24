@@ -9,8 +9,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsResetEvent()
-            : base(Name, true, false)
+        public XFormsResetEvent(NXNode visual)
+            : base(visual, Name, true, false)
         {
 
         }

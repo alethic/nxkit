@@ -9,8 +9,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsInRangeEvent()
-            : base(Name, true, false)
+        public XFormsInRangeEvent(NXNode visual)
+            : base(visual, Name, true, false)
         {
 
         }

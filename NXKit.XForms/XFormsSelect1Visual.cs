@@ -12,16 +12,26 @@ namespace NXKit.XForms
         bool selectedItemVisualCached;
         XFormsItemVisual selectedItemVisual;
 
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsSelect1Visual(System.Xml.Linq.XElement element)
+            : base(element)
+        {
+
+        }
+
         [Interactive]
         public bool Incremental
         {
-            get { return Module.GetAttributeValue(Element, "incremental") == "true"; }
+            get { return Module.GetAttributeValue(Xml, "incremental") == "true"; }
         }
 
         [Interactive]
         public XFormsSelection Selection
         {
-            get { return Module.GetAttributeValue(Element, "selection") == "open" ? XFormsSelection.Open : XFormsSelection.Closed; }
+            get { return Module.GetAttributeValue(Xml, "selection") == "open" ? XFormsSelection.Open : XFormsSelection.Closed; }
         }
 
         protected override void SetValue(object value)
@@ -59,7 +69,7 @@ namespace NXKit.XForms
         {
             if (!selectedItemVisualCached)
             {
-                foreach (var itemVisual in Descendants().OfType<XFormsItemVisual>())
+                foreach (var itemVisual in this.Descendants().OfType<XFormsItemVisual>())
                 {
                     // find selectable visuals underneath item
                     if (itemVisual.Selectable == null)
@@ -117,7 +127,7 @@ namespace NXKit.XForms
         /// <param name="id"></param>
         void SetSelectedItemVisualId(string id)
         {
-            SelectedItemVisual = Descendants()
+            SelectedItemVisual = this.Descendants()
                 .OfType<XFormsItemVisual>()
                 .FirstOrDefault(i => i.UniqueId == id);
         }
@@ -135,10 +145,10 @@ namespace NXKit.XForms
             if (selectedItemId == null)
             {
                 // ensure descendant itemsets are refreshed, kind of a hack
-                foreach (var itemSetVisual in Descendants().OfType<XFormsItemSetVisual>())
+                foreach (var itemSetVisual in this.Descendants().OfType<XFormsItemSetVisual>())
                     itemSetVisual.Refresh();
 
-                foreach (var itemVisual in Descendants().OfType<XFormsItemVisual>())
+                foreach (var itemVisual in this.Descendants().OfType<XFormsItemVisual>())
                 {
                     if (itemVisual.Selectable == null)
                         continue;

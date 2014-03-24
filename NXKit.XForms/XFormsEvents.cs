@@ -154,52 +154,52 @@ namespace NXKit.XForms
             .Concat(notification_events)
             .Concat(error_indications));
 
-        public static readonly string ModelConstruct = "xforms-model-construct";
-        public static readonly string ModelConstructDone = "xforms-model-construct-done";
-        public static readonly string Ready = "xforms-ready";
-        public static readonly string ModelDestruct = "xforms-model-destruct";
+        public const string ModelConstruct = "xforms-model-construct";
+        public const string ModelConstructDone = "xforms-model-construct-done";
+        public const string Ready = "xforms-ready";
+        public const string ModelDestruct = "xforms-model-destruct";
 
-        public static readonly string Rebuild = "xforms-rebuild";
-        public static readonly string Recalculate = "xforms-recalculate";
-        public static readonly string Revalidate = "xforms-revalidate";
-        public static readonly string Refresh = "xforms-refresh";
-        public static readonly string Reset = "xforms-reset";
-        public static readonly string Previous = "xforms-previous";
-        public static readonly string Next = "xforms-next";
-        public static readonly string Focus = "xforms-focus";
-        public static readonly string Help = "xforms-help";
-        public static readonly string Hint = "xforms-hint";
-        public static readonly string Submit = "xforms-submit";
-        public static readonly string SubmitSerialize = "xforms-submit-serialize";
+        public const string Rebuild = "xforms-rebuild";
+        public const string Recalculate = "xforms-recalculate";
+        public const string Revalidate = "xforms-revalidate";
+        public const string Refresh = "xforms-refresh";
+        public const string Reset = "xforms-reset";
+        public const string Previous = "xforms-previous";
+        public const string Next = "xforms-next";
+        public const string Focus = "xforms-focus";
+        public const string Help = "xforms-help";
+        public const string Hint = "xforms-hint";
+        public const string Submit = "xforms-submit";
+        public const string SubmitSerialize = "xforms-submit-serialize";
 
-        public static readonly string Insert = "xforms-insert";
-        public static readonly string Delete = "xforms-delete";
-        public static readonly string ValueChanged = "xforms-value-changed";
-        public static readonly string Valid = "xforms-valid";
-        public static readonly string Invalid = "xforms-invalid";
-        public static readonly string ReadOnly = "xforms-readonly";
-        public static readonly string ReadWrite = "xforms-readwrite";
-        public static readonly string Required = "xforms-required";
-        public static readonly string Optional = "xforms-optional";
-        public static readonly string Enabled = "xforms-enabled";
-        public static readonly string Disabled = "xforms-disabled";
-        public static readonly string Select = "xforms-select";
-        public static readonly string Deselect = "xforms-deselect";
-        public static readonly string InRange = "xforms-in-range";
-        public static readonly string OutOfRange = "xforms-out-of-range";
-        public static readonly string ScrollFirst = "xforms-scroll-first";
-        public static readonly string ScrollLast = "xforms-scroll-last";
-        public static readonly string SubmitDone = "xforms-submit-done";
+        public const string Insert = "xforms-insert";
+        public const string Delete = "xforms-delete";
+        public const string ValueChanged = "xforms-value-changed";
+        public const string Valid = "xforms-valid";
+        public const string Invalid = "xforms-invalid";
+        public const string ReadOnly = "xforms-readonly";
+        public const string ReadWrite = "xforms-readwrite";
+        public const string Required = "xforms-required";
+        public const string Optional = "xforms-optional";
+        public const string Enabled = "xforms-enabled";
+        public const string Disabled = "xforms-disabled";
+        public const string Select = "xforms-select";
+        public const string Deselect = "xforms-deselect";
+        public const string InRange = "xforms-in-range";
+        public const string OutOfRange = "xforms-out-of-range";
+        public const string ScrollFirst = "xforms-scroll-first";
+        public const string ScrollLast = "xforms-scroll-last";
+        public const string SubmitDone = "xforms-submit-done";
 
-        public static readonly string BindingError = "xforms-binding-error";
-        public static readonly string ExpressionError = "xforms-expression-error";
-        public static readonly string ActionError = "xforms-action-error";
-        public static readonly string BindingException = "xforms-binding-exception";
-        public static readonly string ComputeException = "xforms-compute-exception";
-        public static readonly string VersionException = "xforms-version-exception";
-        public static readonly string LinkException = "xforms-link-exception";
-        public static readonly string OutputError = "xforms-output-error";
-        public static readonly string SubmitError = "xforms-submit-error";
+        public const string BindingError = "xforms-binding-error";
+        public const string ExpressionError = "xforms-expression-error";
+        public const string ActionError = "xforms-action-error";
+        public const string BindingException = "xforms-binding-exception";
+        public const string ComputeException = "xforms-compute-exception";
+        public const string VersionException = "xforms-version-exception";
+        public const string LinkException = "xforms-link-exception";
+        public const string OutputError = "xforms-output-error";
+        public const string SubmitError = "xforms-submit-error";
 
     }
 

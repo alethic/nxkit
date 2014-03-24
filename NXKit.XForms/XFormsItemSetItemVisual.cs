@@ -1,4 +1,5 @@
-﻿namespace NXKit.XForms
+﻿using System.Xml.Linq;
+namespace NXKit.XForms
 {
 
     public class XFormsItemSetItemVisual :
@@ -6,6 +7,17 @@
         IEvaluationContextScope,
         INamingScope
     {
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsItemSetItemVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
+
+        }
 
         public override string Id
         {

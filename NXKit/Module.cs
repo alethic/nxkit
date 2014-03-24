@@ -12,7 +12,7 @@ namespace NXKit
     public abstract class Module
     {
 
-        INXDocument document;
+        NXDocument document;
 
         /// <summary>
         /// Initializes a new instance.
@@ -44,46 +44,36 @@ namespace NXKit
         /// <summary>
         /// Gets a reference to the form processor hosting this module.
         /// </summary>
-        public INXDocument Document
+        public NXDocument Document
         {
             get { return document; }
         }
 
         /// <summary>
         /// Invoked when the engine wants to create a visual. Override this method to implement creation of <see
-        /// cref="Visual"/> instances. Return <c>null</c> if the module doesn't support generation of a <see 
-        /// cref="Visual"/> for the given element name.
+        /// cref="NXNode"/> instances. Return <c>null</c> if the module doesn't support generation of a <see 
+        /// cref="NXNode"/> for the given element name.
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public virtual Visual CreateVisual(XName xname)
+        public virtual NXNode CreateNode(XNode node)
         {
-            Contract.Requires<ArgumentNullException>(xname != null);
+            Contract.Requires<ArgumentNullException>(node != null);
 
             return null;
         }
 
         /// <summary>
-        /// Gives a <see cref="Module"/> a chance to attach additional information to a <see cref="Visual"/> created by
-        /// other modules.
-        /// </summary>
-        /// <param name="visual"></param>
-        public virtual void AnnotateVisual(Visual visual)
-        {
-            Contract.Requires<ArgumentNullException>(visual != null);
-        }
-
-        /// <summary>
-        /// Gets the supported interfaces for the given <see cref="Visual"/>.
+        /// Gets the supported interfaces for the given <see cref="NXObject"/>.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="visual"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        public virtual IEnumerable<object> GetInterfaces(Visual visual)
+        public virtual IEnumerable<object> GetInterfaces(NXObject obj)
         {
-            Contract.Requires<ArgumentNullException>(visual != null);
+            Contract.Requires<ArgumentNullException>(obj != null);
 
-            yield break;
+            yield return obj;
         }
 
         /// <summary>

@@ -29,7 +29,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
 </unknown>",
                 c);
 
-            var input = e.RootVisual
+            var input = e.RootElement
                 .Descendants()
                 .OfType<XFormsInputVisual>()
                 .FirstOrDefault();
@@ -56,7 +56,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
                     <xf:input ref=""xf:instance('instance2')"" />
                 </unknown>", c);
 
-            var input = e.RootVisual
+            var input = e.RootElement
                 .Descendants()
                 .OfType<XFormsInputVisual>()
                 .FirstOrDefault();

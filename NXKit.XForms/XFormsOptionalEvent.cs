@@ -9,8 +9,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsOptionalEvent()
-            : base(Name, true, false)
+        public XFormsOptionalEvent(NXNode visual)
+            : base(visual,Name, true, false)
         {
 
         }

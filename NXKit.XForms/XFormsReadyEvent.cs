@@ -9,8 +9,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsReadyEvent()
-            : base(Name, true, false)
+        public XFormsReadyEvent(NXNode visual)
+            : base(visual, Name, true, false)
         {
 
         }

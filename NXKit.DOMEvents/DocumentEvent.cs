@@ -7,12 +7,14 @@ namespace NXKit.DOMEvents
         IDocumentEvent
     {
 
-        public IEvent CreateEvent(string eventInterface)
+        public Event CreateEvent(string eventInterface)
         {
             switch (eventInterface)
             {
                 case "Event":
                     return new Event();
+                case "UIEvent":
+                    return new UIEvent();
                 default:
                     throw new DOMException();
             }

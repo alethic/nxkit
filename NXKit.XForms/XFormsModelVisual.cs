@@ -11,17 +11,21 @@ namespace NXKit.XForms
     public class XFormsModelVisual :
         XFormsVisual,
         IEvaluationContextScope,
-        IEventDefaultActionHandler<XFormsModelConstructEvent>,
-        IEventDefaultActionHandler<XFormsModelConstructDoneEvent>,
-        IEventDefaultActionHandler<XFormsReadyEvent>,
-        IEventDefaultActionHandler<XFormsRefreshEvent>,
-        IEventDefaultActionHandler<XFormsRevalidateEvent>,
-        IEventDefaultActionHandler<XFormsRecalculateEvent>,
-        IEventDefaultActionHandler<XFormsRebuildEvent>,
-        IEventDefaultActionHandler<XFormsResetEvent>
+        IEventDefaultActionHandler
     {
 
         XFormsModelVisualState state;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsModelVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
+
+        }
 
         /// <summary>
         /// Gets a reference to the model visual's state.
@@ -40,32 +44,11 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Creates the children in a defined order.
-        /// </summary>
-        /// <returns></returns>
-        protected override IEnumerable<Visual> CreateVisuals()
-        {
-            var childNodeList = Element.Elements().ToArray();
-
-            // emit instance children first
-            foreach (var element in Element.Elements(Constants.XForms_1_0 + "instance"))
-                yield return Document.CreateVisual(this, element);
-
-            // emit instance children first
-            foreach (var element in Element.Elements(Constants.XForms_1_0 + "bind"))
-                yield return Document.CreateVisual(this, element);
-
-            // emit instance children first
-            foreach (var element in Element.Elements(Constants.XForms_1_0 + "submission"))
-                yield return Document.CreateVisual(this, element);
-        }
-
-        /// <summary>
         /// Gets the set of <see cref="XFormsInstanceVisual"/>s.
         /// </summary>
         public IEnumerable<XFormsInstanceVisual> Instances
         {
-            get { return Visuals.OfType<XFormsInstanceVisual>(); }
+            get { return Elements.OfType<XFormsInstanceVisual>(); }
         }
 
         /// <summary>
@@ -84,22 +67,22 @@ namespace NXKit.XForms
             }
         }
 
-        void IEventDefaultActionHandler<XFormsModelConstructEvent>.DefaultAction(XFormsModelConstructEvent evt)
+        void ModelConstructEventDefaultAction(Event evt)
         {
             // mark step as complete, regardless of outcome
             State.Construct = true;
 
             // validate model version, we only support 1.0
-            var versions = Module.GetAttributeValue(Element, "version");
+            var versions = Module.GetAttributeValue(Xml, "version");
             if (versions != null)
                 foreach (var version in versions.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     if (version != "1.0")
                     {
-                        DispatchEvent<XFormsVersionExceptionEvent>();
+                        this.Interface<IEventTarget>().DispatchEvent(new XFormsVersionExceptionEvent(this).Event);
                         return;
                     }
 
-            var schema = Module.GetAttributeValue(Element, "schema");
+            var schema = Module.GetAttributeValue(Xml, "schema");
             if (schema != null)
                 foreach (var item in schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     continue; // TODO
@@ -115,40 +98,71 @@ namespace NXKit.XForms
         }
 
 
-        void IEventDefaultActionHandler<XFormsModelConstructDoneEvent>.DefaultAction(XFormsModelConstructDoneEvent evt)
+        void ModelConstructDoneDefaultAction(Event evt)
         {
             State.ConstructDone = true;
             State.ConstructDoneOnce = true;
         }
 
-        void IEventDefaultActionHandler<XFormsReadyEvent>.DefaultAction(XFormsReadyEvent evt)
+        void ReadyDefaultAction(Event evt)
         {
             Module.ReadyDefaultAction(evt);
         }
 
-        void IEventDefaultActionHandler<XFormsRebuildEvent>.DefaultAction(XFormsRebuildEvent evt)
+        void RebuildDefaultAction(Event evt)
         {
             Module.RebuildDefaultAction(evt);
         }
 
-        void IEventDefaultActionHandler<XFormsRecalculateEvent>.DefaultAction(XFormsRecalculateEvent evt)
+        void RecalculateDefaultAction(Event evt)
         {
             Module.RecalculateDefaultAction(evt);
         }
 
-        void IEventDefaultActionHandler<XFormsRevalidateEvent>.DefaultAction(XFormsRevalidateEvent evt)
+        void RevalidateDefaultAction(Event evt)
         {
             Module.RevalidateDefaultAction(evt);
         }
 
-        void IEventDefaultActionHandler<XFormsRefreshEvent>.DefaultAction(XFormsRefreshEvent evt)
+        void RefreshDefaultAction(Event evt)
         {
             Module.RefreshDefaultAction(evt);
         }
 
-        void IEventDefaultActionHandler<XFormsResetEvent>.DefaultAction(XFormsResetEvent evt)
+        void ResetDefaultAction(Event evt)
         {
             Module.ResetDefaultAction(evt);
+        }
+
+        void IEventDefaultActionHandler.DefaultAction(Event evt)
+        {
+            switch (evt.Type)
+            {
+                case XFormsEvents.ModelConstruct:
+                    ModelConstructEventDefaultAction(evt);
+                    break;
+                case XFormsEvents.ModelConstructDone:
+                    ModelConstructDoneDefaultAction(evt);
+                    break;
+                case XFormsEvents.Ready:
+                    ReadyDefaultAction(evt);
+                    break;
+                case XFormsEvents.Rebuild:
+                    RebuildDefaultAction(evt);
+                    break;
+                case XFormsEvents.Recalculate:
+                    RecalculateDefaultAction(evt);
+                    break;
+                case XFormsEvents.Revalidate:
+                    RevalidateDefaultAction(evt);
+                    break;
+                case XFormsEvents.Refresh:
+                    RefreshDefaultAction(evt);
+                    break;
+                case XFormsEvents.Reset:
+                    ResetDefaultAction(evt);
+                    break;
+            }
         }
 
     }

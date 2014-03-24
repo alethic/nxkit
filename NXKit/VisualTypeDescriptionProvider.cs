@@ -6,7 +6,7 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Provides overrides to <see cref="Visual"/> types.
+    /// Provides overrides to <see cref="NXNode"/> types.
     /// </summary>
     public abstract class VisualTypeDescriptionProvider :
         TypeDescriptionProvider
@@ -24,7 +24,7 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(parent != null);
             Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentException>(typeof(Visual).IsAssignableFrom(type));
+            Contract.Requires<ArgumentException>(typeof(NXNode).IsAssignableFrom(type));
 
             this.parent = parent;
             this.type = type;

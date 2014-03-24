@@ -4,8 +4,7 @@ using System.Diagnostics.Contracts;
 namespace NXKit.DOMEvents
 {
 
-    public class Event :
-        IEvent
+    public class Event
     {
 
         string type;

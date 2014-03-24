@@ -1,17 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace NXKit.XForms.Layout
 {
 
     [Visual("p")]
-    public class ParagraphVisual : LayoutVisual
+    public class ParagraphVisual : 
+        LayoutVisual
     {
 
-        protected override IEnumerable<Visual> CreateVisuals()
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public ParagraphVisual(XElement element)
+            : base(element)
         {
-            // preserve text nodes
-            return CreateElementVisuals(Element, true);
+
         }
 
         public Importance Importance

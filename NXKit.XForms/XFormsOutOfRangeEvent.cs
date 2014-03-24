@@ -9,8 +9,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsOutOfRangeEvent()
-            : base(Name, true, false)
+        public XFormsOutOfRangeEvent(NXNode visual)
+            : base(visual, Name, true, false)
         {
 
         }

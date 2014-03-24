@@ -9,7 +9,7 @@ namespace NXKit.Web.IO
 {
 
     /// <summary>
-    /// Provides a writer that produces a JSON tree from <see cref="Visual"/> instances.
+    /// Provides a writer that produces a JSON tree from <see cref="NXNode"/> instances.
     /// </summary>
     public class JsonVisualWriter :
         VisualWriter
@@ -70,10 +70,10 @@ namespace NXKit.Web.IO
         }
 
         /// <summary>
-        /// Writes the given <see cref="Visual"/> to the underlying output.
+        /// Writes the given <see cref="NXNode"/> to the underlying output.
         /// </summary>
         /// <param name="visual"></param>
-        public override void Write(Visual visual)
+        public override void Write(NXNode visual)
         {
             writer.WriteStartObject();
 
@@ -117,14 +117,14 @@ namespace NXKit.Web.IO
             }
 
             // dealing with a content visual
-            if (visual is ContentVisual)
+            if (visual is NXElement)
             {
                 // write content of visuals
                 writer.WritePropertyName("Visuals");
                 writer.WriteStartArray();
 
                 // write all children objects
-                foreach (var i in ((ContentVisual)visual).Visuals)
+                foreach (var i in ((NXElement)visual).Elements)
                     Write(i);
 
                 writer.WriteEndArray();

@@ -5,8 +5,20 @@ namespace NXKit.XForms
 {
 
     [Visual("copy")]
-    public class XFormsCopyVisual : XFormsSingleNodeBindingVisual, ISelectableVisual
+    public class XFormsCopyVisual :
+        XFormsSingleNodeBindingVisual,
+        ISelectableVisual
     {
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsCopyVisual(XElement element)
+            : base(element)
+        {
+
+        }
 
         /// <summary>
         /// Implements the actions when selecting the item from a list control.

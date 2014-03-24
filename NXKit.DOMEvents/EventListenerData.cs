@@ -4,7 +4,7 @@ namespace NXKit.DOMEvents
 {
 
     /// <summary>
-    /// Information required to associate an <see cref="IEventListener"/> with an event on a particular <see cref="Visual"/>.
+    /// Information required to associate an <see cref="IEventListener"/> with an event on a particular <see cref="NXNode"/>.
     /// </summary>
     internal class EventListenerData
     {

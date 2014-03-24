@@ -7,11 +7,22 @@ namespace NXKit.XForms.Layout
     public class TableRowVisual : LayoutVisual
     {
 
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public TableRowVisual(XElement element)
+            : base(element)
+        {
+
+        }
+
+
         public string ColumnGroup
         {
             get
             {
-                return Module.GetAttributeValue(Element, "column-group");
+                return Module.GetAttributeValue(Xml, "column-group");
             }
         }
 

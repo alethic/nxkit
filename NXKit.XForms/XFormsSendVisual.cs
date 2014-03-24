@@ -11,19 +11,30 @@ namespace NXKit.XForms
         IActionVisual
     {
 
-        public void Handle(IEvent ev)
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsSendVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
+
+        }
+
+        public void Handle(Event ev)
         {
             Invoke();
         }
 
         public void Invoke()
         {
-            var submissionAttr = Module.GetAttributeValue(Element, "submission");
+            var submissionAttr = Module.GetAttributeValue(Xml, "submission");
             if (submissionAttr != null)
             {
                 var submissionVisual = ResolveId(submissionAttr);
                 if (submissionVisual != null)
-                    submissionVisual.DispatchEvent<XFormsSubmitEvent>();
+                    submissionVisual.Interface<IEventTarget>().DispatchEvent(new XFormsSubmitEvent(submissionVisual).Event);
             }
         }
 

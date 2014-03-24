@@ -1,4 +1,5 @@
-﻿namespace NXKit.XForms
+﻿using System.Xml.Linq;
+namespace NXKit.XForms
 {
 
     /// <summary>
@@ -11,6 +12,27 @@
 
         bool evaluationContextCached;
         XFormsEvaluationContext evaluationContext;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsBindingVisual(XElement element)
+            : base(element)
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsBindingVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
+
+        }
 
         /// <summary>
         /// Returns the context which will be inherited by scoped elements.
@@ -36,7 +58,7 @@
         }
 
         /// <summary>
-        /// Creates a new <see cref="XFormsEvaluationContext"/> for this <see cref="Visual"/>.
+        /// Creates a new <see cref="XFormsEvaluationContext"/> for this <see cref="NXNode"/>.
         /// </summary>
         /// <returns></returns>
         protected abstract XFormsEvaluationContext CreateEvaluationContext();

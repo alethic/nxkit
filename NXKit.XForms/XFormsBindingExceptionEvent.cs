@@ -9,8 +9,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsBindingExceptionEvent()
-            : base(Name, true, false)
+        public XFormsBindingExceptionEvent(NXNode visual)
+            : base(visual, Name, true, false)
         {
 
         }

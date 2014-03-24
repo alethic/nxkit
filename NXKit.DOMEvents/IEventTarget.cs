@@ -8,10 +8,10 @@
 
         void RemoveEventListener(string type, IEventListener listener, bool useCapture);
 
-        void DispatchEvent(IEvent evt);
+        void DispatchEvent(Event evt);
 
         void AddEventHandler<T>(string type, bool useCapture, EventHandlerDelegate handler)
-            where T : IEvent;
+            where T : Event;
 
     }
 

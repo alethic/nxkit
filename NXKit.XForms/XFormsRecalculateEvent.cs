@@ -9,8 +9,8 @@
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public XFormsRecalculateEvent()
-            : base(Name, true, true)
+        public XFormsRecalculateEvent(NXNode visual)
+            : base(visual, Name, true, true)
         {
 
         }

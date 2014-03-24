@@ -1,16 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace NXKit.XForms.Layout
 {
 
     [Visual("table-column")]
-    public class TableColumnVisual : LayoutVisual
+    public class TableColumnVisual : 
+        LayoutVisual
     {
 
-        protected override IEnumerable<Visual> CreateVisuals()
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public TableColumnVisual(XElement element)
+            : base(element)
         {
-            return CreateElementVisuals(Element, true);
+
         }
 
         public Importance Importance

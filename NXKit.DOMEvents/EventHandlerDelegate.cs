@@ -3,6 +3,6 @@
 namespace NXKit
 {
 
-    public delegate void EventHandlerDelegate(IEvent evt);
+    public delegate void EventHandlerDelegate(Event evt);
 
 }

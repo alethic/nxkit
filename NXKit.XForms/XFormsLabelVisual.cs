@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -13,22 +11,17 @@ namespace NXKit.XForms
     [Visual("label")]
     public class XFormsLabelVisual :
         XFormsSingleNodeBindingVisual,
-        ISupportsCommonAttributes,
-        ITextVisual
+        ISupportsCommonAttributes
     {
 
-        protected override IEnumerable<Visual> CreateVisuals()
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsLabelVisual(XElement element)
+            : base(element)
         {
-            return CreateElementVisuals(Element, includeTextContent: true);
-        }
 
-        public void WriteText(TextWriter w)
-        {
-            if (Binding != null)
-                w.Write(Binding.Value ?? "");
-            else
-                foreach (var c in Visuals.OfType<ITextVisual>())
-                    c.WriteText(w);
         }
 
     }

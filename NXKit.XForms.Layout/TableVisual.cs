@@ -1,4 +1,6 @@
-﻿namespace NXKit.XForms.Layout
+﻿using System.Xml.Linq;
+
+namespace NXKit.XForms.Layout
 {
 
     [Visual("table")]
@@ -6,6 +8,16 @@
         XFormsGroupVisual,
         ITableColumnGroupContainer
     {
+        
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="xml"></param>
+        public TableVisual(XElement xml)
+            : base(xml)
+        {
+
+        }
 
         public Importance Importance
         {

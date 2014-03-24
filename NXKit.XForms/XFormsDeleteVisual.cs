@@ -9,12 +9,23 @@ namespace NXKit.XForms
 {
 
     [Visual("delete")]
-    public class XFormsDeleteVisual : 
-        XFormsNodeSetBindingVisual, 
+    public class XFormsDeleteVisual :
+        XFormsNodeSetBindingVisual,
         IActionVisual
     {
+        
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsDeleteVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
 
-        public void Handle(IEvent ev)
+        }
+
+        public void Handle(Event ev)
         {
             Module.InvokeAction(this);
         }
@@ -47,7 +58,7 @@ namespace NXKit.XForms
             //if (boundNodes.Any(i => i.getNamespaceURI() != qn.getNamespaceURI() || i.getLocalName() != qn.getLocalPart()))
             //    throw new Exception();
 
-            var atAttr = Module.GetAttributeValue(Element, "at");
+            var atAttr = Module.GetAttributeValue(Xml, "at");
             if (atAttr == null)
                 throw new Exception();
 
@@ -74,7 +85,7 @@ namespace NXKit.XForms
             var curNode = Binding.Nodes[at - 1];
 
             // set of dependent visuals
-            var dependentVisualsState = Module.Document.RootVisual
+            var dependentVisualsState = Module.Document.Root
                 .Descendants(true)
                 .OfType<XFormsNodeSetBindingVisual>()
                 .Where(i => i.Binding != null && i.Binding.Nodes != null && i.Binding.Nodes.Any(j => j.Parent == parent))
@@ -137,7 +148,7 @@ namespace NXKit.XForms
             ec.Model.State.RevalidateFlag = true;
             ec.Model.State.RefreshFlag = true;
 
-            ec.Instance.DispatchEvent<XFormsDeleteEvent>();
+            ec.Instance.Interface<IEventTarget>().DispatchEvent(new XFormsDeleteEvent(ec.Instance).Event);
         }
 
     }

@@ -7,13 +7,24 @@ namespace NXKit.XForms
     /// Serves as a generated item within a repeat.
     /// </summary>
     public class XFormsRepeatItemVisual :
-        XFormsVisual, 
-        IEvaluationContextScope, 
-        INamingScope, 
+        XFormsVisual,
+        IEvaluationContextScope,
+        INamingScope,
         IRelevancyScope
     {
 
         XFormsEvaluationContext context;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsRepeatItemVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
+
+        }
 
         /// <summary>
         /// 

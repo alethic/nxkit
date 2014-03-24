@@ -233,7 +233,7 @@ namespace NXKit.Web.UI
             using (var str = new JTokenWriter())
             using (var wrt = new JsonVisualWriter(str))
             {
-                wrt.Write(document.RootVisual);
+                wrt.Write(document.Root);
                 wrt.Close();
                 return (JObject)str.Token;
             }
@@ -249,7 +249,7 @@ namespace NXKit.Web.UI
             using (var str = new StringWriter())
             using (var wrt = new JsonVisualWriter(str))
             {
-                wrt.Write(document.RootVisual);
+                wrt.Write(document.Root);
                 wrt.Close();
                 return str.ToString();
             }
@@ -389,11 +389,11 @@ namespace NXKit.Web.UI
         /// <param name="data"></param>
         void ClientPush(JObject data)
         {
-            VisitAndPush(data, document.RootVisual);
+            VisitAndPush(data, document.Root);
             document.Invoke();
         }
 
-        void VisitAndPush(JObject s, Visual d)
+        void VisitAndPush(JObject s, NXNode d)
         {
             if (s.Value<string>("Type") != d.GetType().FullName)
                 throw new Exception();
@@ -419,14 +419,14 @@ namespace NXKit.Web.UI
             foreach (var i in pL)
                 i.dP.SetValue(d, ((JObject)i.sP.Value).Value<string>("Value"));
 
-            if (d is ContentVisual)
+            if (d is NXElement)
             {
                 var sVisuals = s.Value<JArray>("Visuals")
                     .Values<JObject>()
                     .ToArray();
 
-                var dVisuals = ((ContentVisual)d)
-                    .Visuals
+                var dVisuals = ((NXElement)d)
+                    .Elements
                     .ToArray();
 
                 foreach (var i in sVisuals.Zip(dVisuals, (sV, dV) => new { sV, dV }))

@@ -15,9 +15,9 @@ namespace NXKit.XForms
         /// <param name="self"></param>
         /// <returns></returns>
         public static XName Appearance<T>(this T self)
-            where T : ContentVisual, ISupportsUiCommonAttributes
+            where T : NXElement, ISupportsUiCommonAttributes
         {
-            var a = self.Document.GetModule<XFormsModule>().ResolveAttribute(self.Element, "appearance");
+            var a = self.Document.Module<XFormsModule>().ResolveAttribute(self.Xml, "appearance");
             return a != null ? a.ValueAsXName() : null;
         }
 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -9,30 +7,17 @@ namespace NXKit.XForms
     public class XFormsGroupVisual :
         XFormsSingleNodeBindingVisual,
         ISupportsUiCommonAttributes,
-        IRelevancyScope, 
-        INavigationCategoryVisual
+        IRelevancyScope
     {
-
-        protected override IEnumerable<Visual> CreateVisuals()
+        
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsGroupVisual(XElement element)
+            : base(element)
         {
-            return CreateElementVisuals(Element);
-        }
 
-        public string Label
-        {
-            get { return GetLabel(); }
-        }
-
-        string GetLabel()
-        {
-            var b = new StringWriter();
-            var l = Visuals.OfType<XFormsLabelVisual>().FirstOrDefault();
-            if (l != null)
-                l.WriteText(b);
-            else
-                return null;
-
-            return b.ToString();
         }
 
     }

@@ -1,16 +1,27 @@
-﻿using NXKit.DOMEvents;
+﻿using System.Xml.Linq;
+using NXKit.DOMEvents;
 using NXKit.Util;
 
 namespace NXKit.XForms
 {
 
     [Visual("setvalue")]
-    public class XFormsSetValueVisual : 
-        XFormsSingleNodeBindingVisual, 
+    public class XFormsSetValueVisual :
+        XFormsSingleNodeBindingVisual,
         IActionVisual
     {
 
         XFormsBinding valueBinding;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsSetValueVisual(XElement element)
+            : base(element)
+        {
+
+        }
 
         public override void Refresh()
         {
@@ -20,16 +31,16 @@ namespace NXKit.XForms
             valueBinding = null;
             if (Binding != null)
             {
-                var valueAttr = Module.GetAttributeValue(Element, "value");
+                var valueAttr = Module.GetAttributeValue(Xml, "value");
                 if (valueAttr != null)
                 {
                     var ec = new XFormsEvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.Context.Node, 1, 1);
-                    valueBinding = new XFormsBinding(Document, this, ec, valueAttr);
+                    valueBinding = new XFormsBinding(this, ec, valueAttr);
                 }
             }
         }
 
-        public void Handle(IEvent ev)
+        public void Handle(Event ev)
         {
             Module.InvokeAction(this);
         }
@@ -52,7 +63,7 @@ namespace NXKit.XForms
             else
             {
                 // resolve value from contents
-                var content = Element.Value.TrimToNull();
+                var content = Xml.Value.TrimToNull();
                 if (content != null)
                     newValue = content;
             }

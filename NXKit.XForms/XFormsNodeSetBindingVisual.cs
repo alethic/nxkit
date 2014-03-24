@@ -1,12 +1,25 @@
-﻿namespace NXKit.XForms
+﻿using System.Xml.Linq;
+
+namespace NXKit.XForms
 {
 
     /// <summary>
-    /// Abstract base <see cref="Visual"/> implementation for node-set binding elements.
+    /// Abstract base <see cref="NXNode"/> implementation for node-set binding elements.
     /// </summary>
     public abstract class XFormsNodeSetBindingVisual :
         XFormsBindingVisual
     {
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsNodeSetBindingVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
+
+        }
 
         /// <summary>
         /// Provides an evaluation context for children. Node-set bindings provide the first node result.
@@ -28,9 +41,7 @@
             Binding = Module.ResolveNodeSetBinding(this);
 
             base.Refresh();
-
-            // rebuild children
-            base.InvalidateChildren();
+            base.CreateNodes();
         }
 
     }

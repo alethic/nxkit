@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -11,6 +12,17 @@ namespace NXKit.XForms
         XFormsInstanceVisualState state;
 
         /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsInstanceVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
+
+        }
+
+        /// <summary>
         /// Gets the instance state associated with this instance visual.
         /// </summary>
         public XFormsInstanceVisualState State
@@ -18,10 +30,9 @@ namespace NXKit.XForms
             get { return state ?? (state = GetState<XFormsInstanceVisualState>()); }
         }
 
-        protected override IEnumerable<Visual> CreateVisuals()
+        protected override void CreateNodes()
         {
-            // an instance has no visual children
-            yield break;
+            
         }
 
     }

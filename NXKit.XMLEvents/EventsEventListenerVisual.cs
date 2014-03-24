@@ -1,19 +1,30 @@
-﻿using NXKit.DOMEvents;
+﻿using System.Xml.Linq;
+
+using NXKit.DOMEvents;
 
 namespace NXKit.XmlEvents
 {
 
     public class EventsEventListenerVisual :
-        ContentVisual,
-        IEventHandlerVisual
+        NXElement
     {
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public EventsEventListenerVisual(XElement element)
+            : base(element)
+        {
+
+        }
 
         public override string Id
         {
-            get { return Document.GetElementId(Element); }
+            get { return Document.GetElementId(Xml); }
         }
 
-        public void Handle(IEvent ev)
+        public void Handle(Event ev)
         {
 
         }

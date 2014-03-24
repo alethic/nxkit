@@ -8,20 +8,20 @@ namespace NXKit.DOMEvents
         IEventListener
     {
 
-        Action<IEvent> action;
+        Action<Event> action;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="action"></param>
-        public EventListener(Action<IEvent> action)
+        public EventListener(Action<Event> action)
         {
             Contract.Requires<ArgumentNullException>(action != null);
 
             this.action = action;
         }
 
-        void IEventListener.HandleEvent(IEvent @event)
+        void IEventListener.HandleEvent(Event @event)
         {
             action(@event);
         }

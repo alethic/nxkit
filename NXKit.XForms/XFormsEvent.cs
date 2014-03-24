@@ -6,7 +6,7 @@ namespace NXKit.XForms
     public abstract class XFormsEvent
     {
 
-        readonly IEvent evt;
+        readonly Event evt;
 
         /// <summary>
         /// Initializes a new instance.
@@ -14,13 +14,13 @@ namespace NXKit.XForms
         /// <param name="name"></param>
         /// <param name="bubbles"></param>
         /// <param name="cancelable"></param>
-        public XFormsEvent(Visual visual, string name, bool bubbles, bool cancelable)
+        public XFormsEvent(NXNode visual, string name, bool bubbles, bool cancelable)
         {
-            this.evt = visual.Interface<IDocumentEvent>().CreateEvent(name);
+            this.evt = visual.Document.Interface<IDocumentEvent>().CreateEvent(name);
             this.evt.InitEvent(name, bubbles, cancelable);
         }
 
-        public IEvent Event
+        public Event Event
         {
             get { return evt; }
         }

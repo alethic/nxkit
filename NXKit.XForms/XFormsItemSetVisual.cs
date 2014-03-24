@@ -8,25 +8,38 @@ namespace NXKit.XForms
 
     [Visual("itemset")]
     public class XFormsItemSetVisual :
-        XFormsNodeSetBindingVisual, 
+        XFormsNodeSetBindingVisual,
         INamingScope
     {
 
-        Dictionary<XObject, XFormsItemSetItemVisual> items = new Dictionary<XObject, XFormsItemSetItemVisual>();
+        readonly Dictionary<XObject, XFormsItemSetItemVisual> items = new Dictionary<XObject, XFormsItemSetItemVisual>();
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsItemSetVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
+
+        }
 
         /// <summary>
         /// Dynamically generate itemset items.
         /// </summary>
         /// <returns></returns>
-        protected override IEnumerable<Visual> CreateVisuals()
+        protected override void CreateNodes()
         {
+            RemoveNodes();
+
             if (Binding == null ||
                 Binding.Nodes == null)
-                yield break;
+                return;
 
             // obtain or create items
             for (int i = 0; i < Binding.Nodes.Length; i++)
-                yield return GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.Nodes[i], i + 1, Binding.Nodes.Length);
+                Add(GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.Nodes[i], i + 1, Binding.Nodes.Length));
         }
 
         /// <summary>
@@ -47,8 +60,7 @@ namespace NXKit.XForms
             var item = items.GetOrDefault(node);
             if (item == null)
             {
-                item = items[node] = new XFormsItemSetItemVisual();
-                item.Initialize(Document, this, Element);
+                item = items[node] = new XFormsItemSetItemVisual(this, Xml);
                 item.SetContext(ec);
             }
             else

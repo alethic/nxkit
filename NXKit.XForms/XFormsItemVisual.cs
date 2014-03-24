@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -14,6 +15,17 @@ namespace NXKit.XForms
         ISelectableVisual selectable;
 
         /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsItemVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
+
+        }
+
+        /// <summary>
         /// Gets the <see cref="XFormsLabelVisual"/> for this item.
         /// </summary>
         public XFormsLabelVisual LabelVisual
@@ -22,7 +34,7 @@ namespace NXKit.XForms
             {
                 if (!labelVisualCached)
                 {
-                    labelVisual = Visuals.OfType<XFormsLabelVisual>().SingleOrDefault();
+                    labelVisual = Elements.OfType<XFormsLabelVisual>().SingleOrDefault();
                     labelVisualCached = true;
                 }
 
@@ -39,7 +51,7 @@ namespace NXKit.XForms
             {
                 if (!selectableCached)
                 {
-                    selectable = Visuals.OfType<ISelectableVisual>().SingleOrDefault();
+                    selectable = Elements.OfType<ISelectableVisual>().SingleOrDefault();
                     selectableCached = true;
                 }
 

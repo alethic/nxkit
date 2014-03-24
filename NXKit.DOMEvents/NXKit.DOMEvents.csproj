@@ -79,18 +79,16 @@
     <Compile Include="EventListenerData.cs" />
     <Compile Include="EventListenerMap.cs" />
     <Compile Include="EventTarget.cs" />
-    <Compile Include="IDefaultAction.cs" />
     <Compile Include="IEventDefaultActionHandler.cs" />
+    <Compile Include="IEventHandler.cs" />
     <Compile Include="UIEvent.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventPhase.cs" />
     <Compile Include="UIEvents.cs" />
     <Compile Include="IDocumentEvent.cs" />
-    <Compile Include="IEvent.cs" />
     <Compile Include="IEventListener.cs" />
     <Compile Include="IEventTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IUIEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj">

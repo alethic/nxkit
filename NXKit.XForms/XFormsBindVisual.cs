@@ -1,4 +1,6 @@
-﻿namespace NXKit.XForms
+﻿using System.Xml.Linq;
+
+namespace NXKit.XForms
 {
 
     [Visual("bind")]
@@ -6,15 +8,24 @@
         XFormsBindingVisual
     {
 
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        public XFormsBindVisual(NXElement parent, XElement element)
+            : base(parent, element)
+        {
+
+        }
+
         public override void Refresh()
         {
             // rebuild binding
             Binding = Module.ResolveNodeSetBinding(this);
 
             base.Refresh();
-
-            // rebuild children
-            base.InvalidateChildren();
+            base.CreateNodes();
         }
 
         /// <summary>

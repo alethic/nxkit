@@ -10,8 +10,14 @@ namespace NXKit.Tests
     {
 
         public class TestVisual :
-            ContentVisual
+            NXElement
         {
+
+            public TestVisual()
+                : base()
+            {
+
+            }
 
             public override string Id
             {
@@ -51,7 +57,7 @@ namespace NXKit.Tests
         public void Test_NXDocument_roundtrip()
         {
             var d1 = NXDocument.Parse(@"<unknown />");
-            d1.RootVisual.GetState<TestVisualState>().Value = "Value1";
+            d1.Root.GetState<TestVisualState>().Value = "Value1";
 
             var f = new BinaryFormatter();
             var m = new MemoryStream();
@@ -61,7 +67,7 @@ namespace NXKit.Tests
             var s = (NXDocumentState)f.Deserialize(m);
             var d2 = new NXDocument(d1.Resolver, s);
 
-            Assert.AreEqual("Value1", d1.RootVisual.GetState<TestVisualState>().Value);
+            Assert.AreEqual("Value1", d1.Root.GetState<TestVisualState>().Value);
         }
 
     }

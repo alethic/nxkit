@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Xml.Linq;
 using NXKit.Util;
 
 namespace NXKit.XForms
@@ -12,11 +12,21 @@ namespace NXKit.XForms
     {
 
         /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public XFormsValueVisual(XElement element)
+            : base(element)
+        {
+
+        }
+
+        /// <summary>
         /// Gets the text value associated with this value visual.
         /// </summary>
         public string InlineContent
         {
-            get { return Element.Value.TrimToNull(); }
+            get { return Xml.Value.TrimToNull(); }
         }
 
         /// <summary>

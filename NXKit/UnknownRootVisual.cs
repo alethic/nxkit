@@ -9,25 +9,22 @@ namespace NXKit
     /// Provides an unknown visual.
     /// </summary>
     class UnknownRootVisual :
-        ContentVisual,
-        IVisual
+        NXElement
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="engine"></param>
-        /// <param name="parent"></param>
-        /// <param name="node"></param>
-        internal UnknownRootVisual(INXDocument engine, ContentVisual parent, XNode node)
-            : base(engine, parent, node)
+        /// <param name="xml"></param>
+        internal UnknownRootVisual(XElement xml)
+            : base(xml)
         {
-            Contract.Requires<ArgumentNullException>(engine != null);
+            Contract.Requires<ArgumentNullException>(xml != null);
         }
 
         public override string Id
         {
-            get { return Document.GetElementId(Element); }
+            get { return Document.GetElementId(Xml); }
         }
 
     }
