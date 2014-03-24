@@ -52,16 +52,6 @@ namespace NXKit.XForms.Layout
         public override void AnnotateVisual(Visual visual)
         {
             base.AnnotateVisual(visual);
-
-            // set importance annotation if marked
-            if (visual is ContentVisual)
-            {
-                var attr = GetAttributeValue(((ContentVisual)visual).Element, "importance");
-                if (attr == "high")
-                    visual.Annotations.Set<ImportanceAnnotation>(new ImportanceAnnotation(Importance.High));
-                else if (attr == "low")
-                    visual.Annotations.Set<ImportanceAnnotation>(new ImportanceAnnotation(Importance.Low));
-            }
         }
 
         /// <summary>

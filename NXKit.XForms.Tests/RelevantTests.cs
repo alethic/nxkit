@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NXKit.DOMEvents;
 
 namespace NXKit.XForms.Tests
 {
@@ -60,6 +61,7 @@ namespace NXKit.XForms.Tests
                 .ToList();
 
             int c = 0;
+            inputs[1].Interface<IEventTarget>().AddEventListener()
             inputs[1].AddEventHandler<XFormsDisabledEvent>(i => c++, false);
             inputs[0].Binding.SetValue("false");
             d.Invoke();

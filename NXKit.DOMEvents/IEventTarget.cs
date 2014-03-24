@@ -10,6 +10,9 @@
 
         bool DispatchEvent(IEvent evt);
 
+        void AddEventHandler<T>(string type, bool useCapture, EventHandlerDelegate handler)
+            where T : IEvent;
+
     }
 
 }

@@ -73,7 +73,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DocumentEvent.cs" />
+    <Compile Include="EventHandlerDelegate.cs" />
     <Compile Include="DOMEventsModule.cs" />
+    <Compile Include="EventListener.cs" />
+    <Compile Include="EventListenerData.cs" />
+    <Compile Include="EventListenerMap.cs" />
+    <Compile Include="EventTarget.cs" />
+    <Compile Include="IDefaultAction.cs" />
     <Compile Include="IEventDefaultActionHandler.cs" />
     <Compile Include="UIEvent.cs" />
     <Compile Include="Event.cs" />
@@ -90,6 +96,14 @@
     <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj">
       <Project>{075ba36b-f95a-4563-bbe9-20d4405e9c9e}</Project>
       <Name>NXKit.DOM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Util\NXKit.Util.csproj">
+      <Project>{1e5fae9e-f890-487b-bfcd-e3ed5c4f8d41}</Project>
+      <Name>NXKit.Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit\NXKit.csproj">
+      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
+      <Name>NXKit</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,8 @@
-﻿namespace NXKit.XForms
+﻿using System;
+using System.Linq;
+using NXKit.DOMEvents;
+
+namespace NXKit.XForms
 {
 
     /// <summary>
@@ -22,6 +26,21 @@
         public override string Id
         {
             get { return Document.GetElementId(Element); }
+        }
+
+        /// <summary>
+        /// Dispatches the typed XForms event.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        [Obsolete("Raise events by string type instead.")]
+        protected void DispatchEvent<T>()
+            where T : XFormsEvent
+        {
+            var evt = (XFormsEvent)Activator.CreateInstance(typeof(T), new object[] { this });
+            if (evt == null)
+                throw new NullReferenceException();
+
+            Interface<IEventTarget>().DispatchEvent(evt.Event);
         }
 
     }

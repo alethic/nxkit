@@ -57,7 +57,11 @@ namespace NXKit
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public abstract Visual CreateVisual(XName xname);
+        public virtual Visual CreateVisual(XName xname)
+        {
+            Contract.Requires<ArgumentNullException>(xname != null);
+            return null;
+        }
 
         /// <summary>
         /// Gives a <see cref="Module"/> a chance to attach additional information to a <see cref="Visual"/> created by
@@ -70,13 +74,15 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Gets all available interfaces for the specified <see cref="Visual"/>.
+        /// Gets the supported interfaces for the given <see cref="Visual"/>.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="visual"></param>
         /// <returns></returns>
         public virtual IEnumerable<object> GetInterfaces(Visual visual)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
+
             yield break;
         }
 
