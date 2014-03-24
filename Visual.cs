@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 
-using NXKit.DOMEvents;
 using NXKit.Util;
 
 namespace NXKit
@@ -14,19 +13,18 @@ namespace NXKit
     /// <summary>
     /// Represents a node in the visual tree.
     /// </summary>
-    public abstract class Visual :
-        IEventTarget
+    public abstract class Visual
     {
 
         bool addedEventRaised = false;
-        EventListenerMap listenerMap;
+        LinkedList<object> storage;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public Visual()
         {
-
+            this.storage = new LinkedList<object>();
         }
 
         /// <summary>
@@ -55,7 +53,6 @@ namespace NXKit
             Document = document;
             Parent = parent;
             Node = node;
-            Annotations = new VisualAnnotationCollection();
         }
 
         /// <summary>
@@ -74,22 +71,30 @@ namespace NXKit
         public XNode Node { get; private set; }
 
         /// <summary>
+        /// Gets the private storage for this visual.
+        /// </summary>
+        public LinkedList<object> Storage
+        {
+            get { return storage; }
+        }
+
+        /// <summary>
+        /// Gets all the available interfaces.
+        /// </summary>
+        public IEnumerable<object> Interfaces
+        {
+            get { return Document.Modules.SelectMany(i => i.GetInterfaces(this)); }
+        }
+
+        /// <summary>
         /// Gets the implemented interface specified by <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public T Interface<T>()
         {
-            return Document.Modules
-                .SelectMany(i => i.GetInterfaces(this))
-                .OfType<T>()
-                .FirstOrDefault();
+            return Interfaces.OfType<T>().FirstOrDefault();
         }
-
-        /// <summary>
-        /// Additional information attached to this <see cref="Visual"/>.
-        /// </summary>
-        public VisualAnnotationCollection Annotations { get; private set; }
 
         #region Navigation
 
@@ -153,70 +158,6 @@ namespace NXKit
 
         #endregion
 
-        #region Events
-
-        /// <summary>
-        /// Private <see cref="org.w3c.dom.events.EventListener"/> implementation for implementing dispatch to a delegate.
-        /// </summary>
-        public class DelegateDispatchEventListener :
-            IEventListener
-        {
-
-            readonly DocumentEventHandler handler;
-
-            /// <summary>
-            /// Initializes a new instance.
-            /// </summary>
-            /// <param name="observer"></param>
-            /// <param name="target"></param>
-            /// <param name="handler2"></param>
-            public DelegateDispatchEventListener(DocumentEventHandler handler2)
-            {
-                this.handler = handler2;
-            }
-
-            public void HandleEvent(IEvent evt)
-            {
-                if (handler != null)
-                    handler(evt);
-            }
-
-        }
-
-        /// <summary>
-        /// Adds an event handler for events of type <typeparamref name="T"/> when they pass this visual.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="handler"></param>
-        /// <param name="useCapture"></param>
-        public void AddEventHandler<T>(DocumentEventHandler handler, bool useCapture)
-        {
-            string name = null;
-
-            var nameField = typeof(T).GetField("Name", BindingFlags.Static | BindingFlags.Public);
-            if (nameField != null)
-                name = (string)nameField.GetValue(null);
-
-            if (name == null)
-                throw new Exception();
-
-            AddEventListener(name, new DelegateDispatchEventListener(handler), useCapture);
-        }
-
-        /// <summary>
-        /// Invoke once per control in refresh to raise the created event.
-        /// </summary>
-        internal void RaiseAddedEvent()
-        {
-            if (!addedEventRaised)
-            {
-                addedEventRaised = true;
-                DispatchEvent<VisualAddedEvent>();
-            }
-        }
-
-        #endregion
-
         /// <summary>
         /// Returns a string representation of this <see cref="Visual"/>.
         /// </summary>
@@ -224,184 +165,6 @@ namespace NXKit
         public override string ToString()
         {
             return GetType().Name;
-        }
-
-        public void AddEventListener(string type, IEventListener listener, bool useCapture)
-        {
-            // initialize listener map
-            if (listenerMap == null)
-                listenerMap = new EventListenerMap();
-
-            // initialize listeners list
-            var listeners = listenerMap.GetOrDefault(type);
-            if (listeners == null)
-                listeners = listenerMap[type] = new List<EventListenerData>();
-
-            // check for existing registration
-            if (listeners.Any(i => i.Listener == listener && i.UseCapture == useCapture))
-                return;
-
-            // add listener to set
-            listeners.Add(new EventListenerData(listener, useCapture));
-        }
-
-        public void RemoveEventListener(string type, IEventListener listener, bool useCapture)
-        {
-            if (listenerMap == null)
-                return;
-
-            // initialize listeners list
-            var listeners = listenerMap.GetOrDefault(type);
-            if (listeners == null)
-                return;
-
-            // check for existing registration
-            var data = listeners.FirstOrDefault(i => i.Listener == listener && i.UseCapture == useCapture);
-            if (data != null)
-                listeners.Remove(data);
-        }
-
-        /// <summary>
-        /// Attempts to handle the <see cref="Event"/> with any listeners registered on <paramref name="visual"/>.
-        /// </summary>
-        /// <param name="visual"></param>
-        /// <param name="evt"></param>
-        /// <param name="useCapture"></param>
-        void HandleEventOnVisual(Visual visual, Event evt, bool useCapture)
-        {
-            Contract.Requires<ArgumentNullException>(visual != null);
-            Contract.Requires<ArgumentNullException>(evt != null);
-
-            evt.CurrentTarget = visual;
-            if (visual.listenerMap != null)
-            {
-                // obtain set of registered listeners
-                var listeners = visual.listenerMap.GetOrDefault(evt.Type);
-                if (listeners != null)
-                    foreach (var listener in listeners.Where(i => i.UseCapture == useCapture))
-                        listener.Listener.HandleEvent(evt);
-            }
-        }
-
-        /// <summary>
-        /// Attempts to invoke the default action associated with the event.
-        /// </summary>
-        /// <param name="visual"></param>
-        /// <param name="evt"></param>
-        void HandleDefaultAction(IEvent evt)
-        {
-            Contract.Requires<ArgumentNullException>(evt != null);
-
-            var mev = evt as Event;
-            if (mev.PreventDefaultSet)
-                return;
-
-            // type of interface visual needs to implement
-            var interfaceType = typeof(IEventDefaultActionHandler<>).MakeGenericType(evt.GetType());
-
-            // if target provides default action, invoke it
-            if (interfaceType.IsAssignableFrom(evt.Target.GetType()))
-                interfaceType.GetMethod("DefaultAction").Invoke(evt.Target, new object[] { evt });
-        }
-
-        /// <summary>
-        /// Dispatches a new event of type <typeparamref name="T"/> to this <see cref="Visual"/>.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public void DispatchEvent<T>()
-            where T : Event, new()
-        {
-            DispatchEvent(new T());
-        }
-
-        /// <summary>
-        /// Dispatchs a new event of type <paramref name="type"/> to this <see cref="Visual"/>.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="canBubble"></param>
-        /// <param name="cancelable"></param>
-        public void DispatchEvent(string type, bool canBubble, bool cancelable)
-        {
-            Contract.Requires<ArgumentNullException>(type != null);
-
-            DispatchEvent(new Event(type, canBubble, cancelable));
-        }
-
-        /// <summary>
-        /// Dispatches the specified <see cref="Event"/> to this <see cref="Visual"/>.
-        /// </summary>
-        /// <param name="evt"></param>
-        /// <returns></returns>
-        void DispatchEvent(Event evt)
-        {
-            if (((IEventTarget)this).DispatchEvent(evt))
-                HandleDefaultAction(evt);
-        }
-        /// <summary>
-        /// Implements <see cref="IEventTarget"/>.DispatchEvent.
-        /// </summary>
-        /// <param name="evt"></param>
-        /// <returns></returns>
-        bool IEventTarget.DispatchEvent(IEvent evt)
-        {
-            return DispatchEventImpl((Event)evt);
-        }
-
-        /// <summary>
-        /// Implements <see cref="IEventTarget"/>.DispatchEvent.
-        /// </summary>
-        /// <param name="evt"></param>
-        /// <returns></returns>
-        bool DispatchEventImpl(Event evt)
-        {
-            Contract.Assume(evt != null);
-
-            // event type must be specified
-            if (string.IsNullOrEmpty(evt.Type))
-                throw new Exception();
-
-            // event phase must be uninitialized
-            if (evt.EventPhase != EventPhase.Uninitialized)
-                throw new InvalidOperationException();
-
-            // prevent event for dispatch
-            evt.Target = this;
-
-            // path to root from root
-            var path = Ascendants().ToList();
-
-            // capture phase
-            evt.EventPhase = EventPhase.Capturing;
-            foreach (var visual in path.Reverse<Visual>())
-            {
-                HandleEventOnVisual(visual, evt, true);
-
-                // was told to stop propagation
-                if (evt.StopPropagationSet)
-                    return !evt.PreventDefaultSet;
-            }
-
-            // at-target phase
-            evt.EventPhase = EventPhase.AtTarget;
-            HandleEventOnVisual(this, evt, false);
-
-            // was told to stop propagation
-            if (evt.StopPropagationSet)
-                return !evt.PreventDefaultSet;
-
-            // bubbling phase
-            evt.EventPhase = EventPhase.Bubbling;
-            foreach (var visual in path)
-            {
-                HandleEventOnVisual(visual, evt, false);
-
-                // was told to stop propagation
-                if (evt.StopPropagationSet)
-                    return !evt.PreventDefaultSet;
-            }
-
-            return !evt.PreventDefaultSet;
         }
 
     }
