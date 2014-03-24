@@ -9,7 +9,6 @@ namespace NXKit
     /// <summary>
     /// Modules provide the implementation of a specification.
     /// </summary>
-    [ContractClass(typeof(Module_Contract))]
     public abstract class Module
     {
 
@@ -60,6 +59,7 @@ namespace NXKit
         public virtual Visual CreateVisual(XName xname)
         {
             Contract.Requires<ArgumentNullException>(xname != null);
+
             return null;
         }
 
@@ -93,19 +93,6 @@ namespace NXKit
         public virtual bool Invoke()
         {
             return false;
-        }
-
-    }
-
-    [ContractClassFor(typeof(Module))]
-    abstract class Module_Contract :
-        Module
-    {
-
-        public override Visual CreateVisual(XName xname)
-        {
-            Contract.Requires<ArgumentNullException>(xname != null);
-            throw new NotImplementedException();
         }
 
     }

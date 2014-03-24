@@ -134,6 +134,8 @@
     <Compile Include="PriorityAttribute.cs" />
     <Compile Include="SingleUriResolver.cs" />
     <Compile Include="UnknownRootVisual.cs" />
+    <Compile Include="VisualEventHandler.cs" />
+    <Compile Include="VisualEventArgs.cs" />
     <Compile Include="VisualTypeDescriptionProvider.cs" />
     <Compile Include="VisualTypeDescriptor.cs" />
     <Compile Include="XmlSchemaConstants.cs" />
