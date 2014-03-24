@@ -9,7 +9,7 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Associates serializable state information with <see cref="Visual"/> instances.
+    /// Associates serializable state information with <see cref="NXNode"/> instances.
     /// </summary>
     [Serializable]
     public class VisualStateCollection :
@@ -41,12 +41,12 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Gets the state object of the specified type for the specified <see cref="Visual"/>.
+        /// Gets the state object of the specified type for the specified <see cref="NXNode"/>.
         /// </summary>
         /// <param name="visual"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        object Get(ContentVisual visual, Type type, Func<object> getDefaultValue)
+        object Get(NXElement visual, Type type, Func<object> getDefaultValue)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
             Contract.Requires<ArgumentNullException>(type != null);
@@ -69,8 +69,8 @@ namespace NXKit
         /// <typeparam name="T"></typeparam>
         /// <param name="visual"></param>
         /// <returns></returns>
-        public T Get<T>(ContentVisual visual)
-            where T : new()
+        public T Get<T>(NXElement visual)
+            where T : class,new()
         {
             Contract.Requires<ArgumentNullException>(visual != null);
 

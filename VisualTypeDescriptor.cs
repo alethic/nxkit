@@ -8,7 +8,7 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Provides overrides to <see cref="Visual"/> types.
+    /// Provides overrides to <see cref="NXNode"/> types.
     /// </summary>
     public abstract class VisualTypeDescriptor :
         CustomTypeDescriptor
@@ -23,7 +23,7 @@ namespace NXKit
         public VisualTypeDescriptor(Type type)
         {
             Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentException>(typeof(Visual).IsAssignableFrom(type));
+            Contract.Requires<ArgumentException>(typeof(NXNode).IsAssignableFrom(type));
 
             this.type = type;
         }

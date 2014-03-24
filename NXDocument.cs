@@ -14,7 +14,7 @@ namespace NXKit
     /// Hosts an NXKit document. Provides access to the visual tree for a renderer or other processor.
     /// </summary>
     public class NXDocument :
-        INXDocument
+        NXContainer
     {
 
         /// <summary>
@@ -107,14 +107,13 @@ namespace NXKit
             return Load(new MemoryStream(Encoding.UTF8.GetBytes(document)), configuration);
         }
 
+        readonly LinkedList<object> storage = new LinkedList<object>();
         readonly NXDocumentConfiguration configuration;
         readonly IResolver resolver;
         readonly Uri uri;
-        readonly XDocument xml;
         readonly VisualStateCollection visualState;
         int nextElementId;
 
-        ContentVisual rootVisual;
         Module[] modules;
 
         [ContractInvariantMethod]
@@ -122,7 +121,6 @@ namespace NXKit
         void ObjectInvariant()
         {
             Contract.Invariant(configuration != null);
-            Contract.Invariant(xml != null);
             Contract.Invariant(resolver != null);
             Contract.Invariant(visualState != null);
             Contract.Invariant(nextElementId >= 0);
@@ -149,6 +147,7 @@ namespace NXKit
         /// <param name="nextElementId"></param>
         /// <param name="visualState"></param>
         public NXDocument(IResolver resolver, Uri uri, NXDocumentConfiguration configuration)
+            : base()
         {
             Contract.Requires<ArgumentNullException>(resolver != null);
             Contract.Requires<ArgumentNullException>(uri != null);
@@ -165,7 +164,7 @@ namespace NXKit
 
             this.resolver = resolver;
             this.uri = uri;
-            this.xml = XDocument.Load(stream);
+            this.Xml = XDocument.Load(stream);
 
             Initialize();
         }
@@ -192,6 +191,7 @@ namespace NXKit
         /// <param name="nextElementId"></param>
         /// <param name="visualState"></param>
         NXDocument(IResolver resolver, Uri uri, NXDocumentConfiguration configuration, string xml, int nextElementId, VisualStateCollection visualState)
+            : base()
         {
             Contract.Requires<ArgumentNullException>(resolver != null);
             Contract.Requires<ArgumentNullException>(uri != null);
@@ -206,7 +206,7 @@ namespace NXKit
 
             this.resolver = resolver;
             this.uri = uri;
-            this.xml = XDocument.Parse(xml);
+            this.Xml = XDocument.Parse(xml);
 
             Initialize();
         }
@@ -243,6 +243,9 @@ namespace NXKit
             foreach (var module in modules)
                 module.Initialize(this);
 
+            // create the root node and add it to the document
+            Add(CreateRootNode());
+
             // ensure document has been invoked at least once
             Invoke();
         }
@@ -255,12 +258,18 @@ namespace NXKit
             get { return configuration; }
         }
 
+        public override NXDocument Document
+        {
+            get { return this; }
+        }
+
         /// <summary>
         /// Gets a reference to the current <see cref="Xml"/> being handled.
         /// </summary>
-        public XDocument Xml
+        public new XDocument Xml
         {
-            get { return xml; }
+            get { return (XDocument)base.Xml; }
+            internal set { base.Xml = value; }
         }
 
         /// <summary>
@@ -272,26 +281,26 @@ namespace NXKit
         }
 
         /// <summary>
+        /// Gets all the loaded modules.
+        /// </summary>
+        public IEnumerable<Module> Modules()
+        {
+            return modules;
+        }
+
+        /// <summary>
         /// Gets the loaded module instance of the specified type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T GetModule<T>()
+        public T Module<T>()
             where T : Module
         {
             return modules.OfType<T>().FirstOrDefault();
         }
 
         /// <summary>
-        /// Gets all the loaded modules.
-        /// </summary>
-        public IEnumerable<Module> Modules
-        {
-            get { return modules; }
-        }
-
-        /// <summary>
-        /// Gets a reference to the per-<see cref="Visual"/> state collection.
+        /// Gets a reference to the per-<see cref="NXNode"/> state collection.
         /// </summary>
         public VisualStateCollection VisualState
         {
@@ -312,10 +321,6 @@ namespace NXKit
                     run |= module.Invoke();
             }
             while (run);
-
-            // raise the added event for visuals that have not yet had it raised
-            foreach (var visual in RootVisual.Descendants())
-                visual.RaiseVisualAdded();
         }
 
         /// <summary>
@@ -336,65 +341,57 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Gets a reference to the root <see cref="Visual"/> instance for navigating the visual tree.
+        /// Gets a reference to the root <see cref="NXELement"/> instance for navigating the visual tree.
         /// </summary>
-        public ContentVisual RootVisual
+        public NXElement Root
         {
-            get { return rootVisual ?? (rootVisual = CreateRootVisual()); }
+            get { return Elements.FirstOrDefault(); }
         }
 
         /// <summary>
-        /// Creates a new root <see cref="Visual"/> instance for navigating the visual tree.
+        /// Creates a new root <see cref="NXNode"/> instance for navigating the visual tree.
         /// </summary>
         /// <returns></returns>
-        ContentVisual CreateRootVisual()
+        NXElement CreateRootNode()
         {
-            Contract.Ensures(Contract.Result<ContentVisual>() != null);
+            Contract.Ensures(Contract.Result<NXElement>() != null);
 
-            return (ContentVisual)((INXDocument)this).CreateVisual(null, Xml.Root) ?? new UnknownRootVisual(this, null, Xml.Root);
+            return (NXElement)CreateNodeFromModules(Xml.Root) ?? new UnknownRootVisual(Xml.Root);
         }
 
         /// <summary>
-        /// Creates a <see cref="Visual"/> from the loaded <see cref="Module"/>s.
+        /// Creates a <see cref="NXNode"/> from the loaded <see cref="Module"/>s.
         /// </summary>
         /// <param name="parent"></param>
-        /// <param name="element"></param>
+        /// <param name="xml"></param>
         /// <returns></returns>
-        Visual CreateVisualFromModules(XElement element)
+        NXNode CreateNodeFromModules(XElement xml)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(xml != null);
 
-            return modules.Select(i => i.CreateVisual(element.Name)).FirstOrDefault(i => i != null);
+            return modules
+                .Select(i => i.CreateNode(xml))
+                .FirstOrDefault(i => i != null);
         }
 
         /// <summary>
         /// Implements IVisualBuilder.CreateVisual.
         /// </summary>
         /// <param name="parent"></param>
-        /// <param name="node"></param>
+        /// <param name="xml"></param>
         /// <returns></returns>
-        Visual INXDocument.CreateVisual(ContentVisual parent, XNode node)
+        internal NXNode CreateNode(XNode xml)
         {
-            if (node is XText)
+            if (xml is XText)
             {
-                var v = new TextVisual();
-                v.Initialize(this, parent, node);
-                return v;
+                return new NXText((XText)xml);
             }
-            else if (node is XElement)
+            else if (xml is XElement)
             {
                 // create new instance of visual using extensions
-                var visual = CreateVisualFromModules((XElement)node);
-                if (visual != null)
-                {
-                    visual.Initialize(this, parent, node);
-
-                    // give each module a chance to add additional information to the visual
-                    foreach (var module2 in modules)
-                        module2.AnnotateVisual(visual);
-
-                    return visual;
-                }
+                var node = CreateNodeFromModules((XElement)xml);
+                if (node != null)
+                    return node;
             }
 
             return null;
@@ -409,7 +406,7 @@ namespace NXKit
             return new NXDocumentState(
                 configuration,
                 uri,
-                xml.ToString(SaveOptions.DisableFormatting),
+                Xml.ToString(SaveOptions.DisableFormatting),
                 nextElementId,
                 visualState);
         }

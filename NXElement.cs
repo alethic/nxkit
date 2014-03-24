@@ -1,0 +1,151 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+
+using NXKit.Util;
+
+namespace NXKit
+{
+
+    /// <summary>
+    /// Represents an element in the document.
+    /// </summary>
+    public abstract class NXElement :
+        NXContainer
+    {
+
+        string uniqueId;
+        Dictionary<XNode, NXNode> cache = new Dictionary<XNode, NXNode>();
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        public NXElement()
+            : base()
+        {
+            CreateNodes();
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        public NXElement(XElement element)
+            : base(element)
+        {
+            CreateNodes();
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        public NXElement(NXElement parent)
+            : base(parent)
+        {
+            CreateNodes();
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="element"></param>
+        protected NXElement(NXElement parent, XElement element)
+            : base(parent, element)
+        {
+            CreateNodes();
+        }
+
+        /// <summary>
+        /// Gets a reference to the underlying DOM element.
+        /// </summary>
+        public new XElement Xml
+        {
+            get { return (XElement)base.Xml; }
+            protected set { base.Xml = value; }
+        }
+
+        /// <summary>
+        /// Unique identifier for the <see cref="NXNode"/> within the current naming scope.
+        /// </summary>
+        [Interactive]
+        public abstract string Id { get; }
+
+        /// <summary>
+        /// Returns a unique identifier for this visual, considering naming scopes.
+        /// </summary>
+        [Interactive]
+        public string UniqueId
+        {
+            get { return uniqueId ?? (uniqueId = CreateUniqueId()); }
+        }
+
+        /// <summary>
+        /// Implements the getter for UniqueId.
+        /// </summary>
+        /// <returns></returns>
+        string CreateUniqueId()
+        {
+            var namingScope = this.Ancestors()
+                .OfType<INamingScope>()
+                .FirstOrDefault();
+
+            if (namingScope == null)
+                return Id;
+            else
+                return ((NXElement)namingScope).UniqueId + "_" + Id;
+        }
+
+        /// <summary>
+        /// Creates the container items.
+        /// </summary>
+        protected virtual void CreateNodes()
+        {
+            nodes.Clear();
+            if (Xml != null)
+                foreach (var node in CreateNodesFromXElement(Xml, true))
+                    Add(node);
+        }
+
+        /// <summary>
+        /// Generates the sequence of container item nodes given the source <see cref="XElememt"/>. Optionally includes text content.
+        /// </summary>
+        /// <param name="xelement"></param>
+        /// <param name="includeTextContent"></param>
+        /// <returns></returns>
+        protected IEnumerable<NXNode> CreateNodesFromXElement(XElement xelement, bool includeTextContent = false)
+        {
+            var xnodes = xelement.Nodes().ToArray();
+            for (int i = 0; i < xnodes.Length; i++)
+            {
+                var xnode = xnodes[i];
+
+                // if we're ignoring text, skip text nodes
+                if (!includeTextContent && xnode is XText)
+                    continue;
+
+                // restore existing visual child, if it exists
+                var node = cache.GetOrDefault(xnode);
+                if (node != null)
+                    yield return node;
+
+                // create new child
+                node = Document.CreateNode(xnode);
+                if (node != null)
+                {
+                    cache[xnode] = node;
+                    yield return node;
+                }
+            }
+        }
+
+        public T GetState<T>()
+            where T : class, new()
+        {
+            return Document != null ? Document.VisualState.Get<T>(this) : null;
+        }
+
+    }
+
+}
