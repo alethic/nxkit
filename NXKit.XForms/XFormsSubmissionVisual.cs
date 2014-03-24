@@ -12,11 +12,14 @@ namespace NXKit.XForms
     [Visual("submission")]
     public class XFormsSubmissionVisual :
         XFormsSingleNodeBindingVisual,
-        IEventDefaultActionHandler<XFormsSubmitEvent>
+        IEventDefaultActionHandler
     {
 
-        void IEventDefaultActionHandler<XFormsSubmitEvent>.DefaultAction(XFormsSubmitEvent evt)
+        void IEventDefaultActionHandler.DefaultAction(IEvent evt)
         {
+            if (evt.Type != XFormsEvents.Submit)
+                return;
+
             var ec = Module.ResolveBindingEvaluationContext(this);
 
             // single node binding, fall back to evaluation context
@@ -26,6 +29,7 @@ namespace NXKit.XForms
             {
                 if (!Module.GetModelItemRelevant(node))
                 {
+                    Interface<IEventTarget>().DispatchEvent()
                     DispatchEvent<XFormsSubmitErrorEvent>();
                     return;
                 }
