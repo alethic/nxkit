@@ -315,7 +315,7 @@ namespace NXKit
 
             // raise the added event for visuals that have not yet had it raised
             foreach (var visual in RootVisual.Descendants())
-                visual.RaiseAddedEvent();
+                visual.RaiseVisualAdded();
         }
 
         /// <summary>

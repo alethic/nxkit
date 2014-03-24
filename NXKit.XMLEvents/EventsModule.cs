@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
-
 using NXKit.DOMEvents;
+
 
 namespace NXKit.XmlEvents
 {
@@ -112,7 +112,10 @@ namespace NXKit.XmlEvents
             }
 
             if (handler != null)
-                observer.AddEventListener(eventAttr, new EventListener(observer, target, handler), capture);
+                observer.Interface<IEventTarget>().AddEventListener(
+                    eventAttr,
+                    new EventListener(observer, target, handler),
+                    capture);
         }
 
         public override bool Invoke()

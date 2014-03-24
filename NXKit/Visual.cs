@@ -71,6 +71,32 @@ namespace NXKit
         public XNode Node { get; private set; }
 
         /// <summary>
+        /// Invoked when the visual is added.
+        /// </summary>
+        public event VisualEventHandler VisualAdded;
+
+        /// <summary>
+        /// Raises the VisualAdded event.
+        /// </summary>
+        void OnVisualAdded()
+        {
+            if (VisualAdded != null)
+                VisualAdded(this, new VisualEventArgs(this));
+        }
+
+        /// <summary>
+        /// Invoke once per control in refresh to raise the created event.
+        /// </summary>
+        internal void RaiseVisualAdded()
+        {
+            if (!addedEventRaised)
+            {
+                addedEventRaised = true;
+                OnVisualAdded();
+            }
+        }
+
+        /// <summary>
         /// Gets the private storage for this visual.
         /// </summary>
         public LinkedList<object> Storage

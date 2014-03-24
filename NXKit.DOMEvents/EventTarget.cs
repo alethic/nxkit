@@ -88,11 +88,11 @@ namespace NXKit.DOMEvents
                 listeners.Remove(data);
         }
 
-        public bool DispatchEvent(IEvent @event)
+        public void DispatchEvent(IEvent @event)
         {
             var evt = @event as Event;
             if (evt == null)
-                return false;
+                return;
 
             var target = visual.Interfaces.OfType<IEventTarget>().FirstOrDefault();
             if (target == null)
@@ -120,7 +120,7 @@ namespace NXKit.DOMEvents
 
                 // was told to stop propagation
                 if (evt.StopPropagationSet)
-                    return !evt.PreventDefaultSet;
+                    return;
             }
 
             // at-target phase
@@ -129,7 +129,7 @@ namespace NXKit.DOMEvents
 
             // was told to stop propagation
             if (evt.StopPropagationSet)
-                return !evt.PreventDefaultSet;
+                return;
 
             // bubbling phase
             evt.EventPhase = EventPhase.Bubbling;
@@ -139,7 +139,7 @@ namespace NXKit.DOMEvents
 
                 // was told to stop propagation
                 if (evt.StopPropagationSet)
-                    return !evt.PreventDefaultSet;
+                    return;
             }
 
             if (!evt.PreventDefaultSet)
