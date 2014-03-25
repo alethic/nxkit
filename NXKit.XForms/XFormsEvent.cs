@@ -1,4 +1,7 @@
-﻿using NXKit.DOMEvents;
+﻿using System;
+using System.Diagnostics.Contracts;
+
+using NXKit.DOMEvents;
 
 namespace NXKit.XForms
 {
@@ -16,7 +19,10 @@ namespace NXKit.XForms
         /// <param name="cancelable"></param>
         public XFormsEvent(NXNode visual, string name, bool bubbles, bool cancelable)
         {
-            this.evt = visual.Document.Interface<IDocumentEvent>().CreateEvent(name);
+            Contract.Requires<ArgumentNullException>(visual != null);
+            Contract.Requires<ArgumentNullException>(name != null);
+
+            this.evt = visual.Document.Interface<IDocumentEvent>().CreateEvent("Event");
             this.evt.InitEvent(name, bubbles, cancelable);
         }
 

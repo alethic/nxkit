@@ -12,15 +12,15 @@ namespace NXKit.XForms
         INamingScope
     {
 
-        readonly Dictionary<XObject, XFormsItemSetItemVisual> items = new Dictionary<XObject, XFormsItemSetItemVisual>();
+        readonly Dictionary<XObject, XFormsItemSetItemVisual> items =
+            new Dictionary<XObject, XFormsItemSetItemVisual>();
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsItemSetVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsItemSetVisual(XElement xml)
+            : base(xml)
         {
 
         }
@@ -60,7 +60,7 @@ namespace NXKit.XForms
             var item = items.GetOrDefault(node);
             if (item == null)
             {
-                item = items[node] = new XFormsItemSetItemVisual(this, Xml);
+                item = items[node] = new XFormsItemSetItemVisual(Xml);
                 item.SetContext(ec);
             }
             else

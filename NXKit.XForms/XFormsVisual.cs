@@ -24,27 +24,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        public XFormsVisual(NXElement parent)
-            : base(parent)
-        {
-
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsVisual(NXElement parent, XElement element)
-            : base(parent, element)
-        {
-
-        }
-
-        /// <summary>
         /// Gets a reference to the <see cref="XFormsModule"/> instance.
         /// </summary>
         public XFormsModule Module

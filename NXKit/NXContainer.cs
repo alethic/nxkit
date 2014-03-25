@@ -89,10 +89,10 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            Changing(this, new NXObjectChangeEventArgs(node, NXObjectChange.Add));
+            OnChanging(new NXObjectChangeEventArgs(node, NXObjectChange.Add));
             nodes.AddLast(node);
             node.Parent = this;
-            Changed(this, new NXObjectChangeEventArgs(node, NXObjectChange.Add));
+            OnChanged(new NXObjectChangeEventArgs(node, NXObjectChange.Add));
         }
 
         /// <summary>

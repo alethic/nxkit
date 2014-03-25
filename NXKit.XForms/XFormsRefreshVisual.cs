@@ -6,18 +6,17 @@ namespace NXKit.XForms
 {
 
     [Visual("refresh")]
-    public class XFormsRefreshVisual : 
-        XFormsVisual, 
+    public class XFormsRefreshVisual :
+        XFormsVisual,
         IActionVisual
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsRefreshVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsRefreshVisual(XElement xml)
+            : base(xml)
         {
 
         }

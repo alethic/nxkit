@@ -3,7 +3,7 @@ namespace NXKit.XForms
 {
 
     public class XFormsItemSetItemVisual :
-        XFormsItemVisual, 
+        XFormsItemVisual,
         IEvaluationContextScope,
         INamingScope
     {
@@ -11,10 +11,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsItemSetItemVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsItemSetItemVisual(XElement xml)
+            : base(xml)
         {
 
         }

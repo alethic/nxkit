@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -15,9 +16,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="element"></param>
-        public XFormsSelect1Visual(System.Xml.Linq.XElement element)
-            : base(element)
+        /// <param name="xml"></param>
+        public XFormsSelect1Visual(XElement xml)
+            : base(xml)
         {
 
         }

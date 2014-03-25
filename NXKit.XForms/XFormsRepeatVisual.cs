@@ -18,15 +18,15 @@ namespace NXKit.XForms
         bool numberCached;
         int? number;
 
-        readonly Dictionary<XObject, XFormsRepeatItemVisual> items = new Dictionary<XObject, XFormsRepeatItemVisual>();
+        readonly Dictionary<XObject, XFormsRepeatItemVisual> items =
+            new Dictionary<XObject, XFormsRepeatItemVisual>();
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsRepeatVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsRepeatVisual(XElement xml)
+            : base(xml)
         {
 
         }
@@ -75,7 +75,7 @@ namespace NXKit.XForms
             var item = items.GetOrDefault(node);
             if (item == null)
             {
-                item = items[node] = new XFormsRepeatItemVisual(this, Xml);
+                item = items[node] = new XFormsRepeatItemVisual(Xml);
                 item.SetContext(ec);
             }
             else

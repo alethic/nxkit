@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
-
 using NXKit.Util;
 
 namespace NXKit.DOMEvents
@@ -40,23 +40,30 @@ namespace NXKit.DOMEvents
 
         }
 
-        readonly NXNode visual;
+        readonly NXNode node;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="visual"></param>
-        public EventTarget(NXNode visual)
+        /// <param name="node"></param>
+        public EventTarget(NXNode node)
         {
-            this.visual = visual;
+            Contract.Requires<ArgumentNullException>(node != null);
+
+            this.node = node;
+        }
+
+        public NXNode Node
+        {
+            get { return node; }
         }
 
         public void AddEventListener(string type, IEventListener listener, bool useCapture)
         {
             // initialize listener map
-            var listenerMap = visual.Storage.OfType<EventListenerMap>().FirstOrDefault();
+            var listenerMap = node.Storage.OfType<EventListenerMap>().FirstOrDefault();
             if (listenerMap == null)
-                visual.Storage.AddLast(listenerMap = new EventListenerMap());
+                node.Storage.AddLast(listenerMap = new EventListenerMap());
 
             // initialize listeners list
             var listeners = listenerMap.GetOrDefault(type);
@@ -73,7 +80,7 @@ namespace NXKit.DOMEvents
 
         public void RemoveEventListener(string type, IEventListener listener, bool useCapture)
         {
-            var listenerMap = visual.Storage.OfType<EventListenerMap>().FirstOrDefault();
+            var listenerMap = node.Storage.OfType<EventListenerMap>().FirstOrDefault();
             if (listenerMap == null)
                 return;
 
@@ -90,7 +97,7 @@ namespace NXKit.DOMEvents
 
         public void DispatchEvent(Event evt)
         {
-            var target = visual.Interface<IEventTarget>();
+            var target = node.Interface<IEventTarget>();
             if (target == null)
                 throw new Exception();
 
@@ -106,7 +113,7 @@ namespace NXKit.DOMEvents
             evt.Target = target;
 
             // path to root from root
-            var path = visual.Ancestors().ToList();
+            var path = node.Ancestors().ToList();
 
             // capture phase
             evt.EventPhase = EventPhase.Capturing;
@@ -121,7 +128,7 @@ namespace NXKit.DOMEvents
 
             // at-target phase
             evt.EventPhase = EventPhase.AtTarget;
-            HandleEventOnVisual(visual, evt, false);
+            HandleEventOnVisual(node, evt, false);
 
             // was told to stop propagation
             if (evt.StopPropagationSet)
@@ -141,7 +148,7 @@ namespace NXKit.DOMEvents
             if (!evt.PreventDefaultSet)
             {
                 // handle default action
-                var da = visual as IEventDefaultActionHandler;
+                var da = node as IEventDefaultActionHandler;
                 if (da != null)
                     da.DefaultAction(evt);
             }
@@ -150,14 +157,14 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Attempts to handle the event at the given <see cref="NXNode"/>.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="node"></param>
         /// <param name="evt"></param>
         /// <param name="useCapture"></param>
-        void HandleEventOnVisual(NXNode visual, Event evt, bool useCapture)
+        void HandleEventOnVisual(NXNode node, Event evt, bool useCapture)
         {
-            evt.CurrentTarget = visual.Interface<IEventTarget>();
+            evt.CurrentTarget = node.Interface<IEventTarget>();
 
-            var listenerMap = visual.Storage.OfType<EventListenerMap>().FirstOrDefault();
+            var listenerMap = node.Storage.OfType<EventListenerMap>().FirstOrDefault();
             if (listenerMap != null)
             {
                 // obtain set of registered listeners
@@ -171,12 +178,10 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Adds an event handler for the given event type.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="type"></param>
         /// <param name="useCapture"></param>
         /// <param name="handler"></param>
-        public void AddEventHandler<T>(string type, bool useCapture, EventHandlerDelegate handler)
-            where T : Event
+        public void AddEventHandler(string type, bool useCapture, EventHandlerDelegate handler)
         {
             AddEventListener(type, new DelegateDispatchEventListener(handler), useCapture);
         }

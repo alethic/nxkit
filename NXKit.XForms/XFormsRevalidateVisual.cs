@@ -13,10 +13,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsRevalidateVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsRevalidateVisual(XElement xml)
+            : base(xml)
         {
 
         }

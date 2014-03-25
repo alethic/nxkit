@@ -29,6 +29,7 @@ namespace NXKit.XForms.Tests
         NXDocument GetSampleDocument()
         {
             var c = new NXDocumentConfiguration();
+            c.AddModule<DOMEventsModule>();
             c.AddModule<XFormsModule>();
 
             return NXDocument.Parse(sample, c);
@@ -61,7 +62,7 @@ namespace NXKit.XForms.Tests
                 .ToList();
 
             int c = 0;
-            inputs[1].Interface<IEventTarget>().AddEventHandler(new XFormsDisabledEvent(inputs[1]).Event, false, i => c++);
+            inputs[1].Interface<IEventTarget>().AddEventHandler("xforms-disabled", false, i => c++);
             inputs[0].Binding.SetValue("false");
             d.Invoke();
             Assert.AreEqual(1, c);
@@ -79,7 +80,7 @@ namespace NXKit.XForms.Tests
                 .ToList();
 
             int c = 0;
-            inputs[1].AddEventHandler<XFormsEnabledEvent>(i => c++, false);
+            inputs[1].Interface<IEventTarget>().AddEventHandler("xforms-enabled", false, i => c++);
             inputs[0].Binding.SetValue("false");
             d.Invoke();
             inputs[0].Binding.SetValue("true");

@@ -9,18 +9,17 @@ namespace NXKit.XForms
 {
 
     [Visual("insert")]
-    public class XFormsInsertVisual : 
-        XFormsNodeSetBindingVisual, 
+    public class XFormsInsertVisual :
+        XFormsNodeSetBindingVisual,
         IActionVisual
     {
-        
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsInsertVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsInsertVisual(XElement xml)
+            : base(xml)
         {
 
         }

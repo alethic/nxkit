@@ -6,18 +6,17 @@ namespace NXKit.XForms
 {
 
     [Visual("send")]
-    public class XFormsSendVisual : 
-        XFormsVisual, 
+    public class XFormsSendVisual :
+        XFormsVisual,
         IActionVisual
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsSendVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsSendVisual(XElement xml)
+            : base(xml)
         {
 
         }

@@ -7,17 +7,16 @@ namespace NXKit.XForms
 
     [Visual("rebuild")]
     public class XFormsRebuildVisual :
-        XFormsVisual, 
+        XFormsVisual,
         IActionVisual
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsRebuildVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsRebuildVisual(XElement xml)
+            : base(xml)
         {
 
         }

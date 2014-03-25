@@ -4,16 +4,16 @@ namespace NXKit.XForms
 {
 
     [Visual("choices")]
-    public class XFormsChoicesVisual : XFormsVisual
+    public class XFormsChoicesVisual :
+        XFormsVisual
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsChoicesVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsChoicesVisual(XElement xml)
+            : base(xml)
         {
 
         }

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.XPath;
-
-using NXKit.XmlEvents;
-using NXKit.Util;
 using NXKit.DOMEvents;
+using NXKit.Util;
+using NXKit.XmlEvents;
 
 namespace NXKit.XForms
 {
@@ -311,7 +309,7 @@ namespace NXKit.XForms
 
         internal void ReadyDefaultAction(Event ev)
         {
-            var model = (XFormsModelVisual)ev.Target;
+            var model = (XFormsModelVisual)ev.Target.Node;
             model.State.Ready = true;
         }
 
@@ -321,7 +319,7 @@ namespace NXKit.XForms
         /// <param name="ev"></param>
         internal void RefreshDefaultAction(Event ev)
         {
-            RefreshModel((XFormsModelVisual)ev.Target);
+            RefreshModel((XFormsModelVisual)ev.Target.Node);
         }
 
         /// <summary>
@@ -330,7 +328,7 @@ namespace NXKit.XForms
         /// <param name="ev"></param>
         internal void RevalidateDefaultAction(Event ev)
         {
-            RevalidateModel((XFormsModelVisual)ev.Target);
+            RevalidateModel((XFormsModelVisual)ev.Target.Node);
         }
 
         /// <summary>
@@ -339,7 +337,7 @@ namespace NXKit.XForms
         /// <param name="ev"></param>
         internal void RecalculateDefaultAction(Event ev)
         {
-            RecalculateModel((XFormsModelVisual)ev.Target);
+            RecalculateModel((XFormsModelVisual)ev.Target.Node);
         }
 
         /// <summary>
@@ -348,7 +346,7 @@ namespace NXKit.XForms
         /// <param name="ev"></param>
         internal void RebuildDefaultAction(Event ev)
         {
-            RebuildModel((XFormsModelVisual)ev.Target);
+            RebuildModel((XFormsModelVisual)ev.Target.Node);
         }
 
         /// <summary>

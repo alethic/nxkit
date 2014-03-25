@@ -14,10 +14,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsInstanceVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsInstanceVisual(XElement xml)
+            : base(xml)
         {
 
         }
@@ -32,7 +31,7 @@ namespace NXKit.XForms
 
         protected override void CreateNodes()
         {
-            
+
         }
 
     }

@@ -1,11 +1,26 @@
-﻿using NXKit.DOM;
+﻿using System;
+using System.Diagnostics.Contracts;
+
+using NXKit.DOM;
 
 namespace NXKit.DOMEvents
 {
 
-    public class DocumentEvent :
+    /// <summary>
+    /// Provides a <see cref="IDocumentEvent"/> implementation.
+    /// </summary>
+    class DocumentEvent :
         IDocumentEvent
     {
+
+        readonly NXDocument document;
+
+        public DocumentEvent(NXDocument document)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+
+            this.document = document;
+        }
 
         public Event CreateEvent(string eventInterface)
         {

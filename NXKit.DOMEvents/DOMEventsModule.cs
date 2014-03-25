@@ -14,6 +14,9 @@ namespace NXKit.DOMEvents
 
             if (obj is NXNode)
                 yield return new EventTarget((NXNode)obj);
+
+            if (obj is NXDocument)
+                yield return new DocumentEvent((NXDocument)obj);
         }
 
     }

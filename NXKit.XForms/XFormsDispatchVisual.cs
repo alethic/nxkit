@@ -7,18 +7,17 @@ namespace NXKit.XForms
 {
 
     [Visual("dispatch")]
-    public class XFormsDispatchVisual : 
-        XFormsVisual, 
+    public class XFormsDispatchVisual :
+        XFormsVisual,
         IActionVisual
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsDispatchVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsDispatchVisual(XElement xml)
+            : base(xml)
         {
 
         }

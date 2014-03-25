@@ -6,18 +6,17 @@ namespace NXKit.XForms
 {
 
     [Visual("recalculate")]
-    public class XFormsRecalculateVisual : 
-        XFormsVisual, 
+    public class XFormsRecalculateVisual :
+        XFormsVisual,
         IActionVisual
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsRecalculateVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsRecalculateVisual(XElement xml)
+            : base(xml)
         {
 
         }

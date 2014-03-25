@@ -1327,6 +1327,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
+      <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
+      <Name>NXKit.DOMEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj">
+      <Project>{075ba36b-f95a-4563-bbe9-20d4405e9c9e}</Project>
+      <Name>NXKit.DOM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.Web\NXKit.Web.csproj">
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
       <Name>NXKit.Web</Name>

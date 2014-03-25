@@ -9,37 +9,17 @@ namespace NXKit.XForms
         XFormsVisual
     {
 
-        bool labelVisualCached;
-        XFormsLabelVisual labelVisual;
         bool selectableCached;
         ISelectableVisual selectable;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsItemVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsItemVisual(XElement xml)
+            : base(xml)
         {
 
-        }
-
-        /// <summary>
-        /// Gets the <see cref="XFormsLabelVisual"/> for this item.
-        /// </summary>
-        public XFormsLabelVisual LabelVisual
-        {
-            get
-            {
-                if (!labelVisualCached)
-                {
-                    labelVisual = Elements.OfType<XFormsLabelVisual>().SingleOrDefault();
-                    labelVisualCached = true;
-                }
-
-                return labelVisual;
-            }
         }
 
         /// <summary>

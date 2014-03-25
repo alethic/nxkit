@@ -7,7 +7,7 @@ namespace NXKit.XForms
 {
 
     [Visual("action")]
-    public class XFormsActionVisual : 
+    public class XFormsActionVisual :
         XFormsVisual,
         IActionVisual
     {
@@ -15,10 +15,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        public XFormsActionVisual(NXElement parent, XElement element)
-            : base(parent, element)
+        /// <param name="xml"></param>
+        public XFormsActionVisual(XElement xml)
+            : base(xml)
         {
 
         }
