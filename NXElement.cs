@@ -23,7 +23,7 @@ namespace NXKit
         public NXElement()
             : base()
         {
-            CreateNodes();
+
         }
 
         /// <summary>
@@ -33,28 +33,7 @@ namespace NXKit
         public NXElement(XElement element)
             : base(element)
         {
-            CreateNodes();
-        }
 
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        public NXElement(NXElement parent)
-            : base(parent)
-        {
-            CreateNodes();
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="element"></param>
-        protected NXElement(NXElement parent, XElement element)
-            : base(parent, element)
-        {
-            CreateNodes();
         }
 
         /// <summary>
@@ -95,6 +74,14 @@ namespace NXKit
                 return Id;
             else
                 return ((NXElement)namingScope).UniqueId + "_" + Id;
+        }
+
+        protected override void OnAdded(NXObjectEventArgs args)
+        {
+            base.OnAdded(args);
+
+            // on first add to parent, generate children
+            CreateNodes();
         }
 
         /// <summary>
