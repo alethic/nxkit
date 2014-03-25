@@ -42,7 +42,7 @@ namespace NXKit.XForms.Tests
 
             var inputs = d.Root
                 .Descendants()
-                .OfType<XFormsInputVisual>()
+                .OfType<InputElement>()
                 .ToList();
 
             Assert.IsTrue(inputs[1].Relevant);
@@ -58,7 +58,7 @@ namespace NXKit.XForms.Tests
 
             var inputs = d.Root
                 .Descendants()
-                .OfType<XFormsInputVisual>()
+                .OfType<InputElement>()
                 .ToList();
 
             int c = 0;
@@ -76,7 +76,7 @@ namespace NXKit.XForms.Tests
 
             var inputs = d.Root
                 .Descendants()
-                .OfType<XFormsInputVisual>()
+                .OfType<InputElement>()
                 .ToList();
 
             int c = 0;

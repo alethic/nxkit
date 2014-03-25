@@ -1,4 +1,4 @@
-﻿/// <reference path="Visual.ts" />
+﻿/// <reference path="Node.ts" />
 /// <reference path="TypedEvent.ts" />
 
 module NXKit.Web {
@@ -10,16 +10,16 @@ module NXKit.Web {
 
         private _body: HTMLElement;
         private _data: any;
-        private _root: Visual;
+        private _root: Node;
         private _bind: boolean;
 
-        private _onVisualValueChanged: (visual: Visual, property: Property) => void;
+        private _onNodeValueChanged: (node: Node, property: Property) => void;
 
         private _queue: Array<(cb: ICallbackComplete) => void>;
         private _queueRunning: boolean;
 
         /**
-         * Raised when the Visual has changes to be pushed to the server.
+         * Raised when the Node has changes to be pushed to the server.
          */
         public CallbackRequest: ICallbackRequestEvent = new TypedEvent();
 
@@ -34,8 +34,8 @@ module NXKit.Web {
             self._queue = new Array<any>();
             self._queueRunning = false;
 
-            self._onVisualValueChanged = (visual: Visual, property: Property) => {
-                self.OnRootVisualValueChanged(visual, property);
+            self._onNodeValueChanged = (node: Node, property: Property) => {
+                self.OnRootNodeValueChanged(node, property);
             };
         }
 
@@ -70,24 +70,24 @@ module NXKit.Web {
             var self = this;
 
             if (self._root == null) {
-                // generate new visual tree
-                self._root = new Visual(self._data);
-                self._root.ValueChanged.add(self._onVisualValueChanged);
+                // generate new node tree
+                self._root = new Node(self._data);
+                self._root.ValueChanged.add(self._onNodeValueChanged);
             }
             else {
-                // update existing visual tree
-                self._root.ValueChanged.remove(self._onVisualValueChanged);
+                // update existing node tree
+                self._root.ValueChanged.remove(self._onNodeValueChanged);
                 self._root.Update(self._data);
-                self._root.ValueChanged.add(self._onVisualValueChanged);
+                self._root.ValueChanged.add(self._onNodeValueChanged);
             }
 
             self.ApplyBindings();
         }
 
         /**
-         * Invoked to handle root visual value change events.
+         * Invoked to handle root node value change events.
          */
-        OnRootVisualValueChanged(visual: Visual, property: Property) {
+        OnRootNodeValueChanged(node: Node, property: Property) {
             this.Push();
         }
 

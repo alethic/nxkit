@@ -118,26 +118,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnchorVisual.cs" />
-    <Compile Include="CategoryVisual.cs" />
+    <Compile Include="AnchorElement.cs" />
+    <Compile Include="CategoryElement.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="FormVisual.cs" />
+    <Compile Include="FormElement.cs" />
     <Compile Include="ITableColumnGroupContainer.cs" />
     <Compile Include="LayoutHelper.cs" />
     <Compile Include="Importance.cs" />
     <Compile Include="LayoutModule.cs" />
-    <Compile Include="PageVisual.cs" />
-    <Compile Include="ParagraphVisual.cs" />
+    <Compile Include="PageElement.cs" />
+    <Compile Include="ParagraphElement.cs" />
     <Compile Include="SchemaPackage.cs" />
-    <Compile Include="SectionVisual.cs" />
-    <Compile Include="TableCellVisual.cs" />
-    <Compile Include="TableColumnGroupVisual.cs" />
-    <Compile Include="TableColumnVisual.cs" />
-    <Compile Include="TableRowVisual.cs" />
-    <Compile Include="TableVisual.cs" />
-    <Compile Include="LayoutVisual.cs" />
+    <Compile Include="SectionElement.cs" />
+    <Compile Include="TableCellElement.cs" />
+    <Compile Include="TableColumnGroupElement.cs" />
+    <Compile Include="TableColumnElement.cs" />
+    <Compile Include="TableRowElement.cs" />
+    <Compile Include="TableElement.cs" />
+    <Compile Include="LayoutElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VisualAttribute.cs" />
+    <Compile Include="ElementAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">

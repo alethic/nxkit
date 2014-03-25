@@ -27,7 +27,7 @@ namespace NXKit
             if (includeSelf)
                 yield return self;
 
-            foreach (var container in self.Nodes)
+            foreach (var container in self.Nodes())
                 if (container is NXContainer)
                     foreach (var descendant in ((NXContainer)container).Descendants(true))
                         yield return descendant;

@@ -1,170 +1,170 @@
 ﻿module NXKit.Web.XForms.Utils {
 
-    export function GetProperty(visual: Visual, name: string): Property {
-        if (visual != null &&
-            visual.Properties[name] != null)
-            return visual.Properties[name];
+    export function GetProperty(node: Node, name: string): Property {
+        if (node != null &&
+            node.Properties[name] != null)
+            return node.Properties[name];
         else
             return null;
     }
 
-    export function GetValue(visual: Visual): KnockoutComputed<any> {
+    export function GetValue(node: Node): KnockoutComputed<any> {
         return ko.computed<any>({
             read: () => {
-                var p = GetProperty(visual, "Value");
+                var p = GetProperty(node, "Value");
                 return p != null ? p.Value() : null;
             },
             write: _ => {
-                var p = GetProperty(visual, "Value");
+                var p = GetProperty(node, "Value");
                 if (p != null)
                     p.Value(_);
             },
         });
     }
 
-    export function GetValueAsString(visual: Visual): KnockoutComputed<string> {
+    export function GetValueAsString(node: Node): KnockoutComputed<string> {
         return ko.computed<string>({
             read: () => {
-                var p = GetProperty(visual, "Value");
+                var p = GetProperty(node, "Value");
                 return p != null ? p.ValueAsString() : null;
             },
             write: _ => {
-                var p = GetProperty(visual, "Value");
+                var p = GetProperty(node, "Value");
                 if (p != null)
                     p.ValueAsString(_);
             },
         });
     }
 
-    export function GetValueAsBoolean(visual: Visual): KnockoutComputed<boolean> {
+    export function GetValueAsBoolean(node: Node): KnockoutComputed<boolean> {
         return ko.computed<boolean>({
             read: () => {
-                var p = GetProperty(visual, "Value");
+                var p = GetProperty(node, "Value");
                 return p != null ? p.ValueAsBoolean() : null;
             },
             write: _ => {
-                var p = GetProperty(visual, "Value");
+                var p = GetProperty(node, "Value");
                 if (p != null)
                     p.ValueAsBoolean(_);
             },
         });
     }
 
-    export function GetValueAsNumber(visual: Visual): KnockoutComputed<number> {
+    export function GetValueAsNumber(node: Node): KnockoutComputed<number> {
         return ko.computed<number>({
             read: () => {
-                var p = GetProperty(visual, "Value");
+                var p = GetProperty(node, "Value");
                 return p != null ? p.ValueAsNumber() : null;
             },
             write: _ => {
-                var p = GetProperty(visual, "Value");
+                var p = GetProperty(node, "Value");
                 if (p != null)
                     p.ValueAsNumber(_);
             },
         });
     }
 
-    export function GetRelevant(visual: Visual): KnockoutComputed<boolean> {
+    export function GetRelevant(node: Node): KnockoutComputed<boolean> {
         return ko.computed(() => {
-            var p = GetProperty(visual, "Relevant");
+            var p = GetProperty(node, "Relevant");
             return p != null ? p.ValueAsBoolean() : null;
         });
     }
 
-    export function GetReadOnly(visual: Visual): KnockoutComputed<boolean> {
+    export function GetReadOnly(node: Node): KnockoutComputed<boolean> {
         return ko.computed(() => {
-            var p = GetProperty(visual, "ReadOnly");
+            var p = GetProperty(node, "ReadOnly");
             return p != null ? p.ValueAsBoolean() : null;
         });
     }
 
-    export function GetRequired(visual: Visual): KnockoutComputed<boolean> {
+    export function GetRequired(node: Node): KnockoutComputed<boolean> {
         return ko.computed(() => {
-            var p = GetProperty(visual, "Required");
+            var p = GetProperty(node, "Required");
             return p != null ? p.ValueAsBoolean() : null;
         });
     }
 
-    export function GetValid(visual: Visual): KnockoutComputed<boolean> {
+    export function GetValid(node: Node): KnockoutComputed<boolean> {
         return ko.computed(() => {
-            var p = GetProperty(visual, "Valid");
+            var p = GetProperty(node, "Valid");
             return p != null ? p.ValueAsBoolean() : null;
         });
     }
 
-    export function GetType(visual: Visual): KnockoutComputed<string> {
+    export function GetType(node: Node): KnockoutComputed<string> {
         return ko.computed(() => {
-            var p = GetProperty(visual, "Type");
+            var p = GetProperty(node, "Type");
             return p != null ? p.ValueAsString() : null;
         });
     }
 
-    export function GetAppearance(visual: Visual): KnockoutComputed<string> {
+    export function GetAppearance(node: Node): KnockoutComputed<string> {
         return ko.computed(() => {
-            var p = GetProperty(visual, "Appearance");
+            var p = GetProperty(node, "Appearance");
             return p != null ? p.ValueAsString() : null;
         });
     }
 
-    export function IsMetadataVisual(visual: Visual): boolean {
-        return XFormsVisualViewModel.MetadataVisualTypes
+    export function IsMetadataNode(node: Node): boolean {
+        return XFormsNodeViewModel.MetadataNodeTypes
             .some((_) =>
-                visual.Type == _);
+                node.Type == _);
     }
 
-    export function GetLabel(visual: Visual): Visual {
-        return ko.utils.arrayFirst(visual.Visuals(), (_: Visual) =>
-            _.Type == 'NXKit.XForms.XFormsLabelVisual');
+    export function GetLabel(node: Node): Node {
+        return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
+            _.Type == 'NXKit.XForms.LabelElement');
     }
 
-    export function GetHelp(visual: Visual): Visual {
-        return ko.utils.arrayFirst(visual.Visuals(), (_: Visual) =>
-            _.Type == 'NXKit.XForms.XFormsHelpVisual');
+    export function GetHelp(node: Node): Node {
+        return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
+            _.Type == 'NXKit.XForms.HelpElement');
     }
 
-    export function GetHint(visual: Visual): Visual {
-        return ko.utils.arrayFirst(visual.Visuals(), (_: Visual) =>
-            _.Type == 'NXKit.XForms.XFormsHintVisual');
+    export function GetHint(node: Node): Node {
+        return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
+            _.Type == 'NXKit.XForms.HintElement');
     }
 
-    export function GetAlert(visual: Visual): Visual {
-        return ko.utils.arrayFirst(visual.Visuals(), (_: Visual) =>
-            _.Type == 'NXKit.XForms.XFormsAlertVisual');
+    export function GetAlert(node: Node): Node {
+        return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
+            _.Type == 'NXKit.XForms.AlertElement');
     }
 
-    export function IsControlVisual(visual: Visual): boolean {
-        return this.ControlVisualTypes
+    export function IsControlNode(node: Node): boolean {
+        return this.ControlNodeTypes
             .some(_ =>
-                visual.Type == _);
+                node.Type == _);
     }
 
-    export function HasControlVisual(visual: Visual): boolean {
-        return visual.Visuals()
+    export function HasControlNode(node: Node): boolean {
+        return node.Nodes()
             .some(_ =>
-                IsControlVisual(_));
+                IsControlNode(_));
     }
 
-    export function GetControlVisuals(visual: Visual): Visual[] {
-        return visual.Visuals()
+    export function GetControlNodes(node: Node): Node[] {
+        return node.Nodes()
             .filter(_ =>
-                IsControlVisual(_));
+                IsControlNode(_));
     }
 
-    export function IsTransparentVisual(visual: Visual): boolean {
-        return XFormsVisualViewModel.TransparentVisualTypes
+    export function IsTransparentNode(node: Node): boolean {
+        return XFormsNodeViewModel.TransparentNodeTypes
             .some(_ =>
-                visual.Type == _);
+                node.Type == _);
     }
 
-    export function GetContents(visual: Visual): Visual[] {
-        var l = visual.Visuals()
+    export function GetContents(node: Node): Node[] {
+        var l = node.Nodes()
             .filter(_ =>
-                !IsMetadataVisual(_));
+                !IsMetadataNode(_));
 
-        var r = new Array<Visual>();
+        var r = new Array<Node>();
         for (var i = 0; i < l.length; i++) {
             var v = l[i];
-            if (IsTransparentVisual(v)) {
+            if (IsTransparentNode(v)) {
                 var s = GetContents(v);
                 for (var j = 0; j < s.length; j++)
                     r.push(s[j]);

@@ -1,12 +1,12 @@
-﻿/// <reference path="XFormsVisualViewModel.ts" />
+﻿/// <reference path="XFormsNodeViewModel.ts" />
 
 module NXKit.Web.XForms {
 
     export class TextAreaViewModel
-        extends NXKit.Web.XForms.XFormsVisualViewModel {
+        extends NXKit.Web.XForms.XFormsNodeViewModel {
 
-        constructor(context: KnockoutBindingContext, visual: Visual) {
-            super(context, visual);
+        constructor(context: KnockoutBindingContext, node: Node) {
+            super(context, node);
         }
 
     }

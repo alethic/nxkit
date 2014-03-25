@@ -68,10 +68,10 @@
     }
 
     /**
-      * Gets the unique document ID of the given visual.
+      * Gets the unique document ID of the given node.
       */
-    export function GetUniqueId(visual: Visual): string {
-        return visual != null && visual.Properties['UniqueId'] != null ? visual.Properties['UniqueId'].ValueAsString() : null;
+    export function GetUniqueId(node: Node): string {
+        return node != null && node.Properties['UniqueId'] != null ? node.Properties['UniqueId'].ValueAsString() : null;
     }
 
     /**

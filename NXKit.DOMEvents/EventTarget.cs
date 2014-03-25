@@ -119,7 +119,7 @@ namespace NXKit.DOMEvents
             evt.EventPhase = EventPhase.Capturing;
             foreach (var visual_ in path.Reverse<NXNode>())
             {
-                HandleEventOnVisual(visual_, evt, true);
+                HandleEventOnNode(visual_, evt, true);
 
                 // was told to stop propagation
                 if (evt.StopPropagationSet)
@@ -128,7 +128,7 @@ namespace NXKit.DOMEvents
 
             // at-target phase
             evt.EventPhase = EventPhase.AtTarget;
-            HandleEventOnVisual(node, evt, false);
+            HandleEventOnNode(node, evt, false);
 
             // was told to stop propagation
             if (evt.StopPropagationSet)
@@ -138,7 +138,7 @@ namespace NXKit.DOMEvents
             evt.EventPhase = EventPhase.Bubbling;
             foreach (var visual_ in path)
             {
-                HandleEventOnVisual(visual_, evt, false);
+                HandleEventOnNode(visual_, evt, false);
 
                 // was told to stop propagation
                 if (evt.StopPropagationSet)
@@ -160,7 +160,7 @@ namespace NXKit.DOMEvents
         /// <param name="node"></param>
         /// <param name="evt"></param>
         /// <param name="useCapture"></param>
-        void HandleEventOnVisual(NXNode node, Event evt, bool useCapture)
+        void HandleEventOnNode(NXNode node, Event evt, bool useCapture)
         {
             evt.CurrentTarget = node.Interface<IEventTarget>();
 

@@ -38,7 +38,7 @@ namespace NXKit.Tests
         public void Test_VisualStateCollection_roundtrip()
         {
             var v = new TestVisual();
-            var c = new VisualStateCollection();
+            var c = new NodeStateCollection();
             var s = c.Get<TestVisualState>(v);
             s.Value = "Value1";
 
@@ -48,7 +48,7 @@ namespace NXKit.Tests
 
             m.Position = 0;
 
-            var c2 = (VisualStateCollection)f.Deserialize(m);
+            var c2 = (NodeStateCollection)f.Deserialize(m);
 
             Assert.AreEqual("Value1", c2.Get<TestVisualState>(v).Value);
         }

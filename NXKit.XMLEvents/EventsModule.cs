@@ -50,7 +50,7 @@ namespace NXKit.XmlEvents
                 return null;
 
             if (element.Name.LocalName == "listener")
-                return new EventsEventListenerVisual(element);
+                return new EventsEventListenerElement(element);
 
             return null;
         }

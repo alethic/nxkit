@@ -15,6 +15,10 @@ namespace NXKit.DOMEvents
 
         readonly NXDocument document;
 
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
         public DocumentEvent(NXDocument document)
         {
             Contract.Requires<ArgumentNullException>(document != null);

@@ -1,4 +1,4 @@
-﻿/// <reference path="XFormsVisualViewModel.ts" />
+﻿/// <reference path="XFormsNodeViewModel.ts" />
 
 module NXKit.Web.XForms {
 
@@ -61,7 +61,7 @@ module NXKit.Web.XForms {
                 return this.GetLabel();
             }
 
-            GetLabel(): Visual {
+            GetLabel(): Node {
                 throw new Error('GetLabel not implemented');
             }
 
@@ -69,7 +69,7 @@ module NXKit.Web.XForms {
                 return this.GetHelp();
             }
 
-            GetHelp(): Visual {
+            GetHelp(): Node {
                 throw new Error('GetHelp not implemented');
             }
 
@@ -84,56 +84,56 @@ module NXKit.Web.XForms {
         }
 
         /**
-          * Describes an item that will render a raw visual.
+          * Describes an item that will render a raw node.
           */
-        export class VisualItem
+        export class NodeItem
             extends Item {
 
-            private _itemVisual: Visual;
+            private _itemNode: Node;
 
-            constructor(viewModel: GroupViewModel, itemVisual: Visual, level: number) {
+            constructor(viewModel: GroupViewModel, itemNode: Node, level: number) {
                 super(viewModel, level);
-                this._itemVisual = itemVisual;
+                this._itemNode = itemNode;
             }
 
-            public get ItemVisual(): Visual {
-                return this._itemVisual;
+            public get ItemNode(): Node {
+                return this._itemNode;
             }
 
             GetRelevant(): KnockoutObservable<boolean> {
-                return Utils.GetRelevant(this._itemVisual);
+                return Utils.GetRelevant(this._itemNode);
             }
 
             GetReadOnly(): KnockoutObservable<boolean> {
-                return Utils.GetReadOnly(this._itemVisual);
+                return Utils.GetReadOnly(this._itemNode);
             }
 
             GetRequired(): KnockoutObservable<boolean> {
-                return Utils.GetRequired(this._itemVisual);
+                return Utils.GetRequired(this._itemNode);
             }
 
             GetValid(): KnockoutObservable<boolean> {
-                return Utils.GetValid(this._itemVisual);
+                return Utils.GetValid(this._itemNode);
             }
 
-            GetLabel(): Visual {
-                if (this._itemVisual.Type == 'NXKit.XForms.XFormsInputVisual' &&
-                    Utils.GetType(this._itemVisual)() == '{http://www.w3.org/2001/XMLSchema}boolean')
+            GetLabel(): Node {
+                if (this._itemNode.Type == 'NXKit.XForms.InputElement' &&
+                    Utils.GetType(this._itemNode)() == '{http://www.w3.org/2001/XMLSchema}boolean')
                     // boolean inputs provide their own label
                     return null;
                 else
-                    return Utils.GetLabel(this._itemVisual);
+                    return Utils.GetLabel(this._itemNode);
             }
 
-            GetHelp(): Visual {
-                return Utils.GetHelp(this._itemVisual);
+            GetHelp(): Node {
+                return Utils.GetHelp(this._itemNode);
             }
 
             GetLayout(): any {
                 return {
-                    visual: this.ViewModel.Visual,
+                    node: this.ViewModel.Node,
                     data: this,
-                    layout: 'visual',
+                    layout: 'node',
                     level: this.Level,
                 };
             }
@@ -141,22 +141,22 @@ module NXKit.Web.XForms {
         }
 
         export class InputItem
-            extends VisualItem {
+            extends NodeItem {
 
-            constructor(viewModel: GroupViewModel, inputVisual: Visual, level: number) {
-                super(viewModel, inputVisual, level);
+            constructor(viewModel: GroupViewModel, inputNode: Node, level: number) {
+                super(viewModel, inputNode, level);
             }
 
-            public get InputVisual(): Visual {
-                return this.ItemVisual;
+            public get InputNode(): Node {
+                return this.ItemNode;
             }
 
             GetLayout(): any {
                 return {
-                    visual: this.ViewModel.Visual,
+                    node: this.ViewModel.Node,
                     data: this,
                     layout: 'input',
-                    type: Utils.GetType(this.InputVisual),
+                    type: Utils.GetType(this.InputNode),
                     level: this.Level,
                 };
             }
@@ -208,17 +208,17 @@ module NXKit.Web.XForms {
                 return this.Item.Valid;
             }
 
-            GetLabel(): Visual {
+            GetLabel(): Node {
                 return this._item.Label;
             }
 
-            GetHelp(): Visual {
+            GetHelp(): Node {
                 return this._item.Help;
             }
 
             GetLayout(): any {
                 return {
-                    visual: this.ViewModel.Visual,
+                    node: this.ViewModel.Node,
                     data: this,
                     layout: 'single',
                     level: this.Level,
@@ -272,17 +272,17 @@ module NXKit.Web.XForms {
                 return ko.computed(() => this._item1.Valid() && this._item2.Valid());
             }
 
-            GetLabel(): Visual {
+            GetLabel(): Node {
                 return null;
             }
 
-            GetHelp(): Visual {
+            GetHelp(): Node {
                 return null;
             }
 
             GetLayout(): any {
                 return {
-                    visual: this.ViewModel.Visual,
+                    node: this.ViewModel.Node,
                     data: this,
                     layout: 'double',
                     level: this.Level,
@@ -294,12 +294,12 @@ module NXKit.Web.XForms {
         export class GroupItem
             extends Item {
 
-            private _groupVisual: Visual;
+            private _groupNode: Node;
             private _items: Item[];
 
-            constructor(viewModel: GroupViewModel, groupVisual: Visual, level: number) {
+            constructor(viewModel: GroupViewModel, groupNode: Node, level: number) {
                 super(viewModel, level);
-                this._groupVisual = groupVisual;
+                this._groupNode = groupNode;
                 this._items = new Array<Item>();
             }
 
@@ -312,32 +312,32 @@ module NXKit.Web.XForms {
             }
 
             GetRelevant(): KnockoutObservable<boolean> {
-                return Utils.GetRelevant(this._groupVisual);
+                return Utils.GetRelevant(this._groupNode);
             }
 
             GetReadOnly(): KnockoutObservable<boolean> {
-                return Utils.GetReadOnly(this._groupVisual);
+                return Utils.GetReadOnly(this._groupNode);
             }
 
             GetRequired(): KnockoutObservable<boolean> {
-                return Utils.GetRequired(this._groupVisual);
+                return Utils.GetRequired(this._groupNode);
             }
 
             GetValid(): KnockoutObservable<boolean> {
-                return Utils.GetValid(this._groupVisual);
+                return Utils.GetValid(this._groupNode);
             }
 
-            GetLabel(): Visual {
-                return Utils.GetLabel(this._groupVisual);
+            GetLabel(): Node {
+                return Utils.GetLabel(this._groupNode);
             }
 
-            GetHelp(): Visual {
-                return Utils.GetHelp(this._groupVisual);
+            GetHelp(): Node {
+                return Utils.GetHelp(this._groupNode);
             }
 
             GetLayout(): any {
                 return {
-                    visual: this.ViewModel.Visual,
+                    node: this.ViewModel.Node,
                     data: this,
                     layout: 'group',
                     level: this.Level,
@@ -349,12 +349,12 @@ module NXKit.Web.XForms {
     }
 
     export class GroupViewModel
-        extends XFormsVisualViewModel {
+        extends XFormsNodeViewModel {
 
         private _count: number;
 
-        constructor(context: KnockoutBindingContext, visual: Visual, count: number) {
-            super(context, visual);
+        constructor(context: KnockoutBindingContext, node: Node, count: number) {
+            super(context, node);
 
             this._count = count;
         }
@@ -367,30 +367,30 @@ module NXKit.Web.XForms {
         }
 
         private GetBindingContents(): GroupViewModel_.Item[] {
-            return this.GetItems(this.Visual, 1);
+            return this.GetItems(this.Node, 1);
         }
 
         /**
          * Gets the set of contents expressed as template binding objects.
          */
-        private GetGroupItem(visual: Visual, level: number): GroupViewModel_.GroupItem {
-            var item = new GroupViewModel_.GroupItem(this, visual, level);
-            item.Items = this.GetItems(visual, level + 1);
+        private GetGroupItem(node: Node, level: number): GroupViewModel_.GroupItem {
+            var item = new GroupViewModel_.GroupItem(this, node, level);
+            item.Items = this.GetItems(node, level + 1);
             return item;
         }
 
-        private GetItems(visual: Visual, level: number): GroupViewModel_.Item[] {
+        private GetItems(node: Node, level: number): GroupViewModel_.Item[] {
             var list = new Array<GroupViewModel_.Item>();
-            var cnts = Utils.GetContents(visual);
+            var cnts = Utils.GetContents(node);
             for (var i = 0; i < cnts.length; i++) {
                 var v = cnts[i];
 
                 // nested group obtains single child
-                if (v.Type == 'NXKit.XForms.XFormsGroupVisual') {
+                if (v.Type == 'NXKit.XForms.GroupElement') {
                     var groupItem = this.GetGroupItem(v, level);
                     list.push(groupItem);
                     continue;
-                } else if (v.Type == 'NXKit.XForms.XFormsTextAreaVisual') {
+                } else if (v.Type == 'NXKit.XForms.TextAreaElement') {
                     var textAreaItem = new GroupViewModel_.SingleItem(this, level);
                     textAreaItem.Force = true;
                     list.push(textAreaItem);
@@ -403,7 +403,7 @@ module NXKit.Web.XForms {
                     var item1 = <GroupViewModel_.SingleItem>item;
                     var item2 = new GroupViewModel_.DoubleItem(this, level);
                     item2.Item1 = item1.Item;
-                    item2.Item2 = new GroupViewModel_.VisualItem(this, v, level);
+                    item2.Item2 = new GroupViewModel_.NodeItem(this, v, level);
                     list.push(item2);
                 }
                 else {
@@ -413,7 +413,7 @@ module NXKit.Web.XForms {
 
                     // insert new single item
                     var item1 = new GroupViewModel_.SingleItem(this, level);
-                    item1.Item = new GroupViewModel_.VisualItem(this, v, level);
+                    item1.Item = new GroupViewModel_.NodeItem(this, v, level);
                     list.push(item1);
                 }
             }

@@ -1,4 +1,4 @@
-﻿/// <reference path="Visual.ts" />
+﻿/// <reference path="Node.ts" />
 /// <reference path="Utils.ts" />
 
 module NXKit.Web {

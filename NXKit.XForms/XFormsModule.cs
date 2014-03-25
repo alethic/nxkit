@@ -21,7 +21,7 @@ namespace NXKit.XForms
         /// Map of <see cref="XName"/> to <see cref="NXNode"/> type.
         /// </summary>
         static readonly Dictionary<XName, Type> visualTypeMap = typeof(XFormsModule).Assembly.GetTypes()
-               .Select(i => new { Type = i, Attribute = i.GetCustomAttribute<VisualAttribute>() })
+               .Select(i => new { Type = i, Attribute = i.GetCustomAttribute<ElementAttribute>() })
                .Where(i => i.Attribute != null)
                .ToDictionary(i => Constants.XForms_1_0 + i.Attribute.Name, i => i.Type);
 
@@ -32,18 +32,12 @@ namespace NXKit.XForms
 
         public override Type[] DependsOn
         {
-            get
-            {
-                return new[]
-                {
-                    typeof(EventsModule)
-                };
-            }
+            get { return new[] { typeof(DOMEventsModule) }; }
         }
 
-        public override void Initialize(NXDocument engine)
+        public override void Initialize(NXDocument document)
         {
-            base.Initialize(engine);
+            base.Initialize(document);
 
             Document.Changed += Document_Changed;
             Document.ProcessSubmit += Form_ProcessSubmit;
@@ -62,7 +56,7 @@ namespace NXKit.XForms
             // obtain all model visuals
             var models = element
                 .Descendants(true)
-                .OfType<XFormsModelVisual>()
+                .OfType<ModelElement>()
                 .ToList();
 
             foreach (var model in models)
@@ -70,7 +64,7 @@ namespace NXKit.XForms
                 // obtain instances
                 var instances = model
                     .Descendants(false)
-                    .OfType<XFormsInstanceVisual>()
+                    .OfType<InstanceElement>()
                     .ToList();
 
                 // initialize the instances
@@ -80,7 +74,7 @@ namespace NXKit.XForms
 
             // perform refresh of just loaded visuals
             if (models.All(i => i.State.Ready))
-                foreach (var binding in Document.Root.Descendants(true).OfType<XFormsBindingVisual>())
+                foreach (var binding in Document.Root.Descendants(true).OfType<BindingElement>())
                     binding.Refresh();
         }
 
@@ -102,7 +96,7 @@ namespace NXKit.XForms
             if (type == null)
                 return null;
 
-            return (XFormsVisual)Activator.CreateInstance(type, new object[] { node });
+            return (XFormsElement)Activator.CreateInstance(type, new object[] { node });
         }
 
         /// <summary>
@@ -138,11 +132,11 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        internal XFormsModelItemState GetModelItem(XObject obj)
+        internal ModelItemState GetModelItem(XObject obj)
         {
-            var modelItem = obj.Annotation<XFormsModelItemState>();
+            var modelItem = obj.Annotation<ModelItemState>();
             if (modelItem == null)
-                obj.AddAnnotation(modelItem = new XFormsModelItemState());
+                obj.AddAnnotation(modelItem = new ModelItemState());
 
             return modelItem;
         }
@@ -152,27 +146,27 @@ namespace NXKit.XForms
             Submit();
         }
 
-        void VersionExceptionEventDefaultAction(XFormsVersionExceptionEvent ev)
+        void VersionExceptionEventDefaultAction(VersionExceptionEvent ev)
         {
-            System.Console.WriteLine(XFormsVersionExceptionEvent.Name);
-            Document.Root.GetState<XFormsModuleState>().Failed = true;
+            System.Console.WriteLine(VersionExceptionEvent.Name);
+            Document.Root.GetState<ModuleState>().Failed = true;
         }
 
-        void LinkExceptionEventDefaultAction(XFormsLinkExceptionEvent ev)
+        void LinkExceptionEventDefaultAction(LinkExceptionEvent ev)
         {
-            System.Console.WriteLine(XFormsLinkExceptionEvent.Name);
-            Document.Root.GetState<XFormsModuleState>().Failed = true;
+            System.Console.WriteLine(LinkExceptionEvent.Name);
+            Document.Root.GetState<ModuleState>().Failed = true;
         }
 
-        void BindingExceptionEventDefaultAction(XFormsBindingExceptionEvent ev)
+        void BindingExceptionEventDefaultAction(BindingExceptionEvent ev)
         {
-            System.Console.WriteLine(XFormsBindingExceptionEvent.Name);
-            Document.Root.GetState<XFormsModuleState>().Failed = true;
+            System.Console.WriteLine(BindingExceptionEvent.Name);
+            Document.Root.GetState<ModuleState>().Failed = true;
         }
 
         public override bool Invoke()
         {
-            if (Document.Root.GetState<XFormsModuleState>().Failed)
+            if (Document.Root.GetState<ModuleState>().Failed)
                 return false;
 
             var work = false;
@@ -180,70 +174,70 @@ namespace NXKit.XForms
             // obtain all model visuals
             var models = Document.Root
                 .Descendants(true)
-                .OfType<XFormsModelVisual>()
+                .OfType<ModelElement>()
                 .ToList();
 
             // raise construct event on all non-constructed models
             foreach (var model in models)
-                if (!Document.Root.GetState<XFormsModuleState>().Failed)
+                if (!Document.Root.GetState<ModuleState>().Failed)
                     if (!model.State.Construct)
                     {
-                        model.Interface<IEventTarget>().DispatchEvent(new XFormsModelConstructEvent(model).Event);
+                        model.Interface<IEventTarget>().DispatchEvent(new ModelConstructEvent(model).Event);
                         work = true;
                     }
 
             // if all models have passed construct, raise construct done event
             if (models.All(i => i.State.Construct))
-                if (!Document.Root.GetState<XFormsModuleState>().Failed)
+                if (!Document.Root.GetState<ModuleState>().Failed)
                     foreach (var model in models)
                         if (!model.State.ConstructDone)
                         {
-                            model.Interface<IEventTarget>().DispatchEvent(new XFormsModelConstructDoneEvent(model).Event);
+                            model.Interface<IEventTarget>().DispatchEvent(new ModelConstructDoneEvent(model).Event);
                             work = true;
                         }
 
             // if all models have passed construct-done, raise ready event
             if (models.All(i => i.State.ConstructDone))
-                if (!Document.Root.GetState<XFormsModuleState>().Failed)
+                if (!Document.Root.GetState<ModuleState>().Failed)
                     foreach (var model in models)
                         if (!model.State.Ready)
                         {
-                            model.Interface<IEventTarget>().DispatchEvent(new XFormsReadyEvent(model).Event);
+                            model.Interface<IEventTarget>().DispatchEvent(new ReadyEvent(model).Event);
                             work = true;
                         }
 
-            if (Document.Root.GetState<XFormsModuleState>().Failed)
+            if (Document.Root.GetState<ModuleState>().Failed)
                 return work;
 
             // only process main events if all models are ready
             if (models.All(i => i.State.Ready))
             {
                 foreach (var model in models.Where(i => i.State.RebuildFlag))
-                    if (!Document.Root.GetState<XFormsModuleState>().Failed)
+                    if (!Document.Root.GetState<ModuleState>().Failed)
                     {
                         work = true;
-                        model.Interface<IEventTarget>().DispatchEvent(new XFormsRebuildEvent(model).Event);
+                        model.Interface<IEventTarget>().DispatchEvent(new RebuildEvent(model).Event);
                     }
 
                 foreach (var model in models.Where(i => i.State.RecalculateFlag))
-                    if (!Document.Root.GetState<XFormsModuleState>().Failed)
+                    if (!Document.Root.GetState<ModuleState>().Failed)
                     {
                         work = true;
-                        model.Interface<IEventTarget>().DispatchEvent(new XFormsRecalculateEvent(model).Event);
+                        model.Interface<IEventTarget>().DispatchEvent(new RecalculateEvent(model).Event);
                     }
 
                 foreach (var model in models.Where(i => i.State.RevalidateFlag))
-                    if (!Document.Root.GetState<XFormsModuleState>().Failed)
+                    if (!Document.Root.GetState<ModuleState>().Failed)
                     {
                         work = true;
-                        model.Interface<IEventTarget>().DispatchEvent(new XFormsRevalidateEvent(model).Event);
+                        model.Interface<IEventTarget>().DispatchEvent(new RevalidateEvent(model).Event);
                     }
 
                 foreach (var model in models.Where(i => i.State.RefreshFlag))
-                    if (!Document.Root.GetState<XFormsModuleState>().Failed)
+                    if (!Document.Root.GetState<ModuleState>().Failed)
                     {
                         work = true;
-                        model.Interface<IEventTarget>().DispatchEvent(new XFormsRefreshEvent(model).Event);
+                        model.Interface<IEventTarget>().DispatchEvent(new RefreshEvent(model).Event);
                     }
             }
 
@@ -255,7 +249,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        internal void ProcessModelInstance(XFormsModelVisual model)
+        internal void ProcessModelInstance(ModelElement model)
         {
             var target = model.Interface<IEventTarget>();
             if (target == null)
@@ -292,13 +286,13 @@ namespace NXKit.XForms
                     }
                     catch (UriFormatException)
                     {
-                        target.DispatchEvent(new XFormsLinkExceptionEvent(model).Event);
+                        target.DispatchEvent(new LinkExceptionEvent(model).Event);
                     }
                 }
                 else if (instanceChildElements.Length >= 2)
                 {
                     // invalid number of child elements
-                    target.DispatchEvent(new XFormsLinkExceptionEvent(model).Event);
+                    target.DispatchEvent(new LinkExceptionEvent(model).Event);
                 }
                 else if (instanceChildElements.Length == 1)
                 {
@@ -309,7 +303,7 @@ namespace NXKit.XForms
 
         internal void ReadyDefaultAction(Event ev)
         {
-            var model = (XFormsModelVisual)ev.Target.Node;
+            var model = (ModelElement)ev.Target.Node;
             model.State.Ready = true;
         }
 
@@ -319,7 +313,7 @@ namespace NXKit.XForms
         /// <param name="ev"></param>
         internal void RefreshDefaultAction(Event ev)
         {
-            RefreshModel((XFormsModelVisual)ev.Target.Node);
+            RefreshModel((ModelElement)ev.Target.Node);
         }
 
         /// <summary>
@@ -328,7 +322,7 @@ namespace NXKit.XForms
         /// <param name="ev"></param>
         internal void RevalidateDefaultAction(Event ev)
         {
-            RevalidateModel((XFormsModelVisual)ev.Target.Node);
+            RevalidateModel((ModelElement)ev.Target.Node);
         }
 
         /// <summary>
@@ -337,7 +331,7 @@ namespace NXKit.XForms
         /// <param name="ev"></param>
         internal void RecalculateDefaultAction(Event ev)
         {
-            RecalculateModel((XFormsModelVisual)ev.Target.Node);
+            RecalculateModel((ModelElement)ev.Target.Node);
         }
 
         /// <summary>
@@ -346,7 +340,7 @@ namespace NXKit.XForms
         /// <param name="ev"></param>
         internal void RebuildDefaultAction(Event ev)
         {
-            RebuildModel((XFormsModelVisual)ev.Target.Node);
+            RebuildModel((ModelElement)ev.Target.Node);
         }
 
         /// <summary>
@@ -362,7 +356,7 @@ namespace NXKit.XForms
         /// Rebuilds the specified model.
         /// </summary>
         /// <param name="model"></param>
-        internal void RebuildModel(XFormsModelVisual model)
+        internal void RebuildModel(ModelElement model)
         {
             do
             {
@@ -376,7 +370,7 @@ namespace NXKit.XForms
         /// Recalculates the specified model.
         /// </summary>
         /// <param name="model"></param>
-        internal void RecalculateModel(XFormsModelVisual model)
+        internal void RecalculateModel(ModelElement model)
         {
             do
             {
@@ -453,7 +447,7 @@ namespace NXKit.XForms
                 }
 
                 // apply binding expressions
-                foreach (var bind in model.Descendants(false).OfType<XFormsBindVisual>())
+                foreach (var bind in model.Descendants(false).OfType<BindElement>())
                 {
                     bind.Refresh();
 
@@ -463,17 +457,18 @@ namespace NXKit.XForms
                         continue;
 
                     var typeAttr = GetAttributeValue(bind.Xml, "type");
+                    var calculateAttr = GetAttributeValue(bind.Xml, "calculate");
                     var readonlyAttr = GetAttributeValue(bind.Xml, "readonly");
                     var requiredAttr = GetAttributeValue(bind.Xml, "required");
                     var relevantAttr = GetAttributeValue(bind.Xml, "relevant");
-                    var calculateAttr = GetAttributeValue(bind.Xml, "calculate");
+                    var constraintAttr = GetAttributeValue(bind.Xml, "constraint");
 
                     for (int i = 0; i < bind.Binding.Nodes.Length; i++)
                     {
                         var node = bind.Binding.Nodes[i];
                         var modelItem = GetModelItem(node);
 
-                        var ec = new XFormsEvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, node, i + 1, bind.Binding.Nodes.Length);
+                        var ec = new EvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, node, i + 1, bind.Binding.Nodes.Length);
                         var nc = new XFormsXsltContext(bind, ec);
 
                         // get existing values
@@ -496,10 +491,10 @@ namespace NXKit.XForms
                             // calculated nodes are readonly
                             modelItem.ReadOnly = true;
 
-                            var calculateBinding = new XFormsBinding(bind, ec, calculateAttr);
+                            var calculateBinding = new Binding(bind, ec, calculateAttr);
                             if (calculateBinding.Value != null)
                             {
-                                var oldValue = GetModelItemValue(ec, node);
+                                var oldValue = GetModelItemValue(node);
                                 if (oldValue != calculateBinding.Value)
                                 {
                                     modelItem.NewValue = calculateBinding.Value;
@@ -541,6 +536,15 @@ namespace NXKit.XForms
                                 modelItem.Relevant = bool.Parse((string)obj);
                         }
 
+                        if (constraintAttr != null)
+                        {
+                            var obj = EvaluateXPath(bind, ec, constraintAttr, XPathResultType.Any);
+                            if (obj is bool)
+                                modelItem.Constraint = (bool)obj;
+                            else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
+                                modelItem.Constraint = bool.Parse((string)obj);
+                        }
+
                         // get new read-only value; raise event on change
                         var readOnly = GetModelItemReadOnly(node);
                         if (readOnly != oldReadOnly)
@@ -574,47 +578,40 @@ namespace NXKit.XForms
         /// Revalidates the specified model.
         /// </summary>
         /// <param name="model"></param>
-        internal void RevalidateModel(XFormsModelVisual model)
+        internal void RevalidateModel(ModelElement model)
         {
             do
             {
                 model.State.RevalidateFlag = false;
-                model.State.RefreshFlag = true;
 
-                // apply binding expressions
-                foreach (var bind in model.Descendants(false).OfType<XFormsBindVisual>())
+                foreach (var instance in model.Instances)
                 {
-                    if (bind.Binding == null ||
-                        bind.Binding.Nodes == null ||
-                        bind.Binding.Nodes.Length == 0)
-                        continue;
+                    // all model items
+                    var items = instance.Xml.DescendantNodesAndSelf()
+                        .OfType<XElement>()
+                        .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i));
 
-                    var constraintAttr = GetAttributeValue(bind.Xml, "constraint");
-                    if (constraintAttr == null)
-                        continue;
-
-                    for (int i = 0; i < bind.Binding.Nodes.Length; i++)
+                    foreach (var item in items)
                     {
-                        var node = bind.Binding.Nodes[i];
-                        var modelItem = GetModelItem(node);
+                        var modelItem = GetModelItem(item);
 
-                        var ec = new XFormsEvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, node, i + 1, bind.Binding.Nodes.Length);
+                        // get new relevant value; raise event on change
+                        var required = GetModelItemRequired(item);
+                        var constraint = GetModelItemConstraint(item);
+                        var value = GetModelItemValue(item);
+                        var oldValid = GetModelItemValid(item);
 
-                        // get old valid value
-                        var oldValid = GetModelItemValid(node);
-
-                        // recalculate valid
-                        var st = (string)EvaluateXPath(bind, ec, constraintAttr, XPathResultType.String);
-                        if (!string.IsNullOrWhiteSpace(st))
-                            modelItem.Valid = bool.Parse(st);
-
-                        // get new valid value; raise event on change
-                        var valid = GetModelItemValid(node);
+                        // get new validity, raise on change
+                        var valid = (!required || value.TrimToNull() != null) && constraint;
                         if (valid != oldValid)
+                        {
+                            modelItem.Valid = valid;
+
                             if (valid)
                                 modelItem.DispatchValid = true;
                             else
                                 modelItem.DispatchInvalid = true;
+                        }
                     }
                 }
             }
@@ -625,28 +622,28 @@ namespace NXKit.XForms
         /// Refreshes the specified model.
         /// </summary>
         /// <param name="model"></param>
-        internal void RefreshModel(XFormsModelVisual model)
+        internal void RefreshModel(ModelElement model)
         {
             do
             {
                 model.State.RefreshFlag = false;
 
                 // resolve visuals whom are dependent on this model
-                var visuals = Document.Root
+                var elements = Document.Root
                     .Descendants(true)
-                    .OfType<XFormsBindingVisual>();
+                    .OfType<BindingElement>();
 
                 // for each visual, dispatch required events
-                foreach (var visual in visuals)
+                foreach (var element in elements)
                 {
-                    var target = visual.Interface<IEventTarget>();
+                    var target = element.Interface<IEventTarget>();
                     if (target == null)
                         throw new NullReferenceException();
 
                     // refresh underlying data
-                    visual.Refresh();
+                    element.Refresh();
 
-                    var singleNodeBindingVisual = visual as XFormsSingleNodeBindingVisual;
+                    var singleNodeBindingVisual = element as SingleNodeBindingElement;
                     if (singleNodeBindingVisual != null)
                     {
                         if (singleNodeBindingVisual.Binding == null)
@@ -660,23 +657,23 @@ namespace NXKit.XForms
 
                         // dispatch required events
                         if (modelItem.DispatchValueChanged)
-                            target.DispatchEvent(new XFormsValueChangedEvent(visual).Event);
+                            target.DispatchEvent(new ValueChangedEvent(element).Event);
                         if (modelItem.DispatchValid)
-                            target.DispatchEvent(new XFormsValidEvent(visual).Event);
+                            target.DispatchEvent(new ValidEvent(element).Event);
                         if (modelItem.DispatchInvalid)
-                            target.DispatchEvent(new XFormsInvalidEvent(visual).Event);
+                            target.DispatchEvent(new InvalidEvent(element).Event);
                         if (modelItem.DispatchEnabled)
-                            target.DispatchEvent(new XFormsEnabledEvent(visual).Event);
+                            target.DispatchEvent(new EnabledEvent(element).Event);
                         if (modelItem.DispatchDisabled)
-                            target.DispatchEvent(new XFormsDisabledEvent(visual).Event);
+                            target.DispatchEvent(new DisabledEvent(element).Event);
                         if (modelItem.DispatchOptional)
-                            target.DispatchEvent(new XFormsOptionalEvent(visual).Event);
+                            target.DispatchEvent(new OptionalEvent(element).Event);
                         if (modelItem.DispatchRequired)
-                            target.DispatchEvent(new XFormsRequiredEvent(visual).Event);
+                            target.DispatchEvent(new RequiredEvent(element).Event);
                         if (modelItem.DispatchReadOnly)
-                            target.DispatchEvent(new XFormsReadOnlyEvent(visual).Event);
+                            target.DispatchEvent(new ReadOnlyEvent(element).Event);
                         if (modelItem.DispatchReadWrite)
-                            target.DispatchEvent(new XFormsReadWriteEvent(visual).Event);
+                            target.DispatchEvent(new ReadWriteEvent(element).Event);
 
                         // clear events
                         modelItem.DispatchValueChanged = false;
@@ -700,7 +697,7 @@ namespace NXKit.XForms
         /// Resets the specified model.
         /// </summary>
         /// <param name="model"></param>
-        internal void ResetModel(XFormsModelVisual model)
+        internal void ResetModel(ModelElement model)
         {
 
         }
@@ -713,7 +710,7 @@ namespace NXKit.XForms
         /// <param name="expression"></param>
         /// <param name="resultType"></param>
         /// <returns></returns>
-        internal object EvaluateXPath(NXNode visual, XFormsEvaluationContext evaluationContext, string expression, XPathResultType resultType)
+        internal object EvaluateXPath(NXNode visual, EvaluationContext evaluationContext, string expression, XPathResultType resultType)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
             Contract.Requires<ArgumentNullException>(evaluationContext != null);
@@ -755,9 +752,9 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        internal XFormsEvaluationContext ResolveInScopeEvaluationContext(XFormsVisual visual)
+        internal EvaluationContext ResolveInScopeEvaluationContext(XFormsElement visual)
         {
-            XFormsEvaluationContext ec = null;
+            EvaluationContext ec = null;
 
             // search up visual tree for initial context
             if (ec == null)
@@ -771,8 +768,8 @@ namespace NXKit.XForms
             if (ec == null)
                 ec = Document.Root
                     .Descendants(true)
-                    .TakeWhile(i => !(i is XFormsGroupVisual))
-                    .OfType<XFormsModelVisual>()
+                    .TakeWhile(i => !(i is GroupElement))
+                    .OfType<ModelElement>()
                     .Select(i => i.DefaultEvaluationContext)
                     .FirstOrDefault();
 
@@ -780,11 +777,11 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Resolves the <see cref="XFormsEvaluationContext"/> to be used by the given visual.
+        /// Resolves the <see cref="EvaluationContext"/> to be used by the given visual.
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        internal XFormsEvaluationContext ResolveBindingEvaluationContext(XFormsVisual visual)
+        internal EvaluationContext ResolveBindingEvaluationContext(XFormsElement visual)
         {
             // attempt to retrieve model state given by 'model' attribute
             var modelAttr = GetAttributeValue(visual.Xml, "model");
@@ -793,15 +790,15 @@ namespace NXKit.XForms
                 // find referenced model visual
                 var model = Document.Root
                     .Descendants(true)
-                    .TakeWhile(i => !(i is XFormsGroupVisual))
-                    .OfType<XFormsModelVisual>()
+                    .TakeWhile(i => !(i is GroupElement))
+                    .OfType<ModelElement>()
                     .SingleOrDefault(i => Document.GetElementId(i.Xml) == modelAttr);
 
                 if (model != null)
                     return model.Context;
                 else
                 {
-                    visual.Interface<IEventTarget>().DispatchEvent(new XFormsBindingExceptionEvent(visual).Event);
+                    visual.Interface<IEventTarget>().DispatchEvent(new BindingExceptionEvent(visual).Event);
                     return null;
                 }
             }
@@ -814,7 +811,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        internal XFormsBinding ResolveSingleNodeBinding(XFormsBindingVisual visual)
+        internal Binding ResolveSingleNodeBinding(BindingElement visual)
         {
             var element = visual.Xml as XElement;
             if (element == null)
@@ -824,13 +821,13 @@ namespace NXKit.XForms
             var bd = GetAttributeValue(visual.Xml, "bind");
             if (bd != null)
             {
-                var bind = (XFormsBindVisual)visual.ResolveId(bd);
+                var bind = (BindElement)visual.ResolveId(bd);
 
                 // invalid bind element
                 if (bind == null ||
                     bind.Context == null)
                 {
-                    visual.Interface<IEventTarget>().DispatchEvent(new XFormsBindingExceptionEvent(visual).Event);
+                    visual.Interface<IEventTarget>().DispatchEvent(new BindingExceptionEvent(visual).Event);
                     return null;
                 }
 
@@ -846,7 +843,7 @@ namespace NXKit.XForms
                     return null;
 
                 // otherwise continue by evaluating expression
-                return new XFormsBinding(visual, ec, xp);
+                return new Binding(visual, ec, xp);
             }
 
             return null;
@@ -857,19 +854,19 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        internal XFormsBinding ResolveNodeSetBinding(XFormsBindingVisual visual)
+        internal Binding ResolveNodeSetBinding(BindingElement visual)
         {
             // attempt to resolve 'bind' attribute to bind element's context
             var bindAttr = GetAttributeValue(visual.Xml, "bind");
             if (bindAttr != null)
             {
-                var bind = (XFormsBindVisual)visual.ResolveId(bindAttr);
+                var bind = (BindElement)visual.ResolveId(bindAttr);
 
                 // invalid bind element
                 if (bind == null ||
                     bind.Binding == null)
                 {
-                    visual.Interface<IEventTarget>().DispatchEvent(new XFormsBindingExceptionEvent(visual).Event);
+                    visual.Interface<IEventTarget>().DispatchEvent(new BindingExceptionEvent(visual).Event);
                     return null;
                 }
 
@@ -881,7 +878,7 @@ namespace NXKit.XForms
             {
                 var nodesetAttr = GetAttributeValue(visual.Xml, "nodeset");
                 if (nodesetAttr != null)
-                    return new XFormsBinding(visual, ec, nodesetAttr);
+                    return new Binding(visual, ec, nodesetAttr);
             }
 
             return null;
@@ -892,13 +889,13 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
-        internal XFormsModelVisual GetModelItemModel(XObject self)
+        internal ModelElement GetModelItemModel(XObject self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
             Contract.Requires<ArgumentNullException>(self.Document != null);
-            Contract.Ensures(Contract.Result<XFormsModelVisual>() != null);
+            Contract.Ensures(Contract.Result<ModelElement>() != null);
 
-            return self.Document.Annotation<XFormsModelVisual>();
+            return self.Document.Annotation<ModelElement>();
         }
 
         /// <summary>
@@ -906,13 +903,13 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
-        internal XFormsInstanceVisual GetModelItemInstance(XObject self)
+        internal InstanceElement GetModelItemInstance(XObject self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
             Contract.Requires<ArgumentNullException>(self.Document != null);
-            Contract.Ensures(Contract.Result<XFormsInstanceVisual>() != null);
+            Contract.Ensures(Contract.Result<InstanceElement>() != null);
 
-            return self.Document.Annotation<XFormsInstanceVisual>();
+            return self.Document.Annotation<InstanceElement>();
         }
 
         /// <summary>
@@ -920,7 +917,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="ec"></param>
         /// <param name="item"></param>
-        internal void ClearModelItem(XFormsEvaluationContext ec, XObject item)
+        internal void ClearModelItem(EvaluationContext ec, XObject item)
         {
             var mi = GetModelItem(item);
             mi.Remove = true;
@@ -934,7 +931,7 @@ namespace NXKit.XForms
         /// <param name="ec"></param>
         /// <param name="item"></param>
         /// <param name="newElement"></param>
-        internal void SetModelItemElement(XFormsEvaluationContext ec, XObject item, XElement newElement)
+        internal void SetModelItemElement(EvaluationContext ec, XObject item, XElement newElement)
         {
             // register new value with model item
             GetModelItem(item).NewElement = newElement;
@@ -951,9 +948,9 @@ namespace NXKit.XForms
         /// <param name="ec"></param>
         /// <param name="item"></param>
         /// <param name="newValue"></param>
-        internal void SetModelItemValue(XFormsEvaluationContext ec, XObject item, string newValue)
+        internal void SetModelItemValue(EvaluationContext ec, XObject item, string newValue)
         {
-            var lastValue = GetModelItemValue(ec, item);
+            var lastValue = GetModelItemValue(item);
             if (lastValue == newValue)
                 return;
 
@@ -970,13 +967,17 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the value of the given instance data node.
         /// </summary>
-        /// <param name="ec"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        internal string GetModelItemValue(XFormsEvaluationContext ec, XObject item)
+        internal string GetModelItemValue(XObject item)
         {
+            // obtain any scheduled new value
+            var mi = GetModelItem(item);
+            if (mi.NewValue != null)
+                return mi.NewValue;
+
             if (item is XElement)
-                return ((XElement)item).Value;
+                return !((XElement)item).HasElements ? ((XElement)item).Value : null;
             else if (item is XAttribute)
                 return ((XAttribute)item).Value;
             else
@@ -989,11 +990,11 @@ namespace NXKit.XForms
         /// <param name="ec"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        internal int GetModelItemId(XFormsEvaluationContext ec, XObject item)
+        internal int GetModelItemId(EvaluationContext ec, XObject item)
         {
             var mi = GetModelItem(item);
             if (mi.Id == null)
-                mi.Id = ec.Instance.GetState<XFormsInstanceVisualState>().AllocateItemId();
+                mi.Id = ec.Instance.GetState<InstanceElementState>().AllocateItemId();
 
             return (int)mi.Id;
         }
@@ -1004,7 +1005,7 @@ namespace NXKit.XForms
         /// <param name="ec"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        internal string GetModelItemUniqueId(XFormsEvaluationContext ec, XObject item)
+        internal string GetModelItemUniqueId(EvaluationContext ec, XObject item)
         {
             Contract.Requires<ArgumentNullException>(ec != null);
             Contract.Requires<ArgumentNullException>(item != null);
@@ -1061,6 +1062,18 @@ namespace NXKit.XForms
         }
 
         /// <summary>
+        /// Returns the constraint model item property.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        internal bool GetModelItemConstraint(XObject item)
+        {
+            Contract.Requires<ArgumentNullException>(item != null);
+
+            return GetModelItem(item).Constraint ?? true;
+        }
+
+        /// <summary>
         /// Returns whether or not the given instance data node is valid.
         /// </summary>
         /// <param name="item"></param>
@@ -1076,7 +1089,7 @@ namespace NXKit.XForms
         /// Invokes the given action visual properly.
         /// </summary>
         /// <param name="visual"></param>
-        internal void InvokeAction(IActionVisual visual)
+        internal void InvokeAction(IActionElement visual)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
 
@@ -1093,7 +1106,7 @@ namespace NXKit.XForms
             }
         }
 
-        internal void RaiseMessage(XFormsMessageVisual visual)
+        internal void RaiseMessage(MessageElement visual)
         {
             throw new NotImplementedException();
         }
@@ -1109,11 +1122,11 @@ namespace NXKit.XForms
             // all submission elements on the form
             var visuals = Document.Root
                 .Descendants()
-                .OfType<XFormsSubmissionVisual>();
+                .OfType<SubmissionElement>();
 
             // raise a submit event for each submission
             foreach (var visual in visuals)
-                visual.Interface<IEventTarget>().DispatchEvent(new XFormsSubmitEvent(visual).Event);
+                visual.Interface<IEventTarget>().DispatchEvent(new SubmitEvent(visual).Event);
         }
 
     }

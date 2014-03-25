@@ -16,7 +16,7 @@ namespace NXKit.XForms.Layout
         /// Map of <see cref="XName"/> to <see cref="NXNode"/> type.
         /// </summary>
         static readonly Dictionary<XName, Type> visualTypeMap = typeof(LayoutModule).Assembly.GetTypes()
-            .Select(i => new { Type = i, Attribute = i.GetCustomAttribute<VisualAttribute>() })
+            .Select(i => new { Type = i, Attribute = i.GetCustomAttribute<ElementAttribute>() })
             .Where(i => i.Attribute != null)
             .ToDictionary(i => Constants.Layout_1_0 + i.Attribute.Name, i => i.Type);
 

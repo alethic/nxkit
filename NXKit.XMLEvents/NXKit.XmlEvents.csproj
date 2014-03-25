@@ -112,7 +112,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventsEventListenerVisual.cs" />
+    <Compile Include="EventsEventListenerElement.cs" />
     <Compile Include="EventsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaConstants.cs" />

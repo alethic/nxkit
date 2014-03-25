@@ -1,4 +1,4 @@
-﻿/// <reference path="XFormsVisualViewModel.ts" />
+﻿/// <reference path="XFormsNodeViewModel.ts" />
 
 module NXKit.Web.XForms {
 

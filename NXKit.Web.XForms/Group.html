@@ -1,5 +1,5 @@
 ﻿<script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual">
+        data-nxkit-node="NXKit.XForms.GroupElement">
 
     <!-- ko with: new NXKit.Web.XForms.GroupLayoutManager($context) -->
     <!-- ko with: new NXKit.Web.XForms.GroupViewModel($context, $parent) -->
@@ -75,7 +75,7 @@
     HTML for a field label.
 -->
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-layout="field-label">
 
     <!-- ko with: Label -->
@@ -96,7 +96,7 @@
     HTML for a single field with label.
 -->
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-layout="field-with-label">
 
     <!-- layout: 'field-with-label' -->
@@ -110,7 +110,7 @@ css: {
 }">
 
         <!-- ko nxkit_template: {
-            visual: ViewModel.Visual,
+            node: ViewModel.Node,
             data: $data,
             layout: 'field-label',
         } -->
@@ -130,7 +130,7 @@ css: {
     HTML for a single field with no label.
 -->
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-layout="field-without-label">
 
     <!-- layout: 'field-without-label' -->
@@ -154,11 +154,11 @@ css: {
     HTML for a single field.
 -->
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-layout="field">
 
     <!-- ko nxkit_template: {
-        visual: ViewModel.Visual,
+        node: ViewModel.Node,
         data: $data,
         layout: Label != null ? 'field-with-label' : 'field-without-label',
     } -->
@@ -167,12 +167,12 @@ css: {
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="1"
         data-nxkit-layout="single">
 
     <!-- ko nxkit_template: {
-        visual: ViewModel.Visual,
+        node: ViewModel.Node,
         data: Item,
         layout: 'field',
     }-->
@@ -180,7 +180,7 @@ css: {
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="1"
         data-nxkit-layout="double">
 
@@ -188,13 +188,13 @@ css: {
          data-bind="nxkit_visible: Relevant">
 
         <!-- ko nxkit_template: {
-            visual: ViewModel.Visual,
+            node: ViewModel.Node,
             data: Item1,
             layout: 'field',
         }-->
         <!-- /ko -->
         <!-- ko nxkit_template: {
-            visual: ViewModel.Visual,
+            node: ViewModel.Node,
             data: Item2,
             layout: 'field',
         }-->
@@ -205,7 +205,7 @@ css: {
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="1"
         data-nxkit-layout="group">
 
@@ -228,25 +228,25 @@ css: {
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="1"
-        data-nxkit-layout="visual">
-    <!-- ko nxkit_template: ItemVisual -->
+        data-nxkit-layout="node">
+    <!-- ko nxkit_template: ItemNode -->
     <!-- /ko -->
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="1"
         data-nxkit-layout="input">
 
-    <!-- ko nxkit_template: ItemVisual -->
+    <!-- ko nxkit_template: ItemNode -->
     <!-- /ko -->
 
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="2"
         data-nxkit-layout="single">
 
@@ -266,7 +266,7 @@ css: {
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="2"
         data-nxkit-layout="double">
 
@@ -313,7 +313,7 @@ css: {
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="2"
         data-nxkit-layout="group">
 
@@ -343,23 +343,23 @@ css: {
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="2"
-        data-nxkit-layout="visual">
-    <!-- ko nxkit_template: ItemVisual -->
+        data-nxkit-layout="node">
+    <!-- ko nxkit_template: ItemNode -->
     <!-- /ko -->
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="2"
         data-nxkit-layout="input">
-    <!-- ko nxkit_template: ItemVisual -->
+    <!-- ko nxkit_template: ItemNode -->
     <!-- /ko -->
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="3"
         data-nxkit-layout="double">
 
@@ -396,17 +396,17 @@ css: {
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="3"
-        data-nxkit-layout="visual">
-    <!-- ko nxkit_template: ItemVisual -->
+        data-nxkit-layout="node">
+    <!-- ko nxkit_template: ItemNode -->
     <!-- /ko -->
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsGroupVisual"
+        data-nxkit-node="NXKit.XForms.GroupElement"
         data-nxkit-level="3"
         data-nxkit-layout="input">
-    <!-- ko nxkit_template: ItemVisual -->
+    <!-- ko nxkit_template: ItemNode -->
     <!-- /ko -->
 </script>

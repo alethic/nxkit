@@ -9,8 +9,10 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Web.UI;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using NXKit.Web.IO;
 
 namespace NXKit.Web.UI
@@ -231,7 +233,7 @@ namespace NXKit.Web.UI
         {
             // serialize document state to data field
             using (var str = new JTokenWriter())
-            using (var wrt = new JsonVisualWriter(str))
+            using (var wrt = new JsonNodeWriter(str))
             {
                 wrt.Write(document.Root);
                 wrt.Close();
@@ -247,7 +249,7 @@ namespace NXKit.Web.UI
         {
             // serialize document state to data field
             using (var str = new StringWriter())
-            using (var wrt = new JsonVisualWriter(str))
+            using (var wrt = new JsonNodeWriter(str))
             {
                 wrt.Write(document.Root);
                 wrt.Close();
@@ -421,15 +423,15 @@ namespace NXKit.Web.UI
 
             if (d is NXElement)
             {
-                var sVisuals = s.Value<JArray>("Visuals")
+                var sNodes = s.Value<JArray>("Nodes")
                     .Values<JObject>()
                     .ToArray();
 
-                var dVisuals = ((NXElement)d)
-                    .Elements
+                var dNodes = ((NXElement)d)
+                    .Nodes()
                     .ToArray();
 
-                foreach (var i in sVisuals.Zip(dVisuals, (sV, dV) => new { sV, dV }))
+                foreach (var i in sNodes.Zip(dNodes, (sV, dV) => new { sV, dV }))
                     VisitAndPush(i.sV, i.dV);
             }
         }

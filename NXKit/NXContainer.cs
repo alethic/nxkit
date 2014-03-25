@@ -68,17 +68,17 @@ namespace NXKit
         /// <summary>
         /// Gets the children <see cref="NXNode"/>s of this <see cref="NXContainer"/>.
         /// </summary>
-        public IEnumerable<NXNode> Nodes
+        public IEnumerable<NXNode> Nodes()
         {
-            get { return nodes; }
+            return nodes;
         }
 
         /// <summary>
         /// Gets the children <see cref="NXElements"/> of this <see cref="NXContainer"/>.
         /// </summary>
-        public IEnumerable<NXElement> Elements
+        public IEnumerable<NXElement> Elements()
         {
-            get { return nodes.OfType<NXElement>(); }
+            return nodes.OfType<NXElement>();
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace NXKit
         /// </summary>
         public void RemoveNodes()
         {
-            foreach (var node in Nodes.Reverse().ToArray())
+            foreach (var node in Nodes().Reverse().ToArray())
                 node.Remove();
         }
 
@@ -135,7 +135,7 @@ namespace NXKit
 
             yield return this;
 
-            foreach (var container in Nodes)
+            foreach (var container in Nodes())
                 if (container is NXContainer)
                     foreach (var descendant in ((NXContainer)container).DescendantsIncludeNS(ns))
                         yield return descendant;

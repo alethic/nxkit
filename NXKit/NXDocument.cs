@@ -111,7 +111,7 @@ namespace NXKit
         readonly NXDocumentConfiguration configuration;
         readonly IResolver resolver;
         readonly Uri uri;
-        readonly VisualStateCollection visualState;
+        readonly NodeStateCollection nodeState;
         int nextElementId;
 
         Module[] modules;
@@ -122,7 +122,7 @@ namespace NXKit
         {
             Contract.Invariant(configuration != null);
             Contract.Invariant(resolver != null);
-            Contract.Invariant(visualState != null);
+            Contract.Invariant(nodeState != null);
             Contract.Invariant(nextElementId >= 0);
         }
 
@@ -155,7 +155,7 @@ namespace NXKit
 
             this.configuration = configuration;
             this.nextElementId = 1;
-            this.visualState = new VisualStateCollection();
+            this.nodeState = new NodeStateCollection();
 
             // resolve uri
             var stream = resolver.Get(uri);
@@ -175,7 +175,7 @@ namespace NXKit
         /// <param name="resolver"></param>
         /// <param name="state"></param>
         public NXDocument(IResolver resolver, NXDocumentState state)
-            : this(resolver, state.Uri, state.Configuration, state.Xml, state.NextElementId, state.VisualState)
+            : this(resolver, state.Uri, state.Configuration, state.Xml, state.NextElementId, state.NodeState)
         {
             Contract.Requires<ArgumentNullException>(resolver != null);
             Contract.Requires<ArgumentNullException>(state != null);
@@ -190,7 +190,7 @@ namespace NXKit
         /// <param name="xml"></param>
         /// <param name="nextElementId"></param>
         /// <param name="visualState"></param>
-        NXDocument(IResolver resolver, Uri uri, NXDocumentConfiguration configuration, string xml, int nextElementId, VisualStateCollection visualState)
+        NXDocument(IResolver resolver, Uri uri, NXDocumentConfiguration configuration, string xml, int nextElementId, NodeStateCollection visualState)
             : base()
         {
             Contract.Requires<ArgumentNullException>(resolver != null);
@@ -202,7 +202,7 @@ namespace NXKit
 
             this.configuration = configuration;
             this.nextElementId = nextElementId;
-            this.visualState = visualState;
+            this.nodeState = visualState;
 
             this.resolver = resolver;
             this.uri = uri;
@@ -302,9 +302,9 @@ namespace NXKit
         /// <summary>
         /// Gets a reference to the per-<see cref="NXNode"/> state collection.
         /// </summary>
-        public VisualStateCollection VisualState
+        public NodeStateCollection NodeState
         {
-            get { return visualState; }
+            get { return nodeState; }
         }
 
         /// <summary>
@@ -345,7 +345,7 @@ namespace NXKit
         /// </summary>
         public NXElement Root
         {
-            get { return Elements.FirstOrDefault(); }
+            get { return Elements().FirstOrDefault(); }
         }
 
         /// <summary>
@@ -356,7 +356,7 @@ namespace NXKit
         {
             Contract.Ensures(Contract.Result<NXElement>() != null);
 
-            return (NXElement)CreateNodeFromModules(Xml.Root) ?? new UnknownRootVisual(Xml.Root);
+            return (NXElement)CreateNodeFromModules(Xml.Root) ?? new UnknownRootElement(Xml.Root);
         }
 
         /// <summary>
@@ -408,7 +408,7 @@ namespace NXKit
                 uri,
                 Xml.ToString(SaveOptions.DisableFormatting),
                 nextElementId,
-                visualState);
+                nodeState);
         }
 
         /// <summary>

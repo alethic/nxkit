@@ -17,7 +17,7 @@ namespace NXKit.XForms
     {
 
         readonly NXNode node;
-        readonly XFormsEvaluationContext evaluationContext;
+        readonly EvaluationContext evaluationContext;
 
         /// <summary>
         /// Initializes a new instance.
@@ -26,7 +26,7 @@ namespace NXKit.XForms
         /// <param name="evaluationContext"></param>
         internal XFormsXsltContext(
             NXNode node, 
-            XFormsEvaluationContext evaluationContext)
+            EvaluationContext evaluationContext)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(evaluationContext != null);
@@ -44,9 +44,9 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the <see cref="XFormsEvaluationContext"/> associated with the XSLT operation.
+        /// Gets the <see cref="EvaluationContext"/> associated with the XSLT operation.
         /// </summary>
-        public XFormsEvaluationContext EvaluationContext
+        public EvaluationContext EvaluationContext
         {
             get { return evaluationContext; }
         }

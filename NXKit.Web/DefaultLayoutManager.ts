@@ -1,4 +1,4 @@
-﻿/// <reference path="Visual.ts" />
+﻿/// <reference path="Node.ts" />
 /// <reference path="LayoutManager.ts" />
 
 module NXKit.Web {
@@ -19,22 +19,22 @@ module NXKit.Web {
             // extract data to be used to search for a template
             var value = valueAccessor();
 
-            // value is itself a visual
+            // value is itself a node
             if (value != null &&
-                ko.unwrap(value) instanceof Visual) {
-                data.visual = (<Visual>ko.unwrap(value)).Type;
+                ko.unwrap(value) instanceof Node) {
+                data.node = (<Node>ko.unwrap(value)).Type;
                 return data;
             }
 
-            // specified visual value
+            // specified node value
             if (value != null &&
-                value.visual != null &&
-                ko.unwrap(value.visual) instanceof Visual)
-                data.visual = (<Visual>ko.unwrap(value.visual)).Type;
+                value.node != null &&
+                ko.unwrap(value.node) instanceof Node)
+                data.node = (<Node>ko.unwrap(value.node)).Type;
 
-            if (data.visual == null)
-                if (viewModel instanceof Visual)
-                    data.visual = (<Visual>viewModel).Type;
+            if (data.node == null)
+                if (viewModel instanceof Node)
+                    data.node = (<Node>viewModel).Type;
 
             // specified data type
             if (value != null &&

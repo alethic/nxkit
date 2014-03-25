@@ -1,8 +1,8 @@
 ﻿<script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsInputVisual">
+        data-nxkit-node="NXKit.XForms.InputElement">
     <!-- ko with: new NXKit.Web.XForms.InputViewModel($context, $data) -->
     <!-- ko nxkit_template: {
-        visual: Visual,
+        node: Node,
         data: $data,
         type: Type,
     } -->
@@ -11,14 +11,14 @@
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsInputVisual"
+        data-nxkit-node="NXKit.XForms.InputElement"
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
     <input type="text"
            data-bind="value: ValueAsString" />
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsInputVisual"
+        data-nxkit-node="NXKit.XForms.InputElement"
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}boolean">
     <div class="ui checkbox"
          data-bind="nxkit_checkbox: ValueAsBoolean">
@@ -37,17 +37,17 @@
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsInputVisual"
+        data-nxkit-node="NXKit.XForms.InputElement"
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}date">
     <input type="date"
            data-bind="value: ValueAsString" />
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsInputVisual"
+        data-nxkit-node="NXKit.XForms.InputElement"
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}int">
     <!-- ko nxkit_template: {
-        visual: Visual,
+        node: Node,
         data: $data,
         type: '{http://www.w3.org/2001/XMLSchema}integer',
     } -->
@@ -55,7 +55,7 @@
 </script>
 
 <script type="text/html"
-        data-nxkit-visual="NXKit.XForms.XFormsInputVisual"
+        data-nxkit-node="NXKit.XForms.InputElement"
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}integer">
     <input type="number"
            data-bind="value: ValueAsNumber" />

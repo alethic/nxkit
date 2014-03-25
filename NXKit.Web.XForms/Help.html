@@ -1,13 +1,11 @@
-﻿
-
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsHelpVisual">
+﻿<script type="text/html" data-nxkit-node="NXKit.XForms.HelpElement">
     <!-- ko with: new NXKit.Web.XForms.HelpViewModel($context, $data) -->
     <div class="xforms-help">
         <!-- ko if: Text -->
         <span data-bind="text: Text" />
         <!-- /ko -->
         <!-- ko ifnot: Text -->
-        <!-- ko foreach: Visual.Visuals -->
+        <!-- ko foreach: Node.Nodes -->
         <!-- ko nxkit_template -->
         <!-- /ko -->
         <!-- /ko -->

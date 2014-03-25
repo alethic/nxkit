@@ -1,36 +1,20 @@
-﻿<script type="text/javascript">
-
-    function GetSelect1Items(visual) {
-        return ko.utils.arrayFilter(visual.Visuals(), function (_) {
-            return _.Type == 'NXKit.XForms.XFormsItemVisual';
-        });
-    }
-
-    function GetItemValueVisual(visual) {
-        return ko.utils.arrayFirst(visual.Visuals(), function (_) {
-            return _.Type == 'NXKit.XForms.XFormsValueVisual';
-        });
-    }
-
-</script>
-
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsSelect1Visual">
+﻿<script type="text/html" data-nxkit-node="NXKit.XForms.Select1Element">
     <!-- ko with: new NXKit.Web.XForms.Select1ViewModel($context, $data) -->
     <!-- ko nxkit_template: {
-        visual: Visual,
+        node: Node,
         data: $data,
-        type: Type,
+        type: '{http://www.w3.org/2001/XMLSchema}string',
     } -->
     <!-- /ko -->
     <!-- /ko -->
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsSelect1Visual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
-    <div class="ui fluid selection dropdown" data-bind="nxkit_dropdown: SelectedItemVisualId">
+<script type="text/html" data-nxkit-node="NXKit.XForms.Select1Element" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
+    <div class="ui fluid selection dropdown" data-bind="nxkit_dropdown: SelectedItemNodeId">
         <input type="hidden" />
         <div class="text">Select</div>
         <i class="dropdown icon"></i>
-        <div class="ui menu" data-bind="foreach: GetSelect1Items($data.Visual)">
+        <div class="ui menu" data-bind="foreach: Items">
             <div class="item" data-bind="attr: { 'data-value': $data.Properties['UniqueId'].ValueAsString }">
                 <!-- ko nxkit_template: NXKit.Web.XForms.Utils.GetLabel($data) -->
                 <!-- /ko -->
@@ -39,5 +23,6 @@
     </div>
 </script>
 
-<script type="text/html" data-nxkit-visual="NXKit.XForms.XFormsSelect1Visual" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}boolean">
+<script type="text/html" data-nxkit-node="NXKit.XForms.Select1Element" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}boolean">
+
 </script>

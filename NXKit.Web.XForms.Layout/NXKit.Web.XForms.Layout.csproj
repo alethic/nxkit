@@ -107,7 +107,7 @@
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="CategoryViewModel.ts" />
     <TypeScriptCompile Include="SectionViewModel.ts" />
-    <TypeScriptCompile Include="LayoutVisualViewModel.ts" />
+    <TypeScriptCompile Include="LayoutNodeViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Category.html" />

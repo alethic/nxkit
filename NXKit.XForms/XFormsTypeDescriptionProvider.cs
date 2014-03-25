@@ -6,7 +6,7 @@ namespace NXKit.XForms
 {
 
     public class XFormsTypeDescriptionProvider :
-        VisualTypeDescriptionProvider
+        NodeTypeDescriptionProvider
     {
 
         /// <summary>

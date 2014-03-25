@@ -75,15 +75,15 @@ namespace NXKit
         /// <param name="node"></param>
         public void Remove()
         {
-            var parent = Parent;
-            if (parent == null)
+            var old = Parent;
+            if (old == null)
                 throw new InvalidOperationException();
 
             // raise events and remove node
-            parent.OnChanging(new NXObjectChangeEventArgs(this, NXObjectChange.Remove));
-            parent.nodes.Remove(this);
-            parent = null;
-            parent.OnChanged(new NXObjectChangeEventArgs(this, NXObjectChange.Remove));
+            old.OnChanging(new NXObjectChangeEventArgs(this, NXObjectChange.Remove));
+            old.nodes.Remove(this);
+            Parent = null;
+            old.OnChanged(new NXObjectChangeEventArgs(this, NXObjectChange.Remove));
         }
 
         #region Naming Scope

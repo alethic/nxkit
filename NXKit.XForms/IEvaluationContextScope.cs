@@ -7,7 +7,7 @@
     public interface IEvaluationContextScope
     {
 
-        XFormsEvaluationContext Context { get; }
+        EvaluationContext Context { get; }
 
     }
 

@@ -125,13 +125,13 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="ICallbackRequestEvent.ts" />
-    <Compile Include="IO\JsonVisualReader.cs" />
-    <Compile Include="IO\JsonVisualWriter.cs" />
+    <Compile Include="IO\JsonNodeReader.cs" />
+    <Compile Include="IO\JsonNodeWriter.cs" />
     <Compile Include="IO\XNameJsonConverter.cs" />
     <TypeScriptCompile Include="ICallbackComplete.ts" />
     <TypeScriptCompile Include="IEvent.ts" />
     <TypeScriptCompile Include="IPropertyMap.ts" />
-    <TypeScriptCompile Include="IVisualPropertyValueChangedEvent.ts" />
+    <TypeScriptCompile Include="INodePropertyValueChangedEvent.ts" />
     <TypeScriptCompile Include="IPropertyValueChangedEvent.ts" />
     <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
     <TypeScriptCompile Include="LayoutOptions.ts" />
@@ -157,8 +157,8 @@
     <TypeScriptCompile Include="Property.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="View.ts" />
-    <TypeScriptCompile Include="Visual.ts" />
-    <TypeScriptCompile Include="VisualViewModel.ts" />
+    <TypeScriptCompile Include="Node.ts" />
+    <TypeScriptCompile Include="NodeViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Knockout\DropdownBindingHandler.ts" />

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit
@@ -27,23 +28,18 @@ namespace NXKit
         public NXText(XText text)
             : base(text)
         {
-
+            Contract.Requires<ArgumentNullException>(text != null);
         }
 
         public XText Xml
         {
-            get { return (XText)Xml; }
+            get { return (XText)base.Xml; }
         }
 
         [Interactive]
         public string Text
         {
             get { return Xml.Value; }
-        }
-
-        public void WriteText(TextWriter writer)
-        {
-            writer.Write(Text);
         }
 
     }

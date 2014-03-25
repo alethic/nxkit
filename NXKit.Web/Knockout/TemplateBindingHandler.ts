@@ -46,9 +46,9 @@ module NXKit.Web.Knockout {
         static GetTemplateViewModel(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any {
             var value = valueAccessor() || viewModel;
 
-            // value itself is a visual
+            // value itself is a node
             if (value != null &&
-                ko.unwrap(value) instanceof Visual)
+                ko.unwrap(value) instanceof Node)
                 return ko.unwrap(value);
 
             // specified data value
@@ -56,11 +56,11 @@ module NXKit.Web.Knockout {
                 value.data != null)
                 return ko.unwrap(value.data);
 
-            // specified visual value
+            // specified node value
             if (value != null &&
-                value.visual != null &&
-                ko.unwrap(value.visual) instanceof Visual)
-                return ko.unwrap(value.visual);
+                value.node != null &&
+                ko.unwrap(value.node) instanceof Node)
+                return ko.unwrap(value.node);
 
             // default to existing context
             return null;
