@@ -587,7 +587,7 @@ namespace NXKit.XForms
                 foreach (var instance in model.Instances)
                 {
                     // all model items
-                    var items = instance.Xml.DescendantNodesAndSelf()
+                    var items = instance.State.Document.Root.DescendantNodesAndSelf()
                         .OfType<XElement>()
                         .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i));
 
@@ -602,7 +602,7 @@ namespace NXKit.XForms
                         var oldValid = GetModelItemValid(item);
 
                         // get new validity, raise on change
-                        var valid = (!required || value.TrimToNull() != null) && constraint;
+                        var valid = (required ? value.TrimToNull() != null : true) && constraint;
                         if (valid != oldValid)
                         {
                             modelItem.Valid = valid;
@@ -956,7 +956,7 @@ namespace NXKit.XForms
 
             // register new value with model item
             var mi = GetModelItem(item);
-            mi.NewValue = newValue;
+            mi.NewValue = newValue ?? "";
 
             // trigger recalculate event to collect new value
             ec.Model.State.RecalculateFlag = true;
