@@ -8,7 +8,7 @@ namespace NXKit
     /// <summary>
     /// Provides an unknown visual.
     /// </summary>
-    class UnknownRootVisual :
+    class UnknownRootElement :
         NXElement
     {
 
@@ -16,7 +16,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        internal UnknownRootVisual(XElement xml)
+        internal UnknownRootElement(XElement xml)
             : base(xml)
         {
             Contract.Requires<ArgumentNullException>(xml != null);

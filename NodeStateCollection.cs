@@ -12,7 +12,7 @@ namespace NXKit
     /// Associates serializable state information with <see cref="NXNode"/> instances.
     /// </summary>
     [Serializable]
-    public class VisualStateCollection :
+    public class NodeStateCollection :
         ISerializable
     {
 
@@ -21,7 +21,7 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public VisualStateCollection()
+        public NodeStateCollection()
         {
             this.store = new Dictionary<string, Dictionary<Type, object>>();
         }
@@ -31,7 +31,7 @@ namespace NXKit
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public VisualStateCollection(SerializationInfo info, StreamingContext context)
+        public NodeStateCollection(SerializationInfo info, StreamingContext context)
             : this()
         {
             Contract.Requires<ArgumentNullException>(info != null);

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
+using System.Linq;
 
 namespace NXKit
 {
@@ -8,31 +10,32 @@ namespace NXKit
     /// <summary>
     /// Provides overrides to <see cref="NXNode"/> types.
     /// </summary>
-    public abstract class VisualTypeDescriptionProvider :
-        TypeDescriptionProvider
+    public abstract class NodeTypeDescriptor :
+        CustomTypeDescriptor
     {
 
-        readonly TypeDescriptionProvider parent;
         readonly Type type;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="parent"></param>
         /// <param name="type"></param>
-        public VisualTypeDescriptionProvider(TypeDescriptionProvider parent, Type type)
+        public NodeTypeDescriptor(Type type)
         {
-            Contract.Requires<ArgumentNullException>(parent != null);
             Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentException>(typeof(NXNode).IsAssignableFrom(type));
 
-            this.parent = parent;
             this.type = type;
         }
 
-        public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
+        public override PropertyDescriptorCollection GetProperties()
         {
-            return parent.GetTypeDescriptor(objectType, instance);
+            return new PropertyDescriptorCollection(GetPropertiesIter().ToArray());
+        }
+
+        IEnumerable<PropertyDescriptor> GetPropertiesIter()
+        {
+            yield break;
         }
 
     }

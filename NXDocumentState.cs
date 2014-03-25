@@ -51,7 +51,7 @@ namespace NXKit
         readonly Uri uri;
         readonly string xml;
         readonly int nextElementId;
-        readonly VisualStateCollection visualState;
+        readonly NodeStateCollection nodeState;
 
         /// <summary>
         /// Initializes a new instance.
@@ -61,7 +61,7 @@ namespace NXKit
             Uri uri,
             string xml,
             int nextElementId,
-            VisualStateCollection visualState)
+            NodeStateCollection visualState)
         {
             Contract.Requires<ArgumentNullException>(configuration != null);
             Contract.Requires<ArgumentNullException>(uri != null);
@@ -73,7 +73,7 @@ namespace NXKit
             this.uri = uri;
             this.xml = xml;
             this.nextElementId = nextElementId;
-            this.visualState = visualState;
+            this.nodeState = visualState;
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace NXKit
             this.uri = (Uri)info.GetValue("Uri", typeof(Uri));
             this.xml = LoadXml((byte[])info.GetValue("Xml", typeof(byte[])));
             this.nextElementId = info.GetInt32("NextElementId");
-            this.visualState = (VisualStateCollection)info.GetValue("VisualState", typeof(VisualStateCollection));
+            this.nodeState = (NodeStateCollection)info.GetValue("NodeState", typeof(NodeStateCollection));
         }
 
         /// <summary>
@@ -122,9 +122,9 @@ namespace NXKit
         /// <summary>
         /// Saved visual state.
         /// </summary>
-        public VisualStateCollection VisualState
+        public NodeStateCollection NodeState
         {
-            get { return visualState; }
+            get { return nodeState; }
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace NXKit
             info.AddValue("Uri", uri);
             info.AddValue("Xml", SaveXml(xml));
             info.AddValue("NextElementId", nextElementId);
-            info.AddValue("VisualState", visualState);
+            info.AddValue("NodeState", nodeState);
         }
 
     }

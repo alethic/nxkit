@@ -10,15 +10,15 @@ namespace NXKit.Web
     /// <summary>
     /// Provides a writer that produces output from <see cref="NXNode"/> instances.
     /// </summary>
-    [ContractClass(typeof(VisualWriter_Contract))]
-    public abstract class VisualWriter :
+    [ContractClass(typeof(NodeWriter_Contract))]
+    public abstract class NodeWriter :
         IDisposable
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        protected VisualWriter()
+        protected NodeWriter()
         {
 
         }
@@ -26,15 +26,15 @@ namespace NXKit.Web
         /// <summary>
         /// Writes the given <see cref="NXNode"/> to the underlying output.
         /// </summary>
-        /// <param name="visual"></param>
-        public abstract void Write(NXNode visual);
+        /// <param name="node"></param>
+        public abstract void Write(NXNode node);
 
         /// <summary>
         /// Gets the type of the specified <see cref="NXNode"/>.
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        protected virtual Type GetVisualType(NXNode visual)
+        protected virtual Type GetNodeType(NXNode visual)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
 
@@ -44,13 +44,13 @@ namespace NXKit.Web
         /// <summary>
         /// Gets the base types of the specified <see cref="NXNode"/>.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="node"></param>
         /// <returns></returns>
-        protected virtual Type[] GetVisualBaseTypes(NXNode visual)
+        protected virtual Type[] GetNodeBaseTypes(NXNode node)
         {
-            Contract.Requires<ArgumentNullException>(visual != null);
+            Contract.Requires<ArgumentNullException>(node != null);
 
-            return TypeDescriptor.GetReflectionType(visual).BaseType
+            return TypeDescriptor.GetReflectionType(node).BaseType
                 .Recurse(i => i.BaseType)
                 .TakeWhile(i => typeof(NXNode).IsAssignableFrom(i))
                 .ToArray();
@@ -59,13 +59,13 @@ namespace NXKit.Web
         /// <summary>
         /// Gets the properties of the specified <see cref="NXNode"/>.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="node"></param>
         /// <returns></returns>
-        protected PropertyDescriptor[] GetVisualProperties(NXNode visual)
+        protected PropertyDescriptor[] GetNodeProperties(NXNode node)
         {
-            Contract.Requires<ArgumentNullException>(visual != null);
+            Contract.Requires<ArgumentNullException>(node != null);
 
-            return TypeDescriptor.GetProperties(visual)
+            return TypeDescriptor.GetProperties(node)
                 .Cast<PropertyDescriptor>()
                 .Where(i => i.Attributes.OfType<InteractiveAttribute>().Any())
                 .ToArray();
@@ -88,14 +88,14 @@ namespace NXKit.Web
 
     }
 
-    [ContractClassFor(typeof(VisualWriter))]
-    abstract class VisualWriter_Contract :
-        VisualWriter
+    [ContractClassFor(typeof(NodeWriter))]
+    abstract class NodeWriter_Contract :
+        NodeWriter
     {
 
-        public override void Write(NXNode visual)
+        public override void Write(NXNode node)
         {
-            Contract.Requires<ArgumentNullException>(visual != null);
+            Contract.Requires<ArgumentNullException>(node != null);
             throw new NotImplementedException();
         }
 

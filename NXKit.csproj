@@ -121,7 +121,7 @@
   <ItemGroup>
     <Compile Include="DefaultResolver.cs" />
     <Compile Include="InteractiveAttribute.cs" />
-    <Compile Include="IO\VisualWriter.cs" />
+    <Compile Include="IO\NodeWriter.cs" />
     <Compile Include="NXContainer.cs" />
     <Compile Include="NXContainerExtensions.cs" />
     <Compile Include="NXDocumentConfiguration.cs" />
@@ -133,15 +133,15 @@
     <Compile Include="NXObjectExtensions.cs" />
     <Compile Include="PriorityAttribute.cs" />
     <Compile Include="SingleUriResolver.cs" />
-    <Compile Include="UnknownRootVisual.cs" />
+    <Compile Include="UnknownRootElement.cs" />
     <Compile Include="NXObjectEventHandler.cs" />
     <Compile Include="NXObjectEventArgs.cs" />
-    <Compile Include="VisualTypeDescriptionProvider.cs" />
-    <Compile Include="VisualTypeDescriptor.cs" />
+    <Compile Include="NodeTypeDescriptionProvider.cs" />
+    <Compile Include="NodeTypeDescriptor.cs" />
     <Compile Include="XmlSchemaConstants.cs" />
     <Compile Include="XmlSchemaPackage.cs" />
     <Compile Include="SchemaPackage.cs" />
-    <Compile Include="VisualStateCollection.cs" />
+    <Compile Include="NodeStateCollection.cs" />
     <Compile Include="SchemaContainer.cs" />
     <Compile Include="INamingScope.cs" />
     <Compile Include="NXDocument.cs" />

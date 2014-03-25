@@ -16,6 +16,7 @@ namespace NXKit
 
         string uniqueId;
         Dictionary<XNode, NXNode> cache = new Dictionary<XNode, NXNode>();
+        bool created = false;
 
         /// <summary>
         /// Initializes a new instance.
@@ -81,7 +82,11 @@ namespace NXKit
             base.OnAdded(args);
 
             // on first add to parent, generate children
-            CreateNodes();
+            if (!created)
+            {
+                created = true;
+                CreateNodes();
+            }
         }
 
         /// <summary>
@@ -89,7 +94,8 @@ namespace NXKit
         /// </summary>
         protected virtual void CreateNodes()
         {
-            nodes.Clear();
+            RemoveNodes();
+
             if (Xml != null)
                 foreach (var node in CreateNodesFromXElement(Xml, true))
                     Add(node);
@@ -130,7 +136,7 @@ namespace NXKit
         public T GetState<T>()
             where T : class, new()
         {
-            return Document != null ? Document.VisualState.Get<T>(this) : null;
+            return Document != null ? Document.NodeState.Get<T>(this) : null;
         }
 
     }
