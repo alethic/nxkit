@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-
+using System.Xaml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NXKit.DOMEvents;
 

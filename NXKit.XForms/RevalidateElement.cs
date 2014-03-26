@@ -32,7 +32,7 @@ namespace NXKit.XForms
             {
                 var modelVisual = (ModelElement)ResolveId(modelAttr);
                 if (modelVisual != null)
-                    Module.RevalidateModel(modelVisual);
+                    modelVisual.OnRevalidate();
                 else
                 {
                     DispatchEvent<BindingExceptionEvent>();

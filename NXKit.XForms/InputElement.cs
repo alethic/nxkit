@@ -17,10 +17,12 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="element"></param>
-        public InputElement(XElement element)
-            : base(element)
+        /// <param name="xml"></param>
+        public InputElement(XElement xml)
+            : base(xml)
         {
+
+
 
         }
 
