@@ -122,6 +122,7 @@
     <Compile Include="DefaultResolver.cs" />
     <Compile Include="InteractiveAttribute.cs" />
     <Compile Include="IO\NodeWriter.cs" />
+    <Compile Include="CompositionUtil.cs" />
     <Compile Include="NXContainer.cs" />
     <Compile Include="NXContainerExtensions.cs" />
     <Compile Include="NXDocumentConfiguration.cs" />
