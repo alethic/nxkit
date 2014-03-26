@@ -253,8 +253,8 @@ namespace NXKit.XForms
                     bind.Refresh();
 
                     if (bind.Binding == null ||
-                        bind.Binding.Nodes == null ||
-                        bind.Binding.Nodes.Length == 0)
+                        bind.Binding.ModelItems == null ||
+                        bind.Binding.ModelItems.Length == 0)
                         continue;
 
                     var typeAttr = Module.GetAttributeValue(bind.Xml, "type");
@@ -264,12 +264,12 @@ namespace NXKit.XForms
                     var relevantAttr = Module.GetAttributeValue(bind.Xml, "relevant");
                     var constraintAttr = Module.GetAttributeValue(bind.Xml, "constraint");
 
-                    for (int i = 0; i < bind.Binding.Nodes.Length; i++)
+                    for (int i = 0; i < bind.Binding.ModelItems.Length; i++)
                     {
-                        var node = bind.Binding.Nodes[i];
+                        var node = bind.Binding.ModelItems[i];
                         var modelItem = Module.GetModelItem(node);
 
-                        var ec = new EvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, node, i + 1, bind.Binding.Nodes.Length);
+                        var ec = new EvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, node, i + 1, bind.Binding.ModelItems.Length);
                         var nc = new XFormsXsltContext(bind, ec);
 
                         // get existing values
@@ -448,7 +448,7 @@ namespace NXKit.XForms
                         if (singleNodeBindingVisual.Binding == null)
                             continue;
 
-                        var node = singleNodeBindingVisual.Binding.Node;
+                        var node = singleNodeBindingVisual.Binding.ModelItem;
                         if (node == null)
                             continue;
 

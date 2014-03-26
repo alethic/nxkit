@@ -40,12 +40,12 @@ namespace NXKit.XForms
             RemoveNodes();
 
             if (Binding == null ||
-                Binding.Nodes == null)
+                Binding.ModelItems == null)
                 return;
 
             // obtain or create items
-            for (int i = 0; i < Binding.Nodes.Length; i++)
-                Add(GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.Nodes[i], i + 1, Binding.Nodes.Length));
+            for (int i = 0; i < Binding.ModelItems.Length; i++)
+                Add(GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.ModelItems[i], i + 1, Binding.ModelItems.Length));
         }
 
         ItemSetItemElement GetOrCreateItem(ModelElement model, InstanceElement instance, XObject node, int position, int size)

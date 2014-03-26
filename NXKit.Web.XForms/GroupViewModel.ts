@@ -386,7 +386,7 @@ module NXKit.Web.XForms {
                 var v = cnts[i];
 
                 // nested group obtains single child
-                if (v.Type == 'NXKit.XForms.GroupElement') {
+                if (v.Type == 'NXKit.XForms.Group') {
                     var groupItem = this.GetGroupItem(v, level);
                     list.push(groupItem);
                     continue;

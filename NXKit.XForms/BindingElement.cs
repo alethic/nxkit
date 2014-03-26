@@ -17,6 +17,15 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        public BindingElement()
+            : base()
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
         /// <param name="element"></param>
         public BindingElement(XElement element)
             : base(element)

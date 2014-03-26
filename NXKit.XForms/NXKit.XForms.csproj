@@ -150,7 +150,7 @@
     <Compile Include="EnabledEvent.cs" />
     <Compile Include="EvaluationContext.cs" />
     <Compile Include="XFormsEvent.cs" />
-    <Compile Include="GroupElement.cs" />
+    <Compile Include="Group.cs" />
     <Compile Include="HelpElement.cs" />
     <Compile Include="HintElement.cs" />
     <Compile Include="InputElement.cs" />

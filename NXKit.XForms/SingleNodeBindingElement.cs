@@ -15,6 +15,15 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        public SingleNodeBindingElement()
+            : base()
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
         /// <param name="xml"></param>
         public SingleNodeBindingElement(XElement xml)
             : base(xml)
@@ -29,16 +38,16 @@ namespace NXKit.XForms
         protected override EvaluationContext CreateEvaluationContext()
         {
             if (Binding != null &&
-                Binding.Node != null &&
-                Binding.Node.Document != null)
+                Binding.ModelItem != null &&
+                Binding.ModelItem.Document != null)
             {
-                var model = Binding.Node.Document.Annotation<ModelElement>();
+                var model = Binding.ModelItem.Document.Annotation<ModelElement>();
                 Contract.Assert(model != null);
 
-                var instance = Binding.Node.Document.Annotation<InstanceElement>();
+                var instance = Binding.ModelItem.Document.Annotation<InstanceElement>();
                 Contract.Assert(instance != null);
 
-                return new EvaluationContext(model, instance, Binding.Node, 1, 1);
+                return new EvaluationContext(model, instance, Binding.ModelItem, 1, 1);
             }
 
             return null;
@@ -79,7 +88,7 @@ namespace NXKit.XForms
         [Interactive]
         public XName Type
         {
-            get { return Binding != null ? Binding.Type : null; }
+            get { return Binding != null ? Binding.ModelItemType : null; }
         }
 
         /// <summary>
@@ -97,11 +106,11 @@ namespace NXKit.XForms
                     return true;
 
                 // the Single Node Binding is expressed and resolves to empty nodeset
-                if (Binding.Node == null)
+                if (Binding.ModelItem == null)
                     return false;
 
                 // the Single Node Binding is expressed and resolves to a non-relevant instance node
-                if (Binding.Relevant == false)
+                if (Binding.ModelItemRelevant == false)
                     return false;
 
                 // the form control is contained by a non-relevant switch or group (which includes a non-relevant repeat item)
@@ -123,7 +132,7 @@ namespace NXKit.XForms
         [Interactive]
         public bool ReadOnly
         {
-            get { return Binding != null ? Binding.ReadOnly : true; }
+            get { return Binding != null ? Binding.ModelItemReadOnly : true; }
         }
 
         /// <summary>
@@ -132,7 +141,7 @@ namespace NXKit.XForms
         [Interactive]
         public bool Required
         {
-            get { return Binding != null ? Binding.Required : false; }
+            get { return Binding != null ? Binding.ModelItemRequired : false; }
         }
 
         /// <summary>
@@ -141,7 +150,7 @@ namespace NXKit.XForms
         [Interactive]
         public bool Valid
         {
-            get { return Binding != null ? Binding.Valid : false; }
+            get { return Binding != null ? Binding.ModelItemValid : false; }
         }
 
     }

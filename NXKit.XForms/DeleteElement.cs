@@ -35,11 +35,11 @@ namespace NXKit.XForms
             Refresh();
 
             // only element nodes allowed
-            if (Binding.Nodes.Any(i => !(i is XElement)))
+            if (Binding.ModelItems.Any(i => !(i is XElement)))
                 throw new Exception();
 
             // ensure we have at least one node
-            var firstNode = Binding.Nodes.Cast<XElement>().FirstOrDefault();
+            var firstNode = Binding.ModelItems.Cast<XElement>().FirstOrDefault();
             if (firstNode == null)
                 return;
 
@@ -69,26 +69,26 @@ namespace NXKit.XForms
             if ((atD ?? double.NaN) == double.NaN)
             {
                 // outside legal range, we insert after last node
-                atD = Binding.Nodes.Length;
+                atD = Binding.ModelItems.Length;
             }
             else if (atD < 1)
                 // out of range, start
                 atD = 1;
-            else if (atD > Binding.Nodes.Length)
+            else if (atD > Binding.ModelItems.Length)
                 // out of range, end
-                atD = Binding.Nodes.Length;
+                atD = Binding.ModelItems.Length;
 
             int at = (int)atD;
 
             // current node
-            var curNode = Binding.Nodes[at - 1];
+            var curNode = Binding.ModelItems[at - 1];
 
             // set of dependent visuals
             var dependentVisualsState = Module.Document.Root
                 .Descendants(true)
                 .OfType<NodeSetBindingElement>()
-                .Where(i => i.Binding != null && i.Binding.Nodes != null && i.Binding.Nodes.Any(j => j.Parent == parent))
-                .Select(i => new { Visual = i, BoundNodes = i.Binding.Nodes })
+                .Where(i => i.Binding != null && i.Binding.ModelItems != null && i.Binding.ModelItems.Any(j => j.Parent == parent))
+                .Select(i => new { Visual = i, BoundNodes = i.Binding.ModelItems })
                 .ToList();
 
             // remove node from instance data

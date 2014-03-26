@@ -51,7 +51,7 @@ namespace NXKit.XForms
             Refresh();
 
             if (Binding == null ||
-                Binding.Node == null)
+                Binding.ModelItem == null)
                 return;
 
             // default value
@@ -73,7 +73,7 @@ namespace NXKit.XForms
                 newValue = "";
 
             // set node value
-            Module.SetModelItemValue(Binding.Context, Binding.Node, newValue);
+            Module.SetModelItemValue(Binding.Context, Binding.ModelItem, newValue);
 
             // instruct model to complete deferred update
             Binding.Context.Model.State.RecalculateFlag = true;

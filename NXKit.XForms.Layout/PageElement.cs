@@ -4,7 +4,7 @@ namespace NXKit.XForms.Layout
 
     [Element( "page")]
     public class PageElement :
-        GroupElement
+        Group
     {
         
         /// <summary>

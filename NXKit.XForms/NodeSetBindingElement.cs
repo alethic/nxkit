@@ -27,9 +27,9 @@ namespace NXKit.XForms
         protected override EvaluationContext CreateEvaluationContext()
         {
             if (Binding != null &&
-                Binding.Nodes != null &&
-                Binding.Nodes.Length >= 1)
-                return new EvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.Nodes[0], 1, Binding.Nodes.Length);
+                Binding.ModelItems != null &&
+                Binding.ModelItems.Length >= 1)
+                return new EvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.ModelItems[0], 1, Binding.ModelItems.Length);
 
             return null;
         }

@@ -6,9 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.XPath;
+
 using NXKit.DOMEvents;
 using NXKit.Util;
-using NXKit.XmlEvents;
 
 namespace NXKit.XForms
 {
@@ -304,18 +304,18 @@ namespace NXKit.XForms
         /// <summary>
         /// Evaluates the given XPath expression.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="node"></param>
         /// <param name="evaluationContext"></param>
         /// <param name="expression"></param>
         /// <param name="resultType"></param>
         /// <returns></returns>
-        internal object EvaluateXPath(NXNode visual, EvaluationContext evaluationContext, string expression, XPathResultType resultType)
+        internal object EvaluateXPath(NXNode node, EvaluationContext evaluationContext, string expression, XPathResultType resultType)
         {
-            Contract.Requires<ArgumentNullException>(visual != null);
+            Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(evaluationContext != null);
             Contract.Requires<ArgumentNullException>(expression != null);
 
-            var nc = new XFormsXsltContext(visual, evaluationContext);
+            var nc = new XFormsXsltContext(node, evaluationContext);
             var nv = ((XNode)evaluationContext.Node).CreateNavigator();
             var xp = XPathExpression.Compile(expression, nc);
             var nd = nv.Evaluate(xp);
@@ -367,7 +367,7 @@ namespace NXKit.XForms
             if (ec == null)
                 ec = Document.Root
                     .Descendants(true)
-                    .TakeWhile(i => !(i is GroupElement))
+                    .TakeWhile(i => !(i is Group))
                     .OfType<ModelElement>()
                     .Select(i => i.DefaultEvaluationContext)
                     .FirstOrDefault();
@@ -389,7 +389,7 @@ namespace NXKit.XForms
                 // find referenced model visual
                 var model = Document.Root
                     .Descendants(true)
-                    .TakeWhile(i => !(i is GroupElement))
+                    .TakeWhile(i => !(i is Group))
                     .OfType<ModelElement>()
                     .SingleOrDefault(i => Document.GetElementId(i.Xml) == modelAttr);
 

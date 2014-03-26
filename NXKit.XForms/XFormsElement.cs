@@ -16,6 +16,15 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        public XFormsElement()
+            : base()
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
         /// <param name="parent"></param>
         public XFormsElement(XElement element)
             : base(element)

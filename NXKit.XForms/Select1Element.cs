@@ -49,7 +49,7 @@ namespace NXKit.XForms
 
             // set node value
             if (Binding != null &&
-                Binding.Node != null)
+                Binding.ModelItem != null)
                 base.SetValue(value);
         }
 

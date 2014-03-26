@@ -47,7 +47,7 @@ namespace NXKit.XForms
         public void Select(SingleNodeBindingElement visual)
         {
             if (visual.Binding == null ||
-                visual.Binding.Node == null)
+                visual.Binding.ModelItem == null)
                 throw new InvalidOperationException();
 
             if (Binding != null &&
@@ -65,7 +65,7 @@ namespace NXKit.XForms
         public bool Selected(SingleNodeBindingElement visual)
         {
             if (visual.Binding == null ||
-                visual.Binding.Node == null ||
+                visual.Binding.ModelItem == null ||
                 visual.Binding.Value == null)
                 return false;
 

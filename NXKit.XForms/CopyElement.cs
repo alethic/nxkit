@@ -27,17 +27,17 @@ namespace NXKit.XForms
         public void Select(SingleNodeBindingElement visual)
         {
             if (Binding == null ||
-                Binding.Node == null ||
+                Binding.ModelItem == null ||
                 visual.Binding == null ||
-                visual.Binding.Node == null ||
-                !(Binding.Node is XElement) ||
-                !(visual.Binding.Node is XElement))
+                visual.Binding.ModelItem == null ||
+                !(Binding.ModelItem is XElement) ||
+                !(visual.Binding.ModelItem is XElement))
             {
                 DispatchEvent<BindingExceptionEvent>();
                 return;
             }
 
-            visual.Binding.SetValue((XElement)Binding.Node);
+            visual.Binding.SetValue((XElement)Binding.ModelItem);
         }
 
         /// <summary>
@@ -47,17 +47,17 @@ namespace NXKit.XForms
         public void Deselect(SingleNodeBindingElement visual)
         {
             if (Binding == null ||
-                Binding.Node == null ||
+                Binding.ModelItem == null ||
                 visual.Binding == null ||
-                visual.Binding.Node == null ||
-                !(Binding.Node is XElement) ||
-                !(visual.Binding.Node is XElement))
+                visual.Binding.ModelItem == null ||
+                !(Binding.ModelItem is XElement) ||
+                !(visual.Binding.ModelItem is XElement))
             {
                 DispatchEvent<BindingExceptionEvent>();
                 return;
             }
 
-            visual.Binding.ClearNode();
+            visual.Binding.ClearModelItem();
         }
 
         /// <summary>
@@ -68,19 +68,19 @@ namespace NXKit.XForms
         public bool Selected(SingleNodeBindingElement visual)
         {
             if (visual.Binding == null ||
-                visual.Binding.Node == null)
+                visual.Binding.ModelItem == null)
                 return false;
 
             if (Binding == null ||
-                Binding.Node == null)
+                Binding.ModelItem == null)
                 return false;
 
-            if (!(Binding.Node is XElement))
+            if (!(Binding.ModelItem is XElement))
                 return false;
 
             // our value matches the current value?
-            var currentNode = ((XElement)visual.Binding.Node).Elements().FirstOrDefault();
-            var proposeNode = (XElement)Binding.Node;
+            var currentNode = ((XElement)visual.Binding.ModelItem).Elements().FirstOrDefault();
+            var proposeNode = (XElement)Binding.ModelItem;
 
             if (!XNode.DeepEquals(currentNode, proposeNode))
                 return false;
@@ -95,14 +95,14 @@ namespace NXKit.XForms
         public int GetValueHashCode()
         {
             if (Binding == null ||
-                Binding.Node == null)
+                Binding.ModelItem == null)
                 return 0;
 
-            if (!(Binding.Node is XElement))
+            if (!(Binding.ModelItem is XElement))
                 return 0;
 
             // get deep hashcode of entire element tree
-            return new XNodeEqualityComparer().GetHashCode((XElement)Binding.Node);
+            return new XNodeEqualityComparer().GetHashCode((XElement)Binding.ModelItem);
         }
 
     }

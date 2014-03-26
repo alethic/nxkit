@@ -5,7 +5,7 @@ namespace NXKit.XForms.Layout
 
     [Element("section")]
     public class SectionElement : 
-        GroupElement
+        Group
     {
         
         /// <summary>

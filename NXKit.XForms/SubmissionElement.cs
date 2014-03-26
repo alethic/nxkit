@@ -33,7 +33,7 @@ namespace NXKit.XForms
             var ec = Module.ResolveBindingEvaluationContext(this);
 
             // single node binding, fall back to evaluation context
-            var node = Binding != null ? Binding.Node : ec.Node;
+            var node = Binding != null ? Binding.ModelItem : ec.Node;
 
             if (node is XElement)
             {

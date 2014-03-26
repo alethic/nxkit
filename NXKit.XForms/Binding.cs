@@ -13,28 +13,28 @@ namespace NXKit.XForms
     public class Binding
     {
 
-        readonly XFormsElement element;
+        readonly NXNode node;
         readonly EvaluationContext context;
         readonly string xpath;
 
         bool resultCached;
         object result;
-        bool nodeCached;
-        XObject node;
-        bool nodesCached;
-        XObject[] nodes;
+        bool modelItemCached;
+        XObject modelItem;
+        bool modelItemsCached;
+        XObject[] modelItems;
         bool valueCached;
         string value;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="node"></param>
         /// <param name="ec">Context in which to begin evaluation</param>
         /// <param name="xp"></param>
-        internal Binding(XFormsElement visual, EvaluationContext ec, string xp)
+        internal Binding(NXNode node, EvaluationContext ec, string xp)
         {
-            this.element = visual;
+            this.node = node;
             this.context = ec;
             this.xpath = xp;
         }
@@ -42,17 +42,17 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets a reference to the <see cref="XFormsModule"/>.
         /// </summary>
-        public XFormsModule Module
+        XFormsModule Module
         {
-            get { return Element.Module; }
+            get { return Node.Document.Module<XFormsModule>(); }
         }
 
         /// <summary>
-        /// <see cref="Element"/> to which this binding is related.
+        /// <see cref="Node"/> to which this binding is related.
         /// </summary>
-        public XFormsElement Element
+        public NXNode Node
         {
-            get { return element; }
+            get { return node; }
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace NXKit.XForms
             {
                 if (!resultCached)
                 {
-                    result = Module.EvaluateXPath(Element, Context, XPathExpression, XPathResultType.NodeSet);
+                    result = Module.EvaluateXPath(Node, Context, XPathExpression, XPathResultType.NodeSet);
                     resultCached = true;
                 }
 
@@ -91,35 +91,35 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the bound node, if applicable; otherwise, <c>null</c>.
         /// </summary>
-        public XObject Node
+        public XObject ModelItem
         {
             get
             {
-                if (!nodeCached)
+                if (!modelItemCached)
                 {
-                    if (Nodes is XObject[])
-                        node = Nodes.FirstOrDefault();
+                    if (ModelItems is XObject[])
+                        modelItem = ModelItems.FirstOrDefault();
                     else if (Result is XNode)
-                        node = (XNode)Result;
+                        modelItem = (XNode)Result;
                     else if (Result is XAttribute)
-                        node = (XAttribute)Result;
+                        modelItem = (XAttribute)Result;
 
-                    nodeCached = true;
+                    modelItemCached = true;
                 }
 
-                return node;
+                return modelItem;
             }
         }
 
         /// <summary>
         /// Gets the unique id of the 
         /// </summary>
-        public string NodeUniqueId
+        public string ModelItemUniqueId
         {
             get
             {
-                if (Node != null)
-                    return Module.GetModelItemUniqueId(Context, Node);
+                if (ModelItem != null)
+                    return Module.GetModelItemUniqueId(Context, ModelItem);
 
                 return null;
             }
@@ -128,23 +128,23 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the bound node, if applicable; otherwise, <c>null</c>.
         /// </summary>
-        public XObject[] Nodes
+        public XObject[] ModelItems
         {
             get
             {
-                if (!nodesCached)
+                if (!modelItemsCached)
                 {
                     if (Result is XPathNodeIterator)
-                        nodes = ((XPathNodeIterator)Result)
+                        modelItems = ((XPathNodeIterator)Result)
                             .Cast<XPathNavigator>()
                             .Select(i => i.UnderlyingObject)
                             .Cast<XObject>()
                             .ToArray();
 
-                    nodesCached = true;
+                    modelItemsCached = true;
                 }
 
-                return nodes;
+                return modelItems;
             }
         }
 
@@ -159,18 +159,18 @@ namespace NXKit.XForms
                 {
                     value = null;
 
-                    if (Node != null)
+                    if (ModelItem != null)
                     {
-                        if (Node is XText)
+                        if (ModelItem is XText)
                             // node is a simple text node
-                            return ((XText)Node).Value;
-                        else if (Node is XElement && !((XElement)Node).HasElements)
+                            return ((XText)ModelItem).Value;
+                        else if (ModelItem is XElement && !((XElement)ModelItem).HasElements)
                         {
                             // node is an element, that contains only text
-                            value = ((XElement)Node).Value ?? "";
+                            value = ((XElement)ModelItem).Value ?? "";
                         }
-                        else if (Node is XAttribute)
-                            return ((XAttribute)Node).Value ?? "";
+                        else if (ModelItem is XAttribute)
+                            return ((XAttribute)ModelItem).Value ?? "";
                     }
                     else if (Result is string)
                         value = (string)Result;
@@ -191,41 +191,41 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the type of the bound data.
         /// </summary>
-        public XName Type
+        public XName ModelItemType
         {
-            get { return Node != null ? Module.GetModelItemType(Node) : null; }
+            get { return ModelItem != null ? Module.GetModelItemType(ModelItem) : null; }
         }
 
         /// <summary>
         /// Gets whether or not this binding is bound to relevant data.
         /// </summary>
-        public bool Relevant
+        public bool ModelItemRelevant
         {
-            get { return Node != null ? Module.GetModelItemRelevant(Node) : true; }
+            get { return ModelItem != null ? Module.GetModelItemRelevant(ModelItem) : true; }
         }
 
         /// <summary>
         /// Gets whether or not this binding is bound to required data.
         /// </summary>
-        public bool Required
+        public bool ModelItemRequired
         {
-            get { return Node != null ? Module.GetModelItemRequired(Node) : false; }
+            get { return ModelItem != null ? Module.GetModelItemRequired(ModelItem) : false; }
         }
 
         /// <summary>
         /// Gets whether or not this binding is bound to read-only data.
         /// </summary>
-        public bool ReadOnly
+        public bool ModelItemReadOnly
         {
-            get { return Node != null ? Module.GetModelItemReadOnly(Node) : true; }
+            get { return ModelItem != null ? Module.GetModelItemReadOnly(ModelItem) : true; }
         }
 
         /// <summary>
         /// Gest whether or not this binding is bound to valid data.
         /// </summary>
-        public bool Valid
+        public bool ModelItemValid
         {
-            get { return Node != null ? Module.GetModelItemValid(Node) : false; }
+            get { return ModelItem != null ? Module.GetModelItemValid(ModelItem) : false; }
         }
 
         /// <summary>
@@ -234,8 +234,8 @@ namespace NXKit.XForms
         /// <param name="newElement"></param>
         public void SetValue(XElement newElement)
         {
-            if (Node != null && Node is XElement)
-                Module.SetModelItemElement(Context, Node, newElement);
+            if (ModelItem != null && ModelItem is XElement)
+                Module.SetModelItemElement(Context, ModelItem, newElement);
             else
                 throw new InvalidOperationException();
         }
@@ -243,10 +243,10 @@ namespace NXKit.XForms
         /// <summary>
         /// Registers an unsetting of the binding's node contents.
         /// </summary>
-        public void ClearNode()
+        public void ClearModelItem()
         {
-            if (Node != null)
-                Module.ClearModelItem(Context, Node);
+            if (ModelItem != null)
+                Module.ClearModelItem(Context, ModelItem);
         }
 
         /// <summary>
@@ -255,16 +255,16 @@ namespace NXKit.XForms
         /// <param name="newValue"></param>
         public void SetValue(string newValue)
         {
-            if (Node != null)
-                Module.SetModelItemValue(Context, Node, newValue);
+            if (ModelItem != null)
+                Module.SetModelItemValue(Context, ModelItem, newValue);
         }
 
         /// <summary>
-        /// Invalidates the cached values.
+        /// Invalidates the binding so that it is recalculated.
         /// </summary>
         public void Invalidate()
         {
-            resultCached = nodeCached = nodesCached = valueCached = false;
+            resultCached = modelItemCached = modelItemsCached = valueCached = false;
         }
 
     }

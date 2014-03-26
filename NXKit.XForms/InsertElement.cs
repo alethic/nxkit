@@ -35,16 +35,16 @@ namespace NXKit.XForms
             Refresh();
 
             if (Binding == null ||
-                Binding.Nodes == null ||
-                Binding.Nodes.Length == 0)
+                Binding.ModelItems == null ||
+                Binding.ModelItems.Length == 0)
                 return;
 
             // only element nodes allowed
-            if (Binding.Nodes.Any(i => !(i is XElement)))
+            if (Binding.ModelItems.Any(i => !(i is XElement)))
                 throw new Exception();
 
             // ensure we have at least one node
-            var firstNode = (XElement)Binding.Nodes[0];
+            var firstNode = (XElement)Binding.ModelItems[0];
             if (firstNode == null)
                 return;
 
@@ -79,24 +79,24 @@ namespace NXKit.XForms
             if (double.IsNaN((double)atD))
             {
                 // outside legal range, we insert after last node
-                atD = Binding.Nodes.Length;
+                atD = Binding.ModelItems.Length;
                 positionAttr = "after";
             }
             else if (atD < 1)
                 // out of range, start
                 atD = 1;
-            else if (atD > Binding.Nodes.Length)
+            else if (atD > Binding.ModelItems.Length)
                 // out of range, end
-                atD = Binding.Nodes.Length;
+                atD = Binding.ModelItems.Length;
 
             int at = (int)atD;
             int index;
 
             // current node
-            var curNode = (XElement)Binding.Nodes[at - 1];
+            var curNode = (XElement)Binding.ModelItems[at - 1];
 
             // clone last node to create new node
-            var newNode = new XElement((XElement)Binding.Nodes[Binding.Nodes.Length - 1]).Elements().First();
+            var newNode = new XElement((XElement)Binding.ModelItems[Binding.ModelItems.Length - 1]).Elements().First();
 
             foreach (var i in curNode.Descendants().Zip(newNode.Descendants(), (a, b) => new { A = a, B = b }))
             {
@@ -118,7 +118,7 @@ namespace NXKit.XForms
                 curNode.AddBeforeSelf(newNode);
                 index = at;
             }
-            else if (at == Binding.Nodes.Length)
+            else if (at == Binding.ModelItems.Length)
             {
                 // after last element: append to parent
                 parent.Add(newNode);
@@ -136,8 +136,8 @@ namespace NXKit.XForms
                 .Descendants(true)
                 .OfType<NodeSetBindingElement>()
                 .Where(i => i.Binding != null)
-                .Where(i => i.Binding.Nodes != null)
-                .Where(i => i.Binding.Nodes.Any(j => j.Parent == parent));
+                .Where(i => i.Binding.ModelItems != null)
+                .Where(i => i.Binding.ModelItems.Any(j => j.Parent == parent));
 
             foreach (var nodeSetVisual in nodeSetVisuals)
             {

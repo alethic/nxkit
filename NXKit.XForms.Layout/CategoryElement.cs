@@ -5,7 +5,7 @@ namespace NXKit.XForms.Layout
 
     [Element("category")]
     public class CategoryElement :
-        GroupElement
+        Group
     {
         
         /// <summary>

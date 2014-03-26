@@ -5,7 +5,7 @@ namespace NXKit.XForms.Layout
 
     [Element("table")]
     public class TableElement : 
-        GroupElement,
+        Group,
         ITableColumnGroupContainer
     {
         

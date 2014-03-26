@@ -50,12 +50,12 @@ namespace NXKit.XForms
             RemoveNodes();
 
             if (Binding == null ||
-                Binding.Nodes == null)
+                Binding.ModelItems == null)
                 return;
 
             // build proper list of items
-            for (int i = 0; i < Binding.Nodes.Length; i++)
-                Add(GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.Nodes[i], i + 1, Binding.Nodes.Length));
+            for (int i = 0; i < Binding.ModelItems.Length; i++)
+                Add(GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.ModelItems[i], i + 1, Binding.ModelItems.Length));
 
             // clear stale items from cache
             foreach (var i in items.ToList())
@@ -154,16 +154,16 @@ namespace NXKit.XForms
             // ensure index value is within range
             if (Index < 0)
                 if (Binding == null ||
-                    Binding.Nodes == null ||
-                    Binding.Nodes.Length == 0)
+                    Binding.ModelItems == null ||
+                    Binding.ModelItems.Length == 0)
                     Index = 0;
                 else
                     Index = StartIndex;
 
             if (Binding != null &&
-                Binding.Nodes != null)
-                if (Index > Binding.Nodes.Length)
-                    Index = Binding.Nodes.Length;
+                Binding.ModelItems != null)
+                if (Index > Binding.ModelItems.Length)
+                    Index = Binding.ModelItems.Length;
 
             // rebuild node tree
             CreateNodes();
