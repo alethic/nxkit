@@ -179,7 +179,7 @@
     <Compile Include="OptionalEvent.cs" />
     <Compile Include="OutOfRangeEvent.cs" />
     <Compile Include="OutputElement.cs" />
-    <Compile Include="RangeElement.cs" />
+    <Compile Include="Range.cs" />
     <Compile Include="ReadOnlyEvent.cs" />
     <Compile Include="ReadWriteEvent.cs" />
     <Compile Include="ReadyEvent.cs" />

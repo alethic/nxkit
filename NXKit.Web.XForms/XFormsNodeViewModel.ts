@@ -5,7 +5,7 @@
 
         public static ControlNodeTypes = [
             'NXKit.XForms.Input',
-            'NXKit.XForms.RangeElement',
+            'NXKit.XForms.Range',
             'NXKit.XForms.Select1Element',
             'NXKit.XForms.SelectElement',
             'NXKit.XForms.TextAreaElement',

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Linq;
+
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms
@@ -40,6 +41,11 @@ namespace NXKit.XForms
             base.OnAdded(args);
 
             this.Interface<IEventTarget>().AddEventHandler("xforms-invalid", false, i =>
+            {
+                Console.WriteLine(i);
+            });
+
+            this.Interface<IEventTarget>().AddEventHandler("xforms-valid", false, i =>
             {
                 Console.WriteLine(i);
             });

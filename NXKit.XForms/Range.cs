@@ -4,7 +4,7 @@ namespace NXKit.XForms
 {
 
     [Element("range")]
-    public class RangeElement : 
+    public class Range : 
         SingleNodeBindingElement
     {
 
@@ -12,7 +12,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public RangeElement(XElement element)
+        public Range(XElement element)
             : base(element)
         {
 
