@@ -117,7 +117,7 @@ module NXKit.Web.XForms {
             }
 
             GetLabel(): Node {
-                if (this._itemNode.Type == 'NXKit.XForms.InputElement' &&
+                if (this._itemNode.Type == 'NXKit.XForms.Input' &&
                     Utils.GetType(this._itemNode)() == '{http://www.w3.org/2001/XMLSchema}boolean')
                     // boolean inputs provide their own label
                     return null;

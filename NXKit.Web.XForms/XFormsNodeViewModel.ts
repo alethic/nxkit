@@ -4,7 +4,7 @@
         extends NXKit.Web.NodeViewModel {
 
         public static ControlNodeTypes = [
-            'NXKit.XForms.InputElement',
+            'NXKit.XForms.Input',
             'NXKit.XForms.RangeElement',
             'NXKit.XForms.Select1Element',
             'NXKit.XForms.SelectElement',

@@ -31,7 +31,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
 
             var input = e.Root
                 .Descendants()
-                .OfType<InputElement>()
+                .OfType<Input>()
                 .FirstOrDefault();
 
             Assert.AreEqual("node1", input.Binding.Value);
@@ -58,7 +58,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
 
             var input = e.Root
                 .Descendants()
-                .OfType<InputElement>()
+                .OfType<Input>()
                 .FirstOrDefault();
 
             Assert.AreEqual("node2", input.Binding.Value);
