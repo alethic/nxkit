@@ -11,7 +11,7 @@ namespace NXKit.XForms
 
     [Element("submission")]
     public class SubmissionElement :
-        SingleNodeBindingElement,
+        SingleNodeUIBindingElement,
         IEventDefaultActionHandler
     {
 
@@ -33,11 +33,11 @@ namespace NXKit.XForms
             var ec = Module.ResolveBindingEvaluationContext(this);
 
             // single node binding, fall back to evaluation context
-            var node = Binding != null ? Binding.ModelItem : ec.Node;
-
+            var modelItem = Binding != null ? Binding.ModelItem : ec.ModelItem;
+            var node = Binding != null ? Binding.ModelItem.Xml : ec.ModelItem.Xml;
             if (node is XElement)
             {
-                if (!Module.GetModelItemRelevant(node))
+                if (!modelItem.Relevant)
                 {
                     DispatchEvent<SubmitErrorEvent>();
                     return;
@@ -61,7 +61,9 @@ namespace NXKit.XForms
                     u = new Uri(new Uri(Xml.BaseUri), u);
 
                 // put data
-                var resource = Document.Resolver.Put(u, new MemoryStream(Encoding.UTF8.GetBytes(t)));
+                var resource = Document
+                    .Container.GetExportedValue<IResolver>()
+                    .Put(u, new MemoryStream(Encoding.UTF8.GetBytes(t)));
 
                 if (resource != null)
                     throw new NotSupportedException("Cannot return new data from a Put.");

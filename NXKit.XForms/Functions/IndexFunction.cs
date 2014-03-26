@@ -1,9 +1,13 @@
 ﻿using System.Xml.XPath;
 
-namespace NXKit.XForms.XPathFunctions
+using NXKit.XPath;
+
+namespace NXKit.XForms.Functions
 {
 
-    internal class BooleanFromStringFunction : XPathFunction
+    [XsltContextFunction("{http://www.w3.org/2002/xforms}index")]
+    public class IndexFunction : 
+        XPathFunction
     {
 
         public override XPathResultType[] ArgTypes
@@ -23,17 +27,22 @@ namespace NXKit.XForms.XPathFunctions
 
         public override XPathResultType ReturnType
         {
-            get { return XPathResultType.Boolean; }
+            get { return XPathResultType.Number; }
         }
 
         protected override object Invoke(XFormsXsltContext context, XPathNavigator navigator, params object[] args)
         {
-            bool result;
-            if (bool.TryParse(args[0].ToString(), out result))
-                return result;
-            else
-                return false;
+            var repeatId = (string)args[0];
+            if (repeatId == null)
+                return double.NaN;
+
+            var repeatVisual = (RepeatElement)context.Visual.ResolveId(repeatId);
+            if (repeatVisual == null)
+                return double.NaN;
+
+            return repeatVisual.Index;
         }
+
     }
 
 }

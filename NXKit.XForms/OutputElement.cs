@@ -6,7 +6,7 @@ namespace NXKit.XForms
 
     [Element("output")]
     public class OutputElement : 
-        SingleNodeBindingElement
+        SingleNodeUIBindingElement
     {
 
         /// <summary>

@@ -4,7 +4,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
-namespace NXKit.XForms.XPathFunctions
+namespace NXKit.XForms.Functions
 {
 
     /// <summary>
@@ -91,7 +91,7 @@ namespace NXKit.XForms.XPathFunctions
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
             Contract.Ensures(Contract.Result<ModelElement>() != null);
 
-            return module.GetModelItemModel((XObject)navigator.UnderlyingObject);
+            return new ModelItem(module, (XObject)navigator.UnderlyingObject).Model;
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace NXKit.XForms.XPathFunctions
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
             Contract.Ensures(Contract.Result<InstanceElement>() != null);
 
-            return module.GetModelItemInstance((XObject)navigator.UnderlyingObject);
+            return new ModelItem(module, (XObject)navigator.UnderlyingObject).Instance;
         }
 
     }

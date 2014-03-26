@@ -7,7 +7,7 @@ namespace NXKit.XForms
 
     [Element("value")]
     public class ValueElement : 
-        SingleNodeBindingElement, 
+        SingleNodeUIBindingElement, 
         ISelectableNode
     {
 
@@ -44,25 +44,25 @@ namespace NXKit.XForms
                 return "";
         }
 
-        public void Select(SingleNodeBindingElement visual)
+        public void Select(SingleNodeUIBindingElement element)
         {
-            if (visual.Binding == null ||
-                visual.Binding.ModelItem == null)
+            if (element.Binding == null ||
+                element.Binding.ModelItem == null)
                 throw new InvalidOperationException();
 
             if (Binding != null &&
                 Binding.Value == null)
                 throw new InvalidOperationException();
 
-            visual.Binding.SetValue(GetNewValue());
+            element.Binding.ModelItem.Value = GetNewValue();
         }
 
-        public void Deselect(SingleNodeBindingElement visual)
+        public void Deselect(SingleNodeUIBindingElement visual)
         {
 
         }
 
-        public bool Selected(SingleNodeBindingElement visual)
+        public bool Selected(SingleNodeUIBindingElement visual)
         {
             if (visual.Binding == null ||
                 visual.Binding.ModelItem == null ||

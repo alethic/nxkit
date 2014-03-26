@@ -4,7 +4,7 @@ namespace NXKit.XForms
 
     [Element("select")]
     public class SelectElement :
-        SingleNodeBindingElement,
+        SingleNodeUIBindingElement,
         ISupportsUiCommonAttributes
     {
 

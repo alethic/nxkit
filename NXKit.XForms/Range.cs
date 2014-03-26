@@ -1,11 +1,13 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
+using NXKit.DOMEvents;
 
 namespace NXKit.XForms
 {
 
     [Element("range")]
     public class Range : 
-        SingleNodeBindingElement
+        SingleNodeUIBindingElement
     {
 
         /// <summary>
@@ -18,10 +20,19 @@ namespace NXKit.XForms
 
         }
 
-        [Interactive]
-        public bool Incremental
+        protected override void OnAdded(NXObjectEventArgs args)
         {
-            get { return Module.GetAttributeValue(Xml, "incremental") == "true"; }
+            base.OnAdded(args);
+
+            this.Interface<IEventTarget>().AddEventHandler("xforms-invalid", false, i =>
+            {
+                Console.WriteLine(i);
+            });
+
+            this.Interface<IEventTarget>().AddEventHandler("xforms-valid", false, i =>
+            {
+                Console.WriteLine(i);
+            });
         }
 
         [Interactive]

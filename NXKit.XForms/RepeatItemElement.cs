@@ -1,4 +1,6 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -22,7 +24,7 @@ namespace NXKit.XForms
         public RepeatItemElement(XElement xml)
             : base(xml)
         {
-
+            Contract.Requires<ArgumentNullException>(xml != null);
         }
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace NXKit.XForms
         /// </summary>
         public override string Id
         {
-            get { return "NODE" + Module.GetModelItemId(Context, Context.Node); }
+            get { return "NODE" + Context.ModelItem.Id; }
         }
 
         /// <summary>
@@ -50,17 +52,9 @@ namespace NXKit.XForms
             context = ec;
         }
 
-        protected override void OnAdded(NXObjectEventArgs args)
-        {
-            base.OnAdded(args);
-
-            // ensure module item id is initialized
-            Module.GetModelItemId(Context, Context.Node);
-        }
-
         public bool Relevant
         {
-            get { return Module.GetModelItemRelevant(Context.Node); }
+            get { return Context.ModelItem.Relevant; }
         }
 
     }

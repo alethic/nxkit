@@ -6,7 +6,7 @@ namespace NXKit.XForms
 
     [Element("load")]
     public class LoadElement : 
-        SingleNodeBindingElement,
+        SingleNodeUIBindingElement,
         IActionElement
     {
 

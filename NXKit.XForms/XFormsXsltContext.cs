@@ -3,8 +3,10 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
+using System.Linq;
 
-using NXKit.XForms.XPathFunctions;
+using NXKit.XForms.Functions;
+using NXKit.XPath;
 
 namespace NXKit.XForms
 {
@@ -18,6 +20,7 @@ namespace NXKit.XForms
 
         readonly NXNode node;
         readonly EvaluationContext evaluationContext;
+        readonly IXsltContextFunctionProvider functionProvider;
 
         /// <summary>
         /// Initializes a new instance.
@@ -25,7 +28,7 @@ namespace NXKit.XForms
         /// <param name="node"></param>
         /// <param name="evaluationContext"></param>
         internal XFormsXsltContext(
-            NXNode node, 
+            NXNode node,
             EvaluationContext evaluationContext)
         {
             Contract.Requires<ArgumentNullException>(node != null);
@@ -33,6 +36,7 @@ namespace NXKit.XForms
 
             this.node = node;
             this.evaluationContext = evaluationContext;
+            this.functionProvider = node.Document.Container.GetExportedValue<IXsltContextFunctionProvider>();
         }
 
         /// <summary>
@@ -94,19 +98,10 @@ namespace NXKit.XForms
 
         public override IXsltContextFunction ResolveFunction(string prefix, string name, XPathResultType[] argTypes)
         {
-            var ns = (XNamespace)LookupNamespace(prefix);
-            if (ns == Constants.XForms_1_0)
-            {
-                switch (name)
-                {
-                    case "instance":
-                        return new InstanceFunction();
-                    case "position":
-                        return new PositionFunction();
-                }
-            }
-
-            return null;
+            return functionProvider.GetFunctions()
+                .Where(i => XName.Get(i.Metadata.ExpandedName) == ((XNamespace)LookupNamespace(prefix) + name))
+                .Select(i => i.Value)
+                .FirstOrDefault();
         }
 
         public override IXsltContextVariable ResolveVariable(string prefix, string name)

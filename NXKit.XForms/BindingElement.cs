@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+
 namespace NXKit.XForms
 {
 
@@ -17,7 +18,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public BindingElement()
+        protected BindingElement()
             : base()
         {
 
@@ -26,9 +27,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="element"></param>
-        public BindingElement(XElement element)
-            : base(element)
+        /// <param name="xml"></param>
+        protected BindingElement(XElement xml)
+            : base(xml)
         {
 
         }
@@ -96,7 +97,7 @@ namespace NXKit.XForms
             evaluationContextCached = false;
 
             if (binding != null)
-                binding.Invalidate();
+                binding.Refresh();
         }
 
     }

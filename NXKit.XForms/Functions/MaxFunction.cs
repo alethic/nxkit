@@ -1,10 +1,13 @@
 ﻿using System.Xml.Linq;
 using System.Xml.XPath;
+using NXKit.XPath;
 
-namespace NXKit.XForms.XPathFunctions
+namespace NXKit.XForms.Functions
 {
 
-    internal class MaxFunction : XPathFunction
+    [XsltContextFunction("{http://www.w3.org/2002/xforms}max")]
+    public class MaxFunction : 
+        XPathFunction
     {
 
         public override XPathResultType[] ArgTypes

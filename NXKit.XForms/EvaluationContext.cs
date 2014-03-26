@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace NXKit.XForms
 {
@@ -11,7 +12,7 @@ namespace NXKit.XForms
 
         readonly ModelElement model;
         readonly InstanceElement instance;
-        readonly XObject node;
+        readonly ModelItem modelItem;
         readonly int position;
         readonly int size;
 
@@ -20,14 +21,20 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="model"></param>
         /// <param name="instance"></param>
-        /// <param name="node"></param>
+        /// <param name="modelItem"></param>
         /// <param name="position"></param>
         /// <param name="size"></param>
-        internal EvaluationContext(ModelElement model, InstanceElement instance, XObject node, int position, int size)
+        internal EvaluationContext(ModelElement model, InstanceElement instance, ModelItem modelItem, int position, int size)
         {
+            Contract.Requires<ArgumentNullException>(model != null);
+            Contract.Requires<ArgumentNullException>(instance != null);
+            Contract.Requires<ArgumentNullException>(modelItem != null);
+            Contract.Requires<ArgumentNullException>(position >= 1);
+            Contract.Requires<ArgumentNullException>(size >= 1);
+
             this.model = model;
             this.instance = instance;
-            this.node = node;
+            this.modelItem = modelItem;
             this.position = position;
             this.size = size;
         }
@@ -51,9 +58,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Node within instance.
         /// </summary>
-        public XObject Node
+        public ModelItem ModelItem
         {
-            get { return node; }
+            get { return modelItem; }
         }
 
         /// <summary>

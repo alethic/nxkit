@@ -81,13 +81,13 @@ namespace NXKit.XForms
             int at = (int)atD;
 
             // current node
-            var curNode = Binding.ModelItems[at - 1];
+            var curNode = Binding.ModelItems[at - 1].Xml;
 
             // set of dependent visuals
             var dependentVisualsState = Module.Document.Root
                 .Descendants(true)
                 .OfType<NodeSetBindingElement>()
-                .Where(i => i.Binding != null && i.Binding.ModelItems != null && i.Binding.ModelItems.Any(j => j.Parent == parent))
+                .Where(i => i.Binding != null && i.Binding.ModelItems != null && i.Binding.ModelItems.Any(j => j.Xml.Parent == parent))
                 .Select(i => new { Visual = i, BoundNodes = i.Binding.ModelItems })
                 .ToList();
 
@@ -107,8 +107,8 @@ namespace NXKit.XForms
                 {
                     // index of deleted item
                     var deleteIndex = dependentVisualState.BoundNodes
-                        .Select((i, j) => new { Index = j + 1, Node = i })
-                        .Where(i => i.Node == curNode)
+                        .Select((i, j) => new { Index = j + 1, ModelItem = i })
+                        .Where(i => i.ModelItem.Xml == curNode)
                         .Select(i => (int?)i.Index)
                         .FirstOrDefault();
                     if (deleteIndex == null)

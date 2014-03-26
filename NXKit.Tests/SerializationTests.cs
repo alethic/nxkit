@@ -65,7 +65,7 @@ namespace NXKit.Tests
             m.Position = 0;
 
             var s = (NXDocumentState)f.Deserialize(m);
-            var d2 = new NXDocument(d1.Resolver, s);
+            var d2 = new NXDocument(CompositionUtil.CreateContainer(), s);
 
             Assert.AreEqual("Value1", d1.Root.GetState<TestVisualState>().Value);
         }

@@ -5,7 +5,7 @@ namespace NXKit.XForms
 
     [Element("trigger")]
     public class TriggerElement :
-        SingleNodeBindingElement
+        SingleNodeUIBindingElement
     {
 
         /// <summary>

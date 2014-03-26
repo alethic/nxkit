@@ -161,7 +161,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Indicates that the model item is to be removed.
         /// </summary>
-        public bool Remove
+        public bool Clear
         {
             get { return clear; }
             set { clear = value; }
@@ -170,7 +170,7 @@ namespace NXKit.XForms
         /// <summary>
         /// New <see cref="XElement"/> scheduled to be set as the value of the model item.
         /// </summary>
-        public XElement NewElement
+        public XElement NewContents
         {
             get { return newElement; }
             set { newElement = value; newValue = null; }
@@ -183,6 +183,25 @@ namespace NXKit.XForms
         {
             get { return newValue; }
             set { newValue = value; newElement = null; }
+        }
+
+        /// <summary>
+        /// Clears any outstanding notifications.
+        /// </summary>
+        public void Reset()
+        {
+            dispatchValueChanged = false;
+            dispatchReadOnly = false;
+            dispatchReadWrite = false;
+            dispatchRequired = false;
+            dispatchOptional = false;
+            dispatchEnabled = false;
+            dispatchDisabled = false;
+            dispatchValid = false;
+            dispatchInvalid = false;
+
+            newValue = null;
+            newElement = null;
         }
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)

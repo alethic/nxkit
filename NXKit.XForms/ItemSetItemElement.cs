@@ -1,4 +1,7 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
+
 namespace NXKit.XForms
 {
 
@@ -15,12 +18,12 @@ namespace NXKit.XForms
         public ItemSetItemElement(XElement xml)
             : base(xml)
         {
-
+            Contract.Requires<ArgumentNullException>(xml != null);
         }
 
         public override string Id
         {
-            get { return "NODE" + Module.GetModelItemId(Context, Context.Node); }
+            get { return "NODE" + Context.ModelItem.Id; }
         }
 
         /// <summary>
@@ -35,9 +38,6 @@ namespace NXKit.XForms
         internal void SetContext(EvaluationContext ec)
         {
             Context = ec;
-
-            // ensure module item id is initialized
-            Module.GetModelItemId(Context, Context.Node);
         }
 
     }

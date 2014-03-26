@@ -13,6 +13,8 @@ namespace NXKit.XForms
         NXElement
     {
 
+        XFormsModule module;
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -37,7 +39,7 @@ namespace NXKit.XForms
         /// </summary>
         public XFormsModule Module
         {
-            get { return Document.Module<XFormsModule>(); }
+            get { return module ?? (module = Document.Module<XFormsModule>()); }
         }
 
         /// <summary>

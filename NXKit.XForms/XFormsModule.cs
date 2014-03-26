@@ -127,20 +127,6 @@ namespace NXKit.XForms
             return attr != null ? attr.Value : null;
         }
 
-        /// <summary>
-        /// Obtains the model item properties for <paramref name="obj"/>.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        internal ModelItemState GetModelItem(XObject obj)
-        {
-            var modelItem = obj.Annotation<ModelItemState>();
-            if (modelItem == null)
-                obj.AddAnnotation(modelItem = new ModelItemState());
-
-            return modelItem;
-        }
-
         void Form_ProcessSubmit(object sender, EventArgs e)
         {
             Submit();
@@ -274,7 +260,7 @@ namespace NXKit.XForms
                             u = new Uri(new Uri(instance.Xml.BaseUri), u);
 
                         // return resource as a stream
-                        var resource = Document.Resolver.Get(u);
+                        var resource = Document.Container.GetExportedValue<IResolver>().Get(u);
                         if (resource == null)
                             throw new FileNotFoundException("Could not load resource", instanceSrc);
 
@@ -302,6 +288,27 @@ namespace NXKit.XForms
         }
 
         /// <summary>
+        /// Creates a <see cref="XPathNavigator"/> for the given model item.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        XPathNavigator CreateNavigator(ModelItem item)
+        {
+            if (item.Xml is XAttribute)
+            {
+                // navigator needs to be created on parent, and navigated to attribute
+                var nav = item.Xml.Parent.CreateNavigator();
+                nav.MoveToAttribute(((XAttribute)item.Xml).Name.LocalName, ((XAttribute)item.Xml).Name.NamespaceName);
+                return nav;
+            }
+
+            if (item.Xml is XElement)
+                return ((XElement)item.Xml).CreateNavigator();
+
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
         /// Evaluates the given XPath expression.
         /// </summary>
         /// <param name="node"></param>
@@ -316,7 +323,7 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(expression != null);
 
             var nc = new XFormsXsltContext(node, evaluationContext);
-            var nv = ((XNode)evaluationContext.Node).CreateNavigator();
+            var nv = CreateNavigator(evaluationContext.ModelItem);
             var xp = XPathExpression.Compile(expression, nc);
             var nd = nv.Evaluate(xp);
 
@@ -481,207 +488,6 @@ namespace NXKit.XForms
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Gets the model visual of the specified <see cref="XObject"/>.
-        /// </summary>
-        /// <param name="self"></param>
-        /// <returns></returns>
-        internal ModelElement GetModelItemModel(XObject self)
-        {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self.Document != null);
-            Contract.Ensures(Contract.Result<ModelElement>() != null);
-
-            return self.Document.Annotation<ModelElement>();
-        }
-
-        /// <summary>
-        /// Gets the instance visual of the specified <see cref="XObject"/>.
-        /// </summary>
-        /// <param name="self"></param>
-        /// <returns></returns>
-        internal InstanceElement GetModelItemInstance(XObject self)
-        {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self.Document != null);
-            Contract.Ensures(Contract.Result<InstanceElement>() != null);
-
-            return self.Document.Annotation<InstanceElement>();
-        }
-
-        /// <summary>
-        /// Clears the contents of the given instance data node.
-        /// </summary>
-        /// <param name="ec"></param>
-        /// <param name="item"></param>
-        internal void ClearModelItem(EvaluationContext ec, XObject item)
-        {
-            var mi = GetModelItem(item);
-            mi.Remove = true;
-
-            ec.Model.State.RecalculateFlag = true;
-        }
-
-        /// <summary>
-        /// Sets the value of the given instance data node.
-        /// </summary>
-        /// <param name="ec"></param>
-        /// <param name="item"></param>
-        /// <param name="newElement"></param>
-        internal void SetModelItemElement(EvaluationContext ec, XObject item, XElement newElement)
-        {
-            // register new value with model item
-            GetModelItem(item).NewElement = newElement;
-
-            // trigger recalculate event to collect new value
-            ec.Model.State.RecalculateFlag = true;
-            ec.Model.State.RevalidateFlag = true;
-            ec.Model.State.RefreshFlag = true;
-        }
-
-        /// <summary>
-        /// Sets the value of the given instance data node.
-        /// </summary>
-        /// <param name="ec"></param>
-        /// <param name="item"></param>
-        /// <param name="newValue"></param>
-        internal void SetModelItemValue(EvaluationContext ec, XObject item, string newValue)
-        {
-            var lastValue = GetModelItemValue(item);
-            if (lastValue == newValue)
-                return;
-
-            // register new value with model item
-            var mi = GetModelItem(item);
-            mi.NewValue = newValue ?? "";
-
-            // trigger recalculate event to collect new value
-            ec.Model.State.RecalculateFlag = true;
-            ec.Model.State.RevalidateFlag = true;
-            ec.Model.State.RefreshFlag = true;
-        }
-
-        /// <summary>
-        /// Gets the value of the given instance data node.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        internal string GetModelItemValue(XObject item)
-        {
-            // obtain any scheduled new value
-            var mi = GetModelItem(item);
-            if (mi.NewValue != null)
-                return mi.NewValue;
-
-            if (item is XElement)
-                return !((XElement)item).HasElements ? ((XElement)item).Value : null;
-            else if (item is XAttribute)
-                return ((XAttribute)item).Value;
-            else
-                throw new Exception();
-        }
-
-        /// <summary>
-        /// Returns the unique identifier of the given instance data node.
-        /// </summary>
-        /// <param name="ec"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        internal int GetModelItemId(EvaluationContext ec, XObject item)
-        {
-            var mi = GetModelItem(item);
-            if (mi.Id == null)
-                mi.Id = ec.Instance.GetState<InstanceElementState>().AllocateItemId();
-
-            return (int)mi.Id;
-        }
-
-        /// <summary>
-        /// Returns the unique identifier for the given instance data node.
-        /// </summary>
-        /// <param name="ec"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        internal string GetModelItemUniqueId(EvaluationContext ec, XObject item)
-        {
-            Contract.Requires<ArgumentNullException>(ec != null);
-            Contract.Requires<ArgumentNullException>(item != null);
-
-            return GetAttributeValue(ec.Instance.Xml, "id") + "$" + GetModelItemId(ec, item);
-        }
-
-        /// <summary>
-        /// Returns the type of the given instance data node.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        internal XName GetModelItemType(XObject item)
-        {
-            Contract.Requires<ArgumentNullException>(item != null);
-
-            return GetModelItem(item).Type ?? NXKit.XmlSchemaConstants.XMLSchema + "string";
-        }
-
-        /// <summary>
-        /// Returns whether or not the given instance data node is read-only.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        internal bool GetModelItemReadOnly(XObject item)
-        {
-            Contract.Requires<ArgumentNullException>(item != null);
-
-            return item.AncestorsAndSelf().Any(i => GetModelItem(i).ReadOnly ?? false);
-        }
-
-        /// <summary>
-        /// Returns whether or not the given instance data node is required.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        internal bool GetModelItemRequired(XObject item)
-        {
-            Contract.Requires<ArgumentNullException>(item != null);
-
-            return GetModelItem(item).Required ?? false;
-        }
-
-        /// <summary>
-        /// Returns whether or not the given model item is relevant.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        internal bool GetModelItemRelevant(XObject item)
-        {
-            Contract.Requires<ArgumentNullException>(item != null);
-
-            return item.AncestorsAndSelf().All(i => GetModelItem(i).Relevant ?? true);
-        }
-
-        /// <summary>
-        /// Returns the constraint model item property.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        internal bool GetModelItemConstraint(XObject item)
-        {
-            Contract.Requires<ArgumentNullException>(item != null);
-
-            return GetModelItem(item).Constraint ?? true;
-        }
-
-        /// <summary>
-        /// Returns whether or not the given instance data node is valid.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        internal bool GetModelItemValid(XObject item)
-        {
-            Contract.Requires<ArgumentNullException>(item != null);
-
-            return GetModelItem(item).Valid ?? true;
         }
 
         /// <summary>

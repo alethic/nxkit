@@ -12,7 +12,7 @@ namespace NXKit.XForms
     /// </summary>
     [Element("input")]
     public class Input :
-        SingleNodeBindingElement,
+        SingleNodeUIBindingElement,
         ISupportsUiCommonAttributes,
         ISupportsIncrementalAttribute
     {

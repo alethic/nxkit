@@ -68,19 +68,19 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="model"></param>
         /// <param name="instance"></param>
-        /// <param name="node"></param>
+        /// <param name="modelItem"></param>
         /// <param name="position"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        RepeatItemElement GetOrCreateItem(ModelElement model, InstanceElement instance, XObject node, int position, int size)
+        RepeatItemElement GetOrCreateItem(ModelElement model, InstanceElement instance, ModelItem modelItem, int position, int size)
         {
             // new context for child
-            var ec = new EvaluationContext(model, instance, node, position, size);
+            var ec = new EvaluationContext(model, instance, modelItem, position, size);
 
             // obtain or create child
-            var item = items.GetOrDefault(node);
+            var item = items.GetOrDefault(modelItem.Xml);
             if (item == null)
-                item = items[node] = new RepeatItemElement(Xml);
+                item = items[modelItem.Xml] = new RepeatItemElement(Xml);
 
             // ensure child is configured
             item.SetContext(ec);

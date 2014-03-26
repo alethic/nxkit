@@ -4,7 +4,7 @@ namespace NXKit.XForms
 
     [Element("textarea")]
     public class TextAreaElement :
-        SingleNodeBindingElement,
+        SingleNodeUIBindingElement,
         ISupportsUiCommonAttributes,
         ISupportsIncrementalAttribute
     {

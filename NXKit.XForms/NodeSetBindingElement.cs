@@ -7,7 +7,7 @@ namespace NXKit.XForms
     /// Abstract base <see cref="NXNode"/> implementation for node-set binding elements.
     /// </summary>
     public abstract class NodeSetBindingElement :
-        BindingElement
+        UIBindingElement
     {
 
         /// <summary>

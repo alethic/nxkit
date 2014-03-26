@@ -126,7 +126,7 @@
     <Compile Include="LayoutHelper.cs" />
     <Compile Include="Importance.cs" />
     <Compile Include="LayoutModule.cs" />
-    <Compile Include="PageElement.cs" />
+    <Compile Include="Page.cs" />
     <Compile Include="ParagraphElement.cs" />
     <Compile Include="SchemaPackage.cs" />
     <Compile Include="SectionElement.cs" />

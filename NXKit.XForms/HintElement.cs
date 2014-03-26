@@ -9,7 +9,7 @@ namespace NXKit.XForms
     /// </summary>
     [Element("hint")]
     public class HintElement : 
-        SingleNodeBindingElement,
+        SingleNodeUIBindingElement,
         ISupportsCommonAttributes
     {
         

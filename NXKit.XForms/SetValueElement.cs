@@ -7,7 +7,7 @@ namespace NXKit.XForms
 
     [Element("setvalue")]
     public class SetValueElement :
-        SingleNodeBindingElement,
+        SingleNodeUIBindingElement,
         IActionElement
     {
 
@@ -34,7 +34,7 @@ namespace NXKit.XForms
                 var valueAttr = Module.GetAttributeValue(Xml, "value");
                 if (valueAttr != null)
                 {
-                    var ec = new EvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.Context.Node, 1, 1);
+                    var ec = new EvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.Context.ModelItem, 1, 1);
                     valueBinding = new Binding(this, ec, valueAttr);
                 }
             }
@@ -72,13 +72,11 @@ namespace NXKit.XForms
             if (newValue == null)
                 newValue = "";
 
-            // set node value
-            Module.SetModelItemValue(Binding.Context, Binding.ModelItem, newValue);
-
             // instruct model to complete deferred update
-            Binding.Context.Model.State.RecalculateFlag = true;
-            Binding.Context.Model.State.RevalidateFlag = true;
-            Binding.Context.Model.State.RefreshFlag = true;
+            Binding.ModelItem.Value = newValue;
+            Binding.ModelItem.Model.State.RecalculateFlag = true;
+            Binding.ModelItem.Model.State.RevalidateFlag = true;
+            Binding.ModelItem.Model.State.RefreshFlag = true;
         }
 
     }

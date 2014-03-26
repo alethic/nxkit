@@ -14,3 +14,4 @@ obj
 /NXKit.Web.XForms.Layout/NXKit.XForms.Layout.d.ts
 /NXKit.Web.XForms.Layout/NXKit.XForms.Layout.js
 /NXKit.Web.XForms.Layout/NXKit.XForms.Layout.js.map
+*.js

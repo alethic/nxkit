@@ -6,7 +6,7 @@ namespace NXKit.XForms
 
     [Element("copy")]
     public class CopyElement :
-        SingleNodeBindingElement,
+        SingleNodeUIBindingElement,
         ISelectableNode
     {
 
@@ -24,48 +24,48 @@ namespace NXKit.XForms
         /// Implements the actions when selecting the item from a list control.
         /// </summary>
         /// <param name="visual"></param>
-        public void Select(SingleNodeBindingElement visual)
+        public void Select(SingleNodeUIBindingElement visual)
         {
             if (Binding == null ||
                 Binding.ModelItem == null ||
                 visual.Binding == null ||
                 visual.Binding.ModelItem == null ||
-                !(Binding.ModelItem is XElement) ||
-                !(visual.Binding.ModelItem is XElement))
+                !(Binding.ModelItem.Xml is XElement) ||
+                !(visual.Binding.ModelItem.Xml is XElement))
             {
                 DispatchEvent<BindingExceptionEvent>();
                 return;
             }
 
-            visual.Binding.SetValue((XElement)Binding.ModelItem);
+            visual.Binding.ModelItem.Contents = Binding.ModelItem.Contents;
         }
 
         /// <summary>
         /// Implements the actions when unselecting the item from a list control.
         /// </summary>
         /// <param name="visual"></param>
-        public void Deselect(SingleNodeBindingElement visual)
+        public void Deselect(SingleNodeUIBindingElement visual)
         {
             if (Binding == null ||
                 Binding.ModelItem == null ||
                 visual.Binding == null ||
                 visual.Binding.ModelItem == null ||
-                !(Binding.ModelItem is XElement) ||
-                !(visual.Binding.ModelItem is XElement))
+                !(Binding.ModelItem.Xml is XElement) ||
+                !(visual.Binding.ModelItem.Xml is XElement))
             {
                 DispatchEvent<BindingExceptionEvent>();
                 return;
             }
 
-            visual.Binding.ClearModelItem();
+            visual.Binding.ModelItem.Clear();
         }
 
         /// <summary>
-        /// Returns <c>true</c> if the <see cref="SingleNodeBindingElement"/> currently has this item selected.
+        /// Returns <c>true</c> if the <see cref="SingleNodeUIBindingElement"/> currently has this item selected.
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
-        public bool Selected(SingleNodeBindingElement visual)
+        public bool Selected(SingleNodeUIBindingElement visual)
         {
             if (visual.Binding == null ||
                 visual.Binding.ModelItem == null)
@@ -75,12 +75,12 @@ namespace NXKit.XForms
                 Binding.ModelItem == null)
                 return false;
 
-            if (!(Binding.ModelItem is XElement))
+            if (!(Binding.ModelItem.Xml is XElement))
                 return false;
 
             // our value matches the current value?
-            var currentNode = ((XElement)visual.Binding.ModelItem).Elements().FirstOrDefault();
-            var proposeNode = (XElement)Binding.ModelItem;
+            var currentNode = ((XElement)visual.Binding.ModelItem.Xml).Elements().FirstOrDefault();
+            var proposeNode = (XElement)Binding.ModelItem.Xml;
 
             if (!XNode.DeepEquals(currentNode, proposeNode))
                 return false;
@@ -98,11 +98,11 @@ namespace NXKit.XForms
                 Binding.ModelItem == null)
                 return 0;
 
-            if (!(Binding.ModelItem is XElement))
+            if (!(Binding.ModelItem.Xml is XElement))
                 return 0;
 
             // get deep hashcode of entire element tree
-            return new XNodeEqualityComparer().GetHashCode((XElement)Binding.ModelItem);
+            return new XNodeEqualityComparer().GetHashCode((XElement)Binding.ModelItem.Xml);
         }
 
     }

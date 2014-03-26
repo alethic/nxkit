@@ -1,9 +1,11 @@
 ﻿using System.Xml.XPath;
+using NXKit.XPath;
 
-namespace NXKit.XForms.XPathFunctions
+namespace NXKit.XForms.Functions
 {
 
-    internal class PositionFunction :
+    [XsltContextFunction("{http://www.w3.org/2002/xforms}position")]
+    public class PositionFunction :
         XPathFunction
     {
 

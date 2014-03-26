@@ -7,11 +7,11 @@
     public interface ISelectableNode
     {
 
-        void Select(SingleNodeBindingElement visual);
+        void Select(SingleNodeUIBindingElement visual);
 
-        void Deselect(SingleNodeBindingElement visual);
+        void Deselect(SingleNodeUIBindingElement visual);
 
-        bool Selected(SingleNodeBindingElement visual);
+        bool Selected(SingleNodeUIBindingElement visual);
 
         /// <summary>
         /// Gets a hash code that identifies the value of the selectable.

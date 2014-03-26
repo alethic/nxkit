@@ -2,10 +2,12 @@
 using System.Xml.XPath;
 
 using NXKit.Util;
+using NXKit.XPath;
 
-namespace NXKit.XForms.XPathFunctions
+namespace NXKit.XForms.Functions
 {
 
+    [XsltContextFunction("{http://www.w3.org/2002/xforms}instance")]
     public class InstanceFunction :
         XPathFunction
     {

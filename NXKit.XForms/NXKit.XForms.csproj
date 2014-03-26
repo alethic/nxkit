@@ -126,12 +126,16 @@
     <Compile Include="ISupportsCommonAttributes.cs" />
     <Compile Include="ISupportsIncrementalAttribute.cs" />
     <Compile Include="ISupportsUiCommonAttributes.cs" />
+    <Compile Include="ModelItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaPackage.cs" />
     <Compile Include="SupportsIncrementalAttributeExtensions.cs" />
     <Compile Include="SupportsCommonAttributesExtensions.cs" />
     <Compile Include="SupportsUiCommonAttributesExtensions.cs" />
     <Compile Include="ElementAttribute.cs" />
+    <Compile Include="UIBinding.cs" />
+    <Compile Include="UIBindingElement.cs" />
+    <Compile Include="UIBindingState.cs" />
     <Compile Include="XFormsEvents.cs" />
     <Compile Include="XFormsTypeDescriptionProvider.cs" />
     <Compile Include="XFormsXsltContext.cs" />
@@ -202,7 +206,7 @@
     <Compile Include="SelectElement.cs" />
     <Compile Include="SendElement.cs" />
     <Compile Include="SetValueElement.cs" />
-    <Compile Include="SingleNodeBindingElement.cs" />
+    <Compile Include="SingleNodeUIBindingElement.cs" />
     <Compile Include="SubmissionElement.cs" />
     <Compile Include="SubmitDoneEvent.cs" />
     <Compile Include="SubmitErrorEvent.cs" />
@@ -214,13 +218,13 @@
     <Compile Include="ValueElement.cs" />
     <Compile Include="VersionExceptionEvent.cs" />
     <Compile Include="XFormsElement.cs" />
-    <Compile Include="XPathFunctions\BooleanFromStringFunction.cs" />
-    <Compile Include="XPathFunctions\IfFunction.cs" />
-    <Compile Include="XPathFunctions\IndexFunction.cs" />
-    <Compile Include="XPathFunctions\InstanceFunction.cs" />
-    <Compile Include="XPathFunctions\MaxFunction.cs" />
-    <Compile Include="XPathFunctions\PositionFunction.cs" />
-    <Compile Include="XPathFunctions\XPathFunction.cs" />
+    <Compile Include="Functions\BooleanFromString.cs" />
+    <Compile Include="Functions\IfFunction.cs" />
+    <Compile Include="Functions\IndexFunction.cs" />
+    <Compile Include="Functions\InstanceFunction.cs" />
+    <Compile Include="Functions\MaxFunction.cs" />
+    <Compile Include="Functions\PositionFunction.cs" />
+    <Compile Include="Functions\XPathFunction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
@@ -234,6 +238,10 @@
     <ProjectReference Include="..\NXKit.Util\NXKit.Util.csproj">
       <Project>{1e5fae9e-f890-487b-bfcd-e3ed5c4f8d41}</Project>
       <Name>NXKit.Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XPath\NXKit.XPath.csproj">
+      <Project>{a91bc0e8-18cc-41f6-b00d-07e91b1593be}</Project>
+      <Name>NXKit.XPath</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>

@@ -3,7 +3,7 @@ namespace NXKit.XForms.Layout
 {
 
     [Element( "page")]
-    public class PageElement :
+    public class Page :
         Group
     {
         
@@ -11,7 +11,7 @@ namespace NXKit.XForms.Layout
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        public PageElement(XElement xml)
+        public Page(XElement xml)
             : base(xml)
         {
 

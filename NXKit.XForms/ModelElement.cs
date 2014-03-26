@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using NXKit.DOMEvents;
@@ -62,7 +63,7 @@ namespace NXKit.XForms
             {
                 // default context is only available once instances have been instantiated 
                 if (State != null && Instances.Any())
-                    return new EvaluationContext(this, Instances.First(), Instances.First().State.Document.Root, 1, 1);
+                    return new EvaluationContext(this, Instances.First(), new ModelItem(Module, Instances.First().State.Document.Root), 1, 1);
                 else
                     return null;
             }
@@ -107,7 +108,7 @@ namespace NXKit.XForms
 
             var elements = Document.Root
                 .Descendants(true)
-                .OfType<BindingElement>();
+                .OfType<UIBindingElement>();
 
             // refresh each bound control
             foreach (var element in elements)
@@ -185,25 +186,22 @@ namespace NXKit.XForms
                         .DescendantsAndSelf()
                         .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
                         .Where(i => i is XElement || i is XAttribute)
-                        .Select(i => new { Node = i, ModelItem = Module.GetModelItem(i) });
+                        .Select(i => new ModelItem(Module, i));
 
                     // for each model item underneath the instance
-                    foreach (var i in instanceModelItems)
+                    foreach (var modelItem in instanceModelItems)
                     {
-                        var node = i.Node;
-                        var modelItem = i.ModelItem;
-
-                        if (modelItem.Remove)
+                        if (modelItem.State.Clear)
                         {
-                            if (node is XElement)
-                                ((XElement)node).RemoveNodes();
-                            else if (node is XAttribute)
-                                ((XAttribute)node).SetValue("");
+                            if (modelItem.Xml is XElement)
+                                ((XElement)modelItem.Xml).RemoveNodes();
+                            else if (modelItem.Xml is XAttribute)
+                                ((XAttribute)modelItem.Xml).SetValue("");
                             else
-                                throw new Exception();
+                                throw new InvalidOperationException();
 
-                            modelItem.Remove = false;
-                            modelItem.DispatchValueChanged = true;
+                            modelItem.State.Clear = false;
+                            modelItem.State.DispatchValueChanged = true;
 
                             // prompt model to act
                             State.RevalidateFlag = true;
@@ -211,34 +209,34 @@ namespace NXKit.XForms
                         }
 
                         // model item contains a new value
-                        if (modelItem.NewElement != null)
+                        if (modelItem.State.NewContents != null)
                         {
-                            if (node is XElement)
-                                ((XElement)node).ReplaceAll(modelItem.NewElement);
-                            else if (node is XAttribute)
-                                ((XAttribute)node).SetValue(modelItem.NewElement.Value);
+                            if (modelItem.Xml is XElement)
+                                ((XElement)modelItem.Xml).ReplaceAll(modelItem.State.NewContents);
+                            else if (modelItem.Xml is XAttribute)
+                                ((XAttribute)modelItem.Xml).SetValue(modelItem.State.NewValue);
                             else
-                                throw new Exception();
+                                throw new InvalidOperationException();
 
-                            modelItem.NewElement = null;
-                            modelItem.DispatchValueChanged = true;
+                            modelItem.State.NewContents = null;
+                            modelItem.State.DispatchValueChanged = true;
 
                             // prompt model to act
                             State.RevalidateFlag = true;
                             State.RefreshFlag = true;
                         }
 
-                        if (modelItem.NewValue != null)
+                        if (modelItem.State.NewValue != null)
                         {
-                            if (node is XElement)
-                                ((XElement)node).SetValue(modelItem.NewValue);
-                            else if (node is XAttribute)
-                                ((XAttribute)node).SetValue(modelItem.NewValue);
+                            if (modelItem.Xml is XElement)
+                                ((XElement)modelItem.Xml).SetValue(modelItem.State.NewValue);
+                            else if (modelItem.Xml is XAttribute)
+                                ((XAttribute)modelItem.Xml).SetValue(modelItem.State.NewValue);
                             else
                                 throw new Exception();
 
-                            modelItem.NewValue = null;
-                            modelItem.DispatchValueChanged = true;
+                            modelItem.State.NewContents = null;
+                            modelItem.State.DispatchValueChanged = true;
 
                             // prompt model to act
                             State.RevalidateFlag = true;
@@ -266,16 +264,17 @@ namespace NXKit.XForms
 
                     for (int i = 0; i < bind.Binding.ModelItems.Length; i++)
                     {
-                        var node = bind.Binding.ModelItems[i];
-                        var modelItem = Module.GetModelItem(node);
+                        var modelItem = bind.Binding.ModelItems[i];
+                        var modelItemState = modelItem.State;
 
-                        var ec = new EvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, node, i + 1, bind.Binding.ModelItems.Length);
+                        var ec = new EvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, modelItem, i + 1, bind.Binding.ModelItems.Length);
                         var nc = new XFormsXsltContext(bind, ec);
 
                         // get existing values
-                        var oldReadOnly = Module.GetModelItemReadOnly(node);
-                        var oldRequired = Module.GetModelItemRequired(node);
-                        var oldRelevant = Module.GetModelItemRelevant(node);
+                        var oldReadOnly = modelItem.ReadOnly;
+                        var oldRequired = modelItem.Required;
+                        var oldRelevant = modelItem.Relevant;
+                        var oldValue = modelItem.Value;
 
                         if (typeAttr != null)
                         {
@@ -283,26 +282,7 @@ namespace NXKit.XForms
                             var st = typeAttr.Split(':');
                             var ns = st.Length == 2 ? nc.LookupNamespace(st[0]) : null;
                             var lp = st.Length == 2 ? st[1] : st[0];
-                            modelItem.Type = XName.Get(lp, ns);
-                        }
-
-                        // calculate before setting read-only, so read-only can be overridden
-                        if (calculateAttr != null)
-                        {
-                            // calculated nodes are readonly
-                            modelItem.ReadOnly = true;
-
-                            var calculateBinding = new Binding(bind, ec, calculateAttr);
-                            if (calculateBinding.Value != null)
-                            {
-                                var oldValue = Module.GetModelItemValue(node);
-                                if (oldValue != calculateBinding.Value)
-                                {
-                                    modelItem.NewValue = calculateBinding.Value;
-                                    modelItem.DispatchValueChanged = true;
-                                    State.RecalculateFlag = true;
-                                }
-                            }
+                            modelItemState.Type = XName.Get(lp, ns);
                         }
 
                         // recalculate read-only value
@@ -310,9 +290,9 @@ namespace NXKit.XForms
                         {
                             var obj = Module.EvaluateXPath(bind, ec, readonlyAttr, XPathResultType.Any);
                             if (obj is bool)
-                                modelItem.ReadOnly = (bool)obj;
+                                modelItemState.ReadOnly = (bool)obj;
                             else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
-                                modelItem.ReadOnly = bool.Parse((string)obj);
+                                modelItemState.ReadOnly = bool.Parse((string)obj);
                             else
                                 throw new Exception();
                         }
@@ -322,9 +302,9 @@ namespace NXKit.XForms
                         {
                             var obj = Module.EvaluateXPath(bind, ec, requiredAttr, XPathResultType.Any);
                             if (obj is bool)
-                                modelItem.Required = (bool)obj;
+                                modelItemState.Required = (bool)obj;
                             else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
-                                modelItem.Required = bool.Parse((string)obj);
+                                modelItemState.Required = bool.Parse((string)obj);
                         }
 
                         // recalculate relevant value
@@ -332,43 +312,52 @@ namespace NXKit.XForms
                         {
                             var obj = Module.EvaluateXPath(bind, ec, relevantAttr, XPathResultType.Any);
                             if (obj is bool)
-                                modelItem.Relevant = (bool)obj;
+                                modelItemState.Relevant = (bool)obj;
                             else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
-                                modelItem.Relevant = bool.Parse((string)obj);
+                                modelItemState.Relevant = bool.Parse((string)obj);
+                        }
+
+                        // calculate before setting read-only, so read-only can be overridden
+                        if (calculateAttr != null)
+                        {
+                            // calculated nodes are readonly
+                            modelItemState.ReadOnly = true;
+
+                            var calculateBinding = new Binding(bind, ec, calculateAttr);
+                            if (calculateBinding.Value != null)
+                                if (oldValue != calculateBinding.Value)
+                                    modelItem.Value = calculateBinding.Value;
                         }
 
                         if (constraintAttr != null)
                         {
                             var obj = Module.EvaluateXPath(bind, ec, constraintAttr, XPathResultType.Any);
                             if (obj is bool)
-                                modelItem.Constraint = (bool)obj;
+                                modelItemState.Constraint = (bool)obj;
                             else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
-                                modelItem.Constraint = bool.Parse((string)obj);
+                                modelItemState.Constraint = bool.Parse((string)obj);
                         }
 
                         // get new read-only value; raise event on change
-                        var readOnly = Module.GetModelItemReadOnly(node);
-                        if (readOnly != oldReadOnly)
-                            if (readOnly)
-                                modelItem.DispatchReadOnly = true;
+                        if (modelItem.ReadOnly != oldReadOnly)
+                            if (modelItem.ReadOnly)
+                                modelItemState.DispatchReadOnly = true;
                             else
-                                modelItem.DispatchReadWrite = true;
+                                modelItemState.DispatchReadWrite = true;
 
                         // get new required value; raise event on change
-                        var required = Module.GetModelItemRequired(node);
-                        if (required != oldRequired)
-                            if (required)
-                                modelItem.DispatchRequired = true;
+                        if (modelItem.Required != oldRequired)
+                            if (modelItem.Required)
+                                modelItemState.DispatchRequired = true;
                             else
-                                modelItem.DispatchOptional = true;
+                                modelItemState.DispatchOptional = true;
 
                         // get new relevant value; raise event on change
-                        var relevant = Module.GetModelItemRelevant(node);
-                        if (relevant != oldRelevant)
-                            if (relevant)
-                                modelItem.DispatchEnabled = true;
+                        if (modelItem.Relevant != oldRelevant)
+                            if (modelItem.Relevant)
+                                modelItemState.DispatchEnabled = true;
                             else
-                                modelItem.DispatchDisabled = true;
+                                modelItemState.DispatchDisabled = true;
                     }
                 }
             }
@@ -387,31 +376,21 @@ namespace NXKit.XForms
                 foreach (var instance in Instances)
                 {
                     // all model items
-                    var items = instance.State.Document.Root.DescendantNodesAndSelf()
+                    var modelItems = instance.State.Document.Root.DescendantNodesAndSelf()
                         .OfType<XElement>()
-                        .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i));
+                        .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
+                        .Select(i => new ModelItem(Module, i));
 
-                    foreach (var item in items)
+                    foreach (var modelItem in modelItems)
                     {
-                        var modelItem = Module.GetModelItem(item);
+                        var oldValid = modelItem.Valid;
 
-                        // get new relevant value; raise event on change
-                        var required = Module.GetModelItemRequired(item);
-                        var constraint = Module.GetModelItemConstraint(item);
-                        var value = Module.GetModelItemValue(item);
-                        var oldValid = Module.GetModelItemValid(item);
-
-                        // get new validity, raise on change
-                        var valid = (required ? value.TrimToNull() != null : true) && constraint;
-                        if (valid != oldValid)
-                        {
-                            modelItem.Valid = valid;
-
-                            if (valid)
-                                modelItem.DispatchValid = true;
+                        modelItem.State.Valid = (modelItem.Required ? modelItem.Value.TrimToNull() != null : true) && modelItem.Constraint;
+                        if (oldValid != modelItem.Valid)
+                            if (modelItem.Valid)
+                                modelItem.State.DispatchValid = true;
                             else
-                                modelItem.DispatchInvalid = true;
-                        }
+                                modelItem.State.DispatchInvalid = true;
                     }
                 }
             }
@@ -430,7 +409,7 @@ namespace NXKit.XForms
                 // resolve visuals whom are dependent on this model
                 var elements = Document.Root
                     .Descendants(true)
-                    .OfType<BindingElement>();
+                    .OfType<UIBindingElement>();
 
                 // for each visual, dispatch required events
                 foreach (var element in elements)
@@ -442,54 +421,46 @@ namespace NXKit.XForms
                     // refresh underlying data
                     element.Refresh();
 
-                    var singleNodeBindingVisual = element as SingleNodeBindingElement;
-                    if (singleNodeBindingVisual != null)
-                    {
-                        if (singleNodeBindingVisual.Binding == null)
-                            continue;
-
-                        var node = singleNodeBindingVisual.Binding.ModelItem;
-                        if (node == null)
-                            continue;
-
-                        var modelItem = Module.GetModelItem(node);
-
-                        // dispatch required events
-                        if (modelItem.DispatchValueChanged)
-                            target.DispatchEvent(new ValueChangedEvent(element).Event);
-                        if (modelItem.DispatchValid)
-                            target.DispatchEvent(new ValidEvent(element).Event);
-                        if (modelItem.DispatchInvalid)
-                            target.DispatchEvent(new InvalidEvent(element).Event);
-                        if (modelItem.DispatchEnabled)
-                            target.DispatchEvent(new EnabledEvent(element).Event);
-                        if (modelItem.DispatchDisabled)
-                            target.DispatchEvent(new DisabledEvent(element).Event);
-                        if (modelItem.DispatchOptional)
-                            target.DispatchEvent(new OptionalEvent(element).Event);
-                        if (modelItem.DispatchRequired)
-                            target.DispatchEvent(new RequiredEvent(element).Event);
-                        if (modelItem.DispatchReadOnly)
-                            target.DispatchEvent(new ReadOnlyEvent(element).Event);
-                        if (modelItem.DispatchReadWrite)
-                            target.DispatchEvent(new ReadWriteEvent(element).Event);
-
-                        // clear events
-                        modelItem.DispatchValueChanged = false;
-                        modelItem.DispatchValid = false;
-                        modelItem.DispatchInvalid = false;
-                        modelItem.DispatchEnabled = false;
-                        modelItem.DispatchDisabled = false;
-                        modelItem.DispatchOptional = false;
-                        modelItem.DispatchRequired = false;
-                        modelItem.DispatchReadOnly = false;
-                        modelItem.DispatchReadWrite = false;
-
+                    var modelItem = element.Binding != null ? element.Binding.ModelItem : null;
+                    if (modelItem == null)
                         continue;
-                    }
+
+                    // dispatch required events
+                    if (modelItem.State.DispatchValueChanged)
+                        target.DispatchEvent(new ValueChangedEvent(element).Event);
+                    if (modelItem.State.DispatchValid)
+                        target.DispatchEvent(new ValidEvent(element).Event);
+                    if (modelItem.State.DispatchInvalid)
+                        target.DispatchEvent(new InvalidEvent(element).Event);
+                    if (modelItem.State.DispatchEnabled)
+                        target.DispatchEvent(new EnabledEvent(element).Event);
+                    if (modelItem.State.DispatchDisabled)
+                        target.DispatchEvent(new DisabledEvent(element).Event);
+                    if (modelItem.State.DispatchOptional)
+                        target.DispatchEvent(new OptionalEvent(element).Event);
+                    if (modelItem.State.DispatchRequired)
+                        target.DispatchEvent(new RequiredEvent(element).Event);
+                    if (modelItem.State.DispatchReadOnly)
+                        target.DispatchEvent(new ReadOnlyEvent(element).Event);
+                    if (modelItem.State.DispatchReadWrite)
+                        target.DispatchEvent(new ReadWriteEvent(element).Event);
                 }
             }
             while (State.RefreshFlag);
+
+            // clear any notification events
+            foreach (var instance in Instances)
+            {
+                // all model items
+                var items = instance.State.Document.Root.DescendantNodesAndSelf()
+                    .OfType<XElement>()
+                    .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
+                    .Select(i => new ModelItem(Module, i));
+
+                // clear notifications
+                foreach (var item in items)
+                    item.State.Reset();
+            }
         }
 
         /// <summary>

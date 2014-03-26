@@ -40,11 +40,11 @@ namespace NXKit.XForms
                 return;
 
             // only element nodes allowed
-            if (Binding.ModelItems.Any(i => !(i is XElement)))
+            if (Binding.ModelItems.Any(i => !(i.Xml is XElement)))
                 throw new Exception();
 
             // ensure we have at least one node
-            var firstNode = (XElement)Binding.ModelItems[0];
+            var firstNode = Binding.ModelItem != null ? (XElement)Binding.ModelItem.Xml : null;
             if (firstNode == null)
                 return;
 
@@ -93,23 +93,16 @@ namespace NXKit.XForms
             int index;
 
             // current node
-            var curNode = (XElement)Binding.ModelItems[at - 1];
+            var curNode = (XElement)Binding.ModelItems[at - 1].Xml;
 
             // clone last node to create new node
-            var newNode = new XElement((XElement)Binding.ModelItems[Binding.ModelItems.Length - 1]).Elements().First();
+            var newNode = new XElement((XElement)Binding.ModelItems[Binding.ModelItems.Length - 1].Xml).Elements().First();
 
             foreach (var i in curNode.Descendants().Zip(newNode.Descendants(), (a, b) => new { A = a, B = b }))
             {
-                var miA = Module.GetModelItem(i.A);
-                var miB = Module.GetModelItem(i.B);
-
-                miB.Type = miA.Type;
-                miB.Relevant = miA.Relevant;
-                miB.ReadOnly = miA.ReadOnly;
-                miB.Required = miA.Required;
-                miB.Remove = false;
-                miB.NewElement = null;
-                miB.NewValue = null;
+                var miA = new ModelItem(Module, i.A);
+                var miB = new ModelItem(Module, i.B);
+                miB.Apply(miA);
             }
 
             if (positionAttr == "before")
@@ -137,7 +130,7 @@ namespace NXKit.XForms
                 .OfType<NodeSetBindingElement>()
                 .Where(i => i.Binding != null)
                 .Where(i => i.Binding.ModelItems != null)
-                .Where(i => i.Binding.ModelItems.Any(j => j.Parent == parent));
+                .Where(i => i.Binding.ModelItems.Any(j => j.Xml.Parent == parent));
 
             foreach (var nodeSetVisual in nodeSetVisuals)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.IO;
@@ -37,7 +38,10 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(uri != null);
             Contract.Requires<ArgumentNullException>(configuration != null);
 
-            return new NXDocument(new DefaultResolver(), uri, configuration);
+            return new NXDocument(
+                CompositionUtil.CreateContainer(),
+                uri,
+                configuration);
         }
 
         /// <summary>
@@ -64,7 +68,9 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(configuration != null);
 
             return new NXDocument(
-                new SingleUriResolver("document.xml", () => document),
+                CompositionUtil.CreateContainer()
+                    .WithExport<IResolver>(
+                        new SingleUriResolver("document.xml", () => document)),
                 new Uri("document.xml", UriKind.Relative),
                 configuration);
         }
@@ -109,7 +115,7 @@ namespace NXKit
 
         readonly LinkedList<object> storage = new LinkedList<object>();
         readonly NXDocumentConfiguration configuration;
-        readonly IResolver resolver;
+        readonly CompositionContainer container;
         readonly Uri uri;
         readonly NodeStateCollection nodeState;
         int nextElementId;
@@ -121,7 +127,7 @@ namespace NXKit
         void ObjectInvariant()
         {
             Contract.Invariant(configuration != null);
-            Contract.Invariant(resolver != null);
+            Contract.Invariant(container != null);
             Contract.Invariant(nodeState != null);
             Contract.Invariant(nextElementId >= 0);
         }
@@ -129,27 +135,27 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="resolver"></param>
+        /// <param name="container"></param>
         /// <param name="uri"></param>
-        public NXDocument(IResolver resolver, Uri uri)
-            : this(resolver, uri, CreateDefaultConfiguration())
+        public NXDocument(CompositionContainer container, Uri uri)
+            : this(container, uri, CreateDefaultConfiguration())
         {
-            Contract.Requires<ArgumentNullException>(resolver != null);
+            Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(uri != null);
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="resolver"></param>
+        /// <param name="container"></param>
         /// <param name="uri"></param>
         /// <param name="configuration"></param>
         /// <param name="nextElementId"></param>
         /// <param name="visualState"></param>
-        public NXDocument(IResolver resolver, Uri uri, NXDocumentConfiguration configuration)
+        public NXDocument(CompositionContainer container, Uri uri, NXDocumentConfiguration configuration)
             : base()
         {
-            Contract.Requires<ArgumentNullException>(resolver != null);
+            Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(uri != null);
             Contract.Requires<ArgumentNullException>(configuration != null);
 
@@ -158,11 +164,11 @@ namespace NXKit
             this.nodeState = new NodeStateCollection();
 
             // resolve uri
-            var stream = resolver.Get(uri);
+            var stream = container.GetExportedValue<IResolver>().Get(uri);
             if (stream == null)
                 throw new FileNotFoundException("Could not resolve specified Uri.");
 
-            this.resolver = resolver;
+            this.container = container;
             this.uri = uri;
             this.Xml = XDocument.Load(stream);
 
@@ -172,28 +178,28 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="resolver"></param>
+        /// <param name="container"></param>
         /// <param name="state"></param>
-        public NXDocument(IResolver resolver, NXDocumentState state)
-            : this(resolver, state.Uri, state.Configuration, state.Xml, state.NextElementId, state.NodeState)
+        public NXDocument(CompositionContainer container, NXDocumentState state)
+            : this(container, state.Uri, state.Configuration, state.Xml, state.NextElementId, state.NodeState)
         {
-            Contract.Requires<ArgumentNullException>(resolver != null);
+            Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(state != null);
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="resolver"></param>
+        /// <param name="container"></param>
         /// <param name="uri"></param>
         /// <param name="configuration"></param>
         /// <param name="xml"></param>
         /// <param name="nextElementId"></param>
         /// <param name="visualState"></param>
-        NXDocument(IResolver resolver, Uri uri, NXDocumentConfiguration configuration, string xml, int nextElementId, NodeStateCollection visualState)
+        NXDocument(CompositionContainer container, Uri uri, NXDocumentConfiguration configuration, string xml, int nextElementId, NodeStateCollection visualState)
             : base()
         {
-            Contract.Requires<ArgumentNullException>(resolver != null);
+            Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(uri != null);
             Contract.Requires<ArgumentNullException>(configuration != null);
             Contract.Requires<ArgumentNullException>(xml != null);
@@ -204,7 +210,7 @@ namespace NXKit
             this.nextElementId = nextElementId;
             this.nodeState = visualState;
 
-            this.resolver = resolver;
+            this.container = container;
             this.uri = uri;
             this.Xml = XDocument.Parse(xml);
 
@@ -258,6 +264,14 @@ namespace NXKit
             get { return configuration; }
         }
 
+        /// <summary>
+        /// Gets the <see cref="IServiceProvider"/> used to resolve services.
+        /// </summary>
+        public CompositionContainer Container
+        {
+            get { return container; }
+        }
+
         public override NXDocument Document
         {
             get { return this; }
@@ -270,14 +284,6 @@ namespace NXKit
         {
             get { return (XDocument)base.Xml; }
             internal set { base.Xml = value; }
-        }
-
-        /// <summary>
-        /// Gets a reference to the <see cref="IResolver"/> which is used to save or load external resources.
-        /// </summary>
-        public IResolver Resolver
-        {
-            get { return resolver; }
         }
 
         /// <summary>

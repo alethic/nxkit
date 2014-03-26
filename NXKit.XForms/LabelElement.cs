@@ -10,7 +10,7 @@ namespace NXKit.XForms
     /// </summary>
     [Element("label")]
     public class LabelElement :
-        SingleNodeBindingElement,
+        SingleNodeUIBindingElement,
         ISupportsCommonAttributes
     {
 

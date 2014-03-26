@@ -5,7 +5,7 @@ namespace NXKit.XForms
 
     [Element("group")]
     public class Group :
-        SingleNodeBindingElement,
+        SingleNodeUIBindingElement,
         ISupportsUiCommonAttributes,
         IRelevancyScope
     {
@@ -17,10 +17,8 @@ namespace NXKit.XForms
             : base()
         {
 
-
-
         }
-        
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -28,8 +26,6 @@ namespace NXKit.XForms
         public Group(XElement xml)
             : base(xml)
         {
-
-
 
         }
 

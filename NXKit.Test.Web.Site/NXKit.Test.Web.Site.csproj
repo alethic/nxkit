@@ -1351,6 +1351,18 @@
       <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
       <Name>NXKit.XForms</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NXKit.XmlEvents\NXKit.XmlEvents.csproj">
+      <Project>{db71b395-df60-470a-b761-b083d7acafe8}</Project>
+      <Name>NXKit.XmlEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XPath2\NXKit.XPath2.csproj">
+      <Project>{4fc0495c-b8e7-407a-9505-fba9e973ba4c}</Project>
+      <Name>NXKit.XPath2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XPath\NXKit.XPath.csproj">
+      <Project>{a91bc0e8-18cc-41f6-b00d-07e91b1593be}</Project>
+      <Name>NXKit.XPath</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
       <Name>NXKit</Name>

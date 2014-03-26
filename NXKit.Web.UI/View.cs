@@ -156,7 +156,10 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            document = new NXDocument(new ResourceResolver(this), uri);
+            document = new NXDocument(
+                CompositionUtil.CreateContainer()
+                    .WithExport<IResolver>(new ResourceResolver(this)),
+                uri);
             document.Invoke();
         }
 
@@ -182,7 +185,11 @@ namespace NXKit.Web.UI
             Contract.Requires<ArgumentNullException>(configuration != null);
 
             // construct a engine instance
-            document = new NXDocument(new ResourceResolver(this), uri, configuration);
+            document = new NXDocument(
+                CompositionUtil.CreateContainer()
+                    .WithExport<IResolver>(new ResourceResolver(this)),
+                uri, 
+                configuration);
             document.Invoke();
         }
 
@@ -343,7 +350,10 @@ namespace NXKit.Web.UI
                 if (state == null)
                     throw new NullReferenceException();
 
-                document = new NXDocument(new ResourceResolver(this), state);
+                document = new NXDocument(
+                    CompositionUtil.CreateContainer()
+                        .WithExport<IResolver>(new ResourceResolver(this)),
+                    state);
                 document.Invoke();
             }
         }

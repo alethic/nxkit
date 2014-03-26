@@ -7,7 +7,7 @@ namespace NXKit.XForms
 
     [Element("message")]
     public class MessageElement : 
-        SingleNodeBindingElement, 
+        SingleNodeUIBindingElement, 
         IActionElement
     {
 

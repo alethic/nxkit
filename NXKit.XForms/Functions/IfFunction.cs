@@ -1,9 +1,12 @@
 ﻿using System.Xml.XPath;
+using NXKit.XPath;
 
-namespace NXKit.XForms.XPathFunctions
+namespace NXKit.XForms.Functions
 {
 
-    internal class IfFunction : XPathFunction
+    [XsltContextFunction("{http://www.w3.org/2002/xforms}if")]
+    public class IfFunction :
+        XPathFunction
     {
 
         public override XPathResultType[] ArgTypes

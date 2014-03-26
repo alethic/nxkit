@@ -7,7 +7,7 @@ namespace NXKit.XForms
 
     [Element("alert")]
     public class AlertElement :
-        SingleNodeBindingElement
+        SingleNodeUIBindingElement
     {
 
         /// <summary>
