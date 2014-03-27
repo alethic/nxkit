@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Linq;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -31,6 +32,13 @@ namespace NXKit.XForms
         protected override void CreateNodes()
         {
 
+        }
+
+        protected override void OnAdded(NXObjectEventArgs args)
+        {
+            base.OnAdded(args);
+
+            State.Initialize(this.Ancestors().OfType<ModelElement>().First(), this);
         }
 
     }

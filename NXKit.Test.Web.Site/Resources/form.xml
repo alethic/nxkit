@@ -31,7 +31,14 @@
                  type="xsd:date"/>
       <xf:bind nodeset="xf:instance('primaryperson')/socialsecuritynumber"
                required="true()"
-               constraint="matches(., '\d{3}-\d{2}-\d{4}')"/>
+               constraint="matches(., '^(\d{3}-\d{2}-\d{4})|(\d{9})$')"/>
+      <xf:bind nodeset="xf:instance('primaryperson')/telephone1"
+               required="true()"
+               constraint="string-length()>=10"/>
+        
+      <xf:bind nodeset="xf:instance('primaryperson')/telephone2"
+               required="false()"
+               constraint=".='' or string-length()>=10" />
 
         <xf:instance id="secondaryperson"
                      src="secondaryperson.xml" />
@@ -59,7 +66,7 @@
                      src="questions.xml" />
         <xf:bind nodeset="xf:instance('primaryquestions')//healthinfo"
                  relevant="../answer='true' and ./@enable='true'" />
-        <xf:bind nodeset="xf:instance('primaryquestions')//healthinfo/*"
+        <xf:bind nodeset="xf:instance('primaryquestions')/question/healthinfo/*"
                  type="xsd:string" />
 
         <xf:instance id="secondaryquestions"
@@ -197,7 +204,6 @@
                         </xf:item>
                     </xf:select1>
                     <xf:group ref="healthinfo">
-                        <xf:label>Health Questions</xf:label>
                         <xf:input ref="condition">
                             <xf:label>Condition</xf:label>
                         </xf:input>
@@ -213,7 +219,7 @@
                         <xf:input ref="physicianaddress">
                             <xf:label>Physician Address</xf:label>
                         </xf:input>
-                        <xf:input ref="physiciantelephone">
+                        <xf:input ref="physicianphonenumber">
                             <xf:label>Physician Phone Number</xf:label>
                         </xf:input>
                     </xf:group>
@@ -327,7 +333,7 @@
                         <xf:input ref="physicianaddress">
                             <xf:label>Physician Address</xf:label>
                         </xf:input>
-                        <xf:input ref="physiciantelephone">
+                        <xf:input ref="physicianphonenumber">
                             <xf:label>Physician Phone Number</xf:label>
                         </xf:input>
                     </xf:group>

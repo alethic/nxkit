@@ -9,7 +9,8 @@ namespace NXKit.XForms
     [Element("itemset")]
     public class ItemSetElement :
         NodeSetBindingElement,
-        INamingScope
+        INamingScope,
+        IUIRefreshable
     {
 
         readonly Dictionary<XObject, ItemSetItemElement> items =
@@ -61,6 +62,11 @@ namespace NXKit.XForms
             item.SetContext(ec);
 
             return item;
+        }
+
+        public void Refresh()
+        {
+            CreateNodes();
         }
 
     }

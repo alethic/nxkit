@@ -16,14 +16,14 @@ namespace NXKit
         ISerializable
     {
 
-        readonly Dictionary<string, Dictionary<Type, object>> store;
+        readonly Dictionary<string, LinkedList<object>> store;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public NodeStateCollection()
         {
-            this.store = new Dictionary<string, Dictionary<Type, object>>();
+            this.store = new Dictionary<string, LinkedList<object>>();
         }
 
         /// <summary>
@@ -37,44 +37,24 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(info != null);
 
             foreach (var kvp in info)
-                store.Add(kvp.Name, (Dictionary<Type, object>)kvp.Value);
+                store.Add(kvp.Name, (LinkedList<object>)kvp.Value);
         }
 
         /// <summary>
         /// Gets the state object of the specified type for the specified <see cref="NXNode"/>.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="element"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        object Get(NXElement visual, Type type, Func<object> getDefaultValue)
+        public LinkedList<object> Get(NXElement element)
         {
-            Contract.Requires<ArgumentNullException>(visual != null);
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(getDefaultValue != null);
+            Contract.Requires<ArgumentNullException>(element != null);
 
-            var visualStore = store.GetOrDefault(visual.UniqueId);
+            var visualStore = store.GetOrDefault(element.UniqueId);
             if (visualStore == null)
-                visualStore = store[visual.UniqueId] = new Dictionary<Type, object>();
+                visualStore = store[element.UniqueId] = new LinkedList<object>();
 
-            var value = visualStore.GetOrDefault(type);
-            if (value == null)
-                value = visualStore[type] = getDefaultValue();
-
-            return value;
-        }
-
-        /// <summary>
-        /// Gets the state object of type <typeparamref name="T"/> for <paramref name="visual"/>.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="visual"></param>
-        /// <returns></returns>
-        public T Get<T>(NXElement visual)
-            where T : class,new()
-        {
-            Contract.Requires<ArgumentNullException>(visual != null);
-
-            return (T)Get(visual, typeof(T), () => new T());
+            return visualStore;
         }
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)

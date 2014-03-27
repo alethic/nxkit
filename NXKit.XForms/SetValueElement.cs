@@ -11,33 +11,14 @@ namespace NXKit.XForms
         IActionElement
     {
 
-        Binding valueBinding;
-
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="element"></param>
-        public SetValueElement(XElement element)
-            : base(element)
+        /// <param name="xml"></param>
+        public SetValueElement(XElement xml)
+            : base(xml)
         {
 
-        }
-
-        public override void Refresh()
-        {
-            base.Refresh();
-
-            // reset value binding
-            valueBinding = null;
-            if (Binding != null)
-            {
-                var valueAttr = Module.GetAttributeValue(Xml, "value");
-                if (valueAttr != null)
-                {
-                    var ec = new EvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.Context.ModelItem, 1, 1);
-                    valueBinding = new Binding(this, ec, valueAttr);
-                }
-            }
         }
 
         public void Handle(Event ev)
@@ -47,8 +28,14 @@ namespace NXKit.XForms
 
         public void Invoke()
         {
-            // ensure values are up to date
-            Refresh();
+            Binding valueBinding = null;
+
+            if (Binding != null)
+            {
+                var valueAttr = Module.GetAttributeValue(Xml, "value");
+                if (valueAttr != null)
+                    valueBinding = new Binding(this, new EvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.Context.ModelItem, 1, 1), valueAttr);
+            }
 
             if (Binding == null ||
                 Binding.ModelItem == null)

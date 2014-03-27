@@ -9,7 +9,7 @@
 
         <!-- ko with: Label -->
         <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <h2 class="ui header"
+        <header class="ui header"
             data-bind="nxkit_template: $data" />
         <!-- /ko -->
         <!-- /ko -->
@@ -105,7 +105,7 @@
          data-bind="
 nxkit_visible: Relevant,
 css: {
-    error: !$data.Valid,
+    error: !$data.Valid(),
     disabled: $data.ReadOnly,
 }">
 
@@ -139,7 +139,7 @@ css: {
          data-bind="
 nxkit_visible: Relevant,
 css: {
-    error: !$data.Valid,
+    error: !$data.Valid(),
     disabled: $data.ReadOnly,
 }">
 
@@ -276,7 +276,7 @@ css: {
         <div class="field" data-bind="
 nxkit_visible: Relevant,
 css: {
-    error: !$data.Valid,
+    error: !$data.Valid(),
     disabled: $data.ReadOnly,
 }">
 
@@ -294,7 +294,7 @@ css: {
         <div class="field" data-bind="
 nxkit_visible: Relevant,
 css: {
-    error: !$data.Valid,
+    error: !$data.Valid(),
     disabled: $data.Readonly,
 }">
 
@@ -323,7 +323,7 @@ css: {
 
         <!-- ko with: Label -->
         <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <div class="ui top attached header"
+        <header class="ui top attached tiny header"
              data-bind="nxkit_template: $data" />
         <!-- /ko -->
         <!-- /ko -->

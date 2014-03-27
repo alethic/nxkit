@@ -11,18 +11,28 @@ namespace NXKit.XForms
 
     [Element("submission")]
     public class SubmissionElement :
-        SingleNodeUIBindingElement,
+        BindingElement,
         IEventDefaultActionHandler
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="element"></param>
-        public SubmissionElement(XElement element)
-            : base(element)
+        /// <param name="xml"></param>
+        public SubmissionElement(XElement xml)
+            : base(xml)
         {
 
+        }
+
+        protected override EvaluationContext CreateEvaluationContext()
+        {
+            return null;
+        }
+
+        protected override Binding CreateBinding()
+        {
+            return Module.ResolveSingleNodeBinding(this);
         }
 
         void IEventDefaultActionHandler.DefaultAction(Event evt)

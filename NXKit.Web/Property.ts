@@ -47,16 +47,7 @@ module NXKit.Web {
 
             self._valueAsBoolean = ko.computed({
                 read: function () {
-                    return self._value() === true || self._value() == 'true' || self._value() == 'True';
-                },
-                write: function (value: boolean) {
-                    self._value(value === true ? "true" : "false");
-                },
-            });
-
-            self._valueAsBoolean = ko.computed({
-                read: function () {
-                    return self._value() === true || self._value() == 'true' || self._value() == 'True';
+                    return self._value() === true || self._value() === 'true' || self._value() === 'True';
                 },
                 write: function (value: boolean) {
                     self._value(value === true ? "true" : "false");

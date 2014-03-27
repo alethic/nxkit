@@ -10,7 +10,8 @@ namespace NXKit.XForms
     [Element("repeat")]
     public class RepeatElement :
         NodeSetBindingElement,
-        INamingScope
+        INamingScope,
+        IUIRefreshable
     {
 
         int nextId;
@@ -147,9 +148,9 @@ namespace NXKit.XForms
             }
         }
 
-        public override void Refresh()
+        public void Refresh()
         {
-            base.Refresh();
+            Binding.Refresh();
 
             // ensure index value is within range
             if (Index < 0)
@@ -167,6 +168,16 @@ namespace NXKit.XForms
 
             // rebuild node tree
             CreateNodes();
+
+            // refresh children
+            foreach (var node in this.Descendants().Select(i => i.Interface<IUIBindingNode>()))
+                if (node != null)
+                    node.UIBinding.Refresh();
+
+            // refresh children
+            foreach (var node in this.Descendants().Select(i => i.Interface<IUIRefreshable>()))
+                if (node != null)
+                    node.Refresh();
         }
 
     }

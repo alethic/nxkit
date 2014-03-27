@@ -40,20 +40,20 @@ namespace NXKit.DOMEvents
 
         }
 
-        readonly NXNode node;
+        readonly NXElement node;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="node"></param>
-        public EventTarget(NXNode node)
+        public EventTarget(NXElement node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
             this.node = node;
         }
 
-        public NXNode Node
+        public NXElement Node
         {
             get { return node; }
         }
@@ -113,11 +113,13 @@ namespace NXKit.DOMEvents
             evt.Target = target;
 
             // path to root from root
-            var path = node.Ancestors().ToList();
+            var path = node.Ancestors()
+                .OfType<NXElement>()
+                .ToList();
 
             // capture phase
             evt.EventPhase = EventPhase.Capturing;
-            foreach (var visual_ in path.Reverse<NXNode>())
+            foreach (var visual_ in path.Reverse<NXElement>())
             {
                 HandleEventOnNode(visual_, evt, true);
 
@@ -160,7 +162,7 @@ namespace NXKit.DOMEvents
         /// <param name="node"></param>
         /// <param name="evt"></param>
         /// <param name="useCapture"></param>
-        void HandleEventOnNode(NXNode node, Event evt, bool useCapture)
+        void HandleEventOnNode(NXElement node, Event evt, bool useCapture)
         {
             evt.CurrentTarget = node.Interface<IEventTarget>();
 

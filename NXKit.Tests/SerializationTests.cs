@@ -34,24 +34,24 @@ namespace NXKit.Tests
 
         }
 
-        [TestMethod]
-        public void Test_VisualStateCollection_roundtrip()
-        {
-            var v = new TestVisual();
-            var c = new NodeStateCollection();
-            var s = c.Get<TestVisualState>(v);
-            s.Value = "Value1";
+        //[TestMethod]
+        //public void Test_VisualStateCollection_roundtrip()
+        //{
+        //    var v = new TestVisual();
+        //    var c = new NodeStateCollection();
+        //    var s = c.Get<TestVisualState>(v);
+        //    s.Value = "Value1";
 
-            var f = new BinaryFormatter();
-            var m = new MemoryStream();
-            f.Serialize(m, c);
+        //    var f = new BinaryFormatter();
+        //    var m = new MemoryStream();
+        //    f.Serialize(m, c);
 
-            m.Position = 0;
+        //    m.Position = 0;
 
-            var c2 = (NodeStateCollection)f.Deserialize(m);
+        //    var c2 = (NodeStateCollection)f.Deserialize(m);
 
-            Assert.AreEqual("Value1", c2.Get<TestVisualState>(v).Value);
-        }
+        //    Assert.AreEqual("Value1", c2.Get<TestVisualState>(v).Value);
+        //}
 
         [TestMethod]
         public void Test_NXDocument_roundtrip()

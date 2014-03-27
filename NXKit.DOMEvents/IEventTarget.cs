@@ -7,7 +7,7 @@
         /// <summary>
         /// Gets the underlying <see cref="NXNode"/> that this interface is provided for.
         /// </summary>
-        NXNode Node { get; }
+        NXElement Node { get; }
 
         void AddEventListener(string type, IEventListener listener, bool useCapture);
 

@@ -14,7 +14,7 @@ namespace NXKit.XForms
     public class UIBinding
     {
 
-        readonly NXNode node;
+        readonly NXElement node;
         readonly Binding binding;
         ModelItem modelItem;
         UIBindingState state;
@@ -23,7 +23,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="node"></param>
-        internal UIBinding(NXNode node)
+        internal UIBinding(NXElement node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
@@ -34,7 +34,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="node"></param>
-        internal UIBinding(NXNode node, ModelItem modelItem)
+        internal UIBinding(NXElement node, ModelItem modelItem)
             : this(node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
@@ -47,7 +47,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="node"></param>
         /// <param name="binding"></param>
-        internal UIBinding(NXNode node, Binding binding)
+        internal UIBinding(NXElement node, Binding binding)
             : this(node, binding.ModelItem)
         {
             Contract.Requires<ArgumentNullException>(node != null);
@@ -99,7 +99,22 @@ namespace NXKit.XForms
         /// </summary>
         public bool Relevant
         {
-            get { return !State.Relevant ? false : node.Ancestors().OfType<UIBindingElement>().Select(i => i.UIBinding.Relevant).FirstOrDefault(); }
+            get { return GetRelevant(); }
+        }
+
+        bool GetRelevant()
+        {
+            if (State.Relevant == false)
+                return false;
+
+            var next = node.Ancestors()
+                .Select(i => i.Interface<IUIBindingNode>())
+                .Where(i => i != null)
+                .FirstOrDefault();
+            if (next != null)
+                return next.UIBinding.Relevant;
+
+            return true;
         }
 
         /// <summary>
@@ -141,8 +156,6 @@ namespace NXKit.XForms
         {
             if (binding != null)
             {
-                Module.ResolveBindingEvaluationContext(node);
-
                 binding.Refresh();
 
                 if (modelItem != binding.ModelItem)

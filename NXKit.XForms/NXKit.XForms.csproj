@@ -126,6 +126,7 @@
     <Compile Include="ISupportsIncrementalAttribute.cs" />
     <Compile Include="ISupportsUiCommonAttributes.cs" />
     <Compile Include="IUIBindingNode.cs" />
+    <Compile Include="IUIRefreshable.cs" />
     <Compile Include="ModelItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaPackage.cs" />

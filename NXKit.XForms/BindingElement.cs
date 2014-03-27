@@ -39,22 +39,7 @@ namespace NXKit.XForms
         /// </summary>
         public EvaluationContext Context
         {
-            get { return GetEvaluationContext(); }
-        }
-
-        /// <summary>
-        /// Implements the getter for Context.
-        /// </summary>
-        /// <returns></returns>
-        EvaluationContext GetEvaluationContext()
-        {
-            if (!evaluationContextCached)
-            {
-                evaluationContext = CreateEvaluationContext();
-                evaluationContextCached = true;
-            }
-
-            return evaluationContext;
+            get { return CreateEvaluationContext(); }
         }
 
         /// <summary>
@@ -75,18 +60,6 @@ namespace NXKit.XForms
         public Binding Binding
         {
             get { return binding ?? (binding = CreateBinding()); }
-        }
-
-        /// <summary>
-        /// Refreshes the visual from the underlying data.
-        /// </summary>
-        public virtual void Refresh()
-        {
-            evaluationContext = null;
-            evaluationContextCached = false;
-
-            if (binding != null)
-                binding.Refresh();
         }
 
     }

@@ -27,9 +27,6 @@ namespace NXKit.XForms
 
         public void Invoke()
         {
-            // ensure values are up to date
-            Refresh();
-
 
         }
 

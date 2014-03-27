@@ -15,6 +15,10 @@
 
     <style type="text/css">
 
+        html, body {
+            font-size: 15px;
+        }
+
         .ui.checkbox label {
             margin-bottom: 16px !important;
         }

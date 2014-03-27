@@ -73,19 +73,6 @@ namespace NXKit.XForms
             return visual.Binding.Value == GetNewValue();
         }
 
-        public override void Refresh()
-        {
-            base.Refresh();
-
-            if (Binding != null &&
-                Binding.Value == null)
-            {
-                // binding, if it exists, must point to a value node
-                // DispatchEvent<XFormsBindingExceptionEvent>();
-                return;
-            }
-        }
-
         public int GetValueHashCode()
         {
             if (Binding != null &&

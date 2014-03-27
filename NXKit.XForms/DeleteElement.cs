@@ -31,9 +31,6 @@ namespace NXKit.XForms
 
         public void Invoke()
         {
-            // ensure values are up to date
-            Refresh();
-
             // only element nodes allowed
             if (Binding.ModelItems.Any(i => !(i is XElement)))
                 throw new Exception();
@@ -83,13 +80,13 @@ namespace NXKit.XForms
             // current node
             var curNode = Binding.ModelItems[at - 1].Xml;
 
-            // set of dependent visuals
-            var dependentVisualsState = Module.Document.Root
-                .Descendants(true)
-                .OfType<NodeSetBindingElement>()
-                .Where(i => i.Binding != null && i.Binding.ModelItems != null && i.Binding.ModelItems.Any(j => j.Xml.Parent == parent))
-                .Select(i => new { Visual = i, BoundNodes = i.Binding.ModelItems })
-                .ToList();
+            //// set of dependent visuals
+            //var dependentVisualsState = Module.Document.Root
+            //    .Descendants(true)
+            //    .OfType<NodeSetBindingElement>()
+            //    .Where(i => i.Binding != null && i.Binding.ModelItems != null && i.Binding.ModelItems.Any(j => j.Xml.Parent == parent))
+            //    .Select(i => new { Visual = i, BoundNodes = i.Binding.ModelItems })
+            //    .ToList();
 
             // remove node from instance data
             if (curNode is XElement)
@@ -99,47 +96,47 @@ namespace NXKit.XForms
             else
                 throw new Exception();
 
-            foreach (var dependentVisualState in dependentVisualsState)
-            {
-                // if visual is a repeat element, resposition it to the new index
-                var repeatVisual = dependentVisualState.Visual as RepeatElement;
-                if (repeatVisual != null)
-                {
-                    // index of deleted item
-                    var deleteIndex = dependentVisualState.BoundNodes
-                        .Select((i, j) => new { Index = j + 1, ModelItem = i })
-                        .Where(i => i.ModelItem.Xml == curNode)
-                        .Select(i => (int?)i.Index)
-                        .FirstOrDefault();
-                    if (deleteIndex == null)
-                        continue;
+            //foreach (var dependentVisualState in dependentVisualsState)
+            //{
+            //    // if visual is a repeat element, resposition it to the new index
+            //    var repeatVisual = dependentVisualState.Visual as RepeatElement;
+            //    if (repeatVisual != null)
+            //    {
+            //        // index of deleted item
+            //        var deleteIndex = dependentVisualState.BoundNodes
+            //            .Select((i, j) => new { Index = j + 1, ModelItem = i })
+            //            .Where(i => i.ModelItem.Xml == curNode)
+            //            .Select(i => (int?)i.Index)
+            //            .FirstOrDefault();
+            //        if (deleteIndex == null)
+            //            continue;
 
-                    if (repeatVisual.Index < deleteIndex)
-                    {
-                        // index remains unchanged, deletion occured after index
-                        repeatVisual.Refresh();
-                        continue;
-                    }
-                    else if (repeatVisual.Index == deleteIndex)
-                        // index is equal to the one deleted, maintain position, but refresh; refresh will force index
-                        // to the proper position
-                        repeatVisual.Index = (int)deleteIndex;
-                    else if (repeatVisual.Index > deleteIndex)
-                        // index was after the position that was deleted; index moves down by one
-                        repeatVisual.Index = repeatVisual.Index - 1;
-                    else
-                        throw new Exception();
+            //        if (repeatVisual.Index < deleteIndex)
+            //        {
+            //            // index remains unchanged, deletion occured after index
+            //            repeatVisual.Refresh();
+            //            continue;
+            //        }
+            //        else if (repeatVisual.Index == deleteIndex)
+            //            // index is equal to the one deleted, maintain position, but refresh; refresh will force index
+            //            // to the proper position
+            //            repeatVisual.Index = (int)deleteIndex;
+            //        else if (repeatVisual.Index > deleteIndex)
+            //            // index was after the position that was deleted; index moves down by one
+            //            repeatVisual.Index = repeatVisual.Index - 1;
+            //        else
+            //            throw new Exception();
 
-                    // refresh repeat visual
-                    repeatVisual.Refresh();
+            //        // refresh repeat visual
+            //        repeatVisual.Refresh();
 
-                    // reinitialize inner repeat visuals
-                    foreach (var innerRepeatVisual in repeatVisual.Descendants(false).OfType<RepeatElement>())
-                        innerRepeatVisual.Index = innerRepeatVisual.StartIndex;
-                }
-                else
-                    dependentVisualState.Visual.Refresh();
-            }
+            //        // reinitialize inner repeat visuals
+            //        foreach (var innerRepeatVisual in repeatVisual.Descendants(false).OfType<RepeatElement>())
+            //            innerRepeatVisual.Index = innerRepeatVisual.StartIndex;
+            //    }
+            //    else
+            //        dependentVisualState.Visual.Refresh();
+            //}
 
             // instruct model to complete deferred update
             ec.Model.State.RebuildFlag = true;

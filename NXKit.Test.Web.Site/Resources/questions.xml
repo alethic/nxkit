@@ -37,7 +37,7 @@
             <currentstatus />
             <physicianname />
             <physicianaddress />
-            <physiciantelephone />
+            <physicianphonenumber />
         </healthinfo>
     </question>
 </questions>

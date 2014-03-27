@@ -94,7 +94,7 @@
 
     export function GetType(node: Node): KnockoutComputed<string> {
         return ko.computed(() => {
-            var p = GetProperty(node, "ItemType");
+            var p = GetProperty(node, "DataType");
             return p != null ? p.ValueAsString() : null;
         });
     }

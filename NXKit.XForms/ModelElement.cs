@@ -61,11 +61,17 @@ namespace NXKit.XForms
         {
             get
             {
-                // default context is only available once instances have been instantiated 
-                if (State != null && Instances.Any())
-                    return new EvaluationContext(this, Instances.First(), new ModelItem(Module, Instances.First().State.Document.Root), 1, 1);
-                else
+                if (State == null)
                     return null;
+
+                var defaultInstance = Instances.FirstOrDefault();
+                if (defaultInstance == null)
+                    return null;
+
+                if (defaultInstance.State.Document == null)
+                    return null;
+
+                return new EvaluationContext(this, defaultInstance, new ModelItem(Module, defaultInstance.State.Document.Root), 1, 1);
             }
         }
 
@@ -73,13 +79,27 @@ namespace NXKit.XForms
         /// Gets all of the bound nodes for this model.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IUIBindingNode> GetBoundNodes()
+        IEnumerable<IUIBindingNode> GetUIBindingNodes()
         {
             // all available ui bindings
             return Document.Root
                 .Descendants(true)
                 .OfType<NXElement>()
                 .Select(i => i.Interface<IUIBindingNode>())
+                .Where(i => i != null);
+        }
+
+        /// <summary>
+        /// Gets all of the nodes that should be refreshed for this model.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IUIRefreshable> GetUIRefreshableNodes()
+        {
+            // all available ui bindings
+            return Document.Root
+                .Descendants(true)
+                .OfType<NXElement>()
+                .Select(i => i.Interface<IUIRefreshable>())
                 .Where(i => i != null);
         }
 
@@ -157,19 +177,18 @@ namespace NXKit.XForms
             if (Document.Root.GetState<ModuleState>().ConstructDoneOnce)
                 return;
 
-            // obtain all of the bindings in the document
-            var bindings = GetBoundNodes()
-                .Select(i => i.UIBinding)
-                .Where(i => i != null);
+            // refresh values
+            foreach (var item1 in GetUIBindingNodes())
+                if (item1.UIBinding != null)
+                    item1.UIBinding.Refresh();
 
-            // refresh each bound control
-            foreach (var element in bindings)
-            {
-                element.Refresh();
+            foreach (var item2 in GetUIRefreshableNodes())
+                item2.Refresh();
 
-                // construct done does not raise events
-                element.ClearEvents();
-            }
+            // dispatch required events
+            foreach (var item3 in GetUIBindingNodes())
+                if (item3.UIBinding != null)
+                    item3.UIBinding.ClearEvents();
 
             Document.Root.GetState<ModuleState>().ConstructDoneOnce = true;
         }
@@ -274,10 +293,11 @@ namespace NXKit.XForms
                 // apply binding expressions
                 foreach (var bind in this.Descendants(false).OfType<BindElement>())
                 {
-                    bind.Refresh();
+                    if (bind.Binding == null)
+                        continue;
 
-                    if (bind.Binding == null ||
-                        bind.Binding.ModelItems == null ||
+                    bind.Binding.Refresh();
+                    if (bind.Binding.ModelItems == null ||
                         bind.Binding.ModelItems.Length == 0)
                         continue;
 
@@ -433,16 +453,19 @@ namespace NXKit.XForms
                 State.RefreshFlag = false;
 
                 // all available ui bindings
-                var items = GetBoundNodes()
+                var bindingNodes = GetUIBindingNodes()
                     .Select(i => i.UIBinding)
                     .Where(i => i != null);
 
                 // refresh values
-                foreach (var item in items)
+                foreach (var item in bindingNodes)
+                    item.Refresh();
+
+                foreach (var item in GetUIRefreshableNodes())
                     item.Refresh();
 
                 // dispatch required events
-                foreach (var item in items)
+                foreach (var item in bindingNodes)
                     item.DispatchEvents();
             }
             while (State.RefreshFlag);

@@ -72,10 +72,10 @@ namespace NXKit.XForms
                     instance.State.Initialize(model, instance);
             }
 
-            // perform refresh of just loaded visuals
-            if (models.All(i => i.State.Ready))
-                foreach (var binding in Document.Root.Descendants(true).OfType<BindingElement>())
-                    binding.Refresh();
+            //// perform refresh of just loaded visuals
+            //if (models.All(i => i.State.Ready))
+            //    foreach (var binding in Document.Root.Descendants(true).OfType<BindingElement>())
+            //        binding.
         }
 
         /// <summary>

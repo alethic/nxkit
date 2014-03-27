@@ -7,7 +7,8 @@ namespace NXKit.XForms
     [Element("select1")]
     public class Select1Element :
         SingleNodeUIBindingElement,
-        ISupportsUiCommonAttributes
+        ISupportsUiCommonAttributes,
+        IUIRefreshable
     {
 
         bool selectedItemNodeCached;
@@ -133,10 +134,8 @@ namespace NXKit.XForms
                 .FirstOrDefault(i => i.UniqueId == id);
         }
 
-        public override void Refresh()
+        public void Refresh()
         {
-            base.Refresh();
-
             // clear selected item cache
             selectedItemNode = null;
             selectedItemNodeCached = false;

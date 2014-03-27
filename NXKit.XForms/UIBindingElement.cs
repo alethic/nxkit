@@ -37,11 +37,11 @@ namespace NXKit.XForms
         /// </summary>
         public UIBinding UIBinding
         {
-            get { return uiBinding; }
+            get { return uiBinding ?? (uiBinding = CreateUIBinding()); }
         }
 
         [Interactive]
-        public XName ItemType
+        public XName DataType
         {
             get { return UIBinding.DataType; }
         }
@@ -73,22 +73,6 @@ namespace NXKit.XForms
         protected virtual UIBinding CreateUIBinding()
         {
             return Binding != null ? new UIBinding(this, Binding) : new UIBinding(this);
-        }
-
-        internal void UIBind()
-        {
-            if (uiBinding == null)
-                uiBinding = CreateUIBinding();
-        }
-
-        public override void Refresh()
-        {
-            base.Refresh();
-
-            UIBind();
-
-            if (uiBinding != null)
-                uiBinding.Refresh();
         }
 
     }

@@ -31,9 +31,6 @@ namespace NXKit.XForms
 
         public void Invoke()
         {
-            // ensure values are up to date
-            Refresh();
-
             if (Binding == null ||
                 Binding.ModelItems == null ||
                 Binding.ModelItems.Length == 0)
@@ -122,24 +119,6 @@ namespace NXKit.XForms
                 // after non-last element, insert before next sibling
                 curNode.NextNode.AddBeforeSelf(newNode);
                 index = at + 1;
-            }
-
-            // node set visuals that are bound to nodes sharing the same parent
-            var nodeSetVisuals = Module.Document.Root
-                .Descendants(true)
-                .OfType<NodeSetBindingElement>()
-                .Where(i => i.Binding != null)
-                .Where(i => i.Binding.ModelItems != null)
-                .Where(i => i.Binding.ModelItems.Any(j => j.Xml.Parent == parent));
-
-            foreach (var nodeSetVisual in nodeSetVisuals)
-            {
-                // refresh visual's binding
-                nodeSetVisual.Refresh();
-
-                // if visual is a repeat element, resposition it to the new index
-                if (nodeSetVisual is RepeatElement)
-                    ((RepeatElement)nodeSetVisual).Index = index;
             }
 
             // instruct model to complete deferred update
