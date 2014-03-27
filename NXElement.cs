@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-
 using NXKit.Util;
 
 namespace NXKit
@@ -44,6 +44,11 @@ namespace NXKit
         {
             get { return (XElement)base.Xml; }
             protected set { base.Xml = value; }
+        }
+
+        public LinkedList<object> Storage
+        {
+            get { return Document.NodeState.Get(this); }
         }
 
         /// <summary>
@@ -136,7 +141,13 @@ namespace NXKit
         public T GetState<T>()
             where T : class, new()
         {
-            return Document != null ? Document.NodeState.Get<T>(this) : null;
+            Contract.Ensures(Contract.Result<T>() != null);
+
+            var state = Storage.OfType<T>().FirstOrDefault();
+            if (state == null)
+                Storage.AddLast(state = new T());
+
+            return state;
         }
 
     }

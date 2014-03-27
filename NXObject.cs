@@ -11,7 +11,6 @@ namespace NXKit
     public abstract class NXObject
     {
 
-        readonly LinkedList<object> storage;
         NXContainer parent;
 
         /// <summary>
@@ -19,7 +18,7 @@ namespace NXKit
         /// </summary>
         public NXObject()
         {
-            this.storage = new LinkedList<object>();
+
         }
 
         /// <summary>
@@ -32,14 +31,6 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(parent != null);
 
             this.parent = parent;
-        }
-
-        /// <summary>
-        /// Gets a reference to private data storage on the object.
-        /// </summary>
-        public LinkedList<object> Storage
-        {
-            get { return storage; }
         }
 
         /// <summary>

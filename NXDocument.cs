@@ -195,8 +195,8 @@ namespace NXKit
         /// <param name="configuration"></param>
         /// <param name="xml"></param>
         /// <param name="nextElementId"></param>
-        /// <param name="visualState"></param>
-        NXDocument(CompositionContainer container, Uri uri, NXDocumentConfiguration configuration, string xml, int nextElementId, NodeStateCollection visualState)
+        /// <param name="nodeState"></param>
+        NXDocument(CompositionContainer container, Uri uri, NXDocumentConfiguration configuration, string xml, int nextElementId, NodeStateCollection nodeState)
             : base()
         {
             Contract.Requires<ArgumentNullException>(container != null);
@@ -204,11 +204,11 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(configuration != null);
             Contract.Requires<ArgumentNullException>(xml != null);
             Contract.Requires<ArgumentOutOfRangeException>(nextElementId >= 0);
-            Contract.Requires<ArgumentNullException>(visualState != null);
+            Contract.Requires<ArgumentNullException>(nodeState != null);
 
             this.configuration = configuration;
             this.nextElementId = nextElementId;
-            this.nodeState = visualState;
+            this.nodeState = nodeState;
 
             this.container = container;
             this.uri = uri;
