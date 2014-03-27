@@ -6,8 +6,7 @@ namespace NXKit.XForms
     [Element("group")]
     public class Group :
         SingleNodeUIBindingElement,
-        ISupportsUiCommonAttributes,
-        IRelevancyScope
+        ISupportsUiCommonAttributes
     {
 
         /// <summary>

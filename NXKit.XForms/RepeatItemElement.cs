@@ -12,10 +12,11 @@ namespace NXKit.XForms
         XFormsElement,
         IEvaluationContextScope,
         INamingScope,
-        IRelevancyScope
+        IUIBindingNode
     {
 
         EvaluationContext context;
+        UIBinding uiBinding;
 
         /// <summary>
         /// Initializes a new instance.
@@ -52,9 +53,14 @@ namespace NXKit.XForms
             context = ec;
         }
 
-        public bool Relevant
+        public UIBinding UIBinding
         {
-            get { return Context.ModelItem.Relevant; }
+            get { return uiBinding ?? (uiBinding = CreateUIBinding()); }
+        }
+
+        UIBinding CreateUIBinding()
+        {
+            return new UIBinding(this, Context.ModelItem);
         }
 
     }

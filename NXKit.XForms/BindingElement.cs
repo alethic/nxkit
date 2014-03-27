@@ -74,16 +74,7 @@ namespace NXKit.XForms
         /// </summary>
         public Binding Binding
         {
-            get { return binding; }
-        }
-
-        /// <summary>
-        /// Performs the initial binding.
-        /// </summary>
-        internal void Bind()
-        {
-            if (binding == null)
-                binding = CreateBinding();
+            get { return binding ?? (binding = CreateBinding()); }
         }
 
         /// <summary>
@@ -91,8 +82,6 @@ namespace NXKit.XForms
         /// </summary>
         public virtual void Refresh()
         {
-            Bind();
-
             evaluationContext = null;
             evaluationContextCached = false;
 

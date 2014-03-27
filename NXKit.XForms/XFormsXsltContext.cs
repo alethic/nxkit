@@ -95,12 +95,48 @@ namespace NXKit.XForms
             return element.GetPrefixOfNamespace(namespaceName);
         }
 
-        public override IXsltContextFunction ResolveFunction(string prefix, string name, XPathResultType[] argTypes)
+        public override IXsltContextFunction ResolveFunction(string prefix, string localName, XPathResultType[] argTypes)
         {
+            var name = (prefix != "" ? LookupNamespace(prefix) : XNamespace.None) + localName;
+            if (name == null)
+                throw new XPathException("Unable to resolve function name.");
+
             return functionProvider.GetFunctions()
-                .Where(i => XName.Get(i.Metadata.ExpandedName) == ((XNamespace)LookupNamespace(prefix) + name))
-                .Select(i => i.Value)
+                .SelectMany(i => i.Metadata.ExpandedName
+                    .Select((j, k) => new
+                    {
+                        Name = i.Metadata.ExpandedName[k],
+                        IsPrefixRequired = i.Metadata.IsPrefixRequired[k],
+                        Item = i,
+                    }))
+                .Where(i => ResolveFunctionPredicate(
+                    XName.Get(i.Name), 
+                    i.IsPrefixRequired, 
+                    name))
+                .Select(i => i.Item.Value)
                 .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Test whether the given candidate function data matches with the requested name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="isPrefixRequired"></param>
+        /// <param name="requested"></param>
+        /// <returns></returns>
+        bool ResolveFunctionPredicate(XName name, bool isPrefixRequired, XName requested)
+        {
+            if (requested.LocalName != name.LocalName)
+                return false;
+
+            if (requested.NamespaceName == "")
+                if (!isPrefixRequired)
+                    return true;
+
+            if (requested.NamespaceName == name.NamespaceName)
+                return true;
+
+            return false;
         }
 
         public override IXsltContextVariable ResolveVariable(string prefix, string name)

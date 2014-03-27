@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+
 using NXKit.DOMEvents;
 using NXKit.Util;
 
@@ -69,7 +69,55 @@ namespace NXKit.XForms
             }
         }
 
-        void OnConstructModel()
+        /// <summary>
+        /// Gets all of the bound nodes for this model.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IUIBindingNode> GetBoundNodes()
+        {
+            // all available ui bindings
+            return Document.Root
+                .Descendants(true)
+                .OfType<NXElement>()
+                .Select(i => i.Interface<IUIBindingNode>())
+                .Where(i => i != null);
+        }
+
+        void IEventDefaultActionHandler.DefaultAction(Event evt)
+        {
+            switch (evt.Type)
+            {
+                case XFormsEvents.ModelConstruct:
+                    OnModelConstruct();
+                    break;
+                case XFormsEvents.ModelConstructDone:
+                    OnModelConstructDone();
+                    break;
+                case XFormsEvents.Ready:
+                    OnReady();
+                    break;
+                case XFormsEvents.Rebuild:
+                    OnRebuild();
+                    break;
+                case XFormsEvents.Recalculate:
+                    OnRecalculate();
+                    break;
+                case XFormsEvents.Revalidate:
+                    OnRevalidate();
+                    break;
+                case XFormsEvents.Refresh:
+                    OnRefresh();
+                    break;
+                case XFormsEvents.Reset:
+                    OnReset();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Default action for the xforms-model-construct event.
+        /// </summary>
+        void OnModelConstruct()
         {
             // mark step as complete, regardless of outcome
             State.Construct = true;
@@ -99,57 +147,35 @@ namespace NXKit.XForms
             OnRevalidate();
         }
 
-        void OnConstructDone()
+        /// <summary>
+        /// Default action for the xforms-model-construct-done event.
+        /// </summary>
+        void OnModelConstructDone()
         {
             State.ConstructDone = true;
 
             if (Document.Root.GetState<ModuleState>().ConstructDoneOnce)
                 return;
 
-            var elements = Document.Root
-                .Descendants(true)
-                .OfType<UIBindingElement>();
+            // obtain all of the bindings in the document
+            var bindings = GetBoundNodes()
+                .Select(i => i.UIBinding)
+                .Where(i => i != null);
 
             // refresh each bound control
-            foreach (var element in elements)
+            foreach (var element in bindings)
+            {
                 element.Refresh();
+
+                // construct done does not raise events
+                element.ClearEvents();
+            }
 
             Document.Root.GetState<ModuleState>().ConstructDoneOnce = true;
         }
 
-        void IEventDefaultActionHandler.DefaultAction(Event evt)
-        {
-            switch (evt.Type)
-            {
-                case XFormsEvents.ModelConstruct:
-                    OnConstructModel();
-                    break;
-                case XFormsEvents.ModelConstructDone:
-                    OnConstructDone();
-                    break;
-                case XFormsEvents.Ready:
-                    OnReady();
-                    break;
-                case XFormsEvents.Rebuild:
-                    OnRebuild();
-                    break;
-                case XFormsEvents.Recalculate:
-                    OnRecalculate();
-                    break;
-                case XFormsEvents.Revalidate:
-                    OnRevalidate();
-                    break;
-                case XFormsEvents.Refresh:
-                    OnRefresh();
-                    break;
-                case XFormsEvents.Reset:
-                    OnReset();
-                    break;
-            }
-        }
-
         /// <summary>
-        /// Marks the model as ready.
+        /// Default action for the xforms-ready event.
         /// </summary>
         internal void OnReady()
         {
@@ -157,7 +183,7 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Rebuilds the model.
+        /// Default action for the xforms-rebuild event.
         /// </summary>
         internal void OnRebuild()
         {
@@ -170,7 +196,7 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Recalculates the model.
+        /// Default action for the xforms-recalculate event.
         /// </summary>
         internal void OnRecalculate()
         {
@@ -365,7 +391,7 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Revalidates the model.
+        /// Default action for the xforms-revalidate event.
         /// </summary>
         internal void OnRevalidate()
         {
@@ -398,7 +424,7 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Refreshes the model.
+        /// Default action for the xforms-refresh event.
         /// </summary>
         internal void OnRefresh()
         {
@@ -406,45 +432,18 @@ namespace NXKit.XForms
             {
                 State.RefreshFlag = false;
 
-                // resolve visuals whom are dependent on this model
-                var elements = Document.Root
-                    .Descendants(true)
-                    .OfType<UIBindingElement>();
+                // all available ui bindings
+                var items = GetBoundNodes()
+                    .Select(i => i.UIBinding)
+                    .Where(i => i != null);
 
-                // for each visual, dispatch required events
-                foreach (var element in elements)
-                {
-                    var target = element.Interface<IEventTarget>();
-                    if (target == null)
-                        throw new NullReferenceException();
+                // refresh values
+                foreach (var item in items)
+                    item.Refresh();
 
-                    // refresh underlying data
-                    element.Refresh();
-
-                    var modelItem = element.Binding != null ? element.Binding.ModelItem : null;
-                    if (modelItem == null)
-                        continue;
-
-                    // dispatch required events
-                    if (modelItem.State.DispatchValueChanged)
-                        target.DispatchEvent(new ValueChangedEvent(element).Event);
-                    if (modelItem.State.DispatchValid)
-                        target.DispatchEvent(new ValidEvent(element).Event);
-                    if (modelItem.State.DispatchInvalid)
-                        target.DispatchEvent(new InvalidEvent(element).Event);
-                    if (modelItem.State.DispatchEnabled)
-                        target.DispatchEvent(new EnabledEvent(element).Event);
-                    if (modelItem.State.DispatchDisabled)
-                        target.DispatchEvent(new DisabledEvent(element).Event);
-                    if (modelItem.State.DispatchOptional)
-                        target.DispatchEvent(new OptionalEvent(element).Event);
-                    if (modelItem.State.DispatchRequired)
-                        target.DispatchEvent(new RequiredEvent(element).Event);
-                    if (modelItem.State.DispatchReadOnly)
-                        target.DispatchEvent(new ReadOnlyEvent(element).Event);
-                    if (modelItem.State.DispatchReadWrite)
-                        target.DispatchEvent(new ReadWriteEvent(element).Event);
-                }
+                // dispatch required events
+                foreach (var item in items)
+                    item.DispatchEvents();
             }
             while (State.RefreshFlag);
 
@@ -464,7 +463,7 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Resets the model.
+        /// Default action for the xforms-reset event.
         /// </summary>
         internal void OnReset()
         {

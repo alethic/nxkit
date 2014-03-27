@@ -23,11 +23,11 @@ namespace NXKit.XPath
         /// <param name="functions"></param>
         [ImportingConstructor]
         public DefaultXsltContextFunctionProvider(
-            [ImportMany] IEnumerable<Lazy<IXsltContextFunction, IDictionary<string,object>>> functions)
+            [ImportMany] IEnumerable<Lazy<IXsltContextFunction, IXsltContextFunctionMetadata>> functions)
         {
             Contract.Requires<ArgumentNullException>(functions != null);
 
-            this.functions = null;
+            this.functions = functions;
         }
 
         public IEnumerable<Lazy<IXsltContextFunction, IXsltContextFunctionMetadata>> GetFunctions()
