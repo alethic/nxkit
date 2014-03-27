@@ -54,7 +54,7 @@ namespace NXKit.XForms.Functions
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
 
-            var result = GetModel(context.Visual.Document.Module<XFormsModule>(), navigator);
+            var result = GetModel(context.Node.Document.Module<XFormsModule>(), navigator);
             if (result == null)
                 throw new NullReferenceException();
 
@@ -74,7 +74,7 @@ namespace NXKit.XForms.Functions
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
 
-            return GetInstance(context.Visual.Document.Module<XFormsModule>(), navigator);
+            return GetInstance(context.Node.Document.Module<XFormsModule>(), navigator);
         }
 
         /// <summary>

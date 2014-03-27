@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
-using System.Linq;
 
-using NXKit.XForms.Functions;
 using NXKit.XPath;
 
 namespace NXKit.XForms
@@ -40,9 +39,9 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the <see cref="Visual"/> associated with the XSLT operation.
+        /// Gets the <see cref="Node"/> associated with the XSLT operation.
         /// </summary>
-        public NXNode Visual
+        public NXNode Node
         {
             get { return node; }
         }
