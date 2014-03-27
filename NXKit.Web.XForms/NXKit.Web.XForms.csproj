@@ -115,6 +115,7 @@
     <TypeScriptCompile Include="HelpViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="AlertViewModel.ts" />
     <TypeScriptCompile Include="HintViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +154,7 @@
     <EmbeddedResource Include="Input.html" />
     <EmbeddedResource Include="Hint.html" />
     <EmbeddedResource Include="Label.html" />
+    <EmbeddedResource Include="Alert.html" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

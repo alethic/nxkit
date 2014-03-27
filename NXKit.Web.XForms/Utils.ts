@@ -114,22 +114,22 @@
 
     export function GetLabel(node: Node): Node {
         return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
-            _.Type == 'NXKit.XForms.LabelElement');
+            _.Type == 'NXKit.XForms.Label');
     }
 
     export function GetHelp(node: Node): Node {
         return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
-            _.Type == 'NXKit.XForms.HelpElement');
+            _.Type == 'NXKit.XForms.Help');
     }
 
     export function GetHint(node: Node): Node {
         return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
-            _.Type == 'NXKit.XForms.HintElement');
+            _.Type == 'NXKit.XForms.Hint');
     }
 
     export function GetAlert(node: Node): Node {
         return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
-            _.Type == 'NXKit.XForms.AlertElement');
+            _.Type == 'NXKit.XForms.Alert');
     }
 
     export function IsControlNode(node: Node): boolean {

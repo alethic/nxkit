@@ -9,7 +9,7 @@ namespace NXKit.XForms
     /// short description of form controls while navigating among them.
     /// </summary>
     [Element("label")]
-    public class LabelElement :
+    public class Label :
         SingleNodeUIBindingElement,
         ISupportsCommonAttributes
     {
@@ -17,9 +17,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="element"></param>
-        public LabelElement(XElement element)
-            : base(element)
+        /// <param name="xml"></param>
+        public Label(XElement xml)
+            : base(xml)
         {
 
         }

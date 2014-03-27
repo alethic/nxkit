@@ -141,7 +141,7 @@
     <Compile Include="XFormsTypeDescriptionProvider.cs" />
     <Compile Include="XFormsXsltContext.cs" />
     <Compile Include="ActionElement.cs" />
-    <Compile Include="AlertElement.cs" />
+    <Compile Include="Alert.cs" />
     <Compile Include="Binding.cs" />
     <Compile Include="BindingExceptionEvent.cs" />
     <Compile Include="BindingElement.cs" />
@@ -156,8 +156,8 @@
     <Compile Include="EvaluationContext.cs" />
     <Compile Include="XFormsEvent.cs" />
     <Compile Include="Group.cs" />
-    <Compile Include="HelpElement.cs" />
-    <Compile Include="HintElement.cs" />
+    <Compile Include="Help.cs" />
+    <Compile Include="Hint.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="InRangeEvent.cs" />
     <Compile Include="InsertEvent.cs" />
@@ -168,7 +168,7 @@
     <Compile Include="ItemSetItemElement.cs" />
     <Compile Include="ItemSetElement.cs" />
     <Compile Include="ItemElement.cs" />
-    <Compile Include="LabelElement.cs" />
+    <Compile Include="Label.cs" />
     <Compile Include="LinkExceptionEvent.cs" />
     <Compile Include="ListeItemElement.cs" />
     <Compile Include="LoadElement.cs" />

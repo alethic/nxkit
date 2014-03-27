@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -8,7 +7,7 @@ namespace NXKit.XForms
     /// The author-optional element hint provides a convenient way to attach hint information to a form control.
     /// </summary>
     [Element("hint")]
-    public class HintElement : 
+    public class Hint : 
         SingleNodeUIBindingElement,
         ISupportsCommonAttributes
     {
@@ -17,10 +16,16 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public HintElement(XElement element)
+        public Hint(XElement element)
             : base(element)
         {
 
+        }
+
+        [Interactive]
+        public XName Appearance
+        {
+            get { return (string)Module.ResolveAttribute(Xml, "appearance"); }
         }
 
     }

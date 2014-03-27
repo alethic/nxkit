@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -8,7 +7,7 @@ namespace NXKit.XForms
     /// The author-optional element help provides a convenient way to attach help information to a form control.
     /// </summary>
     [Element("help")]
-    public class HelpElement :
+    public class Help :
         SingleNodeUIBindingElement,
         ISupportsCommonAttributes
     {
@@ -16,9 +15,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="element"></param>
-        public HelpElement(XElement element)
-            : base(element)
+        /// <param name="xml"></param>
+        public Help(XElement xml)
+            : base(xml)
         {
 
         }

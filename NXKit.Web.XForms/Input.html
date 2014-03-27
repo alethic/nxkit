@@ -14,7 +14,25 @@
         data-nxkit-node="NXKit.XForms.Input"
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
     <input type="text"
-           data-bind="value: ValueAsString" />
+           data-bind="
+    value: ValueAsString,
+    attr: {
+        placeholder: PlaceHolderText
+    }" />
+
+    <!-- ko if: ShowAdvice -->
+    <!-- ko nxkit_template: {
+        node: Hint,
+    } -->
+    <!-- /ko -->
+    <!-- /ko -->
+
+    <div class="ui red pointing above label" data-bind="nxkit_visible: ShowError">
+        <!-- ko nxkit_template: {
+            node: Alert,
+        } -->
+        <!-- /ko -->
+    </div>
 </script>
 
 <script type="text/html"

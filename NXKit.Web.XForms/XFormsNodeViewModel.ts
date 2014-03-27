@@ -12,10 +12,10 @@
         ];
 
         public static MetadataNodeTypes = [
-            'NXKit.XForms.LabelElement',
-            'NXKit.XForms.HelpElement',
-            'NXKit.XForms.HintElement',
-            'NXKit.XForms.AlertElement',
+            'NXKit.XForms.Label',
+            'NXKit.XForms.Help',
+            'NXKit.XForms.Hint',
+            'NXKit.XForms.Alert',
         ];
 
         public static TransparentNodeTypes = [
@@ -77,6 +77,10 @@
 
         public get Hint(): Node {
             return Utils.GetHint(this.Node);
+        }
+
+        public get Alert(): Node {
+            return Utils.GetAlert(this.Node);
         }
 
         public get Contents(): Node[] {
