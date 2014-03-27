@@ -7,7 +7,8 @@ namespace NXKit.XForms
     /// Describes an element which is part of the interface hierarchy and supports binding.
     /// </summary>
     public abstract class UIBindingElement :
-        BindingElement
+        BindingElement,
+        IUIBindingNode
     {
 
         UIBinding uiBinding;
@@ -42,7 +43,7 @@ namespace NXKit.XForms
         [Interactive]
         public XName ItemType
         {
-            get { return UIBinding.ItemType; }
+            get { return UIBinding.DataType; }
         }
 
         [Interactive]

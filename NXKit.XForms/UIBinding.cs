@@ -3,6 +3,8 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.DOMEvents;
+
 namespace NXKit.XForms
 {
 
@@ -14,6 +16,7 @@ namespace NXKit.XForms
 
         readonly NXNode node;
         readonly Binding binding;
+        ModelItem modelItem;
         UIBindingState state;
 
         /// <summary>
@@ -31,14 +34,42 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="node"></param>
+        internal UIBinding(NXNode node, ModelItem modelItem)
+            : this(node)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+
+            this.modelItem = modelItem;
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="node"></param>
         /// <param name="binding"></param>
         internal UIBinding(NXNode node, Binding binding)
-            : this(node)
+            : this(node, binding.ModelItem)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(binding != null);
 
             this.binding = binding;
+        }
+
+        /// <summary>
+        /// Gets the module.
+        /// </summary>
+        public XFormsModule Module
+        {
+            get { return node.Document.Module<XFormsModule>(); }
+        }
+
+        /// <summary>
+        /// Gets the model item associated with this binding.
+        /// </summary>
+        public ModelItem ModelItem
+        {
+            get { return modelItem; }
         }
 
         UIBindingState State
@@ -55,31 +86,49 @@ namespace NXKit.XForms
             return state;
         }
 
-        public XName ItemType
+        /// <summary>
+        /// Gets the current data type of the interface.
+        /// </summary>
+        public XName DataType
         {
-            get { return State.ItemType; }
+            get { return State.DataType; }
         }
 
+        /// <summary>
+        /// Gets whether or not the interface is considered relevant.
+        /// </summary>
         public bool Relevant
         {
-            get { return State.Relevant; }
+            get { return !State.Relevant ? false : node.Ancestors().OfType<UIBindingElement>().Select(i => i.UIBinding.Relevant).FirstOrDefault(); }
         }
 
+        /// <summary>
+        /// Gets whether or not the interface is considered read-only.
+        /// </summary>
         public bool ReadOnly
         {
             get { return State.ReadOnly; }
         }
 
+        /// <summary>
+        /// Gets whether or not the interface is considered required.
+        /// </summary>
         public bool Required
         {
             get { return State.Required; }
         }
 
+        /// <summary>
+        /// Gets whether or not the interface is considered valid.
+        /// </summary>
         public bool Valid
         {
             get { return State.Valid; }
         }
 
+        /// <summary>
+        /// Gets the current value of the interface.
+        /// </summary>
         public string Value
         {
             get { return State.Value; }
@@ -91,28 +140,150 @@ namespace NXKit.XForms
         public void Refresh()
         {
             if (binding != null)
+            {
+                Module.ResolveBindingEvaluationContext(node);
+
                 binding.Refresh();
 
-            if (binding != null &&
-                binding.ModelItem != null)
+                if (modelItem != binding.ModelItem)
+                    modelItem = binding.ModelItem;
+            }
+
+            var oldItemType = State.DataType;
+            var oldRelevant = State.Relevant;
+            var oldReadOnly = State.ReadOnly;
+            var oldRequired = State.Required;
+            var oldValid = State.Valid;
+            var oldValue = State.Value;
+
+            if (modelItem != null)
             {
-                State.ItemType = binding.ModelItem.ItemType;
-                State.Relevant = binding.ModelItem.Relevant;
-                State.ReadOnly = binding.ModelItem.ReadOnly;
-                State.Required = binding.ModelItem.Required;
-                State.Valid = binding.ModelItem.Valid;
-                State.Value = binding.ModelItem.Value;
+                State.DataType = modelItem.ItemType;
+                State.Relevant = modelItem.Relevant;
+                State.ReadOnly = modelItem.ReadOnly;
+                State.Required = modelItem.Required;
+                State.Valid = modelItem.Valid;
+                State.Value = modelItem.Value;
             }
             else
             {
                 // default values
-                State.ItemType = null;
+                State.DataType = null;
                 State.Relevant = true;
                 State.ReadOnly = false;
                 State.Required = false;
                 State.Valid = true;
                 State.Value = null;
             }
+
+            // mark all required events
+            var valueChanged = Value != oldValue;
+            if (valueChanged)
+                State.DispatchValueChanged = true;
+
+            if (Relevant != oldRelevant || valueChanged)
+                if (Relevant)
+                    State.DispatchEnabled = true;
+                else
+                    State.DispatchDisabled = true;
+
+            if (ReadOnly != oldReadOnly || valueChanged)
+                if (ReadOnly)
+                    State.DispatchReadOnly = true;
+                else
+                    State.DispatchReadWrite = true;
+
+            if (Required != oldRequired || valueChanged)
+                if (Required)
+                    State.DispatchRequired = true;
+                else
+                    State.DispatchOptional = true;
+
+            if (Valid != oldValid || valueChanged)
+                if (Valid)
+                    state.DispatchValid = true;
+                else
+                    state.DispatchInvalid = true;
+        }
+
+        /// <summary>
+        /// Dispatches all pending events.
+        /// </summary>
+        public void DispatchEvents()
+        {
+            var target = node.Interface<IEventTarget>();
+            if (target == null)
+                return;
+
+            if (State.DispatchValueChanged)
+            {
+                State.DispatchValueChanged = false;
+                target.DispatchEvent(new ValueChangedEvent(node).Event);
+            }
+
+            if (State.DispatchValid)
+            {
+                State.DispatchValid = false;
+                target.DispatchEvent(new ValidEvent(node).Event);
+            }
+
+            if (State.DispatchInvalid)
+            {
+                State.DispatchInvalid = false;
+                target.DispatchEvent(new InvalidEvent(node).Event);
+            }
+
+            if (State.DispatchEnabled)
+            {
+                State.DispatchEnabled = false;
+                target.DispatchEvent(new EnabledEvent(node).Event);
+            }
+
+            if (State.DispatchDisabled)
+            {
+                State.DispatchDisabled = false;
+                target.DispatchEvent(new DisabledEvent(node).Event);
+            }
+
+            if (State.DispatchOptional)
+            {
+                State.DispatchOptional = false;
+                target.DispatchEvent(new OptionalEvent(node).Event);
+            }
+
+            if (State.DispatchRequired)
+            {
+                State.DispatchRequired = false;
+                target.DispatchEvent(new RequiredEvent(node).Event);
+            }
+
+            if (State.DispatchReadOnly)
+            {
+                State.DispatchReadOnly = false;
+                target.DispatchEvent(new ReadOnlyEvent(node).Event);
+            }
+
+            if (State.DispatchReadWrite)
+            {
+                State.DispatchReadWrite = false;
+                target.DispatchEvent(new ReadWriteEvent(node).Event);
+            }
+        }
+
+        /// <summary>
+        /// Clears all pending events.
+        /// </summary>
+        public void ClearEvents()
+        {
+            State.DispatchValueChanged = false;
+            State.DispatchValid = false;
+            State.DispatchInvalid = false;
+            State.DispatchEnabled = false;
+            State.DispatchDisabled = false;
+            State.DispatchOptional = false;
+            State.DispatchRequired = false;
+            State.DispatchReadOnly = false;
+            State.DispatchReadWrite = false;
         }
 
     }

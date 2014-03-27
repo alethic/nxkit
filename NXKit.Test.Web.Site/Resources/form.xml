@@ -29,6 +29,9 @@
         <xf:bind nodeset="xf:instance('primaryperson')/dateofbirth"
                  required="true()"
                  type="xsd:date"/>
+      <xf:bind nodeset="xf:instance('primaryperson')/socialsecuritynumber"
+               required="true()"
+               constraint="matches(., '\d{3}-\d{2}-\d{4}')"/>
 
         <xf:instance id="secondaryperson"
                      src="secondaryperson.xml" />

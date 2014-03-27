@@ -39,20 +39,6 @@ namespace NXKit.XForms.Layout
             get { return Document.Module<LayoutModule>().GetAttributeValue(Xml, "style"); }
         }
 
-        /// <summary>
-        /// Gets whether or not this visual is enabled.
-        /// </summary>
-        public bool Relevant
-        {
-            get
-            {
-                if (this.Ancestors().OfType<IRelevancyScope>().Any(i => !i.Relevant))
-                    return false;
-
-                return true;
-            }
-        }
-
     }
 
 }
