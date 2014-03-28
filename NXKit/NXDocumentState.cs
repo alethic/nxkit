@@ -47,7 +47,6 @@ namespace NXKit
             return mstm.ToArray();
         }
 
-        readonly NXDocumentConfiguration configuration;
         readonly Uri uri;
         readonly string xml;
         readonly int nextElementId;
@@ -57,19 +56,16 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         internal NXDocumentState(
-            NXDocumentConfiguration configuration,
             Uri uri,
             string xml,
             int nextElementId,
             NodeStateCollection visualState)
         {
-            Contract.Requires<ArgumentNullException>(configuration != null);
             Contract.Requires<ArgumentNullException>(uri != null);
             Contract.Requires<ArgumentNullException>(xml != null);
             Contract.Requires<ArgumentNullException>(nextElementId >= 0);
             Contract.Requires<ArgumentNullException>(visualState != null);
 
-            this.configuration = configuration;
             this.uri = uri;
             this.xml = xml;
             this.nextElementId = nextElementId;
@@ -83,19 +79,10 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(info != null);
 
-            this.configuration = (NXDocumentConfiguration)info.GetValue("Configuration", typeof(NXDocumentConfiguration));
             this.uri = (Uri)info.GetValue("Uri", typeof(Uri));
             this.xml = LoadXml((byte[])info.GetValue("Xml", typeof(byte[])));
             this.nextElementId = info.GetInt32("NextElementId");
             this.nodeState = (NodeStateCollection)info.GetValue("NodeState", typeof(NodeStateCollection));
-        }
-
-        /// <summary>
-        /// Saved engine configuration.
-        /// </summary>
-        public NXDocumentConfiguration Configuration
-        {
-            get { return configuration; }
         }
 
         public Uri Uri
@@ -134,7 +121,6 @@ namespace NXKit
         /// <param name="context"></param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Configuration", configuration);
             info.AddValue("Uri", uri);
             info.AddValue("Xml", SaveXml(xml));
             info.AddValue("NextElementId", nextElementId);

@@ -103,21 +103,29 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultEventFactory.cs" />
     <Compile Include="DocumentEvent.cs" />
     <Compile Include="EventHandlerDelegate.cs" />
-    <Compile Include="DOMEventsModule.cs" />
     <Compile Include="EventListener.cs" />
     <Compile Include="EventListenerData.cs" />
     <Compile Include="EventListenerMap.cs" />
+    <Compile Include="EventNodeInterfaceProvider.cs" />
+    <Compile Include="INXDocumentEvent.cs" />
+    <Compile Include="IEventFactory.cs" />
+    <Compile Include="IEventProvider.cs" />
+    <Compile Include="NXDocumentEvent.cs" />
+    <Compile Include="NXEventTarget.cs" />
     <Compile Include="EventTarget.cs" />
     <Compile Include="IEventDefaultActionHandler.cs" />
     <Compile Include="IEventHandler.cs" />
+    <Compile Include="INXEventTarget.cs" />
     <Compile Include="UIEvent.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventPhase.cs" />

@@ -62,7 +62,7 @@ namespace NXKit.XForms.Tests
                 .ToList();
 
             int c = 0;
-            inputs[1].Interface<IEventTarget>().AddEventHandler("xforms-disabled", false, i => c++);
+            inputs[1].Interface<INXEventTarget>().AddEventHandler("xforms-disabled",  i => c++);
             inputs[0].Binding.SetValue("false");
             d.Invoke();
             Assert.AreEqual(1, c);
@@ -80,7 +80,7 @@ namespace NXKit.XForms.Tests
                 .ToList();
 
             int c = 0;
-            inputs[1].Interface<IEventTarget>().AddEventHandler("xforms-enabled", false, i => c++);
+            inputs[1].Interface<INXEventTarget>().AddEventHandler("xforms-enabled",  i => c++);
             inputs[0].Binding.SetValue("false");
             d.Invoke();
             inputs[0].Binding.SetValue("true");

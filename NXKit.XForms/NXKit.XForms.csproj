@@ -118,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="NodeInterfaceProvider.cs" />
     <Compile Include="IActionElement.cs" />
     <Compile Include="IEvaluationContextScope.cs" />
     <Compile Include="ISupportsListUiCommonAttributes.cs" />

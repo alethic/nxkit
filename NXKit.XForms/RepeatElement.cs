@@ -170,12 +170,12 @@ namespace NXKit.XForms
             CreateNodes();
 
             // refresh children
-            foreach (var node in this.Descendants().Select(i => i.Interface<IUIBindingNode>()))
+            foreach (var node in this.Descendants().Select(i => i.InterfaceOrDefault<IUIBindingNode>()))
                 if (node != null)
                     node.UIBinding.Refresh();
 
             // refresh children
-            foreach (var node in this.Descendants().Select(i => i.Interface<IUIRefreshable>()))
+            foreach (var node in this.Descendants().Select(i => i.InterfaceOrDefault<IUIRefreshable>()))
                 if (node != null)
                     node.Refresh();
         }

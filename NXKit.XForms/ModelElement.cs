@@ -85,7 +85,7 @@ namespace NXKit.XForms
             return Document.Root
                 .Descendants(true)
                 .OfType<NXElement>()
-                .Select(i => i.Interface<IUIBindingNode>())
+                .Select(i => i.InterfaceOrDefault<IUIBindingNode>())
                 .Where(i => i != null);
         }
 
@@ -99,7 +99,7 @@ namespace NXKit.XForms
             return Document.Root
                 .Descendants(true)
                 .OfType<NXElement>()
-                .Select(i => i.Interface<IUIRefreshable>())
+                .Select(i => i.InterfaceOrDefault<IUIRefreshable>())
                 .Where(i => i != null);
         }
 

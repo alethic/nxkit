@@ -164,7 +164,7 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Loads the specified uri into the view.
+        /// Loads the specified <see cref="Uri"/> into the view.
         /// </summary>
         /// <param name="uri"></param>
         public void Configure(string uri)
@@ -172,38 +172,6 @@ namespace NXKit.Web.UI
             Contract.Requires<ArgumentNullException>(uri != null);
 
             Configure(new Uri(uri, UriKind.RelativeOrAbsolute));
-        }
-
-        /// <summary>
-        /// Loads the specified <see cref="Uri"/> into the view.
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="configuration"></param>
-        public void Configure(Uri uri, NXDocumentConfiguration configuration)
-        {
-            Contract.Requires<ArgumentNullException>(uri != null);
-            Contract.Requires<ArgumentNullException>(configuration != null);
-
-            // construct a engine instance
-            document = new NXDocument(
-                CompositionUtil.CreateContainer()
-                    .WithExport<IResolver>(new ResourceResolver(this)),
-                uri, 
-                configuration);
-            document.Invoke();
-        }
-
-        /// <summary>
-        /// Loads the specified <see cref="Uri"/> into the view.
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="configuration"></param>
-        public void Configure(string uri, NXDocumentConfiguration configuration)
-        {
-            Contract.Requires<ArgumentNullException>(uri != null);
-            Contract.Requires<ArgumentNullException>(configuration != null);
-
-            Configure(new Uri(uri, UriKind.RelativeOrAbsolute), configuration);
         }
 
         /// <summary>

@@ -17,13 +17,7 @@ namespace NXKit.Test.Web.Site
         protected void View_Load(object sender, EventArgs args)
         {
             if (!IsPostBack)
-            {
-                var c = new NXDocumentConfiguration();
-                c.AddModule<NXKit.DOMEvents.DOMEventsModule>();
-                c.AddModule<NXKit.XForms.XFormsModule>();
-                c.AddModule<NXKit.XForms.Layout.LayoutModule>();
-                View.Configure("form.xml", c);
-            }
+                View.Configure("form.xml");
         }
 
         protected void View_ResourceAction(object sender, ResourceActionEventArgs args)

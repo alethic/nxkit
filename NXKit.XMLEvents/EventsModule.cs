@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
 using NXKit.DOMEvents;
 
 namespace NXKit.XmlEvents
@@ -38,6 +39,17 @@ namespace NXKit.XmlEvents
                 handler.Handle(ev);
             }
 
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
+        [ImportingConstructor]
+        public EventsModule(NXDocument document)
+            : base(document)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
         }
 
         public override NXNode CreateNode(XNode node)

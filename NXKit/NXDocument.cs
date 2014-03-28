@@ -19,32 +19,6 @@ namespace NXKit
     {
 
         /// <summary>
-        /// Creates a new default <see cref="NXDocumentConfiguration"/> instance.
-        /// </summary>
-        /// <returns></returns>
-        public static NXDocumentConfiguration CreateDefaultConfiguration()
-        {
-            return new NXDocumentConfiguration();
-        }
-
-        /// <summary>
-        /// Loads a <see cref="NXDocument"/> from the given <see cref="Uri"/>.
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
-        public static NXDocument Load(Uri uri, NXDocumentConfiguration configuration)
-        {
-            Contract.Requires<ArgumentNullException>(uri != null);
-            Contract.Requires<ArgumentNullException>(configuration != null);
-
-            return new NXDocument(
-                CompositionUtil.CreateContainer(),
-                uri,
-                configuration);
-        }
-
-        /// <summary>
         /// Loads a <see cref="NXDocument"/> from the given <see cref="Uri"/>.
         /// </summary>
         /// <param name="uri"></param>
@@ -53,26 +27,9 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            return Load(uri, CreateDefaultConfiguration());
-        }
-
-        /// <summary>
-        /// Loads a <see cref="NXDocument"/> from the given <see cref="Stream"/>.
-        /// </summary>
-        /// <param name="document"></param>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
-        public static NXDocument Load(Stream document, NXDocumentConfiguration configuration)
-        {
-            Contract.Requires<ArgumentNullException>(document != null);
-            Contract.Requires<ArgumentNullException>(configuration != null);
-
             return new NXDocument(
-                CompositionUtil.CreateContainer()
-                    .WithExport<IResolver>(
-                        new SingleUriResolver("document.xml", () => document)),
-                new Uri("document.xml", UriKind.Relative),
-                configuration);
+                CompositionUtil.CreateContainer(),
+                uri);
         }
 
         /// <summary>
@@ -84,19 +41,11 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
-            return Load(document, CreateDefaultConfiguration());
-        }
-
-        /// <summary>
-        /// Parses a <see cref="NXDocument"/> from the given string.
-        /// </summary>
-        /// <param name="document"></param>
-        /// <returns></returns>
-        public static NXDocument Parse(string document)
-        {
-            Contract.Requires<ArgumentNullException>(document != null);
-
-            return Parse(document, CreateDefaultConfiguration());
+            return new NXDocument(
+                CompositionUtil.CreateContainer()
+                    .WithExport<IResolver>(
+                        new SingleUriResolver("document.xml", () => document)),
+                new Uri("document.xml", UriKind.Relative));
         }
 
         /// <summary>
@@ -105,16 +54,14 @@ namespace NXKit
         /// <param name="document"></param>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public static NXDocument Parse(string document, NXDocumentConfiguration configuration)
+        public static NXDocument Parse(string document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
-            Contract.Requires<ArgumentNullException>(configuration != null);
 
-            return Load(new MemoryStream(Encoding.UTF8.GetBytes(document)), configuration);
+            return Load(new MemoryStream(Encoding.UTF8.GetBytes(document)));
         }
 
         readonly LinkedList<object> storage = new LinkedList<object>();
-        readonly NXDocumentConfiguration configuration;
         readonly CompositionContainer container;
         readonly Uri uri;
         readonly NodeStateCollection nodeState;
@@ -126,7 +73,6 @@ namespace NXKit
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
         void ObjectInvariant()
         {
-            Contract.Invariant(configuration != null);
             Contract.Invariant(container != null);
             Contract.Invariant(nodeState != null);
             Contract.Invariant(nextElementId >= 0);
@@ -138,28 +84,11 @@ namespace NXKit
         /// <param name="container"></param>
         /// <param name="uri"></param>
         public NXDocument(CompositionContainer container, Uri uri)
-            : this(container, uri, CreateDefaultConfiguration())
-        {
-            Contract.Requires<ArgumentNullException>(container != null);
-            Contract.Requires<ArgumentNullException>(uri != null);
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="uri"></param>
-        /// <param name="configuration"></param>
-        /// <param name="nextElementId"></param>
-        /// <param name="visualState"></param>
-        public NXDocument(CompositionContainer container, Uri uri, NXDocumentConfiguration configuration)
             : base()
         {
             Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(uri != null);
-            Contract.Requires<ArgumentNullException>(configuration != null);
 
-            this.configuration = configuration;
             this.nextElementId = 1;
             this.nodeState = new NodeStateCollection();
 
@@ -181,7 +110,7 @@ namespace NXKit
         /// <param name="container"></param>
         /// <param name="state"></param>
         public NXDocument(CompositionContainer container, NXDocumentState state)
-            : this(container, state.Uri, state.Configuration, state.Xml, state.NextElementId, state.NodeState)
+            : this(container, state.Uri, state.Xml, state.NextElementId, state.NodeState)
         {
             Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(state != null);
@@ -196,17 +125,15 @@ namespace NXKit
         /// <param name="xml"></param>
         /// <param name="nextElementId"></param>
         /// <param name="nodeState"></param>
-        NXDocument(CompositionContainer container, Uri uri, NXDocumentConfiguration configuration, string xml, int nextElementId, NodeStateCollection nodeState)
+        NXDocument(CompositionContainer container, Uri uri, string xml, int nextElementId, NodeStateCollection nodeState)
             : base()
         {
             Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(uri != null);
-            Contract.Requires<ArgumentNullException>(configuration != null);
             Contract.Requires<ArgumentNullException>(xml != null);
             Contract.Requires<ArgumentOutOfRangeException>(nextElementId >= 0);
             Contract.Requires<ArgumentNullException>(nodeState != null);
 
-            this.configuration = configuration;
             this.nextElementId = nextElementId;
             this.nodeState = nodeState;
 
@@ -222,46 +149,22 @@ namespace NXKit
         /// </summary>
         void Initialize()
         {
-            // dictionary of types to instances
-            var m = configuration.ModuleTypes
-                .ToDictionary(i => i, i => (Module)null);
-
-            do
-            {
-                // instantiate types
-                foreach (var i in m.ToList())
-                    if (i.Value == null)
-                        m[i.Key] = (Module)Activator.CreateInstance(i.Key);
-
-                // add dependency types
-                foreach (var i in m.ToList())
-                    foreach (var d in i.Value.DependsOn)
-                        if (!m.ContainsKey(d))
-                            m[d] = null;
-            }
-            // end when all types are instantiated
-            while (m.Any(i => i.Value == null));
+            // ensures the document is in the container
+            Container.WithExport<NXDocument>(this);
 
             // generate final module list
-            modules = m.Values.ToArray();
+            modules = Container.GetExportedValues<Module>()
+                .ToArray();
 
             // initialize modules
             foreach (var module in modules)
-                module.Initialize(this);
+                module.Initialize();
 
             // create the root node and add it to the document
             Add(CreateRootNode());
 
             // ensure document has been invoked at least once
             Invoke();
-        }
-
-        /// <summary>
-        /// Gets the current engine configuration.
-        /// </summary>
-        public NXDocumentConfiguration Configuration
-        {
-            get { return configuration; }
         }
 
         /// <summary>
@@ -410,7 +313,6 @@ namespace NXKit
         public NXDocumentState Save()
         {
             return new NXDocumentState(
-                configuration,
                 uri,
                 Xml.ToString(SaveOptions.DisableFormatting),
                 nextElementId,

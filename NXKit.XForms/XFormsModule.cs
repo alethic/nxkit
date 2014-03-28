@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
@@ -30,14 +31,20 @@ namespace NXKit.XForms
         /// </summary>
         internal bool executingOutermostActionHandler;
 
-        public override Type[] DependsOn
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
+        [ImportingConstructor]
+        public XFormsModule(NXDocument document)
+            : base(document)
         {
-            get { return new[] { typeof(DOMEventsModule) }; }
+
         }
 
-        public override void Initialize(NXDocument document)
+        public override void Initialize()
         {
-            base.Initialize(document);
+            base.Initialize();
 
             Document.Changed += Document_Changed;
             Document.ProcessSubmit += Form_ProcessSubmit;

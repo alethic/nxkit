@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
@@ -9,7 +11,8 @@ using NXKit.Util;
 namespace NXKit.XForms.Layout
 {
 
-    public class LayoutModule : Module
+    public class LayoutModule :
+        Module
     {
 
         /// <summary>
@@ -20,15 +23,15 @@ namespace NXKit.XForms.Layout
             .Where(i => i.Attribute != null)
             .ToDictionary(i => Constants.Layout_1_0 + i.Attribute.Name, i => i.Type);
 
-        public override Type[] DependsOn
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
+        [ImportingConstructor]
+        public LayoutModule(NXDocument document)
+            : base(document)
         {
-            get
-            {
-                return new[]
-                {
-                    typeof(XFormsModule)
-                };
-            }
+            Contract.Requires<ArgumentNullException>(document != null);
         }
 
         public override NXNode CreateNode(XNode node)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+
 using NXKit.Util;
 
 namespace NXKit.DOMEvents
@@ -40,30 +41,30 @@ namespace NXKit.DOMEvents
 
         }
 
-        readonly NXElement node;
+        readonly NXElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="node"></param>
-        public EventTarget(NXElement node)
+        /// <param name="element"></param>
+        public EventTarget(NXElement element)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(element != null);
 
-            this.node = node;
+            this.element = element;
         }
 
         public NXElement Node
         {
-            get { return node; }
+            get { return element; }
         }
 
         public void AddEventListener(string type, IEventListener listener, bool useCapture)
         {
             // initialize listener map
-            var listenerMap = node.Storage.OfType<EventListenerMap>().FirstOrDefault();
+            var listenerMap = element.Storage.OfType<EventListenerMap>().FirstOrDefault();
             if (listenerMap == null)
-                node.Storage.AddLast(listenerMap = new EventListenerMap());
+                element.Storage.AddLast(listenerMap = new EventListenerMap());
 
             // initialize listeners list
             var listeners = listenerMap.GetOrDefault(type);
@@ -80,7 +81,7 @@ namespace NXKit.DOMEvents
 
         public void RemoveEventListener(string type, IEventListener listener, bool useCapture)
         {
-            var listenerMap = node.Storage.OfType<EventListenerMap>().FirstOrDefault();
+            var listenerMap = element.Storage.OfType<EventListenerMap>().FirstOrDefault();
             if (listenerMap == null)
                 return;
 
@@ -97,7 +98,7 @@ namespace NXKit.DOMEvents
 
         public void DispatchEvent(Event evt)
         {
-            var target = node.Interface<IEventTarget>();
+            var target = element.Interface<IEventTarget>();
             if (target == null)
                 throw new Exception();
 
@@ -113,7 +114,7 @@ namespace NXKit.DOMEvents
             evt.Target = target;
 
             // path to root from root
-            var path = node.Ancestors()
+            var path = element.Ancestors()
                 .OfType<NXElement>()
                 .ToList();
 
@@ -130,7 +131,7 @@ namespace NXKit.DOMEvents
 
             // at-target phase
             evt.EventPhase = EventPhase.AtTarget;
-            HandleEventOnNode(node, evt, false);
+            HandleEventOnNode(element, evt, false);
 
             // was told to stop propagation
             if (evt.StopPropagationSet)
@@ -150,7 +151,7 @@ namespace NXKit.DOMEvents
             if (!evt.PreventDefaultSet)
             {
                 // handle default action
-                var da = node as IEventDefaultActionHandler;
+                var da = element as IEventDefaultActionHandler;
                 if (da != null)
                     da.DefaultAction(evt);
             }

@@ -24,12 +24,12 @@ namespace NXKit.XForms
         {
             base.OnAdded(args);
 
-            this.Interface<IEventTarget>().AddEventHandler("xforms-invalid", false, i =>
+            this.Interface<INXEventTarget>().AddEventHandler("xforms-invalid", i =>
             {
                 Console.WriteLine(i);
             });
 
-            this.Interface<IEventTarget>().AddEventHandler("xforms-valid", false, i =>
+            this.Interface<INXEventTarget>().AddEventHandler("xforms-valid", i =>
             {
                 Console.WriteLine(i);
             });

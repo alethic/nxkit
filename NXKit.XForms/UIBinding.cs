@@ -108,7 +108,7 @@ namespace NXKit.XForms
                 return false;
 
             var next = node.Ancestors()
-                .Select(i => i.Interface<IUIBindingNode>())
+                .Select(i => i.InterfaceOrDefault<IUIBindingNode>())
                 .Where(i => i != null)
                 .FirstOrDefault();
             if (next != null)

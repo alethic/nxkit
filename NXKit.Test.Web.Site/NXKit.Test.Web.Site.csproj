@@ -262,13 +262,13 @@
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
       <Name>NXKit.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
-      <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
-      <Name>NXKit.XForms.Layout</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NXKit.Web.UI\NXKit.Web.UI.csproj">
       <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
       <Name>NXKit.Web.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
+      <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
+      <Name>NXKit.XForms.Layout</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
       <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
