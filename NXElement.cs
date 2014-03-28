@@ -54,13 +54,13 @@ namespace NXKit
         /// <summary>
         /// Unique identifier for the <see cref="NXNode"/> within the current naming scope.
         /// </summary>
-        [Interactive]
+        [Public]
         public abstract string Id { get; }
 
         /// <summary>
         /// Returns a unique identifier for this visual, considering naming scopes.
         /// </summary>
-        [Interactive]
+        [Public]
         public string UniqueId
         {
             get { return uniqueId ?? (uniqueId = CreateUniqueId()); }
