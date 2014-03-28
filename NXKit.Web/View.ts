@@ -12,7 +12,7 @@ module NXKit.Web {
         private _root: Node;
         private _bind: boolean;
 
-        private _onNodeValueChanged: (node: Node, property: Property) => void;
+        private _onNodePropertyChanged: (node: Node, $interface: Interface, property: Property, value: any) => void;
         private _onNodeMethodInvoked: (node: Node, $interface: Interface, method: Method, params: any) => void;
 
         private _queue: Array<(cb: ICallbackComplete) => void>;
@@ -33,8 +33,8 @@ module NXKit.Web {
             self._queue = new Array<any>();
             self._queueRunning = false;
 
-            self._onNodeValueChanged = (node: Node, property: Property) => {
-                self.OnRootNodeValueChanged(node, property);
+            self._onNodePropertyChanged = (node: Node, $interface: Interface, property: Property, value: any) => {
+                self.OnRootNodePropertyChanged(node, $interface, property, value);
             };
 
             self._onNodeMethodInvoked = (node: Node, $interface: Interface, method: Method, params: any) => {
@@ -70,15 +70,15 @@ module NXKit.Web {
             if (self._root == null) {
                 // generate new node tree
                 self._root = new Node(data);
-                self._root.ValueChanged.add(self._onNodeValueChanged);
+                self._root.PropertyChanged.add(self._onNodePropertyChanged);
                 self._root.MethodInvoked.add(self._onNodeMethodInvoked);
             }
             else {
                 // update existing node tree
-                self._root.ValueChanged.remove(self._onNodeValueChanged);
+                self._root.PropertyChanged.remove(self._onNodePropertyChanged);
                 self._root.MethodInvoked.remove(self._onNodeMethodInvoked);
                 self._root.Update(data);
-                self._root.ValueChanged.add(self._onNodeValueChanged);
+                self._root.PropertyChanged.add(self._onNodePropertyChanged);
                 self._root.MethodInvoked.add(self._onNodeMethodInvoked);
             }
 
@@ -88,7 +88,7 @@ module NXKit.Web {
         /**
          * Invoked to handle root node value change events.
          */
-        OnRootNodeValueChanged(node: Node, property: Property) {
+        OnRootNodePropertyChanged(node: Node, $interface: Interface, property: Property, value: any) {
             this.Push();
         }
 

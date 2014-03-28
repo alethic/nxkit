@@ -7,14 +7,13 @@ module NXKit.Web {
 
         _type: string;
         _baseTypes: string[];
-        _properties: IPropertyMap;
         _interfaces: IInterfaceMap;
         _nodes: KnockoutObservableArray<Node>;
 
         /**
          * Raised when the node has changes to be pushed to the server.
          */
-        public ValueChanged: INodePropertyValueChangedEvent = new TypedEvent();
+        public PropertyChanged: INodePropertyChangedEvent = new TypedEvent();
 
         /**
          * Raised when the node has methods to be invoked on the server.
@@ -27,7 +26,6 @@ module NXKit.Web {
         constructor(source: any) {
             this._type = null;
             this._baseTypes = new Array<string>();
-            this._properties = new PropertyMap();
             this._interfaces = new InterfaceMap();
             this._nodes = ko.observableArray<Node>();
 
@@ -55,13 +53,6 @@ module NXKit.Web {
         }
 
         /**
-         * Gets the interactive properties of this node.
-         */
-        public get Properties(): IPropertyMap {
-            return this._properties;
-        }
-
-        /**
          * Gets the exposed interfaces of this node.
          */
         public get Interfaces(): IInterfaceMap {
@@ -76,18 +67,75 @@ module NXKit.Web {
         }
 
         /**
-         * Invokes a named method.
+         * Gets the named property on the named interface.
          */
-        public Invoke(interfaceName: string, methodName: string, params: any): void {
+        public Property(interfaceName: string, propertyName: string): Property {
+            var i = this._interfaces[interfaceName];
+            if (i == null)
+                throw new Error('Unknown interface');
+
+            var p = i.Properties[propertyName];
+            if (p == null)
+                throw new Error('Unknown property');
+
+            return p;
+        }
+
+        /**
+         * Gets the property value accessor for the named property on the specified interface.
+         */
+        public Value(interfaceName: string, propertyName: string): KnockoutObservable<any> {
+            return this.Property(interfaceName, propertyName).Value;
+        }
+        
+        /**
+         * Gets the property value accessor for the named property on the specified interface as a string.
+         */
+        public ValueAsString(interfaceName: string, propertyName: string): KnockoutObservable<string> {
+            return this.Property(interfaceName, propertyName).ValueAsString;
+        }
+        
+        /**
+         * Gets the property value accessor for the named property on the specified interface as a boolean.
+         */
+        public ValueAsBoolean(interfaceName: string, propertyName: string): KnockoutObservable<boolean> {
+            return this.Property(interfaceName, propertyName).ValueAsBoolean;
+        }
+
+        /**
+         * Gets the property value accessor for the named property on the specified interface as a number.
+         */
+        public ValueAsNumber(interfaceName: string, propertyName: string): KnockoutObservable<number> {
+            return this.Property(interfaceName, propertyName).ValueAsNumber;
+        }
+
+        /**
+         * Gets the property value accessor for the named property on the specified interface as a date.
+         */
+        public ValueAsDate(interfaceName: string, propertyName: string): KnockoutObservable<Date> {
+            return this.Property(interfaceName, propertyName).ValueAsDate;
+        }
+
+        /**
+         * Gets the named method on the named interface.
+         */
+        public Method(interfaceName: string, methodName: string): Method {
             var i = this._interfaces[interfaceName];
             if (i == null)
                 throw new Error('Unknown interface');
 
             var m = i.Methods[methodName];
             if (m == null)
-                throw new Error('Unknown method.');
+                throw new Error('Unknown method');
 
-            m.Invoke(params);
+            return m;
+        }
+
+        /**
+         * Invokes a named method on the specified interface.
+         */
+        public Invoke(interfaceName: string, methodName: string, params: any): void {
+            this.Method(interfaceName, methodName).Invoke(params);
         }
 
         /**
@@ -96,7 +144,6 @@ module NXKit.Web {
         public Update(source: any) {
             this.UpdateType(source.Type);
             this.UpdateBaseTypes(source.BaseTypes);
-            this.UpdateProperties(source.Properties);
             this.UpdateInterfaces(source);
             this.UpdateNodes(source.Nodes);
         }
@@ -113,31 +160,6 @@ module NXKit.Web {
          */
         UpdateBaseTypes(baseTypes: string[]) {
             this._baseTypes = baseTypes;
-        }
-
-        /**
-         * Integrates the set of properties given with this node.
-         */
-        UpdateProperties(source: any) {
-            for (var i in source) {
-                this.UpdateProperty(<string>i, source[<string>i]);
-            }
-        }
-
-        /**
-         * Updates the property given by the specified name with the specified value.
-         */
-        UpdateProperty(name: string, source: any) {
-            var self = this;
-            var prop: Property = self._properties[name];
-            if (prop == null) {
-                prop = self._properties[name] = new Property(source);
-                prop.ValueChanged.add(_ => {
-                    self.OnValueChanged(self, _);
-                });
-            } else {
-                prop.Update(source);
-            }
         }
 
         /**
@@ -158,8 +180,8 @@ module NXKit.Web {
             var intf: Interface = self._interfaces[name];
             if (intf == null) {
                 intf = self._interfaces[name] = new Interface(name, source);
-                intf.PropertyChanged.add(_ => {
-                    self.OnValueChanged(self, _);
+                intf.PropertyChanged.add((_, property, value) => {
+                    self.OnPropertyChanged(_, property, value);
                 });
                 intf.MethodInvoked.add((_, method, params) => {
                     self.OnMethodInvoked(_, method, params);
@@ -185,8 +207,11 @@ module NXKit.Web {
             for (var i = 0; i < sources.length; i++) {
                 if (self._nodes().length < i + 1) {
                     var v = new Node(sources[i]);
-                    v.ValueChanged.add((_, __) => {
-                        self.OnValueChanged(_, __);
+                    v.PropertyChanged.add((n, intf, property, value) => {
+                        this.PropertyChanged.trigger(n, intf, property, value);
+                    });
+                    v.MethodInvoked.add((n, intf, method, params) => {
+                        this.MethodInvoked.trigger(n, intf, method, params);
                     });
                     self._nodes.push(v);
                 } else {
@@ -203,7 +228,6 @@ module NXKit.Web {
             var r: any = {
                 Type: this._type,
                 BaseTypes: this._baseTypes,
-                Properties: this.PropertiesToData(),
                 Nodes: this.NodesToData(),
             };
 
@@ -211,17 +235,6 @@ module NXKit.Web {
                 r[<string>i] = this._interfaces[<string>i].ToData();
 
             return r;
-        }
-
-        /**
-         * Transforms the given Property array into a list of data to push.
-         */
-        PropertiesToData(): any {
-            var l: any = {};
-            for (var p in this._properties) {
-                l[<string>p] = this._properties[<string>p].ToData();
-            }
-            return l;
         }
 
         /**
@@ -236,8 +249,8 @@ module NXKit.Web {
         /**
          * Initiates a push of new values to the server.
          */
-        OnValueChanged(node: Node, property: Property) {
-            this.ValueChanged.trigger(node, property);
+        OnPropertyChanged($interface: Interface, property: Property, value: any) {
+            this.PropertyChanged.trigger(this, $interface, property, value);
         }
 
         /**

@@ -21,15 +21,15 @@ module NXKit.Web.XForms {
             return ko.computed<string>({
                 read: () => {
                     if (node != null &&
-                        node.Properties['SelectedItemNodeId'] != null)
-                        return node.Properties['SelectedItemNodeId'].ValueAsString();
+                        node.ValueAsString('NXKit.XForms.Select1', 'SelectedItemNodeId') != null)
+                        return node.ValueAsString('NXKit.XForms.Select1', 'SelectedItemNodeId')();
                     else
                         return null;
                 },
                 write: _ => {
                     if (node != null &&
-                        node.Properties['SelectedItemNodeId'] != null)
-                        node.Properties['SelectedItemNodeId'].Value(_);
+                        node.ValueAsString('NXKit.XForms.Select1', 'SelectedItemNodeId') != null)
+                        node.ValueAsString('NXKit.XForms.Select1', 'SelectedItemNodeId')(_);
                 },
             });
         }

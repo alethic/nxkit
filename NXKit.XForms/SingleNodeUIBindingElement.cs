@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace NXKit.XForms
@@ -8,7 +7,6 @@ namespace NXKit.XForms
     /// <summary>
     /// Base implementation for an XForms element which implements Single-Node Binding.
     /// </summary>
-    [Public]
     public class SingleNodeUIBindingElement :
         UIBindingElement
     {
@@ -66,7 +64,6 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets or sets the value of the bound data.
         /// </summary>
-        [Public]
         public object Value
         {
             get { return UIBinding != null ? UIBinding.Value : null; }

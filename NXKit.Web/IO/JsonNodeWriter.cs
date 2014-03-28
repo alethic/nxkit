@@ -1,13 +1,12 @@
 ﻿using System;
-using NXKit.Util;
-using System.Linq;
+using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.Linq;
 using System.Reflection;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.ComponentModel;
+using NXKit.Util;
 
 namespace NXKit.Web.IO
 {
@@ -96,30 +95,6 @@ namespace NXKit.Web.IO
                 writer.WriteEndArray();
             }
 
-            // write interactive properties
-            var properties = GetNodeProperties(node);
-            if (properties.Length > 0)
-            {
-                writer.WritePropertyName("Properties");
-                writer.WriteStartObject();
-                foreach (var property in properties)
-                {
-                    writer.WritePropertyName(property.Name);
-                    writer.WriteStartObject();
-
-                    // serialize value independently to handle custom conversion
-                    writer.WritePropertyName("Value");
-                    serializer.Serialize(writer, property.GetValue(node));
-
-                    // each value gets a version so the client can keep track of changed nodes
-                    writer.WritePropertyName("Version");
-                    writer.WriteValue(0);
-
-                    writer.WriteEndObject();
-                }
-                writer.WriteEndObject();
-            }
-
             var items = node.Interfaces()
                 .Where(i => i != null)
                 .Select(i => new
@@ -134,21 +109,34 @@ namespace NXKit.Web.IO
                 })
                 .Where(i => i.Types.Any())
                 .SelectMany(i => i.Types
-                    .Select(j => new { Object = i.Object, Type = j }))
-                .GroupBy(i => i.Type)
+                    .Select(j => new
+                    {
+                        Object = i.Object,
+                        Type = j,
+                        TypeName = j.FullName,
+                    }))
+                .GroupBy(i => i.TypeName)
                 .Select(i => new
                 {
-                    Type = i.Key,
-                    Object = i.First(),
-                    Properties = TypeDescriptor.GetProperties(i.Key)
-                        .Cast<PropertyDescriptor>()
-                        .Where(j => j.ComponentType == i.Key)
-                        .Where(j => j.Attributes.OfType<PublicAttribute>().Any())
+                    Type = i.First().Type,
+                    TypeName = i.First().TypeName,
+                    Object = i.First().Object,
+                })
+                .Select(i => new
+                {
+                    Type = i.Type,
+                    TypeName = i.TypeName,
+                    Object = i.Object,
+                    Properties = TypeDescriptor.GetReflectionType(i.Type)
+                        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                        .Where(j => j.DeclaringType == i.Type)
+                        .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
                         .GroupBy(j => j.Name)
                         .Select(j => j.First())
                         .ToList(),
-                    Methods = TypeDescriptor.GetReflectionType(i.Key)
+                    Methods = TypeDescriptor.GetReflectionType(i.Type)
                         .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                        .Where(j => j.DeclaringType == i.Type)
                         .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
                         .GroupBy(j => j.Name)
                         .Select(j => j.First())
@@ -169,7 +157,7 @@ namespace NXKit.Web.IO
 
                 foreach (var method in item.Methods)
                 {
-                    writer.WritePropertyName(method.Name);
+                    writer.WritePropertyName("@" + method.Name);
                     writer.WriteStartArray();
                     writer.WriteEndArray();
                 }

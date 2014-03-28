@@ -6,9 +6,10 @@ namespace NXKit.XForms
     /// <summary>
     /// Describes an element which is part of the interface hierarchy and supports binding.
     /// </summary>
-    [Public]
     public abstract class UIBindingElement :
         BindingElement,
+        IValue,
+        IModelItemBinding,
         IUIBindingNode
     {
 
@@ -41,31 +42,32 @@ namespace NXKit.XForms
             get { return uiBinding ?? (uiBinding = CreateUIBinding()); }
         }
 
-        [Public]
+
+        public object Value
+        {
+            get { return UIBinding.Value; }
+        }
+
         public XName DataType
         {
             get { return UIBinding.DataType; }
         }
 
-        [Public]
         public bool Relevant
         {
             get { return UIBinding.Relevant; }
         }
 
-        [Public]
         public bool ReadOnly
         {
             get { return UIBinding.ReadOnly; }
         }
 
-        [Public]
         public bool Required
         {
             get { return UIBinding.Required; }
         }
 
-        [Public]
         public bool Valid
         {
             get { return UIBinding.Valid; }

@@ -2,6 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+
 using NXKit.Util;
 
 namespace NXKit
@@ -10,6 +11,7 @@ namespace NXKit
     /// <summary>
     /// Represents an element in the document.
     /// </summary>
+    [Public]
     public abstract class NXElement :
         NXContainer
     {

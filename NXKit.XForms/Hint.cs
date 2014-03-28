@@ -9,7 +9,8 @@ namespace NXKit.XForms
     [Element("hint")]
     public class Hint : 
         SingleNodeUIBindingElement,
-        ISupportsCommonAttributes
+        ISupportsCommonAttributes,
+        IUIAppearance
     {
         
         /// <summary>
@@ -22,7 +23,6 @@ namespace NXKit.XForms
 
         }
 
-        [Public]
         public XName Appearance
         {
             get { return (string)Module.ResolveAttribute(Xml, "appearance"); }

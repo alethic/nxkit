@@ -9,7 +9,8 @@ namespace NXKit
     /// Represents a simple text node.
     /// </summary>
     public class NXText :
-        NXNode
+        NXNode,
+        IText
     {
 
         /// <summary>
@@ -36,7 +37,6 @@ namespace NXKit
             get { return (XText)base.Xml; }
         }
 
-        [Public]
         public string Text
         {
             get { return Xml.Value; }

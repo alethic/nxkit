@@ -21,8 +21,8 @@ module NXKit.Web.XForms {
             var s = '';
             var l = n.Nodes();
             for (var i = 0; i < l.length; i++)
-                if (l[i].Type === 'NXKit.NXText')
-                    s += l[i].Properties['Text'].ValueAsString();
+                if (l[i].Type === 'NXKit.IText')
+                    s += l[i].Property('NXKit.IText', 'Text').ValueAsString();
             return s;
         }
 
@@ -31,7 +31,7 @@ module NXKit.Web.XForms {
             if (n == null)
                 return null;
 
-            if (n.Properties['Appearance'].ValueAsString() != 'minimal')
+            if (Utils.GetAppearance(n)() != 'minimal')
                 return null;
 
             return this.GetHintText();
@@ -39,7 +39,7 @@ module NXKit.Web.XForms {
 
         public get ShowAdvice(): KnockoutObservable<boolean> {
             return ko.computed(() =>
-                this.Hint != null && this.Hint.Properties['Appearance'].ValueAsString() != 'minimal');
+                this.Hint != null && Utils.GetAppearance(this.Hint)() !== 'minimal');
         }
 
         public get ShowError(): KnockoutObservable<boolean> {

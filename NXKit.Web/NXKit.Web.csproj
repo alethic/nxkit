@@ -134,14 +134,15 @@
     <Compile Include="IO\XNameJsonConverter.cs" />
     <TypeScriptCompile Include="ICallbackComplete.ts" />
     <TypeScriptCompile Include="IEvent.ts" />
+    <TypeScriptCompile Include="IPropertyChangedEvent.ts" />
     <TypeScriptCompile Include="INodeMethodInvokedEvent.ts" />
     <TypeScriptCompile Include="IInterfaceMethodInvokedEvent.ts" />
     <TypeScriptCompile Include="IMethodMap.ts" />
     <TypeScriptCompile Include="IInterfaceMap.ts" />
     <TypeScriptCompile Include="IPropertyMap.ts" />
-    <TypeScriptCompile Include="INodePropertyValueChangedEvent.ts" />
+    <TypeScriptCompile Include="INodePropertyChangedEvent.ts" />
     <TypeScriptCompile Include="IMethodInvokedEvent.ts" />
-    <TypeScriptCompile Include="IPropertyValueChangedEvent.ts" />
+    <TypeScriptCompile Include="IInterfacePropertyChangedEvent.ts" />
     <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\HorizontalVisibleBindingHandler.ts" />
     <TypeScriptCompile Include="LayoutOptions.ts" />

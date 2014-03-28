@@ -1,4 +1,5 @@
-﻿<script type="text/html" data-nxkit-node="NXKit.XForms.Select1Element">
+﻿<script type="text/html"
+        data-nxkit-node="NXKit.XForms.Select1">
     <!-- ko with: new NXKit.Web.XForms.Select1ViewModel($context, $data) -->
     <!-- ko nxkit_template: {
         node: Node,
@@ -9,13 +10,15 @@
     <!-- /ko -->
 </script>
 
-<script type="text/html" data-nxkit-node="NXKit.XForms.Select1Element" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
+<script type="text/html"
+        data-nxkit-node="NXKit.XForms.Select1"
+        data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
     <div class="ui fluid selection dropdown" data-bind="nxkit_dropdown: SelectedItemNodeId">
         <input type="hidden" />
         <div class="text">Select</div>
         <i class="dropdown icon"></i>
         <div class="ui menu" data-bind="foreach: Items">
-            <div class="item" data-bind="attr: { 'data-value': $data.Properties['UniqueId'].ValueAsString }">
+            <div class="item" data-bind="attr: { 'data-value': $data.ValueAsString('NXKit.NXElement', 'UniqueId') }">
                 <!-- ko nxkit_template: NXKit.Web.XForms.Utils.GetLabel($data) -->
                 <!-- /ko -->
             </div>
@@ -23,6 +26,8 @@
     </div>
 </script>
 
-<script type="text/html" data-nxkit-node="NXKit.XForms.Select1Element" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}boolean">
+<script type="text/html"
+        data-nxkit-node="NXKit.XForms.Select1"
+        data-nxkit-type="{http://www.w3.org/2001/XMLSchema}boolean">
 
 </script>

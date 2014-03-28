@@ -6,6 +6,7 @@ namespace NXKit.XForms
 {
 
     [Element("range")]
+    [Public]
     public class Range : 
         SingleNodeUIBindingElement
     {

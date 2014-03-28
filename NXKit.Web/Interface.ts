@@ -9,7 +9,7 @@ module NXKit.Web {
         private _properties: IPropertyMap;
         private _methods: IMethodMap;
 
-        public PropertyChanged: IPropertyValueChangedEvent = new TypedEvent();
+        public PropertyChanged: IInterfacePropertyChangedEvent = new TypedEvent();
         public MethodInvoked: IInterfaceMethodInvokedEvent = new TypedEvent();
 
         constructor(name: string, source: any) {
@@ -27,6 +27,10 @@ module NXKit.Web {
             return this._name;
         }
 
+        public get Properties(): IPropertyMap {
+            return this._properties;
+        }
+
         public get Methods(): IMethodMap {
             return this._methods;
         }
@@ -35,26 +39,58 @@ module NXKit.Web {
             var self = this;
 
             for (var i in source) {
-                var m = self._methods[<string>i];
-                if (m == null) {
-                    self._methods[<string>i] = new Method(<string>i, source[<string>i]);
-                    self._methods[<string>i].MethodInvoked.add((_, params) => {
-                        self.OnMethodInvoked(_, params);
-                    });
+                var s = <string>i;
+                if (s.indexOf('@') === 0) {
+                    var m = self._methods[s.substring(1, s.length - 1)];
+                    if (m == null) {
+                        self._methods[s] = new Method(s, source[s]);
+                        self._methods[s].MethodInvoked.add((_, params) => {
+                            self.OnMethodInvoked(_, params);
+                        });
+                    } else {
+                        m.Update(source[s]);
+                    }
                 } else {
-                    m.Update(source[<string>i]);
+                    var p = self._properties[s];
+                    if (p == null) {
+                        self._properties[s] = new Property(s, source[s]);
+                        self._properties[s].PropertyChanged.add((_, value) => {
+                            self.OnPropertyChanged(_, value);
+                        });
+                    } else {
+                        p.Update(source[s]);
+                    }
                 }
             }
         }
 
         public ToData(): { [name: string]: any } {
+            var self = this;
             var r: { [name: string]: any } = {};
-            for (var i in this._methods) {
-                var m = this._methods[<string>i].ToData();
-                if (m != null)
-                    r[this._methods[<string>i].Name] = this._methods[<string>i].ToData();
+
+            // add properties to the data
+            for (var i in self._properties) {
+                var s = <string>i;
+                var p = self._properties[s].ToData();
+                if (p != null) {
+                    r[self._properties[s].Name] = self._properties[s].ToData();
+                }
             }
+
+            // add methods to the data
+            for (var i in self._methods) {
+                var s = <string>i;
+                var m = self._methods[s].ToData();
+                if (m != null) {
+                    r['@' + self._methods[s].Name] = self._methods[s].ToData();
+                }
+            }
+
             return r;
+        }
+
+        OnPropertyChanged(property: Property, value: any) {
+            this.PropertyChanged.trigger(this, property, value);
         }
 
         OnMethodInvoked(method: Method, params: any) {

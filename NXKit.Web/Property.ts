@@ -4,34 +4,30 @@ module NXKit.Web {
 
     export class Property {
 
+        private _name: string;
         private _value: KnockoutObservable<any>;
-        private _version: KnockoutObservable<number>;
+        private _suspend: boolean = false;
 
         private _valueAsString: KnockoutComputed<string>;
         private _valueAsBoolean: KnockoutComputed<boolean>;
         private _valueAsNumber: KnockoutComputed<number>;
         private _valueAsDate: KnockoutComputed<Date>;
-        
+
         /**
          * Raised when the Property's value has changed.
          */
-        public ValueChanged: IPropertyValueChangedEvent = new TypedEvent();
+        public PropertyChanged: IPropertyChangedEvent = new TypedEvent();
 
-        constructor(source: any) {
+        constructor(name: string, source: any) {
             var self = this;
+
+            self._name = name;
 
             self._value = ko.observable<any>();
             self._value.subscribe(_ => {
-                // version is set below zero when integrating changes
-                if (self._version() >= 0) {
-                    self._version(self._version() + 1);
-                    self.ValueChanged.trigger(self);
+                if (!self._suspend) {
+                    self.PropertyChanged.trigger(self, self._value());
                 }
-            });
-
-            self._version = ko.observable<number>();
-            self._version.subscribe(_ => {
-
             });
 
             self._valueAsString = ko.computed({
@@ -81,6 +77,10 @@ module NXKit.Web {
                 self.Update(source);
         }
 
+        public get Name(): string {
+            return this._name;
+        }
+
         public get Value(): KnockoutObservable<any> {
             return this._value;
         }
@@ -101,24 +101,17 @@ module NXKit.Web {
             return this._valueAsDate;
         }
 
-        public get Version(): KnockoutObservable<number> {
-            return this._version
-        }
-
         public Update(source: any) {
             var self = this;
-            if (self._value() !== source.Value) {
-                self._version(-1);
-                self._value(source.Value);
-                self._version(0);
+            if (self._value() !== source) {
+                self._suspend = true;
+                self._value(source);
+                self._suspend = false;
             }
         }
 
         public ToData(): any {
-            return {
-                Value: this.Value(),
-                Version: this.Version(),
-            }
+            return this.Value();
         }
 
     }

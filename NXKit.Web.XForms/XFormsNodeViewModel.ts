@@ -6,7 +6,7 @@
         public static ControlNodeTypes = [
             'NXKit.XForms.Input',
             'NXKit.XForms.Range',
-            'NXKit.XForms.Select1Element',
+            'NXKit.XForms.Select1',
             'NXKit.XForms.SelectElement',
             'NXKit.XForms.TextAreaElement',
         ];
@@ -27,43 +27,43 @@
             super(context, node);
         }
 
-        public get Value(): KnockoutComputed<any> {
+        public get Value(): KnockoutObservable<any> {
             return Utils.GetValue(this.Node);
         }
 
-        public get ValueAsString(): KnockoutComputed<string> {
+        public get ValueAsString(): KnockoutObservable<string> {
             return Utils.GetValueAsString(this.Node);
         }
 
-        public get ValueAsBoolean(): KnockoutComputed<boolean> {
+        public get ValueAsBoolean(): KnockoutObservable<boolean> {
             return Utils.GetValueAsBoolean(this.Node);
         }
 
-        public get ValueAsNumber(): KnockoutComputed<number> {
+        public get ValueAsNumber(): KnockoutObservable<number> {
             return Utils.GetValueAsNumber(this.Node);
         }
 
-        public get Relevant(): KnockoutComputed<boolean> {
+        public get Relevant(): KnockoutObservable<boolean> {
             return Utils.GetRelevant(this.Node);
         }
 
-        public get ReadOnly(): KnockoutComputed<boolean> {
+        public get ReadOnly(): KnockoutObservable<boolean> {
             return Utils.GetReadOnly(this.Node);
         }
 
-        public get Required(): KnockoutComputed<boolean> {
+        public get Required(): KnockoutObservable<boolean> {
             return Utils.GetRequired(this.Node);
         }
 
-        public get Valid(): KnockoutComputed<boolean> {
+        public get Valid(): KnockoutObservable<boolean> {
             return Utils.GetValid(this.Node);
         }
 
-        public get Type(): KnockoutComputed<string> {
+        public get Type(): KnockoutObservable<string> {
             return Utils.GetType(this.Node);
         }
 
-        public get Appearance(): KnockoutComputed<string> {
+        public get Appearance(): KnockoutObservable<string> {
             return Utils.GetAppearance(this.Node);
         }
 

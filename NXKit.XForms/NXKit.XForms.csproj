@@ -124,6 +124,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="IUIAppearance.cs" />
+    <Compile Include="IModelItemBinding.cs" />
+    <Compile Include="IValue.cs" />
     <Compile Include="NodeInterfaceProvider.cs" />
     <Compile Include="IActionElement.cs" />
     <Compile Include="IEvaluationContextScope.cs" />
@@ -144,7 +147,6 @@
     <Compile Include="UIBinding.cs" />
     <Compile Include="UIBindingElement.cs" />
     <Compile Include="UIBindingState.cs" />
-    <Compile Include="XFormsTypeDescriptionProvider.cs" />
     <Compile Include="XFormsXsltContext.cs" />
     <Compile Include="ActionElement.cs" />
     <Compile Include="Alert.cs" />
@@ -186,7 +188,7 @@
     <Compile Include="RepeatElement.cs" />
     <Compile Include="RevalidateElement.cs" />
     <Compile Include="Select1State.cs" />
-    <Compile Include="Select1Element.cs" />
+    <Compile Include="Select1.cs" />
     <Compile Include="Selection.cs" />
     <Compile Include="SelectElement.cs" />
     <Compile Include="SendElement.cs" />

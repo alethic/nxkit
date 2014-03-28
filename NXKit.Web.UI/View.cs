@@ -384,105 +384,92 @@ namespace NXKit.Web.UI
             if (s.Value<string>("Type") != d.GetType().FullName)
                 throw new Exception();
 
-            var sProperties = s.Value<JObject>("Properties")
-                .Properties()
-                .OrderBy(i => i.Name)
-                .ToArray();
-
-            var dProperties = TypeDescriptor.GetProperties(d)
-                .Cast<PropertyDescriptor>()
-                .Where(i => i.Attributes.OfType<PublicAttribute>().Any())
-                .OrderBy(i => i.Name)
-                .ToArray();
-
-            // join property lists by name
-            var pL = dProperties
-                .Join(sProperties, i => i.Name, i => i.Name, (dP, sP) => new { sP, dP })
-                .Where(i => !i.dP.IsReadOnly)
-                .Where(i => ((JObject)i.sP.Value).Value<int>("Version") > 0);
-
-            // set all properties in the destination with their matching value from the source
-            foreach (var i in pL)
-                i.dP.SetValue(d, ((JObject)i.sP.Value).Value<string>("Value"));
-
-            {
-                var items = d.Interfaces()
-                    .Where(i => i != null)
-                    .Select(i => new
-                    {
-                        Object = i,
-                        Types = TypeDescriptor.GetReflectionType(i)
-                            .GetInterfaces()
-                            .Concat(TypeDescriptor.GetReflectionType(i)
-                                .Recurse(j => j.BaseType))
-                            .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
-                            .ToList(),
-                    })
-                    .Where(i => i.Types.Any())
-                    .SelectMany(i => i.Types
-                        .Select(j => new { Object = i.Object, Type = j }))
-                    .GroupBy(i => i.Type)
-                    .Select(i => new
-                    {
-                        Type = i.Key,
-                        Object = i.First().Object,
-                        Properties = TypeDescriptor.GetProperties(i.Key)
-                            .Cast<PropertyDescriptor>()
-                            .Where(j => j.ComponentType == i.Key)
-                            .Where(j => j.Attributes.OfType<PublicAttribute>().Any())
-                            .GroupBy(j => j.Name)
-                            .Select(j => j.First())
-                            .ToList(),
-                        Methods = TypeDescriptor.GetReflectionType(i.Key)
-                            .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                            .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
-                            .GroupBy(j => j.Name)
-                            .Select(j => j.First())
-                            .ToList(),
-                    })
-                    .Where(i => i.Properties.Any() || i.Methods.Any());
-
-                foreach (var item in items)
+            var items = d.Interfaces()
+                .Where(i => i != null)
+                .Select(i => new
                 {
-                    var sourceObj = s[item.Type.FullName];
-                    if (sourceObj == null)
+                    Object = i,
+                    Types = TypeDescriptor.GetReflectionType(i)
+                        .GetInterfaces()
+                        .Concat(TypeDescriptor.GetReflectionType(i)
+                            .Recurse(j => j.BaseType))
+                        .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
+                        .ToList(),
+                })
+                .Where(i => i.Types.Any())
+                .SelectMany(i => i.Types
+                    .Select(j => new { Object = i.Object, Type = j }))
+                .GroupBy(i => i.Type)
+                .Select(i => new
+                {
+                    Type = i.Key,
+                    Object = i.First().Object,
+                    Properties = TypeDescriptor.GetProperties(i.Key)
+                        .Cast<PropertyDescriptor>()
+                        .Where(j => j.ComponentType == i.Key)
+                        .Where(j => j.Attributes.OfType<PublicAttribute>().Any())
+                        .GroupBy(j => j.Name)
+                        .Select(j => j.First())
+                        .ToList(),
+                    Methods = TypeDescriptor.GetReflectionType(i.Key)
+                        .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                        .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
+                        .GroupBy(j => j.Name)
+                        .Select(j => j.First())
+                        .ToList(),
+                })
+                .Where(i => i.Properties.Any() || i.Methods.Any());
+
+            foreach (var item in items)
+            {
+                var sourceObj = s[item.Type.FullName];
+                if (sourceObj == null)
+                    continue;
+
+                foreach (var property in item.Properties)
+                {
+                    var j = sourceObj[property.Name] as JObject;
+                    var t = property.PropertyType;
+                    var o = j != null ? j.ToObject(t) : null;
+
+                    if (!property.IsReadOnly)
+                        property.SetValue(item.Object, o);
+                }
+
+                foreach (var method in item.Methods)
+                {
+                    var methodObj = sourceObj['@' + method.Name] as JArray;
+                    if (methodObj == null)
                         continue;
 
-                    foreach (var method in item.Methods)
+                    foreach (var invokeObj in methodObj.OfType<JObject>())
                     {
-                        var methodObj = sourceObj[method.Name] as JArray;
-                        if (methodObj == null)
+                        var count = 0;
+                        var parameters = method.GetParameters();
+                        var invoke = new object[parameters.Length];
+                        for (int i = 0; i < invoke.Length; i++)
+                        {
+                            // submitted JSON parameter value
+                            var j = invokeObj[parameters[i].Name];
+                            if (j == null)
+                                break;
+
+                            // convert JObject to appropriate type
+                            var t = parameters[i].ParameterType;
+                            var o = j != null ? j.ToObject(t) : null;
+
+                            // successful conversion
+                            invoke[i] = o;
+                            count = i + 1;
+                        }
+
+                        // unsuccessful parameter count, try next method
+                        if (count != parameters.Length)
                             continue;
 
-                        foreach (var invokeObj in methodObj.OfType<JObject>())
-                        {
-                            var count = 0;
-                            var parameters = method.GetParameters();
-                            var invoke = new object[parameters.Length];
-                            for (int i = 0; i < invoke.Length; i++)
-                            {
-                                // submitted JSON parameter value
-                                var j = invokeObj[parameters[i].Name];
-                                if (j == null)
-                                    break;
-
-                                // convert JObject to appropriate type
-                                var t = parameters[i].ParameterType;
-                                var o = j.ToObject(t);
-
-                                // successful conversion
-                                invoke[i] = o;
-                                count = i + 1;
-                            }
-
-                            // unsuccessful parameter count, try next method
-                            if (count != parameters.Length)
-                                continue;
-
-                            // successful; done with invoke object
-                            method.Invoke(item.Object, invoke);
-                            break;
-                        }
+                        // successful; done with invoke object
+                        method.Invoke(item.Object, invoke);
+                        break;
                     }
                 }
             }

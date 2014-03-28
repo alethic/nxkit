@@ -1,107 +1,48 @@
 ﻿module NXKit.Web.XForms.Utils {
 
-    export function GetProperty(node: Node, name: string): Property {
-        if (node != null &&
-            node.Properties[name] != null)
-            return node.Properties[name];
-        else
-            return null;
+    export function GetValue(node: Node): KnockoutObservable<any> {
+        return node.Value('NXKit.XForms.IValue', 'Value');
     }
 
-    export function GetValue(node: Node): KnockoutComputed<any> {
-        return ko.computed<any>({
-            read: () => {
-                var p = GetProperty(node, "Value");
-                return p != null ? p.Value() : null;
-            },
-            write: _ => {
-                var p = GetProperty(node, "Value");
-                if (p != null)
-                    p.Value(_);
-            },
-        });
+    export function GetValueAsString(node: Node): KnockoutObservable<string> {
+        return node.ValueAsString('NXKit.XForms.IValue', 'Value');
     }
 
-    export function GetValueAsString(node: Node): KnockoutComputed<string> {
-        return ko.computed<string>({
-            read: () => {
-                var p = GetProperty(node, "Value");
-                return p != null ? p.ValueAsString() : null;
-            },
-            write: _ => {
-                var p = GetProperty(node, "Value");
-                if (p != null)
-                    p.ValueAsString(_);
-            },
-        });
+    export function GetValueAsBoolean(node: Node): KnockoutObservable<boolean> {
+        return node.ValueAsBoolean('NXKit.XForms.IValue', 'Value');
     }
 
-    export function GetValueAsBoolean(node: Node): KnockoutComputed<boolean> {
-        return ko.computed<boolean>({
-            read: () => {
-                var p = GetProperty(node, "Value");
-                return p != null ? p.ValueAsBoolean() : null;
-            },
-            write: _ => {
-                var p = GetProperty(node, "Value");
-                if (p != null)
-                    p.ValueAsBoolean(_);
-            },
-        });
+    export function GetValueAsNumber(node: Node): KnockoutObservable<number> {
+        return node.ValueAsNumber('NXKit.XForms.IValue', 'Value');
     }
 
-    export function GetValueAsNumber(node: Node): KnockoutComputed<number> {
-        return ko.computed<number>({
-            read: () => {
-                var p = GetProperty(node, "Value");
-                return p != null ? p.ValueAsNumber() : null;
-            },
-            write: _ => {
-                var p = GetProperty(node, "Value");
-                if (p != null)
-                    p.ValueAsNumber(_);
-            },
-        });
+    export function GetValueAsDate(node: Node): KnockoutObservable<Date> {
+        return node.ValueAsDate('NXKit.XForms.IValue', 'Value');
     }
 
-    export function GetRelevant(node: Node): KnockoutComputed<boolean> {
+    export function GetRelevant(node: Node): KnockoutObservable<boolean> {
+        return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'Relevant');
+    }
+
+    export function GetReadOnly(node: Node): KnockoutObservable<boolean> {
+        return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'ReadOnly');
+    }
+
+    export function GetRequired(node: Node): KnockoutObservable<boolean> {
+        return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'Required');
+    }
+
+    export function GetValid(node: Node): KnockoutObservable<boolean> {
+        return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'Valid');
+    }
+
+    export function GetType(node: Node): KnockoutObservable<string> {
+        return node.ValueAsString('NXKit.XForms.IModelItemBinding', 'DataType');
+    }
+
+    export function GetAppearance(node: Node): KnockoutObservable<string> {
         return ko.computed(() => {
-            var p = GetProperty(node, "Relevant");
-            return p != null ? p.ValueAsBoolean() : null;
-        });
-    }
-
-    export function GetReadOnly(node: Node): KnockoutComputed<boolean> {
-        return ko.computed(() => {
-            var p = GetProperty(node, "ReadOnly");
-            return p != null ? p.ValueAsBoolean() : null;
-        });
-    }
-
-    export function GetRequired(node: Node): KnockoutComputed<boolean> {
-        return ko.computed(() => {
-            var p = GetProperty(node, "Required");
-            return p != null ? p.ValueAsBoolean() : null;
-        });
-    }
-
-    export function GetValid(node: Node): KnockoutComputed<boolean> {
-        return ko.computed(() => {
-            var p = GetProperty(node, "Valid");
-            return p != null ? p.ValueAsBoolean() : null;
-        });
-    }
-
-    export function GetType(node: Node): KnockoutComputed<string> {
-        return ko.computed(() => {
-            var p = GetProperty(node, "DataType");
-            return p != null ? p.ValueAsString() : null;
-        });
-    }
-
-    export function GetAppearance(node: Node): KnockoutComputed<string> {
-        return ko.computed(() => {
-            var p = GetProperty(node, "Appearance");
+            var p = node.Property('NXKit.XForms.IUIAppearance', "Appearance");
             return p != null ? p.ValueAsString() : null;
         });
     }

@@ -24,10 +24,10 @@
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}integer">
     <input type="number"
            data-bind="
-    value: Properties.Value.ValueAsNumber,
+    value: Property('NXKit.XForms.IValue', 'Value').ValueAsNumber,
     attr: {
-        min: Properties.Start.ValueAsNumber,
-        max: Properties.End.ValueAsNumber,
-        step: Properties.Step.ValueAsNumber
+        min: Property('NXKit.XForms.Range', 'Start').ValueAsNumber,
+        max: Property('NXKit.XForms.Range', 'End').ValueAsNumber,
+        step: Property('NXKit.XForms.Range', 'Step').ValueAsNumber 
     }" />
 </script>

@@ -71,7 +71,7 @@
       * Gets the unique document ID of the given node.
       */
     export function GetUniqueId(node: Node): string {
-        return node != null && node.Properties['UniqueId'] != null ? node.Properties['UniqueId'].ValueAsString() : null;
+        return node.Property('NXKit.NXElement', 'UniqueId').ValueAsString();
     }
 
     /**

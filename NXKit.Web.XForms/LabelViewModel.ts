@@ -9,7 +9,7 @@ module NXKit.Web.XForms {
             super(context, node);
         }
 
-        get Text(): KnockoutComputed<string> {
+        get Text(): KnockoutObservable<string> {
             return this.ValueAsString;
         }
 

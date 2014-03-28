@@ -5,7 +5,8 @@ namespace NXKit.XForms
 {
 
     [Element("select1")]
-    public class Select1Element :
+    [Public]
+    public class Select1 :
         SingleNodeUIBindingElement,
         ISupportsUiCommonAttributes,
         IUIRefreshable
@@ -18,7 +19,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        public Select1Element(XElement xml)
+        public Select1(XElement xml)
             : base(xml)
         {
 
@@ -30,7 +31,6 @@ namespace NXKit.XForms
             get { return Module.GetAttributeValue(Xml, "incremental") == "true"; }
         }
 
-        [Public]
         public Selection Selection
         {
             get { return Module.GetAttributeValue(Xml, "selection") == "open" ? Selection.Open : Selection.Closed; }
