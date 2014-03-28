@@ -247,10 +247,18 @@ namespace NXKit.Web.UI
             writer.RenderEndTag();
             writer.WriteLine();
 
+            // serialize visual state to data field
+            writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID);
+            writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
+            writer.RenderBeginTag(HtmlTextWriterTag.Input);
+            writer.RenderEndTag();
+            writer.WriteLine();
+
             if (document != null)
             {
                 // serialize visual state to data field
                 writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_data");
+                writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID + "_data");
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
                 writer.AddAttribute(HtmlTextWriterAttribute.Value, GetDataString());
                 writer.RenderBeginTag(HtmlTextWriterTag.Input);
@@ -259,6 +267,7 @@ namespace NXKit.Web.UI
 
                 // serialize document state to save field
                 writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_save");
+                writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID + "_save");
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
                 writer.AddAttribute(HtmlTextWriterAttribute.Value, GetSaveString());
                 writer.RenderBeginTag(HtmlTextWriterTag.Input);
@@ -312,12 +321,16 @@ namespace NXKit.Web.UI
 
         bool IPostBackDataHandler.LoadPostData(string postDataKey, NameValueCollection postCollection)
         {
-            throw new NotImplementedException();
+            var save = postCollection[postDataKey + "_save"];
+            if (save != null)
+                LoadDocumentFromSave(save);
+
+            return true;
         }
 
         void IPostBackDataHandler.RaisePostDataChangedEvent()
         {
-            throw new NotImplementedException();
+
         }
 
         string ICallbackEventHandler.GetCallbackResult()
