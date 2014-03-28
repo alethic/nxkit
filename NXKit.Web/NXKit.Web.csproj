@@ -118,13 +118,17 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyHtmlTemplateProvider.cs" />
+    <Compile Include="HtmlTemplateInfo.cs" />
     <TypeScriptCompile Include="ICallbackRequestEvent.ts" />
+    <Compile Include="IHtmlTemplateProvider.cs" />
     <Compile Include="IO\JsonNodeReader.cs" />
     <Compile Include="IO\JsonNodeWriter.cs" />
     <Compile Include="IO\XNameJsonConverter.cs" />

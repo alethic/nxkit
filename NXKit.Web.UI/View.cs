@@ -6,7 +6,6 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Web.UI;
 
@@ -26,18 +25,6 @@ namespace NXKit.Web.UI
         ICallbackEventHandler,
         IScriptControl
     {
-
-        static Assembly[] ko_assemblies = new[] {
-            typeof(NXKit.Web.Ref).Assembly,
-            typeof(NXKit.Web.XForms.Ref).Assembly,
-            typeof(NXKit.Web.XForms.Layout.Ref).Assembly,
-        };
-
-        static List<Tuple<string, Func<Stream>>> ko_templates = ko_assemblies
-            .SelectMany(i => i.GetManifestResourceNames()
-                .Where(j => j.EndsWith(".html"))
-                .Select(j => new Tuple<string, Func<Stream>>(j, () => i.GetManifestResourceStream(j))))
-                .ToList();
 
         /// <summary>
         /// Private resolver implementation to dispatch to events.
@@ -175,16 +162,6 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Raises the PreRender event.
-        /// </summary>
-        /// <param name="args"></param>
-        protected override void OnPreRender(EventArgs args)
-        {
-            base.OnPreRender(args);
-            ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
-        }
-
-        /// <summary>
         /// Gets the client-side save state as a string.
         /// </summary>
         /// <returns></returns>
@@ -232,15 +209,22 @@ namespace NXKit.Web.UI
             }
         }
 
-        protected override void OnLoad(EventArgs args)
+        /// <summary>
+        /// Raises the PreRender event.
+        /// </summary>
+        /// <param name="args"></param>
+        protected override void OnPreRender(EventArgs args)
         {
-            base.OnLoad(args);
+            base.OnPreRender(args);
+            ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
 
             // write all available knockout templates
-            foreach (var ko_template in ko_templates)
-                if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), ko_template.Item1))
-                    using (var rdr = new StreamReader(ko_template.Item2()))
-                        Page.ClientScript.RegisterClientScriptBlock(typeof(View), ko_template.Item1, rdr.ReadToEnd(), false);
+            if (Document != null)
+                foreach (var provider in Document.Container.GetExportedValues<IHtmlTemplateProvider>())
+                    foreach (var template in provider.GetTemplates())
+                        if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
+                            using (var rdr = new StreamReader(template.Open()))
+                                Page.ClientScript.RegisterClientScriptBlock(typeof(View), template.Name, rdr.ReadToEnd(), false);
         }
 
         /// <summary>
