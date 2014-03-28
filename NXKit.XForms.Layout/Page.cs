@@ -17,11 +17,6 @@ namespace NXKit.XForms.Layout
 
         }
 
-        public Importance Importance
-        {
-            get { return LayoutHelper.GetImportance(this); }
-        }
-
     }
 
 }

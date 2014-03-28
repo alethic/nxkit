@@ -14,7 +14,6 @@
     <link rel="stylesheet/less" type="text/css" href="Content/styles.less" />
 
     <style type="text/css">
-
         html, body {
             font-size: 15px;
         }
@@ -22,7 +21,6 @@
         .ui.checkbox label {
             margin-bottom: 16px !important;
         }
-
     </style>
 
 </head>
@@ -32,6 +30,7 @@
         <asp:ScriptManager runat="server">
             <Scripts>
                 <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="jquery.ui.combined" />
                 <asp:ScriptReference Name="less" />
                 <asp:ScriptReference Name="semantic" />
                 <asp:ScriptReference Name="knockout" />
@@ -43,6 +42,11 @@
                 CssClass="FormView"
                 OnLoad="View_Load"
                 OnResourceAction="View_ResourceAction" />
+
+            <div class="ui horizontal divider">
+                and then
+            </div>
+
             <asp:Button ID="PrevButton" runat="server"
                 Text="Previous"
                 CausesValidation="false"

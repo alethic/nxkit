@@ -3,8 +3,8 @@
 namespace NXKit.XForms.Layout
 {
 
-    [Element("p")]
-    public class ParagraphElement : 
+    [Element("a")]
+    public class Anchor : 
         LayoutElement
     {
 
@@ -12,15 +12,15 @@ namespace NXKit.XForms.Layout
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public ParagraphElement(XElement element)
+        public Anchor(XElement element)
             : base(element)
         {
 
         }
 
-        public Importance Importance
+        public string Href
         {
-            get { return LayoutHelper.GetImportance(this); }
+            get { return Document.Module<LayoutModule>().GetAttributeValue(Xml, "href"); }
         }
 
     }

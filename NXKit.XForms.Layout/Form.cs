@@ -3,8 +3,8 @@
 namespace NXKit.XForms.Layout
 {
 
-    [Element("a")]
-    public class AnchorElement : 
+    [Element("form")]
+    public class Form : 
         LayoutElement
     {
 
@@ -12,15 +12,15 @@ namespace NXKit.XForms.Layout
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public AnchorElement(XElement element)
+        public Form(XElement element)
             : base(element)
         {
 
         }
 
-        public string Href
+        public override string Id
         {
-            get { return Document.Module<LayoutModule>().GetAttributeValue(Xml, "href"); }
+            get { return "FORM"; }
         }
 
     }

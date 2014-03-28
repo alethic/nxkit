@@ -3,8 +3,8 @@
 namespace NXKit.XForms.Layout
 {
 
-    [Element("form")]
-    public class FormElement : 
+    [Element("p")]
+    public class Paragraph : 
         LayoutElement
     {
 
@@ -12,15 +12,10 @@ namespace NXKit.XForms.Layout
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public FormElement(XElement element)
+        public Paragraph(XElement element)
             : base(element)
         {
 
-        }
-
-        public override string Id
-        {
-            get { return "FORM"; }
         }
 
     }

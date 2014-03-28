@@ -34,11 +34,6 @@ namespace NXKit.XForms.Layout
             get { return Document.GetElementId(Xml); }
         }
 
-        public string Style
-        {
-            get { return Document.Module<LayoutModule>().GetAttributeValue(Xml, "style"); }
-        }
-
     }
 
 }

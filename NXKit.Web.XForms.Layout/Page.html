@@ -1,7 +1,7 @@
 ﻿<script type="text/html"
         data-nxkit-node="NXKit.XForms.Layout.Page">
     <!-- ko with: new NXKit.Web.XForms.Layout.PageViewModel($context, $data) -->
-    <div class="xforms-layout-page">
+    <div class="xforms-layout-page" data-bind="if: Active">
         <!-- ko foreach: Contents -->
         <!-- ko nxkit_template -->
         <!-- /ko -->

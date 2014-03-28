@@ -3,8 +3,8 @@
 namespace NXKit.XForms.Layout
 {
 
-    [Element("category")]
-    public class CategoryElement :
+    [Element("section")]
+    public class Section : 
         Group
     {
         
@@ -12,11 +12,12 @@ namespace NXKit.XForms.Layout
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        public CategoryElement(XElement xml)
+        public Section(XElement xml)
             : base(xml)
         {
 
         }
+
 
     }
 
