@@ -1,0 +1,89 @@
+﻿<#@ template language="C#" hostspecific="true" #>
+<#@ output extension="partial.cs" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Xml.Linq" #>
+
+
+namespace NXKit.DOMEvents
+{
+
+    public partial class Events
+    {
+
+        static readonly EventInfo[] EVENT_INFO = new EventInfo[]
+        {
+<#
+foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("Event"))
+{
+#>
+            new EventInfo("<#= (string)e.Attribute("type") #>", <#= (string)e.Attribute("bubbles") #>, <#= (string)e.Attribute("cancelable") #>),
+<#
+} #>
+<#
+foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("UIEvent"))
+{
+#>
+            new UIEventInfo("<#= (string)e.Attribute("type") #>", <#= (string)e.Attribute("bubbles") #>, <#= (string)e.Attribute("cancelable") #>),
+<#
+} #>
+<#
+foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("MutationEvent"))
+{
+#>
+            new MutationEventInfo("<#= (string)e.Attribute("type") #>", <#= (string)e.Attribute("bubbles") #>, <#= (string)e.Attribute("cancelable") #>),
+<#
+} #>
+<#
+foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("FocusEvent"))
+{
+#>
+            new FocusEventInfo("<#= (string)e.Attribute("type") #>", <#= (string)e.Attribute("bubbles") #>, <#= (string)e.Attribute("cancelable") #>),
+<#
+} #>
+        };
+
+<#
+foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("Event"))
+{
+#>
+        public const string <#= (string)e.Attribute("type") #> = "<#= (string)e.Attribute("type") #>";
+<#
+}
+#>
+
+<#
+foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("UIEvent"))
+{
+#>
+        public const string <#= (string)e.Attribute("type") #> = "<#= (string)e.Attribute("type") #>";
+<#
+}
+#>
+
+<#
+foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("MutationEvent"))
+{
+#>
+        public const string <#= (string)e.Attribute("type") #> = "<#= (string)e.Attribute("type") #>";
+<#
+}
+#>
+
+<#
+foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("FocusEvent"))
+{
+#>
+        public const string <#= (string)e.Attribute("type") #> = "<#= (string)e.Attribute("type") #>";
+<#
+}
+#>
+
+    }
+
+}

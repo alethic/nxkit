@@ -1,0 +1,237 @@
+﻿<events>
+    <Event
+        name="ModelConstruct"
+        type="xforms-model-construct"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="ModelConstructDone"
+        type="xforms-model-construct-done"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="Ready"
+        type="xforms-ready"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="ModelDestruct"
+        type="xforms-model-destruct"
+        bubbles="false"
+        cancelable="false" />
+    <Event
+        name="Rebuild"
+        type="xforms-rebuild"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="Recalculate"
+        type="xforms-recalculate"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="Revalidate"
+        type="xforms-revalidate"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="Refresh"
+        type="xforms-refresh"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="Reset"
+        type="xforms-reset"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="Next"
+        type="xforms-next"
+        bubbles="false"
+        cancelable="true" />
+    <Event
+        name="Previous"
+        type="xforms-previous"
+        bubbles="false"
+        cancelable="true" />
+    <Event
+        name="Focus"
+        type="xforms-focus"
+        bubbles="false"
+        cancelable="true" />
+    <Event
+        name="Help"
+        type="xforms-help"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="Hint"
+        type="xforms-hint"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="Submit"
+        type="xforms-submit"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="SubmitSerialize"
+        type="xforms-submit-serialize"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="DialogShow"
+        type="xforms-dialog-show"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="DialogHide"
+        type="xforms-dialog-hide"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="Insert"
+        type="xforms-insert"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="Delete"
+        type="xforms-delete"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="ValueChanged"
+        type="xforms-value-changed"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="Valid"
+        type="xforms-valid"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="Invalid"
+        type="xforms-invalid"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="ReadOnly"
+        type="xforms-readonly"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="ReadWrite"
+        type="xforms-readwrite"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="Required"
+        type="xforms-required"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="Optional"
+        type="xforms-optional"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="Enabled"
+        type="xforms-enabled"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="Disabled"
+        type="xforms-disabled"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="Select"
+        type="xforms-select"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="Deselect"
+        type="xforms-deselect"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="InRange"
+        type="xforms-in-range"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="OutOfRange"
+        type="xforms-out-of-range"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="ScrollFirst"
+        type="xforms-scroll-first"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="ScrollLast"
+        type="xforms-scroll-last"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="SubmitDone"
+        type="xforms-submit-done"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="DialogShown"
+        type="xforms-dialog-shown"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="DialogHidden"
+        type="xforms-dialog-hidden"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="BindingError"
+        type="xforms-binding-error"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="ExpressionError"
+        type="xforms-expression-error"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="ActionError"
+        type="xforms-action-error"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="BindingException"
+        type="xforms-binding-exception"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="ComputeException"
+        type="xforms-compute-exception"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="VersionException"
+        type="xforms-version-exception"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="LinkException"
+        type="xforms-link-exception"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="OutputError"
+        type="xforms-output-error"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="SubmitError"
+        type="xforms-submit-error"
+        bubbles="true"
+        cancelable="false" />
+</events>

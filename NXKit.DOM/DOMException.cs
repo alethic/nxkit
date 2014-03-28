@@ -4,8 +4,7 @@ namespace NXKit.DOM
 {
 
     public class DOMException :
-        Exception,
-        IDOMException
+        Exception
     {
 
         /// <summary>

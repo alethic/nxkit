@@ -144,7 +144,7 @@ namespace NXKit.XForms
             ec.Model.State.RevalidateFlag = true;
             ec.Model.State.RefreshFlag = true;
 
-            ec.Instance.Interface<IEventTarget>().DispatchEvent(new DeleteEvent(ec.Instance).Event);
+            ec.Instance.Interface<INXEventTarget>().DispatchEvent(Events.Delete);
         }
 
     }

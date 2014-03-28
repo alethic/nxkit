@@ -15,32 +15,6 @@ namespace NXKit.DOMEvents
         IEventTarget
     {
 
-        /// <summary>
-        /// Private <see cref="org.w3c.dom.events.EventListener"/> implementation for implementing dispatch to a delegate.
-        /// </summary>
-        public class DelegateDispatchEventListener :
-            IEventListener
-        {
-
-            readonly EventHandlerDelegate handler;
-
-            /// <summary>
-            /// Initializes a new instance.
-            /// </summary>
-            /// <param name="handler"></param>
-            public DelegateDispatchEventListener(EventHandlerDelegate handler)
-            {
-                this.handler = handler;
-            }
-
-            public void HandleEvent(Event evt)
-            {
-                if (handler != null)
-                    handler(evt);
-            }
-
-        }
-
         readonly NXElement element;
 
         /// <summary>
@@ -176,17 +150,6 @@ namespace NXKit.DOMEvents
                     foreach (var listener in listeners.Where(i => i.UseCapture == useCapture))
                         listener.Listener.HandleEvent(evt);
             }
-        }
-
-        /// <summary>
-        /// Adds an event handler for the given event type.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="useCapture"></param>
-        /// <param name="handler"></param>
-        public void AddEventHandler(string type, bool useCapture, EventHandlerDelegate handler)
-        {
-            AddEventListener(type, new DelegateDispatchEventListener(handler), useCapture);
         }
 
     }

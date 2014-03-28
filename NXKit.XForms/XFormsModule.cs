@@ -139,24 +139,6 @@ namespace NXKit.XForms
             Submit();
         }
 
-        void VersionExceptionEventDefaultAction(VersionExceptionEvent ev)
-        {
-            System.Console.WriteLine(VersionExceptionEvent.Name);
-            Document.Root.GetState<ModuleState>().Failed = true;
-        }
-
-        void LinkExceptionEventDefaultAction(LinkExceptionEvent ev)
-        {
-            System.Console.WriteLine(LinkExceptionEvent.Name);
-            Document.Root.GetState<ModuleState>().Failed = true;
-        }
-
-        void BindingExceptionEventDefaultAction(BindingExceptionEvent ev)
-        {
-            System.Console.WriteLine(BindingExceptionEvent.Name);
-            Document.Root.GetState<ModuleState>().Failed = true;
-        }
-
         public override bool Invoke()
         {
             if (Document.Root.GetState<ModuleState>().Failed)
@@ -175,7 +157,7 @@ namespace NXKit.XForms
                 if (!Document.Root.GetState<ModuleState>().Failed)
                     if (!model.State.Construct)
                     {
-                        model.Interface<IEventTarget>().DispatchEvent(new ModelConstructEvent(model).Event);
+                        model.Interface<INXEventTarget>().DispatchEvent(Events.ModelConstruct);
                         work = true;
                     }
 
@@ -185,7 +167,7 @@ namespace NXKit.XForms
                     foreach (var model in models)
                         if (!model.State.ConstructDone)
                         {
-                            model.Interface<IEventTarget>().DispatchEvent(new ModelConstructDoneEvent(model).Event);
+                            model.Interface<INXEventTarget>().DispatchEvent(Events.ModelConstructDone);
                             work = true;
                         }
 
@@ -195,7 +177,7 @@ namespace NXKit.XForms
                     foreach (var model in models)
                         if (!model.State.Ready)
                         {
-                            model.Interface<IEventTarget>().DispatchEvent(new ReadyEvent(model).Event);
+                            model.Interface<INXEventTarget>().DispatchEvent(Events.Ready);
                             work = true;
                         }
 
@@ -209,28 +191,28 @@ namespace NXKit.XForms
                     if (!Document.Root.GetState<ModuleState>().Failed)
                     {
                         work = true;
-                        model.Interface<IEventTarget>().DispatchEvent(new RebuildEvent(model).Event);
+                        model.Interface<INXEventTarget>().DispatchEvent(Events.Rebuild);
                     }
 
                 foreach (var model in models.Where(i => i.State.RecalculateFlag))
                     if (!Document.Root.GetState<ModuleState>().Failed)
                     {
                         work = true;
-                        model.Interface<IEventTarget>().DispatchEvent(new RecalculateEvent(model).Event);
+                        model.Interface<INXEventTarget>().DispatchEvent(Events.Recalculate);
                     }
 
                 foreach (var model in models.Where(i => i.State.RevalidateFlag))
                     if (!Document.Root.GetState<ModuleState>().Failed)
                     {
                         work = true;
-                        model.Interface<IEventTarget>().DispatchEvent(new RevalidateEvent(model).Event);
+                        model.Interface<INXEventTarget>().DispatchEvent(Events.Revalidate);
                     }
 
                 foreach (var model in models.Where(i => i.State.RefreshFlag))
                     if (!Document.Root.GetState<ModuleState>().Failed)
                     {
                         work = true;
-                        model.Interface<IEventTarget>().DispatchEvent(new RefreshEvent(model).Event);
+                        model.Interface<INXEventTarget>().DispatchEvent(Events.Refresh);
                     }
             }
 
@@ -244,7 +226,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal void ProcessModelInstance(ModelElement model)
         {
-            var target = model.Interface<IEventTarget>();
+            var target = model.Interface<INXEventTarget>();
             if (target == null)
                 throw new NullReferenceException();
 
@@ -279,13 +261,13 @@ namespace NXKit.XForms
                     }
                     catch (UriFormatException)
                     {
-                        target.DispatchEvent(new LinkExceptionEvent(model).Event);
+                        target.DispatchEvent(Events.Rebuild);
                     }
                 }
                 else if (instanceChildElements.Length >= 2)
                 {
                     // invalid number of child elements
-                    target.DispatchEvent(new LinkExceptionEvent(model).Event);
+                    target.DispatchEvent(Events.LinkException);
                 }
                 else if (instanceChildElements.Length == 1)
                 {
@@ -411,7 +393,7 @@ namespace NXKit.XForms
                     return model.Context;
                 else
                 {
-                    visual.Interface<IEventTarget>().DispatchEvent(new BindingExceptionEvent(visual).Event);
+                    visual.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                     return null;
                 }
             }
@@ -440,7 +422,7 @@ namespace NXKit.XForms
                 if (bind == null ||
                     bind.Context == null)
                 {
-                    visual.Interface<IEventTarget>().DispatchEvent(new BindingExceptionEvent(visual).Event);
+                    visual.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                     return null;
                 }
 
@@ -479,7 +461,7 @@ namespace NXKit.XForms
                 if (bind == null ||
                     bind.Binding == null)
                 {
-                    visual.Interface<IEventTarget>().DispatchEvent(new BindingExceptionEvent(visual).Event);
+                    visual.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                     return null;
                 }
 
@@ -538,7 +520,7 @@ namespace NXKit.XForms
 
             // raise a submit event for each submission
             foreach (var visual in visuals)
-                visual.Interface<IEventTarget>().DispatchEvent(new SubmitEvent(visual).Event);
+                visual.Interface<INXEventTarget>().DispatchEvent(Events.Submit);
         }
 
     }

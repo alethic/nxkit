@@ -1,0 +1,42 @@
+﻿<#@ template language="C#" hostspecific="true" #>
+<#@ output extension="partial.cs" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Xml.Linq" #>
+
+using NXKit.DOMEvents;
+
+namespace NXKit.XForms
+{
+
+    public partial class Events
+    {
+
+        static readonly EventInfo[] EVENT_INFO = new EventInfo[]
+        {
+<#
+foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("Event"))
+{
+#>
+            new EventInfo("<#= (string)e.Attribute("type") #>", <#= (string)e.Attribute("bubbles") #>, <#= (string)e.Attribute("cancelable") #>),
+<#
+} #>
+        };
+
+<#
+foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("Event"))
+{
+#>
+        public const string <#= (string)e.Attribute("name") #> = "<#= (string)e.Attribute("type") #>";
+<#
+}
+#>
+
+    }
+
+}

@@ -107,28 +107,28 @@ namespace NXKit.XForms
         {
             switch (evt.Type)
             {
-                case XFormsEvents.ModelConstruct:
+                case Events.ModelConstruct:
                     OnModelConstruct();
                     break;
-                case XFormsEvents.ModelConstructDone:
+                case Events.ModelConstructDone:
                     OnModelConstructDone();
                     break;
-                case XFormsEvents.Ready:
+                case Events.Ready:
                     OnReady();
                     break;
-                case XFormsEvents.Rebuild:
+                case Events.Rebuild:
                     OnRebuild();
                     break;
-                case XFormsEvents.Recalculate:
+                case Events.Recalculate:
                     OnRecalculate();
                     break;
-                case XFormsEvents.Revalidate:
+                case Events.Revalidate:
                     OnRevalidate();
                     break;
-                case XFormsEvents.Refresh:
+                case Events.Refresh:
                     OnRefresh();
                     break;
-                case XFormsEvents.Reset:
+                case Events.Reset:
                     OnReset();
                     break;
             }
@@ -148,7 +148,7 @@ namespace NXKit.XForms
                 foreach (var version in versions.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     if (version != "1.0")
                     {
-                        this.Interface<IEventTarget>().DispatchEvent(new VersionExceptionEvent(this).Event);
+                        this.Interface<INXEventTarget>().DispatchEvent(Events.VersionException);
                         return;
                     }
 

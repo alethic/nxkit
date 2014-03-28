@@ -5,7 +5,7 @@ namespace NXKit.DOMEvents
 {
 
     [Export(typeof(INodeInterfaceProvider))]
-    public class EventNodeInterfaceProvider :
+    public class NodeInterfaceProvider :
         NodeInterfaceProviderBase
     {
 

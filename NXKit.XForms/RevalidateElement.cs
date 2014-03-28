@@ -35,7 +35,7 @@ namespace NXKit.XForms
                     modelVisual.OnRevalidate();
                 else
                 {
-                    DispatchEvent<BindingExceptionEvent>();
+                    this.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                     return;
                 }
             }

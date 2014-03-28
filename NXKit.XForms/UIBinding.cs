@@ -224,62 +224,62 @@ namespace NXKit.XForms
         /// </summary>
         public void DispatchEvents()
         {
-            var target = node.Interface<IEventTarget>();
+            var target = node.Interface<INXEventTarget>();
             if (target == null)
                 return;
 
             if (State.DispatchValueChanged)
             {
                 State.DispatchValueChanged = false;
-                target.DispatchEvent(new ValueChangedEvent(node).Event);
+                target.DispatchEvent(Events.ValueChanged);
             }
 
             if (State.DispatchValid)
             {
                 State.DispatchValid = false;
-                target.DispatchEvent(new ValidEvent(node).Event);
+                target.DispatchEvent(Events.Valid);
             }
 
             if (State.DispatchInvalid)
             {
                 State.DispatchInvalid = false;
-                target.DispatchEvent(new InvalidEvent(node).Event);
+                target.DispatchEvent(Events.Invalid);
             }
 
             if (State.DispatchEnabled)
             {
                 State.DispatchEnabled = false;
-                target.DispatchEvent(new EnabledEvent(node).Event);
+                target.DispatchEvent(Events.Enabled);
             }
 
             if (State.DispatchDisabled)
             {
                 State.DispatchDisabled = false;
-                target.DispatchEvent(new DisabledEvent(node).Event);
+                target.DispatchEvent(Events.Disabled);
             }
 
             if (State.DispatchOptional)
             {
                 State.DispatchOptional = false;
-                target.DispatchEvent(new OptionalEvent(node).Event);
+                target.DispatchEvent(Events.Optional);
             }
 
             if (State.DispatchRequired)
             {
                 State.DispatchRequired = false;
-                target.DispatchEvent(new RequiredEvent(node).Event);
+                target.DispatchEvent(Events.Required);
             }
 
             if (State.DispatchReadOnly)
             {
                 State.DispatchReadOnly = false;
-                target.DispatchEvent(new ReadOnlyEvent(node).Event);
+                target.DispatchEvent(Events.ReadOnly);
             }
 
             if (State.DispatchReadWrite)
             {
                 State.DispatchReadWrite = false;
-                target.DispatchEvent(new ReadWriteEvent(node).Event);
+                target.DispatchEvent(Events.ReadWrite);
             }
         }
 

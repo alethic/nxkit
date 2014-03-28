@@ -36,7 +36,7 @@ namespace NXKit.XForms
                     modelVisual.OnRecalculate();
                 else
                 {
-                    DispatchEvent<BindingExceptionEvent>();
+                    this.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                     return;
                 }
             }

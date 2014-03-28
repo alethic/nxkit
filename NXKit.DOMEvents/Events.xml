@@ -1,0 +1,46 @@
+﻿<events>
+    <UIEvent
+        type="DOMActivate"
+        bubbles="true"
+        cancelable="true" />
+    <MutationEvent
+        type="DOMAttrModified"
+        bubbles="true"
+        cancelable="false" />
+    <MutationEvent
+        type="DOMCharacterDataModified"
+        bubbles="true"
+        cancelable="false" />
+    <FocusEvent
+        type="DOMFocusIn"
+        bubbles="true"
+        cancelable="false" />
+    <FocusEvent
+        type="DOMFocusOut"
+        bubbles="true"
+        cancelable="false" />
+    <MutationEvent
+        type="DOMNodeInserted"
+        bubbles="true"
+        cancelable="false" />
+    <MutationEvent
+        type="DOMNodeInsertedIntoDocument"
+        bubbles="false"
+        cancelable="false" />
+    <MutationEvent
+        type="DOMNodeRemoved"
+        bubbles="true"
+        cancelable="false" />
+    <MutationEvent
+        type="DOMNodeRemovedFromDocument"
+        bubbles="false"
+        cancelable="false" />
+    <MutationEvent
+        type="DOMSubtreeModified"
+        bubbles="true"
+        cancelable="false" />
+    <KeyboardEvent
+        type="keypress"
+        bubbles="true"
+        cancelable="true" />
+</events>

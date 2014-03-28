@@ -50,21 +50,6 @@ namespace NXKit.XForms
             get { return Document.GetElementId(Xml); }
         }
 
-        /// <summary>
-        /// Dispatches the typed XForms event.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        [Obsolete("Raise events by string type instead.")]
-        public void DispatchEvent<T>()
-            where T : XFormsEvent
-        {
-            var evt = (XFormsEvent)Activator.CreateInstance(typeof(T), new object[] { this });
-            if (evt == null)
-                throw new NullReferenceException();
-
-            this.Interface<IEventTarget>().DispatchEvent(evt.Event);
-        }
-
     }
 
 }

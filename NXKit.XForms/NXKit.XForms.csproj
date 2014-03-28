@@ -118,6 +118,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="Events.partial.cs">
+      <DependentUpon>Events.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="NodeInterfaceProvider.cs" />
     <Compile Include="IActionElement.cs" />
     <Compile Include="IEvaluationContextScope.cs" />
@@ -138,69 +144,46 @@
     <Compile Include="UIBinding.cs" />
     <Compile Include="UIBindingElement.cs" />
     <Compile Include="UIBindingState.cs" />
-    <Compile Include="XFormsEvents.cs" />
     <Compile Include="XFormsTypeDescriptionProvider.cs" />
     <Compile Include="XFormsXsltContext.cs" />
     <Compile Include="ActionElement.cs" />
     <Compile Include="Alert.cs" />
     <Compile Include="Binding.cs" />
-    <Compile Include="BindingExceptionEvent.cs" />
     <Compile Include="BindingElement.cs" />
     <Compile Include="BindElement.cs" />
     <Compile Include="ChoicesElement.cs" />
     <Compile Include="CopyElement.cs" />
-    <Compile Include="DeleteEvent.cs" />
     <Compile Include="DeleteElement.cs" />
-    <Compile Include="DisabledEvent.cs" />
     <Compile Include="DispatchElement.cs" />
-    <Compile Include="EnabledEvent.cs" />
     <Compile Include="EvaluationContext.cs" />
-    <Compile Include="XFormsEvent.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="Help.cs" />
     <Compile Include="Hint.cs" />
     <Compile Include="Input.cs" />
-    <Compile Include="InRangeEvent.cs" />
-    <Compile Include="InsertEvent.cs" />
     <Compile Include="InsertElement.cs" />
     <Compile Include="InstanceElement.cs" />
     <Compile Include="InstanceElementState.cs" />
-    <Compile Include="InvalidEvent.cs" />
     <Compile Include="ItemSetItemElement.cs" />
     <Compile Include="ItemSetElement.cs" />
     <Compile Include="ItemElement.cs" />
     <Compile Include="Label.cs" />
-    <Compile Include="LinkExceptionEvent.cs" />
     <Compile Include="ListeItemElement.cs" />
     <Compile Include="LoadElement.cs" />
     <Compile Include="MessageElement.cs" />
-    <Compile Include="ModelConstructDoneEvent.cs" />
-    <Compile Include="ModelConstructEvent.cs" />
     <Compile Include="ModelItemState.cs" />
     <Compile Include="ModelElement.cs" />
     <Compile Include="ModelElementState.cs" />
     <Compile Include="XFormsModule.cs" />
     <Compile Include="ModuleState.cs" />
     <Compile Include="NodeSetBindingElement.cs" />
-    <Compile Include="OptionalEvent.cs" />
-    <Compile Include="OutOfRangeEvent.cs" />
     <Compile Include="OutputElement.cs" />
     <Compile Include="Range.cs" />
-    <Compile Include="ReadOnlyEvent.cs" />
-    <Compile Include="ReadWriteEvent.cs" />
-    <Compile Include="ReadyEvent.cs" />
-    <Compile Include="RebuildEvent.cs" />
     <Compile Include="RebuildElement.cs" />
-    <Compile Include="RecalculateEvent.cs" />
     <Compile Include="RecalculateElement.cs" />
-    <Compile Include="RefreshEvent.cs" />
     <Compile Include="RefreshElement.cs" />
     <Compile Include="RepeatItemElement.cs" />
     <Compile Include="RepeatState.cs" />
     <Compile Include="RepeatElement.cs" />
-    <Compile Include="RequiredEvent.cs" />
-    <Compile Include="ResetEvent.cs" />
-    <Compile Include="RevalidateEvent.cs" />
     <Compile Include="RevalidateElement.cs" />
     <Compile Include="Select1State.cs" />
     <Compile Include="Select1Element.cs" />
@@ -210,15 +193,9 @@
     <Compile Include="SetValueElement.cs" />
     <Compile Include="SingleNodeUIBindingElement.cs" />
     <Compile Include="SubmissionElement.cs" />
-    <Compile Include="SubmitDoneEvent.cs" />
-    <Compile Include="SubmitErrorEvent.cs" />
-    <Compile Include="SubmitEvent.cs" />
     <Compile Include="TextAreaElement.cs" />
     <Compile Include="TriggerElement.cs" />
-    <Compile Include="ValidEvent.cs" />
-    <Compile Include="ValueChangedEvent.cs" />
     <Compile Include="ValueElement.cs" />
-    <Compile Include="VersionExceptionEvent.cs" />
     <Compile Include="XFormsElement.cs" />
     <Compile Include="Functions\BooleanFromString.cs" />
     <Compile Include="Functions\IfFunction.cs" />
@@ -256,8 +233,18 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Events.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Events.partial.cs</LastGenOutput>
+    </None>
     <None Include="NXKit.XForms.nuspec" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Events.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

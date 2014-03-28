@@ -127,7 +127,7 @@ namespace NXKit.XForms
             ec.Model.State.RevalidateFlag = true;
             ec.Model.State.RefreshFlag = true;
 
-            ec.Instance.DispatchEvent<InsertEvent>();
+            this.Interface<INXEventTarget>().DispatchEvent(Events.Insert);
         }
 
     }

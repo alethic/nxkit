@@ -4,6 +4,10 @@ using System.Diagnostics.Contracts;
 namespace NXKit.DOMEvents
 {
 
+    /// <summary>
+    /// The Event interface provides basic contextual information about an event to all registered event handlers.
+    /// Specific events can also implement other derived interfaces, for example the UIEvent and MouseEvent interfaces.
+    /// </summary>
     public class Event
     {
 

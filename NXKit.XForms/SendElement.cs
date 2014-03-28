@@ -33,7 +33,7 @@ namespace NXKit.XForms
             {
                 var submissionVisual = ResolveId(submissionAttr);
                 if (submissionVisual != null)
-                    submissionVisual.Interface<IEventTarget>().DispatchEvent(new SubmitEvent(submissionVisual).Event);
+                    submissionVisual.Interface<INXEventTarget>().DispatchEvent(Events.Submit);
             }
         }
 

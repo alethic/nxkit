@@ -113,10 +113,24 @@
     <Compile Include="DefaultEventFactory.cs" />
     <Compile Include="DocumentEvent.cs" />
     <Compile Include="EventHandlerDelegate.cs" />
+    <Compile Include="FocusEventInfo.cs" />
+    <Compile Include="MutationEventInfo.cs" />
+    <Compile Include="Events.partial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Events.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FocusEvent.cs" />
+    <Compile Include="MutationEvent.cs" />
+    <Compile Include="UIEventInfo.cs" />
+    <Compile Include="EventInfo.cs" />
     <Compile Include="EventListener.cs" />
     <Compile Include="EventListenerData.cs" />
     <Compile Include="EventListenerMap.cs" />
-    <Compile Include="EventNodeInterfaceProvider.cs" />
+    <Compile Include="EventInfoTableProvider.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="IEventInfoTable.cs" />
+    <Compile Include="NodeInterfaceProvider.cs" />
     <Compile Include="INXDocumentEvent.cs" />
     <Compile Include="IEventFactory.cs" />
     <Compile Include="IEventProvider.cs" />
@@ -150,7 +164,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Events.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Events.partial.cs</LastGenOutput>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Events.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

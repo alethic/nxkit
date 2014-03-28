@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
+using NXKit.DOMEvents;
 
 namespace NXKit.XForms
 {
@@ -33,7 +34,7 @@ namespace NXKit.XForms
                 !(Binding.ModelItem.Xml is XElement) ||
                 !(visual.Binding.ModelItem.Xml is XElement))
             {
-                DispatchEvent<BindingExceptionEvent>();
+                this.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                 return;
             }
 
@@ -53,7 +54,7 @@ namespace NXKit.XForms
                 !(Binding.ModelItem.Xml is XElement) ||
                 !(visual.Binding.ModelItem.Xml is XElement))
             {
-                DispatchEvent<BindingExceptionEvent>();
+                this.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                 return;
             }
 

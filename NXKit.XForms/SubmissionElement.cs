@@ -37,7 +37,7 @@ namespace NXKit.XForms
 
         void IEventDefaultActionHandler.DefaultAction(Event evt)
         {
-            if (evt.Type != XFormsEvents.Submit)
+            if (evt.Type != Events.Submit)
                 return;
 
             var ec = Module.ResolveBindingEvaluationContext(this);
@@ -49,7 +49,7 @@ namespace NXKit.XForms
             {
                 if (!modelItem.Relevant)
                 {
-                    DispatchEvent<SubmitErrorEvent>();
+                    this.Interface<INXEventTarget>().DispatchEvent(Events.SubmitError);
                     return;
                 }
 
@@ -78,12 +78,12 @@ namespace NXKit.XForms
                 if (resource != null)
                     throw new NotSupportedException("Cannot return new data from a Put.");
 
-                DispatchEvent<SubmitDoneEvent>();
+                this.Interface<INXEventTarget>().DispatchEvent(Events.SubmitDone);
                 return;
             }
             else
             {
-                DispatchEvent<SubmitErrorEvent>();
+                this.Interface<INXEventTarget>().DispatchEvent(Events.SubmitError);
                 return;
             }
         }
