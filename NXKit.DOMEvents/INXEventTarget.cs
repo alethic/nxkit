@@ -4,6 +4,7 @@
     /// <summary>
     /// NX-specfic event target interface.
     /// </summary>
+    [Public]
     public interface INXEventTarget
     {
 
@@ -11,6 +12,7 @@
         /// Dispatches an event of the given type, searching for the default event settings in the container.
         /// </summary>
         /// <param name="type"></param>
+        [Public]
         void DispatchEvent(string type);
 
         /// <summary>

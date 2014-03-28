@@ -22,7 +22,7 @@ namespace NXKit.XForms
 
         }
 
-        [Interactive]
+        [Public]
         public XName Appearance
         {
             get { return (string)Module.ResolveAttribute(Xml, "appearance"); }

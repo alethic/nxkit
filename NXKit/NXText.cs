@@ -36,7 +36,7 @@ namespace NXKit
             get { return (XText)base.Xml; }
         }
 
-        [Interactive]
+        [Public]
         public string Text
         {
             get { return Xml.Value; }

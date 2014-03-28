@@ -11,7 +11,7 @@ module NXKit.Web {
         private _valueAsBoolean: KnockoutComputed<boolean>;
         private _valueAsNumber: KnockoutComputed<number>;
         private _valueAsDate: KnockoutComputed<Date>;
-
+        
         /**
          * Raised when the Property's value has changed.
          */

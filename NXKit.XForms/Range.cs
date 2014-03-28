@@ -35,19 +35,19 @@ namespace NXKit.XForms
             });
         }
 
-        [Interactive]
+        [Public]
         public string Start
         {
             get { return Module.GetAttributeValue(Xml, "start"); }
         }
 
-        [Interactive]
+        [Public]
         public string End
         {
             get { return Module.GetAttributeValue(Xml, "end"); }
         }
 
-        [Interactive]
+        [Public]
         public string Step
         {
             get { return Module.GetAttributeValue(Xml, "step"); }

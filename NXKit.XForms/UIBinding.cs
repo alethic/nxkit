@@ -89,6 +89,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the current data type of the interface.
         /// </summary>
+        [Public]
         public XName DataType
         {
             get { return State.DataType; }

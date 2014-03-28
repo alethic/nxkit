@@ -79,7 +79,16 @@ _NXKit.Web.UI.View.prototype = {
 
             // update view with data
             self._view.Data = $(self._data).val();
+
+            // when the form is submitted, ensure the data field is updated
+            $(self.get_element()).parents('form').submit(function (event) {
+                $(self._data).val(JSON.stringify(self._view.Data));
+            });
         }
+    },
+
+    onBeginRequest: function () {
+
     },
 
     onCallbackRequest: function (data, wh) {

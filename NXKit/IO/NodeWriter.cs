@@ -67,7 +67,7 @@ namespace NXKit.Web
 
             return TypeDescriptor.GetProperties(node)
                 .Cast<PropertyDescriptor>()
-                .Where(i => i.Attributes.OfType<InteractiveAttribute>().Any())
+                .Where(i => i.Attributes.OfType<PublicAttribute>().Any())
                 .ToArray();
         }
 

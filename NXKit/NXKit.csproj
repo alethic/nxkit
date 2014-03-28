@@ -121,7 +121,7 @@
   <ItemGroup>
     <Compile Include="DefaultResolver.cs" />
     <Compile Include="INodeInterfaceProvider.cs" />
-    <Compile Include="InteractiveAttribute.cs" />
+    <Compile Include="PublicAttribute.cs" />
     <Compile Include="IO\NodeWriter.cs" />
     <Compile Include="CompositionUtil.cs" />
     <Compile Include="NodeInterfaceProviderBase.cs" />

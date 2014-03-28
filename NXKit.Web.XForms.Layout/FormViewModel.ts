@@ -123,8 +123,12 @@ module NXKit.Web.XForms.Layout {
         public GoNextPage(): void {
             var self = this;
             var p = self.GetNextPage(self.ActivePage())();
-            if (p != null)
+            if (p != null) {
                 self.ActivePage(p);
+                self.Node.Invoke('NXKit.DOMEvents.INXEventTarget', 'DispatchEvent', {
+                    type: 'xforms-layout-page-next',
+                });
+            }
         }
 
         public get Steps(): FormViewModel_.Step[] {

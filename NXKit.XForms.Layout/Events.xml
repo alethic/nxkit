@@ -1,0 +1,12 @@
+﻿<events>
+    <Event
+        name="PageNext"
+        type="xforms-layout-page-next"
+        bubbles="true"
+        cancelable="true" />
+    <Event
+        name="PagePrevious"
+        type="xforms-layout-page-previous"
+        bubbles="true"
+        cancelable="true" />
+</events>

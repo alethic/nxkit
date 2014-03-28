@@ -20,6 +20,9 @@ namespace NXKit.Util
         public static IEnumerable<T> Recurse<T>(this T self, Func<T, T> step)
             where T : class
         {
+            if (self == null)
+                yield break;
+
             yield return self;
 
             foreach (var next in Recurse(step(self), step))

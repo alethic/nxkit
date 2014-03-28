@@ -194,7 +194,7 @@
     <Compile Include="SingleNodeUIBindingElement.cs" />
     <Compile Include="SubmissionElement.cs" />
     <Compile Include="TextAreaElement.cs" />
-    <Compile Include="TriggerElement.cs" />
+    <Compile Include="Trigger.cs" />
     <Compile Include="ValueElement.cs" />
     <Compile Include="XFormsElement.cs" />
     <Compile Include="Functions\BooleanFromString.cs" />

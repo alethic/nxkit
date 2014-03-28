@@ -8,6 +8,7 @@ module NXKit.Web {
         _type: string;
         _baseTypes: string[];
         _properties: IPropertyMap;
+        _interfaces: IInterfaceMap;
         _nodes: KnockoutObservableArray<Node>;
 
         /**
@@ -16,12 +17,18 @@ module NXKit.Web {
         public ValueChanged: INodePropertyValueChangedEvent = new TypedEvent();
 
         /**
+         * Raised when the node has methods to be invoked on the server.
+         */
+        public MethodInvoked: INodeMethodInvokedEvent = new TypedEvent();
+
+        /**
          * Initializes a new instance from the given initial data.
          */
         constructor(source: any) {
             this._type = null;
             this._baseTypes = new Array<string>();
             this._properties = new PropertyMap();
+            this._interfaces = new InterfaceMap();
             this._nodes = ko.observableArray<Node>();
 
             // update from source data
@@ -55,10 +62,32 @@ module NXKit.Web {
         }
 
         /**
+         * Gets the exposed interfaces of this node.
+         */
+        public get Interfaces(): IInterfaceMap {
+            return this._interfaces;
+        }
+
+        /**
          * Gets the content of this node.
          */
         public get Nodes(): KnockoutObservableArray<Node> {
             return this._nodes;
+        }
+
+        /**
+         * Invokes a named method.
+         */
+        public Invoke(interfaceName: string, methodName: string, params: any): void {
+            var i = this._interfaces[interfaceName];
+            if (i == null)
+                throw new Error('Unknown interface');
+
+            var m = i.Methods[methodName];
+            if (m == null)
+                throw new Error('Unknown method.');
+
+            m.Invoke(params);
         }
 
         /**
@@ -68,6 +97,7 @@ module NXKit.Web {
             this.UpdateType(source.Type);
             this.UpdateBaseTypes(source.BaseTypes);
             this.UpdateProperties(source.Properties);
+            this.UpdateInterfaces(source);
             this.UpdateNodes(source.Nodes);
         }
 
@@ -111,6 +141,35 @@ module NXKit.Web {
         }
 
         /**
+         * Integrates the set of interfaces given with this node.
+         */
+        UpdateInterfaces(source: any) {
+            for (var i in source) {
+                if (i.indexOf('.') > -1)
+                    this.UpdateInterface(<string>i, source[<string>i]);
+            }
+        }
+
+        /**
+         * Updates the property given by the specified name with the specified value.
+         */
+        UpdateInterface(name: string, source: any) {
+            var self = this;
+            var intf: Interface = self._interfaces[name];
+            if (intf == null) {
+                intf = self._interfaces[name] = new Interface(name, source);
+                intf.PropertyChanged.add(_ => {
+                    self.OnValueChanged(self, _);
+                });
+                intf.MethodInvoked.add((_, method, params) => {
+                    self.OnMethodInvoked(_, method, params);
+                });
+            } else {
+                intf.Update(source);
+            }
+        }
+
+        /**
          * Integrates the set of content nodes with the given object values.
          */
         UpdateNodes(sources: Array<any>) {
@@ -141,12 +200,17 @@ module NXKit.Web {
         }
 
         public ToData(): any {
-            return {
+            var r: any = {
                 Type: this._type,
                 BaseTypes: this._baseTypes,
                 Properties: this.PropertiesToData(),
                 Nodes: this.NodesToData(),
-            }
+            };
+
+            for (var i in this._interfaces)
+                r[<string>i] = this._interfaces[<string>i].ToData();
+
+            return r;
         }
 
         /**
@@ -154,7 +218,6 @@ module NXKit.Web {
          */
         PropertiesToData(): any {
             var l: any = {};
-
             for (var p in this._properties) {
                 l[<string>p] = this._properties[<string>p].ToData();
             }
@@ -175,6 +238,13 @@ module NXKit.Web {
          */
         OnValueChanged(node: Node, property: Property) {
             this.ValueChanged.trigger(node, property);
+        }
+
+        /**
+         * Initiates a push of method invocations to the server.
+         */
+        OnMethodInvoked($interface: Interface, method: Method, params: any) {
+            this.MethodInvoked.trigger(this, $interface, method, params);
         }
 
     }

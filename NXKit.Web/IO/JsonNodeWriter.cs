@@ -1,9 +1,13 @@
 ﻿using System;
+using NXKit.Util;
+using System.Linq;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.Reflection;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel;
 
 namespace NXKit.Web.IO
 {
@@ -114,6 +118,63 @@ namespace NXKit.Web.IO
                     writer.WriteEndObject();
                 }
                 writer.WriteEndObject();
+            }
+
+            var items = node.Interfaces()
+                .Where(i => i != null)
+                .Select(i => new
+                {
+                    Object = i,
+                    Types = TypeDescriptor.GetReflectionType(i)
+                        .GetInterfaces()
+                        .Concat(TypeDescriptor.GetReflectionType(i)
+                            .Recurse(j => j.BaseType))
+                        .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
+                        .ToList(),
+                })
+                .Where(i => i.Types.Any())
+                .SelectMany(i => i.Types
+                    .Select(j => new { Object = i.Object, Type = j }))
+                .GroupBy(i => i.Type)
+                .Select(i => new
+                {
+                    Type = i.Key,
+                    Object = i.First(),
+                    Properties = TypeDescriptor.GetProperties(i.Key)
+                        .Cast<PropertyDescriptor>()
+                        .Where(j => j.ComponentType == i.Key)
+                        .Where(j => j.Attributes.OfType<PublicAttribute>().Any())
+                        .GroupBy(j => j.Name)
+                        .Select(j => j.First())
+                        .ToList(),
+                    Methods = TypeDescriptor.GetReflectionType(i.Key)
+                        .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                        .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
+                        .GroupBy(j => j.Name)
+                        .Select(j => j.First())
+                        .ToList(),
+                })
+                .Where(i => i.Properties.Any() || i.Methods.Any());
+
+            foreach (var item in items)
+            {
+                writer.WritePropertyName(item.Type.FullName);
+                writer.WriteStartObject();
+
+                foreach (var property in item.Properties)
+                {
+                    writer.WritePropertyName(property.Name);
+                    serializer.Serialize(writer, property.GetValue(node));
+                }
+
+                foreach (var method in item.Methods)
+                {
+                    writer.WritePropertyName(method.Name);
+                    writer.WriteStartArray();
+                    writer.WriteEndArray();
+                }
+
+                writer.WriteEnd();
             }
 
             // dealing with a content node

@@ -9,11 +9,11 @@ module NXKit.Web {
     export class View {
 
         private _body: HTMLElement;
-        private _data: any;
         private _root: Node;
         private _bind: boolean;
 
         private _onNodeValueChanged: (node: Node, property: Property) => void;
+        private _onNodeMethodInvoked: (node: Node, $interface: Interface, method: Method, params: any) => void;
 
         private _queue: Array<(cb: ICallbackComplete) => void>;
         private _queueRunning: boolean;
@@ -27,7 +27,6 @@ module NXKit.Web {
             var self = this;
 
             self._body = body;
-            self._data = null;
             self._root = null;
             self._bind = true;
 
@@ -37,48 +36,50 @@ module NXKit.Web {
             self._onNodeValueChanged = (node: Node, property: Property) => {
                 self.OnRootNodeValueChanged(node, property);
             };
+
+            self._onNodeMethodInvoked = (node: Node, $interface: Interface, method: Method, params: any) => {
+                self.OnRootNodeMethodInvoked(node, $interface, method, params);
+            };
         }
 
-        get Body(): HTMLElement {
+        public get Body(): HTMLElement {
             return this._body;
         }
 
-        set Body(value: HTMLElement) {
-            this._body = value;
+        public get Data(): any {
+            return this._root.ToData();
         }
 
-        get Data(): any {
-            return this._data;
-        }
-
-        set Data(value: any) {
+        public set Data(value: any) {
             var self = this;
 
             if (typeof (value) === 'string')
-                self._data = JSON.parse(<string>value);
+                // update the form with the parsed data
+                self.Update(JSON.parse(<string>value));
             else
-                self._data = value;
-
-            // raise the value changed event
-            self.Update();
+                // update the form with the data itself
+                self.Update(value);
         }
 
         /**
          * Initiates a refresh of the view model.
          */
-        Update() {
+        private Update(data: any) {
             var self = this;
 
             if (self._root == null) {
                 // generate new node tree
-                self._root = new Node(self._data);
+                self._root = new Node(data);
                 self._root.ValueChanged.add(self._onNodeValueChanged);
+                self._root.MethodInvoked.add(self._onNodeMethodInvoked);
             }
             else {
                 // update existing node tree
                 self._root.ValueChanged.remove(self._onNodeValueChanged);
-                self._root.Update(self._data);
+                self._root.MethodInvoked.remove(self._onNodeMethodInvoked);
+                self._root.Update(data);
                 self._root.ValueChanged.add(self._onNodeValueChanged);
+                self._root.MethodInvoked.add(self._onNodeMethodInvoked);
             }
 
             self.ApplyBindings();
@@ -88,6 +89,13 @@ module NXKit.Web {
          * Invoked to handle root node value change events.
          */
         OnRootNodeValueChanged(node: Node, property: Property) {
+            this.Push();
+        }
+
+        /**
+         * Invoked to handle root node method invocations.
+         */
+        OnRootNodeMethodInvoked(node: Node, $interface: Interface, method: Method, params: any) {
             this.Push();
         }
 

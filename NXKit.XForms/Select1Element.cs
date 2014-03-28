@@ -24,13 +24,13 @@ namespace NXKit.XForms
 
         }
 
-        [Interactive]
+        [Public]
         public bool Incremental
         {
             get { return Module.GetAttributeValue(Xml, "incremental") == "true"; }
         }
 
-        [Interactive]
+        [Public]
         public Selection Selection
         {
             get { return Module.GetAttributeValue(Xml, "selection") == "open" ? Selection.Open : Selection.Closed; }
@@ -116,7 +116,7 @@ namespace NXKit.XForms
             }
         }
 
-        [Interactive]
+        [Public]
         public string SelectedItemNodeId
         {
             get { return SelectedItemNode != null ? SelectedItemNode.UniqueId : null; }
