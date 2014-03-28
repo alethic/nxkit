@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
+
+using NXKit.Util;
 
 namespace NXKit
 {
@@ -12,6 +15,7 @@ namespace NXKit
     {
 
         NXContainer parent;
+        LinkedList<object> annotations = new LinkedList<object>();
 
         /// <summary>
         /// Initialies a new instance.
@@ -100,6 +104,81 @@ namespace NXKit
         {
             if (Removed != null)
                 Removed(this, args);
+        }
+
+        /// <summary>
+        /// Gets the annotations of the specified type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public IEnumerable<object> Annotations(Type type)
+        {
+            return annotations.Where(i => type.IsInstanceOfType(i));
+        }
+
+        /// <summary>
+        /// Gets the annotations of the specified type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public IEnumerable<T> Annotations<T>()
+        {
+            return annotations.OfType<T>();
+        }
+
+        /// <summary>
+        /// Gets the first annotation of the given type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public object Annotation(Type type)
+        {
+            return Annotations(type).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the first annotation of the given type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T Annotation<T>()
+        {
+            return Annotations<T>().FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Adds a new annotation.
+        /// </summary>
+        /// <param name="annotation"></param>
+        public void AddAnnotation(object annotation)
+        {
+            annotations.AddLast(annotations);
+        }
+
+        /// <summary>
+        /// Removes the annotations of the specified type.
+        /// </summary>
+        /// <param name="type"></param>
+        public void RemoveAnnotations(Type type)
+        {
+            var nodes = annotations.Forwards()
+                .Where(i => type.IsInstanceOfType(i.Value))
+                .ToList();
+            foreach (var node in nodes)
+                node.List.Remove(node);
+        }
+
+        /// <summary>
+        /// Removes the annotations of the specified type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void RemoveAnnotations<T>()
+        {
+            var nodes = annotations.Forwards()
+                .Where(i => i.Value is T)
+                .ToList();
+            foreach (var node in nodes)
+                node.List.Remove(node);
         }
 
     }

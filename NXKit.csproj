@@ -120,13 +120,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultResolver.cs" />
+    <Compile Include="INodeInterfaceProvider.cs" />
     <Compile Include="InteractiveAttribute.cs" />
     <Compile Include="IO\NodeWriter.cs" />
     <Compile Include="CompositionUtil.cs" />
+    <Compile Include="NodeInterfaceProviderBase.cs" />
     <Compile Include="NXContainer.cs" />
     <Compile Include="NXContainerExtensions.cs" />
-    <Compile Include="NXDocumentConfiguration.cs" />
     <Compile Include="HttpResolver.cs" />
+    <Compile Include="NXNodeExtensions.cs" />
     <Compile Include="NXObject.cs" />
     <Compile Include="NXObjectChange.cs" />
     <Compile Include="NXObjectChangeEventArgs.cs" />
@@ -134,6 +136,7 @@
     <Compile Include="NXObjectExtensions.cs" />
     <Compile Include="PriorityAttribute.cs" />
     <Compile Include="SingleUriResolver.cs" />
+    <Compile Include="TypeNodeInterfaceProvider.cs" />
     <Compile Include="UnknownRootElement.cs" />
     <Compile Include="NXObjectEventHandler.cs" />
     <Compile Include="NXObjectEventArgs.cs" />

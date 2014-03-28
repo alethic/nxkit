@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
@@ -9,36 +9,30 @@ namespace NXKit
     /// <summary>
     /// Modules provide the implementation of a specification.
     /// </summary>
+    [InheritedExport(typeof(Module))]
     public abstract class Module
     {
 
-        NXDocument document;
+        readonly NXDocument document;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public Module()
-        {
-
-        }
-
-        /// <summary>
-        /// Override to specify the modules this module depends on.
-        /// </summary>
-        public virtual Type[] DependsOn
-        {
-            get { Contract.Ensures(Contract.Result<Type[]>() != null); return new Type[0]; }
-        }
-
-        /// <summary>
-        /// Initializes the module instance against the specified <see cref="Document"/>.
-        /// </summary>
         /// <param name="document"></param>
-        public virtual void Initialize(NXDocument document)
+        public Module(
+            NXDocument document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
             this.document = document;
+        }
+
+        /// <summary>
+        /// Initializes the module.
+        /// </summary>
+        public virtual void Initialize()
+        {
+
         }
 
         /// <summary>
@@ -61,19 +55,6 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(node != null);
 
             return null;
-        }
-
-        /// <summary>
-        /// Gets the supported interfaces for the given <see cref="NXObject"/>.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public virtual IEnumerable<object> GetInterfaces(NXObject obj)
-        {
-            Contract.Requires<ArgumentNullException>(obj != null);
-
-            yield return obj;
         }
 
         /// <summary>
