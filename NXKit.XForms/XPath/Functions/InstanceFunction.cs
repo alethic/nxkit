@@ -4,7 +4,7 @@ using System.Xml.XPath;
 using NXKit.Util;
 using NXKit.XPath;
 
-namespace NXKit.XForms.Functions
+namespace NXKit.XForms.XPath.Functions
 {
 
     [XsltContextFunction("{http://www.w3.org/2002/xforms}instance")]

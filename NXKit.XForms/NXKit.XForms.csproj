@@ -59,7 +59,7 @@
     <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
     <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -197,13 +197,13 @@
     <Compile Include="Trigger.cs" />
     <Compile Include="ValueElement.cs" />
     <Compile Include="XFormsElement.cs" />
-    <Compile Include="Functions\BooleanFromString.cs" />
-    <Compile Include="Functions\IfFunction.cs" />
-    <Compile Include="Functions\IndexFunction.cs" />
-    <Compile Include="Functions\InstanceFunction.cs" />
-    <Compile Include="Functions\MaxFunction.cs" />
-    <Compile Include="Functions\PositionFunction.cs" />
-    <Compile Include="Functions\XPathFunction.cs" />
+    <Compile Include="XPath\Functions\BooleanFromString.cs" />
+    <Compile Include="XPath\Functions\IfFunction.cs" />
+    <Compile Include="XPath\Functions\IndexFunction.cs" />
+    <Compile Include="XPath\Functions\InstanceFunction.cs" />
+    <Compile Include="XPath\Functions\MaxFunction.cs" />
+    <Compile Include="XPath\Functions\PositionFunction.cs" />
+    <Compile Include="XPath\Functions\XPathFunction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">

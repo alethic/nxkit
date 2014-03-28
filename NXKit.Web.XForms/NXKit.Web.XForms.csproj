@@ -203,7 +203,7 @@
     <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
     <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets')" />
