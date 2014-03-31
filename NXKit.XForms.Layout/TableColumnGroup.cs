@@ -5,7 +5,7 @@ namespace NXKit.XForms.Layout
 {
 
     [Element("table-column-group")]
-    public class TableColumnGroupElement :
+    public class TableColumnGroup :
         LayoutElement,
         ITableColumnGroupContainer
     {
@@ -14,7 +14,7 @@ namespace NXKit.XForms.Layout
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        public TableColumnGroupElement(XElement xml)
+        public TableColumnGroup(XElement xml)
             : base(xml)
         {
 

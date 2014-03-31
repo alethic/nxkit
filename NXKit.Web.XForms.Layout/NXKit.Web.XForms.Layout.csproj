@@ -107,6 +107,7 @@
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="CategoryViewModel.ts" />
+    <TypeScriptCompile Include="TableViewModel.ts" />
     <TypeScriptCompile Include="SectionViewModel.ts" />
     <TypeScriptCompile Include="LayoutNodeViewModel.ts" />
     <TypeScriptCompile Include="Utils.ts" />

@@ -3,8 +3,8 @@
 namespace NXKit.XForms.Layout
 {
 
-    [Element("table-column")]
-    public class TableColumnElement : 
+    [Element("table-cell")]
+    public class TableCell : 
         LayoutElement
     {
 
@@ -12,7 +12,7 @@ namespace NXKit.XForms.Layout
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public TableColumnElement(XElement element)
+        public TableCell(XElement element)
             : base(element)
         {
 

@@ -136,10 +136,10 @@
     <Compile Include="Paragraph.cs" />
     <Compile Include="SchemaPackage.cs" />
     <Compile Include="Section.cs" />
-    <Compile Include="TableCellElement.cs" />
-    <Compile Include="TableColumnGroupElement.cs" />
-    <Compile Include="TableColumnElement.cs" />
-    <Compile Include="TableRowElement.cs" />
+    <Compile Include="TableCell.cs" />
+    <Compile Include="TableColumnGroup.cs" />
+    <Compile Include="TableColumn.cs" />
+    <Compile Include="TableRow.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="LayoutElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -4,14 +4,14 @@ namespace NXKit.XForms.Layout
 {
 
     [Element( "table-row")]
-    public class TableRowElement : LayoutElement
+    public class TableRow : LayoutElement
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public TableRowElement(XElement element)
+        public TableRow(XElement element)
             : base(element)
         {
 

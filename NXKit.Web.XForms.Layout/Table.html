@@ -1,5 +1,33 @@
 ﻿<script type="text/html"
         data-nxkit-node="NXKit.XForms.Layout.Table">
-    <div class="xforms-layout-table">
-    </div>
+    <!-- ko with: new NXKit.Web.XForms.Layout.TableViewModel($context, $data) -->
+    <table class="xforms-layout-table ui table segment">
+        <tbody>
+            <!-- ko foreach: Contents -->
+            <!-- ko nxkit_template -->
+            <!-- /ko -->
+            <!-- /ko -->
+        </tbody>
+    </table>
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-node="NXKit.XForms.Layout.TableRow">
+    <tr>
+        <!-- ko foreach: Nodes -->
+        <!-- ko nxkit_template -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </tr>
+</script>
+
+<script type="text/html"
+        data-nxkit-node="NXKit.XForms.Layout.TableCell">
+    <td>
+        <!-- ko foreach: Nodes -->
+        <!-- ko nxkit_template -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </td>
 </script>
