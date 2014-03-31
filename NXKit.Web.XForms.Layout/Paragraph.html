@@ -2,8 +2,10 @@
         data-nxkit-node="NXKit.XForms.Layout.Paragraph">
     <!-- ko with: new NXKit.Web.XForms.Layout.ParagraphViewModel($context, $data) -->
     <p class="xforms-layout-paragraph">
-        <!-- ko foreach: Contents -->
-        <!-- ko nxkit_template -->
+        <!-- ko foreach: $data.Nodes -->
+        <!-- ko nxkit_template: {
+            node: $data
+        } -->
         <!-- /ko -->
         <!-- /ko -->
     </p>

@@ -117,6 +117,7 @@
     <EmbeddedResource Include="Section.html" />
     <EmbeddedResource Include="Paragraph.html" />
     <EmbeddedResource Include="Form.html" />
+    <EmbeddedResource Include="Table.html" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

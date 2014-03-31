@@ -101,19 +101,19 @@ module NXKit.Web.XForms {
             }
 
             GetRelevant(): KnockoutObservable<boolean> {
-                return Utils.GetRelevant(this._itemNode);
+                return ko.computed(() => Utils.IsModelItemBindable(this._itemNode) ? Utils.GetRelevant(this._itemNode)() : true);
             }
 
             GetReadOnly(): KnockoutObservable<boolean> {
-                return Utils.GetReadOnly(this._itemNode);
+                return ko.computed(() => Utils.IsModelItemBindable(this._itemNode) ? Utils.GetReadOnly(this._itemNode)() : false);
             }
 
             GetRequired(): KnockoutObservable<boolean> {
-                return Utils.GetRequired(this._itemNode);
+                return ko.computed(() => Utils.IsModelItemBindable(this._itemNode) ? Utils.GetRequired(this._itemNode)() : false);
             }
 
             GetValid(): KnockoutObservable<boolean> {
-                return Utils.GetValid(this._itemNode);
+                return ko.computed(() => Utils.IsModelItemBindable(this._itemNode) ? Utils.GetValid(this._itemNode)() : true);
             }
 
             GetLabel(): Node {
@@ -390,7 +390,7 @@ module NXKit.Web.XForms {
                     var groupItem = this.GetGroupItem(v, level);
                     list.push(groupItem);
                     continue;
-                } else if (v.Type == 'NXKit.XForms.TextAreaElement') {
+                } else if (v.Type == 'NXKit.XForms.TextArea') {
                     var textAreaItem = new GroupViewModel_.SingleItem(this, level);
                     textAreaItem.Force = true;
                     list.push(textAreaItem);

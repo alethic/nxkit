@@ -21,11 +21,11 @@
     }
 
     export function GetRelevant(node: Node): KnockoutObservable<boolean> {
-        return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'Relevant');
+            return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'Relevant');
     }
 
     export function GetReadOnly(node: Node): KnockoutObservable<boolean> {
-        return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'ReadOnly');
+            return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'ReadOnly');
     }
 
     export function GetRequired(node: Node): KnockoutObservable<boolean> {
@@ -33,11 +33,19 @@
     }
 
     export function GetValid(node: Node): KnockoutObservable<boolean> {
-        return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'Valid');
+            return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'Valid');
     }
 
     export function GetType(node: Node): KnockoutObservable<string> {
         return node.ValueAsString('NXKit.XForms.IModelItemBinding', 'DataType');
+    }
+
+    export function IsModelItemValue(node: Node): boolean {
+        return node.Interfaces['NXKit.XForms.IModelItemValue'] != null;
+    }
+
+    export function IsModelItemBindable(node: Node): boolean {
+        return node.Interfaces['NXKit.XForms.IModelItemBindable'] != null;
     }
 
     export function GetAppearance(node: Node): KnockoutObservable<string> {

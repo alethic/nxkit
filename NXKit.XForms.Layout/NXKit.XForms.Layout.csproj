@@ -140,7 +140,7 @@
     <Compile Include="TableColumnGroupElement.cs" />
     <Compile Include="TableColumnElement.cs" />
     <Compile Include="TableRowElement.cs" />
-    <Compile Include="TableElement.cs" />
+    <Compile Include="Table.cs" />
     <Compile Include="LayoutElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ElementAttribute.cs" />

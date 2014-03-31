@@ -1,12 +1,13 @@
 ﻿using System.Xml.Linq;
+
 namespace NXKit.XForms.Layout
 {
 
-    [Element( "page")]
+    [Element("page")]
     public class Page :
         Group
     {
-        
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>

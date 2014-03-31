@@ -13,9 +13,9 @@ namespace NXKit.XForms.Layout
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="element"></param>
-        public TableColumnGroupElement(XElement element)
-            : base(element)
+        /// <param name="xml"></param>
+        public TableColumnGroupElement(XElement xml)
+            : base(xml)
         {
 
         }
