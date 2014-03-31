@@ -404,15 +404,16 @@ namespace NXKit.Web.UI
                 {
                     Type = i.Key,
                     Object = i.First().Object,
-                    Properties = TypeDescriptor.GetProperties(i.Key)
-                        .Cast<PropertyDescriptor>()
-                        .Where(j => j.ComponentType == i.Key)
-                        .Where(j => j.Attributes.OfType<PublicAttribute>().Any())
+                    Properties = TypeDescriptor.GetReflectionType(i.Key)
+                        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                        .Where(j => j.DeclaringType == i.Key)
+                        .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
                         .GroupBy(j => j.Name)
                         .Select(j => j.First())
                         .ToList(),
                     Methods = TypeDescriptor.GetReflectionType(i.Key)
                         .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                        .Where(j => j.DeclaringType == i.Key)
                         .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
                         .GroupBy(j => j.Name)
                         .Select(j => j.First())
@@ -422,18 +423,23 @@ namespace NXKit.Web.UI
 
             foreach (var item in items)
             {
-                var sourceObj = s[item.Type.FullName];
+                var sourceObj = s[item.Type.FullName] as JObject;
                 if (sourceObj == null)
                     continue;
 
                 foreach (var property in item.Properties)
                 {
-                    var j = sourceObj[property.Name] as JObject;
-                    var t = property.PropertyType;
-                    var o = j != null ? j.ToObject(t) : null;
+                    var p = sourceObj.Property(property.Name);
+                    if (p != null)
+                    {
+                        var v = p.Value;
+                        var t = property.PropertyType;
+                        var o = v != null ? v.ToObject(t) : null;
 
-                    if (!property.IsReadOnly)
-                        property.SetValue(item.Object, o);
+                        if (property.CanWrite && property.CanRead)
+                            if (!object.Equals(property.GetValue(item.Object), o))
+                                property.SetValue(item.Object, o);
+                    }
                 }
 
                 foreach (var method in item.Methods)

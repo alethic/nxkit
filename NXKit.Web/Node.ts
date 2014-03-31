@@ -72,11 +72,11 @@ module NXKit.Web {
         public Property(interfaceName: string, propertyName: string): Property {
             var i = this._interfaces[interfaceName];
             if (i == null)
-                throw new Error('Unknown interface');
+                throw new Error('Unknown interface [' + interfaceName + ':' + propertyName + ']');
 
             var p = i.Properties[propertyName];
             if (p == null)
-                throw new Error('Unknown property');
+                throw new Error('Unknown property [' + interfaceName + ':' + propertyName + ']');
 
             return p;
         }

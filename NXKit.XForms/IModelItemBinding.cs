@@ -7,7 +7,8 @@ namespace NXKit.XForms
     /// Provides access to the bound model item.
     /// </summary>
     [Public]
-    public interface IModelItemBinding
+    public interface IModelItemBinding :
+        IModelItemValue
     {
 
         [Public]

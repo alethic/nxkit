@@ -3,6 +3,7 @@
     <!-- ko with: new NXKit.Web.XForms.RangeViewModel($context, $data) -->
     <!-- ko nxkit_template: {
         node: Node,
+        data: $data,
         type: Type,
     } -->
     <!-- /ko -->
@@ -13,7 +14,8 @@
         data-nxkit-node="NXKit.XForms.Range"
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}int">
     <!-- ko nxkit_template: {
-        node: $data,
+        node: Node,
+        data: $data,
         type: '{http://www.w3.org/2001/XMLSchema}integer',
     } -->
     <!-- /ko -->
@@ -24,10 +26,10 @@
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}integer">
     <input type="number"
            data-bind="
-    value: Property('NXKit.XForms.IValue', 'Value').ValueAsNumber,
+    value: ValueAsNumber,
     attr: {
-        min: Property('NXKit.XForms.Range', 'Start').ValueAsNumber,
-        max: Property('NXKit.XForms.Range', 'End').ValueAsNumber,
-        step: Property('NXKit.XForms.Range', 'Step').ValueAsNumber 
+        min: Start,
+        max: End,
+        step: Step,
     }" />
 </script>

@@ -124,9 +124,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="IModelItemValue.cs" />
     <Compile Include="IUIAppearance.cs" />
     <Compile Include="IModelItemBinding.cs" />
-    <Compile Include="IValue.cs" />
     <Compile Include="NodeInterfaceProvider.cs" />
     <Compile Include="IActionElement.cs" />
     <Compile Include="IEvaluationContextScope.cs" />

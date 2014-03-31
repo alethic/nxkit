@@ -41,20 +41,22 @@ module NXKit.Web {
             for (var i in source) {
                 var s = <string>i;
                 if (s.indexOf('@') === 0) {
-                    var m = self._methods[s.substring(1, s.length - 1)];
+                    var n = s.substring(1, s.length);
+                    var m = self._methods[n];
                     if (m == null) {
-                        self._methods[s] = new Method(s, source[s]);
-                        self._methods[s].MethodInvoked.add((_, params) => {
+                        self._methods[n] = new Method(n, source[s]);
+                        self._methods[n].MethodInvoked.add((_, params) => {
                             self.OnMethodInvoked(_, params);
                         });
                     } else {
                         m.Update(source[s]);
                     }
                 } else {
-                    var p = self._properties[s];
+                    var n = s;
+                    var p = self._properties[n];
                     if (p == null) {
-                        self._properties[s] = new Property(s, source[s]);
-                        self._properties[s].PropertyChanged.add((_, value) => {
+                        self._properties[n] = new Property(n, source[s]);
+                        self._properties[n].PropertyChanged.add((_, value) => {
                             self.OnPropertyChanged(_, value);
                         });
                     } else {
@@ -71,19 +73,15 @@ module NXKit.Web {
             // add properties to the data
             for (var i in self._properties) {
                 var s = <string>i;
-                var p = self._properties[s].ToData();
-                if (p != null) {
-                    r[self._properties[s].Name] = self._properties[s].ToData();
-                }
+                var p = self._properties[s];
+                r[self._properties[s].Name] = p.ToData();
             }
 
             // add methods to the data
             for (var i in self._methods) {
                 var s = <string>i;
-                var m = self._methods[s].ToData();
-                if (m != null) {
-                    r['@' + self._methods[s].Name] = self._methods[s].ToData();
-                }
+                var m = self._methods[s];
+                r['@' + m.Name] = m.ToData();
             }
 
             return r;

@@ -8,7 +8,6 @@ namespace NXKit.XForms
     /// </summary>
     public abstract class UIBindingElement :
         BindingElement,
-        IValue,
         IModelItemBinding,
         IUIBindingNode
     {
@@ -43,9 +42,10 @@ namespace NXKit.XForms
         }
 
 
-        public object Value
+        public virtual string Value
         {
             get { return UIBinding.Value; }
+            set { UIBinding.Value = value; }
         }
 
         public XName DataType

@@ -148,6 +148,17 @@ namespace NXKit.XForms
         public string Value
         {
             get { return State.Value; }
+            set { SetValue(value); }
+        }
+
+        /// <summary>
+        /// Implements the setter for Value.
+        /// </summary>
+        /// <param name="value"></param>
+        void SetValue(string value)
+        {
+            if (modelItem != null)
+                modelItem.Value = value;
         }
 
         /// <summary>

@@ -9,7 +9,8 @@ namespace NXKit.XForms
     public class Select1 :
         SingleNodeUIBindingElement,
         ISupportsUiCommonAttributes,
-        IUIRefreshable
+        IUIRefreshable,
+        IModelItemValue
     {
 
         bool selectedItemNodeCached;
@@ -36,7 +37,13 @@ namespace NXKit.XForms
             get { return Module.GetAttributeValue(Xml, "selection") == "open" ? Selection.Open : Selection.Closed; }
         }
 
-        protected override void SetValue(object value)
+        public override string Value
+        {
+            get { return SelectedItemNode == null && UIBinding != null ? UIBinding.Value : null; }
+            set { SetValue(value); }
+        }
+
+        void SetValue(string value)
         {
             // deselect current visual
             if (SelectedItemNode != null &&
@@ -49,9 +56,8 @@ namespace NXKit.XForms
             GetState<Select1State>().SelectedNodeId = null;
 
             // set node value
-            if (Binding != null &&
-                Binding.ModelItem != null)
-                base.SetValue(value);
+            if (UIBinding != null)
+                UIBinding.Value = value;
         }
 
         /// <summary>

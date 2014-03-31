@@ -42,28 +42,28 @@ module NXKit.Web {
             });
 
             self._valueAsBoolean = ko.computed({
-                read: function () {
+                read: () => {
                     return self._value() === true || self._value() === 'true' || self._value() === 'True';
                 },
-                write: function (value: boolean) {
-                    self._value(value === true ? "true" : "false");
+                write: (value: boolean) => {
+                    self._value(value ? 'true' : 'false');
                 },
             });
 
             self._valueAsNumber = ko.computed({
-                read: function () {
+                read: () => {
                     return self._value() != '' ? parseFloat(self._value()) : null;
                 },
-                write: function (value: number) {
+                write: (value: number) => {
                     self._value(value != null ? value.toString() : null);
                 },
             });
 
             self._valueAsDate = ko.computed({
-                read: function () {
+                read: () => {
                     return self._value() != null ? new Date(self._value()) : null;
                 },
-                write: function (value: Date) {
+                write: (value: Date) => {
                     if (value instanceof Date)
                         self._value(value.toDateString());
                     else if (typeof (value) === 'string')
@@ -111,7 +111,7 @@ module NXKit.Web {
         }
 
         public ToData(): any {
-            return this.Value();
+            return this._value();
         }
 
     }

@@ -61,26 +61,6 @@ namespace NXKit.XForms
             return Module.ResolveSingleNodeBinding(this);
         }
 
-        /// <summary>
-        /// Gets or sets the value of the bound data.
-        /// </summary>
-        public object Value
-        {
-            get { return UIBinding != null ? UIBinding.Value : null; }
-            set { SetValue(value); }
-        }
-
-        /// <summary>
-        /// Implements the setter for Value. Override this method to store bound values differently.
-        /// </summary>
-        /// <param name="value"></param>
-        protected virtual void SetValue(object value)
-        {
-            if (Binding != null &&
-                Binding.ModelItem != null)
-                Binding.ModelItem.Value = value != null ? value.ToString() : null;
-        }
-
     }
 
 }

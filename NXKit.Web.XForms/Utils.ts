@@ -1,23 +1,23 @@
 ﻿module NXKit.Web.XForms.Utils {
 
     export function GetValue(node: Node): KnockoutObservable<any> {
-        return node.Value('NXKit.XForms.IValue', 'Value');
+        return node.Value('NXKit.XForms.IModelItemValue', 'Value');
     }
 
     export function GetValueAsString(node: Node): KnockoutObservable<string> {
-        return node.ValueAsString('NXKit.XForms.IValue', 'Value');
+        return node.ValueAsString('NXKit.XForms.IModelItemValue', 'Value');
     }
 
     export function GetValueAsBoolean(node: Node): KnockoutObservable<boolean> {
-        return node.ValueAsBoolean('NXKit.XForms.IValue', 'Value');
+        return node.ValueAsBoolean('NXKit.XForms.IModelItemValue', 'Value');
     }
 
     export function GetValueAsNumber(node: Node): KnockoutObservable<number> {
-        return node.ValueAsNumber('NXKit.XForms.IValue', 'Value');
+        return node.ValueAsNumber('NXKit.XForms.IModelItemValue', 'Value');
     }
 
     export function GetValueAsDate(node: Node): KnockoutObservable<Date> {
-        return node.ValueAsDate('NXKit.XForms.IValue', 'Value');
+        return node.ValueAsDate('NXKit.XForms.IModelItemValue', 'Value');
     }
 
     export function GetRelevant(node: Node): KnockoutObservable<boolean> {
