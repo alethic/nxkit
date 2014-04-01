@@ -1,5 +1,5 @@
 ﻿/// <reference path="Node.ts" />
-/// <reference path="Utils.ts" />
+/// <reference path="Util.ts" />
 
 module NXKit.Web {
 
@@ -105,7 +105,7 @@ module NXKit.Web {
         public TemplatePredicate(node: HTMLElement, data: any): boolean {
             var d1 = this.GetTemplateNodeData(node);
             var d2 = data;
-            return Utils.DeepEquals(d1, d2);
+            return Util.DeepEquals(d1, d2);
         }
 
         /**
@@ -134,7 +134,7 @@ module NXKit.Web {
 
                 // ensure the node has a valid and unique id
                 if (node.id == '')
-                    node.id = 'NXKit.Web__' + Utils.GenerateGuid().replace(/-/g, '');
+                    node.id = 'NXKit.Web__' + Util.GenerateGuid().replace(/-/g, '');
 
                 // caller expects the id
                 return node.id;

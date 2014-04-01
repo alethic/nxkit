@@ -31,10 +31,11 @@ module NXKit.Web.XForms.Layout {
         }
 
         public get Layout(): any {
-            if (!this.Contents.some(_ => _.Type === 'NXKit.XForms.Group'))
-                return 'body-with-group';
-            else
-                return 'body';
+            return this.Contents.some(_ => _.Type === 'NXKit.XForms.Group') ? 'body' : 'body-with-group';
+        }
+
+        public get Items(): GroupUtil.Item[] {
+            return GroupUtil.GetItems(this, this.Node, 1);
         }
 
     }

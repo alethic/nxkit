@@ -1,4 +1,4 @@
-﻿/// <reference path="Utils.ts" />
+﻿/// <reference path="Util.ts" />
 
 module NXKit.Web {
 
@@ -9,7 +9,7 @@ module NXKit.Web {
           */
         public static GetArgs(bindingContext: KnockoutBindingContext): any {
             var a: any = {};
-            var c = Utils.GetContextItems(bindingContext);
+            var c = Util.GetContextItems(bindingContext);
             for (var i = 0; i < c.length; i++)
                 if (c[i] instanceof LayoutOptions)
                     a = ko.utils.extend(a, c[i]);

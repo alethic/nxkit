@@ -1,90 +1,88 @@
-﻿module NXKit.Web.XForms {
+﻿NXKit.Web.ViewModelUtil.ControlNodeTypes.push(
+    'NXKit.XForms.Input',
+    'NXKit.XForms.Range',
+    'NXKit.XForms.Select1',
+    'NXKit.XForms.Select',
+    'NXKit.XForms.TextArea');
+
+NXKit.Web.ViewModelUtil.MetadataNodeTypes.push(
+    'NXKit.XForms.Label',
+    'NXKit.XForms.Help',
+    'NXKit.XForms.Hint',
+    'NXKit.XForms.Alert');
+
+NXKit.Web.ViewModelUtil.TransparentNodeTypes.push(
+    'NXKit.XForms.Repeat',
+    'NXKit.XForms.RepeatItem');
+
+module NXKit.Web.XForms {
 
     export class XFormsNodeViewModel
         extends NXKit.Web.NodeViewModel {
-
-        public static ControlNodeTypes = [
-            'NXKit.XForms.Input',
-            'NXKit.XForms.Range',
-            'NXKit.XForms.Select1',
-            'NXKit.XForms.SelectElement',
-            'NXKit.XForms.TextAreaElement',
-        ];
-
-        public static MetadataNodeTypes = [
-            'NXKit.XForms.Label',
-            'NXKit.XForms.Help',
-            'NXKit.XForms.Hint',
-            'NXKit.XForms.Alert',
-        ];
-
-        public static TransparentNodeTypes = [
-            'NXKit.XForms.RepeatElement',
-            'NXKit.XForms.RepeatItemElement',
-        ];
 
         constructor(context: KnockoutBindingContext, node: Node) {
             super(context, node);
         }
 
         public get Value(): KnockoutObservable<any> {
-            return Utils.GetValue(this.Node);
+            return ViewModelUtil.GetValue(this.Node);
         }
 
         public get ValueAsString(): KnockoutObservable<string> {
-            return Utils.GetValueAsString(this.Node);
+            return ViewModelUtil.GetValueAsString(this.Node);
         }
 
         public get ValueAsBoolean(): KnockoutObservable<boolean> {
-            return Utils.GetValueAsBoolean(this.Node);
+            return ViewModelUtil.GetValueAsBoolean(this.Node);
         }
 
         public get ValueAsNumber(): KnockoutObservable<number> {
-            return Utils.GetValueAsNumber(this.Node);
+            return ViewModelUtil.GetValueAsNumber(this.Node);
         }
 
         public get Relevant(): KnockoutObservable<boolean> {
-            return Utils.GetRelevant(this.Node);
+            return ViewModelUtil.GetRelevant(this.Node);
         }
 
         public get ReadOnly(): KnockoutObservable<boolean> {
-            return Utils.GetReadOnly(this.Node);
+            return ViewModelUtil.GetReadOnly(this.Node);
         }
 
         public get Required(): KnockoutObservable<boolean> {
-            return Utils.GetRequired(this.Node);
+            return ViewModelUtil.GetRequired(this.Node);
         }
 
         public get Valid(): KnockoutObservable<boolean> {
-            return Utils.GetValid(this.Node);
+            return ViewModelUtil.GetValid(this.Node);
         }
 
         public get Type(): KnockoutObservable<string> {
-            return Utils.GetType(this.Node);
+            return ViewModelUtil.GetType(this.Node);
         }
 
         public get Appearance(): KnockoutObservable<string> {
-            return Utils.GetAppearance(this.Node);
+            return ViewModelUtil.GetAppearance(this.Node);
         }
 
         public get Label(): Node {
-            return Utils.GetLabel(this.Node);
+            try {
+                return ViewModelUtil.GetLabelNode(this.Node);
+            } catch (ex) {
+                ex.message = 'XFormsNodeViewModel.Label' + '"\nMessage: ' + ex.message;
+                throw ex;
+            }
         }
 
         public get Help(): Node {
-            return Utils.GetHelp(this.Node);
+            return ViewModelUtil.GetHelpNode(this.Node);
         }
 
         public get Hint(): Node {
-            return Utils.GetHint(this.Node);
+            return ViewModelUtil.GetHintNode(this.Node);
         }
 
         public get Alert(): Node {
-            return Utils.GetAlert(this.Node);
-        }
-
-        public get Contents(): Node[] {
-            return Utils.GetContents(this.Node);
+            return ViewModelUtil.GetAlertNode(this.Node);
         }
 
     }

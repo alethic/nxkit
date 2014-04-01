@@ -5,18 +5,6 @@ module NXKit.Web.XForms {
     export class Select1ViewModel
         extends NXKit.Web.XForms.XFormsNodeViewModel {
 
-        public static GetItems(node: Node) {
-            return ko.utils.arrayFilter(node.Nodes(), (_: Node) => {
-                return _.Type == 'NXKit.XForms.ItemElement';
-            });
-        }
-
-        public static GetItemValue(node: Node) {
-            return ko.utils.arrayFirst(node.Nodes(), (_) => {
-                return _.Type == 'NXKit.XForms.ValueElement';
-            });
-        }
-
         public static GetSelectedItemNodeId(node: Node): KnockoutComputed<string> {
             return ko.computed<string>({
                 read: () => {
@@ -38,8 +26,8 @@ module NXKit.Web.XForms {
             super(context, node);
         }
 
-        public get Items(): Node[] {
-            return Select1ViewModel.GetItems(this.Node);
+        public get Items(): SelectUtil.Item[] {
+            return SelectUtil.GetItems(this, this.Node, 1);
         }
 
         public get SelectedItemNodeId(): KnockoutComputed<string> {

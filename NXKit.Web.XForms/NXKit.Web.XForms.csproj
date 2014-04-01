@@ -109,6 +109,7 @@
     <TypeScriptCompile Include="GroupLayoutManager.ts" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="SelectUtil.ts" />
     <TypeScriptCompile Include="GroupUtil.ts" />
     <TypeScriptCompile Include="GroupViewModel.ts" />
   </ItemGroup>
@@ -136,7 +137,7 @@
     <TypeScriptCompile Include="TextAreaViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Utils.ts" />
+    <TypeScriptCompile Include="ViewModelUtil.ts" />
     <TypeScriptCompile Include="XFormsNodeViewModel.ts" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿module NXKit.Web.XForms.Utils {
+﻿module NXKit.Web.XForms.ViewModelUtil {
 
     export function GetValue(node: Node): KnockoutObservable<any> {
         return node.Value('NXKit.XForms.IModelItemValue', 'Value');
@@ -55,74 +55,29 @@
         });
     }
 
-    export function IsMetadataNode(node: Node): boolean {
-        return XFormsNodeViewModel.MetadataNodeTypes
-            .some((_) =>
-                node.Type == _);
-    }
-
-    export function GetLabel(node: Node): Node {
+    export function GetLabelNode(node: Node): Node {
         return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
             _.Type == 'NXKit.XForms.Label');
     }
 
-    export function GetHelp(node: Node): Node {
+    export function GetHelpNode(node: Node): Node {
         return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
             _.Type == 'NXKit.XForms.Help');
     }
 
-    export function GetHint(node: Node): Node {
+    export function GetHintNode(node: Node): Node {
         return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
             _.Type == 'NXKit.XForms.Hint');
     }
 
-    export function GetAlert(node: Node): Node {
+    export function GetAlertNode(node: Node): Node {
         return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
             _.Type == 'NXKit.XForms.Alert');
     }
 
-    export function IsControlNode(node: Node): boolean {
-        return this.ControlNodeTypes
-            .some(_ =>
-                node.Type == _);
-    }
-
-    export function HasControlNode(node: Node): boolean {
-        return node.Nodes()
-            .some(_ =>
-                IsControlNode(_));
-    }
-
-    export function GetControlNodes(node: Node): Node[] {
-        return node.Nodes()
-            .filter(_ =>
-                IsControlNode(_));
-    }
-
-    export function IsTransparentNode(node: Node): boolean {
-        return XFormsNodeViewModel.TransparentNodeTypes
-            .some(_ =>
-                node.Type == _);
-    }
-
-    export function GetContents(node: Node): Node[] {
-        var l = node.Nodes()
-            .filter(_ =>
-                !IsMetadataNode(_));
-
-        var r = new Array<Node>();
-        for (var i = 0; i < l.length; i++) {
-            var v = l[i];
-            if (IsTransparentNode(v)) {
-                var s = GetContents(v);
-                for (var j = 0; j < s.length; j++)
-                    r.push(s[j]);
-            } else {
-                r.push(v);
-            }
-        }
-
-        return r;
+    export function GetValueNode(node: Node): Node {
+        return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
+            _.Type == 'NXKit.XForms.Value');
     }
 
 } 

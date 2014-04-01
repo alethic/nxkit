@@ -20,9 +20,9 @@ module NXKit.Web.XForms.Layout {
                 this._viewModel = viewModel;
                 this._node = node;
                 this._index = index;
-                this._label = XForms.Utils.GetLabel(node);
+                this._label = ViewModelUtil.GetLabelNode(node);
                 this._active = ko.computed(() => this._viewModel.ActivePage() == this._node);
-                this._disabled = ko.computed(() => !XForms.Utils.GetRelevant(this._node)());
+                this._disabled = ko.computed(() => !ViewModelUtil.GetRelevant(this._node)());
             }
 
             public get Node(): Node {
@@ -83,7 +83,7 @@ module NXKit.Web.XForms.Layout {
             var self = this;
             return ko.computed(() => {
                 for (var i = self._pages.indexOf(page) - 1; i >= 0; i--) {
-                    if (XForms.Utils.GetRelevant(self._pages[i])())
+                    if (ViewModelUtil.GetRelevant(self._pages[i])())
                         return self._pages[i];
                 }
 
@@ -107,7 +107,7 @@ module NXKit.Web.XForms.Layout {
             var self = this;
             return ko.computed(() => {
                 for (var i = self._pages.indexOf(page) + 1; i < self._pages.length; i++) {
-                    if (XForms.Utils.GetRelevant(self._pages[i])())
+                    if (ViewModelUtil.GetRelevant(self._pages[i])())
                         return self._pages[i];
                 }
 

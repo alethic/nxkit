@@ -7,20 +7,20 @@ namespace NXKit.XForms
 {
 
     [Element("itemset")]
-    public class ItemSetElement :
+    public class ItemSet :
         NodeSetBindingElement,
         INamingScope,
         IUIRefreshable
     {
 
-        readonly Dictionary<XObject, ItemSetItemElement> items =
-            new Dictionary<XObject, ItemSetItemElement>();
+        readonly Dictionary<XObject, ItemSetItem> items =
+            new Dictionary<XObject, ItemSetItem>();
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        public ItemSetElement(XElement xml)
+        public ItemSet(XElement xml)
             : base(xml)
         {
 
@@ -49,7 +49,7 @@ namespace NXKit.XForms
                 Add(GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.ModelItems[i], i + 1, Binding.ModelItems.Length));
         }
 
-        ItemSetItemElement GetOrCreateItem(ModelElement model, InstanceElement instance, ModelItem modelItem, int position, int size)
+        ItemSetItem GetOrCreateItem(ModelElement model, InstanceElement instance, ModelItem modelItem, int position, int size)
         {
             // new context for child
             var ec = new EvaluationContext(model, instance, modelItem, position, size);
@@ -57,7 +57,7 @@ namespace NXKit.XForms
             // obtain or create child
             var item = items.GetOrDefault(modelItem.Xml);
             if (item == null)
-                item = items[modelItem.Xml] = new ItemSetItemElement(Xml);
+                item = items[modelItem.Xml] = new ItemSetItem(Xml);
 
             item.SetContext(ec);
 

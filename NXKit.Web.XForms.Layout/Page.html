@@ -2,34 +2,10 @@
         data-nxkit-node="NXKit.XForms.Layout.Page">
     <!-- ko with: new NXKit.Web.XForms.Layout.PageViewModel($context, $data) -->
     <div class="xforms-layout-page">
-        <!-- ko nxkit_template: {
-            node: Node,
-            data: $data,
-            layout: Layout
-        } -->
+        <!-- ko foreach: Contents -->
+        <!-- ko nxkit_template: $data -->
+        <!-- /ko -->
         <!-- /ko -->
     </div>
-    <!-- /ko -->
-</script>
-
-<script type="text/html"
-        data-nxkit-node="NXKit.XForms.Layout.Page"
-        data-nxkit-layout="body-with-group">
-    <div class="ui form segment">
-        <!-- ko nxkit_template: {
-            node: Node,
-            data: $data,
-            layout: 'body'
-        } -->
-        <!-- /ko -->
-    </div>
-</script>
-
-<script type="text/html"
-        data-nxkit-node="NXKit.XForms.Layout.Page"
-        data-nxkit-layout="body">
-    <!-- ko foreach: Contents -->
-    <!-- ko nxkit_template -->
-    <!-- /ko -->
     <!-- /ko -->
 </script>

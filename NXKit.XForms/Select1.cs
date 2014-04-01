@@ -14,7 +14,7 @@ namespace NXKit.XForms
     {
 
         bool selectedItemNodeCached;
-        ItemElement selectedItemNode;
+        Item selectedItemNode;
 
         /// <summary>
         /// Initializes a new instance.
@@ -63,7 +63,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the currently selected item visual.
         /// </summary>
-        public ItemElement SelectedItemNode
+        public Item SelectedItemNode
         {
             get { return GetSelectedItemNode(); }
             set { SetSelectedItemNode(value); }
@@ -73,11 +73,11 @@ namespace NXKit.XForms
         /// Implements the getter for SelectedItemVisual.
         /// </summary>
         /// <returns></returns>
-        ItemElement GetSelectedItemNode()
+        Item GetSelectedItemNode()
         {
             if (!selectedItemNodeCached)
             {
-                foreach (var itemNode in this.Descendants().OfType<ItemElement>())
+                foreach (var itemNode in this.Descendants().OfType<Item>())
                 {
                     // find selectable visuals underneath item
                     if (itemNode.Selectable == null)
@@ -100,7 +100,7 @@ namespace NXKit.XForms
         /// Implements the setter for SelectedItemVisual.
         /// </summary>
         /// <param name="node"></param>
-        void SetSelectedItemNode(ItemElement node)
+        void SetSelectedItemNode(Item node)
         {
             // deselect current visual
             if (SelectedItemNode != null &&
@@ -136,7 +136,7 @@ namespace NXKit.XForms
         void SetSelectedItemNodeId(string id)
         {
             SelectedItemNode = this.Descendants()
-                .OfType<ItemElement>()
+                .OfType<Item>()
                 .FirstOrDefault(i => i.UniqueId == id);
         }
 
@@ -151,10 +151,10 @@ namespace NXKit.XForms
             if (selectedItemId == null)
             {
                 // ensure descendant itemsets are refreshed, kind of a hack
-                foreach (var itemSet in this.Descendants().OfType<ItemSetElement>())
+                foreach (var itemSet in this.Descendants().OfType<ItemSet>())
                     itemSet.Refresh();
 
-                foreach (var item in this.Descendants().OfType<ItemElement>())
+                foreach (var item in this.Descendants().OfType<Item>())
                 {
                     if (item.Selectable == null)
                         continue;

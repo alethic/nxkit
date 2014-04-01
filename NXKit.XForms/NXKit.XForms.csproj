@@ -165,9 +165,9 @@
     <Compile Include="InsertElement.cs" />
     <Compile Include="InstanceElement.cs" />
     <Compile Include="InstanceElementState.cs" />
-    <Compile Include="ItemSetItemElement.cs" />
-    <Compile Include="ItemSetElement.cs" />
-    <Compile Include="ItemElement.cs" />
+    <Compile Include="ItemSetItem.cs" />
+    <Compile Include="ItemSet.cs" />
+    <Compile Include="Item.cs" />
     <Compile Include="Label.cs" />
     <Compile Include="ListeItemElement.cs" />
     <Compile Include="LoadElement.cs" />
@@ -190,12 +190,12 @@
     <Compile Include="Select1State.cs" />
     <Compile Include="Select1.cs" />
     <Compile Include="Selection.cs" />
-    <Compile Include="SelectElement.cs" />
+    <Compile Include="Select.cs" />
     <Compile Include="SendElement.cs" />
     <Compile Include="SetValueElement.cs" />
     <Compile Include="SingleNodeUIBindingElement.cs" />
     <Compile Include="SubmissionElement.cs" />
-    <Compile Include="TextAreaElement.cs" />
+    <Compile Include="TextArea.cs" />
     <Compile Include="Trigger.cs" />
     <Compile Include="ValueElement.cs" />
     <Compile Include="XFormsElement.cs" />

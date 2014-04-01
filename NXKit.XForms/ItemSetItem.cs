@@ -5,8 +5,8 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
-    public class ItemSetItemElement :
-        ItemElement,
+    public class ItemSetItem :
+        Item,
         IEvaluationContextScope,
         INamingScope
     {
@@ -15,7 +15,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        public ItemSetItemElement(XElement xml)
+        public ItemSetItem(XElement xml)
             : base(xml)
         {
             Contract.Requires<ArgumentNullException>(xml != null);

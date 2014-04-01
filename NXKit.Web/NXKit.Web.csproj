@@ -161,7 +161,8 @@
     <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
-    <TypeScriptCompile Include="Utils.ts" />
+    <TypeScriptCompile Include="Util.ts" />
+    <TypeScriptCompile Include="ViewModelUtil.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NXKit.Web.nuspec" />

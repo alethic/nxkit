@@ -18,8 +18,8 @@
         <div class="text">Select</div>
         <i class="dropdown icon"></i>
         <div class="ui menu" data-bind="foreach: Items">
-            <div class="item" data-bind="attr: { 'data-value': $data.ValueAsString('NXKit.NXElement', 'UniqueId') }">
-                <!-- ko nxkit_template: NXKit.Web.XForms.Utils.GetLabel($data) -->
+            <div class="item" data-bind="attr: { 'data-value': Id }">
+                <!-- ko nxkit_template: Label -->
                 <!-- /ko -->
             </div>
         </div>

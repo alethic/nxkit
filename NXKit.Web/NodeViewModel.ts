@@ -41,7 +41,23 @@ module NXKit.Web {
           * Gets the unique document ID of the wrapped node.
           */
         public get UniqueId(): string {
-            return Utils.GetUniqueId(this.Node);
+            return Util.GetUniqueId(this.Node);
+        }
+
+        /**
+          * Gets the content nodes of the current node.
+          */
+        public get Contents(): Node[] {
+            return this.GetContents();
+        }
+
+        GetContents(): Node[] {
+            try {
+                return ViewModelUtil.GetContents(this.Node);
+            } catch (ex) {
+                ex.message = 'NodeViewModel.GetContents()' + '"\nMessage: ' + ex.message;
+                throw ex;
+            }
         }
 
     }

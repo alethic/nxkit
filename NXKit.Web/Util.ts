@@ -1,4 +1,4 @@
-﻿module NXKit.Web.Utils {
+﻿module NXKit.Web.Util {
 
     /**
      * Tests two objects for equality.
@@ -32,7 +32,7 @@
             if (a.hasOwnProperty(i)) {
                 if (!b.hasOwnProperty(i))
                     return false;
-                if (!Utils.DeepEquals(a[i], b[i]))
+                if (!Util.DeepEquals(a[i], b[i]))
                     return false;
             }
         }
@@ -41,7 +41,7 @@
             if (b.hasOwnProperty(i)) {
                 if (!a.hasOwnProperty(i))
                     return false;
-                if (!Utils.DeepEquals(b[i], a[i]))
+                if (!Util.DeepEquals(b[i], a[i]))
                     return false;
             }
         }

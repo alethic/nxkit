@@ -1,4 +1,4 @@
-﻿/// <reference path="../Utils.ts" />
+﻿/// <reference path="../Util.ts" />
 
 module NXKit.Web.Knockout {
 

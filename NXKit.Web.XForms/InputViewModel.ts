@@ -31,7 +31,7 @@ module NXKit.Web.XForms {
             if (n == null)
                 return null;
 
-            if (Utils.GetAppearance(n)() != 'minimal')
+            if (ViewModelUtil.GetAppearance(n)() != 'minimal')
                 return null;
 
             return this.GetHintText();
@@ -39,7 +39,7 @@ module NXKit.Web.XForms {
 
         public get ShowAdvice(): KnockoutObservable<boolean> {
             return ko.computed(() =>
-                this.Hint != null && Utils.GetAppearance(this.Hint)() !== 'minimal');
+                this.Hint != null && ViewModelUtil.GetAppearance(this.Hint)() !== 'minimal');
         }
 
         public get ShowError(): KnockoutObservable<boolean> {

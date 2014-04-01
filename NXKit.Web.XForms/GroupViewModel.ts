@@ -2,7 +2,6 @@
 
 module NXKit.Web.XForms {
 
-
     export class GroupViewModel
         extends XFormsNodeViewModel {
 
@@ -14,9 +13,19 @@ module NXKit.Web.XForms {
             this._count = count;
         }
 
-        public get BindingContents(): NXKit.Web.XForms.GroupUtil.ViewModel_.Item[] {
-            return GroupUtil.GetItems(this, this.Node, 1);
+        public get Items(): GroupUtil.Item[] {
+            return this.GetItems();
         }
+
+        GetItems(): GroupUtil.Item[] {
+            try {
+                return GroupUtil.GetItems(this, this.Node, 1);
+            } catch (ex) {
+                ex.message = 'GroupViewModel.GetItems()' + '"\nMessage: ' + ex.message;
+                throw ex;
+            }
+        }
+
     }
 
 }

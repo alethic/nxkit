@@ -1,4 +1,4 @@
-﻿/// <reference path="../Utils.ts" />
+﻿/// <reference path="../Util.ts" />
 
 module NXKit.Web.Knockout {
 
@@ -70,14 +70,14 @@ module NXKit.Web.Knockout {
          * Extracts template index data from the given binding information.
          */
         static GetTemplateBinding(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any {
-            return NXKit.Web.Utils.GetLayoutManager(bindingContext).ParseTemplateBinding(valueAccessor, viewModel, bindingContext, {});
+            return NXKit.Web.Util.GetLayoutManager(bindingContext).ParseTemplateBinding(valueAccessor, viewModel, bindingContext, {});
         }
 
         /**
          * Determines the named template from the given extracted data and context.
          */
         static GetTemplateName(bindingContext: KnockoutBindingContext, data: any): KnockoutObservable<string> {
-            return NXKit.Web.Utils.GetLayoutManager(bindingContext).GetTemplateName(data);
+            return NXKit.Web.Util.GetLayoutManager(bindingContext).GetTemplateName(data);
         }
 
     }

@@ -2,17 +2,18 @@
 namespace NXKit.XForms
 {
 
-    [Element("select")]
-    public class SelectElement :
+    [Element("textarea")]
+    public class TextArea :
         SingleNodeUIBindingElement,
-        ISupportsUiCommonAttributes
+        ISupportsUiCommonAttributes,
+        ISupportsIncrementalAttribute
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public SelectElement(XElement element)
+        public TextArea(XElement element)
             : base(element)
         {
 
