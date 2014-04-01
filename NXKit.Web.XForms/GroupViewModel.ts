@@ -140,152 +140,75 @@ module NXKit.Web.XForms {
 
         }
 
-        export class InputItem
-            extends NodeItem {
-
-            constructor(viewModel: GroupViewModel, inputNode: Node, level: number) {
-                super(viewModel, inputNode, level);
-            }
-
-            public get InputNode(): Node {
-                return this.ItemNode;
-            }
-
-            GetLayout(): any {
-                return {
-                    node: this.ViewModel.Node,
-                    data: this,
-                    layout: 'input',
-                    type: Utils.GetType(this.InputNode),
-                    level: this.Level,
-                };
-            }
-
-        }
-
         /**
-          * Describes a sub-item of a top-level group that will render a single underlying item.
+          * Describes a sub-item of a top-level group which will render a row of items.
           */
-        export class SingleItem
+        export class Row
             extends Item {
 
-            private _item: Item;
-            private _force: boolean;
+            private _items: Item[];
+            private _done: boolean;
 
             constructor(viewModel: GroupViewModel, level: number) {
                 super(viewModel, level);
+                this._items = new Array<Item>();
             }
 
-            public get Item(): Item {
-                return this._item;
+            public get Items(): Item[] {
+                return this._items;
             }
 
-            public set Item(item: Item) {
-                this._item = item;
+            public get Done(): boolean {
+                return this._done;
             }
 
-            public get Force() {
-                return this._force;
-            }
-
-            public set Force(force: boolean) {
-                this._force = force;
+            public set Done(value: boolean) {
+                this._done = value;
             }
 
             GetRelevant(): KnockoutObservable<boolean> {
-                return this.Item.Relevant;
+                return ko.computed(() => this._items.every(_ => _.Relevant()));
             }
 
             GetReadOnly(): KnockoutObservable<boolean> {
-                return this.Item.ReadOnly;
+                return ko.computed(() => this._items.every(_ => _.ReadOnly()));
             }
 
             GetRequired(): KnockoutObservable<boolean> {
-                return this.Item.Required;
+                return ko.computed(() => this._items.every(_ => _.Required()));
             }
 
             GetValid(): KnockoutObservable<boolean> {
-                return this.Item.Valid;
+                return ko.computed(() => this._items.every(_ => _.Valid()));
             }
 
             GetLabel(): Node {
-                return this._item.Label;
+                return null;
             }
 
             GetHelp(): Node {
-                return this._item.Help;
+                return null;
             }
 
             GetLayout(): any {
                 return {
                     node: this.ViewModel.Node,
                     data: this,
-                    layout: 'single',
+                    layout: this.GetLayoutName(),
                     level: this.Level,
                 }
             }
 
-        }
-
-        /**
-          * Describes a sub-item of a top-level group which will render two items.
-          */
-        export class DoubleItem
-            extends Item {
-
-            private _item1: Item;
-            private _item2: Item;
-
-            constructor(viewModel: GroupViewModel, level: number) {
-                super(viewModel, level);
-            }
-
-            public get Item1(): Item {
-                return this._item1;
-            }
-
-            public set Item1(item: Item) {
-                this._item1 = item;
-            }
-
-            public get Item2(): Item {
-                return this._item2;
-            }
-
-            public set Item2(item: Item) {
-                this._item2 = item;
-            }
-
-            GetRelevant(): KnockoutObservable<boolean> {
-                return ko.computed(() => this._item1.Relevant() && this._item2.Relevant());
-            }
-
-            GetReadOnly(): KnockoutObservable<boolean> {
-                return ko.computed(() => this._item1.ReadOnly() && this._item2.ReadOnly());
-            }
-
-            GetRequired(): KnockoutObservable<boolean> {
-                return ko.computed(() => this._item1.Required() && this._item2.Required());
-            }
-
-            GetValid(): KnockoutObservable<boolean> {
-                return ko.computed(() => this._item1.Valid() && this._item2.Valid());
-            }
-
-            GetLabel(): Node {
-                return null;
-            }
-
-            GetHelp(): Node {
-                return null;
-            }
-
-            GetLayout(): any {
-                return {
-                    node: this.ViewModel.Node,
-                    data: this,
-                    layout: 'double',
-                    level: this.Level,
+            GetLayoutName(): string {
+                switch (this._items.length) {
+                    case 1:
+                        return "single";
+                    case 2:
+                        return "double";
+                    case 3:
+                        return "triple";
+                    default:
+                        throw new Error("Unhandled row size");
                 }
             }
 
@@ -391,30 +314,31 @@ module NXKit.Web.XForms {
                     list.push(groupItem);
                     continue;
                 } else if (v.Type == 'NXKit.XForms.TextArea') {
-                    var textAreaItem = new GroupViewModel_.SingleItem(this, level);
-                    textAreaItem.Force = true;
+                    var textAreaItem = new GroupViewModel_.Row(this, level);
+                    textAreaItem.Done = true;
                     list.push(textAreaItem);
                     continue;
                 }
 
                 // check if last inserted item was a single item, if so, replace with a double item
                 var item = list.pop();
-                if (item instanceof GroupViewModel_.SingleItem && !(<GroupViewModel_.SingleItem>item).Force) {
-                    var item1 = <GroupViewModel_.SingleItem>item;
-                    var item2 = new GroupViewModel_.DoubleItem(this, level);
-                    item2.Item1 = item1.Item;
-                    item2.Item2 = new GroupViewModel_.NodeItem(this, v, level);
-                    list.push(item2);
-                }
-                else {
+                if (item instanceof GroupViewModel_.Row && !(<GroupViewModel_.Row>item).Done) {
+                    var item_ = <GroupViewModel_.Row>item;
+                    item_.Items.push(new GroupViewModel_.NodeItem(this, v, level));
+                    list.push(item_);
+
+                    // end row
+                    if (item_.Items.length >= 2)
+                        item_.Done = true;
+                } else {
                     // put previous item back into list
                     if (item != null)
                         list.push(item);
 
-                    // insert new single item
-                    var item1 = new GroupViewModel_.SingleItem(this, level);
-                    item1.Item = new GroupViewModel_.NodeItem(this, v, level);
-                    list.push(item1);
+                    // insert new row
+                    var item_ = new GroupViewModel_.Row(this, level);
+                    item_.Items.push(new GroupViewModel_.NodeItem(this, v, level));
+                    list.push(item_);
                 }
             }
 

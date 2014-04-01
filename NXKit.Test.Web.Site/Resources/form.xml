@@ -350,62 +350,34 @@
     </f:page>
     <f:page>
         <xf:label>Additional Information</xf:label>
-        <f:table>
-            <xf:label>Beneficiaries</xf:label>
-            <f:table-column-group>
-                <f:table-column>First Name</f:table-column>
-                <f:table-column>MI</f:table-column>
-                <f:table-column>Last Name</f:table-column>
-                <f:table-column>Social Security Number</f:table-column>
-                <f:table-column>Phone Number</f:table-column>
-                <f:table-column>Relationship</f:table-column>
-                <f:table-column>Percentage</f:table-column>
-            </f:table-column-group>
-            <xf:repeat nodeset="xf:instance('beneficiaries')/beneficiary">
-                <f:table-row>
-                    <f:table-cell>
-                        <xf:input ref="firstname"
-                                  appearance="minimal">
-                            <xf:label />
-                        </xf:input>
-                    </f:table-cell>
-                    <f:table-cell>
-                        <xf:input ref="middlename"
-                                  appearance="minimal">
-                            <xf:label />
-                        </xf:input>
-                    </f:table-cell>
-                    <f:table-cell>
-                        <xf:input ref="lastname"
-                                  appearance="minimal">
-                            <xf:label />
-                        </xf:input>
-                    </f:table-cell>
-                    <f:table-cell>
-                        <xf:input ref="socialsecuritynumber"
-                                  appearance="minimal">
-                            <xf:label />
-                        </xf:input>
-                    </f:table-cell>
-                    <f:table-cell>
-                        <xf:input ref="telephone"
-                                  appearance="minimal">
-                            <xf:label />
-                        </xf:input>
-                    </f:table-cell>
-                    <f:table-cell>
-                        <xf:input ref="relationship" />
-                    </f:table-cell>
-                    <f:table-cell>
-                        <xf:range ref="percentage"
-                                  start="0"
-                                  step="5"
-                                  end="100">
-                            <xf:label />
-                        </xf:range>
-                    </f:table-cell>
-                </f:table-row>
-            </xf:repeat>
-        </f:table>
+        <xf:repeat nodeset="xf:instance('beneficiaries')/beneficiary">
+            <xf:input ref="firstname"
+                      appearance="minimal">
+                <xf:label />
+            </xf:input>
+            <xf:input ref="middlename"
+                      appearance="minimal">
+                <xf:label />
+            </xf:input>
+            <xf:input ref="lastname"
+                      appearance="minimal">
+                <xf:label />
+            </xf:input>
+            <xf:input ref="socialsecuritynumber"
+                      appearance="minimal">
+                <xf:label />
+            </xf:input>
+            <xf:input ref="telephone"
+                      appearance="minimal">
+                <xf:label />
+            </xf:input>
+            <xf:input ref="relationship" />
+            <xf:range ref="percentage"
+                      start="0"
+                      step="5"
+                      end="100">
+                <xf:label />
+            </xf:range>
+        </xf:repeat>
     </f:page>
 </f:form>

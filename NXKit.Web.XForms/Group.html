@@ -1,6 +1,5 @@
 ﻿<script type="text/html"
         data-nxkit-node="NXKit.XForms.Group">
-
     <!-- ko with: new NXKit.Web.XForms.GroupLayoutManager($context) -->
     <!-- ko with: new NXKit.Web.XForms.GroupViewModel($context, $parent) -->
 
@@ -10,11 +9,11 @@
         <!-- ko with: Label -->
         <!-- ko if: ($data.Appearance || 'full') == 'full' -->
         <header class="ui header"
-            data-bind="nxkit_template: $data" />
+                data-bind="nxkit_template: $data" />
         <!-- /ko -->
         <!-- /ko -->
-        <!-- ko with: Help -->
 
+        <!-- ko with: Help -->
         <div class="ui modal"
              data-bind="attr: { 'id': $parent.UniqueId }">
             <div class="header">
@@ -68,7 +67,6 @@
         Are you sure you know what you're doing?
     </div>
     <!-- /ko -->
-
     <!-- /ko -->
     <!-- /ko -->
 </script>
@@ -175,7 +173,7 @@ css: {
 
     <!-- ko nxkit_template: {
         node: ViewModel.Node,
-        data: Item,
+        data: $data.Items[0],
         layout: 'field',
     }-->
 
@@ -189,18 +187,13 @@ css: {
     <div class="two fields"
          data-bind="nxkit_visible: Relevant">
 
+        <!-- ko foreach: Items -->
         <!-- ko nxkit_template: {
             node: ViewModel.Node,
-            data: Item1,
+            data: $data,
             layout: 'field',
         }-->
         <!-- /ko -->
-
-        <!-- ko nxkit_template: {
-            node: ViewModel.Node,
-            data: Item2,
-            layout: 'field',
-        }-->
         <!-- /ko -->
 
     </div>
@@ -221,7 +214,6 @@ css: {
              data-bind="nxkit_template: $data" />
         <!-- /ko -->
         <!-- /ko -->
-
         <!-- ko foreach: Items -->
         <!-- ko nxkit_template: Layout -->
         <!-- /ko -->
@@ -254,7 +246,7 @@ css: {
         data-nxkit-level="2"
         data-nxkit-layout="single">
 
-    <!-- ko with: Item -->
+    <!-- ko with: Items[0] -->
     <div class="field">
 
         <!-- ko with: Label -->
@@ -262,7 +254,6 @@ css: {
         <label data-bind="nxkit_template: $data" />
         <!-- /ko -->
         <!-- /ko -->
-
         <!-- ko nxkit_template: Layout -->
         <!-- /ko -->
 
@@ -278,7 +269,7 @@ css: {
 
     <div class="two fields">
 
-        <!-- ko with: Item1 -->
+        <!-- ko foreach: Items-->
         <div class="field" data-bind="
 nxkit_visible: Relevant,
 css: {
@@ -291,26 +282,6 @@ css: {
             <label data-bind="nxkit_template: $data" />
             <!-- /ko -->
             <!-- /ko -->
-
-            <!-- ko nxkit_template: Layout -->
-            <!-- /ko -->
-
-        </div>
-        <!-- /ko -->
-        <!-- ko with: Item2 -->
-        <div class="field" data-bind="
-nxkit_visible: Relevant,
-css: {
-    error: !$data.Valid(),
-    disabled: $data.Readonly,
-}">
-
-            <!-- ko with: Label -->
-            <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-            <label data-bind="nxkit_template: $data" />
-            <!-- /ko -->
-            <!-- /ko -->
-
             <!-- ko nxkit_template: Layout -->
             <!-- /ko -->
 
@@ -331,7 +302,7 @@ css: {
         <!-- ko with: Label -->
         <!-- ko if: ($data.Appearance || 'full') == 'full' -->
         <header class="ui top attached tiny header"
-             data-bind="nxkit_template: $data" />
+                data-bind="nxkit_template: $data" />
         <!-- /ko -->
         <!-- /ko -->
 
@@ -372,7 +343,7 @@ css: {
 
     <div class="two fields">
 
-        <!-- ko with: Item1 -->
+        <!-- ko foreach: Items -->
         <div class="field">
 
             <!-- ko with: Label -->
@@ -380,21 +351,6 @@ css: {
             <label data-bind="nxkit_template: $data" />
             <!-- /ko -->
             <!-- /ko -->
-
-            <!-- ko nxkit_template: Layout -->
-            <!-- /ko -->
-
-        </div>
-        <!-- /ko -->
-        <!-- ko with: Item2 -->
-        <div class="field">
-
-            <!-- ko with: Label -->
-            <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-            <label data-bind="nxkit_template: $data" />
-            <!-- /ko -->
-            <!-- /ko -->
-
             <!-- ko nxkit_template: Layout -->
             <!-- /ko -->
 
@@ -408,14 +364,6 @@ css: {
         data-nxkit-node="NXKit.XForms.Group"
         data-nxkit-level="3"
         data-nxkit-layout="node">
-    <!-- ko nxkit_template: ItemNode -->
-    <!-- /ko -->
-</script>
-
-<script type="text/html"
-        data-nxkit-node="NXKit.XForms.Group"
-        data-nxkit-level="3"
-        data-nxkit-layout="input">
     <!-- ko nxkit_template: ItemNode -->
     <!-- /ko -->
 </script>

@@ -41,6 +41,12 @@ module NXKit.Web {
                 value.type != null)
                 data.type = ko.unwrap(value.type);
 
+            // extract layout binding
+            if (value != null &&
+                value.layout != null &&
+                ko.unwrap(value.layout) != null)
+                data.layout = ko.unwrap(value.layout);
+
             return data;
         }
 

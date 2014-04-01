@@ -22,13 +22,6 @@ module NXKit.Web.XForms {
                 ko.unwrap(value.level) != null)
                 data.level = ko.unwrap(value.level);
 
-            // extract layout binding
-            var value = valueAccessor();
-            if (value != null &&
-                value.layout != null &&
-                ko.unwrap(value.layout) != null)
-                data.layout = ko.unwrap(value.layout);
-
             return data;
         }
 
