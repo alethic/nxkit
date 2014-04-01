@@ -104,7 +104,7 @@ namespace NXKit
         public void SetValue(object value)
         {
             Contract.Requires<ArgumentNullException>(value != null);
-
+            
             Value = value.ToString();
         }
 
