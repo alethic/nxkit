@@ -36,7 +36,7 @@ namespace NXKit.XForms.XPath.Functions
             if (repeatId == null)
                 return double.NaN;
 
-            var repeatVisual = (RepeatElement)context.Node.ResolveId(repeatId);
+            var repeatVisual = (Repeat)context.Node.ResolveId(repeatId);
             if (repeatVisual == null)
                 return double.NaN;
 

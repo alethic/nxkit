@@ -19,14 +19,26 @@
         }
 
         public get Id(): string {
+            return this.GetId();
+        }
+
+        GetId(): string {
             return this._node.ValueAsString('NXKit.NXElement', 'UniqueId')();
         }
 
         public get Label(): Node {
+            return this.GetLabelNode();
+        }
+
+        GetLabelNode(): Node {
             return ViewModelUtil.GetLabelNode(this._node);
         }
 
         public get Value(): Node {
+            return this.GetValueNode();
+        }
+
+        GetValueNode(): Node {
             return ViewModelUtil.GetValueNode(this._node);
         }
 

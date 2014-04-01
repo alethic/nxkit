@@ -1,4 +1,21 @@
-﻿module NXKit.Web.XForms.ViewModelUtil {
+﻿NXKit.Web.ViewModelUtil.ControlNodeTypes.push(
+    'NXKit.XForms.Input',
+    'NXKit.XForms.Range',
+    'NXKit.XForms.Select1',
+    'NXKit.XForms.Select',
+    'NXKit.XForms.TextArea');
+
+NXKit.Web.ViewModelUtil.MetadataNodeTypes.push(
+    'NXKit.XForms.Label',
+    'NXKit.XForms.Help',
+    'NXKit.XForms.Hint',
+    'NXKit.XForms.Alert');
+
+NXKit.Web.ViewModelUtil.TransparentNodeTypes.push(
+    'NXKit.XForms.Repeat',
+    'NXKit.XForms.RepeatItem');
+
+module NXKit.Web.XForms.ViewModelUtil {
 
     export function GetValue(node: Node): KnockoutObservable<any> {
         return node.Value('NXKit.XForms.IModelItemValue', 'Value');
@@ -21,11 +38,11 @@
     }
 
     export function GetRelevant(node: Node): KnockoutObservable<boolean> {
-            return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'Relevant');
+        return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'Relevant');
     }
 
     export function GetReadOnly(node: Node): KnockoutObservable<boolean> {
-            return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'ReadOnly');
+        return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'ReadOnly');
     }
 
     export function GetRequired(node: Node): KnockoutObservable<boolean> {
@@ -33,7 +50,7 @@
     }
 
     export function GetValid(node: Node): KnockoutObservable<boolean> {
-            return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'Valid');
+        return node.ValueAsBoolean('NXKit.XForms.IModelItemBinding', 'Valid');
     }
 
     export function GetType(node: Node): KnockoutObservable<string> {
@@ -80,4 +97,4 @@
             _.Type == 'NXKit.XForms.Value');
     }
 
-} 
+}

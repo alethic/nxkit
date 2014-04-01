@@ -8,7 +8,7 @@ namespace NXKit.XForms
 {
 
     [Element("repeat")]
-    public class RepeatElement :
+    public class Repeat :
         NodeSetBindingElement,
         INamingScope,
         IUIRefreshable
@@ -20,14 +20,14 @@ namespace NXKit.XForms
         bool numberCached;
         int? number;
 
-        readonly Dictionary<XObject, RepeatItemElement> items =
-            new Dictionary<XObject, RepeatItemElement>();
+        readonly Dictionary<XObject, RepeatItem> items =
+            new Dictionary<XObject, RepeatItem>();
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        public RepeatElement(XElement xml)
+        public Repeat(XElement xml)
             : base(xml)
         {
 
@@ -73,7 +73,7 @@ namespace NXKit.XForms
         /// <param name="position"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        RepeatItemElement GetOrCreateItem(ModelElement model, InstanceElement instance, ModelItem modelItem, int position, int size)
+        RepeatItem GetOrCreateItem(ModelElement model, InstanceElement instance, ModelItem modelItem, int position, int size)
         {
             // new context for child
             var ec = new EvaluationContext(model, instance, modelItem, position, size);
@@ -81,7 +81,7 @@ namespace NXKit.XForms
             // obtain or create child
             var item = items.GetOrDefault(modelItem.Xml);
             if (item == null)
-                item = items[modelItem.Xml] = new RepeatItemElement(Xml);
+                item = items[modelItem.Xml] = new RepeatItem(Xml);
 
             // ensure child is configured
             item.SetContext(ec);

@@ -183,9 +183,9 @@
     <Compile Include="RebuildElement.cs" />
     <Compile Include="RecalculateElement.cs" />
     <Compile Include="RefreshElement.cs" />
-    <Compile Include="RepeatItemElement.cs" />
+    <Compile Include="RepeatItem.cs" />
     <Compile Include="RepeatState.cs" />
-    <Compile Include="RepeatElement.cs" />
+    <Compile Include="Repeat.cs" />
     <Compile Include="RevalidateElement.cs" />
     <Compile Include="Select1State.cs" />
     <Compile Include="Select1.cs" />

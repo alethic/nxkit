@@ -8,7 +8,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Serves as a generated item within a repeat.
     /// </summary>
-    public class RepeatItemElement :
+    public class RepeatItem :
         XFormsElement,
         IEvaluationContextScope,
         INamingScope,
@@ -22,7 +22,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        public RepeatItemElement(XElement xml)
+        public RepeatItem(XElement xml)
             : base(xml)
         {
             Contract.Requires<ArgumentNullException>(xml != null);

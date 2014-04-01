@@ -1,21 +1,4 @@
-﻿NXKit.Web.ViewModelUtil.ControlNodeTypes.push(
-    'NXKit.XForms.Input',
-    'NXKit.XForms.Range',
-    'NXKit.XForms.Select1',
-    'NXKit.XForms.Select',
-    'NXKit.XForms.TextArea');
-
-NXKit.Web.ViewModelUtil.MetadataNodeTypes.push(
-    'NXKit.XForms.Label',
-    'NXKit.XForms.Help',
-    'NXKit.XForms.Hint',
-    'NXKit.XForms.Alert');
-
-NXKit.Web.ViewModelUtil.TransparentNodeTypes.push(
-    'NXKit.XForms.Repeat',
-    'NXKit.XForms.RepeatItem');
-
-module NXKit.Web.XForms {
+﻿module NXKit.Web.XForms {
 
     export class XFormsNodeViewModel
         extends NXKit.Web.NodeViewModel {
