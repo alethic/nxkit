@@ -2,7 +2,6 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-
 using NXKit.Util;
 
 namespace NXKit
@@ -19,6 +18,7 @@ namespace NXKit
         string uniqueId;
         Dictionary<XNode, NXNode> cache = new Dictionary<XNode, NXNode>();
         bool created = false;
+        LinkedList<NXAttribute> attributes = new LinkedList<NXAttribute>();
 
         /// <summary>
         /// Initializes a new instance.
@@ -36,7 +36,8 @@ namespace NXKit
         public NXElement(XElement element)
             : base(element)
         {
-
+            foreach (var attr in element.Attributes())
+                attributes.AddLast(new NXAttribute(attr));
         }
 
         /// <summary>
@@ -46,6 +47,15 @@ namespace NXKit
         {
             get { return (XElement)base.Xml; }
             protected set { base.Xml = value; }
+        }
+
+        /// <summary>
+        /// Removes the specified attribute.
+        /// </summary>
+        /// <param name="attribute"></param>
+        public void RemoveAttribute(NXAttribute attribute)
+        {
+            attributes.Remove(attribute);
         }
 
         public LinkedList<object> Storage
