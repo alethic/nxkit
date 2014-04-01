@@ -121,6 +121,7 @@
   <ItemGroup>
     <Compile Include="INodeInterfaceProvider.cs" />
     <Compile Include="IText.cs" />
+    <Compile Include="NXAttribute.cs" />
     <Compile Include="PublicAttribute.cs" />
     <Compile Include="IO\NodeWriter.cs" />
     <Compile Include="CompositionUtil.cs" />
