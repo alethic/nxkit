@@ -17,7 +17,7 @@ namespace NXKit.Test.Web.Site
         protected void View_Load(object sender, EventArgs args)
         {
             if (!IsPostBack)
-                View.Configure("form.xml");
+                View.Configure("resource://NXKit.Test.Web.Site/Resources/form.xml");
         }
 
         protected void View_ResourceAction(object sender, ResourceActionEventArgs args)

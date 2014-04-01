@@ -28,43 +28,6 @@ namespace NXKit.Web.UI
         IScriptControl
     {
 
-        /// <summary>
-        /// Private resolver implementation to dispatch to events.
-        /// </summary>
-        class ResourceResolver :
-            IResolver
-        {
-
-            readonly View control;
-
-            /// <summary>
-            /// Initializes a new instance.
-            /// </summary>
-            /// <param name="control"></param>
-            internal ResourceResolver(View control)
-            {
-                this.control = control;
-            }
-
-            public Stream Get(Uri uri)
-            {
-                return Resolve(ResourceActionMethod.Get, uri, null);
-            }
-
-            public Stream Put(Uri uri, Stream body)
-            {
-                return Resolve(ResourceActionMethod.Put, uri, body);
-            }
-
-            Stream Resolve(ResourceActionMethod method, Uri uri, Stream body)
-            {
-                var args = new ResourceActionEventArgs(method, uri, body);
-                control.OnResourceAction(args);
-                return args.Result;
-            }
-
-        }
-
         string cssClass;
         string validationGroup;
         NXDocument document;
@@ -146,8 +109,7 @@ namespace NXKit.Web.UI
             Contract.Requires<ArgumentNullException>(uri != null);
 
             document = new NXDocument(
-                CompositionUtil.CreateContainer()
-                    .WithExport<IResolver>(new ResourceResolver(this)),
+                CompositionUtil.CreateContainer(),
                 uri);
             document.Invoke();
         }
@@ -314,8 +276,7 @@ namespace NXKit.Web.UI
                     throw new NullReferenceException();
 
                 document = new NXDocument(
-                    CompositionUtil.CreateContainer()
-                        .WithExport<IResolver>(new ResourceResolver(this)),
+                    CompositionUtil.CreateContainer(),
                     state);
                 document.Invoke();
             }

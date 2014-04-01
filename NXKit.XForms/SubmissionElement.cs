@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Xml.Linq;
-
 using NXKit.DOMEvents;
 using NXKit.Util;
 
@@ -71,11 +71,12 @@ namespace NXKit.XForms
                     u = new Uri(new Uri(Xml.BaseUri), u);
 
                 // put data
-                var resource = Document
-                    .Container.GetExportedValue<IResolver>()
-                    .Put(u, new MemoryStream(Encoding.UTF8.GetBytes(t)));
+                var request = WebRequest.Create(u);
+                request.Method = "PUT";
+                new MemoryStream(Encoding.UTF8.GetBytes(t)).CopyTo(request.GetRequestStream());
+                var response = request.GetResponse().GetResponseStream();
 
-                if (resource != null)
+                if (response != null)
                     throw new NotSupportedException("Cannot return new data from a Put.");
 
                 this.Interface<INXEventTarget>().DispatchEvent(Events.SubmitDone);

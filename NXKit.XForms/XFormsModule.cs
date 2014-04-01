@@ -4,10 +4,10 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.XPath;
-
 using NXKit.DOMEvents;
 using NXKit.Util;
 
@@ -249,12 +249,14 @@ namespace NXKit.XForms
                             u = new Uri(new Uri(instance.Xml.BaseUri), u);
 
                         // return resource as a stream
-                        var resource = Document.Container.GetExportedValue<IResolver>().Get(u);
-                        if (resource == null)
+                        var request = WebRequest.Create(u);
+                        request.Method = "GET";
+                        var response = request.GetResponse().GetResponseStream();
+                        if (response == null)
                             throw new FileNotFoundException("Could not load resource", instanceSrc);
 
                         // parse resource into new DOM
-                        var instanceDataDocument = XDocument.Load(resource);
+                        var instanceDataDocument = XDocument.Load(response);
 
                         // add to model
                         instance.State.Initialize(model, instance, instanceDataDocument);
