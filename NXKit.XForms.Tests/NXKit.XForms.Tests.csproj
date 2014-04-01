@@ -126,8 +126,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="RelevantTests.cs" />
-    <Compile Include="ResourceResolver.cs" />
-    <Compile Include="ResourceSetResolver.cs" />
     <Compile Include="XPathFunctions\InstanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
