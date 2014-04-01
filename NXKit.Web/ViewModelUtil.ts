@@ -1,6 +1,11 @@
 ﻿module NXKit.Web.ViewModelUtil {
 
     /**
+      * Node types which represent a grouping element.
+      */
+    export var GroupNodeTypes: string[] = [];
+
+    /**
       * Node types which are considered to be control elements.
       */
     export var ControlNodeTypes: string[] = [];
@@ -14,6 +19,27 @@
       * Node types which are considered to be transparent, and ignored when calculating content membership.
       */
     export var TransparentNodeTypes: string[] = [];
+
+    /**
+      * Returns true if the given node is a control node.
+      */
+    export function IsGroupNode(node: Node): boolean {
+        return GroupNodeTypes.some(_ => node.Type == _);
+    }
+
+    /**
+      * Returns true if the given node set contains a control node.
+      */
+    export function HasGroupNode(nodes: Node[]): boolean {
+        return nodes.some(_ => IsGroupNode(_));
+    }
+
+    /**
+      * Filters out the given node set for control nodes.
+      */
+    export function GetGroupNodes(nodes: Node[]): Node[] {
+        return nodes.filter(_ => IsGroupNode(_));
+    }
 
     /**
       * Returns true if the given node is a control node.

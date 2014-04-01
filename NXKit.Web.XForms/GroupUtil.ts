@@ -94,19 +94,19 @@
         }
 
         GetRelevant(): KnockoutObservable<boolean> {
-            return ko.computed(() => ViewModelUtil.IsModelItemBindable(this._itemNode) ? ViewModelUtil.GetRelevant(this._itemNode)() : true);
+            return ko.computed(() => ViewModelUtil.IsModelItemBinding(this._itemNode) ? ViewModelUtil.GetRelevant(this._itemNode)() : true);
         }
 
         GetReadOnly(): KnockoutObservable<boolean> {
-            return ko.computed(() => ViewModelUtil.IsModelItemBindable(this._itemNode) ? ViewModelUtil.GetReadOnly(this._itemNode)() : false);
+            return ko.computed(() => ViewModelUtil.IsModelItemBinding(this._itemNode) ? ViewModelUtil.GetReadOnly(this._itemNode)() : false);
         }
 
         GetRequired(): KnockoutObservable<boolean> {
-            return ko.computed(() => ViewModelUtil.IsModelItemBindable(this._itemNode) ? ViewModelUtil.GetRequired(this._itemNode)() : false);
+            return ko.computed(() => ViewModelUtil.IsModelItemBinding(this._itemNode) ? ViewModelUtil.GetRequired(this._itemNode)() : false);
         }
 
         GetValid(): KnockoutObservable<boolean> {
-            return ko.computed(() => ViewModelUtil.IsModelItemBindable(this._itemNode) ? ViewModelUtil.GetValid(this._itemNode)() : true);
+            return ko.computed(() => ViewModelUtil.IsModelItemBinding(this._itemNode) ? ViewModelUtil.GetValid(this._itemNode)() : true);
         }
 
         GetLabel(): Node {
@@ -125,7 +125,7 @@
 
         GetLayout(): any {
             return {
-                node: this.ViewModel.Node,
+                node: 'NXKit.XForms.Group',
                 data: this,
                 layout: 'node',
                 level: this.Level,
@@ -186,7 +186,7 @@
 
         GetLayout(): any {
             return {
-                node: this.ViewModel.Node,
+                node: 'NXKit.XForms.Group',
                 data: this,
                 layout: this.GetLayoutName(),
                 level: this.Level,
@@ -254,7 +254,7 @@
 
         GetLayout(): any {
             return {
-                node: this.ViewModel.Node,
+                node: 'NXKit.XForms.Group',
                 data: this,
                 layout: 'group',
                 level: this.Level,

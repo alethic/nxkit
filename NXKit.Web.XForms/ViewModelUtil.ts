@@ -61,8 +61,8 @@ module NXKit.Web.XForms.ViewModelUtil {
         return node.Interfaces['NXKit.XForms.IModelItemValue'] != null;
     }
 
-    export function IsModelItemBindable(node: Node): boolean {
-        return node.Interfaces['NXKit.XForms.IModelItemBindable'] != null;
+    export function IsModelItemBinding(node: Node): boolean {
+        return node.Interfaces['NXKit.XForms.IModelItemBinding'] != null;
     }
 
     export function GetAppearance(node: Node): KnockoutObservable<string> {

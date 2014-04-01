@@ -23,7 +23,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="node"></param>
-        internal UIBinding(NXElement node)
+        public UIBinding(NXElement node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
 

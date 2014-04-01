@@ -4,7 +4,7 @@
     <div class="xforms-layout-form">
 
         <div class="ui small steps">
-            <!-- ko foreach: Steps -->
+            <!-- ko foreach: RootStep.Steps -->
             <div class="ui step" data-bind="
     click: SetActive,
     nxkit_hvisible: !Disabled(),
@@ -19,16 +19,14 @@
             <!-- /ko -->
         </div>
 
-        <!-- ko foreach: Contents -->
-        <!-- ko nxkit_template -->
-        <!-- /ko -->
+        <!-- ko nxkit_template: ActiveStep().Node -->
         <!-- /ko -->
 
         <div class="ui center aligned segment">
             <div class="ui massive buttons">
-                <button class="ui button" data-bind="click: GoPreviousPage">Previous</button>
+                <button class="ui button" data-bind="click: GoPreviousStep">Previous</button>
                 <div class="or"></div>
-                <button class="ui animated positive button" data-bind="click: GoNextPage">
+                <button class="ui animated positive button" data-bind="click: GoNextStep">
                     <div class="visible content">Continue</div>
                     <div class="hidden content">
                         <i class="right arrow icon"></i>

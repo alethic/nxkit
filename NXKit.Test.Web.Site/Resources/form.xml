@@ -109,7 +109,7 @@
                        method="put"
                        action="beneficiaries.xml" />
     </xf:model>
-    <f:page>
+    <f:section>
         <xf:label>Applicant Enrollment</xf:label>
         <xf:group>
             <xf:label>Additional Enrollees</xf:label>
@@ -233,8 +233,8 @@
                 </xf:group>
             </xf:repeat>
         </xf:group>
-    </f:page>
-    <f:page xf:ref="xf:instance('misc')/secondary_enabled">
+    </f:section>
+    <f:section xf:ref="xf:instance('misc')/secondary_enabled">
         <xf:label>Spousal Enrollment</xf:label>
         <xf:group ref="xf:instance('secondaryperson')">
             <xf:label>Spouse Information</xf:label>
@@ -347,8 +347,8 @@
                 </xf:group>
             </xf:repeat>
         </xf:group>
-    </f:page>
-    <f:page>
+    </f:section>
+    <f:section>
         <xf:label>Additional Information</xf:label>
         <xf:repeat nodeset="xf:instance('beneficiaries')/beneficiary">
             <xf:input ref="firstname"
@@ -379,5 +379,5 @@
                 <xf:label />
             </xf:range>
         </xf:repeat>
-    </f:page>
+    </f:section>
 </f:form>

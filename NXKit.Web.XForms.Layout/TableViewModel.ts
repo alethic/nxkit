@@ -2,7 +2,7 @@
 
 module NXKit.Web.XForms.Layout {
 
-    export class TableViewModel
+    export class SectionViewModel
         extends LayoutNodeViewModel {
 
         constructor(context: KnockoutBindingContext, node: Node) {

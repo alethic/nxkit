@@ -4,10 +4,10 @@ namespace NXKit.XForms.Layout
 {
 
     [Element("section")]
-    public class Section : 
+    public class Section :
         Group
     {
-        
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -17,7 +17,6 @@ namespace NXKit.XForms.Layout
         {
 
         }
-
 
     }
 

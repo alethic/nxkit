@@ -1,12 +1,12 @@
 ﻿<events>
     <Event
-        name="PageNext"
-        type="xforms-layout-page-next"
+        name="StepNext"
+        type="xforms-layout-step-next"
         bubbles="true"
         cancelable="true" />
     <Event
-        name="PagePrevious"
-        type="xforms-layout-page-previous"
+        name="StepPrevious"
+        type="xforms-layout-step-previous"
         bubbles="true"
         cancelable="true" />
 </events>

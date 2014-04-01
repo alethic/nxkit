@@ -119,7 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anchor.cs" />
-    <Compile Include="Category.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Events.partial.cs">
@@ -127,15 +126,14 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Section.cs" />
     <Compile Include="Form.cs" />
     <Compile Include="ITableColumnGroupContainer.cs" />
     <Compile Include="LayoutHelper.cs" />
     <Compile Include="Importance.cs" />
     <Compile Include="LayoutModule.cs" />
-    <Compile Include="Page.cs" />
     <Compile Include="Paragraph.cs" />
     <Compile Include="SchemaPackage.cs" />
-    <Compile Include="Section.cs" />
     <Compile Include="TableCell.cs" />
     <Compile Include="TableColumnGroup.cs" />
     <Compile Include="TableColumn.cs" />

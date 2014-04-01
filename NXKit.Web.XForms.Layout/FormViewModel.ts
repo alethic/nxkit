@@ -2,137 +2,94 @@
 
 module NXKit.Web.XForms.Layout {
 
-    export module FormViewModel_ {
-
-        /**
-          * Represents a sub-item of a top-level group.
-          */
-        export class Step {
-
-            private _viewModel: FormViewModel;
-            private _node: Node;
-            private _index: number;
-            private _label: Node;
-            private _active: KnockoutObservable<boolean>;
-            private _disabled: KnockoutObservable<boolean>;
-
-            constructor(viewModel: FormViewModel, node: Node, index: number) {
-                this._viewModel = viewModel;
-                this._node = node;
-                this._index = index;
-                this._label = ViewModelUtil.GetLabelNode(node);
-                this._active = ko.computed(() => this._viewModel.ActivePage() == this._node);
-                this._disabled = ko.computed(() => !ViewModelUtil.GetRelevant(this._node)());
-            }
-
-            public get Node(): Node {
-                return this._node;
-            }
-
-            public get Index(): number {
-                return this._index;
-            }
-
-            public get Label(): Node {
-                return this._label;
-            }
-
-            public get Active(): KnockoutObservable<boolean> {
-                return this._active;
-            }
-
-            public get Disabled(): KnockoutObservable<boolean> {
-                return this._disabled;
-            }
-
-            public SetActive() {
-                this._viewModel.ActivePage(this._node);
-            }
-
-        }
-
-    }
-
     export class FormViewModel
         extends LayoutNodeViewModel {
 
-        private _pages: Node[];
-        private _steps: FormViewModel_.Step[];
-        private _activePage: KnockoutObservable<Node>;
+        private _rootStep: FormUtil.Step;
+        private _activeStep: KnockoutObservable<FormUtil.Step>;
 
-        public PageChanged: IPageChangedEvent = new TypedEvent();
+        public StepChanged: IStepChangedEvent = new TypedEvent();
 
         constructor(context: KnockoutBindingContext, node: Node) {
             super(context, node);
             var self = this;
 
-            self._pages = Utils.GetPages(node);
-            self._activePage = ko.observable<Node>(self._pages.length >= 1 ? self._pages[0] : null);
-            self._steps = self._pages.map((i, j) => new FormViewModel_.Step(self, i, j));
+            self._activeStep = ko.observable<FormUtil.Step>();
+            self._rootStep = new FormUtil.Step(node, null, _ => _ === self._activeStep(), _ => self._activeStep(_));
+            self._activeStep(self.GetNextStep(self._rootStep));
         }
 
-        public get Pages(): Node[] {
-            return this._pages;
+        public get RootStep(): FormUtil.Step {
+            return this._rootStep;
         }
 
-        public get ActivePage(): KnockoutObservable<Node> {
-            return this._activePage;
+        public get ActiveStep(): KnockoutObservable<FormUtil.Step> {
+            return this._activeStep;
         }
 
-        GetPreviousPage(page: Node): KnockoutObservable<Node> {
+        GetPreviousStep(step: FormUtil.Step): FormUtil.Step {
             var self = this;
-            return ko.computed(() => {
-                for (var i = self._pages.indexOf(page) - 1; i >= 0; i--) {
-                    if (ViewModelUtil.GetRelevant(self._pages[i])())
-                        return self._pages[i];
+            if (step.Parent != null) {
+                for (var i = step.Parent.Steps.indexOf(step) - 1; i >= 0; i--) {
+                    if (!step.Parent.Steps[i].Disabled()) {
+                        return step.Parent.Steps[i];
+                    }
                 }
+            }
 
-                return null;
-            });
+            return null;
         }
 
-        public get HasPreviousPage(): KnockoutObservable<boolean> {
+        public get HasPreviousStep(): KnockoutObservable<boolean> {
             var self = this;
-            return ko.computed(() => self.GetPreviousPage(self.ActivePage())() != null);
+            return ko.computed(() => self.GetPreviousStep(self.ActiveStep()) != null);
         }
 
-        public GoPreviousPage(): void {
+        public GoPreviousStep(): void {
             var self = this;
-            var p = self.GetPreviousPage(self.ActivePage())();
-            if (p != null)
-                self.ActivePage(p);
-        }
-
-        GetNextPage(page: Node): KnockoutObservable<Node> {
-            var self = this;
-            return ko.computed(() => {
-                for (var i = self._pages.indexOf(page) + 1; i < self._pages.length; i++) {
-                    if (ViewModelUtil.GetRelevant(self._pages[i])())
-                        return self._pages[i];
-                }
-
-                return null;
-            });
-        }
-
-        public get HasNextPage(): KnockoutObservable<boolean> {
-            var self = this;
-            return ko.computed(() => self.GetNextPage(self.ActivePage())() != null);
-        }
-
-        public GoNextPage(): void {
-            var self = this;
-            var p = self.GetNextPage(self.ActivePage())();
+            var p = self.GetPreviousStep(self.ActiveStep());
             if (p != null) {
-                self.ActivePage(p);
+                self.ActiveStep(p);
                 self.Node.Invoke('NXKit.DOMEvents.INXEventTarget', 'DispatchEvent', {
-                    type: 'xforms-layout-page-next',
+                    type: 'xforms-layout-step-previous',
                 });
             }
         }
 
-        public get Steps(): FormViewModel_.Step[] {
-            return this._steps;
+        GetNextStep(step: FormUtil.Step): FormUtil.Step {
+            var self = this;
+
+            // if step has children
+            if (step.Steps.length > 0) {
+                var s = step.Steps[0];
+                return !s.Disabled() ? s : self.GetNextStep(s);
+            }
+
+            if (step.Parent != null) {
+                for (var i = step.Parent.Steps.indexOf(step) + 1; i < step.Parent.Steps.length; i++) {
+                    if (!step.Parent.Steps[i].Disabled()) {
+                        return step.Parent.Steps[i];
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public get HasNextStep(): KnockoutObservable<boolean> {
+            var self = this;
+            return ko.computed(() => self.GetNextStep(self.ActiveStep()) != null);
+        }
+
+        public GoNextStep(): void {
+            var self = this;
+            var p = self.GetNextStep(self.ActiveStep());
+            if (p != null) {
+                self.ActiveStep(p);
+                self.Node.Invoke('NXKit.DOMEvents.INXEventTarget', 'DispatchEvent', {
+                    type: 'xforms-layout-step-next',
+                });
+            }
         }
 
     }

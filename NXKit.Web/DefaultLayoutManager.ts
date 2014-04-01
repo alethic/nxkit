@@ -32,9 +32,16 @@ module NXKit.Web {
                 ko.unwrap(value.node) instanceof Node)
                 data.node = (<Node>ko.unwrap(value.node)).Type;
 
+            // grab node from viewmode if present
             if (data.node == null)
                 if (viewModel instanceof Node)
                     data.node = (<Node>viewModel).Type;
+
+            // node specified as string
+            if (value != null &&
+                value.node != null &&
+                typeof value.node === 'string')
+                data.node = <string>value.node;
 
             // specified data type
             if (value != null &&

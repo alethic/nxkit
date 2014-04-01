@@ -9,12 +9,12 @@ namespace NXKit.XForms.Layout
 
         static readonly EventInfo[] EVENT_INFO = new EventInfo[]
         {
-            new EventInfo("xforms-layout-page-next", true, true),
-            new EventInfo("xforms-layout-page-previous", true, true),
+            new EventInfo("xforms-layout-step-next", true, true),
+            new EventInfo("xforms-layout-step-previous", true, true),
         };
 
-        public const string PageNext = "xforms-layout-page-next";
-        public const string PagePrevious = "xforms-layout-page-previous";
+        public const string StepNext = "xforms-layout-step-next";
+        public const string StepPrevious = "xforms-layout-step-previous";
 
     }
 
