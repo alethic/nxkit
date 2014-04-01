@@ -5,8 +5,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Xml.Linq;
+using NXKit.Util;
 
 namespace NXKit
 {
@@ -17,6 +19,15 @@ namespace NXKit
     public class NXDocument :
         NXContainer
     {
+
+        /// <summary>
+        /// Initializes the static instance.
+        /// </summary>
+        static NXDocument()
+        {
+            ResourceUriParser.Register();
+            ResourceWebRequestFactory.Register();
+        }
 
         /// <summary>
         /// Loads a <see cref="NXDocument"/> from the given <see cref="Uri"/>.
@@ -30,35 +41,6 @@ namespace NXKit
             return new NXDocument(
                 CompositionUtil.CreateContainer(),
                 uri);
-        }
-
-        /// <summary>
-        /// Loads a <see cref="NXDocument"/> from the given <see cref="Stream"/>.
-        /// </summary>
-        /// <param name="document"></param>
-        /// <returns></returns>
-        public static NXDocument Load(Stream document)
-        {
-            Contract.Requires<ArgumentNullException>(document != null);
-
-            return new NXDocument(
-                CompositionUtil.CreateContainer()
-                    .WithExport<IResolver>(
-                        new SingleUriResolver("document.xml", () => document)),
-                new Uri("document.xml", UriKind.Relative));
-        }
-
-        /// <summary>
-        /// Parses a <see cref="NXDocument"/> from the given string.
-        /// </summary>
-        /// <param name="document"></param>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
-        public static NXDocument Parse(string document)
-        {
-            Contract.Requires<ArgumentNullException>(document != null);
-
-            return Load(new MemoryStream(Encoding.UTF8.GetBytes(document)));
         }
 
         readonly LinkedList<object> storage = new LinkedList<object>();
@@ -92,14 +74,22 @@ namespace NXKit
             this.nextElementId = 1;
             this.nodeState = new NodeStateCollection();
 
-            // resolve uri
-            var stream = container.GetExportedValue<IResolver>().Get(uri);
-            if (stream == null)
-                throw new FileNotFoundException("Could not resolve specified Uri.");
+            //// resolve uri
+            //var request = WebRequest.Create(uri);
+            //if (request == null)
+            //    throw new FileNotFoundException("No request handler.");
+
+            //var response = request.GetResponse();
+            //if (response == null)
+            //    throw new FileNotFoundException("No response.");
+
+            //var stream = response.GetResponseStream();
+            //if (stream == null)
+            //    throw new FileNotFoundException("No response stream.");
 
             this.container = container;
             this.uri = uri;
-            this.Xml = XDocument.Load(stream);
+            this.Xml = XDocument.Load(uri.ToString(), LoadOptions.SetBaseUri);
 
             Initialize();
         }
