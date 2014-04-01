@@ -109,6 +109,7 @@
     <TypeScriptCompile Include="GroupLayoutManager.ts" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="GroupUtil.ts" />
     <TypeScriptCompile Include="GroupViewModel.ts" />
   </ItemGroup>
   <ItemGroup>

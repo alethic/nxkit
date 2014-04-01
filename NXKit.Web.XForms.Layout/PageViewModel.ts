@@ -30,6 +30,13 @@ module NXKit.Web.XForms.Layout {
             return ko.computed(() => self._form.ActivePage() === self.Node);
         }
 
+        public get Layout(): any {
+            if (!this.Contents.some(_ => _.Type === 'NXKit.XForms.Group'))
+                return 'body-with-group';
+            else
+                return 'body';
+        }
+
     }
 
 }
