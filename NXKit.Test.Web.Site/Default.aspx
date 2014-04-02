@@ -41,8 +41,9 @@
             <div class="ui item">
                 <div class="ui fluid action input">
                     <asp:TextBox ID="UriTextBox" runat="server"></asp:TextBox>
-                    <div id="LoadButton" class="ui icon button" onclick="<%= Page.ClientScript.GetPostBackEventReference(Page, "Load") %>" >
-                        <i class="download icon">&nbsp;</i>
+                    <div id="LoadButton" class="ui right icon button" onclick="<%= Page.ClientScript.GetPostBackEventReference(Page, "Load") %>" >
+                        <i class="download icon"></i>
+                        Load
                     </div>
                 </div>
             </div>
