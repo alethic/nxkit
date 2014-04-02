@@ -3,8 +3,7 @@
     class CheckboxBindingHandler
         implements KnockoutBindingHandler {
 
-        init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
-            var self = this;
+        static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
             setTimeout(function () {
                 $(element).checkbox();
                 $(element).checkbox('setting', {
@@ -33,11 +32,11 @@
                         }
                     },
                 });
-                self.update(element, valueAccessor, allBindings, viewModel, bindingContext);
+               CheckboxBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
             }, 2000);
         }
 
-        update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
+        static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
             var self = this;
             setTimeout(function () {
                 var v1 = ko.unwrap(valueAccessor());
@@ -48,6 +47,14 @@
                     $(element).checkbox(v1_ ? 'enable' : 'disable')
                 }
             }, 1000);
+        }
+
+        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
+            CheckboxBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
+        }
+
+        public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
+            CheckboxBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
         }
 
     }

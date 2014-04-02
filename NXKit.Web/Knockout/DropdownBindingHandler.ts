@@ -3,8 +3,7 @@
     class DropdownBindingHandler
         implements KnockoutBindingHandler {
 
-        init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
-            var self = this;
+        static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
             setTimeout(function () {
                 $(element).dropdown();
                 $(element).dropdown({
@@ -17,16 +16,23 @@
                         }
                     },
                 });
-                self.update(element, valueAccessor, allBindings, viewModel, bindingContext);
-            }, 2000);
+                DropdownBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+            }, 1000);
         }
 
-        update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
-            var self = this;
+        static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
             setTimeout(function () {
                 var v1 = ko.unwrap(valueAccessor());
                 $(element).dropdown('set value', v1);
-            }, 1000);
+            }, 2000);
+        }
+
+        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
+            DropdownBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
+        }
+
+        public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
+            DropdownBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
         }
 
     }
