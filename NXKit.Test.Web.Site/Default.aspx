@@ -40,15 +40,15 @@
         <div class="ui fixed transparent main menu">
             <div class="ui item">
                 <div class="ui fluid action input">
-                    <asp:TextBox ID="UriTextBox" runat="server" />
-                    <div id="LoadButton" onclick="<%= Page.ClientScript.GetPostBackEventReference(Page, "Load") %>" class="ui icon button">
-                        <i class="download icon"></i>
+                    <asp:TextBox ID="UriTextBox" runat="server"></asp:TextBox>
+                    <div id="LoadButton" class="ui icon button" onclick="<%= Page.ClientScript.GetPostBackEventReference(Page, "Load") %>" >
+                        <i class="download icon">&nbsp;</i>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="main container">
+        <div class="main container" style="padding-top: 64px;">
 
             <xforms:View ID="View" runat="server"
                 CssClass="FormView"
