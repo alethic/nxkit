@@ -47,6 +47,18 @@ module NXKit.Web.XForms {
                 this.Alert != null && !this.Valid());
         }
 
+        public FocusIn() {
+            this.Node.Invoke('NXKit.DOMEvents.INXEventTarget', 'DispatchEvent', {
+                type: 'DOMFocusIn'
+            });
+        }
+
+        public FocusOut() {
+            this.Node.Invoke('NXKit.DOMEvents.INXEventTarget', 'DispatchEvent', {
+                type: 'DOMFocusOut'
+            });
+        }
+
     }
 
 }

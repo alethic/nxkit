@@ -13,9 +13,14 @@
 <script type="text/html"
         data-nxkit-node="NXKit.XForms.Input"
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
+
     <input type="text"
            data-bind="
-    value: ValueAsString,
+    nxkit_input: ValueAsString,
+    event: {
+        focusin: FocusIn,
+        focusout: FocusOut,
+    },
     attr: {
         placeholder: PlaceHolderText
     }" />
@@ -58,7 +63,12 @@
         data-nxkit-node="NXKit.XForms.Input"
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}date">
     <input type="date"
-           data-bind="value: ValueAsString" />
+           data-bind="
+nxkit_input: ValueAsString,
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}" />
 </script>
 
 <script type="text/html"
@@ -76,5 +86,10 @@
         data-nxkit-node="NXKit.XForms.Input"
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}integer">
     <input type="number"
-           data-bind="value: ValueAsNumber" />
+           data-bind="
+nxkit_input: ValueAsNumber,
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}" />
 </script>

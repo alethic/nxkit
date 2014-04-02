@@ -34,6 +34,8 @@ namespace NXKit.DOMEvents
                     return new Event();
                 case "UIEvent":
                     return new UIEvent();
+                case "FocusEvent":
+                    return new FocusEvent();
                 default:
                     throw new DOMException();
             }

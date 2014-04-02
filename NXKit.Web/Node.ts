@@ -134,7 +134,7 @@ module NXKit.Web {
         /**
          * Invokes a named method on the specified interface.
          */
-        public Invoke(interfaceName: string, methodName: string, params: any): void {
+        public Invoke(interfaceName: string, methodName: string, params?: any): void {
             this.Method(interfaceName, methodName).Invoke(params);
         }
 

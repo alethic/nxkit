@@ -21,7 +21,7 @@ module NXKit.Web {
             return this._name;
         }
 
-        public Invoke(params: any) {
+        public Invoke(params?: any) {
             this._data.push(params);
             this.OnMethodInvoked(params);
         }

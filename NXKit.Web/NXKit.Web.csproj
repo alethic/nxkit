@@ -143,6 +143,7 @@
     <TypeScriptCompile Include="INodePropertyChangedEvent.ts" />
     <TypeScriptCompile Include="IMethodInvokedEvent.ts" />
     <TypeScriptCompile Include="IInterfacePropertyChangedEvent.ts" />
+    <TypeScriptCompile Include="Knockout\InputBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\HorizontalVisibleBindingHandler.ts" />
     <TypeScriptCompile Include="LayoutOptions.ts" />
