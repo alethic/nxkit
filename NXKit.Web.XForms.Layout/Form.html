@@ -5,6 +5,7 @@
 
         <div class="ui small steps">
             <!-- ko foreach: RootStep.Steps -->
+            <!-- ko if: Label -->
             <div class="ui step" data-bind="
     click: SetActive,
     nxkit_hvisible: !Disabled(),
@@ -16,6 +17,7 @@
                 } -->
                 <!-- /ko -->
             </div>
+            <!-- /ko -->
             <!-- /ko -->
         </div>
 

@@ -17,7 +17,10 @@ namespace NXKit.Test.Web.Site
         protected void View_Load(object sender, EventArgs args)
         {
             if (!IsPostBack)
-                View.Configure("resource://NXKit.Test.Web.Site/Resources/form.xml");
+            {
+                UriTextBox.Text = "resource://NXKit.Test.Web.Site/Resources/form.xml";
+                View.Configure(UriTextBox.Text);
+            }
         }
 
         protected void View_ResourceAction(object sender, ResourceActionEventArgs args)
@@ -70,6 +73,11 @@ namespace NXKit.Test.Web.Site
 
             //if (View.CurrentPage == null)
             //    View.Navigate(l.First.Value);
+        }
+
+        protected void LoadButton_Click(object sender, EventArgs args)
+        {
+            View.Configure(UriTextBox.Text);
         }
 
     }

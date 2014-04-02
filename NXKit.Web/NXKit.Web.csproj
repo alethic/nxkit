@@ -200,6 +200,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Text.html" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UnknownRootElement.html" />
+  </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>

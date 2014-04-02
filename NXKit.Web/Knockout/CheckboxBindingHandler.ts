@@ -4,6 +4,7 @@
         implements KnockoutBindingHandler {
 
         init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
+            var self = this;
             setTimeout(function () {
                 $(element).checkbox();
                 $(element).checkbox('setting', {
@@ -32,21 +33,20 @@
                         }
                     },
                 });
+                self.update(element, valueAccessor, allBindings, viewModel, bindingContext);
             }, 2000);
         }
 
         update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
+            var self = this;
             setTimeout(function () {
                 var v1 = ko.unwrap(valueAccessor());
-                var v2 = $(element).find('input').val() == 'on' ? true : false;
                 if (typeof v1 === 'boolean') {
-                    if (v1 != v2)
-                        $(element).checkbox(v1 ? 'enable' : 'disable')
-            } else if (typeof v1 === 'string') {
+                    $(element).checkbox(v1 ? 'enable' : 'disable')
+                } else if (typeof v1 === 'string') {
                     var v1_ = v1.toLowerCase() === 'true' ? true : false;
-                    if (v1_ != v2)
-                        $(element).checkbox(v1_ ? 'enable' : 'disable')
-            }
+                    $(element).checkbox(v1_ ? 'enable' : 'disable')
+                }
             }, 1000);
         }
 

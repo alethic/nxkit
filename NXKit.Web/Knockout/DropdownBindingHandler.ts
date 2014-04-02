@@ -4,6 +4,7 @@
         implements KnockoutBindingHandler {
 
         init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
+            var self = this;
             setTimeout(function () {
                 $(element).dropdown();
                 $(element).dropdown('setting', {
@@ -16,16 +17,17 @@
                         }
                     },
                 });
+                self.update(element, valueAccessor, allBindings, viewModel, bindingContext);
             }, 2000);
         }
 
         update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
+            var self = this;
             setTimeout(function () {
                 var v1 = ko.unwrap(valueAccessor());
                 var v2 = $(element).dropdown('get value');
                 if (typeof v2 === 'string')
-                    if (v1 != v2)
-                        $(element).dropdown('set value', v1);
+                    $(element).dropdown('set value', v1);
             }, 1000);
         }
 

@@ -258,6 +258,7 @@
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\asd.pubxml" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <EmbeddedResource Include="Resources\select1.xml" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
     <Content Include="Scripts\jquery-ui-1.10.4.js" />

@@ -1,0 +1,31 @@
+﻿<f:form xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:f="http://schemas.nxkit.org/nxkit/2014/xforms-layout"
+        xmlns:xf="http://www.w3.org/2002/xforms"
+        xmlns:ev="http://www.w3.org/2001/xml-events">
+    <xf:model>
+        <xf:instance>
+            <data xmlns="">
+                <choice>false</choice>
+            </data>
+        </xf:instance>
+        <xf:bind nodeset="choice"
+                 type="xsd:boolean" />
+    </xf:model>
+    <f:section>
+        <xf:group>
+            <xf:label>Additional Enrollees</xf:label>
+            <xf:select1 ref="choice"
+                        incremental="true">
+                <xf:label>Choice</xf:label>
+                <xf:item>
+                    <xf:label>No</xf:label>
+                    <xf:value>false</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Yes</xf:label>
+                    <xf:value>true</xf:value>
+                </xf:item>
+            </xf:select1>
+        </xf:group>
+    </f:section>
+</f:form>

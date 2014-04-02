@@ -38,6 +38,12 @@
         </asp:ScriptManager>
 
         <div class="main container">
+
+            <div>
+                <asp:TextBox ID="UriTextBox" runat="server" />
+                <asp:Button ID="LoadButton" runat="server" OnClick="LoadButton_Click" />
+            </div>
+
             <xforms:View ID="View" runat="server"
                 CssClass="FormView"
                 OnLoad="View_Load"
