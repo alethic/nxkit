@@ -42,7 +42,7 @@
             <div class="ui segment">
                 <div class="ui fluid action input">
                     <asp:TextBox ID="UriTextBox" runat="server" />
-                    <button id="LoadButton" type="button" runat="server" onserverclick="LoadButton_Click" class="ui button">Load</button>
+                    <div id="LoadButton" onclick="<%= Page.ClientScript.GetPostBackEventReference(Page, "Load") %>" class="ui button">Load</div>
                 </div>
             </div>
 

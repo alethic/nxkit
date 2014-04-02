@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Web.UI;
+
 using NXKit.Web.UI;
 
 namespace NXKit.Test.Web.Site
 {
 
     public partial class Default :
-        System.Web.UI.Page
+        Page,
+        IPostBackEventHandler
     {
 
         protected override void OnLoad(EventArgs args)
@@ -18,14 +20,15 @@ namespace NXKit.Test.Web.Site
         {
             if (!IsPostBack)
             {
-                UriTextBox.Text = new System.Uri(Request.Url, "../Resources/form.xml").ToString();
+                UriTextBox.Text = new Uri(Request.Url, "../Resources/form.xml").ToString();
                 View.Configure(UriTextBox.Text);
             }
         }
 
-        protected void LoadButton_Click(object sender, EventArgs args)
+        public void RaisePostBackEvent(string eventArgument)
         {
-            View.Configure(UriTextBox.Text);
+            if (eventArgument == "Load")
+                View.Configure(UriTextBox.Text);
         }
 
     }
