@@ -124,8 +124,6 @@
   <ItemGroup>
     <Compile Include="View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResourceActionMethod.cs" />
-    <Compile Include="ResourceEventArgs.cs" />
     <Compile Include="Properties\WebResources.cs" />
   </ItemGroup>
   <ItemGroup>

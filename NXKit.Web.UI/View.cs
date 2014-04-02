@@ -69,38 +69,6 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Raised when the forms processor attempts to perform an action on a resource.
-        /// </summary>
-        public event EventHandler<ResourceActionEventArgs> ResourceAction;
-
-        /// <summary>
-        /// Raises the ResolveResource event.
-        /// </summary>
-        /// <param name="args"></param>
-        void OnResourceAction(ResourceActionEventArgs args)
-        {
-            Contract.Requires<ArgumentNullException>(args != null);
-
-            if (ResourceAction != null)
-                ResourceAction(this, args);
-        }
-
-        /// <summary>
-        /// Attempts to resolve a resource's local uri to a URI suitable for offering a link to the user.
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="baseUri"></param>
-        /// <returns></returns>
-        public string ResolveResourceClientUrl(Uri uri)
-        {
-            Contract.Requires<ArgumentNullException>(uri != null);
-
-            var args = new ResourceActionEventArgs(ResourceActionMethod.ResolveClientUrl, uri);
-            OnResourceAction(args);
-            return args.ReferenceUri;
-        }
-
-        /// <summary>
         /// Loads the specified <see cref="Uri"/> into the view.
         /// </summary>
         /// <param name="uri"></param>

@@ -48,21 +48,7 @@
 
             <xforms:View ID="View" runat="server"
                 CssClass="FormView"
-                OnLoad="View_Load"
-                OnResourceAction="View_ResourceAction" />
-
-            <div class="ui horizontal divider">
-                and then
-            </div>
-
-            <asp:Button ID="PrevButton" runat="server"
-                Text="Previous"
-                CausesValidation="false"
-                OnClick="PrevButton_Click" />
-            <asp:Button ID="NextButton" runat="server"
-                Text="Next"
-                CausesValidation="true"
-                OnClick="NextButton_Click" />
+                OnLoad="View_Load" />
 
         </div>
     </form>
