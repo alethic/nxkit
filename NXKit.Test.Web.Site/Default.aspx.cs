@@ -18,7 +18,7 @@ namespace NXKit.Test.Web.Site
         {
             if (!IsPostBack)
             {
-                UriTextBox.Text = "resource://NXKit.Test.Web.Site/Resources/form.xml";
+                UriTextBox.Text = new System.Uri(Request.Url, "../Resources/form.xml").ToString();
                 View.Configure(UriTextBox.Text);
             }
         }

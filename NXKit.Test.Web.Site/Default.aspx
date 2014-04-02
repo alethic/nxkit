@@ -39,9 +39,11 @@
 
         <div class="main container">
 
-            <div>
-                <asp:TextBox ID="UriTextBox" runat="server" />
-                <asp:Button ID="LoadButton" runat="server" OnClick="LoadButton_Click" />
+            <div class="ui segment">
+                <div class="ui fluid action input">
+                    <asp:TextBox ID="UriTextBox" runat="server" />
+                    <button ID="LoadButton" runat="server" onserverclick="LoadButton_Click" class="ui right labeled button">Load</button>
+                </div>
             </div>
 
             <xforms:View ID="View" runat="server"

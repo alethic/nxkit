@@ -37,7 +37,7 @@ namespace NXKit.Test.Web.Site {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button LoadButton;
+        protected global::System.Web.UI.HtmlControls.HtmlButton LoadButton;
         
         /// <summary>
         /// View control.
