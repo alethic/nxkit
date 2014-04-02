@@ -7,7 +7,7 @@
             var self = this;
             setTimeout(function () {
                 $(element).dropdown();
-                $(element).dropdown('setting', {
+                $(element).dropdown({
                     onChange: function (value: any) {
                         var v1 = $(element).dropdown('get value');
                         var v2 = ko.unwrap(valueAccessor());
@@ -25,9 +25,7 @@
             var self = this;
             setTimeout(function () {
                 var v1 = ko.unwrap(valueAccessor());
-                var v2 = $(element).dropdown('get value');
-                if (typeof v2 === 'string')
-                    $(element).dropdown('set value', v1);
+                $(element).dropdown('set value', v1);
             }, 1000);
         }
 
