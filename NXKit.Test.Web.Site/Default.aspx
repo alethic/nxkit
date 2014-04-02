@@ -37,14 +37,18 @@
             </Scripts>
         </asp:ScriptManager>
 
-        <div class="main container">
-
-            <div class="ui segment">
+        <div class="ui fixed transparent main menu">
+            <div class="ui center item">
                 <div class="ui fluid action input">
                     <asp:TextBox ID="UriTextBox" runat="server" />
-                    <div id="LoadButton" onclick="<%= Page.ClientScript.GetPostBackEventReference(Page, "Load") %>" class="ui button">Load</div>
+                    <div id="LoadButton" onclick="<%= Page.ClientScript.GetPostBackEventReference(Page, "Load") %>" class="ui icon button">
+                        <i class="download icon"></i>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <div class="main container">
 
             <xforms:View ID="View" runat="server"
                 CssClass="FormView"
