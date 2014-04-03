@@ -26,21 +26,37 @@ namespace NXKit.XmlEvents
             Initialize();
         }
 
+        /// <summary>
+        /// Gets the value of the 'event' attribute.
+        /// </summary>
+        /// <returns></returns>
         string GetEvent()
         {
             return (string)element.Attribute(SchemaConstants.Events_1_0 + "event");
         }
 
+        /// <summary>
+        /// Gets the value of the 'handler' attribute.
+        /// </summary>
+        /// <returns></returns>
         string GetHandlerAttribute()
         {
             return (string)element.Attribute(SchemaConstants.Events_1_0 + "handler");
         }
 
+        /// <summary>
+        /// Gets the value of the 'observer' attribute.
+        /// </summary>
+        /// <returns></returns>
         string GetObserverAttribute()
         {
             return (string)element.Attribute(SchemaConstants.Events_1_0 + "observer");
         }
 
+        /// <summary>
+        /// Gets the handler element.
+        /// </summary>
+        /// <returns></returns>
         NXElement GetHandlerElement()
         {
             var handlerAttr = GetHandlerAttribute();
@@ -56,6 +72,10 @@ namespace NXKit.XmlEvents
                 throw new InvalidOperationException();
         }
 
+        /// <summary>
+        /// Gets the handler interface.
+        /// </summary>
+        /// <returns></returns>
         IEventHandler GetHandler()
         {
             var element = GetHandlerElement();
@@ -65,6 +85,10 @@ namespace NXKit.XmlEvents
             return null;
         }
 
+        /// <summary>
+        /// Gets the observer element.
+        /// </summary>
+        /// <returns></returns>
         NXElement GetObserverElement()
         {
             var handlerAttr = GetHandlerAttribute();
@@ -80,6 +104,10 @@ namespace NXKit.XmlEvents
                 throw new InvalidOperationException();
         }
 
+        /// <summary>
+        /// Gets the observer interface.
+        /// </summary>
+        /// <returns></returns>
         IEventTarget GetObserver()
         {
             var element = GetObserverElement();
@@ -89,6 +117,10 @@ namespace NXKit.XmlEvents
             return null;
         }
 
+        /// <summary>
+        /// Gets the target element.
+        /// </summary>
+        /// <returns></returns>
         NXElement GetTargetElement()
         {
             var targetAttr = (string)element.Attribute(SchemaConstants.Events_1_0 + "target");
@@ -98,16 +130,28 @@ namespace NXKit.XmlEvents
             return null;
         }
 
+        /// <summary>
+        /// Gets whether or not the phase is set to 'capture'.
+        /// </summary>
+        /// <returns></returns>
         public bool GetCapture()
         {
             return (string)element.Attribute(SchemaConstants.Events_1_0 + "phase") == "capture";
         }
 
+        /// <summary>
+        /// Gets whether or not we should propagate.
+        /// </summary>
+        /// <returns></returns>
         public bool GetPropagate()
         {
             return (string)element.Attribute(SchemaConstants.Events_1_0 + "propagate") != "stop";
         }
 
+        /// <summary>
+        /// Gets whether the default action should execute.
+        /// </summary>
+        /// <returns></returns>
         public bool GetDefaultAction()
         {
             return (string)element.Attribute(SchemaConstants.Events_1_0 + "defaultAction") != "cancel";

@@ -152,7 +152,7 @@ namespace NXKit.Web.IO
                 foreach (var property in item.Properties)
                 {
                     writer.WritePropertyName(property.Name);
-                    serializer.Serialize(writer, property.GetValue(node));
+                    serializer.Serialize(writer, property.GetValue(item.Object));
                 }
 
                 foreach (var method in item.Methods)

@@ -125,7 +125,7 @@
 
         GetLayout(): any {
             return {
-                node: 'NXKit.XForms.Group',
+                template: 'NXKit.XForms.Group',
                 data: this,
                 layout: 'node',
                 level: this.Level,
@@ -186,7 +186,7 @@
 
         GetLayout(): any {
             return {
-                node: 'NXKit.XForms.Group',
+                template: 'NXKit.XForms.Group',
                 data: this,
                 layout: this.GetLayoutName(),
                 level: this.Level,
@@ -254,7 +254,7 @@
 
         GetLayout(): any {
             return {
-                node: 'NXKit.XForms.Group',
+                template: 'NXKit.XForms.Group',
                 data: this,
                 layout: 'group',
                 level: this.Level,
@@ -315,7 +315,7 @@
 
             return list;
         } catch (ex) {
-            ex.message = 'GroupUtil.GetItems()' + '"\nMessage: ' + ex.message;
+            ex.message = 'GroupUtil.GetItems()' + '\nMessage: ' + ex.message;
             throw ex;
         }
     }
