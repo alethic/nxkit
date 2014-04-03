@@ -31,7 +31,7 @@ var NXKit;
                     __extends(FormViewModel, _super);
                     function FormViewModel(context, node) {
                         _super.call(this, context, node);
-                        this.StepChanged = new NXKit.Web.TypedEvent();
+                        this.StepChanged = new TypedEvent();
                         var self = this;
 
                         self._activeStep = ko.observable();
@@ -156,7 +156,7 @@ var NXKit;
                         _super.call(this, context, node);
                     }
                     return ParagraphViewModel;
-                })(NXKit.Web.NodeViewModel);
+                })(NodeViewModel);
                 Layout.ParagraphViewModel = ParagraphViewModel;
             })(XForms.Layout || (XForms.Layout = {}));
             var Layout = XForms.Layout;
