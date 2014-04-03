@@ -102,6 +102,7 @@ namespace NXKit.XForms.XPath.Functions
         /// <returns></returns>
         InstanceElement GetInstance(XFormsModule module, XPathNavigator navigator)
         {
+            Contract.Requires<ArgumentNullException>(module != null);
             Contract.Requires<ArgumentNullException>(navigator != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);

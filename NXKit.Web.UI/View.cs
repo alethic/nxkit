@@ -235,6 +235,8 @@ namespace NXKit.Web.UI
         /// <param name="save"></param>
         void LoadDocumentFromSave(string save)
         {
+            Contract.Requires<ArgumentNullException>(save != null);
+
             using (var stm = new MemoryStream(Convert.FromBase64String(save)))
             using (var zip = new GZipStream(stm, CompressionMode.Decompress))
             {
