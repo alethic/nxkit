@@ -46,6 +46,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XPath", "NXKit.XPath\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Scripting.EcmaScript", "NXKit.Scripting.EcmaScript\NXKit.Scripting.EcmaScript.csproj", "{285CDA69-8A75-408C-A3A1-B750AD9B6BD1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Scripting", "NXKit.Scripting\NXKit.Scripting.csproj", "{F509DF8D-AF13-468D-8381-028835A79DEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,6 +126,10 @@ Global
 		{285CDA69-8A75-408C-A3A1-B750AD9B6BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{285CDA69-8A75-408C-A3A1-B750AD9B6BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{285CDA69-8A75-408C-A3A1-B750AD9B6BD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F509DF8D-AF13-468D-8381-028835A79DEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F509DF8D-AF13-468D-8381-028835A79DEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F509DF8D-AF13-468D-8381-028835A79DEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F509DF8D-AF13-468D-8381-028835A79DEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
