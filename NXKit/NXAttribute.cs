@@ -20,6 +20,11 @@ namespace NXKit
             get { return emptySequence; }
         }
 
+        /// <summary>
+        /// Returns the string value of the attribute.
+        /// </summary>
+        /// <param name="attribute"></param>
+        /// <returns></returns>
         public static explicit operator string(NXAttribute attribute)
         {
             return attribute == null ? null : attribute.value;

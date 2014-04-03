@@ -8,7 +8,7 @@ namespace NXKit.XForms
     [Element("recalculate")]
     public class RecalculateElement :
         XFormsElement,
-        IActionElement
+        IAction
     {
 
         /// <summary>

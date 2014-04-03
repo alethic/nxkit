@@ -128,7 +128,7 @@
     <Compile Include="IUIAppearance.cs" />
     <Compile Include="IModelItemBinding.cs" />
     <Compile Include="NodeInterfaceProvider.cs" />
-    <Compile Include="IActionElement.cs" />
+    <Compile Include="IAction.cs" />
     <Compile Include="IEvaluationContextScope.cs" />
     <Compile Include="ISupportsListUiCommonAttributes.cs" />
     <Compile Include="ISelectableNode.cs" />
@@ -140,6 +140,7 @@
     <Compile Include="ModelItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaPackage.cs" />
+    <Compile Include="Script.cs" />
     <Compile Include="SupportsIncrementalAttributeExtensions.cs" />
     <Compile Include="SupportsCommonAttributesExtensions.cs" />
     <Compile Include="SupportsUiCommonAttributesExtensions.cs" />

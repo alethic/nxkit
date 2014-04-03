@@ -8,7 +8,7 @@ namespace NXKit.XForms
     [Element("rebuild")]
     public class RebuildElement :
         XFormsElement,
-        IActionElement
+        IAction
     {
 
         /// <summary>

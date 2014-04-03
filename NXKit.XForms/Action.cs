@@ -9,7 +9,7 @@ namespace NXKit.XForms
     [Element("action")]
     public class Action :
         XFormsElement,
-        IActionElement
+        IAction
     {
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace NXKit.XForms
 
         public void Invoke()
         {
-            foreach (var action in Elements().OfType<IActionElement>())
+            foreach (var action in Elements().OfType<IAction>())
                 Module.InvokeAction(action);
         }
 

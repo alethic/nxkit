@@ -14,7 +14,7 @@ namespace NXKit.DOMEvents
 
         readonly NXDocument document;
         readonly IEnumerable<IEventInfoTable> tables;
-        readonly IDocumentEvent documentEvent;
+        IDocumentEvent documentEvent;
 
         /// <summary>
         /// Initializes a new instance.
@@ -31,7 +31,11 @@ namespace NXKit.DOMEvents
 
             this.document = document;
             this.tables = tables;
-            this.documentEvent = document.Interface<IDocumentEvent>();
+        }
+
+        IDocumentEvent DocumentEvent
+        {
+            get { return documentEvent ?? (documentEvent = document.Interface<IDocumentEvent>()); }
         }
 
         public Event CreateEvent(string type)
@@ -39,7 +43,7 @@ namespace NXKit.DOMEvents
             var evt = tables
                 .SelectMany(i => i.GetEventInfos())
                 .Where(i => i.Type == type)
-                .Select(i => new { Event = documentEvent.CreateEvent(i.EventInterface), EventInfo = i })
+                .Select(i => new { Event = DocumentEvent.CreateEvent(i.EventInterface), EventInfo = i })
                 .FirstOrDefault();
 
             // initialize and return event

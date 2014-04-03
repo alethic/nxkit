@@ -8,7 +8,7 @@ namespace NXKit.XForms
     [Element("send")]
     public class SendElement :
         XFormsElement,
-        IActionElement
+        IAction
     {
 
         /// <summary>

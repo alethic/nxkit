@@ -13,7 +13,6 @@ namespace NXKit.DOMEvents
 
         readonly NXElement element;
         readonly IEventFactory provider;
-        readonly IEventTarget target;
 
         /// <summary>
         /// Initializes a new instance.
@@ -22,16 +21,20 @@ namespace NXKit.DOMEvents
         public NXEventTarget(NXElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Ensures(target != null);
+            Contract.Ensures(provider != null);
 
             this.element = element;
             this.provider = element.Document.Container.GetExportedValue<IEventFactory>();
-            this.target = element.Interface<IEventTarget>();
         }
 
-        public NXElement Node
+        public NXElement Elemenet
         {
             get { return element; }
+        }
+
+        public IEventTarget Target
+        {
+            get { Contract.Ensures(Contract.Result<IEventTarget>() != null); return Elemenet.Interface<IEventTarget>(); }
         }
 
         public void DispatchEvent(string type)
@@ -40,7 +43,7 @@ namespace NXKit.DOMEvents
             if (evt == null)
                 throw new NullReferenceException();
 
-            target.DispatchEvent(evt);
+            Target.DispatchEvent(evt);
         }
 
         public void AddEventHandler(string type, EventHandlerDelegate handler)
@@ -50,7 +53,7 @@ namespace NXKit.DOMEvents
 
         public void AddEventHandler(string type, bool useCapture, EventHandlerDelegate handler)
         {
-            target.AddEventListener(type, new EventListener(_ => handler(_)), useCapture);
+            Target.AddEventListener(type, new EventListener(_ => handler(_)), useCapture);
         }
 
     }

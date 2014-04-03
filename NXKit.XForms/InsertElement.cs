@@ -11,7 +11,7 @@ namespace NXKit.XForms
     [Element("insert")]
     public class InsertElement :
         NodeSetBindingElement,
-        IActionElement
+        IAction
     {
 
         /// <summary>

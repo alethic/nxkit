@@ -115,11 +115,9 @@
   <ItemGroup>
     <Compile Include="ElementEventListener.cs" />
     <Compile Include="EventsEventListenerElement.cs" />
-    <Compile Include="EventsModule.cs" />
     <Compile Include="NodeInterfaceProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaConstants.cs" />
-    <Compile Include="SchemaPackage.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="xml-events-attribs-1.xsd">

@@ -485,7 +485,7 @@ namespace NXKit.XForms
         /// Invokes the given action visual properly.
         /// </summary>
         /// <param name="visual"></param>
-        internal void InvokeAction(IActionElement visual)
+        internal void InvokeAction(IAction visual)
         {
             Contract.Requires<ArgumentNullException>(visual != null);
 

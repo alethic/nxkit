@@ -87,6 +87,8 @@ namespace NXKit
         /// <param name="args"></param>
         protected virtual void OnAdded(NXObjectEventArgs args)
         {
+            Contract.Requires<ArgumentNullException>(args != null);
+
             if (Added != null)
                 Added(this, args);
         }
@@ -102,6 +104,8 @@ namespace NXKit
         /// <param name="args"></param>
         protected virtual void OnRemoved(NXObjectEventArgs args)
         {
+            Contract.Requires<ArgumentNullException>(args != null);
+
             if (Removed != null)
                 Removed(this, args);
         }
@@ -113,6 +117,8 @@ namespace NXKit
         /// <returns></returns>
         public IEnumerable<object> Annotations(Type type)
         {
+            Contract.Requires<ArgumentNullException>(type != null);
+
             return annotations.Where(i => type.IsInstanceOfType(i));
         }
 
@@ -133,6 +139,8 @@ namespace NXKit
         /// <returns></returns>
         public object Annotation(Type type)
         {
+            Contract.Requires<ArgumentNullException>(type != null);
+
             return Annotations(type).FirstOrDefault();
         }
 
@@ -152,7 +160,9 @@ namespace NXKit
         /// <param name="annotation"></param>
         public void AddAnnotation(object annotation)
         {
-            annotations.AddLast(annotations);
+            Contract.Requires<ArgumentNullException>(annotation != null);
+
+            annotations.AddLast(annotation);
         }
 
         /// <summary>
@@ -161,6 +171,8 @@ namespace NXKit
         /// <param name="type"></param>
         public void RemoveAnnotations(Type type)
         {
+            Contract.Requires<ArgumentNullException>(type != null);
+
             var nodes = annotations.Forwards()
                 .Where(i => type.IsInstanceOfType(i.Value))
                 .ToList();

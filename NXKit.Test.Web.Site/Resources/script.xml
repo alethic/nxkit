@@ -1,0 +1,25 @@
+﻿<f:form xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:f="http://schemas.nxkit.org/nxkit/2014/xforms-layout"
+        xmlns:xf="http://www.w3.org/2002/xforms"
+        xmlns:ev="http://www.w3.org/2001/xml-events">
+    <xf:model>
+        <xf:instance>
+            <data xmlns="">
+                <choice>false</choice>
+            </data>
+        </xf:instance>
+        <xf:bind nodeset="choice"
+                 type="xsd:boolean" />
+    </xf:model>
+    <f:section>
+        <xf:group>
+            <xf:label>Script Example</xf:label>
+            <xf:trigger>
+                <xf:label>Button</xf:label>
+                <xf:script type="text/javascript" ev:event="DOMActivate">
+                    var i = 0;
+                </xf:script>
+            </xf:trigger>
+        </xf:group>
+    </f:section>
+</f:form>

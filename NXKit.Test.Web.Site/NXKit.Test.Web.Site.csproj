@@ -258,6 +258,7 @@
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\asd.pubxml" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <Content Include="Resources\script.xml" />
     <Content Include="Resources\trigger.xml" />
     <Content Include="Resources\select1.xml" />
     <Content Include="Scripts\jquery-2.1.0.js" />
@@ -360,6 +361,10 @@
     <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj">
       <Project>{075ba36b-f95a-4563-bbe9-20d4405e9c9e}</Project>
       <Name>NXKit.DOM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Scripting.EcmaScript\NXKit.Scripting.EcmaScript.csproj">
+      <Project>{285cda69-8a75-408c-a3a1-b750ad9b6bd1}</Project>
+      <Name>NXKit.Scripting.EcmaScript</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.Web.XForms.Layout\NXKit.Web.XForms.Layout.csproj">
       <Project>{9499152c-156e-4005-a01f-4d6f1c480c63}</Project>

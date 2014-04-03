@@ -13,7 +13,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         public Group()
-            : base()
+            : base(Constants.XForms_1_0 + "group")
         {
 
         }

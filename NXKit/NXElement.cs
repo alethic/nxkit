@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+
 using NXKit.Util;
 
 namespace NXKit
@@ -11,33 +13,49 @@ namespace NXKit
     /// Represents an element in the document.
     /// </summary>
     [Public]
-    public abstract class NXElement :
+    public class NXElement :
         NXContainer
     {
 
+        readonly XName name;
         string uniqueId;
         Dictionary<XNode, NXNode> cache = new Dictionary<XNode, NXNode>();
         bool created = false;
-        LinkedList<NXAttribute> attributes = new LinkedList<NXAttribute>();
+        internal LinkedList<NXAttribute> attributes = new LinkedList<NXAttribute>();
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public NXElement()
+        public NXElement(XName name)
             : base()
         {
+            Contract.Requires<ArgumentNullException>(name != null);
 
+            this.name = name;
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="element"></param>
-        public NXElement(XElement element)
-            : base(element)
+        /// <param name="xml"></param>
+        public NXElement(XElement xml)
+            : base(xml)
         {
-            foreach (var attr in element.Attributes())
-                attributes.AddLast(new NXAttribute(attr));
+            Contract.Requires<ArgumentNullException>(xml != null);
+
+            this.name = xml.Name;
+
+            foreach (var attr in xml.Attributes())
+                this.attributes.AddLast(new NXAttribute(attr));
+        }
+
+        /// <summary>
+        /// Gets or sets the name of this element.
+        /// </summary>
+        [Public]
+        public XName Name
+        {
+            get { return name; }
         }
 
         /// <summary>
@@ -49,14 +67,6 @@ namespace NXKit
             protected set { base.Xml = value; }
         }
 
-        /// <summary>
-        /// Gets the attributes of the element.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<NXAttribute> Attributes()
-        {
-            return attributes;
-        }
 
         /// <summary>
         /// Removes the specified attribute.
@@ -76,7 +86,10 @@ namespace NXKit
         /// Unique identifier for the <see cref="NXNode"/> within the current naming scope.
         /// </summary>
         [Public]
-        public abstract string Id { get; }
+        public virtual string Id
+        {
+            get { return (string)this.Attribute("id"); }
+        }
 
         /// <summary>
         /// Returns a unique identifier for this visual, considering naming scopes.

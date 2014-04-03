@@ -17,8 +17,8 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        protected UIBindingElement()
-            : base()
+        protected UIBindingElement(XName name)
+            : base(name)
         {
 
         }

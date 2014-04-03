@@ -26,7 +26,6 @@ namespace NXKit.XmlEvents
 
         public void Handle(Event ev)
         {
-
         }
 
     }

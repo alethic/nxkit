@@ -21,7 +21,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         public Input()
-            : base()
+            : base(Constants.XForms_1_0 + "input")
         {
 
         }

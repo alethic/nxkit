@@ -7,7 +7,7 @@ namespace NXKit.XForms
     [Element("revalidate")]
     public class RevalidateElement :
         XFormsElement,
-        IActionElement
+        IAction
     {
 
         /// <summary>

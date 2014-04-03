@@ -9,7 +9,7 @@ namespace NXKit.XForms
     [Element("dispatch")]
     public class DispatchElement :
         XFormsElement,
-        IActionElement
+        IAction
     {
 
         /// <summary>

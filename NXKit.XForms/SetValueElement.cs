@@ -8,7 +8,7 @@ namespace NXKit.XForms
     [Element("setvalue")]
     public class SetValueElement :
         SingleNodeUIBindingElement,
-        IActionElement
+        IAction
     {
 
         /// <summary>

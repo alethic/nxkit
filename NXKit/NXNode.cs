@@ -44,7 +44,7 @@ namespace NXKit
         public NXNode(NXContainer parent)
             : base(parent)
         {
-
+            Contract.Requires<ArgumentNullException>(parent != null);
         }
 
         /// <summary>
@@ -87,6 +87,14 @@ namespace NXKit
             old.OnChanged(new NXObjectChangeEventArgs(this, NXObjectChange.Remove));
         }
 
+        protected override void OnAdded(NXObjectEventArgs args)
+        {
+            base.OnAdded(args);
+
+            // enumerate all interfaces to ensure initialization
+            this.Interfaces().ToList();
+        }
+
         #region Naming Scope
 
         /// <summary>
@@ -94,10 +102,10 @@ namespace NXKit
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public NXNode ResolveId(string id)
+        public NXElement ResolveId(string id)
         {
             // discover the root visual
-            var rootVisual = this.Ancestors()
+            var root = this.Ancestors()
                 .Prepend(this as NXElement)
                 .First(i => i != null && i.Parent == null);
 
@@ -108,7 +116,7 @@ namespace NXKit
                 .ToArray();
 
             // search all descendents of the root element that are sharing naming scopes with myself
-            foreach (var visual in rootVisual.DescendantsIncludeNS(namingScopes).OfType<NXElement>())
+            foreach (var visual in root.DescendantsIncludeNS(namingScopes).OfType<NXElement>())
                 if (visual.Id == id)
                     return visual;
 

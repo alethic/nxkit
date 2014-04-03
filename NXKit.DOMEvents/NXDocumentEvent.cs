@@ -12,7 +12,7 @@ namespace NXKit.DOMEvents
     {
 
         readonly NXNode node;
-        readonly IEventFactory factory;
+        IEventFactory factory;
 
         /// <summary>
         /// Initializes a new instance.
@@ -23,18 +23,22 @@ namespace NXKit.DOMEvents
             Contract.Requires<ArgumentNullException>(node != null);
 
             this.node = node;
-            this.factory = node.Document.Container.GetExportedValue<IEventFactory>();
+        }
+
+        IEventFactory Factory
+        {
+            get { return factory ?? (factory = node.Document.Container.GetExportedValue<IEventFactory>()); }
         }
 
         public T CreateEvent<T>(string type)
             where T : Event
         {
-            return factory.CreateEvent<T>(type);
+            return Factory.CreateEvent<T>(type);
         }
 
         public Event CreateEvent(string type)
         {
-            return factory.CreateEvent(type);
+            return Factory.CreateEvent(type);
         }
 
     }

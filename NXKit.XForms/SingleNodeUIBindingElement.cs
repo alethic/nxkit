@@ -14,8 +14,8 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public SingleNodeUIBindingElement()
-            : base()
+        public SingleNodeUIBindingElement(XName name)
+            : base(name)
         {
 
         }

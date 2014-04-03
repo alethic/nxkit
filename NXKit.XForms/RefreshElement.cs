@@ -8,7 +8,7 @@ namespace NXKit.XForms
     [Element("refresh")]
     public class RefreshElement :
         XFormsElement,
-        IActionElement
+        IAction
     {
 
         /// <summary>

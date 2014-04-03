@@ -11,7 +11,7 @@ namespace NXKit.XForms
     [Element("delete")]
     public class DeleteElement :
         NodeSetBindingElement,
-        IActionElement
+        IAction
     {
 
         /// <summary>
