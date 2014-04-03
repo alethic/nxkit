@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.TypeScript.1.0.30324.0\build\Microsoft.TypeScript.props" Condition="Exists('..\packages\Microsoft.TypeScript.1.0.30324.0\build\Microsoft.TypeScript.props')" />
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.11\build\Microsoft.CodeContracts.props" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.11\build\Microsoft.CodeContracts.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,10 +10,11 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <TypeScriptToolsVersion>0.9</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+    <NuGetPackageImportStamp>e608a19a</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
     <RootNamespace>NXKit.Web.XForms.Layout</RootNamespace>
@@ -66,15 +68,14 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="..\nxkit.web\NXKit.d.ts">
-      <Link>Scripts\typings\nxkit\NXKit.d.ts</Link>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="..\NXKit.Web.XForms\NXKit.XForms.d.ts">
       <Link>Scripts\typings\nxkit\NXKit.XForms.d.ts</Link>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="..\NXKit.Web\NXKit.d.ts">
+      <Link>Scripts\typings\nxkit\NXKit.d.ts</Link>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="FormViewModel.ts" />
     <TypeScriptCompile Include="IStepChangedEvent.ts" />
-    <TypeScriptCompile Include="NXKit.XForms.Layout.d.ts" />
     <TypeScriptCompile Include="ParagraphViewModel.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
@@ -88,7 +89,6 @@
     <EmbeddedResource Include="Paragraph.html" />
     <EmbeddedResource Include="Form.html" />
     <EmbeddedResource Include="Table.html" />
-    <Content Include="NXKit.XForms.Layout.js" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="NXKit.Web.XForms.Layout.nuspec" />
-    <None Include="NXKit.XForms.Layout.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.Composition" />
@@ -157,7 +156,6 @@
     <TypeScriptOutFile>NXKit.XForms.Layout.js</TypeScriptOutFile>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
   </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -166,6 +164,9 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.11\build\Microsoft.CodeContracts.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.11\build\Microsoft.CodeContracts.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.11\build\Microsoft.CodeContracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.11\build\Microsoft.CodeContracts.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.0\build\Microsoft.TypeScript.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.0\build\Microsoft.TypeScript.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.0\build\Microsoft.TypeScript.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.0\build\Microsoft.TypeScript.targets'))" />
   </Target>
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.11\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.11\build\Microsoft.CodeContracts.targets')" />
+  <Import Project="..\packages\Microsoft.TypeScript.1.0.30324.0\build\Microsoft.TypeScript.targets" Condition="Exists('..\packages\Microsoft.TypeScript.1.0.30324.0\build\Microsoft.TypeScript.targets')" />
 </Project>
