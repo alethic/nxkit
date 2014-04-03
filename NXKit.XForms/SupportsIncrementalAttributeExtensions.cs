@@ -11,7 +11,7 @@ namespace NXKit.XForms
         public static bool Incremental<T>(this T self)
             where T : NXElement, ISupportsIncrementalAttribute
         {
-            var a = self.Document.Module<XFormsModule>().ResolveAttribute(self.Xml, "incremental");
+            var a = self.Document.Module<XFormsModule>().ResolveAttribute(self, "incremental");
             return a != null ? a.Value == "true" : false;
         }
 

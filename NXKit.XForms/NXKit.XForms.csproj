@@ -153,7 +153,7 @@
     <Compile Include="Alert.cs" />
     <Compile Include="Binding.cs" />
     <Compile Include="BindingElement.cs" />
-    <Compile Include="BindElement.cs" />
+    <Compile Include="Bind.cs" />
     <Compile Include="ChoicesElement.cs" />
     <Compile Include="CopyElement.cs" />
     <Compile Include="DeleteElement.cs" />

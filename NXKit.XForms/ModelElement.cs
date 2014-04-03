@@ -143,7 +143,7 @@ namespace NXKit.XForms
             State.Construct = true;
 
             // validate model version, we only support 1.0
-            var versions = Module.GetAttributeValue(Xml, "version");
+            var versions = Module.GetAttributeValue(this, "version");
             if (versions != null)
                 foreach (var version in versions.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     if (version != "1.0")
@@ -152,7 +152,7 @@ namespace NXKit.XForms
                         return;
                     }
 
-            var schema = Module.GetAttributeValue(Xml, "schema");
+            var schema = Module.GetAttributeValue(this, "schema");
             if (schema != null)
                 foreach (var item in schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     continue; // TODO
@@ -301,12 +301,12 @@ namespace NXKit.XForms
                         bind.Binding.ModelItems.Length == 0)
                         continue;
 
-                    var typeAttr = Module.GetAttributeValue(bind.Xml, "type");
-                    var calculateAttr = Module.GetAttributeValue(bind.Xml, "calculate");
-                    var readonlyAttr = Module.GetAttributeValue(bind.Xml, "readonly");
-                    var requiredAttr = Module.GetAttributeValue(bind.Xml, "required");
-                    var relevantAttr = Module.GetAttributeValue(bind.Xml, "relevant");
-                    var constraintAttr = Module.GetAttributeValue(bind.Xml, "constraint");
+                    var typeAttr = Module.GetAttributeValue(bind, "type");
+                    var calculateAttr = Module.GetAttributeValue(bind, "calculate");
+                    var readonlyAttr = Module.GetAttributeValue(bind, "readonly");
+                    var requiredAttr = Module.GetAttributeValue(bind, "required");
+                    var relevantAttr = Module.GetAttributeValue(bind, "relevant");
+                    var constraintAttr = Module.GetAttributeValue(bind, "constraint");
 
                     for (int i = 0; i < bind.Binding.ModelItems.Length; i++)
                     {

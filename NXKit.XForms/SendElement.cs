@@ -28,7 +28,7 @@ namespace NXKit.XForms
 
         public void Invoke()
         {
-            var submissionAttr = Module.GetAttributeValue(Xml, "submission");
+            var submissionAttr = Module.GetAttributeValue(this, "submission");
             if (submissionAttr != null)
             {
                 var submissionVisual = ResolveId(submissionAttr);

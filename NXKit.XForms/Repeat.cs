@@ -115,7 +115,7 @@ namespace NXKit.XForms
             {
                 if (!startIndexCached)
                 {
-                    var startIndexAttr = Module.GetAttributeValue(Xml, "startindex");
+                    var startIndexAttr = Module.GetAttributeValue(this, "startindex");
                     if (startIndexAttr != null)
                         startIndex = int.Parse(startIndexAttr);
                     else
@@ -137,7 +137,7 @@ namespace NXKit.XForms
             {
                 if (!numberCached)
                 {
-                    var numberAttr = Module.GetAttributeValue(Xml, "number");
+                    var numberAttr = Module.GetAttributeValue(this, "number");
                     if (numberAttr != null)
                         number = int.Parse(numberAttr);
 

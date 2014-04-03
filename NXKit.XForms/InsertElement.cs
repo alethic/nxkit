@@ -59,11 +59,11 @@ namespace NXKit.XForms
             //if (boundNodes.Any(i => i.getNamespaceURI() != qn.getNamespaceURI() || i.getLocalName() != qn.getLocalPart()))
             //    throw new Exception();
 
-            var atAttr = Module.GetAttributeValue(Xml, "at");
+            var atAttr = Module.GetAttributeValue(this, "at");
             if (atAttr == null)
                 throw new Exception();
 
-            var positionAttr = Module.GetAttributeValue(Xml, "position");
+            var positionAttr = Module.GetAttributeValue(this, "position");
             if (positionAttr == null)
                 throw new Exception();
 

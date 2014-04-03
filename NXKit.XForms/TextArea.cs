@@ -21,7 +21,7 @@ namespace NXKit.XForms
 
         public bool Incremental
         {
-            get { return Module.GetAttributeValue(Xml, "incremental") == "true"; }
+            get { return Module.GetAttributeValue(this, "incremental") == "true"; }
         }
 
     }

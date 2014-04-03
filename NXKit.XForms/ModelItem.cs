@@ -140,7 +140,7 @@ namespace NXKit.XForms
 
         string GetUniqueId()
         {
-            return module.GetAttributeValue(GetInstance().Xml, "id") + "$" + GetId();
+            return module.GetAttributeValue(GetInstance(), "id") + "$" + GetId();
         }
 
         /// <summary>

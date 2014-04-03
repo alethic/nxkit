@@ -112,7 +112,7 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        internal XAttribute ResolveAttribute(XElement element, string name)
+        internal NXAttribute ResolveAttribute(NXElement element, string name)
         {
             if (element.Name.Namespace == Constants.XForms_1_0)
                 // only xforms native elements support default-ns attributes
@@ -128,7 +128,7 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        internal string GetAttributeValue(XElement element, string name)
+        internal string GetAttributeValue(NXElement element, string name)
         {
             var attr = ResolveAttribute(element, name);
             return attr != null ? attr.Value : null;
@@ -236,7 +236,7 @@ namespace NXKit.XForms
                 Document.GetElementId(instance.Xml);
 
                 // extract instance values from xml
-                var instanceSrc = GetAttributeValue(instance.Xml, "src");
+                var instanceSrc = GetAttributeValue(instance, "src");
                 var instanceChildElements = instance.Xml.Elements().ToArray();
 
                 if (!string.IsNullOrWhiteSpace(instanceSrc))
@@ -381,7 +381,7 @@ namespace NXKit.XForms
         internal EvaluationContext ResolveBindingEvaluationContext(XFormsElement visual)
         {
             // attempt to retrieve model state given by 'model' attribute
-            var modelAttr = GetAttributeValue(visual.Xml, "model");
+            var modelAttr = GetAttributeValue(visual, "model");
             if (!string.IsNullOrWhiteSpace(modelAttr))
             {
                 // find referenced model visual
@@ -404,27 +404,27 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Resolves the single-node binding on <paramref name="visual"/>.
+        /// Resolves the single-node binding on <paramref name="node"/>.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="node"></param>
         /// <returns></returns>
-        internal Binding ResolveSingleNodeBinding(BindingElement visual)
+        internal Binding ResolveSingleNodeBinding(BindingElement node)
         {
-            var element = visual.Xml as XElement;
+            var element = node.Xml as XElement;
             if (element == null)
                 return null;
 
             // attempt to resolve 'bind' attribute to bind element's context
-            var bd = GetAttributeValue(visual.Xml, "bind");
+            var bd = GetAttributeValue(node, "bind");
             if (bd != null)
             {
-                var bind = (BindElement)visual.ResolveId(bd);
+                var bind = (BindElement)node.ResolveId(bd);
 
                 // invalid bind element
                 if (bind == null ||
                     bind.Context == null)
                 {
-                    visual.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
+                    node.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                     return null;
                 }
 
@@ -432,50 +432,50 @@ namespace NXKit.XForms
             }
 
             // attempt to resolve 'ref' attribute
-            var xp = GetAttributeValue(visual.Xml, "ref");
+            var xp = GetAttributeValue(node, "ref");
             if (xp != null)
             {
-                var ec = ResolveBindingEvaluationContext(visual);
+                var ec = ResolveBindingEvaluationContext(node);
                 if (ec == null)
                     return null;
 
                 // otherwise continue by evaluating expression
-                return new Binding(visual, ec, xp);
+                return new Binding(node, ec, xp);
             }
 
             return null;
         }
 
         /// <summary>
-        /// Resolves the node-set binding on <paramref name="visual"/>.
+        /// Resolves the node-set binding on <paramref name="node"/>.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="node"></param>
         /// <returns></returns>
-        internal Binding ResolveNodeSetBinding(BindingElement visual)
+        internal Binding ResolveNodeSetBinding(BindingElement node)
         {
             // attempt to resolve 'bind' attribute to bind element's context
-            var bindAttr = GetAttributeValue(visual.Xml, "bind");
+            var bindAttr = GetAttributeValue(node, "bind");
             if (bindAttr != null)
             {
-                var bind = (BindElement)visual.ResolveId(bindAttr);
+                var bind = (BindElement)node.ResolveId(bindAttr);
 
                 // invalid bind element
                 if (bind == null ||
                     bind.Binding == null)
                 {
-                    visual.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
+                    node.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                     return null;
                 }
 
                 return bind.Binding;
             }
 
-            var ec = ResolveBindingEvaluationContext(visual);
+            var ec = ResolveBindingEvaluationContext(node);
             if (ec != null)
             {
-                var nodesetAttr = GetAttributeValue(visual.Xml, "nodeset");
+                var nodesetAttr = GetAttributeValue(node, "nodeset");
                 if (nodesetAttr != null)
-                    return new Binding(visual, ec, nodesetAttr);
+                    return new Binding(node, ec, nodesetAttr);
             }
 
             return null;

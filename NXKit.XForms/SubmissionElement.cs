@@ -53,8 +53,8 @@ namespace NXKit.XForms
                     return;
                 }
 
-                var action = Module.GetAttributeValue(Xml, "action").TrimToNull();
-                var method = Module.GetAttributeValue(Xml, "method").TrimToNull();
+                var action = Module.GetAttributeValue(this, "action").TrimToNull();
+                var method = Module.GetAttributeValue(this, "method").TrimToNull();
 
                 if (method != "put")
                     throw new NotSupportedException("Unsupported submission method.");

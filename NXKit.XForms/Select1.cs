@@ -29,12 +29,12 @@ namespace NXKit.XForms
         [Public]
         public bool Incremental
         {
-            get { return Module.GetAttributeValue(Xml, "incremental") == "true"; }
+            get { return Module.GetAttributeValue(this, "incremental") == "true"; }
         }
 
         public Selection Selection
         {
-            get { return Module.GetAttributeValue(Xml, "selection") == "open" ? Selection.Open : Selection.Closed; }
+            get { return Module.GetAttributeValue(this, "selection") == "open" ? Selection.Open : Selection.Closed; }
         }
 
         public override string Value
