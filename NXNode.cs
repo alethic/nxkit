@@ -16,6 +16,7 @@ namespace NXKit
         NXObject
     {
 
+        internal NXNode next;
         XNode xml;
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public NXNode(NXContainer parent)
+        public NXNode(NXElement parent)
             : base(parent)
         {
             Contract.Requires<ArgumentNullException>(parent != null);
@@ -52,7 +53,7 @@ namespace NXKit
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="xml"></param>
-        protected NXNode(NXContainer parent, XNode xml)
+        protected NXNode(NXElement parent, XNode xml)
             : this(parent)
         {
             Contract.Requires<ArgumentNullException>(parent != null);
@@ -68,6 +69,37 @@ namespace NXKit
         {
             get { return xml; }
             protected set { xml = value; }
+        }
+
+        public NXNode NextNode
+        {
+            get
+            {
+                if (this.parent == null || this == this.parent.content)
+                {
+                    return null;
+                }
+                return this.next;
+            }
+        }
+
+        public NXNode PreviousNode
+        {
+            get
+            {
+                if (this.parent == null)
+                {
+                    return null;
+                }
+                NXNode xNode = ((NXNode)this.parent.content).next;
+                NXNode xNode1 = null;
+                while (xNode != this)
+                {
+                    xNode1 = xNode;
+                    xNode = xNode.next;
+                }
+                return xNode1;
+            }
         }
 
         /// <summary>
@@ -93,6 +125,28 @@ namespace NXKit
 
             // enumerate all interfaces to ensure initialization
             this.Interfaces().ToList();
+        }
+
+        /// <summary>
+        /// Looks up the closest xmlns declaration for the given prefix that is in scope for the current node and
+        /// returns the namespace URI in the declaration.
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
+        public virtual string GetNamespaceOfPrefix(string prefix)
+        {
+            return Parent.GetNamespaceOfPrefix(prefix);
+        }
+
+        /// <summary>
+        /// Looks up the closest xmlns declaration for the given namespace URI that is in scope for the current node
+        /// and returns the prefix defined in that declaration.
+        /// </summary>
+        /// <param name="namespaceURI"></param>
+        /// <returns></returns>
+        public virtual string GetPrefixOfNamespace(string namespaceURI)
+        {
+            return Parent.GetPrefixOfNamespace(namespaceURI);
         }
 
         #region Naming Scope

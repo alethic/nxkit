@@ -17,6 +17,20 @@ namespace NXKit
         NXContainer
     {
 
+        #region Static
+
+        static IEnumerable<XElement> emptySequence;
+
+        /// <summary>
+        /// Gets an empty collection of elements.
+        /// </summary>
+        public static IEnumerable<XElement> EmptySequence
+        {
+            get { return emptySequence ?? (emptySequence = new XElement[0]); }
+        }
+
+        #endregion
+
         readonly XName name;
         string uniqueId;
         Dictionary<XNode, NXNode> cache = new Dictionary<XNode, NXNode>();
@@ -66,7 +80,6 @@ namespace NXKit
             get { return (XElement)base.Xml; }
             protected set { base.Xml = value; }
         }
-
 
         /// <summary>
         /// Removes the specified attribute.
@@ -182,6 +195,40 @@ namespace NXKit
                 Storage.AddLast(state = new T());
 
             return state;
+        }
+
+        /// <summary>
+        /// Looks up the closest xmlns declaration for the given prefix that is in scope for the current node and
+        /// returns the namespace URI in the declaration.
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
+        public override string GetNamespaceOfPrefix(string prefix)
+        {
+            var xmlns = this.Attribute(XNamespace.Xmlns + prefix);
+            if (xmlns != null)
+                return xmlns.Value;
+
+            return Parent.GetNamespaceOfPrefix(prefix);
+        }
+
+        /// <summary>
+        /// Looks up the closest xmlns declaration for the given namespace URI that is in scope for the current node
+        /// and returns the prefix defined in that declaration.
+        /// </summary>
+        /// <param name="namespaceURI"></param>
+        /// <returns></returns>
+        public override string GetPrefixOfNamespace(string namespaceURI)
+        {
+            var prefix = this.Attributes()
+                .Where(i => i.Name.Namespace == XNamespace.Xmlns)
+                .Where(i => i.Value == namespaceURI)
+                .Select(i => i.Name.LocalName)
+                .FirstOrDefault();
+            if (prefix != null)
+                return prefix;
+
+            return Parent.GetPrefixOfNamespace(namespaceURI);
         }
 
     }

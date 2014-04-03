@@ -14,7 +14,7 @@ namespace NXKit
     public abstract class NXObject
     {
 
-        NXContainer parent;
+        internal NXContainer parent;
         LinkedList<object> annotations = new LinkedList<object>();
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         /// <param name="parent"></param>
-        public NXObject(NXContainer parent)
+        public NXObject(NXElement parent)
             : this()
         {
             Contract.Requires<ArgumentNullException>(parent != null);
@@ -40,32 +40,44 @@ namespace NXKit
         /// <summary>
         /// Gets the <see cref="INXDocument"/>
         /// </summary>
-        public virtual NXDocument Document
+        public NXDocument Document
         {
-            get { return Parent != null ? Parent.Document : null; }
+            get { return GetDocument(); }
+        }
+
+        /// <summary>
+        /// Implements the getter for Document.
+        /// </summary>
+        /// <returns></returns>
+        NXDocument GetDocument()
+        {
+            var o = this;
+            while (o.parent != null)
+                o = o.parent;
+            return o as NXDocument;
         }
 
         /// <summary>
         /// Gets the parent object.
         /// </summary>
-        public NXContainer Parent
+        public NXElement Parent
         {
-            get { return parent; }
+            get { return parent as NXElement; }
             internal set { SetParent(value); }
         }
 
         /// <summary>
         /// Implements the setter for Parent.
         /// </summary>
-        /// <param name="container"></param>
-        void SetParent(NXContainer container)
+        /// <param name="element"></param>
+        void SetParent(NXElement element)
         {
-            if (parent == container)
+            if (parent == element)
                 return;
 
             // set new parent
             var old = parent;
-            parent = container;
+            parent = element;
 
             // resulted in removal
             if (old != null && parent == null)
