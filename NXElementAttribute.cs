@@ -30,7 +30,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         /// <param name="expandedName"></param>
-        tial public NXElementAttribute(string expandedName)
+        public NXElementAttribute(string expandedName)
             : this(XName.Get(expandedName))
         {
             Contract.Requires<ArgumentNullException>(expandedName != null);
