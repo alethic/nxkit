@@ -5,11 +5,7 @@ using System.Xml.Linq;
 namespace NXKit
 {
 
-    /// <summary>
-    /// Represents a simple text node.
-    /// </summary>
-    [Public]
-    public class NXText :
+    public class NXComment :
         NXNode
     {
 
@@ -18,28 +14,16 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public NXText()
-            : base()
+        public NXComment()
         {
 
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        public NXText(string value)
-            : base()
-        {
-            Contract.Requires<ArgumentNullException>(value != null);
-
-            this.value = value;
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        public NXText(XText xml)
+        public NXComment(XComment xml)
             : base(xml)
         {
             Contract.Requires<ArgumentNullException>(xml != null);
@@ -47,18 +31,13 @@ namespace NXKit
             this.value = xml.Value;
         }
 
-        public new XText Xml
-        {
-            get { return (XText)base.Xml; }
-        }
-
         /// <summary>
-        /// Gets or sets the value of this node.
+        /// Gets or sets the string value of this comment.
         /// </summary>
-        [Public]
         public string Value
         {
             get { return value; }
+            set { this.value = value; }
         }
 
     }

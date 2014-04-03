@@ -14,6 +14,42 @@ namespace NXKit
     {
 
         /// <summary>
+        /// Gets the interface of the specified type, if it's already created.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        protected T Get<T>(NXNode node)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+
+            return node.Annotation<T>();
+        }
+
+        /// <summary>
+        /// Creates an interface of the specified 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="node"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        protected T CreateAndAdd<T>(NXNode node, Func<T> func)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(func != null);
+            
+            // create new instance
+            var i = func();
+            if (i == null)
+                throw new NullReferenceException("Interface creation function returned null.");
+
+            // add new instance
+            node.AddAnnotation(i);
+
+            return i;
+        }
+
+        /// <summary>
         /// Gets the interface of the specified type, or creats a new instance with the given function.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -21,17 +57,19 @@ namespace NXKit
         /// <param name="func"></param>
         /// <returns></returns>
         protected T GetOrCreate<T>(NXNode node, Func<T> func)
+            where T : class
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(func != null);
 
-            var i = node.Annotation<T>();
-            if (i == null)
-                node.AddAnnotation(i = func());
-
-            return i;
+            return Get<T>(node) ?? CreateAndAdd<T>(node, func);
         }
 
+        /// <summary>
+        /// Implement this method to handle retrieving interfaces for the specified node.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public abstract IEnumerable<object> GetInterfaces(NXNode node);
 
     }

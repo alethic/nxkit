@@ -282,16 +282,20 @@ namespace NXKit
         internal NXNode CreateNode(XNode xml)
         {
             if (xml is XText)
-            {
                 return new NXText((XText)xml);
-            }
             else if (xml is XElement)
             {
                 // create new instance of visual using extensions
                 var node = CreateNodeFromModules((XElement)xml);
                 if (node != null)
                     return node;
+
+                return new NXElement((XElement)xml);
             }
+            else if (xml is XComment)
+                return new NXComment((XComment)xml);
+            else if (xml is XCData)
+                return new NXCData((XCData)xml);
 
             return null;
         }
