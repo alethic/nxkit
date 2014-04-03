@@ -199,7 +199,6 @@
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
-    <TypeScriptOutFile>NXKit.XForms.js</TypeScriptOutFile>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -215,5 +214,12 @@
     <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.1\build\Microsoft.TypeScript.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.1\build\Microsoft.TypeScript.targets'))" />
   </Target>
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.11\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.11\build\Microsoft.CodeContracts.targets')" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptOutFile>NXKit.XForms.js</TypeScriptOutFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptOutFile>NXKit.XForms.js</TypeScriptOutFile>
+    <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
+  </PropertyGroup>
   <Import Project="..\packages\Microsoft.TypeScript.1.0.30324.1\build\Microsoft.TypeScript.targets" Condition="Exists('..\packages\Microsoft.TypeScript.1.0.30324.1\build\Microsoft.TypeScript.targets')" />
 </Project>
