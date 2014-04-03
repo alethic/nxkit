@@ -92,16 +92,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NXKit.Web.XForms\NXKit.Web.XForms.csproj">
-      <Project>{f106499b-42cc-41cf-9824-39755e25993f}</Project>
-      <Name>NXKit.Web.XForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.Web\NXKit.Web.csproj">
-      <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
-      <Name>NXKit.Web</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="AssemblyHtmlTemplateProvider.cs" />
     <TypeScriptCompile Include="FormUtil.ts" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,6 +102,16 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.Composition" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NXKit.Web.XForms\NXKit.Web.XForms.csproj">
+      <Project>{f106499b-42cc-41cf-9824-39755e25993f}</Project>
+      <Name>NXKit.Web.XForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Web\NXKit.Web.csproj">
+      <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
+      <Name>NXKit.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptOutFile>NXKit.XForms.Layout.js</TypeScriptOutFile>
