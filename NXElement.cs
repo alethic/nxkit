@@ -50,6 +50,15 @@ namespace NXKit
         }
 
         /// <summary>
+        /// Gets the attributes of the element.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<NXAttribute> Attributes()
+        {
+            return attributes;
+        }
+
+        /// <summary>
         /// Removes the specified attribute.
         /// </summary>
         /// <param name="attribute"></param>
