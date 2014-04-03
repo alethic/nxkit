@@ -23,7 +23,7 @@
 
 module NXKit.Web.Knockout {
 
-    class HorizontalVisibleBindingHandler
+    export class HorizontalVisibleBindingHandler
         implements KnockoutBindingHandler {
 
         init(element: HTMLElement, valueAccessor: () => any) {

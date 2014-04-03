@@ -1,6 +1,6 @@
 ﻿module NXKit.Web.Knockout {
 
-    class VisibleBindingHandler
+    export class VisibleBindingHandler
         implements KnockoutBindingHandler {
 
         init(element: HTMLElement, valueAccessor: () => any) {

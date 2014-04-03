@@ -1,6 +1,6 @@
 ﻿module NXKit.Web.Knockout {
 
-    class CheckboxBindingHandler
+    export class CheckboxBindingHandler
         implements KnockoutBindingHandler {
 
         static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {

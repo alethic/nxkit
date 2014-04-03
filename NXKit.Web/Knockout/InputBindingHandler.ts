@@ -1,6 +1,6 @@
 ﻿module NXKit.Web.Knockout {
 
-    class InputBindingHandler
+    export class InputBindingHandler
         implements KnockoutBindingHandler {
 
         static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {

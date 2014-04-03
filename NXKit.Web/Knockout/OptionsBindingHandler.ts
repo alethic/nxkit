@@ -2,7 +2,7 @@
 
 module NXKit.Web.Knockout {
 
-    class OptionsBindingHandler
+    export class OptionsBindingHandler
         implements KnockoutBindingHandler {
 
         public init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any {

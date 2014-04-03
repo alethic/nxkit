@@ -1,6 +1,6 @@
 ﻿module NXKit.Web.Knockout {
 
-    class ModalBindingHandler
+    export class ModalBindingHandler
         implements KnockoutBindingHandler {
 
         init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
@@ -20,8 +20,8 @@
                         }
                     }, 5);
                 },
-                // add clickBubble: false binding
-                // TODO broken
+            // add clickBubble: false binding
+            // TODO broken
                 allBindings,
                 viewModel,
                 bindingContext);

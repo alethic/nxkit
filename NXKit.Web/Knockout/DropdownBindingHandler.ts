@@ -1,6 +1,6 @@
 ﻿module NXKit.Web.Knockout {
 
-    class DropdownBindingHandler
+    export class DropdownBindingHandler
         implements KnockoutBindingHandler {
 
         static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {

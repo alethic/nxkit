@@ -2,7 +2,7 @@
 
 module NXKit.Web.Knockout {
 
-    class TemplateBindingHandler
+    export class TemplateBindingHandler
         implements KnockoutBindingHandler {
 
         public init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): void {
