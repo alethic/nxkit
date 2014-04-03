@@ -261,11 +261,6 @@
     <Content Include="Content\semantic\packaged\javascript\semantic.js" />
     <Content Include="Content\semantic\packaged\javascript\semantic.min.js" />
     <Content Include="packages.config" />
-    <Content Include="Licenses\v8.valgrind.license" />
-    <Content Include="Licenses\v8.v8.license" />
-    <Content Include="Licenses\v8.strongtalk.license" />
-    <Content Include="Licenses\v8.main.license" />
-    <Content Include="Licenses\ClearScript.main.license" />
     <None Include="Properties\PublishProfiles\asd.pubxml" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Resources\script.xml" />

@@ -117,11 +117,6 @@
     <Compile Include="V8ScriptEngine.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Licenses\ClearScript.main.license" />
-    <None Include="Licenses\v8.main.license" />
-    <None Include="Licenses\v8.strongtalk.license" />
-    <None Include="Licenses\v8.v8.license" />
-    <None Include="Licenses\v8.valgrind.license" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
