@@ -5,13 +5,3 @@ bin
 obj
 */bin/*
 */obj/*
-/NXKit.Web/NXKit.d.ts
-/NXKit.Web/NXKit.js
-/NXKit.Web/NXKit.js.map
-/NXKit.Web.XForms/NXKit.XForms.d.ts
-/NXKit.Web.XForms/NXKit.XForms.js
-/NXKit.Web.XForms/NXKit.XForms.js.map
-/NXKit.Web.XForms.Layout/NXKit.XForms.Layout.d.ts
-/NXKit.Web.XForms.Layout/NXKit.XForms.Layout.js
-/NXKit.Web.XForms.Layout/NXKit.XForms.Layout.js.map
-*.js
