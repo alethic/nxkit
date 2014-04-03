@@ -148,7 +148,7 @@
     <Compile Include="UIBindingElement.cs" />
     <Compile Include="UIBindingState.cs" />
     <Compile Include="XFormsXsltContext.cs" />
-    <Compile Include="ActionElement.cs" />
+    <Compile Include="Action.cs" />
     <Compile Include="Alert.cs" />
     <Compile Include="Binding.cs" />
     <Compile Include="BindingElement.cs" />

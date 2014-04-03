@@ -7,7 +7,7 @@ namespace NXKit.XForms
 {
 
     [Element("action")]
-    public class ActionElement :
+    public class Action :
         XFormsElement,
         IActionElement
     {
@@ -16,7 +16,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        public ActionElement(XElement xml)
+        public Action(XElement xml)
             : base(xml)
         {
 

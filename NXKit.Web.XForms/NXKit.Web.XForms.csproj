@@ -109,6 +109,7 @@
     <TypeScriptCompile Include="GroupLayoutManager.ts" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="TriggerViewModel.ts" />
     <TypeScriptCompile Include="SelectUtil.ts" />
     <TypeScriptCompile Include="GroupUtil.ts" />
     <TypeScriptCompile Include="GroupViewModel.ts" />
@@ -157,6 +158,7 @@
     <EmbeddedResource Include="Hint.html" />
     <EmbeddedResource Include="Label.html" />
     <EmbeddedResource Include="Alert.html" />
+    <EmbeddedResource Include="Trigger.html" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
