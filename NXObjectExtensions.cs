@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using NXKit.Util;
 
@@ -16,7 +17,7 @@ namespace NXKit
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static IEnumerable<NXElement> Ancestors(this NXNode self)
+        public static IEnumerable<NXContainer> Ancestors(this NXObject self)
         {
             var node = self.Parent;
             while (node != null)
@@ -24,6 +25,17 @@ namespace NXKit
                 yield return node;
                 node = node.Parent;
             }
+        }
+
+        /// <summary>
+        /// Gets all ancestor objects of the given <see cref="NXObject"/>, including itself.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static IEnumerable<NXObject> AncestorsAndSelf(this NXObject self)
+        {
+            return Ancestors(self).Prepend(self);
         }
 
         /// <summary>
@@ -38,12 +50,12 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Gets all ancestor containers of the given <see cref="NXElement"/>, including itself.
+        /// Gets all ancestor containers of the given <see cref="NXContainer"/>, including itself.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static IEnumerable<NXElement> AncestorsAndSelf(this NXElement self)
+        public static IEnumerable<NXContainer> AncestorsAndSelf(this NXContainer self)
         {
             return Ancestors(self).Prepend(self);
         }

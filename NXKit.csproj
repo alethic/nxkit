@@ -126,7 +126,6 @@
     <Compile Include="NXCData.cs" />
     <Compile Include="NXComment.cs" />
     <Compile Include="NXElementExtensions.cs" />
-    <Compile Include="NXAttributeExtensions.cs" />
     <Compile Include="PublicAttribute.cs" />
     <Compile Include="IO\NodeWriter.cs" />
     <Compile Include="CompositionUtil.cs" />

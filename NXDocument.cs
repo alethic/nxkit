@@ -165,6 +165,11 @@ namespace NXKit
             get { return container; }
         }
 
+        public override NXDocument Document
+        {
+            get { return this; }
+        }
+
         /// <summary>
         /// Gets a reference to the current <see cref="Xml"/> being handled.
         /// </summary>
