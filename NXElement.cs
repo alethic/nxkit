@@ -135,7 +135,11 @@ namespace NXKit
         {
             RemoveNodes();
 
-            if (Xml != null)
+            var cts = this.InterfaceOrDefault<INodeContents>();
+            if (cts != null)
+                foreach (var node in cts.GetContents())
+                    Add(node);
+            else if (Xml != null)
                 foreach (var node in CreateNodesFromXElement(Xml, true))
                     Add(node);
         }
