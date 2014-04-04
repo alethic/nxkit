@@ -14,7 +14,7 @@ namespace NXKit
     public abstract class NXObject
     {
 
-        NXContainer parent;
+        internal NXContainer parent;
         LinkedList<object> annotations = new LinkedList<object>();
 
         /// <summary>

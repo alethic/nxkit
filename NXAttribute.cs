@@ -33,6 +33,8 @@ namespace NXKit
 
         readonly XName name;
         string value;
+        internal NXAttribute prev;
+        internal NXAttribute next;
 
         /// <summary>
         /// Initializes a new instance.
@@ -80,6 +82,22 @@ namespace NXKit
         {
             get { return value; }
             set { this.value = value; }
+        }
+
+        /// <summary>
+        /// Gets the next attribute.
+        /// </summary>
+        public NXAttribute NextAttribute
+        {
+            get { return next; }
+        }
+
+        /// <summary>
+        /// Gets the previous attribute.
+        /// </summary>
+        public NXAttribute PreviousAttribute
+        {
+            get { return prev; }
         }
 
         internal string GetPrefixOfNamespace(XNamespace ns)
