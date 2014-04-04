@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
-
 using NXKit;
 using NXKit.DOMEvents;
 using NXKit.Util;
@@ -11,31 +11,64 @@ using NXKit.Util;
 namespace NXKit.XForms
 {
 
-    [Element("model")]
-    public class ModelElement :
-        XFormsElement,
+    [NXElement("{http://www.w3.org/2002/xforms}model")]
+    public class Model :
         IEvaluationContextScope,
         IEventDefaultActionHandler
     {
 
-        ModelElementState state;
+        readonly NXElement element;
+        ModelState state;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="xml"></param>
-        public ModelElement(XElement xml)
-            : base(xml)
+        /// <param name="element"></param>
+        public Model(NXElement element)
         {
+            Contract.Requires<ArgumentNullException>(element != null);
 
+            this.element = element;
+        }
+
+        public NXElement Element
+        {
+            get { return element; }
+        }
+
+        public XFormsModule Module
+        {
+            get { return element.Document.Container.GetExportedValue<XFormsModule>(); }
         }
 
         /// <summary>
-        /// Gets a reference to the model visual's state.
+        /// Gets the model state associated with this model interface.
         /// </summary>
-        public ModelElementState State
+        public ModelState State
         {
-            get { return state ?? (state = GetState<ModelElementState>()); }
+            get { return state ?? (state = GetState()); }
+        }
+
+        /// <summary>
+        /// Implements the getter for State.
+        /// </summary>
+        /// <returns></returns>
+        ModelState GetState()
+        {
+            var state = element.Storage.OfType<ModelState>().FirstOrDefault();
+            if (state == null)
+                element.Storage.AddLast(state = CreateState());
+
+            return state;
+        }
+
+        /// <summary>
+        /// Creates a new state instance.
+        /// </summary>
+        /// <returns></returns>
+        ModelState CreateState()
+        {
+            return new ModelState();
         }
 
         /// <summary>
@@ -51,7 +84,7 @@ namespace NXKit.XForms
         /// </summary>
         public IEnumerable<Instance> Instances
         {
-            get { return Elements().Where(i => i.Name == Constants.XForms_1_0 + "instance").Select(i => i.Interface<Instance>()); }
+            get { return element.Elements().Where(i => i.Name == Constants.XForms_1_0 + "instance").Select(i => i.Interface<Instance>()); }
         }
 
         /// <summary>
@@ -83,7 +116,7 @@ namespace NXKit.XForms
         IEnumerable<IUIBindingNode> GetUIBindingNodes()
         {
             // all available ui bindings
-            return Document.Root
+            return element.Document.Root
                 .Descendants(true)
                 .OfType<NXElement>()
                 .Select(i => i.InterfaceOrDefault<IUIBindingNode>())
@@ -97,7 +130,7 @@ namespace NXKit.XForms
         IEnumerable<IUIRefreshable> GetUIRefreshableNodes()
         {
             // all available ui bindings
-            return Document.Root
+            return element.Document.Root
                 .Descendants(true)
                 .OfType<NXElement>()
                 .Select(i => i.InterfaceOrDefault<IUIRefreshable>())
@@ -144,16 +177,16 @@ namespace NXKit.XForms
             State.Construct = true;
 
             // validate model version, we only support 1.0
-            var versions = Module.GetAttributeValue(Xml, "version");
+            var versions = Module.GetAttributeValue(element.Xml, "version");
             if (versions != null)
                 foreach (var version in versions.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     if (version != "1.0")
                     {
-                        this.Interface<INXEventTarget>().DispatchEvent(Events.VersionException);
+                        element.Interface<INXEventTarget>().DispatchEvent(Events.VersionException);
                         return;
                     }
 
-            var schema = Module.GetAttributeValue(Xml, "schema");
+            var schema = Module.GetAttributeValue(element.Xml, "schema");
             if (schema != null)
                 foreach (var item in schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     continue; // TODO
@@ -175,7 +208,7 @@ namespace NXKit.XForms
         {
             State.ConstructDone = true;
 
-            if (Document.Root.GetState<ModuleState>().ConstructDoneOnce)
+            if (element.Document.Root.GetState<ModuleState>().ConstructDoneOnce)
                 return;
 
             // refresh values
@@ -191,7 +224,7 @@ namespace NXKit.XForms
                 if (item3.UIBinding != null)
                     item3.UIBinding.ClearEvents();
 
-            Document.Root.GetState<ModuleState>().ConstructDoneOnce = true;
+            element.Document.Root.GetState<ModuleState>().ConstructDoneOnce = true;
         }
 
         /// <summary>
@@ -292,7 +325,7 @@ namespace NXKit.XForms
                 }
 
                 // apply binding expressions
-                foreach (var bind in this.Descendants(false).OfType<BindElement>())
+                foreach (var bind in element.Descendants(false).OfType<BindElement>())
                 {
                     if (bind.Binding == null)
                         continue;

@@ -49,7 +49,7 @@ namespace NXKit.XForms
                 Add(GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.ModelItems[i], i + 1, Binding.ModelItems.Length));
         }
 
-        ItemSetItem GetOrCreateItem(ModelElement model, Instance instance, ModelItem modelItem, int position, int size)
+        ItemSetItem GetOrCreateItem(Model model, Instance instance, ModelItem modelItem, int position, int size)
         {
             // new context for child
             var ec = new EvaluationContext(model, instance, modelItem, position, size);

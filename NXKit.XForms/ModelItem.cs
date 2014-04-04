@@ -27,7 +27,7 @@ namespace NXKit.XForms
         readonly XObject xml;
 
         ModelItemState state;
-        ModelElement model;
+        Model model;
         Instance instance;
 
         /// <summary>
@@ -84,16 +84,16 @@ namespace NXKit.XForms
         /// Gets the model element of the specified model item.
         /// </summary>
         /// <returns></returns>
-        public ModelElement Model
+        public Model Model
         {
             get { return model ?? (model = GetModel()); }
         }
 
-        ModelElement GetModel()
+        Model GetModel()
         {
-            Contract.Ensures(Contract.Result<ModelElement>() != null);
+            Contract.Ensures(Contract.Result<Model>() != null);
 
-            return xml.Document.Annotation<ModelElement>();
+            return xml.Document.Annotation<Model>();
         }
 
         /// <summary>

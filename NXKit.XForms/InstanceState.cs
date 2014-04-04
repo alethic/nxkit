@@ -19,7 +19,7 @@ namespace NXKit.XForms
         ISerializable
     {
 
-        ModelElement model;
+        NXElement model;
         NXElement instance;
 
         int nextItemId;
@@ -91,7 +91,7 @@ namespace NXKit.XForms
             if (document != null)
             {
                 if (model != null)
-                    document.AddAnnotation(model);
+                    document.AddAnnotation(model.Interface<Model>());
                 if (instance != null)
                     document.AddAnnotation(instance.Interface<Instance>());
             }
@@ -104,7 +104,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="model"></param>
         /// <param name="instance"></param>
-        internal void Initialize(ModelElement model, NXElement instance)
+        internal void Initialize(NXElement model, NXElement instance)
         {
             Contract.Requires<ArgumentNullException>(model != null);
             Contract.Requires<ArgumentNullException>(instance != null);
@@ -120,7 +120,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="model"></param>
         /// <param name="instance"></param>
-        internal void Initialize(ModelElement model, NXElement instance, XDocument document)
+        internal void Initialize(NXElement model, NXElement instance, XDocument document)
         {
             Contract.Requires<ArgumentNullException>(model != null);
             Contract.Requires<ArgumentNullException>(instance != null);

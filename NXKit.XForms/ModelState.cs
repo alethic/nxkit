@@ -4,7 +4,7 @@ namespace NXKit.XForms
 {
 
     [Serializable]
-    public class ModelElementState
+    public class ModelState
     {
 
         public bool Construct { get; set; }

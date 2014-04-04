@@ -119,6 +119,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="INodeContents.cs" />
     <Compile Include="IInitialize.cs" />
     <Compile Include="NXElementAttribute.cs" />
     <Compile Include="ElementInterfaceProvider.cs" />

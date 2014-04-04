@@ -174,8 +174,8 @@
     <Compile Include="LoadElement.cs" />
     <Compile Include="MessageElement.cs" />
     <Compile Include="ModelItemState.cs" />
-    <Compile Include="ModelElement.cs" />
-    <Compile Include="ModelElementState.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="ModelState.cs" />
     <Compile Include="XFormsModule.cs" />
     <Compile Include="ModuleState.cs" />
     <Compile Include="NodeSetBindingElement.cs" />

@@ -40,7 +40,7 @@ namespace NXKit.XForms
                 Binding.ModelItem != null &&
                 Binding.ModelItem.Xml.Document != null)
             {
-                var model = Binding.ModelItem.Xml.Document.Annotation<ModelElement>();
+                var model = Binding.ModelItem.Xml.Document.Annotation<Model>();
                 Contract.Assert(model != null);
 
                 var instance = Binding.ModelItem.Xml.Document.Annotation<Instance>();

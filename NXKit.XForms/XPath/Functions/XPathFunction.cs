@@ -47,7 +47,7 @@ namespace NXKit.XForms.XPath.Functions
         /// <param name="context"></param>
         /// <param name="navigator"></param>
         /// <returns></returns>
-        protected ModelElement GetModel(XFormsXsltContext context, XPathNavigator navigator)
+        protected Model GetModel(XFormsXsltContext context, XPathNavigator navigator)
         {
             Contract.Requires<ArgumentNullException>(context != null);
             Contract.Requires<ArgumentNullException>(navigator != null);
@@ -83,13 +83,13 @@ namespace NXKit.XForms.XPath.Functions
         /// <param name="module"></param>
         /// <param name="navigator"></param>
         /// <returns></returns>
-        ModelElement GetModel(XFormsModule module, XPathNavigator navigator)
+        Model GetModel(XFormsModule module, XPathNavigator navigator)
         {
             Contract.Requires<ArgumentNullException>(module != null);
             Contract.Requires<ArgumentNullException>(navigator != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
-            Contract.Ensures(Contract.Result<ModelElement>() != null);
+            Contract.Ensures(Contract.Result<Model>() != null);
 
             return new ModelItem(module, (XObject)navigator.UnderlyingObject).Model;
         }

@@ -125,9 +125,9 @@ namespace NXKit.DOMEvents
             if (!evt.PreventDefaultSet)
             {
                 // handle default action
-                var da = element as IEventDefaultActionHandler;
-                if (da != null)
-                    da.DefaultAction(evt);
+                foreach (var da in element.Interfaces<IEventDefaultActionHandler>())
+                    if (da != null)
+                        da.DefaultAction(evt);
             }
         }
 

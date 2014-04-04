@@ -31,9 +31,9 @@ namespace NXKit.XForms
             var modelAttr = Module.GetAttributeValue(Xml, "model");
             if (modelAttr != null)
             {
-                var modelVisual = (ModelElement)ResolveId(modelAttr);
-                if (modelVisual != null)
-                    modelVisual.OnRebuild();
+                var element = (NXElement)ResolveId(modelAttr);
+                if (element != null)
+                    element.Interface<Model>().OnRebuild();
                 else
                 {
                     this.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
