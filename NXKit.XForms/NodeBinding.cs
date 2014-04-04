@@ -29,9 +29,12 @@ namespace NXKit.XForms
             this.element = element;
         }
 
-        NodeBindingAttributes Attributes
+        /// <summary>
+        /// Gets the node binding attributes of the element.
+        /// </summary>
+        public NodeBindingAttributes Attributes
         {
-            get { return attributes ?? (attributes = element.Interface<NodeBindingAttributes>()); }
+            get { return attributes ?? (attributes = new NodeBindingAttributes(element)); }
         }
 
         /// <summary>

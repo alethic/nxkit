@@ -7,9 +7,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the attributes for the bind element.
     /// </summary>
-    [NXElement("{http://www.w3.org/2002/xforms}bind")]
     public class BindAttributes :
-        AttributesProvider
+        AttributeAccessor
     {
 
         /// <summary>

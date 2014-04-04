@@ -117,7 +117,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributesProvider.cs" />
+    <Compile Include="AttributeAccessor.cs" />
     <Compile Include="BindAttributes.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Events.cs" />

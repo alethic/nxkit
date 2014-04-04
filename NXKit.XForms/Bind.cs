@@ -45,7 +45,7 @@ namespace NXKit.XForms
         /// </summary>
         public BindAttributes Attributes
         {
-            get { return attributes ?? (attributes = element.Interface<BindAttributes>()); }
+            get { return attributes ?? (attributes = new BindAttributes(element)); }
         }
 
         /// <summary>

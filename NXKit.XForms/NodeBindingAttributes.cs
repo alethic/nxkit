@@ -7,7 +7,6 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the standard XForms binding attributes.
     /// </summary>
-    [NXElement]
     public class NodeBindingAttributes
     {
 
