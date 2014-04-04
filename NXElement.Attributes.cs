@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -35,6 +36,8 @@ namespace NXKit
         /// <returns></returns>
         public IEnumerable<NXAttribute> Attributes(XName name)
         {
+            Contract.Requires<ArgumentNullException>(name != null);
+
             return Attributes().Where(i => i.Name == name);
         }
 
@@ -45,6 +48,8 @@ namespace NXKit
         /// <returns></returns>
         public NXAttribute Attribute(XName name)
         {
+            Contract.Requires<ArgumentNullException>(name != null);
+
             return Attributes(name).FirstOrDefault();
         }
 
@@ -52,8 +57,10 @@ namespace NXKit
         /// Adds a new attribute to the end of the element.
         /// </summary>
         /// <param name="attribute"></param>
-        void AppendAttribute(NXAttribute attribute)
+        internal void AppendAttribute(NXAttribute attribute)
         {
+            Contract.Requires<ArgumentNullException>(attribute != null);
+
             // reparent
             attribute.parent = this;
 
@@ -77,10 +84,10 @@ namespace NXKit
         /// Removes the specified attribute.
         /// </summary>
         /// <param name="attribute"></param>
-        public void RemoveAttribute(NXAttribute attribute)
+        internal void RemoveAttribute(NXAttribute attribute)
         {
-            if (attribute.parent != this)
-                throw new InvalidOperationException();
+            Contract.Requires<ArgumentNullException>(attribute != null);
+            Contract.Requires<InvalidOperationException>(attribute.Parent != this);
 
             var attr = lastAttr;
 

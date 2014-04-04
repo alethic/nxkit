@@ -9,7 +9,7 @@ namespace NXKit
     /// Marks the interface object as being associated with a given fully qualified element name.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class NXElementAttribute :
+    public class NXElementInterfaceAttribute :
         Attribute
     {
 
@@ -19,7 +19,7 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public NXElementAttribute()
+        public NXElementInterfaceAttribute()
         {
 
         }
@@ -28,7 +28,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         /// <param name="name"></param>
-        public NXElementAttribute(XName name)
+        public NXElementInterfaceAttribute(XName name)
             : this()
         {
             Contract.Requires<ArgumentNullException>(name != null);
@@ -41,7 +41,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         /// <param name="expandedName"></param>
-        public NXElementAttribute(string expandedName)
+        public NXElementInterfaceAttribute(string expandedName)
             : this(XName.Get(expandedName))
         {
             Contract.Requires<ArgumentNullException>(expandedName != null);
@@ -52,7 +52,7 @@ namespace NXKit
         /// </summary>
         /// <param name="namespaceName"></param>
         /// <param name="localName"></param>
-        public NXElementAttribute(string namespaceName, string localName)
+        public NXElementInterfaceAttribute(string namespaceName, string localName)
             : this()
         {
             this.namespaceName = namespaceName;
