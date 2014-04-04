@@ -28,7 +28,7 @@ namespace NXKit.XForms
 
         public void Invoke()
         {
-            var modelAttr = Module.GetAttributeValue(this, "model");
+            var modelAttr = Module.GetAttributeValue(Xml, "model");
             if (modelAttr != null)
             {
                 var modelVisual = (ModelElement)ResolveId(modelAttr);

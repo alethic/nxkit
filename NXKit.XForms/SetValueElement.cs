@@ -32,7 +32,7 @@ namespace NXKit.XForms
 
             if (Binding != null)
             {
-                var valueAttr = Module.GetAttributeValue(this, "value");
+                var valueAttr = Module.GetAttributeValue(Xml, "value");
                 if (valueAttr != null)
                     valueBinding = new Binding(this, new EvaluationContext(Binding.Context.Model, Binding.Context.Instance, Binding.Context.ModelItem, 1, 1), valueAttr);
             }

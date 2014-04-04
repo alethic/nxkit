@@ -25,7 +25,7 @@ namespace NXKit.XForms
 
         public XName Appearance
         {
-            get { return (string)Module.ResolveAttribute(this, "appearance"); }
+            get { return (string)Module.ResolveAttribute(Xml, "appearance"); }
         }
 
     }

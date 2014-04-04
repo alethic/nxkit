@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Threading;
 using System.Xml.Linq;
 
 namespace NXKit
@@ -15,7 +14,8 @@ namespace NXKit
         NXNode
     {
 
-        internal object content;
+        internal LinkedList<NXNode> nodes =
+            new LinkedList<NXNode>();
 
         /// <summary>
         /// Initializes a new instance.
@@ -29,7 +29,7 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public NXContainer(NXElement parent)
+        public NXContainer(NXContainer parent)
             : base(parent)
         {
 
@@ -38,8 +38,8 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public NXContainer(XElement xml)
-            : base(xml)
+        public NXContainer(XContainer container)
+            : base(container)
         {
 
         }
@@ -47,10 +47,11 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="document"></param>
         /// <param name="parent"></param>
-        /// <param name="xml"></param>
-        protected NXContainer(NXElement parent, XContainer xml)
-            : base(parent, xml)
+        /// <param name="xelement"></param>
+        protected NXContainer(NXContainer parent, XElement xelement)
+            : base(parent, xelement)
         {
 
         }
@@ -58,53 +59,10 @@ namespace NXKit
         /// <summary>
         /// Gets a reference to the underlying DOM element.
         /// </summary>
-        public new XContainer Xml
+        public XContainer Xml
         {
             get { return (XContainer)base.Xml; }
             internal set { base.Xml = value; }
-        }
-
-        public NXNode FirstNode
-        {
-            get 
-            { 
-                NXNode lastNode = this.LastNode;
-                if (lastNode == null)
-                {
-                    return null;
-                }
-                return lastNode.next;
-            }
-        }
-
-        public NXNode LastNode
-        {
-            get
-            {
-                if (content == null)
-                    return null;
-
-                var node = content as NXNode;
-                if (node != null)
-                    return node;
-
-                var str = content as string;
-                if (str != null)
-                {
-                    if (str.Length == 0)
-                        return null;
-
-                    var xText = new NXText(str)
-                    {
-                        parent = this
-                    };
-                    xText.next = xText;
-
-                    Interlocked.CompareExchange<object>(ref this.content, xText, str);
-                }
-
-                return (NXNode)content;
-            }
         }
 
         /// <summary>
@@ -133,31 +91,8 @@ namespace NXKit
 
             OnChanging(new NXObjectChangeEventArgs(node, NXObjectChange.Add));
             nodes.AddLast(node);
-            if (this is NXElement)
-                node.Parent = (NXElement)this;
-        }
-
-        internal void AddNode(NXNode n)
-        {
-           // this.ValidateNode(n, this);
-            if (n.parent == null)
-            {
-                NXNode xNode = this;
-                while (xNode.parent != null)
-                {
-                    xNode = xNode.parent;
-                }
-                if (n == xNode)
-                {
-                    n = n.CloneNode();
-                }
-            }
-            else
-            {
-                n = n.CloneNode();
-            }
-            this.ConvertTextToNode();
-            this.AppendNode(n);
+            node.Parent = this;
+            OnChanged(new NXObjectChangeEventArgs(node, NXObjectChange.Add));
         }
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace NXKit
         NXNode
     {
 
-        internal string text;
+        string value;
 
         /// <summary>
         /// Initializes a new instance.
@@ -32,7 +32,7 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(value != null);
 
-            this.text = value;
+            this.value = value;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(xml != null);
 
-            this.text = xml.Value;
+            this.value = xml.Value;
         }
 
         public new XText Xml
@@ -58,7 +58,7 @@ namespace NXKit
         [Public]
         public string Value
         {
-            get { return text; }
+            get { return value; }
         }
 
     }
