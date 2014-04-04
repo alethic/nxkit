@@ -28,7 +28,7 @@ namespace NXKit.XForms
 
         ModelItemState state;
         ModelElement model;
-        InstanceElement instance;
+        Instance instance;
 
         /// <summary>
         /// Initializes a new instance.
@@ -100,16 +100,16 @@ namespace NXKit.XForms
         /// Gets the instance element of the specified model item.
         /// </summary>
         /// <returns></returns>
-        public InstanceElement Instance
+        public Instance Instance
         {
             get { return instance ?? (instance = GetInstance()); }
         }
 
-        InstanceElement GetInstance()
+        Instance GetInstance()
         {
-            Contract.Ensures(Contract.Result<InstanceElement>() != null);
+            Contract.Ensures(Contract.Result<Instance>() != null);
 
-            return xml.Document.Annotation<InstanceElement>();
+            return xml.Document.Annotation<Instance>();
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace NXKit.XForms
 
         string GetUniqueId()
         {
-            return module.GetAttributeValue(GetInstance().Xml, "id") + "$" + GetId();
+            return module.GetAttributeValue(GetInstance().Element.Xml, "id") + "$" + GetId();
         }
 
         /// <summary>

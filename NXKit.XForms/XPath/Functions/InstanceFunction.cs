@@ -41,7 +41,7 @@ namespace NXKit.XForms.XPath.Functions
                     .FirstOrDefault();
             else
                 return GetModel(context, navigator).Instances
-                    .Where(i => i.Id == id)
+                    .Where(i => i.Element.Id == id)
                     .Select(i => i.State.Document.Root.CreateNavigator().Select("."))
                     .FirstOrDefault();
         }

@@ -92,7 +92,8 @@ namespace NXKit
             base.OnAdded(args);
 
             // enumerate all interfaces to ensure initialization
-            this.Interfaces().ToList();
+            foreach (var intf in this.Interfaces<IInitialize>())
+                intf.Init();
         }
 
         #region Naming Scope

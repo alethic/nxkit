@@ -71,12 +71,14 @@ namespace NXKit.XForms
                 // obtain instances
                 var instances = model
                     .Descendants(false)
-                    .OfType<InstanceElement>()
+                    .OfType<NXElement>()
+                    .Where(i => i.Name == Constants.XForms_1_0 + "instance")
+                    .Select(i => i.Interface<Instance>())
                     .ToList();
 
                 // initialize the instances
                 foreach (var instance in instances)
-                    instance.State.Initialize(model, instance);
+                    instance.State.Initialize(model, instance.Element);
             }
 
             //// perform refresh of just loaded visuals
@@ -233,11 +235,11 @@ namespace NXKit.XForms
             foreach (var instance in model.Instances)
             {
                 // generate required 'id' attribute
-                Document.GetElementId(instance.Xml);
+                Document.GetElementId(instance.Element.Xml);
 
                 // extract instance values from xml
-                var instanceSrc = GetAttributeValue(instance.Xml, "src");
-                var instanceChildElements = instance.Xml.Elements().ToArray();
+                var instanceSrc = GetAttributeValue(instance.Element.Xml, "src");
+                var instanceChildElements = instance.Element.Xml.Elements().ToArray();
 
                 if (!string.IsNullOrWhiteSpace(instanceSrc))
                 {
@@ -245,8 +247,8 @@ namespace NXKit.XForms
                     {
                         // normalize uri with base
                         var u = new Uri(instanceSrc, UriKind.RelativeOrAbsolute);
-                        if (instance.Xml.BaseUri.TrimToNull() != null && !u.IsAbsoluteUri)
-                            u = new Uri(new Uri(instance.Xml.BaseUri), u);
+                        if (instance.Element.Xml.BaseUri.TrimToNull() != null && !u.IsAbsoluteUri)
+                            u = new Uri(new Uri(instance.Element.Xml.BaseUri), u);
 
                         // return resource as a stream
                         var request = WebRequest.Create(u);
@@ -259,7 +261,7 @@ namespace NXKit.XForms
                         var instanceDataDocument = XDocument.Load(response);
 
                         // add to model
-                        instance.State.Initialize(model, instance, instanceDataDocument);
+                        instance.State.Initialize(model, instance.Element, instanceDataDocument);
                     }
                     catch (UriFormatException)
                     {
@@ -273,7 +275,7 @@ namespace NXKit.XForms
                 }
                 else if (instanceChildElements.Length == 1)
                 {
-                    instance.State.Initialize(model, instance, new XDocument(instanceChildElements[0]));
+                    instance.State.Initialize(model, instance.Element, new XDocument(instanceChildElements[0]));
                 }
             }
         }

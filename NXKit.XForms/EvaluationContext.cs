@@ -11,7 +11,7 @@ namespace NXKit.XForms
     {
 
         readonly ModelElement model;
-        readonly InstanceElement instance;
+        readonly Instance instance;
         readonly ModelItem modelItem;
         readonly int position;
         readonly int size;
@@ -24,7 +24,7 @@ namespace NXKit.XForms
         /// <param name="modelItem"></param>
         /// <param name="position"></param>
         /// <param name="size"></param>
-        internal EvaluationContext(ModelElement model, InstanceElement instance, ModelItem modelItem, int position, int size)
+        internal EvaluationContext(ModelElement model, Instance instance, ModelItem modelItem, int position, int size)
         {
             Contract.Requires<ArgumentNullException>(model != null);
             Contract.Requires<ArgumentNullException>(instance != null);
@@ -50,7 +50,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Instance within model.
         /// </summary>
-        public InstanceElement Instance
+        public Instance Instance
         {
             get { return instance; }
         }

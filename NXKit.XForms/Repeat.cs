@@ -73,7 +73,7 @@ namespace NXKit.XForms
         /// <param name="position"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        RepeatItem GetOrCreateItem(ModelElement model, InstanceElement instance, ModelItem modelItem, int position, int size)
+        RepeatItem GetOrCreateItem(ModelElement model, Instance instance, ModelItem modelItem, int position, int size)
         {
             // new context for child
             var ec = new EvaluationContext(model, instance, modelItem, position, size);

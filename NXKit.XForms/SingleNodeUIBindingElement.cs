@@ -43,7 +43,7 @@ namespace NXKit.XForms
                 var model = Binding.ModelItem.Xml.Document.Annotation<ModelElement>();
                 Contract.Assert(model != null);
 
-                var instance = Binding.ModelItem.Xml.Document.Annotation<InstanceElement>();
+                var instance = Binding.ModelItem.Xml.Document.Annotation<Instance>();
                 Contract.Assert(instance != null);
 
                 return new EvaluationContext(model, instance, Binding.ModelItem, 1, 1);

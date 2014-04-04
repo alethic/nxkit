@@ -164,8 +164,8 @@
     <Compile Include="Hint.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="InsertElement.cs" />
-    <Compile Include="InstanceElement.cs" />
-    <Compile Include="InstanceElementState.cs" />
+    <Compile Include="Instance.cs" />
+    <Compile Include="InstanceState.cs" />
     <Compile Include="ItemSetItem.cs" />
     <Compile Include="ItemSet.cs" />
     <Compile Include="Item.cs" />

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
+using NXKit;
 using NXKit.DOMEvents;
 using NXKit.Util;
 
@@ -46,11 +47,11 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the set of <see cref="InstanceElement"/>s.
+        /// Gets the set of <see cref="Instance"/>s.
         /// </summary>
-        public IEnumerable<InstanceElement> Instances
+        public IEnumerable<Instance> Instances
         {
-            get { return Elements().OfType<InstanceElement>(); }
+            get { return Elements().Where(i => i.Name == Constants.XForms_1_0 + "instance").Select(i => i.Interface<Instance>()); }
         }
 
         /// <summary>

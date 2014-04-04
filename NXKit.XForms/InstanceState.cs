@@ -15,12 +15,12 @@ namespace NXKit.XForms
     /// Serialable storage for an instance visual's state.
     /// </summary>
     [Serializable]
-    public class InstanceElementState :
+    public class InstanceState :
         ISerializable
     {
 
         ModelElement model;
-        InstanceElement instance;
+        NXElement instance;
 
         int nextItemId;
         XDocument document;
@@ -36,7 +36,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public InstanceElementState()
+        public InstanceState()
         {
 
         }
@@ -46,13 +46,14 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public InstanceElementState(SerializationInfo info, StreamingContext context)
+        public InstanceState(SerializationInfo info, StreamingContext context)
         {
             Contract.Requires<ArgumentNullException>(info != null);
 
             this.nextItemId = info.GetInt32("NextNodeId");
-            this.document = info.GetString("Document") != null ? XDocument.Parse(info.GetString("Document")) : null;
             this.deserializedModelItemState = (Tuple<int, ModelItemState>[])info.GetValue("ModelItems", typeof(Tuple<int, ModelItemState>[]));
+
+            Initialize(info.GetString("Document") != null ? XDocument.Parse(info.GetString("Document")) : null);
         }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace NXKit.XForms
                 if (model != null)
                     document.AddAnnotation(model);
                 if (instance != null)
-                    document.AddAnnotation(instance);
+                    document.AddAnnotation(instance.Interface<Instance>());
             }
 
             this.document = document;
@@ -103,7 +104,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="model"></param>
         /// <param name="instance"></param>
-        internal void Initialize(ModelElement model, InstanceElement instance)
+        internal void Initialize(ModelElement model, NXElement instance)
         {
             Contract.Requires<ArgumentNullException>(model != null);
             Contract.Requires<ArgumentNullException>(instance != null);
@@ -119,7 +120,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="model"></param>
         /// <param name="instance"></param>
-        internal void Initialize(ModelElement model, InstanceElement instance, XDocument document)
+        internal void Initialize(ModelElement model, NXElement instance, XDocument document)
         {
             Contract.Requires<ArgumentNullException>(model != null);
             Contract.Requires<ArgumentNullException>(instance != null);
