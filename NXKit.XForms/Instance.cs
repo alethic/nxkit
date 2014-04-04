@@ -6,7 +6,7 @@ using System.Linq;
 namespace NXKit.XForms
 {
 
-    [NXElement("{http://www.w3.org/2002/xforms}instance")]
+    [NXElementInterface("{http://www.w3.org/2002/xforms}instance")]
     public class Instance :
         IInitialize,
         INodeContents

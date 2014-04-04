@@ -8,7 +8,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Obtains the in-scope evaluation context for a UI node.
     /// </summary>
-    [NXElement]
+    [NXElementInterface]
     public class NodeUIBindingEvaluationContextInScope
     {
 

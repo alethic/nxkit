@@ -4,7 +4,7 @@ using System.Diagnostics.Contracts;
 namespace NXKit.Web.XForms
 {
 
-    [NXElement("{http://www.w3.org/2002/xforms}group")]
+    [NXElementInterface("{http://www.w3.org/2002/xforms}group")]
     public class Group :
         Template
     {

@@ -4,7 +4,7 @@ using System.Diagnostics.Contracts;
 namespace NXKit.XForms
 {
 
-    [NXElement("{http://www.w3.org/2002/xforms}bind")]
+    [NXElementInterface("{http://www.w3.org/2002/xforms}bind")]
     public class Bind :
         IEvaluationContextScope
     {

@@ -11,7 +11,7 @@ using NXKit.Util;
 namespace NXKit.XForms
 {
 
-    [NXElement("{http://www.w3.org/2002/xforms}model")]
+    [NXElementInterface("{http://www.w3.org/2002/xforms}model")]
     public class Model :
         IEvaluationContextScope,
         IEventDefaultActionHandler

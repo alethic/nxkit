@@ -9,7 +9,7 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Provides interfaces decorated with the <see cref="NXElementAttribute"/>.
+    /// Provides interfaces decorated with the <see cref="NXElementInterfaceAttribute"/>.
     /// </summary>
     [Export(typeof(INodeInterfaceProvider))]
     public class ElementInterfaceProvider :
@@ -31,7 +31,7 @@ namespace NXKit
 
             // attributes decorating types
             var attrs = types
-                .Select(i => new { Type = i, Attributes = i.GetCustomAttributes<NXElementAttribute>() })
+                .Select(i => new { Type = i, Attributes = i.GetCustomAttributes<NXElementInterfaceAttribute>() })
                 .Where(i => i.Attributes.Any())
                 .ToList();
 

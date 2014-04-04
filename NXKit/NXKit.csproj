@@ -121,7 +121,7 @@
   <ItemGroup>
     <Compile Include="INodeContents.cs" />
     <Compile Include="IInitialize.cs" />
-    <Compile Include="NXElementAttribute.cs" />
+    <Compile Include="NXElementInterfaceAttribute.cs" />
     <Compile Include="ElementInterfaceProvider.cs" />
     <Compile Include="INodeInterfaceProvider.cs" />
     <Compile Include="NXAttribute.cs" />
