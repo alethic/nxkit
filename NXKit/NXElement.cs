@@ -13,7 +13,7 @@ namespace NXKit
     /// Represents an element in the document.
     /// </summary>
     [Public]
-    public class NXElement :
+    public partial class NXElement :
         NXContainer
     {
 
@@ -21,7 +21,6 @@ namespace NXKit
         string uniqueId;
         Dictionary<XNode, NXNode> cache = new Dictionary<XNode, NXNode>();
         bool created = false;
-        internal LinkedList<NXAttribute> attributes = new LinkedList<NXAttribute>();
 
         /// <summary>
         /// Initializes a new instance.
@@ -46,7 +45,7 @@ namespace NXKit
             this.name = xml.Name;
 
             foreach (var attr in xml.Attributes())
-                this.attributes.AddLast(new NXAttribute(attr));
+                AppendAttribute(new NXAttribute(attr));
         }
 
         /// <summary>
@@ -65,16 +64,6 @@ namespace NXKit
         {
             get { return (XElement)base.Xml; }
             protected set { base.Xml = value; }
-        }
-
-
-        /// <summary>
-        /// Removes the specified attribute.
-        /// </summary>
-        /// <param name="attribute"></param>
-        public void RemoveAttribute(NXAttribute attribute)
-        {
-            attributes.Remove(attribute);
         }
 
         public LinkedList<object> Storage
