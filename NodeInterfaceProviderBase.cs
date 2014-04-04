@@ -16,6 +16,20 @@ namespace NXKit
         /// <summary>
         /// Gets the interface of the specified type, if it's already created.
         /// </summary>
+        /// <param name="node"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        protected object Get(NXNode node, Type type)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+
+            return node.Annotation(type);
+        }
+
+        /// <summary>
+        /// Gets the interface of the specified type, if it's already created.
+        /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="node"></param>
         /// <returns></returns>
@@ -33,11 +47,12 @@ namespace NXKit
         /// <param name="node"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        protected T CreateAndAdd<T>(NXNode node, Func<T> func)
+        protected object CreateAndAdd(NXNode node, Type type, Func<object> func)
         {
             Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentNullException>(func != null);
-            
+
             // create new instance
             var i = func();
             if (i == null)
@@ -47,6 +62,37 @@ namespace NXKit
             node.AddAnnotation(i);
 
             return i;
+        }
+
+        /// <summary>
+        /// Creates an interface of the specified 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="node"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        protected T CreateAndAdd<T>(NXNode node, Func<T> func)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(func != null);
+
+            return CreateAndAdd(node, () => (T)func());
+        }
+
+        /// <summary>
+        /// Gets the interface of the specified type, or creats a new instance with the given function.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="node"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        protected object GetOrCreate(NXNode node, Type type, Func<object> func)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(func != null);
+
+            return Get(node, type) ?? CreateAndAdd(node, type, func);
         }
 
         /// <summary>
@@ -62,7 +108,7 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(func != null);
 
-            return Get<T>(node) ?? CreateAndAdd<T>(node, func);
+            return (T)GetOrCreate(node, typeof(T), () => func());
         }
 
         /// <summary>
