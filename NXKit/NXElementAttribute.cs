@@ -13,17 +13,28 @@ namespace NXKit
         Attribute
     {
 
-        readonly string expandedName;
+        readonly string namespaceName;
+        readonly string localName;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        public NXElementAttribute()
+        {
+
+        }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="name"></param>
         public NXElementAttribute(XName name)
+            : this()
         {
             Contract.Requires<ArgumentNullException>(name != null);
 
-            this.expandedName = name.ToString();
+            this.namespaceName = name.NamespaceName;
+            this.localName = name.LocalName;
         }
 
         /// <summary>
@@ -34,16 +45,18 @@ namespace NXKit
             : this(XName.Get(expandedName))
         {
             Contract.Requires<ArgumentNullException>(expandedName != null);
-
-            this.expandedName = expandedName;
         }
 
         /// <summary>
-        /// Gets the associated name.
+        /// Initializes a new instance.
         /// </summary>
-        public string ExpandedName
+        /// <param name="namespaceName"></param>
+        /// <param name="localName"></param>
+        public NXElementAttribute(string namespaceName, string localName)
+            : this()
         {
-            get { return expandedName; }
+            this.namespaceName = namespaceName;
+            this.localName = localName;
         }
 
         /// <summary>
@@ -51,7 +64,31 @@ namespace NXKit
         /// </summary>
         public XName Name
         {
-            get { return XName.Get(expandedName); }
+            get { return namespaceName != null && localName != null ? XName.Get(localName, namespaceName) : null; }
+        }
+
+        /// <summary>
+        /// Gets the associated name.
+        /// </summary>
+        public string ExpandedName
+        {
+            get { return Name != null ? Name.ToString() : null; }
+        }
+
+        /// <summary>
+        /// Gets the namespace name.
+        /// </summary>
+        public string NamespaceName
+        {
+            get { return namespaceName; }
+        }
+
+        /// <summary>
+        /// Gets the local name.
+        /// </summary>
+        public string LocalName
+        {
+            get { return localName; }
         }
 
     }

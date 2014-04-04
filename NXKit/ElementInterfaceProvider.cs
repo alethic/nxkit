@@ -5,8 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 
-using NXKit.Util;
-
 namespace NXKit
 {
 
@@ -18,15 +16,59 @@ namespace NXKit
         NodeInterfaceProviderBase
     {
 
-        static readonly Dictionary<XName, List<Type>> map = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(i => i.GetTypes())
-            .Where(i => i.IsClass && !i.IsAbstract)
-            .Select(i => new { Type = i, Attribute = i.GetCustomAttribute<NXElementAttribute>() })
-            .Where(i => i.Attribute != null)
-            .Select(i => new { Type = i.Type, XName = i.Attribute.Name })
-            .GroupBy(i => i.XName)
-            .Select(i => new { XName = i.Key, Types = i.Select(j => j.Type).ToList() })
-            .ToDictionary(i => i.XName, i => i.Types);
+        static readonly List<Tuple<Tuple<string, string>, List<Type>>> map;
+
+        /// <summary>
+        /// Initializes the static instance.
+        /// </summary>
+        static ElementInterfaceProvider()
+        {
+            // applicable types to search for attributes
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(i => i.GetTypes())
+                .Where(i => i.IsClass && !i.IsAbstract)
+                .ToList();
+
+            // attributes decorating types
+            var attrs = types
+                .Select(i => new { Type = i, Attributes = i.GetCustomAttributes<NXElementAttribute>() })
+                .Where(i => i.Attributes.Any())
+                .ToList();
+
+            // pairs of namespace/localname associated to type
+            var pairs = attrs
+                .SelectMany(i => i.Attributes.Select(j => new { Type = i.Type, Attribute = j }))
+                .Select(i => new { Key = Tuple.Create(i.Attribute.NamespaceName, i.Attribute.LocalName), Type = i.Type })
+                .ToList();
+
+            // group by unique namespace/localname pairs
+            var group = pairs
+                .GroupBy(i => i.Key)
+                .Select(i => Tuple.Create(i.Key, i.Select(j => j.Type).ToList()));
+
+            // finish map
+            map = group.ToList();
+        }
+
+        /// <summary>
+        /// Tests whether the given <see cref="XName"/> matches one or both of the specified values.
+        /// </summary>
+        /// <param name="test"></param>
+        /// <param name="namespaceName"></param>
+        /// <param name="localName"></param>
+        /// <returns></returns>
+        bool Predicate(XName test, string namespaceName, string localName)
+        {
+            if (namespaceName != null &&
+                namespaceName != test.NamespaceName)
+                return false;
+
+            if (localName != null &&
+                localName != test.LocalName)
+                return false;
+
+            return true;
+        }
 
         /// <summary>
         /// Gets the interfaces for the specified node.
@@ -39,11 +81,12 @@ namespace NXKit
             if (element == null)
                 yield break;
 
-            var types = map.GetOrDefault(element.Name);
-            if (types == null)
-                yield break;
+            // all types which are available
+            var types = map
+                .Where(i => Predicate(element.Name, i.Item1.Item1, i.Item1.Item2))
+                .SelectMany(i => i.Item2)
+                .ToList();
 
-            // generate instances and return
             foreach (var instance in GetInstances(element, types))
                 yield return instance;
         }
@@ -56,9 +99,12 @@ namespace NXKit
         /// <returns></returns>
         IEnumerable<object> GetInstances(NXElement element, IEnumerable<Type> types)
         {
-            return types
-                .Select(i => GetOrCreate(element, () => CreateInstance(element, i)))
-                .Where(i => i != null);
+            var objects = types
+                .Select(i => GetOrCreate(element, i, () => CreateInstance(element, i)))
+                .Where(i => i != null)
+                .ToList();
+
+            return objects;
         }
 
         /// <summary>

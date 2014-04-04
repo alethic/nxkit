@@ -124,9 +124,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="IBinding.cs" />
     <Compile Include="IModelItemValue.cs" />
     <Compile Include="IUIAppearance.cs" />
     <Compile Include="IModelItemBinding.cs" />
+    <Compile Include="NodeUIBindingEvaluationContextModel.cs" />
+    <Compile Include="NodeUIBindingEvaluationContextInScope.cs" />
+    <Compile Include="NodeUIBindingEvaluationContext.cs" />
     <Compile Include="NodeInterfaceProvider.cs" />
     <Compile Include="IAction.cs" />
     <Compile Include="IEvaluationContextScope.cs" />
@@ -138,6 +142,7 @@
     <Compile Include="IUIBindingNode.cs" />
     <Compile Include="IUIRefreshable.cs" />
     <Compile Include="ModelItem.cs" />
+    <Compile Include="NodeBinding.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaPackage.cs" />
     <Compile Include="Script.cs" />
@@ -145,6 +150,7 @@
     <Compile Include="SupportsCommonAttributesExtensions.cs" />
     <Compile Include="SupportsUiCommonAttributesExtensions.cs" />
     <Compile Include="ElementAttribute.cs" />
+    <Compile Include="Switch.cs" />
     <Compile Include="UIBinding.cs" />
     <Compile Include="UIBindingElement.cs" />
     <Compile Include="UIBindingState.cs" />
