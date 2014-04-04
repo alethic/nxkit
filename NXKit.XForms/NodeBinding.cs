@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms
@@ -8,13 +9,13 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides a <see cref="Binding"/> for a UI element.
     /// </summary>
-    [NXElement(null, null)]
+    [NXElement("http://www.w3.org/2002/xforms", null)]
     public class NodeBinding :
-        IBinding
+        INodeBinding
     {
 
         readonly NXElement element;
-        string ref_;
+        NodeBindingAttributes attributes;
         Binding binding;
 
         /// <summary>
@@ -28,40 +29,9 @@ namespace NXKit.XForms
             this.element = element;
         }
 
-        /// <summary>
-        /// Gets the XForms attribute of the specified name.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        string GetAttribute(string name)
+        NodeBindingAttributes Attributes
         {
-            Contract.Requires<ArgumentNullException>(name != null);
-
-            var fq = element.Attribute(Constants.XForms_1_0 + name);
-            if (fq != null)
-                return (string)fq;
-
-            var ln = element.Name.Namespace == Constants.XForms_1_0 ? element.Attribute(name) : null;
-            if (ln != null)
-                return (string)ln;
-
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the 'ref' or 'nodeset' attribute values.
-        /// </summary>
-        public string RefAttribute
-        {
-            get { return ref_ ?? (ref_ = GetAttribute("ref") ?? GetAttribute("nodeset")); }
-        }
-
-        /// <summary>
-        /// Gets the 'bind' attribute value.
-        /// </summary>
-        public string BindAttribute
-        {
-            get { return GetAttribute("bind"); }
+            get { return attributes ?? (attributes = element.Interface<NodeBindingAttributes>()); }
         }
 
         /// <summary>
@@ -78,11 +48,6 @@ namespace NXKit.XForms
         /// <returns></returns>
         EvaluationContext GetEvaluationContext()
         {
-            var local = element.InterfaceOrDefault<NodeUIBindingEvaluationContext>();
-            if (local != null)
-                if (local.Context != null)
-                    return local.Context;
-
             var model = element.InterfaceOrDefault<NodeUIBindingEvaluationContextModel>();
             if (model != null)
                 if (model.Context != null)
@@ -111,13 +76,13 @@ namespace NXKit.XForms
         Binding GetOrCreateBinding()
         {
             // bind attribute overrides
-            var bind = BindAttribute;
-            if (bind != null)
-                return GetBindBinding();
+            var bindIdRef = Attributes.Bind;
+            if (bindIdRef != null)
+                return GetBindBinding(bindIdRef);
 
             // otherwise 'ref' or 'nodeset'
-            var xpath = RefAttribute;
-            if (xpath == null)
+            var expression = Attributes.Ref ?? Attributes.NodeSet;
+            if (expression == null)
                 return null;
 
             // obtain evaluation context
@@ -125,26 +90,24 @@ namespace NXKit.XForms
             if (context == null)
                 return null;
 
-            return new Binding(element, context, xpath);
+            return new Binding(element, context, expression);
         }
 
         /// <summary>
         /// Gets the <see cref="Binding"/> returned by the referenced 'bind' element.
         /// </summary>
         /// <returns></returns>
-        Binding GetBindBinding()
+        Binding GetBindBinding(string bindIdRef)
         {
-            Contract.Requires(BindAttribute != null);
-
             // resolve bind element
-            var bind = element.ResolveId(BindAttribute);
+            var bind = element.ResolveId(bindIdRef);
             if (bind == null)
             {
                 element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                 return null;
             }
 
-            var binding = bind.InterfaceOrDefault<IBinding>();
+            var binding = bind.InterfaceOrDefault<INodeBinding>();
             if (binding != null)
                 return binding.Binding;
 

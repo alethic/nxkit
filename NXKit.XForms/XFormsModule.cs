@@ -262,7 +262,7 @@ namespace NXKit.XForms
 
                         // parse resource into new DOM
                         var instanceDataDocument = XDocument.Load(response);
-                            
+
                         // add to model
                         instance.State.Initialize(model.Element, instance.Element, instanceDataDocument);
                     }
@@ -350,17 +350,17 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Resolves the evaluation context inherited from parents of <paramref name="visual"/>.
+        /// Resolves the evaluation context inherited from parents of <paramref name="element"/>.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="element"></param>
         /// <returns></returns>
-        internal EvaluationContext ResolveInScopeEvaluationContext(XFormsElement visual)
+        internal EvaluationContext ResolveInScopeEvaluationContext(XFormsElement element)
         {
             EvaluationContext ec = null;
 
             // search up visual tree for initial context
             if (ec == null)
-                ec = visual
+                ec = element
                     .Ancestors()
                     .OfType<NXElement>()
                     .SelectMany(i => i.Interfaces<IEvaluationContextScope>())
@@ -384,12 +384,12 @@ namespace NXKit.XForms
         /// <summary>
         /// Resolves the <see cref="EvaluationContext"/> to be used by the given visual.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="element"></param>
         /// <returns></returns>
-        internal EvaluationContext ResolveBindingEvaluationContext(XFormsElement visual)
+        internal EvaluationContext ResolveBindingEvaluationContext(XFormsElement element)
         {
             // attempt to retrieve model state given by 'model' attribute
-            var modelAttr = GetAttributeValue(visual.Xml, "model");
+            var modelAttr = GetAttributeValue(element.Xml, "model");
             if (!string.IsNullOrWhiteSpace(modelAttr))
             {
                 // find referenced model visual
@@ -404,36 +404,33 @@ namespace NXKit.XForms
                     return model.Interface<Model>().Context;
                 else
                 {
-                    visual.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
+                    element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                     return null;
                 }
             }
 
-            return ResolveInScopeEvaluationContext(visual);
+            return ResolveInScopeEvaluationContext(element);
         }
 
         /// <summary>
-        /// Resolves the single-node binding on <paramref name="visual"/>.
+        /// Resolves the single-node binding on <paramref name="element"/>.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="element"></param>
         /// <returns></returns>
-        internal Binding ResolveSingleNodeBinding(BindingElement visual)
+        internal Binding ResolveSingleNodeBinding(BindingElement element)
         {
-            var element = visual.Xml as XElement;
-            if (element == null)
-                return null;
-
             // attempt to resolve 'bind' attribute to bind element's context
-            var bd = GetAttributeValue(visual.Xml, "bind");
+            var bd = GetAttributeValue(element.Xml, "bind");
             if (bd != null)
             {
-                var bind = (BindElement)visual.ResolveId(bd);
+                var bindElement = element.ResolveId(bd);
+                var bind = bindElement != null ? bindElement.Interface<Bind>() : null;
 
                 // invalid bind element
                 if (bind == null ||
                     bind.Context == null)
                 {
-                    visual.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
+                    element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                     return null;
                 }
 
@@ -441,50 +438,51 @@ namespace NXKit.XForms
             }
 
             // attempt to resolve 'ref' attribute
-            var xp = GetAttributeValue(visual.Xml, "ref");
+            var xp = GetAttributeValue(element.Xml, "ref");
             if (xp != null)
             {
-                var ec = ResolveBindingEvaluationContext(visual);
+                var ec = ResolveBindingEvaluationContext(element);
                 if (ec == null)
                     return null;
 
                 // otherwise continue by evaluating expression
-                return new Binding(visual, ec, xp);
+                return new Binding(element, ec, xp);
             }
 
             return null;
         }
 
         /// <summary>
-        /// Resolves the node-set binding on <paramref name="visual"/>.
+        /// Resolves the node-set binding on <paramref name="element"/>.
         /// </summary>
-        /// <param name="visual"></param>
+        /// <param name="element"></param>
         /// <returns></returns>
-        internal Binding ResolveNodeSetBinding(BindingElement visual)
+        internal Binding ResolveNodeSetBinding(BindingElement element)
         {
             // attempt to resolve 'bind' attribute to bind element's context
-            var bindAttr = GetAttributeValue(visual.Xml, "bind");
+            var bindAttr = GetAttributeValue(element.Xml, "bind");
             if (bindAttr != null)
             {
-                var bind = (BindElement)visual.ResolveId(bindAttr);
+                var bindElement = element.ResolveId(bindAttr);
+                var bind = bindElement != null ? bindElement.Interface<Bind>() : null;
 
                 // invalid bind element
                 if (bind == null ||
                     bind.Binding == null)
                 {
-                    visual.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
+                    element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                     return null;
                 }
 
                 return bind.Binding;
             }
 
-            var ec = ResolveBindingEvaluationContext(visual);
+            var ec = ResolveBindingEvaluationContext(element);
             if (ec != null)
             {
-                var nodesetAttr = GetAttributeValue(visual.Xml, "nodeset");
+                var nodesetAttr = GetAttributeValue(element.Xml, "nodeset");
                 if (nodesetAttr != null)
-                    return new Binding(visual, ec, nodesetAttr);
+                    return new Binding(element, ec, nodesetAttr);
             }
 
             return null;

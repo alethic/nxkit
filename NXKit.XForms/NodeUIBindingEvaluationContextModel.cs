@@ -11,7 +11,7 @@ namespace NXKit.XForms
     {
 
         readonly NXElement element;
-        string modelAttr;
+        NodeBindingAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
@@ -24,32 +24,9 @@ namespace NXKit.XForms
             this.element = element;
         }
 
-        /// <summary>
-        /// Gets the XForms attribute of the specified name.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        string GetAttribute(string name)
+        NodeBindingAttributes Attributes
         {
-            Contract.Requires<ArgumentNullException>(name != null);
-
-            var fq = element.Attribute(Constants.XForms_1_0 + name);
-            if (fq != null)
-                return (string)fq;
-
-            var ln = element.Name.Namespace == Constants.XForms_1_0 ? element.Attribute(name) : null;
-            if (ln != null)
-                return (string)ln;
-
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the 'ref' or 'nodeset' attribute values.
-        /// </summary>
-        public string ModelAttribute
-        {
-            get { return modelAttr ?? (modelAttr = GetAttribute("model")); }
+            get { return attributes ?? (attributes = element.Interface<NodeBindingAttributes>()); }
         }
 
         /// <summary>
@@ -57,7 +34,7 @@ namespace NXKit.XForms
         /// </summary>
         public NXElement ModelElement
         {
-            get { return ModelAttribute != null ? element.ResolveId(ModelAttribute) : null; }
+            get { return Attributes.Model != null ? element.ResolveId(Attributes.Model) : null; }
         }
 
         /// <summary>

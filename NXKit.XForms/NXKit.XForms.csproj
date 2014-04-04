@@ -117,6 +117,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributesProvider.cs" />
+    <Compile Include="BindAttributes.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Events.partial.cs">
@@ -124,13 +126,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="IBinding.cs" />
+    <Compile Include="INodeBinding.cs" />
     <Compile Include="IModelItemValue.cs" />
     <Compile Include="IUIAppearance.cs" />
     <Compile Include="IModelItemBinding.cs" />
+    <Compile Include="NodeBindingAttributes.cs" />
     <Compile Include="NodeUIBindingEvaluationContextModel.cs" />
     <Compile Include="NodeUIBindingEvaluationContextInScope.cs" />
-    <Compile Include="NodeUIBindingEvaluationContext.cs" />
     <Compile Include="NodeInterfaceProvider.cs" />
     <Compile Include="IAction.cs" />
     <Compile Include="IEvaluationContextScope.cs" />
@@ -159,7 +161,7 @@
     <Compile Include="Alert.cs" />
     <Compile Include="Binding.cs" />
     <Compile Include="BindingElement.cs" />
-    <Compile Include="BindElement.cs" />
+    <Compile Include="Bind.cs" />
     <Compile Include="ChoicesElement.cs" />
     <Compile Include="CopyElement.cs" />
     <Compile Include="DeleteElement.cs" />

@@ -4,7 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using NXKit;
+
 using NXKit.DOMEvents;
 using NXKit.Util;
 
@@ -324,8 +324,12 @@ namespace NXKit.XForms
                     }
                 }
 
-                // apply binding expressions
-                foreach (var bind in element.Descendants(false).OfType<BindElement>())
+                var binds = element
+                    .Descendants()
+                    .OfType<NXElement>()
+                    .SelectMany(i => i.Interfaces<Bind>());
+
+                foreach (var bind in binds)
                 {
                     if (bind.Binding == null)
                         continue;
@@ -335,12 +339,12 @@ namespace NXKit.XForms
                         bind.Binding.ModelItems.Length == 0)
                         continue;
 
-                    var typeAttr = Module.GetAttributeValue(bind.Xml, "type");
-                    var calculateAttr = Module.GetAttributeValue(bind.Xml, "calculate");
-                    var readonlyAttr = Module.GetAttributeValue(bind.Xml, "readonly");
-                    var requiredAttr = Module.GetAttributeValue(bind.Xml, "required");
-                    var relevantAttr = Module.GetAttributeValue(bind.Xml, "relevant");
-                    var constraintAttr = Module.GetAttributeValue(bind.Xml, "constraint");
+                    var typeAttr = bind.Attributes.Type;
+                    var calculateAttr = bind.Attributes.Calculate;
+                    var readonlyAttr = bind.Attributes.ReadOnly;
+                    var requiredAttr = bind.Attributes.Required;
+                    var relevantAttr = bind.Attributes.Relevant;
+                    var constraintAttr = bind.Attributes.Constraint;
 
                     for (int i = 0; i < bind.Binding.ModelItems.Length; i++)
                     {
@@ -348,7 +352,7 @@ namespace NXKit.XForms
                         var modelItemState = modelItem.State;
 
                         var ec = new EvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, modelItem, i + 1, bind.Binding.ModelItems.Length);
-                        var nc = new XFormsXsltContext(bind, ec);
+                        var nc = new XFormsXsltContext(bind.Element, ec);
 
                         // get existing values
                         var oldReadOnly = modelItem.ReadOnly;
@@ -368,7 +372,7 @@ namespace NXKit.XForms
                         // recalculate read-only value
                         if (readonlyAttr != null)
                         {
-                            var obj = Module.EvaluateXPath(bind, ec, readonlyAttr, XPathResultType.Any);
+                            var obj = Module.EvaluateXPath(bind.Element, ec, readonlyAttr, XPathResultType.Any);
                             if (obj is bool)
                                 modelItemState.ReadOnly = (bool)obj;
                             else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
@@ -380,7 +384,7 @@ namespace NXKit.XForms
                         // recalculate required value
                         if (requiredAttr != null)
                         {
-                            var obj = Module.EvaluateXPath(bind, ec, requiredAttr, XPathResultType.Any);
+                            var obj = Module.EvaluateXPath(bind.Element, ec, requiredAttr, XPathResultType.Any);
                             if (obj is bool)
                                 modelItemState.Required = (bool)obj;
                             else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
@@ -390,7 +394,7 @@ namespace NXKit.XForms
                         // recalculate relevant value
                         if (relevantAttr != null)
                         {
-                            var obj = Module.EvaluateXPath(bind, ec, relevantAttr, XPathResultType.Any);
+                            var obj = Module.EvaluateXPath(bind.Element, ec, relevantAttr, XPathResultType.Any);
                             if (obj is bool)
                                 modelItemState.Relevant = (bool)obj;
                             else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
@@ -403,7 +407,7 @@ namespace NXKit.XForms
                             // calculated nodes are readonly
                             modelItemState.ReadOnly = true;
 
-                            var calculateBinding = new Binding(bind, ec, calculateAttr);
+                            var calculateBinding = new Binding(bind.Element, ec, calculateAttr);
                             if (calculateBinding.Value != null)
                                 if (oldValue != calculateBinding.Value)
                                     modelItem.Value = calculateBinding.Value;
@@ -411,7 +415,7 @@ namespace NXKit.XForms
 
                         if (constraintAttr != null)
                         {
-                            var obj = Module.EvaluateXPath(bind, ec, constraintAttr, XPathResultType.Any);
+                            var obj = Module.EvaluateXPath(bind.Element, ec, constraintAttr, XPathResultType.Any);
                             if (obj is bool)
                                 modelItemState.Constraint = (bool)obj;
                             else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
