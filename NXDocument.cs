@@ -227,8 +227,29 @@ namespace NXKit
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
+        public string GetElementId(NXElement element)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+
+            var idAttr = element.Attribute("id");
+            if (idAttr == null)
+            {
+                element.SetAttributeValue("id", "_element" + ++nextElementId);
+                idAttr = element.Attribute("id");
+            }
+
+            return idAttr.Value;
+        }
+
+        /// <summary>
+        /// Gets the 'id' attribute for the given Element, or creates it on demand.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public string GetElementId(XElement element)
         {
+            Contract.Requires<ArgumentNullException>(element != null);
+
             var idAttr = element.Attribute("id");
             if (idAttr == null)
             {

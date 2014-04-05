@@ -77,7 +77,7 @@ namespace NXKit
         [Public]
         public virtual string Id
         {
-            get { return (string)this.Attribute("id"); }
+            get { return Document.GetElementId(this); }
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace NXKit
         string CreateUniqueId()
         {
             var namingScope = this.Ancestors()
-                .OfType<INamingScope>()
+                .SelectMany(i => i.Interfaces<INamingScope>())
                 .FirstOrDefault();
 
             if (namingScope == null)

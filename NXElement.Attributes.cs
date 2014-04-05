@@ -81,6 +81,28 @@ namespace NXKit
         }
 
         /// <summary>
+        /// Sets the value of an attribute, adds an attribute, or removes an attribute.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void SetAttributeValue(XName name, object value)
+        {
+            var attr = Attribute(name);
+
+            if (attr != null)
+                // attribute already exists
+                if (value != null)
+                    // set new value
+                    attr.Value = value.ToString();
+                else
+                    // remove attribute
+                    RemoveAttribute(attr);
+            else if (value != null)
+                // attribute is missing, and we have value
+                AppendAttribute(new NXAttribute(name, value.ToString()));
+        }
+
+        /// <summary>
         /// Removes the specified attribute.
         /// </summary>
         /// <param name="attribute"></param>
