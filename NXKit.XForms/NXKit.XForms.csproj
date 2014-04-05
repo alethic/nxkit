@@ -118,7 +118,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeAccessor.cs" />
-    <Compile Include="BindAttributes.cs" />
+    <Compile Include="EvaluationContextFuncProvider.cs" />
+    <Compile Include="IEvaluationContextProvider.cs" />
+    <Compile Include="ModelItemPropertyAttributes.cs" />
+    <Compile Include="CommonAttributes.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Events.partial.cs">
@@ -130,9 +133,8 @@
     <Compile Include="IModelItemValue.cs" />
     <Compile Include="IUIAppearance.cs" />
     <Compile Include="IModelItemBinding.cs" />
-    <Compile Include="NodeBindingAttributes.cs" />
-    <Compile Include="NodeUIBindingEvaluationContextModel.cs" />
-    <Compile Include="NodeUIBindingEvaluationContextInScope.cs" />
+    <Compile Include="BindingAttributes.cs" />
+    <Compile Include="NodeEvaluationContext.cs" />
     <Compile Include="NodeInterfaceProvider.cs" />
     <Compile Include="IAction.cs" />
     <Compile Include="IEvaluationContextScope.cs" />
@@ -191,7 +193,7 @@
     <Compile Include="Range.cs" />
     <Compile Include="RebuildElement.cs" />
     <Compile Include="RecalculateElement.cs" />
-    <Compile Include="RefreshElement.cs" />
+    <Compile Include="Refresh.cs" />
     <Compile Include="RepeatItem.cs" />
     <Compile Include="RepeatState.cs" />
     <Compile Include="Repeat.cs" />

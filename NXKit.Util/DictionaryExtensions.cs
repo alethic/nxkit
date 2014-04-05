@@ -22,6 +22,7 @@ namespace NXKit.Util
         public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key)
         {
             Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(key != null);
 
             TValue v;
             if (source.TryGetValue(key, out v))
@@ -42,6 +43,7 @@ namespace NXKit.Util
         public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TValue> func)
         {
             Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(key != null);
 
             return GetOrAdd(source, key, k => func());
         }
@@ -58,6 +60,7 @@ namespace NXKit.Util
         public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TKey, TValue> func)
         {
             Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(key != null);
 
             TValue v;
             if (source.TryGetValue(key, out v))

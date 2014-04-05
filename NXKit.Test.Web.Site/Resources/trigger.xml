@@ -17,7 +17,7 @@
             <xf:trigger>
                 <xf:label>Button</xf:label>
                 <xf:action ev:event="DOMActivate">
-                    
+                    <xf:refresh />
                 </xf:action>
             </xf:trigger>
         </xf:group>

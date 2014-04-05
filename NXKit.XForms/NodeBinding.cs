@@ -15,8 +15,8 @@ namespace NXKit.XForms
     {
 
         readonly NXElement element;
-        NodeBindingAttributes attributes;
-        Binding binding;
+        readonly BindingAttributes attributes;
+        readonly Lazy<Binding> binding;
 
         /// <summary>
         /// Initializes a new instance.
@@ -27,14 +27,16 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
+            this.attributes = new BindingAttributes(element);
+            this.binding = new Lazy<Binding>(() => GetOrCreateBinding());
         }
 
         /// <summary>
         /// Gets the node binding attributes of the element.
         /// </summary>
-        public NodeBindingAttributes Attributes
+        public BindingAttributes Attributes
         {
-            get { return attributes ?? (attributes = new NodeBindingAttributes(element)); }
+            get { return attributes; }
         }
 
         /// <summary>
@@ -51,15 +53,10 @@ namespace NXKit.XForms
         /// <returns></returns>
         EvaluationContext GetEvaluationContext()
         {
-            var model = element.InterfaceOrDefault<NodeUIBindingEvaluationContextModel>();
-            if (model != null)
-                if (model.Context != null)
-                    return model.Context;
-
-            var scope = element.InterfaceOrDefault<NodeUIBindingEvaluationContextInScope>();
-            if (scope != null)
-                if (scope.Context != null)
-                    return scope.Context;
+            var model = element.InterfaceOrDefault<NodeEvaluationContext>();
+            if (model != null &&
+                model.Context != null)
+                return model.Context;
 
             return null;
         }
@@ -69,7 +66,7 @@ namespace NXKit.XForms
         /// </summary>
         public Binding Binding
         {
-            get { return binding ?? (binding = GetOrCreateBinding()); }
+            get { return binding.Value; }
         }
 
         /// <summary>

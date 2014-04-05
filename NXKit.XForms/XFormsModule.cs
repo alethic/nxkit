@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
@@ -323,6 +324,8 @@ namespace NXKit.XForms
             var xp = XPathExpression.Compile(expression, nc);
             var nd = nv.Evaluate(xp);
 
+            Debug.WriteLine("{0} -> {1}", expression, nd);
+
             return ConvertXPath(nd, resultType);
         }
 
@@ -491,16 +494,16 @@ namespace NXKit.XForms
         /// <summary>
         /// Invokes the given action visual properly.
         /// </summary>
-        /// <param name="visual"></param>
-        internal void InvokeAction(IAction visual)
+        /// <param name="action"></param>
+        internal void InvokeAction(IAction action)
         {
-            Contract.Requires<ArgumentNullException>(visual != null);
+            Contract.Requires<ArgumentNullException>(action != null);
 
             var outermostAction = !executingOutermostActionHandler;
             if (outermostAction)
                 executingOutermostActionHandler = true;
 
-            visual.Invoke();
+            action.Invoke();
 
             if (outermostAction)
             {
