@@ -7,7 +7,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the attributes for the bind element.
     /// </summary>
-    public class BindAttributes :
+    public class ModelItemPropertyAttributes :
         AttributeAccessor
     {
 
@@ -15,7 +15,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public BindAttributes(NXElement element)
+        public ModelItemPropertyAttributes(NXElement element)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
@@ -49,6 +49,11 @@ namespace NXKit.XForms
         public string Constraint
         {
             get { return GetAttribute("constraint"); }
+        }
+
+        public string P3PType
+        {
+            get { return GetAttribute("p3ptype"); }
         }
 
     }

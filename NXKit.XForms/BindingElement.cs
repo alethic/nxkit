@@ -11,8 +11,6 @@ namespace NXKit.XForms
         IEvaluationContextScope
     {
 
-        bool evaluationContextCached;
-        EvaluationContext evaluationContext;
         Binding binding;
 
         /// <summary>

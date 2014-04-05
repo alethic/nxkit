@@ -10,54 +10,62 @@
                 <secondary_enabled />
             </data>
         </xf:instance>
-        <xf:bind nodeset="xf:instance('misc')/secondary"
-                 type="xsd:boolean" />
-        <xf:bind nodeset="xf:instance('misc')/secondary_enabled"
-                 relevant="xf:instance('misc')/secondary='true'"/>
+
+        <xf:bind ref="xf:instance('misc')">
+            <xf:bind ref="secondary"
+                     type="xsd:boolean"/>
+            <xf:bind ref="secondary_enabled"
+                     relevant="secondary='true'" />
+        </xf:bind>
 
         <xf:instance id="primaryperson"
                      src="primaryperson.xml" />
-        <xf:bind nodeset="xf:instance('primaryperson')/heightfeet"
-                 required="true()"
-                 type="xsd:int"/>
-        <xf:bind nodeset="xf:instance('primaryperson')/heightinches"
-                 required="true()"
-                 type="xsd:int"/>
-        <xf:bind nodeset="xf:instance('primaryperson')/weight"
-                 required="true()"
-                 type="xsd:int"/>
-        <xf:bind nodeset="xf:instance('primaryperson')/gender"
-                 required="true()"
-                 type="xsd:string"/>
-        <xf:bind nodeset="xf:instance('primaryperson')/dateofbirth"
-                 required="true()"
-                 type="xsd:date"/>
-        <xf:bind nodeset="xf:instance('primaryperson')/socialsecuritynumber"
-                 required="true()"
-                 constraint="matches(., '^(\d{3}-\d{2}-\d{4})|(\d{9})$')"/>
-        <xf:bind nodeset="xf:instance('primaryperson')/telephone1"
-                 required="true()"
-                 constraint="string-length()>=10"/>
 
-        <xf:bind nodeset="xf:instance('primaryperson')/telephone2"
-                 required="false()"
-                 constraint=".='' or string-length()>=10" />
+        <xf:bind ref="xf:instance('primaryperson')">
+            <xf:bind ref="heightfeet"
+                     required="true()"
+                     type="xsd:int"/>
+            <xf:bind ref="heightinches"
+                     required="true()"
+                     type="xsd:int"/>
+            <xf:bind ref="weight"
+                     required="true()"
+                     type="xsd:int"/>
+            <xf:bind ref="gender"
+                     required="true()"
+                     type="xsd:string"/>
+            <xf:bind ref="dateofbirth"
+                     required="true()"
+                     type="xsd:date"/>
+            <xf:bind ref="socialsecuritynumber"
+                     required="true()"
+                     constraint="matches(., '^(\d{3}-\d{2}-\d{4})|(\d{9})$')"/>
+            <xf:bind ref="telephone1"
+                     required="true()"
+                     constraint="string-length()>=10"/>
+            <xf:bind ref="telephone2"
+                     required="false()"
+                     constraint=".='' or string-length()>=10" />
+        </xf:bind>
+
 
         <xf:instance id="secondaryperson"
                      src="secondaryperson.xml" />
-        <xf:bind nodeset="xf:instance('secondaryperson')"
-                 relevant="xf:instance('misc')/secondary='true'"/>
-        <xf:bind nodeset="xf:instance('secondaryperson')/heightfeet"
-                 required="true()"
-                 type="xsd:int"/>
-        <xf:bind nodeset="xf:instance('secondaryperson')/heightinches"
-                 required="true()"
-                 type="xsd:int"/>
-        <xf:bind nodeset="xf:instance('secondaryperson')/weight"
-                 required="true()"
-                 type="xsd:int"/>
-        <xf:bind nodeset="xf:instance('secondaryperson')/dateofbirth"
-                 type="xsd:date"/>
+
+        <xf:bind ref="xf:instance('secondaryperson')"
+                 relevant="xf:instance('misc')/secondary='true'">
+            <xf:bind ref="heightfeet"
+                     required="true()"
+                     type="xsd:int"/>
+            <xf:bind ref="heightinches"
+                     required="true()"
+                     type="xsd:int"/>
+            <xf:bind ref="weight"
+                     required="true()"
+                     type="xsd:int"/>
+            <xf:bind ref="dateofbirth"
+                     type="xsd:date"/>
+        </xf:bind>
 
         <xf:instance id="primaryelections"
                      src="primaryelections.xml" />
@@ -67,24 +75,32 @@
 
         <xf:instance id="primaryquestions"
                      src="questions.xml" />
-        <xf:bind nodeset="xf:instance('primaryquestions')//healthinfo"
-                 relevant="../answer='true' and ./@enable='true'" />
-        <xf:bind nodeset="xf:instance('primaryquestions')/question/healthinfo/*"
-                 type="xsd:string" />
+
+        <xf:bind ref="xf:instance('primaryquestions')">
+            <xf:bind ref="//healthinfo"
+                     relevant="../answer='true' and ./@enable='true'" />
+            <xf:bind ref="//healthinfo/*"
+                     type="xsd:string" />
+        </xf:bind>
 
         <xf:instance id="secondaryquestions"
                      src="questions.xml" />
-        <xf:bind nodeset="xf:instance('secondaryquestions')"
-                 relevant="xf:instance('misc')/secondary='true'"/>
-        <xf:bind nodeset="xf:instance('secondaryquestions')//healthinfo"
-                 relevant="../answer='true' and ./@enable='true'" />
+        
+        <xf:bind ref="xf:instance('secondaryquestions')"
+                 relevant="xf:instance('misc')/secondary='true'">
+            <xf:bind ref="//healthinfo"
+                     relevant="../answer='true' and ./@enable='true'" />
+            <xf:bind ref="//healthinfo/*"
+                     type="xsd:string" />
+        </xf:bind>
 
         <xf:instance id="relationships"
                      src="relationships.xml" />
 
         <xf:instance id="beneficiaries"
                      src="beneficiaries.xml" />
-        <xf:bind nodeset="xf:instance('beneficiaries')//percentage"
+        
+        <xf:bind ref="xf:instance('beneficiaries')//percentage"
                  type="xsd:integer" />
 
         <xf:submission ref="xf:instance('primaryperson')"

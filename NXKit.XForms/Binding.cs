@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
@@ -18,14 +19,20 @@ namespace NXKit.XForms
         readonly EvaluationContext context;
         readonly string xpath;
 
-        bool resultCached;
-        object result;
-        bool modelItemCached;
-        ModelItem modelItem;
-        bool modelItemsCached;
-        ModelItem[] modelItems;
-        string value;
-        bool valueCached;
+        Lazy<object> result;
+        Lazy<ModelItem[]> modelItems;
+        Lazy<ModelItem> modelItem;
+        Lazy<string> value;
+
+        [ContractInvariantMethod]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
+        private void ObjectInvariant()
+        {
+            Contract.Invariant(result != null);
+            Contract.Invariant(modelItems != null);
+            Contract.Invariant(modelItem != null);
+            Contract.Invariant(value != null);
+        }
 
         /// <summary>
         /// Initializes a new instance.
@@ -42,6 +49,8 @@ namespace NXKit.XForms
             this.node = node;
             this.context = context;
             this.xpath = xpath;
+
+            Refresh();
         }
 
         /// <summary>
@@ -81,16 +90,12 @@ namespace NXKit.XForms
         /// </summary>
         public object Result
         {
-            get
-            {
-                if (!resultCached)
-                {
-                    result = Module.EvaluateXPath(Node, Context, XPathExpression, XPathResultType.NodeSet);
-                    resultCached = true;
-                }
+            get { return result.Value; }
+        }
 
-                return result;
-            }
+        object GetResult()
+        {
+            return Module.EvaluateXPath(Node, Context, XPathExpression, XPathResultType.NodeSet);
         }
 
         /// <summary>
@@ -98,23 +103,20 @@ namespace NXKit.XForms
         /// </summary>
         public ModelItem[] ModelItems
         {
-            get
-            {
-                if (!modelItemsCached)
-                {
-                    if (Result is XPathNodeIterator)
-                        modelItems = ((XPathNodeIterator)Result)
-                            .Cast<XPathNavigator>()
-                            .Select(i => i.UnderlyingObject)
-                            .Cast<XObject>()
-                            .Select(i => new ModelItem(Module, i))
-                            .ToArray();
+            get { return modelItems.Value; }
+        }
 
-                    modelItemsCached = true;
-                }
-
-                return modelItems;
-            }
+        ModelItem[] GetModelItems()
+        {
+            if (Result is XPathNodeIterator)
+                return ((XPathNodeIterator)Result)
+                    .Cast<XPathNavigator>()
+                    .Select(i => i.UnderlyingObject)
+                    .Cast<XObject>()
+                    .Select(i => new ModelItem(Module, i))
+                    .ToArray();
+            else
+                return null;
         }
 
         /// <summary>
@@ -122,18 +124,12 @@ namespace NXKit.XForms
         /// </summary>
         public ModelItem ModelItem
         {
-            get
-            {
-                if (!modelItemCached)
-                {
-                    if (ModelItems is ModelItem[])
-                        modelItem = ModelItems.FirstOrDefault();
+            get { return modelItem.Value; }
+        }
 
-                    modelItemCached = true;
-                }
-
-                return modelItem;
-            }
+        ModelItem GetModelItem()
+        {
+            return ModelItems.FirstOrDefault();
         }
 
         /// <summary>
@@ -141,28 +137,23 @@ namespace NXKit.XForms
         /// </summary>
         public string Value
         {
-            get
-            {
-                if (!valueCached)
-                {
-                    value = null;
+            get { return value.Value; }
+        }
 
-                    if (ModelItem != null)
-                        value = ModelItem.Value;
-                    else if (Result is string)
-                        value = (string)Result;
-                    else if (Result is int)
-                        value = XmlConvert.ToString((int)Result);
-                    else if (Result is double)
-                        value = XmlConvert.ToString((double)Result);
-                    else if (Result is bool)
-                        value = XmlConvert.ToString((bool)Result);
-
-                    valueCached = true;
-                }
-
-                return value;
-            }
+        string GetValue()
+        {
+            if (ModelItem != null &&
+                ModelItem.Value != null)
+                return ModelItem.Value;
+            else if (Result is string)
+                return (string)Result;
+            else if (Result is int)
+                return XmlConvert.ToString((int)Result);
+            else if (Result is double)
+                return XmlConvert.ToString((double)Result);
+            else if (Result is bool)
+                return XmlConvert.ToString((bool)Result);
+            return null;
         }
 
         /// <summary>
@@ -170,7 +161,10 @@ namespace NXKit.XForms
         /// </summary>
         public void Refresh()
         {
-            resultCached = modelItemsCached = modelItemCached = valueCached = false;
+            result = new Lazy<object>(() => GetResult());
+            modelItems = new Lazy<ModelItem[]>(() => GetModelItems());
+            modelItem = new Lazy<ModelItem>(() => GetModelItem());
+            value = new Lazy<string>(() => GetValue());
         }
 
     }

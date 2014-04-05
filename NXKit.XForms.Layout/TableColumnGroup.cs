@@ -20,7 +20,7 @@ namespace NXKit.XForms.Layout
 
         }
 
-        public string Name
+        public new string Name
         {
             get { return Module.GetAttributeValue(Xml, "name").TrimToNull(); }
         }

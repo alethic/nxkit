@@ -331,28 +331,11 @@ namespace NXKit.XForms
 
                 foreach (var bind in binds)
                 {
-                    if (bind.Binding == null)
-                        continue;
+                    bind.Refresh();
 
-                    bind.Binding.Refresh();
-                    if (bind.Binding.ModelItems == null ||
-                        bind.Binding.ModelItems.Length == 0)
-                        continue;
-
-                    var typeAttr = bind.Attributes.Type;
-                    var calculateAttr = bind.Attributes.Calculate;
-                    var readonlyAttr = bind.Attributes.ReadOnly;
-                    var requiredAttr = bind.Attributes.Required;
-                    var relevantAttr = bind.Attributes.Relevant;
-                    var constraintAttr = bind.Attributes.Constraint;
-
-                    for (int i = 0; i < bind.Binding.ModelItems.Length; i++)
+                    foreach (var modelItem in bind.ModelItems)
                     {
-                        var modelItem = bind.Binding.ModelItems[i];
                         var modelItemState = modelItem.State;
-
-                        var ec = new EvaluationContext(bind.Binding.Context.Model, bind.Binding.Context.Instance, modelItem, i + 1, bind.Binding.ModelItems.Length);
-                        var nc = new XFormsXsltContext(bind.Element, ec);
 
                         // get existing values
                         var oldReadOnly = modelItem.ReadOnly;
@@ -360,67 +343,27 @@ namespace NXKit.XForms
                         var oldRelevant = modelItem.Relevant;
                         var oldValue = modelItem.Value;
 
-                        if (typeAttr != null)
-                        {
-                            // lookup namespace of type specifier
-                            var st = typeAttr.Split(':');
-                            var ns = st.Length == 2 ? nc.LookupNamespace(st[0]) : null;
-                            var lp = st.Length == 2 ? st[1] : st[0];
-                            modelItemState.Type = XName.Get(lp, ns);
-                        }
+                        if (bind.Type != null)
+                            modelItemState.Type = bind.Type;
 
-                        // recalculate read-only value
-                        if (readonlyAttr != null)
-                        {
-                            var obj = Module.EvaluateXPath(bind.Element, ec, readonlyAttr, XPathResultType.Any);
-                            if (obj is bool)
-                                modelItemState.ReadOnly = (bool)obj;
-                            else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
-                                modelItemState.ReadOnly = bool.Parse((string)obj);
-                            else
-                                throw new Exception();
-                        }
+                        if (bind.ReadOnly != null)
+                            modelItemState.ReadOnly = bind.ReadOnly;
 
-                        // recalculate required value
-                        if (requiredAttr != null)
-                        {
-                            var obj = Module.EvaluateXPath(bind.Element, ec, requiredAttr, XPathResultType.Any);
-                            if (obj is bool)
-                                modelItemState.Required = (bool)obj;
-                            else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
-                                modelItemState.Required = bool.Parse((string)obj);
-                        }
+                        if (bind.Required != null)
+                            modelItemState.Required = bind.Required;
 
-                        // recalculate relevant value
-                        if (relevantAttr != null)
-                        {
-                            var obj = Module.EvaluateXPath(bind.Element, ec, relevantAttr, XPathResultType.Any);
-                            if (obj is bool)
-                                modelItemState.Relevant = (bool)obj;
-                            else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
-                                modelItemState.Relevant = bool.Parse((string)obj);
-                        }
+                        if (bind.Relevant != null)
+                            modelItemState.Relevant = bind.Relevant;
 
-                        // calculate before setting read-only, so read-only can be overridden
-                        if (calculateAttr != null)
+                        if (bind.Calculate != null)
                         {
-                            // calculated nodes are readonly
                             modelItemState.ReadOnly = true;
-
-                            var calculateBinding = new Binding(bind.Element, ec, calculateAttr);
-                            if (calculateBinding.Value != null)
-                                if (oldValue != calculateBinding.Value)
-                                    modelItem.Value = calculateBinding.Value;
+                            if (oldValue != bind.Calculate)
+                                modelItem.Value = bind.Calculate;
                         }
 
-                        if (constraintAttr != null)
-                        {
-                            var obj = Module.EvaluateXPath(bind.Element, ec, constraintAttr, XPathResultType.Any);
-                            if (obj is bool)
-                                modelItemState.Constraint = (bool)obj;
-                            else if (obj is string && !string.IsNullOrWhiteSpace((string)obj))
-                                modelItemState.Constraint = bool.Parse((string)obj);
-                        }
+                        if (bind.Constraint != null)
+                            modelItemState.Constraint = bind.Constraint;
 
                         // get new read-only value; raise event on change
                         if (modelItem.ReadOnly != oldReadOnly)

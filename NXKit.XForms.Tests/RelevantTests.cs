@@ -1,7 +1,9 @@
-﻿using System.Linq;
-using System.Xaml;
+﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NXKit.DOMEvents;
+using NXKit.Util;
 
 namespace NXKit.XForms.Tests
 {
@@ -10,7 +12,7 @@ namespace NXKit.XForms.Tests
     public class RelevantTests
     {
 
-        static string sample = @"
+        static Uri SampleUri = DynamicUriUtil.GetUriFor(@"
 <unknown xmlns:xf=""http://www.w3.org/2002/xforms"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
     <xf:model id=""data"">
         <xf:instance id=""instance1"">
@@ -24,15 +26,11 @@ namespace NXKit.XForms.Tests
     </xf:model>
     <xf:input ref=""xf:instance('instance1')"" />
     <xf:input ref=""xf:instance('instance2')"" />
-</unknown>";
+</unknown>");
 
         NXDocument GetSampleDocument()
         {
-            var c = new NXDocumentConfiguration();
-            c.AddModule<DOMEventsModule>();
-            c.AddModule<XFormsModule>();
-
-            return NXDocument.Parse(sample, c);
+            return NXDocument.Load(SampleUri);
         }
 
         [TestMethod]
@@ -46,7 +44,7 @@ namespace NXKit.XForms.Tests
                 .ToList();
 
             Assert.IsTrue(inputs[1].Relevant);
-            inputs[0].Binding.SetValue("false");
+            inputs[0].UIBinding.Value = "false";
             d.Invoke();
             Assert.IsFalse(inputs[1].Relevant);
         }
@@ -62,8 +60,8 @@ namespace NXKit.XForms.Tests
                 .ToList();
 
             int c = 0;
-            inputs[1].Interface<INXEventTarget>().AddEventHandler("xforms-disabled",  i => c++);
-            inputs[0].Binding.SetValue("false");
+            inputs[1].Interface<INXEventTarget>().AddEventHandler("xforms-disabled", i => c++);
+            inputs[0].UIBinding.Value = "false";
             d.Invoke();
             Assert.AreEqual(1, c);
             Assert.IsFalse(inputs[1].Relevant);
@@ -80,10 +78,10 @@ namespace NXKit.XForms.Tests
                 .ToList();
 
             int c = 0;
-            inputs[1].Interface<INXEventTarget>().AddEventHandler("xforms-enabled",  i => c++);
-            inputs[0].Binding.SetValue("false");
+            inputs[1].Interface<INXEventTarget>().AddEventHandler("xforms-enabled", i => c++);
+            inputs[0].UIBinding.Value = "false";
             d.Invoke();
-            inputs[0].Binding.SetValue("true");
+            inputs[0].UIBinding.Value = "true";
             d.Invoke();
             Assert.AreEqual(1, c);
             Assert.IsTrue(inputs[1].Relevant);

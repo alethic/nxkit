@@ -6,7 +6,7 @@ using NXKit.DOMEvents;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{}refresh")]
+    [NXElementInterface("{http://www.w3.org/2002/xforms}refresh")]
     public class Refresh :
         IAction
     {

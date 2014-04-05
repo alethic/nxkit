@@ -32,7 +32,7 @@ namespace NXKit.XForms
         public void Invoke()
         {
             // only element nodes allowed
-            if (Binding.ModelItems.Any(i => !(i is XElement)))
+            if (Binding.ModelItems.Any(i => !(i.Xml is XElement)))
                 throw new Exception();
 
             // ensure we have at least one node

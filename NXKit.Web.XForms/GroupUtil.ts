@@ -161,7 +161,7 @@
         }
 
         GetRelevant(): KnockoutObservable<boolean> {
-            return ko.computed(() => this._items.every(_ => _.Relevant()));
+            return ko.computed(() => this._items.some(_ => _.Relevant()));
         }
 
         GetReadOnly(): KnockoutObservable<boolean> {

@@ -1,6 +1,8 @@
-﻿using System.Linq;
-
+﻿using System.IO;
+using System.Linq;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NXKit.Util;
 
 namespace NXKit.XForms.Tests.XPathFunctions
 {
@@ -9,13 +11,15 @@ namespace NXKit.XForms.Tests.XPathFunctions
     public class InstanceTests
     {
 
+        static DynamicUriAuthority RegisterXml(string code)
+        {
+            return new DynamicUriRootFunc(() => new MemoryStream(Encoding.UTF8.GetBytes(code)));
+        }
+
         [TestMethod]
         public void Test_default_instance_resolution()
         {
-            var c = new NXDocumentConfiguration();
-            c.AddModule<XFormsModule>();
-
-            var e = NXDocument.Parse(@"
+            var e = NXDocument.Load(RegisterXml(@"
 <unknown xmlns:xf=""http://www.w3.org/2002/xforms"">
     <xf:model id=""data"">
         <xf:instance id=""instance1"">
@@ -26,8 +30,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
         </xf:instance>
     </xf:model>
     <xf:input ref=""xf:instance()"" />
-</unknown>",
-                c);
+</unknown>").BaseUri);
 
             var input = e.Root
                 .Descendants()
@@ -40,10 +43,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
         [TestMethod]
         public void Test_specified_instance_resolution()
         {
-            var c = new NXDocumentConfiguration();
-            c.AddModule<XFormsModule>();
-
-            var e = NXDocument.Parse(@"
+            var e = NXDocument.Load(RegisterXml(@"
                 <unknown xmlns:xf=""http://www.w3.org/2002/xforms"">
                     <xf:model id=""data"">
                         <xf:instance id=""instance1"">
@@ -54,7 +54,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
                         </xf:instance>
                     </xf:model>
                     <xf:input ref=""xf:instance('instance2')"" />
-                </unknown>", c);
+                </unknown>").BaseUri);
 
             var input = e.Root
                 .Descendants()

@@ -264,6 +264,7 @@
     <None Include="Properties\PublishProfiles\asd.pubxml" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Resources\script.xml" />
+    <Content Include="Resources\relevant.xml" />
     <Content Include="Resources\trigger.xml" />
     <Content Include="Resources\select1.xml" />
     <Content Include="Scripts\jquery-2.1.0.js" />

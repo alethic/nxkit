@@ -18,6 +18,8 @@ module NXKit.Web {
         private _queue: Array<(cb: ICallbackComplete) => void>;
         private _queueRunning: boolean;
 
+        private _busy: KnockoutObservable<boolean>;
+
         /**
          * Raised when the Node has changes to be pushed to the server.
          */
@@ -32,6 +34,7 @@ module NXKit.Web {
 
             self._queue = new Array<any>();
             self._queueRunning = false;
+            self._busy = ko.observable(false);
 
             self._onNodePropertyChanged = (node: Node, $interface: Interface, property: Property, value: any) => {
                 self.OnRootNodePropertyChanged(node, $interface, property, value);
@@ -40,6 +43,10 @@ module NXKit.Web {
             self._onNodeMethodInvoked = (node: Node, $interface: Interface, method: Method, params: any) => {
                 self.OnRootNodeMethodInvoked(node, $interface, method, params);
             };
+        }
+
+        public get Busy(): KnockoutObservable<boolean> {
+            return this._busy;
         }
 
         public get Body(): HTMLElement {
@@ -59,6 +66,10 @@ module NXKit.Web {
             else
                 // update the form with the data itself
                 self.Update(value);
+        }
+
+        public get Root(): Node {
+            return this._root;
         }
 
         /**
@@ -124,6 +135,7 @@ module NXKit.Web {
                 return;
             } else {
                 self._queueRunning = true;
+                self._busy(true);
 
                 // recursive call to work queue
                 var l = () => {
@@ -134,6 +146,7 @@ module NXKit.Web {
                         });
                     } else {
                         self._queueRunning = false;
+                        self._busy(false);
                     }
                 };
 
@@ -156,10 +169,14 @@ module NXKit.Web {
                 // clear existing bindings
                 ko.cleanNode(
                     self._body);
+                
+                // ensure body is to render template
+                $(self._body)
+                    .attr('data-bind', 'template: { name: \'NXKit.View\' }');
 
                 // apply knockout to view node
                 ko.applyBindings(
-                    self._root,
+                    self,
                     self._body);
 
                 self._bind = false;

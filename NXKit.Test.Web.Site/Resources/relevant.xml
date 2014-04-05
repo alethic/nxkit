@@ -1,0 +1,28 @@
+﻿<f:form xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:f="http://schemas.nxkit.org/nxkit/2014/xforms-layout"
+        xmlns:xf="http://www.w3.org/2002/xforms"
+        xmlns:ev="http://www.w3.org/2001/xml-events">
+    <xf:model>
+        <xf:instance>
+            <data xmlns="">
+                <choice>false</choice>
+                <text>text</text>
+            </data>
+        </xf:instance>
+        <xf:bind ref="choice"
+                 type="xsd:boolean" />
+        <xf:bind ref="text"
+                 relevant="../choice = 'true'" />
+    </xf:model>
+    <f:section>
+        <xf:group>
+            <xf:label>Relevant Example</xf:label>
+            <xf:input ref="choice">
+                <xf:label>Toggle</xf:label>
+            </xf:input>
+            <xf:input ref="text">
+                <xf:label>Text</xf:label>
+            </xf:input>
+        </xf:group>
+    </f:section>
+</f:form>
