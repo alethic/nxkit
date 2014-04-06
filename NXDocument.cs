@@ -88,7 +88,7 @@ namespace NXKit
             //    throw new FileNotFoundException("No response stream.");
 
             this.container = container;
-            this.uri = uri;
+            this.uri = new Uri(uri.ToString());
             this.Xml = XDocument.Load(uri.ToString(), LoadOptions.SetBaseUri);
 
             Initialize();
@@ -231,14 +231,14 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            var idAttr = element.Attribute("id");
+            var idAttr = (string)element.Attribute("id") ?? (string)element.Xml.Attribute("id");
             if (idAttr == null)
-            {
-                element.SetAttributeValue("id", "_element" + ++nextElementId);
-                idAttr = element.Attribute("id");
-            }
+                idAttr = "_element" + ++nextElementId;
 
-            return idAttr.Value;
+            element.SetAttributeValue("id", idAttr);
+            element.Xml.SetAttributeValue("id", idAttr);
+
+            return idAttr;
         }
 
         /// <summary>
