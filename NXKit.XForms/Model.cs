@@ -258,72 +258,6 @@ namespace NXKit.XForms
                 State.RecalculateFlag = false;
                 State.RevalidateFlag = true;
 
-                // for each each instance underneath the model
-                foreach (var instance in Instances)
-                {
-                    var instanceModelItems = instance.State.Document.Root
-                        .DescendantsAndSelf()
-                        .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
-                        .Where(i => i is XElement || i is XAttribute)
-                        .Select(i => new ModelItem(Module, i));
-
-                    // for each model item underneath the instance
-                    foreach (var modelItem in instanceModelItems)
-                    {
-                        if (modelItem.State.Clear)
-                        {
-                            if (modelItem.Xml is XElement)
-                                ((XElement)modelItem.Xml).RemoveNodes();
-                            else if (modelItem.Xml is XAttribute)
-                                ((XAttribute)modelItem.Xml).SetValue("");
-                            else
-                                throw new InvalidOperationException();
-
-                            modelItem.State.Clear = false;
-                            modelItem.State.DispatchValueChanged = true;
-
-                            // prompt model to act
-                            State.RevalidateFlag = true;
-                            State.RefreshFlag = true;
-                        }
-
-                        // model item contains a new value
-                        if (modelItem.State.NewContents != null)
-                        {
-                            if (modelItem.Xml is XElement)
-                                ((XElement)modelItem.Xml).ReplaceAll(modelItem.State.NewContents);
-                            else if (modelItem.Xml is XAttribute)
-                                ((XAttribute)modelItem.Xml).SetValue(modelItem.State.NewValue);
-                            else
-                                throw new InvalidOperationException();
-
-                            modelItem.State.NewContents = null;
-                            modelItem.State.DispatchValueChanged = true;
-
-                            // prompt model to act
-                            State.RevalidateFlag = true;
-                            State.RefreshFlag = true;
-                        }
-
-                        if (modelItem.State.NewValue != null)
-                        {
-                            if (modelItem.Xml is XElement)
-                                ((XElement)modelItem.Xml).SetValue(modelItem.State.NewValue);
-                            else if (modelItem.Xml is XAttribute)
-                                ((XAttribute)modelItem.Xml).SetValue(modelItem.State.NewValue);
-                            else
-                                throw new Exception();
-
-                            modelItem.State.NewContents = null;
-                            modelItem.State.DispatchValueChanged = true;
-
-                            // prompt model to act
-                            State.RevalidateFlag = true;
-                            State.RefreshFlag = true;
-                        }
-                    }
-                }
-
                 var binds = element
                     .Descendants()
                     .OfType<NXElement>()
@@ -337,12 +271,6 @@ namespace NXKit.XForms
                     {
                         var modelItemState = modelItem.State;
 
-                        // get existing values
-                        var oldReadOnly = modelItem.ReadOnly;
-                        var oldRequired = modelItem.Required;
-                        var oldRelevant = modelItem.Relevant;
-                        var oldValue = modelItem.Value;
-
                         if (bind.Type != null)
                             modelItemState.Type = bind.Type;
 
@@ -355,36 +283,14 @@ namespace NXKit.XForms
                         if (bind.Relevant != null)
                             modelItemState.Relevant = bind.Relevant;
 
-                        if (bind.Calculate != null)
-                        {
-                            modelItemState.ReadOnly = true;
-                            if (oldValue != bind.Calculate)
-                                modelItem.Value = bind.Calculate;
-                        }
-
                         if (bind.Constraint != null)
                             modelItemState.Constraint = bind.Constraint;
 
-                        // get new read-only value; raise event on change
-                        if (modelItem.ReadOnly != oldReadOnly)
-                            if (modelItem.ReadOnly)
-                                modelItemState.DispatchReadOnly = true;
-                            else
-                                modelItemState.DispatchReadWrite = true;
-
-                        // get new required value; raise event on change
-                        if (modelItem.Required != oldRequired)
-                            if (modelItem.Required)
-                                modelItemState.DispatchRequired = true;
-                            else
-                                modelItemState.DispatchOptional = true;
-
-                        // get new relevant value; raise event on change
-                        if (modelItem.Relevant != oldRelevant)
-                            if (modelItem.Relevant)
-                                modelItemState.DispatchEnabled = true;
-                            else
-                                modelItemState.DispatchDisabled = true;
+                        if (bind.Calculate != null)
+                        {
+                            modelItemState.ReadOnly = true;
+                            modelItem.Value = bind.Calculate;
+                        }
                     }
                 }
             }

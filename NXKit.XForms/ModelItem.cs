@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-
+using NXKit.DOMEvents;
 using NXKit.Util;
 
 namespace NXKit.XForms
@@ -239,6 +240,9 @@ namespace NXKit.XForms
             return State.Valid ?? true;
         }
 
+        /// <summary>
+        /// Gets or sets the value of the simple node.
+        /// </summary>
         public string Value
         {
             get { return GetValue(); }
@@ -246,19 +250,11 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the value of the given instance data node.
+        /// Implements the getter for Value.
         /// </summary>
         /// <returns></returns>
         string GetValue()
         {
-            // obtain any scheduled new value
-            if (State.Clear)
-                return "";
-            if (State.NewValue != null)
-                return State.NewValue;
-            if (State.NewContents != null)
-                throw new InvalidOperationException();
-
             if (xml is XElement)
                 return !((XElement)xml).HasElements ? ((XElement)xml).Value : null;
             else if (xml is XAttribute)
@@ -268,22 +264,46 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Sets the value of the given model item.
+        /// Implements the setter for Value.
         /// </summary>
         /// <param name="newValue"></param>
         void SetValue(string newValue)
         {
-            var lastValue = GetValue();
-            if (lastValue == newValue)
+            if (newValue == GetValue())
                 return;
 
-            // register new value with model item
-            State.Clear = false;
-            State.NewContents = null;
-            State.NewValue = newValue ?? "";
+            // This action has no effect if the Single Item Binding does not select an instance data node or if a 
+            // readonly instance data node is selected.
+            if (ReadOnly)
+                return;
+
+            if (Xml is XElement)
+            {
+                // An xforms-binding-exception occurs if the Single Item Binding indicates a node whose content is not
+                // simpleContent (i.e., a node that has element children).
+                var target = (XElement)Xml;
+                if (target.HasElements)
+                    throw new DOMEventException(Events.BindingException);
+
+                ((XElement)Xml).SetValue(newValue);
+            }
+            else if (Xml is XAttribute)
+            {
+                var target = (XAttribute)Xml;
+                ((XAttribute)Xml).SetValue(newValue);
+            }
+            else if (Xml is XText)
+            {
+                var target = (XText)Xml;
+                target.Value = newValue;
+            }
+            else
+                throw new InvalidOperationException();
 
             // trigger recalculate event to collect new value
             Model.State.RecalculateFlag = true;
+            Model.State.RevalidateFlag = true;
+            Model.State.RefreshFlag = true;
         }
 
         /// <summary>
@@ -296,16 +316,13 @@ namespace NXKit.XForms
             set { SetContents(value); }
         }
 
+        /// <summary>
+        /// Implements the getter for Contents.
+        /// </summary>
+        /// <returns></returns>
         XElement GetContents()
         {
             Contract.Requires<ArgumentException>(Xml is XElement);
-
-            if (State.Clear)
-                return null;
-            if (State.NewContents != null)
-                return State.NewContents;
-            if (state.NewValue != null)
-                throw new InvalidOperationException();
 
             if (xml is XElement)
                 return ((XElement)xml).HasElements ? (XElement)((XElement)xml).FirstNode : null;
@@ -313,30 +330,20 @@ namespace NXKit.XForms
                 throw new InvalidOperationException();
         }
 
+        /// <summary>
+        /// Implements the setter for Contents.
+        /// </summary>
+        /// <param name="newContents"></param>
         void SetContents(XElement newContents)
         {
             Contract.Requires<ArgumentException>(Xml is XElement);
 
-            State.Clear = false;
-            State.NewValue = null;
-            State.NewContents = newContents;
+            throw new NotImplementedException();
 
             // trigger recalculate event to collect new value
-            Model.State.RecalculateFlag = true;
-        }
-
-        /// <summary>
-        /// Clears the given model item.
-        /// </summary>
-        public void Clear()
-        {
-            // register new value with model item
-            State.Clear = true;
-            State.NewValue = null;
-            State.NewContents = null;
-
-            // trigger recalculate event to collect new value
-            Model.State.RecalculateFlag = true;
+            //Model.State.RecalculateFlag = true;
+            //Model.State.RevalidateFlag = true;
+            //Model.State.RefreshFlag = true;
         }
 
         /// <summary>
@@ -348,10 +355,9 @@ namespace NXKit.XForms
             State.Type = item.State.Type;
             State.Relevant = item.State.Relevant;
             State.ReadOnly = item.state.ReadOnly;
-            state.Required = item.state.Required;
-            state.Clear = item.State.Clear;
-            state.NewValue = item.state.NewValue;
-            state.NewContents = item.State.NewContents;
+            State.Required = item.state.Required;
+            State.Constraint = item.State.Constraint;
+            State.Valid = item.State.Valid;
         }
 
     }

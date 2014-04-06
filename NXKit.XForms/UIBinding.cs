@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms
@@ -166,6 +166,13 @@ namespace NXKit.XForms
         /// </summary>
         public void Refresh()
         {
+            var oldItemType = State.DataType;
+            var oldRelevant = State.Relevant;
+            var oldReadOnly = State.ReadOnly;
+            var oldRequired = State.Required;
+            var oldValid = State.Valid;
+            var oldValue = State.Value;
+
             if (binding != null)
             {
                 binding.Refresh();
@@ -174,12 +181,6 @@ namespace NXKit.XForms
                     modelItem = binding.ModelItem;
             }
 
-            var oldItemType = State.DataType;
-            var oldRelevant = State.Relevant;
-            var oldReadOnly = State.ReadOnly;
-            var oldRequired = State.Required;
-            var oldValid = State.Valid;
-            var oldValue = State.Value;
 
             if (modelItem != null)
             {

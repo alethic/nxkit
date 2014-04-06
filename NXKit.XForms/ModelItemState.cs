@@ -22,10 +22,6 @@ namespace NXKit.XForms
         bool? constraint;
         bool? valid;
 
-        bool clear;
-        XElement newElement;
-        string newValue;
-
         bool dispatchValueChanged;
         bool dispatchReadOnly;
         bool dispatchReadWrite;
@@ -159,33 +155,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Indicates that the model item is to be removed.
-        /// </summary>
-        public bool Clear
-        {
-            get { return clear; }
-            set { clear = value; }
-        }
-
-        /// <summary>
-        /// New <see cref="XElement"/> scheduled to be set as the value of the model item.
-        /// </summary>
-        public XElement NewContents
-        {
-            get { return newElement; }
-            set { newElement = value; newValue = null; }
-        }
-
-        /// <summary>
-        /// New <see cref="string"/> scheduled to be set as the value of the model item.
-        /// </summary>
-        public string NewValue
-        {
-            get { return newValue; }
-            set { newValue = value; newElement = null; }
-        }
-
-        /// <summary>
         /// Clears any outstanding notifications.
         /// </summary>
         public void Reset()
@@ -199,9 +168,6 @@ namespace NXKit.XForms
             dispatchDisabled = false;
             dispatchValid = false;
             dispatchInvalid = false;
-
-            newValue = null;
-            newElement = null;
         }
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)

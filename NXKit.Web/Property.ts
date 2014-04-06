@@ -103,9 +103,11 @@ module NXKit.Web {
 
         public Update(source: any) {
             var self = this;
-            if (self._value() !== source) {
+            var old = self._value();
+            if (old !== source) {
                 self._suspend = true;
                 self._value(source);
+                console.log(self.Name + ': ' + old + '->' + source);
                 self._suspend = false;
             }
         }

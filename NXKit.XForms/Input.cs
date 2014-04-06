@@ -36,21 +36,6 @@ namespace NXKit.XForms
 
         }
 
-        protected override void OnAdded(NXObjectEventArgs args)
-        {
-            base.OnAdded(args);
-
-            this.Interface<INXEventTarget>().AddEventHandler("xforms-invalid", i =>
-            {
-                Console.WriteLine(i);
-            });
-
-            this.Interface<INXEventTarget>().AddEventHandler("xforms-valid", i =>
-            {
-                Console.WriteLine(i);
-            });
-        }
-
     }
 
 }

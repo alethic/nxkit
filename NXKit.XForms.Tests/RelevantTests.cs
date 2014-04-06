@@ -18,14 +18,16 @@ namespace NXKit.XForms.Tests
         <xf:instance id=""instance1"">
             <data xmlns="""">true</data>
         </xf:instance>
-        <xf:bind nodeset=""xf:instance('instance1')"" type=""xsd:boolean"" />
+        <xf:bind ref=""xf:instance('instance1')"" type=""xsd:boolean"" />
         <xf:instance id=""instance2"">
             <data xmlns="""">node2</data>
         </xf:instance>
-        <xf:bind nodeset=""xf:instance('instance2')"" relevant=""xf:instance('instance1') = 'true'"" />
+        <xf:bind ref=""xf:instance('instance2')"" relevant=""xf:instance('instance1') = 'true'"" />
     </xf:model>
-    <xf:input ref=""xf:instance('instance1')"" />
-    <xf:input ref=""xf:instance('instance2')"" />
+    <xf:group>
+        <xf:input ref=""xf:instance('instance1')"" />
+        <xf:input ref=""xf:instance('instance2')"" />
+    </xf:group>
 </unknown>");
 
         NXDocument GetSampleDocument()
@@ -44,9 +46,22 @@ namespace NXKit.XForms.Tests
                 .ToList();
 
             Assert.IsTrue(inputs[1].Relevant);
+
             inputs[0].UIBinding.Value = "false";
             d.Invoke();
             Assert.IsFalse(inputs[1].Relevant);
+
+            inputs[0].UIBinding.Value = "true";
+            d.Invoke();
+            Assert.IsTrue(inputs[1].Relevant);
+
+            inputs[0].UIBinding.Value = "false";
+            d.Invoke();
+            Assert.IsFalse(inputs[1].Relevant);
+
+            inputs[0].UIBinding.Value = "true";
+            d.Invoke();
+            Assert.IsTrue(inputs[1].Relevant);
         }
 
         [TestMethod]
@@ -61,6 +76,7 @@ namespace NXKit.XForms.Tests
 
             int c = 0;
             inputs[1].Interface<INXEventTarget>().AddEventHandler("xforms-disabled", i => c++);
+            inputs[0].UIBinding.Value = "false";
             inputs[0].UIBinding.Value = "false";
             d.Invoke();
             Assert.AreEqual(1, c);

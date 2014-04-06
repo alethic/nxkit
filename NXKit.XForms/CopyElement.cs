@@ -58,7 +58,7 @@ namespace NXKit.XForms
                 return;
             }
 
-            visual.Binding.ModelItem.Clear();
+            visual.Binding.ModelItem.Contents = null;
         }
 
         /// <summary>

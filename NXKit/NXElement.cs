@@ -86,7 +86,8 @@ namespace NXKit
         [Public]
         public string UniqueId
         {
-            get { return uniqueId ?? (uniqueId = CreateUniqueId()); }
+            get { return CreateUniqueId();// return uniqueId ?? (uniqueId = CreateUniqueId()); 
+            }
         }
 
         /// <summary>
