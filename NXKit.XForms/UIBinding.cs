@@ -166,12 +166,12 @@ namespace NXKit.XForms
         /// </summary>
         public void Refresh()
         {
-            var oldItemType = State.DataType;
-            var oldRelevant = State.Relevant;
-            var oldReadOnly = State.ReadOnly;
-            var oldRequired = State.Required;
-            var oldValid = State.Valid;
-            var oldValue = State.Value;
+            var oldItemType = DataType;
+            var oldRelevant = Relevant;
+            var oldReadOnly = ReadOnly;
+            var oldRequired = Required;
+            var oldValid = Valid;
+            var oldValue = Value;
 
             if (binding != null)
             {
