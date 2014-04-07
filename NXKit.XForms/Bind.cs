@@ -8,15 +8,13 @@ namespace NXKit.XForms
 {
 
     [NXElementInterface("{http://www.w3.org/2002/xforms}bind")]
-    public class Bind :
-        IEvaluationContextScope
+    public class Bind
     {
 
         readonly NXElement element;
         readonly ModelItemPropertyAttributes attributes;
-        readonly Lazy<INodeBinding> nodeBinding;
-
-        readonly Lazy<XName> type;
+        readonly Lazy<IBindingNode> nodeBinding;
+        readonly Lazy<EvaluationContext> context;
         readonly Lazy<Binding> calculate;
         readonly Lazy<Binding> readOnly;
         readonly Lazy<Binding> required;
@@ -33,8 +31,9 @@ namespace NXKit.XForms
 
             this.element = element;
             this.attributes = new ModelItemPropertyAttributes(element);
-            this.nodeBinding = new Lazy<INodeBinding>(() => element.Interface<INodeBinding>());
+            this.nodeBinding = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
 
+            this.context = new Lazy<EvaluationContext>(() => element.ResolveEvaluationContext());
             this.calculate = new Lazy<Binding>(() => attributes.Calculate != null ? new Binding(element, Context, attributes.Calculate) : null);
             this.readOnly = new Lazy<Binding>(() => attributes.ReadOnly != null ? new Binding(element, Context, attributes.ReadOnly) : null);
             this.required = new Lazy<Binding>(() => attributes.Required != null ? new Binding(element, Context, attributes.Required) : null);
@@ -59,19 +58,19 @@ namespace NXKit.XForms
         }
 
         /// <summary>
+        /// Gets the evaluation context under which binding expressions are built.
+        /// </summary>
+        public EvaluationContext Context
+        {
+            get { return context.Value; }
+        }
+
+        /// <summary>
         /// Gets the binding of the element.
         /// </summary>
         public Binding Binding
         {
             get { return nodeBinding.Value != null ? nodeBinding.Value.Binding : null; }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="EvaluationContext"/> provided to further children elements.
-        /// </summary>
-        public EvaluationContext Context
-        {
-            get { return Binding != null ? new EvaluationContext(Binding.ModelItem.Model, Binding.ModelItem.Instance, Binding.ModelItem, 1, 1) : null; }
         }
 
         public IEnumerable<ModelItem> ModelItems

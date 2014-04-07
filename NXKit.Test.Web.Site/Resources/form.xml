@@ -7,16 +7,11 @@
         <xf:instance id="misc">
             <data xmlns="">
                 <secondary>false</secondary>
-                <secondary_enabled />
             </data>
         </xf:instance>
-
-        <xf:bind ref="xf:instance('misc')">
-            <xf:bind ref="secondary"
-                     type="xsd:boolean"/>
-            <xf:bind ref="secondary_enabled"
-                     relevant="secondary='true'" />
-        </xf:bind>
+        
+        <xf:bind ref="xf:instance('misc')/secondary"
+                 type="xsd:boolean" />
 
         <xf:instance id="primaryperson"
                      src="primaryperson.xml" />
@@ -52,8 +47,8 @@
         <xf:instance id="secondaryperson"
                      src="secondaryperson.xml" />
 
-        <xf:bind ref="xf:instance('secondaryperson')"
-                 relevant="xf:instance('misc')/secondary='true'">
+        <xf:bind ref="xf:instance('secondaryperson')" id="secondary"
+                 relevant="xf:instance('misc')/secondary = 'true'">
             <xf:bind ref="heightfeet"
                      required="true()"
                      type="xsd:int"/>
@@ -250,7 +245,7 @@
             </xf:repeat>
         </xf:group>
     </f:section>
-    <f:section xf:ref="xf:instance('misc')/secondary_enabled">
+    <f:section xf:ref="xf:instance('secondaryperson')">
         <xf:label>Spousal Enrollment</xf:label>
         <xf:group ref="xf:instance('secondaryperson')">
             <xf:label>Spouse Information</xf:label>

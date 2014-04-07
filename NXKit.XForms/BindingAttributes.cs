@@ -26,7 +26,7 @@ namespace NXKit.XForms
         /// </summary>
         public string Ref
         {
-            get { return GetAttribute("ref"); }
+            get { return GetAttributeValue("ref"); }
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace NXKit.XForms
         /// </summary>
         public string NodeSet
         {
-            get { return GetAttribute("nodeset"); }
+            get { return GetAttributeValue("nodeset"); }
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace NXKit.XForms
         /// </summary>
         public string Bind
         {
-            get { return GetAttribute("bind"); }
+            get { return GetAttributeValue("bind"); }
         }
 
     }

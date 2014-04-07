@@ -49,7 +49,6 @@ namespace NXKit.XForms
             base.Initialize();
 
             Document.Changed += Document_Changed;
-            Document.ProcessSubmit += Form_ProcessSubmit;
         }
 
         void Document_Changed(object sender, NXObjectChangeEventArgs args)
@@ -107,7 +106,7 @@ namespace NXKit.XForms
             if (type == null)
                 return null;
 
-            return (XFormsElement)Activator.CreateInstance(type, new object[] { node });
+            return (NXNode)Activator.CreateInstance(type, new object[] { node });
         }
 
         /// <summary>
@@ -136,11 +135,6 @@ namespace NXKit.XForms
         {
             var attr = ResolveAttribute(element, name);
             return attr != null ? attr.Value : null;
-        }
-
-        void Form_ProcessSubmit(object sender, EventArgs e)
-        {
-            Submit();
         }
 
         public override bool Invoke()
@@ -324,8 +318,6 @@ namespace NXKit.XForms
             var xp = XPathExpression.Compile(expression, nc);
             var nd = nv.Evaluate(xp);
 
-            Debug.WriteLine("{0} -> {1}", expression, nd);
-
             return ConvertXPath(nd, resultType);
         }
 
@@ -357,7 +349,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        internal EvaluationContext ResolveInScopeEvaluationContext(XFormsElement element)
+        internal EvaluationContext ResolveInScopeEvaluationContext(NXElement element)
         {
             EvaluationContext ec = null;
 
@@ -389,7 +381,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        internal EvaluationContext ResolveBindingEvaluationContext(XFormsElement element)
+        internal EvaluationContext ResolveBindingEvaluationContext(NXElement element)
         {
             // attempt to retrieve model state given by 'model' attribute
             var modelAttr = GetAttributeValue(element.Xml, "model");
@@ -510,29 +502,6 @@ namespace NXKit.XForms
                 executingOutermostActionHandler = false;
                 Invoke();
             }
-        }
-
-        internal void RaiseMessage(MessageElement visual)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Initiates a submission of all submission elements.
-        /// </summary>
-        public void Submit()
-        {
-            // ensure processor is up to date
-            Document.Invoke();
-
-            // all submission elements on the form
-            var visuals = Document.Root
-                .Descendants()
-                .OfType<SubmissionElement>();
-
-            // raise a submit event for each submission
-            foreach (var visual in visuals)
-                visual.Interface<INXEventTarget>().DispatchEvent(Events.Submit);
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -7,11 +8,10 @@ namespace NXKit.XForms
     /// Abstract implementation for all visuals that support binding expressions.
     /// </summary>
     public abstract class BindingElement :
-        XFormsElement,
-        IEvaluationContextScope
+        NXElement
     {
 
-        Binding binding;
+        readonly Lazy<Binding> binding;
 
         /// <summary>
         /// Initializes a new instance.
@@ -19,7 +19,7 @@ namespace NXKit.XForms
         protected BindingElement(XName name)
             : base(name)
         {
-
+            this.binding = new Lazy<Binding>(() => this.Interface<IBindingNode>().Binding);
         }
 
         /// <summary>
@@ -29,35 +29,23 @@ namespace NXKit.XForms
         protected BindingElement(XElement xml)
             : base(xml)
         {
-
+            this.binding = new Lazy<Binding>(() => this.Interface<IBindingNode>().Binding);
         }
 
         /// <summary>
-        /// Returns the context which will be inherited by scoped elements.
+        /// Gets a reference to the XForms module.
         /// </summary>
-        public EvaluationContext Context
+        public XFormsModule Module
         {
-            get { return CreateEvaluationContext(); }
+            get { return Document.Module<XFormsModule>(); }
         }
-
-        /// <summary>
-        /// Creates a new <see cref="EvaluationContext"/> for this <see cref="NXNode"/>.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract EvaluationContext CreateEvaluationContext();
-
-        /// <summary>
-        /// Creates a new <see cref="Binding"/>.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract Binding CreateBinding();
 
         /// <summary>
         /// Gets a reference to the default binding expressed on this node.
         /// </summary>
         public Binding Binding
         {
-            get { return binding ?? (binding = CreateBinding()); }
+            get { return binding.Value; }
         }
 
     }

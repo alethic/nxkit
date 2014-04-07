@@ -1,178 +1,174 @@
-﻿using System.Linq;
-using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Linq;
 
 namespace NXKit.XForms
 {
 
-    [Element("select1")]
+    [NXElementInterface("{http://www.w3.org/2002/xforms}select1")]
     [Public]
     public class Select1 :
-        SingleNodeUIBindingElement,
-        ISupportsUiCommonAttributes,
-        IUIRefreshable,
-        IModelItemValue
+        IEvaluationContextScope
     {
 
-        bool selectedItemNodeCached;
-        Item selectedItemNode;
+        readonly NXElement element;
+        readonly Select1Attributes attributes;
+        readonly Lazy<IBindingNode> nodeBinding;
+        readonly Lazy<UIBinding> uiBinding;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="xml"></param>
-        public Select1(XElement xml)
-            : base(xml)
+        /// <param name="element"></param>
+        public Select1(NXElement element)
         {
+            Contract.Requires<ArgumentNullException>(element != null);
 
+            this.element = element;
+            this.attributes = new Select1Attributes(element);
+            this.nodeBinding = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
+            this.uiBinding = new Lazy<UIBinding>(() => new UIBinding(element, nodeBinding.Value.Binding));
         }
 
+        /// <summary>
+        /// Gets the 'select1' element.
+        /// </summary>
+        public NXElement Element
+        {
+            get { return element; }
+        }
+
+        /// <summary>
+        /// Gets the property collection.
+        /// </summary>
+        public Select1Attributes Attributes
+        {
+            get { return attributes; }
+        }
+
+        /// <summary>
+        /// Gets whether the selection is open or closed.
+        /// </summary>
+        public bool Open
+        {
+            get { return Attributes.Selection != "closed"; }
+        }
+
+        /// <summary>
+        /// Gets the binding of the element.
+        /// </summary>
+        public Binding Binding
+        {
+            get { return nodeBinding.Value != null ? nodeBinding.Value.Binding : null; }
+        }
+
+        /// <summary>
+        /// Gets the UI binding of the element.
+        /// </summary>
+        public UIBinding UIBinding
+        {
+            get { return uiBinding.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="EvaluationContext"/> provided to further children elements.
+        /// </summary>
+        public EvaluationContext Context
+        {
+            get { return Binding != null ? new EvaluationContext(Binding.ModelItem.Model, Binding.ModelItem.Instance, Binding.ModelItem, 1, 1) : null; }
+        }
+
+        /// <summary>
+        /// Gets or sets the text value of an open selection.
+        /// </summary>
         [Public]
-        public bool Incremental
+        public string Value
         {
-            get { return Module.GetAttributeValue(Xml, "incremental") == "true"; }
-        }
-
-        public Selection Selection
-        {
-            get { return Module.GetAttributeValue(Xml, "selection") == "open" ? Selection.Open : Selection.Closed; }
-        }
-
-        public override string Value
-        {
-            get { return SelectedItemNode == null && UIBinding != null ? UIBinding.Value : null; }
+            get { return GetValue(); }
             set { SetValue(value); }
         }
 
+        /// <summary>
+        /// Implements the getter for Value.
+        /// </summary>
+        /// <returns></returns>
+        string GetValue()
+        {
+            if (UIBinding != null)
+                return UIBinding.Value;
+
+            return null;
+        }
+
+        /// <summary>
+        /// Implements the setter for value.
+        /// </summary>
+        /// <param name="value"></param>
         void SetValue(string value)
         {
-            // deselect current visual
-            if (SelectedItemNode != null &&
-                SelectedItemNode.Selectable != null)
-                SelectedItemNode.Selectable.Deselect(this);
-
-            // clear selected visual state
-            selectedItemNodeCached = true;
-            selectedItemNode = null;
-            GetState<Select1State>().SelectedNodeId = null;
-
-            // set node value
             if (UIBinding != null)
                 UIBinding.Value = value;
         }
 
         /// <summary>
-        /// Gets the currently selected item visual.
+        /// Gets the currently selected item element.
         /// </summary>
-        public Item SelectedItemNode
+        public ISelectable Selected
         {
-            get { return GetSelectedItemNode(); }
-            set { SetSelectedItemNode(value); }
+            get { return GetSelected(); }
+            set { SetSelected(value); }
         }
 
         /// <summary>
         /// Implements the getter for SelectedItemVisual.
         /// </summary>
         /// <returns></returns>
-        Item GetSelectedItemNode()
+        ISelectable GetSelected()
         {
-            if (!selectedItemNodeCached)
-            {
-                foreach (var itemNode in this.Descendants().OfType<Item>())
-                {
-                    // find selectable visuals underneath item
-                    if (itemNode.Selectable == null)
-                        continue;
-
-                    if (itemNode.Selectable.Selected(this))
-                    {
-                        selectedItemNode = itemNode;
-                        break;
-                    }
-                }
-
-                selectedItemNodeCached = true;
-            }
-
-            return selectedItemNode;
+            return element.Descendants()
+                .OfType<NXElement>()
+                .SelectMany(i => i.Interfaces<ISelectable>())
+                .Where(i => i.IsSelected(UIBinding))
+                .FirstOrDefault();
         }
 
         /// <summary>
         /// Implements the setter for SelectedItemVisual.
         /// </summary>
         /// <param name="node"></param>
-        void SetSelectedItemNode(Item node)
+        void SetSelected(ISelectable selected)
         {
-            // deselect current visual
-            if (SelectedItemNode != null &&
-                SelectedItemNode.Selectable != null)
-                SelectedItemNode.Selectable.Deselect(this);
+            // deselect existing item
+            if (Selected != null &&
+                selected == null)
+                Selected.Deselect(UIBinding);
 
-            if (node != null &&
-                node.Selectable != null)
-            {
-                // pre-cache
-                selectedItemNodeCached = true;
-                selectedItemNode = node;
-
-                // store selected item
-                GetState<Select1State>().SelectedNodeId = node.UniqueId;
-
-                // apply selection
-                selectedItemNode.Selectable.Select(this);
-            }
+            // select new item
+            if (selected != null &&
+                selected != Selected)
+                selected.Select(UIBinding);
         }
 
+        /// <summary>
+        /// Gets or sets the unique identifier of the selected item.
+        /// </summary>
         [Public]
-        public string SelectedItemNodeId
+        public string SelectedId
         {
-            get { return SelectedItemNode != null ? SelectedItemNode.UniqueId : null; }
-            set { SetSelectedItemNodeId(value); }
+            get { return Selected != null ? Selected.Id : null; }
+            set { SetSelectedId(value); }
         }
 
         /// <summary>
         /// Implements the setter for SelectedItemVisualId.
         /// </summary>
         /// <param name="id"></param>
-        void SetSelectedItemNodeId(string id)
+        void SetSelectedId(string id)
         {
-            SelectedItemNode = this.Descendants()
-                .OfType<Item>()
-                .FirstOrDefault(i => i.UniqueId == id);
-        }
-
-        public void Refresh()
-        {
-            // clear selected item cache
-            selectedItemNode = null;
-            selectedItemNodeCached = false;
-
-            // if no item is selected, attempt to find one
-            var selectedItemId = GetState<Select1State>().SelectedNodeId;
-            if (selectedItemId == null)
-            {
-                // ensure descendant itemsets are refreshed, kind of a hack
-                foreach (var itemSet in this.Descendants().OfType<ItemSet>())
-                    itemSet.Refresh();
-
-                foreach (var item in this.Descendants().OfType<Item>())
-                {
-                    if (item.Selectable == null)
-                        continue;
-
-                    // is this the current selection?
-                    if (item.Selectable.Selected(this))
-                    {
-                        // pre-cache
-                        selectedItemNodeCached = true;
-                        selectedItemNode = item;
-
-                        // store selected item
-                        GetState<Select1State>().SelectedNodeId = item.UniqueId;
-
-                        break;
-                    }
-                }
-            }
+            Selected = element.Descendants()
+                .OfType<NXElement>()
+                .SelectMany(i => i.Interfaces<ISelectable>())
+                .FirstOrDefault(i => i.Id == id);
         }
 
     }

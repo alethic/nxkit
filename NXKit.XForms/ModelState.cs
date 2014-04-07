@@ -20,6 +20,7 @@ namespace NXKit.XForms
         public bool RevalidateFlag { get; set; }
 
         public bool RefreshFlag { get; set; }
+
     }
 
 }

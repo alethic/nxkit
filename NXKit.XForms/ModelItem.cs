@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+
 using NXKit.DOMEvents;
 using NXKit.Util;
 
@@ -269,6 +269,9 @@ namespace NXKit.XForms
         /// <param name="newValue"></param>
         void SetValue(string newValue)
         {
+            Contract.Requires<ArgumentNullException>(newValue != null);
+
+            // nothing changed
             if (newValue == GetValue())
                 return;
 

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms
@@ -14,10 +15,10 @@ namespace NXKit.XForms
     public class UIBinding
     {
 
-        readonly NXElement node;
+        readonly NXElement element;
         readonly Binding binding;
+        readonly Lazy<UIBindingState> state;
         ModelItem modelItem;
-        UIBindingState state;
 
         /// <summary>
         /// Initializes a new instance.
@@ -27,7 +28,8 @@ namespace NXKit.XForms
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            this.node = node;
+            this.element = node;
+            this.state = new Lazy<UIBindingState>(() => GetState());
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace NXKit.XForms
         /// </summary>
         public XFormsModule Module
         {
-            get { return node.Document.Module<XFormsModule>(); }
+            get { return element.Document.Module<XFormsModule>(); }
         }
 
         /// <summary>
@@ -72,16 +74,23 @@ namespace NXKit.XForms
             get { return modelItem; }
         }
 
+        /// <summary>
+        /// Gets the state of the binding.
+        /// </summary>
         UIBindingState State
         {
-            get { return state ?? (state = GetState()); }
+            get { return state.Value; }
         }
 
+        /// <summary>
+        /// Gets the binding state.
+        /// </summary>
+        /// <returns></returns>
         UIBindingState GetState()
         {
-            var state = node.Storage.OfType<UIBindingState>().FirstOrDefault();
+            var state = element.Storage.OfType<UIBindingState>().FirstOrDefault();
             if (state == null)
-                node.Storage.AddLast(state = new UIBindingState());
+                element.Storage.AddLast(state = new UIBindingState());
 
             return state;
         }
@@ -108,7 +117,7 @@ namespace NXKit.XForms
             if (State.Relevant == false)
                 return false;
 
-            var next = node.Ancestors()
+            var next = element.Ancestors()
                 .Select(i => i.InterfaceOrDefault<IUIBindingNode>())
                 .Where(i => i != null)
                 .FirstOrDefault();
@@ -202,34 +211,53 @@ namespace NXKit.XForms
                 State.Value = null;
             }
 
-            // mark all required events
-            var valueChanged = Value != oldValue;
-            if (valueChanged)
-                State.DispatchValueChanged = true;
+                // mark all required events
+                var valueChanged = Value != oldValue;
+                if (valueChanged)
+                {
+                    Debug.WriteLine("{0}: Value changed: {1}", element, Value);
+                    State.DispatchValueChanged = true;
+                }
 
-            if (Relevant != oldRelevant || valueChanged)
-                if (Relevant)
-                    State.DispatchEnabled = true;
-                else
-                    State.DispatchDisabled = true;
+                if (Relevant != oldRelevant || valueChanged)
+                {
+                    Debug.WriteLine("{0}: Relevant changed: {1}", element, Relevant);
 
-            if (ReadOnly != oldReadOnly || valueChanged)
-                if (ReadOnly)
-                    State.DispatchReadOnly = true;
-                else
-                    State.DispatchReadWrite = true;
+                    if (Relevant)
+                        State.DispatchEnabled = true;
+                    else
+                        State.DispatchDisabled = true;
+                }
 
-            if (Required != oldRequired || valueChanged)
-                if (Required)
-                    State.DispatchRequired = true;
-                else
-                    State.DispatchOptional = true;
+                if (ReadOnly != oldReadOnly || valueChanged)
+                {
+                    Debug.WriteLine("{0}: ReadOnly changed: {1}", element, Relevant);
 
-            if (Valid != oldValid || valueChanged)
-                if (Valid)
-                    state.DispatchValid = true;
-                else
-                    state.DispatchInvalid = true;
+                    if (ReadOnly)
+                        State.DispatchReadOnly = true;
+                    else
+                        State.DispatchReadWrite = true;
+                }
+
+                if (Required != oldRequired || valueChanged)
+                {
+                    Debug.WriteLine("{0}: Required changed: {1}", element, Required);
+
+                    if (Required)
+                        State.DispatchRequired = true;
+                    else
+                        State.DispatchOptional = true;
+                }
+
+                if (Valid != oldValid || valueChanged)
+                {
+                    Debug.WriteLine("{0}: Valid changed: {1}", element, Valid);
+
+                    if (Valid)
+                        State.DispatchValid = true;
+                    else
+                        State.DispatchInvalid = true;
+                }
         }
 
         /// <summary>
@@ -237,7 +265,7 @@ namespace NXKit.XForms
         /// </summary>
         public void DispatchEvents()
         {
-            var target = node.Interface<INXEventTarget>();
+            var target = element.Interface<INXEventTarget>();
             if (target == null)
                 return;
 
@@ -299,7 +327,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Clears all pending events.
         /// </summary>
-        public void ClearEvents()
+        public void DiscardEvents()
         {
             State.DispatchValueChanged = false;
             State.DispatchValid = false;

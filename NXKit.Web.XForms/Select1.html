@@ -1,5 +1,5 @@
 ﻿<script type="text/html"
-        data-nxkit-node="NXKit.XForms.Select1">
+        data-nxkit-template="NXKit.XForms.Select1">
     <!-- ko with: new NXKit.Web.XForms.Select1ViewModel($context, $data) -->
     <!-- ko nxkit_template: {
         node: Node,
@@ -11,13 +11,13 @@
 </script>
 
 <script type="text/html"
-        data-nxkit-node="NXKit.XForms.Select1"
+        data-nxkit-template="NXKit.XForms.Select1"
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
-    <div class="ui fluid selection dropdown" data-bind="nxkit_dropdown: SelectedItemNodeId">
+    <div class="ui fluid selection dropdown" data-bind="nxkit_dropdown: SelectedId">
         <input type="hidden" />
         <div class="text">Select</div>
         <i class="dropdown icon"></i>
-        <div class="ui menu" data-bind="foreach: Items">
+        <div class="ui menu" data-bind="foreach: Selectables">
             <div class="item" data-bind="attr: { 'data-value': Id }">
                 <!-- ko nxkit_template: Label -->
                 <!-- /ko -->
@@ -27,7 +27,7 @@
 </script>
 
 <script type="text/html"
-        data-nxkit-node="NXKit.XForms.Select1"
+        data-nxkit-template="NXKit.XForms.Select1"
         data-nxkit-type="{http://www.w3.org/2001/XMLSchema}boolean">
 
 </script>

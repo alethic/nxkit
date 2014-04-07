@@ -30,6 +30,22 @@ namespace NXKit
             return attribute == null ? null : attribute.value;
         }
 
+        /// <summary>
+        /// Returns the string value of the attribute.
+        /// </summary>
+        /// <param name="attribute"></param>
+        /// <returns></returns>
+        public static explicit operator int?(NXAttribute attribute)
+        {
+            return attribute == null ? null : ParseInt(attribute.value);
+        }
+
+        static int? ParseInt(string value)
+        {
+            int i;
+            return int.TryParse(value, out i) ? (int?)i : null;
+        }
+
 
         readonly XName name;
         string value;
@@ -104,7 +120,7 @@ namespace NXKit
         {
             if (ns.NamespaceName.Length == 0)
                 return string.Empty;
-            
+
             //if (Parent != null)
             //    return ((NXElement)Parent).GetPrefixOfNamespace(ns);
 
@@ -127,7 +143,7 @@ namespace NXKit
         public void SetValue(object value)
         {
             Contract.Requires<ArgumentNullException>(value != null);
-            
+
             Value = value.ToString();
         }
 

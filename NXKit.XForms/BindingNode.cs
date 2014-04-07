@@ -10,8 +10,9 @@ namespace NXKit.XForms
     /// Provides a <see cref="Binding"/> for a UI element.
     /// </summary>
     [NXElementInterface("http://www.w3.org/2002/xforms", null)]
-    public class NodeBinding :
-        INodeBinding
+    public class BindingNode :
+        IBindingNode,
+        IEvaluationContextScope
     {
 
         readonly NXElement element;
@@ -22,7 +23,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public NodeBinding(NXElement element)
+        public BindingNode(NXElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -107,11 +108,19 @@ namespace NXKit.XForms
                 return null;
             }
 
-            var binding = bind.InterfaceOrDefault<INodeBinding>();
+            var binding = bind.InterfaceOrDefault<IBindingNode>();
             if (binding != null)
                 return binding.Binding;
 
             return null;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="EvaluationContext"/> provided to further children elements.
+        /// </summary>
+        public EvaluationContext Context
+        {
+            get { return Binding != null ? new EvaluationContext(Binding.ModelItem.Model, Binding.ModelItem.Instance, Binding.ModelItem, 1, 1) : null; }
         }
 
     }

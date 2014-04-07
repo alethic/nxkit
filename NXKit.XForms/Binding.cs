@@ -50,6 +50,7 @@ namespace NXKit.XForms
             this.context = context;
             this.xpath = xpath;
 
+            // initial load of values
             Refresh();
         }
 

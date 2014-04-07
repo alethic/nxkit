@@ -5,11 +5,9 @@ namespace NXKit.XForms
 {
 
     /// <summary>
-    /// 3.3.1 Common Attributes
-    /// 
-    /// The Common Attribute Collection applies to every element in the XForms namespace.
+    /// Provides the standard XForms binding attributes.
     /// </summary>
-    public class CommonAttributes :
+    public class RepeatAttributes :
         AttributeAccessor
     {
 
@@ -17,26 +15,26 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public CommonAttributes(NXElement element)
+        public RepeatAttributes(NXElement element)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }
 
         /// <summary>
-        /// Gets the 'model' attribute value.
+        /// Gets the 'ref' attribute values.
         /// </summary>
-        public string Model
+        public int StartIndex
         {
-            get { return GetAttributeValue("model"); }
+            get { return (int?)GetAttribute("startindex") ?? 1; }
         }
 
         /// <summary>
-        /// Gets the 'context' attribute value.
+        /// Gets the 'nodeset' attribute values.
         /// </summary>
-        public string Context
+        public int? Number
         {
-            get { return GetAttributeValue("context"); }
+            get { return (int?)GetAttribute("number"); }
         }
 
     }

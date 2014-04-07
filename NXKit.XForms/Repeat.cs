@@ -11,14 +11,11 @@ namespace NXKit.XForms
     public class Repeat :
         NodeSetBindingElement,
         INamingScope,
-        IUIRefreshable
+        IUINode
     {
 
+        readonly RepeatAttributes attributes;
         int nextId;
-        bool startIndexCached;
-        int startIndex;
-        bool numberCached;
-        int? number;
 
         readonly Dictionary<XObject, RepeatItem> items =
             new Dictionary<XObject, RepeatItem>();
@@ -30,7 +27,7 @@ namespace NXKit.XForms
         public Repeat(XElement xml)
             : base(xml)
         {
-
+            this.attributes = new RepeatAttributes(this);
         }
 
         /// <summary>
@@ -90,68 +87,16 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Provides no context to children, as children are dynamically generated items.
-        /// </summary>
-        protected override EvaluationContext CreateEvaluationContext()
-        {
-            return null;
-        }
-
-        /// <summary>
         /// Gets or sets the current index of the repeat.
         /// </summary>
         public int Index
         {
-            get { return GetState<RepeatState>().Index ?? StartIndex; }
+            get { return GetState<RepeatState>().Index ?? attributes.StartIndex; }
             set { GetState<RepeatState>().Index = value; }
         }
 
-        /// <summary>
-        /// Optional 1-based initial value of the repeat index.
-        /// </summary>
-        public int StartIndex
+        public override void Refresh()
         {
-            get
-            {
-                if (!startIndexCached)
-                {
-                    var startIndexAttr = Module.GetAttributeValue(Xml, "startindex");
-                    if (startIndexAttr != null)
-                        startIndex = int.Parse(startIndexAttr);
-                    else
-                        startIndex = 1;
-
-                    startIndexCached = true;
-                }
-
-                return startIndex;
-            }
-        }
-
-        /// <summary>
-        /// Optional hint to the XForms Processor as to how many elements from the collection to display.
-        /// </summary>
-        public int? Number
-        {
-            get
-            {
-                if (!numberCached)
-                {
-                    var numberAttr = Module.GetAttributeValue(Xml, "number");
-                    if (numberAttr != null)
-                        number = int.Parse(numberAttr);
-
-                    numberCached = true;
-                }
-
-                return number;
-            }
-        }
-
-        public void Refresh()
-        {
-            Binding.Refresh();
-
             // ensure index value is within range
             if (Index < 0)
                 if (Binding == null ||
@@ -159,7 +104,7 @@ namespace NXKit.XForms
                     Binding.ModelItems.Length == 0)
                     Index = 0;
                 else
-                    Index = StartIndex;
+                    Index = attributes.StartIndex;
 
             if (Binding != null &&
                 Binding.ModelItems != null)
@@ -175,7 +120,7 @@ namespace NXKit.XForms
                     node.UIBinding.Refresh();
 
             // refresh children
-            foreach (var node in this.Descendants().Select(i => i.InterfaceOrDefault<IUIRefreshable>()))
+            foreach (var node in this.Descendants().Select(i => i.InterfaceOrDefault<IUINode>()))
                 if (node != null)
                     node.Refresh();
         }

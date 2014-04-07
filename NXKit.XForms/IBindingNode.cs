@@ -4,7 +4,7 @@
     /// <summary>
     /// Describes an element that returns a binding.
     /// </summary>
-    public interface INodeBinding
+    public interface IBindingNode
     {
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -8,11 +9,12 @@ namespace NXKit.XForms
     /// </summary>
     public abstract class UIBindingElement :
         BindingElement,
-        IModelItemBinding,
-        IUIBindingNode
+        IUIBindingNode,
+        IUINode,
+        IModelItemBinding
     {
 
-        UIBinding uiBinding;
+        readonly Lazy<UIBinding> uiBinding;
 
         /// <summary>
         /// Initializes a new instance.
@@ -20,7 +22,7 @@ namespace NXKit.XForms
         protected UIBindingElement(XName name)
             : base(name)
         {
-
+            uiBinding = new Lazy<UIBinding>(() => this.Interface<IUIBindingNode>().UIBinding);
         }
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace NXKit.XForms
         protected UIBindingElement(XElement xml)
             : base(xml)
         {
-
+            uiBinding = new Lazy<UIBinding>(() => this.Interface<IUIBindingNode>().UIBinding);
         }
 
         /// <summary>
@@ -38,9 +40,8 @@ namespace NXKit.XForms
         /// </summary>
         public UIBinding UIBinding
         {
-            get { return uiBinding ?? (uiBinding = CreateUIBinding()); }
+            get { return uiBinding.Value; }
         }
-
 
         public virtual string Value
         {
@@ -73,9 +74,9 @@ namespace NXKit.XForms
             get { return UIBinding.Valid; }
         }
 
-        protected virtual UIBinding CreateUIBinding()
+        public virtual void Refresh()
         {
-            return Binding != null ? new UIBinding(this, Binding) : new UIBinding(this);
+
         }
 
     }

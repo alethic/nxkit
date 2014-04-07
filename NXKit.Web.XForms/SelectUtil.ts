@@ -1,6 +1,6 @@
 ﻿module NXKit.Web.XForms.SelectUtil {
 
-    export class Item {
+    export class Selectable {
 
         private _viewModel: NodeViewModel;
         private _node: Node;
@@ -23,7 +23,7 @@
         }
 
         GetId(): string {
-            return this._node.ValueAsString('NXKit.NXElement', 'UniqueId')();
+            return this._node.Property('NXKit.XForms.ISelectable', 'Id').ValueAsString();
         }
 
         public get Label(): Node {
@@ -47,13 +47,13 @@
     /**
       * Gets the select item-set. This consists of the item nodes of the given select node.
       */
-    export function GetItems(viewModel: NodeViewModel, node: Node, level: number): Item[] {
+    export function GetSelectables(viewModel: NodeViewModel, node: Node, level: number): Selectable[] {
         try {
             return node.Nodes()
-                .filter(_ => _.Type == 'NXKit.XForms.Item')
-                .map(_ => new Item(viewModel, _));
+                .filter(_ => _.Interfaces['NXKit.XForms.ISelectable'] != null)
+                .map(_ => new Selectable(viewModel, _));
         } catch (ex) {
-            ex.message = 'SelectUtil.GetItems()' + '"\nMessage: ' + ex.message;
+            ex.message = 'SelectUtil.GetSelectables()' + '"\nMessage: ' + ex.message;
             throw ex;
         }
     }

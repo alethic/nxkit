@@ -23,24 +23,30 @@ namespace NXKit.XForms
             this.element = element;
         }
 
+
+        public NXAttribute GetAttribute(string name)
+        {
+            var fq = element.Attribute(Constants.XForms_1_0 + name);
+            if (fq != null)
+                return fq;
+
+            var ln = element.Name.Namespace == Constants.XForms_1_0 ? element.Attribute(name) : null;
+            if (ln != null)
+                return ln;
+
+            return null;
+        }
+
         /// <summary>
         /// Gets the XForms attribute of the specified name.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public string GetAttribute(string name)
+        public string GetAttributeValue(string name)
         {
             Contract.Requires<ArgumentNullException>(name != null);
 
-            var fq = element.Attribute(Constants.XForms_1_0 + name);
-            if (fq != null)
-                return (string)fq;
-
-            var ln = element.Name.Namespace == Constants.XForms_1_0 ? element.Attribute(name) : null;
-            if (ln != null)
-                return (string)ln;
-
-            return null;
+            return (string)GetAttribute(name);
         }
 
         /// <summary>

@@ -23,37 +23,37 @@ namespace NXKit.XForms
 
         public string Type
         {
-            get { return GetAttribute("type"); }
+            get { return GetAttributeValue("type"); }
         }
 
         public string Calculate
         {
-            get { return GetAttribute("calculate"); }
+            get { return GetAttributeValue("calculate"); }
         }
 
         public string ReadOnly
         {
-            get { return GetAttribute("readonly"); }
+            get { return GetAttributeValue("readonly"); }
         }
 
         public string Required
         {
-            get { return GetAttribute("required"); }
+            get { return GetAttributeValue("required"); }
         }
 
         public string Relevant
         {
-            get { return GetAttribute("relevant"); }
+            get { return GetAttributeValue("relevant"); }
         }
 
         public string Constraint
         {
-            get { return GetAttribute("constraint"); }
+            get { return GetAttributeValue("constraint"); }
         }
 
         public string P3PType
         {
-            get { return GetAttribute("p3ptype"); }
+            get { return GetAttributeValue("p3ptype"); }
         }
 
     }

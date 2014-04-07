@@ -110,31 +110,40 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets all of the bound nodes for this model.
+        /// Gets all 'bind' elements for this model.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IUIBindingNode> GetUIBindingNodes()
+        IEnumerable<Bind> GetBindNodes()
         {
-            // all available ui bindings
-            return element.Document.Root
-                .Descendants(true)
+            return element.Descendants()
                 .OfType<NXElement>()
-                .Select(i => i.InterfaceOrDefault<IUIBindingNode>())
-                .Where(i => i != null);
+                .SelectMany(i => i.Interfaces<Bind>());
         }
 
         /// <summary>
-        /// Gets all of the nodes that should be refreshed for this model.
+        /// Gets all of the bound nodes for this model.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IUIRefreshable> GetUIRefreshableNodes()
+        IEnumerable<UIBinding> GetUIBindingNodes()
         {
             // all available ui bindings
             return element.Document.Root
                 .Descendants(true)
                 .OfType<NXElement>()
-                .Select(i => i.InterfaceOrDefault<IUIRefreshable>())
-                .Where(i => i != null);
+                .SelectMany(i => i.Interfaces<IUIBindingNode>())
+                .Select(i => i.UIBinding);
+        }
+
+        /// <summary>
+        /// Gets all of teh UI nodes for this model.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IUINode> GetUINodes()
+        {
+            return element.Document.Root
+                .Descendants(true)
+                .OfType<NXElement>()
+                .SelectMany(i => i.Interfaces<IUINode>());
         }
 
         void IEventDefaultActionHandler.DefaultAction(Event evt)
@@ -211,18 +220,17 @@ namespace NXKit.XForms
             if (element.Document.Root.GetState<ModuleState>().ConstructDoneOnce)
                 return;
 
-            // refresh values
-            foreach (var item1 in GetUIBindingNodes())
-                if (item1.UIBinding != null)
-                    item1.UIBinding.Refresh();
+            // refresh interface bindings
+            foreach (var ui in GetUIBindingNodes())
+                    ui.Refresh();
 
-            foreach (var item2 in GetUIRefreshableNodes())
-                item2.Refresh();
+            // discard interface events
+            foreach (var ui in GetUIBindingNodes())
+                    ui.DiscardEvents();
 
-            // dispatch required events
-            foreach (var item3 in GetUIBindingNodes())
-                if (item3.UIBinding != null)
-                    item3.UIBinding.ClearEvents();
+            // refresh interfaces
+            foreach (var ui in GetUINodes())
+                ui.Refresh();
 
             element.Document.Root.GetState<ModuleState>().ConstructDoneOnce = true;
         }
@@ -261,35 +269,43 @@ namespace NXKit.XForms
                 var binds = element
                     .Descendants()
                     .OfType<NXElement>()
-                    .SelectMany(i => i.Interfaces<Bind>());
+                    .SelectMany(i => i.Interfaces<Bind>())
+                    .ToList();
 
-                foreach (var bind in binds)
+                foreach (var bind in GetBindNodes())
                 {
-                    bind.Refresh();
+                    bind.Binding.Refresh();
 
                     foreach (var modelItem in bind.ModelItems)
                     {
                         var modelItemState = modelItem.State;
 
                         if (bind.Type != null)
-                            modelItemState.Type = bind.Type;
+                            if (modelItemState.Type != bind.Type)
+                                modelItemState.Type = bind.Type;
 
                         if (bind.ReadOnly != null)
-                            modelItemState.ReadOnly = bind.ReadOnly;
+                            if (modelItemState.ReadOnly != bind.ReadOnly)
+                                modelItemState.ReadOnly = bind.ReadOnly;
 
                         if (bind.Required != null)
-                            modelItemState.Required = bind.Required;
+                            if (modelItemState.Required != bind.Required)
+                                modelItemState.Required = bind.Required;
 
                         if (bind.Relevant != null)
-                            modelItemState.Relevant = bind.Relevant;
+                            if (modelItemState.Relevant != bind.Relevant)
+                                modelItemState.Relevant = bind.Relevant;
 
                         if (bind.Constraint != null)
-                            modelItemState.Constraint = bind.Constraint;
+                            if (modelItemState.Constraint != bind.Constraint)
+                                modelItemState.Constraint = bind.Constraint;
 
                         if (bind.Calculate != null)
                         {
-                            modelItemState.ReadOnly = true;
-                            modelItem.Value = bind.Calculate;
+                            if (modelItemState.ReadOnly == false)
+                                modelItemState.ReadOnly = true;
+                            if (modelItem.Value != bind.Calculate)
+                                modelItem.Value = bind.Calculate;
                         }
                     }
                 }
@@ -315,16 +331,7 @@ namespace NXKit.XForms
                         .Select(i => new ModelItem(Module, i));
 
                     foreach (var modelItem in modelItems)
-                    {
-                        var oldValid = modelItem.Valid;
-
                         modelItem.State.Valid = (modelItem.Required ? modelItem.Value.TrimToNull() != null : true) && modelItem.Constraint;
-                        if (oldValid != modelItem.Valid)
-                            if (modelItem.Valid)
-                                modelItem.State.DispatchValid = true;
-                            else
-                                modelItem.State.DispatchInvalid = true;
-                    }
                 }
             }
             while (State.RevalidateFlag);
@@ -339,37 +346,19 @@ namespace NXKit.XForms
             {
                 State.RefreshFlag = false;
 
-                // all available ui bindings
-                var bindingNodes = GetUIBindingNodes()
-                    .Select(i => i.UIBinding)
-                    .Where(i => i != null);
-
-                // refresh values
-                foreach (var item in bindingNodes)
+                // refresh interface bindings
+                foreach (var item in GetUIBindingNodes())
                     item.Refresh();
 
-                foreach (var item in GetUIRefreshableNodes())
-                    item.Refresh();
+                // refresh interfaces
+                foreach (var ui in GetUINodes())
+                    ui.Refresh();
 
-                // dispatch required events
-                foreach (var item in bindingNodes)
+                // dispatch interface events
+                foreach (var item in GetUIBindingNodes())
                     item.DispatchEvents();
             }
             while (State.RefreshFlag);
-
-            // clear any notification events
-            foreach (var instance in Instances)
-            {
-                // all model items
-                var items = instance.State.Document.Root.DescendantNodesAndSelf()
-                    .OfType<XElement>()
-                    .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
-                    .Select(i => new ModelItem(Module, i));
-
-                // clear notifications
-                foreach (var item in items)
-                    item.State.Reset();
-            }
         }
 
         /// <summary>

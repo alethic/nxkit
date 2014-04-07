@@ -57,8 +57,7 @@ namespace NXKit.XForms
             return element
                 .Interfaces<IEvaluationContextProvider>()
                 .Select(i => i.Context)
-                .Where(i => i != null)
-                .FirstOrDefault();
+                .FirstOrDefault(i => i != null);
         }
 
         /// <summary>
@@ -69,10 +68,8 @@ namespace NXKit.XForms
         {
             return element.Ancestors()
                 .OfType<NXElement>()
-                .SelectMany(i => i.Interfaces<IEvaluationContextScope>())
-                .Select(i => i.Context)
-                .Where(i => i != null)
-                .FirstOrDefault();
+                .Select(i => i.ResolveEvaluationContext())
+                .FirstOrDefault(i => i != null);
         }
 
         /// <summary>

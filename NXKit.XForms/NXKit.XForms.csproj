@@ -118,8 +118,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeAccessor.cs" />
+    <Compile Include="ActionAttributes.cs" />
+    <Compile Include="Delete.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DeleteAttributes.cs" />
+    <Compile Include="NXNodeExtensions.cs" />
+    <Compile Include="RepeatAttributes.cs" />
+    <Compile Include="ItemValueAttributes.cs" />
     <Compile Include="EvaluationContextFuncProvider.cs" />
     <Compile Include="IEvaluationContextProvider.cs" />
+    <Compile Include="ISelectableValue.cs" />
+    <Compile Include="Select1Attributes.cs" />
     <Compile Include="ModelItemPropertyAttributes.cs" />
     <Compile Include="CommonAttributes.cs" />
     <Compile Include="Constants.cs" />
@@ -129,7 +139,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="INodeBinding.cs" />
+    <Compile Include="IBindingNode.cs" />
     <Compile Include="IModelItemValue.cs" />
     <Compile Include="IUIAppearance.cs" />
     <Compile Include="IModelItemBinding.cs" />
@@ -139,14 +149,14 @@
     <Compile Include="IAction.cs" />
     <Compile Include="IEvaluationContextScope.cs" />
     <Compile Include="ISupportsListUiCommonAttributes.cs" />
-    <Compile Include="ISelectableNode.cs" />
+    <Compile Include="ISelectable.cs" />
     <Compile Include="ISupportsCommonAttributes.cs" />
     <Compile Include="ISupportsIncrementalAttribute.cs" />
     <Compile Include="ISupportsUiCommonAttributes.cs" />
     <Compile Include="IUIBindingNode.cs" />
-    <Compile Include="IUIRefreshable.cs" />
+    <Compile Include="IUINode.cs" />
     <Compile Include="ModelItem.cs" />
-    <Compile Include="NodeBinding.cs" />
+    <Compile Include="BindingNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaPackage.cs" />
     <Compile Include="Script.cs" />
@@ -157,6 +167,7 @@
     <Compile Include="Switch.cs" />
     <Compile Include="UIBinding.cs" />
     <Compile Include="UIBindingElement.cs" />
+    <Compile Include="UIBindingNode.cs" />
     <Compile Include="UIBindingState.cs" />
     <Compile Include="XFormsXsltContext.cs" />
     <Compile Include="Action.cs" />
@@ -166,18 +177,15 @@
     <Compile Include="Bind.cs" />
     <Compile Include="ChoicesElement.cs" />
     <Compile Include="CopyElement.cs" />
-    <Compile Include="DeleteElement.cs" />
     <Compile Include="DispatchElement.cs" />
     <Compile Include="EvaluationContext.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="Help.cs" />
     <Compile Include="Hint.cs" />
     <Compile Include="Input.cs" />
-    <Compile Include="InsertElement.cs" />
+    <Compile Include="Insert.cs" />
     <Compile Include="Instance.cs" />
     <Compile Include="InstanceState.cs" />
-    <Compile Include="ItemSetItem.cs" />
-    <Compile Include="ItemSet.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Label.cs" />
     <Compile Include="ListeItemElement.cs" />
@@ -198,17 +206,16 @@
     <Compile Include="RepeatState.cs" />
     <Compile Include="Repeat.cs" />
     <Compile Include="RevalidateElement.cs" />
-    <Compile Include="Select1State.cs" />
     <Compile Include="Select1.cs" />
     <Compile Include="Selection.cs" />
     <Compile Include="Select.cs" />
     <Compile Include="SendElement.cs" />
     <Compile Include="SetValueElement.cs" />
     <Compile Include="SingleNodeUIBindingElement.cs" />
-    <Compile Include="SubmissionElement.cs" />
+    <Compile Include="Submission.cs" />
     <Compile Include="TextArea.cs" />
     <Compile Include="Trigger.cs" />
-    <Compile Include="ValueElement.cs" />
+    <Compile Include="ItemValue.cs" />
     <Compile Include="XFormsElement.cs" />
     <Compile Include="XPath\Functions\BooleanFromString.cs" />
     <Compile Include="XPath\Functions\IfFunction.cs" />
