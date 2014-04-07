@@ -1,42 +1,65 @@
-﻿using System.Linq;
-using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Linq;
 
 namespace NXKit.XForms
 {
 
-    [Element("item")]
+    [NXElementInterface("{http://www.w3.org/2002/xforms}item")]
     public class Item :
-        XFormsElement
+        ISelectable
     {
 
-        bool selectableCached;
-        ISelectableNode selectable;
+        readonly NXElement element;
+        readonly Lazy<ISelectableValue> value;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="xml"></param>
-        public Item(XElement xml)
-            : base(xml)
+        /// <param name="element"></param>
+        public Item(NXElement element)
         {
+            Contract.Requires<ArgumentNullException>(element != null);
 
+            this.element = element;
+            this.value = new Lazy<ISelectableValue>(() => element
+                .Descendants()
+                .OfType<NXElement>()
+                .SelectMany(i => i.Interfaces<ISelectableValue>())
+                .FirstOrDefault());
         }
 
-        /// <summary>
-        /// Gets the <see cref="ISelectable"/> for this item.
-        /// </summary>
-        public ISelectableNode Selectable
+        public string Id
         {
-            get
-            {
-                if (!selectableCached)
-                {
-                    selectable = Elements().OfType<ISelectableNode>().SingleOrDefault();
-                    selectableCached = true;
-                }
+            get { return element.UniqueId; }
+        }
 
-                return selectable;
-            }
+        public void Select(UIBinding ui)
+        {
+            if (value.Value != null)
+                value.Value.Select(ui);
+        }
+
+        public void Deselect(UIBinding ui)
+        {
+            if (value.Value != null)
+                value.Value.Deselect(ui);
+        }
+
+        public bool IsSelected(UIBinding ui)
+        {
+            if (value.Value != null)
+                return value.Value.IsSelected(ui);
+
+            return false;
+        }
+
+        public int GetValueHashCode()
+        {
+            if (value.Value != null)
+                return value.Value.GetHashCode();
+
+            return 0;
         }
 
     }
