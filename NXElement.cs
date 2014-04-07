@@ -178,6 +178,11 @@ namespace NXKit
             return state;
         }
 
+        public override string ToString()
+        {
+            return string.Format("Name = {0}, Id = {1}", name, Id);
+        }
+
     }
 
 }
