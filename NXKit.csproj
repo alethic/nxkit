@@ -119,9 +119,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IOnInvoke.cs" />
     <Compile Include="IOnInitialize.cs" />
-    <Compile Include="NXElementInterfaceAttribute.cs" />
-    <Compile Include="ElementInterfaceProvider.cs" />
+    <Compile Include="InterfaceAttribute.cs" />
+    <Compile Include="DefaultInterfaceProvider.cs" />
     <Compile Include="INodeInterfaceProvider.cs" />
     <Compile Include="PublicAttribute.cs" />
     <Compile Include="IO\NodeWriter.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="NodeInterfaceProviderBase.cs" />
     <Compile Include="XContainerExtensions.cs" />
     <Compile Include="XElementExtensions.cs" />
+    <Compile Include="XDocumentExtensions.cs" />
     <Compile Include="XNodeExtensions.cs" />
     <Compile Include="XObjectExtensions.cs" />
     <Compile Include="PriorityAttribute.cs" />
@@ -140,7 +142,6 @@
     <Compile Include="INamingScope.cs" />
     <Compile Include="NXDocumentHost.cs" />
     <Compile Include="NXDocumentState.cs" />
-    <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

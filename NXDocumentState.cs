@@ -48,23 +48,19 @@ namespace NXKit
 
         readonly Uri uri;
         readonly string xml;
-        readonly int nextElementId;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         internal NXDocumentState(
             Uri uri,
-            string xml,
-            int nextElementId)
+            string xml)
         {
             Contract.Requires<ArgumentNullException>(uri != null);
             Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentNullException>(nextElementId >= 0);
 
             this.uri = uri;
             this.xml = xml;
-            this.nextElementId = nextElementId;
         }
 
         /// <summary>
@@ -76,7 +72,6 @@ namespace NXKit
 
             this.uri = (Uri)info.GetValue("Uri", typeof(Uri));
             this.xml = LoadXml((byte[])info.GetValue("Xml", typeof(byte[])));
-            this.nextElementId = info.GetInt32("NextElementId");
         }
 
         public Uri Uri
@@ -93,14 +88,6 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Saved next element Id.
-        /// </summary>
-        public int NextElementId
-        {
-            get { return nextElementId; }
-        }
-
-        /// <summary>
         /// Serializes the instance.
         /// </summary>
         /// <param name="info"></param>
@@ -109,7 +96,6 @@ namespace NXKit
         {
             info.AddValue("Uri", uri);
             info.AddValue("Xml", SaveXml(xml));
-            info.AddValue("NextElementId", nextElementId);
         }
 
     }
