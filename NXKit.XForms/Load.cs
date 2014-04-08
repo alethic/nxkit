@@ -7,7 +7,7 @@ using NXKit.DOMEvents;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}load")]
+    [Interface("{http://www.w3.org/2002/xforms}load")]
     public class Load : 
         IAction
     {
@@ -25,14 +25,9 @@ namespace NXKit.XForms
             this.element = element;
         }
 
-        XFormsModule Module
-        {
-            get { return element.Host().Module<XFormsModule>(); }
-        }
-
         public void Handle(Event ev)
         {
-            Module.InvokeAction(this);
+            Invoke();
         }
 
         public void Invoke()

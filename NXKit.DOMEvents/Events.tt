@@ -15,7 +15,7 @@ namespace NXKit.DOMEvents
 
     public partial class Events
     {
-
+    
         static readonly EventInfo[] EVENT_INFO = new EventInfo[]
         {
 <#
@@ -52,7 +52,7 @@ foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("
 foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("Event"))
 {
 #>
-        public const string <#= (string)e.Attribute("type") #> = "<#= (string)e.Attribute("type") #>";
+        public const string <#= (string)e.Attribute("name") ?? (string)e.Attribute("type") #> = "<#= (string)e.Attribute("type") #>";
 <#
 }
 #>
@@ -61,7 +61,7 @@ foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("
 foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("UIEvent"))
 {
 #>
-        public const string <#= (string)e.Attribute("type") #> = "<#= (string)e.Attribute("type") #>";
+        public const string <#= (string)e.Attribute("name") ?? (string)e.Attribute("type") #> = "<#= (string)e.Attribute("type") #>";
 <#
 }
 #>
@@ -70,7 +70,7 @@ foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("
 foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("MutationEvent"))
 {
 #>
-        public const string <#= (string)e.Attribute("type") #> = "<#= (string)e.Attribute("type") #>";
+        public const string <#= (string)e.Attribute("name") ?? (string)e.Attribute("type") #> = "<#= (string)e.Attribute("type") #>";
 <#
 }
 #>
@@ -79,7 +79,7 @@ foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("
 foreach (var e in XDocument.Load(Host.ResolvePath("Events.xml")).Root.Elements("FocusEvent"))
 {
 #>
-        public const string <#= (string)e.Attribute("type") #> = "<#= (string)e.Attribute("type") #>";
+        public const string <#= (string)e.Attribute("name") ?? (string)e.Attribute("type") #> = "<#= (string)e.Attribute("type") #>";
 <#
 }
 #>

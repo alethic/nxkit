@@ -6,7 +6,7 @@ using NXKit.DOMEvents;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{}rebuild")]
+    [Interface("{}rebuild")]
     public class Rebuild :
         IAction
     {

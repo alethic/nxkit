@@ -7,7 +7,7 @@ using NXKit.DOMEvents;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}setvalue")]
+    [Interface("{http://www.w3.org/2002/xforms}setvalue")]
     public class SetValue :
         IAction
     {
@@ -25,17 +25,9 @@ namespace NXKit.XForms
             this.element = element;
         }
 
-        /// <summary>
-        /// Gets the XForms module.
-        /// </summary>
-        XFormsModule Module
-        {
-            get { return element.Host().Module<XFormsModule>(); }
-        }
-
         public void Handle(Event ev)
         {
-            Module.InvokeAction(this);
+            Invoke();
         }
 
         public void Invoke()

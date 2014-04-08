@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}item")]
+    [Interface("{http://www.w3.org/2002/xforms}item")]
     public class Item :
         ISelectable
     {

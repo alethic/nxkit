@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace NXKit.XForms.Layout
 {
 
-    [NXElementInterface("{http://schemas.nxkit.org/nxkit/2014/xforms-layout}table-row")]
+    [Interface("{http://schemas.nxkit.org/nxkit/2014/xforms-layout}table-row")]
     public class TableRow
     {
 

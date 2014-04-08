@@ -7,12 +7,13 @@ using NXKit.DOMEvents;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}refresh")]
+    [Interface("{http://www.w3.org/2002/xforms}refresh")]
     public class Refresh :
         IAction
     {
 
         readonly XElement element;
+        readonly AttributeAccessor attributes;
 
         /// <summary>
         /// Initializes a new instance.
@@ -25,14 +26,6 @@ namespace NXKit.XForms
             this.element = element;
         }
 
-        /// <summary>
-        /// Gets the XForms module.
-        /// </summary>
-        XFormsModule Module
-        {
-            get { return element.Host().Module<XFormsModule>(); }
-        }
-
         public void Handle(Event ev)
         {
             Invoke();
@@ -40,7 +33,7 @@ namespace NXKit.XForms
 
         public void Invoke()
         {
-            var modelAttr = Module.GetAttributeValue(element, "model");
+            var modelAttr = attributes.GetAttributeValue("model");
             if (modelAttr != null)
             {
                 var model = element.ResolveId(modelAttr);

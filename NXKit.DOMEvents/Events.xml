@@ -3,20 +3,16 @@
         type="DOMActivate"
         bubbles="true"
         cancelable="true" />
-    <MutationEvent
-        type="DOMAttrModified"
-        bubbles="true"
-        cancelable="false" />
-    <MutationEvent
-        type="DOMCharacterDataModified"
-        bubbles="true"
-        cancelable="false" />
     <FocusEvent
         type="DOMFocusIn"
         bubbles="true"
         cancelable="false" />
     <FocusEvent
         type="DOMFocusOut"
+        bubbles="true"
+        cancelable="false" />
+    <MutationEvent
+        type="DOMSubtreeModified"
         bubbles="true"
         cancelable="false" />
     <MutationEvent
@@ -36,8 +32,25 @@
         bubbles="false"
         cancelable="false" />
     <MutationEvent
-        type="DOMSubtreeModified"
+        type="DOMAttrModified"
         bubbles="true"
+        cancelable="false" />
+    <MutationEvent
+        type="DOMCharacterDataModified"
+        bubbles="true"
+        cancelable="false" />
+    <MutationEvent
+        type="DOMElementNameChanged"
+        bubbles="true"
+        cancelable="false" />
+    <MutationEvent
+        type="DOMAttributeNameChanged"
+        bubbles="true"
+        cancelable="false" />
+    <Event
+        name="Load"
+        type="load"
+        bubbles="false"
         cancelable="false" />
     <KeyboardEvent
         type="keypress"

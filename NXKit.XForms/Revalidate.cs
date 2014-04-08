@@ -7,7 +7,7 @@ using NXKit.DOMEvents;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}revalidate")]
+    [Interface("{http://www.w3.org/2002/xforms}revalidate")]
     public class Revalidate :
         IAction
     {
@@ -23,14 +23,6 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
-        }
-
-        /// <summary>
-        /// Gets the XForms module.
-        /// </summary>
-        XFormsModule Module
-        {
-            get { return element.Host().Module<XFormsModule>(); }
         }
 
         public void Handle(Event ev)

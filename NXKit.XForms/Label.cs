@@ -8,7 +8,7 @@ namespace NXKit.XForms
     /// presented visually and made available to accessibility software so the visually-impaired user can obtain a
     /// short description of form controls while navigating among them.
     /// </summary>
-    [NXElementInterface("{http://www.w3.org/2002/xforms}label")]
+    [Interface("{http://www.w3.org/2002/xforms}label")]
     public class Label 
     {
 

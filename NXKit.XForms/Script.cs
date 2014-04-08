@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// XForms 2.0 script tag.
     /// </summary>
-    [NXElementInterface("{http://www.w3.org/2002/xforms}script")]
+    [Interface("{http://www.w3.org/2002/xforms}script")]
     [Public]
     public class Script :
         IAction

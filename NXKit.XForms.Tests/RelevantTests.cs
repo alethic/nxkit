@@ -42,26 +42,27 @@ namespace NXKit.XForms.Tests
 
             var inputs = d.Root
                 .Descendants()
-                .OfType<Input>()
+                .Where(i => i.Interfaces<Input>().Any())
+                .Select(i => i.Interface<IUIBindingNode>())
                 .ToList();
 
-            Assert.IsTrue(inputs[1].Relevant);
+            Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "false";
             d.Invoke();
-            Assert.IsFalse(inputs[1].Relevant);
+            Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "true";
             d.Invoke();
-            Assert.IsTrue(inputs[1].Relevant);
+            Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "false";
             d.Invoke();
-            Assert.IsFalse(inputs[1].Relevant);
+            Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "true";
             d.Invoke();
-            Assert.IsTrue(inputs[1].Relevant);
+            Assert.IsTrue(inputs[1].UIBinding.Relevant);
         }
 
         [TestMethod]
@@ -71,16 +72,22 @@ namespace NXKit.XForms.Tests
 
             var inputs = d.Root
                 .Descendants()
-                .OfType<Input>()
+                .Select(i => new
+                {
+                    Input = i.InterfaceOrDefault<Input>(),
+                    BindingNode = i.InterfaceOrDefault<IUIBindingNode>(),
+                    Target = i.InterfaceOrDefault<INXEventTarget>(),
+                })
+                .Where(i => i.Input != null)
                 .ToList();
 
             int c = 0;
-            inputs[1].Interface<INXEventTarget>().AddEventHandler("xforms-disabled", i => c++);
-            inputs[0].UIBinding.Value = "false";
-            inputs[0].UIBinding.Value = "false";
+            inputs[1].Target.AddEventHandler("xforms-disabled", i => c++);
+            inputs[0].BindingNode.UIBinding.Value = "false";
+            inputs[0].BindingNode.UIBinding.Value = "false";
             d.Invoke();
             Assert.AreEqual(1, c);
-            Assert.IsFalse(inputs[1].Relevant);
+            Assert.IsFalse(inputs[1].BindingNode.UIBinding.Relevant);
         }
 
         [TestMethod]
@@ -90,17 +97,23 @@ namespace NXKit.XForms.Tests
 
             var inputs = d.Root
                 .Descendants()
-                .OfType<Input>()
+                .Select(i => new
+                {
+                    Input = i.InterfaceOrDefault<Input>(),
+                    BindingNode = i.InterfaceOrDefault<IUIBindingNode>(),
+                    Target = i.InterfaceOrDefault<INXEventTarget>(),
+                })
+                .Where(i => i.Input != null)
                 .ToList();
 
             int c = 0;
-            inputs[1].Interface<INXEventTarget>().AddEventHandler("xforms-enabled", i => c++);
-            inputs[0].UIBinding.Value = "false";
+            inputs[1].Target.AddEventHandler("xforms-enabled", i => c++);
+            inputs[0].BindingNode.UIBinding.Value = "false";
             d.Invoke();
-            inputs[0].UIBinding.Value = "true";
+            inputs[0].BindingNode.UIBinding.Value = "true";
             d.Invoke();
             Assert.AreEqual(1, c);
-            Assert.IsTrue(inputs[1].Relevant);
+            Assert.IsTrue(inputs[1].BindingNode.UIBinding.Relevant);
         }
 
     }

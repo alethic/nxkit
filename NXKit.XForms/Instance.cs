@@ -4,12 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Xml.Linq;
+
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}instance")]
+    [Interface("{http://www.w3.org/2002/xforms}instance")]
     public class Instance :
         IOnInitialize
     {
@@ -109,17 +110,6 @@ namespace NXKit.XForms
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Creates a new state instance.
-        /// </summary>
-        /// <returns></returns>
-        InstanceState CreateState()
-        {
-            var state = new InstanceState();
-            state.Initialize(Model, element);
-            return state;
         }
 
         void IOnInitialize.Init()

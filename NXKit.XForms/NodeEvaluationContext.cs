@@ -10,7 +10,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Obtains the evaluation context to be used by a node.
     /// </summary>
-    [NXElementInterface]
+    [Interface]
     public class NodeEvaluationContext
     {
 

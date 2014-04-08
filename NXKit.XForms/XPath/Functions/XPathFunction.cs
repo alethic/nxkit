@@ -54,7 +54,7 @@ namespace NXKit.XForms.XPath.Functions
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
 
-            var result = GetModel(context.Element.Host().Module<XFormsModule>(), navigator);
+            var result = GetModel(navigator);
             if (result == null)
                 throw new NullReferenceException();
 
@@ -74,41 +74,39 @@ namespace NXKit.XForms.XPath.Functions
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
 
-            return GetInstance(context.Element.Host().Module<XFormsModule>(), navigator);
+            return GetInstance(navigator);
         }
 
         /// <summary>
         /// Gets the current model of the navigator.
         /// </summary>
-        /// <param name="module"></param>
         /// <param name="navigator"></param>
         /// <returns></returns>
-        Model GetModel(XFormsModule module, XPathNavigator navigator)
+        Model GetModel(XPathNavigator navigator)
         {
-            Contract.Requires<ArgumentNullException>(module != null);
             Contract.Requires<ArgumentNullException>(navigator != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
             Contract.Ensures(Contract.Result<Model>() != null);
 
-            return new ModelItem(module, (XObject)navigator.UnderlyingObject).Model;
+            return ((XObject)navigator.UnderlyingObject).AnnotationOrCreate<ModelItem>(() =>
+                new ModelItem((XObject)navigator.UnderlyingObject)).Model;
         }
 
         /// <summary>
         /// Gets the current instance of the navigator.
         /// </summary>
-        /// <param name="module"></param>
         /// <param name="navigator"></param>
         /// <returns></returns>
-        Instance GetInstance(XFormsModule module, XPathNavigator navigator)
+        Instance GetInstance(XPathNavigator navigator)
         {
-            Contract.Requires<ArgumentNullException>(module != null);
             Contract.Requires<ArgumentNullException>(navigator != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
             Contract.Ensures(Contract.Result<Instance>() != null);
 
-            return new ModelItem(module, (XObject)navigator.UnderlyingObject).Instance;
+            return ((XObject)navigator.UnderlyingObject).AnnotationOrCreate<ModelItem>(() =>
+                new ModelItem((XObject)navigator.UnderlyingObject)).Instance;
         }
 
     }

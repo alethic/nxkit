@@ -8,7 +8,7 @@ using NXKit.Util;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}repeat")]
+    [Interface("{http://www.w3.org/2002/xforms}repeat")]
     public class Repeat :
         IUINode
     {

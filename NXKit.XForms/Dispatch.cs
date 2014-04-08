@@ -6,7 +6,7 @@ using NXKit.DOMEvents;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}dispatch")]
+    [Interface("{http://www.w3.org/2002/xforms}dispatch")]
     public class Dispatch :
         IAction
     {

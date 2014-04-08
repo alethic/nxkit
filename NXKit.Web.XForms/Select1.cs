@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace NXKit.Web.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}select1")]
+    [Interface("{http://www.w3.org/2002/xforms}select1")]
     public class Select1 :
         Template
     {

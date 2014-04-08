@@ -6,7 +6,7 @@ using NXKit.DOMEvents;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{}send")]
+    [Interface("{}send")]
     public class Send :
         IAction
     {

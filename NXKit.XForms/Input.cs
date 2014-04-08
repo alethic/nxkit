@@ -1,4 +1,6 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -7,9 +9,11 @@ namespace NXKit.XForms
     /// This form control enables free-form data entry or a user interface component appropriate to the datatype of the
     /// bound node.
     /// </summary>
-    [NXElementInterface("{}input")]
+    [Interface("{http://www.w3.org/2002/xforms}input")]
     public class Input
     {
+
+        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
@@ -17,7 +21,17 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         public Input(XElement element)
         {
+            Contract.Requires<ArgumentNullException>(element != null);
 
+            this.element = element;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="XElement"/>.
+        /// </summary>
+        public XElement Element
+        {
+            get { return element; }
         }
 
     }

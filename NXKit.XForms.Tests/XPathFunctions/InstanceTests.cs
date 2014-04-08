@@ -34,10 +34,11 @@ namespace NXKit.XForms.Tests.XPathFunctions
 
             var input = e.Root
                 .Descendants()
-                .OfType<Input>()
+                .Where(i => i.Interfaces<Input>().Any())
+                .Select(i => i.Interface<IUIBindingNode>())
                 .FirstOrDefault();
 
-            Assert.AreEqual("node1", input.Binding.Value);
+            Assert.AreEqual("node1", input.UIBinding.Value);
         }
 
         [TestMethod]
@@ -58,10 +59,11 @@ namespace NXKit.XForms.Tests.XPathFunctions
 
             var input = e.Root
                 .Descendants()
-                .OfType<Input>()
+                .Where(i => i.Interfaces<Input>().Any())
+                .Select(i => i.Interface<IUIBindingNode>())
                 .FirstOrDefault();
 
-            Assert.AreEqual("node2", input.Binding.Value);
+            Assert.AreEqual("node2", input.UIBinding.Value);
         }
 
     }

@@ -9,7 +9,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides a <see cref="Binding"/> for a UI element.
     /// </summary>
-    [NXElementInterface("http://www.w3.org/2002/xforms", null)]
+    [Interface("http://www.w3.org/2002/xforms", null)]
     public class BindingNode :
         IBindingNode,
         IEvaluationContextScope

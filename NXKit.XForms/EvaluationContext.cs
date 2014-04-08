@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace NXKit.XForms
 {
@@ -77,6 +79,51 @@ namespace NXKit.XForms
         public int Size
         {
             get { return size; }
+        }
+
+        /// <summary>
+        /// Evaluates the given XPath expression.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="evaluationContext"></param>
+        /// <param name="expression"></param>
+        /// <param name="resultType"></param>
+        /// <returns></returns>
+        internal object EvaluateXPath(XElement element, string expression, XPathResultType resultType)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(element.Host() != null);
+            Contract.Requires<ArgumentNullException>(expression != null);
+
+            var nc = new XFormsXsltContext(element, this);
+            var nv = modelItem.CreateNavigator();
+            var xp = XPathExpression.Compile(expression, nc);
+            var nd = nv.Evaluate(xp);
+
+            return ConvertXPath(nd, resultType);
+        }
+
+        /// <summary>
+        /// Converts an XPath evaluation result into the specified type.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="resultType"></param>
+        object ConvertXPath(object result, XPathResultType resultType)
+        {
+            if (result == null)
+                return null;
+
+            switch (resultType)
+            {
+                case XPathResultType.Number:
+                    return Convert.ToDouble(result);
+                case XPathResultType.Boolean:
+                    return Convert.ToBoolean(result);
+                case XPathResultType.String:
+                    return Convert.ToString(result);
+                default:
+                    return result;
+            }
         }
 
     }

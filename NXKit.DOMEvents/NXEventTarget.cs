@@ -14,6 +14,7 @@ namespace NXKit.DOMEvents
 
         readonly XElement element;
         readonly IEventFactory provider;
+        readonly Lazy<IEventTarget> target;
 
         /// <summary>
         /// Initializes a new instance.
@@ -26,16 +27,17 @@ namespace NXKit.DOMEvents
 
             this.element = element;
             this.provider = element.Host().Container.GetExportedValue<IEventFactory>();
+            this.target = new Lazy<IEventTarget>(() => element.Interface<IEventTarget>());
         }
 
-        public XElement Elemenet
+        public XElement Element
         {
             get { return element; }
         }
 
         public IEventTarget Target
         {
-            get { Contract.Ensures(Contract.Result<IEventTarget>() != null); return Elemenet.Interface<IEventTarget>(); }
+            get { return target.Value; }
         }
 
         public void DispatchEvent(string type)

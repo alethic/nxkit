@@ -112,6 +112,7 @@
   <ItemGroup>
     <Compile Include="DefaultEventFactory.cs" />
     <Compile Include="DocumentEvent.cs" />
+    <Compile Include="DocumentEventDispatcher.cs" />
     <Compile Include="DOMEventException.cs" />
     <Compile Include="EventHandlerDelegate.cs" />
     <Compile Include="FocusEventInfo.cs" />

@@ -59,14 +59,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the module.
-        /// </summary>
-        public XFormsModule Module
-        {
-            get { return element.Host().Module<XFormsModule>(); }
-        }
-
-        /// <summary>
         /// Gets the model item associated with this binding.
         /// </summary>
         public ModelItem ModelItem

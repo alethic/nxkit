@@ -6,7 +6,7 @@ using NXKit.DOMEvents;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("recalculate")]
+    [Interface("recalculate")]
     public class Recalculate :
         IAction
     {

@@ -56,14 +56,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets a reference to the <see cref="XFormsModule"/>.
-        /// </summary>
-        XFormsModule Module
-        {
-            get { return Element.Host().Module<XFormsModule>(); }
-        }
-
-        /// <summary>
         /// <see cref="Element"/> to which this binding is related.
         /// </summary>
         public XElement Element
@@ -97,7 +89,7 @@ namespace NXKit.XForms
 
         object GetResult()
         {
-            return Module.EvaluateXPath(Element, Context, XPathExpression, XPathResultType.NodeSet);
+            return Context.EvaluateXPath(Element, XPathExpression, XPathResultType.NodeSet);
         }
 
         /// <summary>
@@ -113,9 +105,8 @@ namespace NXKit.XForms
             if (Result is XPathNodeIterator)
                 return ((XPathNodeIterator)Result)
                     .Cast<XPathNavigator>()
-                    .Select(i => i.UnderlyingObject)
-                    .Cast<XObject>()
-                    .Select(i => new ModelItem(Module, i))
+                    .Select(i => (XObject)i.UnderlyingObject)
+                    .Select(i => i.AnnotationOrCreate<ModelItem>(() => new ModelItem(i)))
                     .ToArray();
             else
                 return null;

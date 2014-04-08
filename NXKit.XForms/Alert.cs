@@ -3,7 +3,7 @@
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}alert")]
+    [Interface("{http://www.w3.org/2002/xforms}alert")]
     public class Alert
     {
 

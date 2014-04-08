@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}switch")]
+    [Interface("{http://www.w3.org/2002/xforms}switch")]
     public class Switch
     {
 

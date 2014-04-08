@@ -25,7 +25,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        internal ModelItemState()
+        public ModelItemState()
         {
 
         }

@@ -9,7 +9,7 @@ using NXKit.DOMEvents;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}delete")]
+    [Interface("{http://www.w3.org/2002/xforms}delete")]
     public class Delete :
         IAction
     {
@@ -36,14 +36,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the XForms module.
-        /// </summary>
-        XFormsModule Module
-        {
-            get { return element.Host().Module<XFormsModule>(); }
-        }
-
-        /// <summary>
         /// Gets the binding applied to the node.
         /// </summary>
         Binding Binding
@@ -53,7 +45,7 @@ namespace NXKit.XForms
 
         public void Handle(Event ev)
         {
-            Module.InvokeAction(this);
+            Invoke();
         }
 
         /// <summary>

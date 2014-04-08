@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{}select")]
+    [Interface("{}select")]
     public class Select
     {
 

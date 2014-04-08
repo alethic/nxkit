@@ -8,7 +8,7 @@ using NXKit.DOMEvents;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}action")]
+    [Interface("{http://www.w3.org/2002/xforms}action")]
     public class Action :
         IAction
     {
@@ -34,17 +34,9 @@ namespace NXKit.XForms
             get { return element; }
         }
 
-        /// <summary>
-        /// Gets the XForms module.
-        /// </summary>
-        XFormsModule Module
-        {
-            get { return element.Host().Module<XFormsModule>(); }
-        }
-
         public void Handle(Event ev)
         {
-            Module.InvokeAction(this);
+            Invoke();
         }
 
         public void Invoke()
@@ -54,7 +46,7 @@ namespace NXKit.XForms
                 .SelectMany(i => i.Interfaces<IAction>());
 
             foreach (var action in actions)
-                Module.InvokeAction(action);
+                action.Invoke();
         }
 
     }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Web.UI;
+using System.Xml.Linq;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -306,11 +307,8 @@ namespace NXKit.Web.UI
             document.Invoke();
         }
 
-        void VisitAndPush(JObject s, NXNode d)
+        void VisitAndPush(JObject s, XNode d)
         {
-            if (s.Value<string>("Type") != d.GetType().FullName)
-                throw new Exception();
-
             var items = d.Interfaces()
                 .Where(i => i != null)
                 .Select(i => new
@@ -407,13 +405,13 @@ namespace NXKit.Web.UI
                 }
             }
 
-            if (d is NXElement)
+            if (d is XElement)
             {
                 var sNodes = s.Value<JArray>("Nodes")
                     .Values<JObject>()
                     .ToArray();
 
-                var dNodes = ((NXElement)d)
+                var dNodes = ((XElement)d)
                     .Nodes()
                     .ToArray();
 

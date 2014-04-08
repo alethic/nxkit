@@ -3,7 +3,7 @@
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}range")]
+    [Interface("{http://www.w3.org/2002/xforms}range")]
     [Public]
     public class Range 
     {

@@ -2,6 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+using System.Xml.XPath;
 
 using NXKit.DOMEvents;
 using NXKit.Util;
@@ -15,42 +16,23 @@ namespace NXKit.XForms
     public class ModelItem
     {
 
-        static ModelItemState GetState(XFormsModule module, XObject item)
-        {
-            var state = item.Annotation<ModelItemState>();
-            if (state == null)
-                item.AddAnnotation(state = new ModelItemState());
-
-            return state;
-        }
-
-        readonly XFormsModule module;
         readonly XObject xml;
-
-        ModelItemState state;
-        Model model;
-        Instance instance;
+        readonly Lazy<Model> model;
+        readonly Lazy<Instance> instance;
+        readonly Lazy<ModelItemState> state;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="module"></param>
-        /// <param name="item"></param>
-        public ModelItem(XFormsModule module, XObject item)
+        /// <param name="xml"></param>
+        public ModelItem(XObject xml)
         {
-            Contract.Requires<ArgumentNullException>(module != null);
-            Contract.Requires<ArgumentNullException>(item != null);
+            Contract.Requires<ArgumentNullException>(xml != null);
 
-            this.module = module;
-            this.xml = item;
-        }
-
-        /// <summary>
-        /// Gets a reference to the module.
-        /// </summary>
-        public XFormsModule Module
-        {
-            get { return module; }
+            this.xml = xml;
+            this.model = new Lazy<Model>(() => xml.Document.Annotation<Model>());
+            this.instance = new Lazy<Instance>(() => xml.Document.Annotation<Instance>());
+            this.state = new Lazy<ModelItemState>(() => xml.AnnotationOrCreate<ModelItemState>());
         }
 
         /// <summary>
@@ -67,18 +49,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal ModelItemState State
         {
-            get { return state ?? (state = GetState()); }
-        }
-
-        /// <summary>
-        /// Gets the state structure for the given model item.
-        /// </summary>
-        /// <returns></returns>
-        ModelItemState GetState()
-        {
-            Contract.Ensures(Contract.Result<ModelItemState>() != null);
-
-            return GetState(module, xml);
+            get { return state.Value; }
         }
 
         /// <summary>
@@ -87,14 +58,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         public Model Model
         {
-            get { return model ?? (model = GetModel()); }
-        }
-
-        Model GetModel()
-        {
-            Contract.Ensures(Contract.Result<Model>() != null);
-
-            return xml.Document.Annotation<Model>();
+            get { return model.Value; }
         }
 
         /// <summary>
@@ -103,14 +67,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         public Instance Instance
         {
-            get { return instance ?? (instance = GetInstance()); }
-        }
-
-        Instance GetInstance()
-        {
-            Contract.Ensures(Contract.Result<Instance>() != null);
-
-            return xml.Document.Annotation<Instance>();
+            get { return instance.Value; }
         }
 
         /// <summary>
@@ -164,7 +121,7 @@ namespace NXKit.XForms
 
         bool GetReadOnly()
         {
-            return xml.AncestorsAndSelf().Any(i => GetState(module, i).ReadOnly ?? false);
+            return xml.AncestorsAndSelf().Any(i => i.AnnotationOrCreate<ModelItemState>().ReadOnly ?? false);
         }
 
         /// <summary>
@@ -178,7 +135,7 @@ namespace NXKit.XForms
 
         bool GetRelevant()
         {
-            return xml.AncestorsAndSelf().All(i => GetState(module, i).Relevant ?? true);
+            return xml.AncestorsAndSelf().All(i => i.AnnotationOrCreate<ModelItemState>().Relevant ?? true);
         }
 
         /// <summary>
@@ -326,10 +283,33 @@ namespace NXKit.XForms
         {
             State.Type = item.State.Type;
             State.Relevant = item.State.Relevant;
-            State.ReadOnly = item.state.ReadOnly;
-            State.Required = item.state.Required;
+            State.ReadOnly = item.State.ReadOnly;
+            State.Required = item.State.Required;
             State.Constraint = item.State.Constraint;
             State.Valid = item.State.Valid;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="XPathNavigator"/> for the given model item.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        internal XPathNavigator CreateNavigator()
+        {
+            var attr = xml as XAttribute;
+            if (attr != null)
+            {
+                // navigator needs to be created on parent, and navigated to attribute
+                var nav = attr.Parent.CreateNavigator();
+                nav.MoveToAttribute(attr.Name.LocalName, attr.Name.NamespaceName);
+                return nav;
+            }
+
+            var element = xml as XElement;
+            if (element != null)
+                return element.CreateNavigator();
+
+            throw new InvalidOperationException();
         }
 
     }

@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}group")]
+    [Interface("{http://www.w3.org/2002/xforms}group")]
     public class Group 
     {
 

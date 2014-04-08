@@ -127,6 +127,7 @@
     <Compile Include="DeleteAttributes.cs" />
     <Compile Include="ItemState.cs" />
     <Compile Include="NXNodeExtensions.cs" />
+    <Compile Include="DocumentInvoke.cs" />
     <Compile Include="RepeatAttributes.cs" />
     <Compile Include="ItemValueAttributes.cs" />
     <Compile Include="EvaluationContextFuncProvider.cs" />
@@ -186,7 +187,6 @@
     <Compile Include="ModelItemState.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="ModelState.cs" />
-    <Compile Include="XFormsModule.cs" />
     <Compile Include="DocumentAnnotation.cs" />
     <Compile Include="Output.cs" />
     <Compile Include="Range.cs" />

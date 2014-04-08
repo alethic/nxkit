@@ -10,7 +10,7 @@ using NXKit.Util;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}model")]
+    [Interface("{http://www.w3.org/2002/xforms}model")]
     public class Model :
         IEvaluationContextScope,
         IEventDefaultActionHandler
@@ -41,11 +41,6 @@ namespace NXKit.XForms
         public XElement Element
         {
             get { return element; }
-        }
-
-        XFormsModule Module
-        {
-            get { return element.Host().Container.GetExportedValue<XFormsModule>(); }
         }
 
         /// <summary>
@@ -95,7 +90,10 @@ namespace NXKit.XForms
                 if (defaultInstance.State.Document == null)
                     return null;
 
-                return new EvaluationContext(this, defaultInstance, new ModelItem(Module, defaultInstance.State.Document.Root), 1, 1);
+                var modelItem = defaultInstance.State.Document.Root.AnnotationOrCreate<ModelItem>(() =>
+                    new ModelItem(defaultInstance.State.Document.Root));
+
+                return new EvaluationContext(this, defaultInstance, modelItem, 1, 1);
             }
         }
 
@@ -206,11 +204,11 @@ namespace NXKit.XForms
 
             // refresh interface bindings
             foreach (var ui in GetUIBindingNodes())
-                    ui.Refresh();
+                ui.Refresh();
 
             // discard interface events
             foreach (var ui in GetUIBindingNodes())
-                    ui.DiscardEvents();
+                ui.DiscardEvents();
 
             // refresh interfaces
             foreach (var ui in GetUINodes())
@@ -308,10 +306,11 @@ namespace NXKit.XForms
                 foreach (var instance in Instances)
                 {
                     // all model items
-                    var modelItems = instance.State.Document.Root.DescendantNodesAndSelf()
+                    var modelItems = instance.State.Document.Root
+                        .DescendantNodesAndSelf()
                         .OfType<XElement>()
                         .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
-                        .Select(i => new ModelItem(Module, i));
+                        .Select(i => i.AnnotationOrCreate<ModelItem>(() => new ModelItem(i)));
 
                     foreach (var modelItem in modelItems)
                         modelItem.State.Valid = (modelItem.Required ? modelItem.Value.TrimToNull() != null : true) && modelItem.Constraint;
