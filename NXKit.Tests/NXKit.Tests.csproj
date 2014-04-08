@@ -125,6 +125,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DefaultInterfaceProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LoadTests.cs" />
     <Compile Include="NXDocumentHostTests.cs" />

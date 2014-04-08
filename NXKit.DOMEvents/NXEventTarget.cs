@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace NXKit.DOMEvents
@@ -8,6 +9,7 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Implements the <see cref="INXEventTarget"/> interface.
     /// </summary>
+    [Interface(XmlNodeType.Element)]
     public class NXEventTarget :
         INXEventTarget
     {

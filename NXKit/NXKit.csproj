@@ -119,15 +119,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IInterfacePredicate.cs" />
+    <Compile Include="InterfaceDescriptor.cs" />
+    <Compile Include="InterfacePredicateBase.cs" />
     <Compile Include="IOnInvoke.cs" />
     <Compile Include="IOnInitialize.cs" />
     <Compile Include="InterfaceAttribute.cs" />
     <Compile Include="DefaultInterfaceProvider.cs" />
-    <Compile Include="INodeInterfaceProvider.cs" />
+    <Compile Include="IInterfaceProvider.cs" />
     <Compile Include="PublicAttribute.cs" />
     <Compile Include="IO\NodeWriter.cs" />
     <Compile Include="CompositionUtil.cs" />
-    <Compile Include="NodeInterfaceProviderBase.cs" />
+    <Compile Include="InterfaceProviderBase.cs" />
     <Compile Include="XContainerExtensions.cs" />
     <Compile Include="XElementExtensions.cs" />
     <Compile Include="XDocumentExtensions.cs" />
@@ -139,7 +142,7 @@
     <Compile Include="XmlSchemaPackage.cs" />
     <Compile Include="SchemaPackage.cs" />
     <Compile Include="SchemaContainer.cs" />
-    <Compile Include="INamingScope.cs" />
+    <Compile Include="IRefScope.cs" />
     <Compile Include="NXDocumentHost.cs" />
     <Compile Include="NXDocumentState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

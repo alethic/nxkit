@@ -7,51 +7,51 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Provides a base <see cref="INodeInterfaceProvider"/> implementation that supports caching implementations in
+    /// Provides a base <see cref="IInterfaceProvider"/> implementation that supports caching implementations in
     /// the annotations collection.
     /// </summary>
-    public abstract class NodeInterfaceProviderBase :
-        INodeInterfaceProvider
+    public abstract class InterfaceProviderBase :
+        IInterfaceProvider
     {
 
         /// <summary>
         /// Gets the interface of the specified type, if it's already created.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="obj"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        protected object Get(XNode node, Type type)
+        protected object Get(XObject obj, Type type)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(type != null);
 
-            return node.Annotation(type);
+            return obj.Annotation(type);
         }
 
         /// <summary>
         /// Gets the interface of the specified type, if it's already created.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="node"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        protected T Get<T>(XNode node)
+        protected T Get<T>(XObject obj)
             where T : class
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(obj != null);
 
-            return node.Annotation<T>();
+            return obj.Annotation<T>();
         }
 
         /// <summary>
-        /// Creates an interface of the specified 
+        /// Creates an interface of the specified type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="node"></param>
+        /// <param name="obj"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        protected object CreateAndAdd(XNode node, Type type, Func<object> func)
+        protected object CreateAndAdd(XObject obj, Type type, Func<object> func)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentNullException>(func != null);
 
@@ -61,65 +61,65 @@ namespace NXKit
                 throw new NullReferenceException("Interface creation function returned null.");
 
             // add new instance
-            node.AddAnnotation(i);
+            obj.AddAnnotation(i);
 
             return i;
         }
 
         /// <summary>
-        /// Creates an interface of the specified 
+        /// Creates an interface of the specified type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="node"></param>
+        /// <param name="obj"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        protected T CreateAndAdd<T>(XNode node, Func<T> func)
+        protected T CreateAndAdd<T>(XObject obj, Func<T> func)
             where T : class
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(func != null);
 
-            return CreateAndAdd(node, () => (T)func());
+            return CreateAndAdd(obj, () => (T)func());
         }
 
         /// <summary>
         /// Gets the interface of the specified type, or creats a new instance with the given function.
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="node"></param>
+        /// <param name="obj"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        protected object GetOrCreate(XNode node, Type type, Func<object> func)
+        protected object GetOrCreate(XObject obj, Type type, Func<object> func)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentNullException>(func != null);
 
-            return Get(node, type) ?? CreateAndAdd(node, type, func);
+            return Get(obj, type) ?? CreateAndAdd(obj, type, func);
         }
 
         /// <summary>
         /// Gets the interface of the specified type, or creats a new instance with the given function.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="node"></param>
+        /// <param name="obj"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        protected T GetOrCreate<T>(XNode node, Func<T> func)
+        protected T GetOrCreate<T>(XObject obj, Func<T> func)
             where T : class
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(func != null);
 
-            return (T)GetOrCreate(node, typeof(T), () => func());
+            return (T)GetOrCreate(obj, typeof(T), () => func());
         }
 
         /// <summary>
         /// Implement this method to handle retrieving interfaces for the specified node.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        public abstract IEnumerable<object> GetInterfaces(XNode node);
+        public abstract IEnumerable<object> GetInterfaces(XObject obj);
 
     }
 

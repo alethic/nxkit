@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml;
 using System.Xml.Linq;
 
-using NXKit;
 using NXKit.DOMEvents;
 
 namespace NXKit.XmlEvents
@@ -11,6 +11,7 @@ namespace NXKit.XmlEvents
     /// <summary>
     /// Listens for a given event on an element.
     /// </summary>
+    [Interface(XmlNodeType.Element)]
     public class ElementEventListener
     {
 

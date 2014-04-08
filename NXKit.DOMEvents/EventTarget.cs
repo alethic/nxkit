@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
+
 using NXKit.Util;
 
 namespace NXKit.DOMEvents
@@ -11,6 +13,7 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Implements the <see cref="IEventTarget"/> interface.
     /// </summary>
+    [Interface(XmlNodeType.Element)]
     public class EventTarget :
         IEventTarget
     {

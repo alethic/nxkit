@@ -113,6 +113,7 @@
     <Compile Include="DefaultEventFactory.cs" />
     <Compile Include="DocumentEvent.cs" />
     <Compile Include="DocumentEventDispatcher.cs" />
+    <Compile Include="DOMTargetEventException.cs" />
     <Compile Include="DOMEventException.cs" />
     <Compile Include="EventHandlerDelegate.cs" />
     <Compile Include="FocusEventInfo.cs" />
@@ -132,7 +133,6 @@
     <Compile Include="EventInfoTableProvider.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="IEventInfoTable.cs" />
-    <Compile Include="NodeInterfaceProvider.cs" />
     <Compile Include="INXDocumentEvent.cs" />
     <Compile Include="IEventFactory.cs" />
     <Compile Include="IEventProvider.cs" />
@@ -150,6 +150,7 @@
     <Compile Include="IEventListener.cs" />
     <Compile Include="IEventTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XElementExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj">

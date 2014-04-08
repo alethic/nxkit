@@ -17,6 +17,7 @@ namespace NXKit
         readonly XmlNodeType nodeType;
         readonly string namespaceName;
         readonly string localName;
+        Type predicateType;
 
         /// <summary>
         /// Initializes a new instance.
@@ -30,6 +31,19 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="predicateType"></param>
+        public InterfaceAttribute(Type predicateType)
+            : this(XmlNodeType.Element)
+        {
+            Contract.Requires<ArgumentNullException>(predicateType != null);
+
+            this.predicateType = predicateType;
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="nodeType"></param>
         public InterfaceAttribute(XmlNodeType nodeType)
         {
             this.nodeType = nodeType;
@@ -105,6 +119,15 @@ namespace NXKit
         public string LocalName
         {
             get { return localName; }
+        }
+
+        /// <summary>
+        /// Specifies the predicate type to determine whether this interface applies to the decorated <see cref="XObject"/>.
+        /// </summary>
+        public Type PredicateType
+        {
+            get { return predicateType; }
+            set { predicateType = value; }
         }
 
     }

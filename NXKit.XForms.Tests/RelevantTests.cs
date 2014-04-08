@@ -50,7 +50,7 @@ namespace NXKit.XForms.Tests
 
             inputs[0].UIBinding.Value = "false";
             d.Invoke();
-            Assert.IsTrue(inputs[1].UIBinding.Relevant);
+            Assert.IsFalse(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "true";
             d.Invoke();
@@ -58,11 +58,40 @@ namespace NXKit.XForms.Tests
 
             inputs[0].UIBinding.Value = "false";
             d.Invoke();
-            Assert.IsTrue(inputs[1].UIBinding.Relevant);
+            Assert.IsFalse(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "true";
             d.Invoke();
             Assert.IsTrue(inputs[1].UIBinding.Relevant);
+        }
+
+        [TestMethod]
+        public void Test_value_changed_event()
+        {
+            var d = GetSampleDocument();
+
+            var inputs = d.Root
+                .Descendants(Constants.XForms_1_0 + "input")
+                .Select(i => new
+                {
+                    Input = i.Interface<Input>(),
+                    BindingNode = i.Interface<IUIBindingNode>(),
+                    Target = i.Interface<INXEventTarget>(),
+                })
+                .Where(i => i.Input != null)
+                .ToList();
+
+            int c = 0;
+            inputs[0].Target.AddEventHandler("xforms-value-changed", i => c++);
+            inputs[0].BindingNode.UIBinding.Value = "false";
+            inputs[0].BindingNode.UIBinding.Value = "false";
+            d.Invoke();
+            Assert.AreEqual(1, c);
+
+            inputs[0].BindingNode.UIBinding.Value = "true";
+            inputs[0].BindingNode.UIBinding.Value = "true";
+            d.Invoke();
+            Assert.AreEqual(2, c);
         }
 
         [TestMethod]
@@ -71,12 +100,12 @@ namespace NXKit.XForms.Tests
             var d = GetSampleDocument();
 
             var inputs = d.Root
-                .Descendants()
+                .Descendants(Constants.XForms_1_0 + "input")
                 .Select(i => new
                 {
-                    Input = i.InterfaceOrDefault<Input>(),
-                    BindingNode = i.InterfaceOrDefault<IUIBindingNode>(),
-                    Target = i.InterfaceOrDefault<INXEventTarget>(),
+                    Input = i.Interface<Input>(),
+                    BindingNode = i.Interface<IUIBindingNode>(),
+                    Target = i.Interface<INXEventTarget>(),
                 })
                 .Where(i => i.Input != null)
                 .ToList();

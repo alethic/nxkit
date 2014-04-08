@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
@@ -10,26 +11,27 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides a <see cref="Binding"/> for a UI element.
     /// </summary>
-    [Interface("http://www.w3.org/2002/xforms", null)]
-    public class BindingNode :
-        IBindingNode,
-        IEvaluationContextScope
+    [Interface(XmlNodeType.Element)]
+    public class BindingElement :
+        IBindingNode
     {
 
         readonly XElement element;
         readonly BindingAttributes attributes;
+        readonly Lazy<EvaluationContextResolver> resolver;
         readonly Lazy<Binding> binding;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public BindingNode(XElement element)
+        public BindingElement(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
             this.attributes = new BindingAttributes(element);
+            this.resolver = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
             this.binding = new Lazy<Binding>(() => GetOrCreateBinding());
         }
 
@@ -39,28 +41,6 @@ namespace NXKit.XForms
         public BindingAttributes Attributes
         {
             get { return attributes; }
-        }
-
-        /// <summary>
-        /// Gets the evaluation context to be used for the binding.
-        /// </summary>
-        public EvaluationContext EvaluationContext
-        {
-            get { return GetEvaluationContext(); }
-        }
-
-        /// <summary>
-        /// Implements the getter for EvaluationContext.
-        /// </summary>
-        /// <returns></returns>
-        EvaluationContext GetEvaluationContext()
-        {
-            var model = element.InterfaceOrDefault<NodeEvaluationContext>();
-            if (model != null &&
-                model.Context != null)
-                return model.Context;
-
-            return null;
         }
 
         /// <summary>
@@ -88,9 +68,9 @@ namespace NXKit.XForms
                 return null;
 
             // obtain evaluation context
-            var context = EvaluationContext;
+            var context = resolver.Value.Context;
             if (context == null)
-                return null;
+                throw new DOMTargetEventException(element, Events.BindingException);
 
             return new Binding(element, context, expression);
         }
@@ -104,10 +84,7 @@ namespace NXKit.XForms
             // resolve bind element
             var bind = element.ResolveId(bindIdRef);
             if (bind == null)
-            {
-                element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
-                return null;
-            }
+                throw new DOMTargetEventException(element, Events.BindingException);
 
             var binding = bind.InterfaceOrDefault<IBindingNode>();
             if (binding != null)
@@ -117,11 +94,24 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the <see cref="EvaluationContext"/> provided to further children elements.
+        /// Returns a new context based on this node's binding.
         /// </summary>
         public EvaluationContext Context
         {
-            get { return Binding != null ? new EvaluationContext(Binding.ModelItem.Model, Binding.ModelItem.Instance, Binding.ModelItem, 1, 1) : null; }
+            get { return GetContext(); }
+        }
+
+        /// <summary>
+        /// Implements the getter for <see cref="Context" />.
+        /// </summary>
+        /// <returns></returns>
+        EvaluationContext GetContext()
+        {
+            if (Binding != null &&
+                Binding.ModelItem != null)
+                return new EvaluationContext(Binding.ModelItem.Model, Binding.ModelItem.Instance, Binding.ModelItem, 1, 1);
+
+            return null;
         }
 
     }

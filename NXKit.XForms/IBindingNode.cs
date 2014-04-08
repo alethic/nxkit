@@ -12,6 +12,11 @@
         /// </summary>
         Binding Binding { get; }
 
+        /// <summary>
+        /// Gets the <see cref="EvaluationContext"/> created by the binding.
+        /// </summary>
+        EvaluationContext Context { get; }
+
     }
 
 }

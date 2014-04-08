@@ -26,6 +26,20 @@ namespace NXKit.Util
         }
 
         /// <summary>
+        /// Obtains the ancestors of the given <see cref="XObject"/> filtered by name.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static IEnumerable<XElement> Ancestors(this XObject self, XName name)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(name != null);
+
+            return self.Parent != null ? self.Parent.AncestorsAndSelf(name) : Enumerable.Empty<XElement>();
+        }
+
+        /// <summary>
         /// 
         /// Obtains the ancestors of the given <see cref="XObject"/>, including the specified instance.
         /// </summary>

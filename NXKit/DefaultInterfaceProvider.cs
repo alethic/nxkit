@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace NXKit
 {
 
     /// <summary>
-    /// Provides interfaces decorated with the <see cref="XElementInterfaceAttribute"/>.
+    /// Provides interfaces decorated with the <see cref="InterfaceAttribute"/>.
     /// </summary>
-    [Export(typeof(INodeInterfaceProvider))]
+    [Export(typeof(IInterfaceProvider))]
     public class DefaultInterfaceProvider :
-        NodeInterfaceProviderBase
+        InterfaceProviderBase
     {
 
-        static readonly List<Tuple<Tuple<XmlNodeType, string, string>, List<Type>>> map;
+        static readonly List<InterfaceDescriptor> defaultDescriptors;
 
         /// <summary>
         /// Initializes the static instance.
@@ -36,90 +36,71 @@ namespace NXKit
                 .Where(i => i.Attributes.Any())
                 .ToList();
 
-            // pairs of namespace/localname associated to type
-            var pairs = attrs
-                .SelectMany(i => i.Attributes.Select(j => new { Type = i.Type, Attribute = j }))
-                .Select(i => new { Key = Tuple.Create(i.Attribute.NodeType, i.Attribute.NamespaceName, i.Attribute.LocalName), Type = i.Type })
+            // generate interface descriptors
+            var descriptors = attrs
+                .SelectMany(i => i.Attributes
+                    .Select(j => new InterfaceDescriptor(j.NodeType, j.NamespaceName, j.LocalName, j.PredicateType, i.Type)))
                 .ToList();
-
-            // group by unique namespace/localname pairs
-            var group = pairs
-                .GroupBy(i => i.Key)
-                .Select(i => Tuple.Create(i.Key, i.Select(j => j.Type).ToList()));
 
             // finish map
-            map = group.ToList();
+            defaultDescriptors = descriptors;
+        }
+
+        readonly IEnumerable<IInterfacePredicate> predicates;
+        readonly List<InterfaceDescriptor> descriptors;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        [ImportingConstructor]
+        public DefaultInterfaceProvider(
+            [ImportMany] IEnumerable<IInterfacePredicate> predicates)
+            : this(predicates, defaultDescriptors)
+        {
+            Contract.Requires<ArgumentNullException>(predicates != null);
         }
 
         /// <summary>
-        /// Tests whether the given <see cref="XObject"/> matches the filter.
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="descriptors"></param>
+        public DefaultInterfaceProvider(
+            IEnumerable<IInterfacePredicate> predicates,
+            List<InterfaceDescriptor> descriptors)
+        {
+            Contract.Requires<ArgumentNullException>(predicates != null);
+            Contract.Requires<ArgumentNullException>(descriptors != null);
+
+            this.predicates = predicates;
+            this.descriptors = descriptors;
+        }
+
+        /// <summary>
+        /// Gets the interfaces for the specified <see cref="XObject"/>.
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="nodeType"></param>
-        /// <param name="namespaceName"></param>
-        /// <param name="localName"></param>
         /// <returns></returns>
-        bool Predicate(XObject obj, XmlNodeType nodeType, string namespaceName, string localName)
+        public override IEnumerable<object> GetInterfaces(XObject obj)
         {
-            if (nodeType != XmlNodeType.None &&
-                nodeType != obj.NodeType)
-                return false;
+            // available interface types for the object
+            var types = descriptors
+                .Where(i => i.IsMatch(predicates, obj))
+                .Select(i => i.Type);
 
-            var element = obj as XElement;
-            if (element != null && !Predicate(element, nodeType, namespaceName, localName))
-                return false;
-
-            return true;
-        }
-
-        /// <summary>
-        /// Tests whether the given <see cref="XObjectXElement"/> matches the filter.
-        /// </summary>
-        /// <param name="element"></param>
-        /// <param name="nodeType"></param>
-        /// <param name="namespaceName"></param>
-        /// <param name="localName"></param>
-        /// <returns></returns>
-        bool Predicate(XElement element, XmlNodeType nodeType, string namespaceName, string localName)
-        {
-            if (namespaceName != null &&
-                namespaceName != element.Name.NamespaceName)
-                return false;
-
-            if (localName != null &&
-                localName != element.Name.LocalName)
-                return false;
-
-            return true;
-        }
-
-        /// <summary>
-        /// Gets the interfaces for the specified node.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        public override IEnumerable<object> GetInterfaces(XNode node)
-        {
-            // all types which are available
-            var types = map
-                .Where(i => Predicate(node, i.Item1.Item1, i.Item1.Item2, i.Item1.Item3))
-                .SelectMany(i => i.Item2)
-                .ToList();
-
-            foreach (var instance in GetInstances(node, types))
+            foreach (var instance in GetInstances(obj, types))
                 yield return instance;
         }
 
         /// <summary>
         /// Obtains the list of interfaces.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="obj"></param>
         /// <param name="types"></param>
         /// <returns></returns>
-        IEnumerable<object> GetInstances(XNode node, IEnumerable<Type> types)
+        IEnumerable<object> GetInstances(XObject obj, IEnumerable<Type> types)
         {
             var objects = types
-                .Select(i => GetOrCreate(node, i, () => CreateInstance(node, i)))
+                .Select(i => GetOrCreate(obj, i, () => CreateInstance(obj, i)))
                 .Where(i => i != null)
                 .ToList();
 
@@ -129,20 +110,25 @@ namespace NXKit
         /// <summary>
         /// Creates hte specified instance type.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="obj"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        object CreateInstance(XNode node, Type type)
+        object CreateInstance(XObject obj, Type type)
         {
-            var ctor = type.GetConstructors()
+            var ctor1 = type.GetConstructors()
                 .Where(i => i.GetParameters().Length == 1)
-                .Where(i => i.GetParameters()[0].ParameterType.IsInstanceOfType(node))
+                .Where(i => i.GetParameters()[0].ParameterType.IsInstanceOfType(obj))
                 .FirstOrDefault();
-            if (ctor == null)
-                throw new NullReferenceException("Could not find ctor accepting XElement.");
+            if (ctor1 != null)
+                return ctor1.Invoke(new object[] { obj });
 
-            // create new instance
-            return ctor.Invoke(new object[] { node });
+            var ctor2 = type.GetConstructors()
+                .Where(i => i.GetParameters().Length == 0)
+                .FirstOrDefault();
+            if (ctor2 != null)
+                return ctor2.Invoke(new object[] { });
+
+            throw new InvalidOperationException("Could not find ctor for interface type.");
         }
 
     }

@@ -3,6 +3,8 @@ using System.Diagnostics.Contracts;
 using System.Xml;
 using System.Xml.Linq;
 
+using NXKit;
+
 namespace NXKit.DOMEvents
 {
 
