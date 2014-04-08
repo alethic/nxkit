@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit.IO
@@ -20,6 +22,8 @@ namespace NXKit.IO
         public XAnnotationDocument(XDocument document)
             : base(document.Declaration)
         {
+            Contract.Requires<ArgumentNullException>(document != null);
+
             this.document = document;
             this.Add(GetContents());
         }

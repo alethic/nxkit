@@ -136,7 +136,14 @@ namespace NXKit.IO
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(annotation != null);
 
-            var ctor = annotation.GetType().GetConstructor(new Type[] { });
+            var type = annotation.GetType();
+
+            // unsupported types
+            if (!type.IsPublic || type.IsAbstract)
+                return null;
+
+            // find default constructor
+            var ctor = type.GetConstructor(new Type[] { });
             if (ctor == null)
                 return null;
 
@@ -190,19 +197,23 @@ namespace NXKit.IO
 
             if (obj is XDocument)
                 return new XElement(NX_ANNOTATION,
+                    new XAttribute(XNamespace.Xmlns + "nx", NX_NS),
                     new XAttribute(NX_TARGET_ELEMENT, NX_TARGET_DOCUMENT));
 
             if (obj is XElement)
                 return new XElement(NX_ANNOTATION,
+                    new XAttribute(XNamespace.Xmlns + "nx", NX_NS),
                     new XAttribute(NX_TARGET, NX_TARGET_ELEMENT));
 
             if (obj is XAttribute)
                 return new XElement(NX_ANNOTATION,
                     new XAttribute(NX_TARGET, NX_TARGET_ATTRIBUTE),
+                    new XAttribute(XNamespace.Xmlns + "nx", NX_NS),
                     new XAttribute(NX_ATTRIBUTE, ((XAttribute)obj).Name));
 
             if (obj is XNode)
                 return new XElement(NX_ANNOTATION,
+                    new XAttribute(XNamespace.Xmlns + "nx", NX_NS),
                     new XAttribute(NX_TARGET, NX_TARGET_NODE));
 
             // cannot serialize unknown object type

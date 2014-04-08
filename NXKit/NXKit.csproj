@@ -131,6 +131,7 @@
     <Compile Include="IO\XAnnotationRootElement.cs" />
     <Compile Include="IO\XAnnotationElement.cs" />
     <Compile Include="IO\XDocumentAnnotationReader.cs" />
+    <Compile Include="IO\XmlAttributeOverrides.cs" />
     <Compile Include="IO\XNodeReaderBase.cs" />
     <Compile Include="PublicAttribute.cs" />
     <Compile Include="IO\NodeWriter.cs" />

@@ -25,7 +25,7 @@ namespace NXKit.IO
             Contract.Requires<ArgumentNullException>(source != null);
 
             this.source = source;
-            this.reader = source.CreateReader(ReaderOptions.None);
+            this.reader = source.CreateReader(ReaderOptions.OmitDuplicateNamespaces);
         }
 
         /// <summary>

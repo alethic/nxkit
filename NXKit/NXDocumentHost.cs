@@ -57,7 +57,7 @@ namespace NXKit
 
             this.container = container;
             this.uri = new Uri(uri.ToString());
-            this.Xml = XDocument.Load(uri.ToString(), LoadOptions.SetBaseUri);
+            this.Xml = XDocument.Load(uri.ToString(), LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
 
             Initialize();
         }
@@ -163,6 +163,8 @@ namespace NXKit
         /// <returns></returns>
         public void Save(XmlWriter writer)
         {
+            Contract.Requires<ArgumentNullException>(writer != null);
+
             using (var i = xml.CreateAnnotationReader())
                 writer.WriteNode(i, true);
         }
@@ -173,6 +175,8 @@ namespace NXKit
         /// <param name="stream"></param>
         public void Save(Stream stream)
         {
+            Contract.Requires<ArgumentNullException>(stream != null);
+
             using (var wrt = XmlWriter.Create(stream, new XmlWriterSettings() { Encoding = Encoding.UTF8, OmitXmlDeclaration = true }))
                 Save(wrt);
         }
