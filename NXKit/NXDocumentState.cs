@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Compression;
@@ -50,7 +49,6 @@ namespace NXKit
         readonly Uri uri;
         readonly string xml;
         readonly int nextElementId;
-        readonly NodeStateCollection nodeState;
 
         /// <summary>
         /// Initializes a new instance.
@@ -58,18 +56,15 @@ namespace NXKit
         internal NXDocumentState(
             Uri uri,
             string xml,
-            int nextElementId,
-            NodeStateCollection visualState)
+            int nextElementId)
         {
             Contract.Requires<ArgumentNullException>(uri != null);
             Contract.Requires<ArgumentNullException>(xml != null);
             Contract.Requires<ArgumentNullException>(nextElementId >= 0);
-            Contract.Requires<ArgumentNullException>(visualState != null);
 
             this.uri = uri;
             this.xml = xml;
             this.nextElementId = nextElementId;
-            this.nodeState = visualState;
         }
 
         /// <summary>
@@ -82,7 +77,6 @@ namespace NXKit
             this.uri = (Uri)info.GetValue("Uri", typeof(Uri));
             this.xml = LoadXml((byte[])info.GetValue("Xml", typeof(byte[])));
             this.nextElementId = info.GetInt32("NextElementId");
-            this.nodeState = (NodeStateCollection)info.GetValue("NodeState", typeof(NodeStateCollection));
         }
 
         public Uri Uri
@@ -107,14 +101,6 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Saved visual state.
-        /// </summary>
-        public NodeStateCollection NodeState
-        {
-            get { return nodeState; }
-        }
-
-        /// <summary>
         /// Serializes the instance.
         /// </summary>
         /// <param name="info"></param>
@@ -124,7 +110,6 @@ namespace NXKit
             info.AddValue("Uri", uri);
             info.AddValue("Xml", SaveXml(xml));
             info.AddValue("NextElementId", nextElementId);
-            info.AddValue("NodeState", nodeState);
         }
 
     }

@@ -4,8 +4,11 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Xml.Linq;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using NXKit.Util;
 
 namespace NXKit.Web.IO
@@ -73,27 +76,12 @@ namespace NXKit.Web.IO
         }
 
         /// <summary>
-        /// Writes the given <see cref="NXNode"/> to the underlying output.
+        /// Writes the given <see cref="XNode"/> to the underlying output.
         /// </summary>
         /// <param name="node"></param>
-        public override void Write(NXNode node)
+        public override void Write(XNode node)
         {
             writer.WriteStartObject();
-
-            // write type of node
-            writer.WritePropertyName("Type");
-            writer.WriteValue(GetNodeType(node).FullName);
-
-            // write type inheritance hierarchy.
-            var types = GetNodeBaseTypes(node);
-            if (types.Length > 0)
-            {
-                writer.WritePropertyName("BaseTypes");
-                writer.WriteStartArray();
-                foreach (var type in types)
-                    writer.WriteValue(type.FullName);
-                writer.WriteEndArray();
-            }
 
             var items = node.Interfaces()
                 .Where(i => i != null)
@@ -166,14 +154,14 @@ namespace NXKit.Web.IO
             }
 
             // dealing with a content node
-            if (node is NXElement)
+            if (node is XElement)
             {
                 // write content of nodes
                 writer.WritePropertyName("Nodes");
                 writer.WriteStartArray();
 
                 // write all children objects
-                foreach (var i in ((NXElement)node).Nodes())
+                foreach (var i in ((XElement)node).Nodes())
                     Write(i);
 
                 writer.WriteEndArray();

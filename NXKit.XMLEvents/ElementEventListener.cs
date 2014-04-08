@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
+
+using NXKit;
 using NXKit.DOMEvents;
 
 namespace NXKit.XmlEvents
@@ -11,13 +14,13 @@ namespace NXKit.XmlEvents
     public class ElementEventListener
     {
 
-        readonly NXElement element;
+        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public ElementEventListener(NXElement element)
+        public ElementEventListener(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -57,7 +60,7 @@ namespace NXKit.XmlEvents
         /// Gets the handler element.
         /// </summary>
         /// <returns></returns>
-        NXElement GetHandlerElement()
+        XElement GetHandlerElement()
         {
             var handlerAttr = GetHandlerAttribute();
             var observerAttr = GetObserverAttribute();
@@ -89,7 +92,7 @@ namespace NXKit.XmlEvents
         /// Gets the observer element.
         /// </summary>
         /// <returns></returns>
-        NXElement GetObserverElement()
+        XElement GetObserverElement()
         {
             var handlerAttr = GetHandlerAttribute();
             var observerAttr = GetObserverAttribute();
@@ -99,7 +102,7 @@ namespace NXKit.XmlEvents
             else if (handlerAttr != null)
                 return element;
             else if (handlerAttr == null)
-                return (NXElement)element.Parent;
+                return (XElement)element.Parent;
             else
                 throw new InvalidOperationException();
         }
@@ -121,7 +124,7 @@ namespace NXKit.XmlEvents
         /// Gets the target element.
         /// </summary>
         /// <returns></returns>
-        NXElement GetTargetElement()
+        XElement GetTargetElement()
         {
             var targetAttr = (string)element.Attribute(SchemaConstants.Events_1_0 + "target");
             if (targetAttr != null)

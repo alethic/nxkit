@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.Scripting
 {
@@ -11,13 +12,13 @@ namespace NXKit.Scripting
         IDocumentScript
     {
 
-        readonly NXDocument document;
+        readonly XDocument document;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="document"></param>
-        public DocumentScript(NXDocument document)
+        public DocumentScript(XDocument document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
@@ -26,7 +27,7 @@ namespace NXKit.Scripting
 
         IScriptDispatcher ScriptDispatcher
         {
-            get { return document.Container.GetExportedValue<IScriptDispatcher>(); }
+            get { return document.Host().Container.GetExportedValue<IScriptDispatcher>(); }
         }
 
         public object Execute(string type, string code)

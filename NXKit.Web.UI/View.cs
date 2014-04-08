@@ -30,7 +30,7 @@ namespace NXKit.Web.UI
 
         string cssClass;
         string validationGroup;
-        NXDocument document;
+        NXDocumentHost document;
 
         /// <summary>
         /// Initializes a new instance.
@@ -63,7 +63,7 @@ namespace NXKit.Web.UI
         /// <summary>
         /// Gets a reference to the <see cref="Document"/>.
         /// </summary>
-        public NXDocument Document
+        public NXDocumentHost Document
         {
             get { return document; }
         }
@@ -76,7 +76,7 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            document = new NXDocument(
+            document = new NXDocumentHost(
                 CompositionUtil.CreateContainer(),
                 uri);
             document.Invoke();
@@ -226,7 +226,7 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Loads the <see cref="NXDocument"/> from the given saved state.
+        /// Loads the <see cref="NXDocumentHost"/> from the given saved state.
         /// </summary>
         /// <param name="save"></param>
         void LoadDocumentFromSave(string save)
@@ -241,7 +241,7 @@ namespace NXKit.Web.UI
                 if (state == null)
                     throw new NullReferenceException();
 
-                document = new NXDocument(
+                document = new NXDocumentHost(
                     CompositionUtil.CreateContainer(),
                     state);
                 document.Invoke();

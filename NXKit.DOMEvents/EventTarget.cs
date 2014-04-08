@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-
+using System.Xml.Linq;
 using NXKit.Util;
 
 namespace NXKit.DOMEvents
@@ -15,20 +15,20 @@ namespace NXKit.DOMEvents
         IEventTarget
     {
 
-        readonly NXElement element;
+        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public EventTarget(NXElement element)
+        public EventTarget(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
         }
 
-        public NXElement Node
+        public XElement Node
         {
             get { return element; }
         }
@@ -36,9 +36,9 @@ namespace NXKit.DOMEvents
         public void AddEventListener(string type, IEventListener listener, bool useCapture)
         {
             // initialize listener map
-            var listenerMap = element.Storage.OfType<EventListenerMap>().FirstOrDefault();
+            var listenerMap = element.Annotation<EventListenerMap>();
             if (listenerMap == null)
-                element.Storage.AddLast(listenerMap = new EventListenerMap());
+                element.AddAnnotation(listenerMap = new EventListenerMap());
 
             // initialize listeners list
             var listeners = listenerMap.GetOrDefault(type);
@@ -55,7 +55,7 @@ namespace NXKit.DOMEvents
 
         public void RemoveEventListener(string type, IEventListener listener, bool useCapture)
         {
-            var listenerMap = element.Storage.OfType<EventListenerMap>().FirstOrDefault();
+            var listenerMap = element.Annotation<EventListenerMap>();
             if (listenerMap == null)
                 return;
 
@@ -89,12 +89,11 @@ namespace NXKit.DOMEvents
 
             // path to root from root
             var path = element.Ancestors()
-                .OfType<NXElement>()
                 .ToList();
 
             // capture phase
             evt.EventPhase = EventPhase.Capturing;
-            foreach (var visual_ in path.Reverse<NXElement>())
+            foreach (var visual_ in path.Reverse<XElement>())
             {
                 HandleEventOnNode(visual_, evt, true);
 
@@ -132,16 +131,16 @@ namespace NXKit.DOMEvents
         }
 
         /// <summary>
-        /// Attempts to handle the event at the given <see cref="NXNode"/>.
+        /// Attempts to handle the event at the given <see cref="XElement"/>.
         /// </summary>
         /// <param name="node"></param>
         /// <param name="evt"></param>
         /// <param name="useCapture"></param>
-        void HandleEventOnNode(NXElement node, Event evt, bool useCapture)
+        void HandleEventOnNode(XElement node, Event evt, bool useCapture)
         {
             evt.CurrentTarget = node.Interface<IEventTarget>();
 
-            var listenerMap = node.Storage.OfType<EventListenerMap>().FirstOrDefault();
+            var listenerMap = node.Annotation<EventListenerMap>();
             if (listenerMap != null)
             {
                 // obtain set of registered listeners

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.DOMEvents
 {
@@ -11,23 +12,23 @@ namespace NXKit.DOMEvents
         INXEventTarget
     {
 
-        readonly NXElement element;
+        readonly XElement element;
         readonly IEventFactory provider;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public NXEventTarget(NXElement element)
+        public NXEventTarget(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Ensures(provider != null);
 
             this.element = element;
-            this.provider = element.Document.Container.GetExportedValue<IEventFactory>();
+            this.provider = element.Host().Container.GetExportedValue<IEventFactory>();
         }
 
-        public NXElement Elemenet
+        public XElement Elemenet
         {
             get { return element; }
         }

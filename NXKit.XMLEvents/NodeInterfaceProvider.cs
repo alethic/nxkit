@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel.Composition;
+using System.Xml.Linq;
 
 namespace NXKit.XmlEvents
 {
@@ -10,11 +11,11 @@ namespace NXKit.XmlEvents
         NodeInterfaceProviderBase
     {
 
-        public override IEnumerable<object> GetInterfaces(NXNode node)
+        public override IEnumerable<object> GetInterfaces(XNode node)
         {
-            if (node is NXElement)
-                if (((NXElement)node).Attributes().Any(i => i.Name.Namespace == SchemaConstants.Events_1_0))
-                    yield return GetOrCreate(node, () => new ElementEventListener((NXElement)node));
+            if (node is XElement)
+                if (((XElement)node).Attributes().Any(i => i.Name.Namespace == SchemaConstants.Events_1_0))
+                    yield return GetOrCreate(node, () => new ElementEventListener((XElement)node));
         }
 
     }

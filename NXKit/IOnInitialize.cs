@@ -4,7 +4,7 @@
     /// <summary>
     /// Allows an interface to be initialized when an element is added.
     /// </summary>
-    public interface IInitialize
+    public interface IOnInitialize
     {
 
         void Init();

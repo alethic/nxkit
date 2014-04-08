@@ -10,12 +10,12 @@ namespace NXKit.XForms
 {
 
     /// <summary>
-    /// Encapsultes an XPath binding expression configured on a <see cref="NXNode"/>.
+    /// Encapsultes an XPath binding expression configured on a <see cref="XNode"/>.
     /// </summary>
     public class Binding
     {
 
-        readonly NXNode node;
+        readonly XNode node;
         readonly EvaluationContext context;
         readonly string xpath;
 
@@ -40,9 +40,10 @@ namespace NXKit.XForms
         /// <param name="node"></param>
         /// <param name="context"></param>
         /// <param name="xpath"></param>
-        internal Binding(NXNode node, EvaluationContext context, string xpath)
+        internal Binding(XNode node, EvaluationContext context, string xpath)
         {
             Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(node.Host() != null);
             Contract.Requires<ArgumentNullException>(context != null);
             Contract.Requires<ArgumentNullException>(xpath != null);
 
@@ -59,13 +60,13 @@ namespace NXKit.XForms
         /// </summary>
         XFormsModule Module
         {
-            get { return Node.Document.Module<XFormsModule>(); }
+            get { return Node.Host().Module<XFormsModule>(); }
         }
 
         /// <summary>
         /// <see cref="Node"/> to which this binding is related.
         /// </summary>
-        public NXNode Node
+        public XNode Node
         {
             get { return node; }
         }

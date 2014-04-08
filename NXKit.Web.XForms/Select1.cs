@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.Web.XForms
 {
@@ -13,7 +14,7 @@ namespace NXKit.Web.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Select1(NXElement element)
+        public Select1(XElement element)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);

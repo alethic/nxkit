@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -10,13 +11,13 @@ namespace NXKit.XForms
     public abstract class AttributeAccessor
     {
 
-        readonly NXElement element;
+        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public AttributeAccessor(NXElement element)
+        public AttributeAccessor(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -24,7 +25,7 @@ namespace NXKit.XForms
         }
 
 
-        public NXAttribute GetAttribute(string name)
+        public XAttribute GetAttribute(string name)
         {
             var fq = element.Attribute(Constants.XForms_1_0 + name);
             if (fq != null)

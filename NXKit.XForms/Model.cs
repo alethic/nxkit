@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-using System.Xml.XPath;
 
 using NXKit.DOMEvents;
 using NXKit.Util;
@@ -17,28 +16,28 @@ namespace NXKit.XForms
         IEventDefaultActionHandler
     {
 
-        readonly NXElement element;
+        readonly XElement element;
         ModelState state;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Model(NXElement element)
+        public Model(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
         }
 
-        public NXElement Element
+        public XElement Element
         {
             get { return element; }
         }
 
         public XFormsModule Module
         {
-            get { return element.Document.Container.GetExportedValue<XFormsModule>(); }
+            get { return element.Host().Container.GetExportedValue<XFormsModule>(); }
         }
 
         /// <summary>
@@ -55,9 +54,9 @@ namespace NXKit.XForms
         /// <returns></returns>
         ModelState GetState()
         {
-            var state = element.Storage.OfType<ModelState>().FirstOrDefault();
+            var state = element.Annotation<ModelState>();
             if (state == null)
-                element.Storage.AddLast(state = CreateState());
+                element.AddAnnotation(state = CreateState());
 
             return state;
         }
@@ -116,7 +115,6 @@ namespace NXKit.XForms
         IEnumerable<Bind> GetBindNodes()
         {
             return element.Descendants()
-                .OfType<NXElement>()
                 .SelectMany(i => i.Interfaces<Bind>());
         }
 
@@ -128,8 +126,7 @@ namespace NXKit.XForms
         {
             // all available ui bindings
             return element.Document.Root
-                .Descendants(true)
-                .OfType<NXElement>()
+                .DescendantsAndSelf()
                 .SelectMany(i => i.Interfaces<IUIBindingNode>())
                 .Select(i => i.UIBinding);
         }
@@ -141,8 +138,7 @@ namespace NXKit.XForms
         IEnumerable<IUINode> GetUINodes()
         {
             return element.Document.Root
-                .Descendants(true)
-                .OfType<NXElement>()
+                .DescendantsAndSelf()
                 .SelectMany(i => i.Interfaces<IUINode>());
         }
 
@@ -186,7 +182,7 @@ namespace NXKit.XForms
             State.Construct = true;
 
             // validate model version, we only support 1.0
-            var versions = Module.GetAttributeValue(element.Xml, "version");
+            var versions = Module.GetAttributeValue(element, "version");
             if (versions != null)
                 foreach (var version in versions.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     if (version != "1.0")
@@ -195,7 +191,7 @@ namespace NXKit.XForms
                         return;
                     }
 
-            var schema = Module.GetAttributeValue(element.Xml, "schema");
+            var schema = Module.GetAttributeValue(element, "schema");
             if (schema != null)
                 foreach (var item in schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     continue; // TODO
@@ -210,6 +206,15 @@ namespace NXKit.XForms
             OnRevalidate();
         }
 
+        ModuleState ModuleState()
+        {
+            var state = element.Document.Root.Annotation<ModuleState>();
+            if (state == null)
+                element.AddAnnotation(state = new ModuleState());
+
+            return state;
+        }
+
         /// <summary>
         /// Default action for the xforms-model-construct-done event.
         /// </summary>
@@ -217,7 +222,7 @@ namespace NXKit.XForms
         {
             State.ConstructDone = true;
 
-            if (element.Document.Root.GetState<ModuleState>().ConstructDoneOnce)
+            if (ModuleState().ConstructDoneOnce)
                 return;
 
             // refresh interface bindings
@@ -232,7 +237,7 @@ namespace NXKit.XForms
             foreach (var ui in GetUINodes())
                 ui.Refresh();
 
-            element.Document.Root.GetState<ModuleState>().ConstructDoneOnce = true;
+            ModuleState().ConstructDoneOnce = true;
         }
 
         /// <summary>
@@ -268,7 +273,6 @@ namespace NXKit.XForms
 
                 var binds = element
                     .Descendants()
-                    .OfType<NXElement>()
                     .SelectMany(i => i.Interfaces<Bind>())
                     .ToList();
 

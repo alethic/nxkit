@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.Web
 {
@@ -8,13 +9,13 @@ namespace NXKit.Web
         ITemplate
     {
 
-        readonly NXElement element;
+        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Template(NXElement element)
+        public Template(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -24,7 +25,7 @@ namespace NXKit.Web
         /// <summary>
         /// Gets the element for this template interface.
         /// </summary>
-        public NXElement Element
+        public XElement Element
         {
             get { return element; }
         }

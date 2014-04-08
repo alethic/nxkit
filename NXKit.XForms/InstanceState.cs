@@ -19,8 +19,8 @@ namespace NXKit.XForms
         ISerializable
     {
 
-        NXElement model;
-        NXElement instance;
+        XElement model;
+        XElement instance;
 
         int nextItemId;
         XDocument document;
@@ -104,7 +104,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="model"></param>
         /// <param name="instance"></param>
-        internal void Initialize(NXElement model, NXElement instance)
+        internal void Initialize(XElement model, XElement instance)
         {
             Contract.Requires<ArgumentNullException>(model != null);
             Contract.Requires<ArgumentNullException>(instance != null);
@@ -120,7 +120,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="model"></param>
         /// <param name="instance"></param>
-        internal void Initialize(NXElement model, NXElement instance, XDocument document)
+        internal void Initialize(XElement model, XElement instance, XDocument document)
         {
             Contract.Requires<ArgumentNullException>(model != null);
             Contract.Requires<ArgumentNullException>(instance != null);

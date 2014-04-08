@@ -24,7 +24,7 @@ namespace NXKit.Tests
         {
             using (var uri = DynamicUriUtil.GetUriFor(@"<unknown />"))
             {
-                var d1 = NXDocument.Load(uri);
+                var d1 = NXDocumentHost.Load(uri);
                 d1.Root.GetState<TestVisualState>().Value = "Value1";
 
                 var f = new BinaryFormatter();
@@ -33,7 +33,7 @@ namespace NXKit.Tests
                 m.Position = 0;
 
                 var s = (NXDocumentState)f.Deserialize(m);
-                var d2 = new NXDocument(CompositionUtil.CreateContainer(), s);
+                var d2 = new NXDocumentHost(CompositionUtil.CreateContainer(), s);
 
                 Assert.AreEqual("Value1", d1.Root.GetState<TestVisualState>().Value);
             }

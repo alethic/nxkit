@@ -28,7 +28,7 @@ namespace NXKit.XForms.Layout
         /// </summary>
         /// <param name="document"></param>
         [ImportingConstructor]
-        public LayoutModule(NXDocument document)
+        public LayoutModule(NXDocumentHost document)
             : base(document)
         {
             Contract.Requires<ArgumentNullException>(document != null);

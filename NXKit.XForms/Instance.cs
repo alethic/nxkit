@@ -1,25 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
 
     [NXElementInterface("{http://www.w3.org/2002/xforms}instance")]
     public class Instance :
-        IInitialize,
-        INodeContents
+        IOnInitialize
     {
 
-        readonly NXElement element;
+        readonly XElement element;
         InstanceState state;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Instance(NXElement element)
+        public Instance(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -29,7 +28,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the associated element.
         /// </summary>
-        public NXElement Element
+        public XElement Element
         {
             get { return element; }
         }
@@ -37,9 +36,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the model of the instance.
         /// </summary>
-        NXElement Model
+        XElement Model
         {
-            get { return element.Ancestors().OfType<NXElement>().First(i => i.Name == Constants.XForms_1_0 + "model"); }
+            get { return element.Ancestors(Constants.XForms_1_0 + "model").First(); }
         }
 
         /// <summary>
@@ -56,9 +55,9 @@ namespace NXKit.XForms
         /// <returns></returns>
         InstanceState GetState()
         {
-            var state = element.Storage.OfType<InstanceState>().FirstOrDefault();
+            var state = element.Annotation<InstanceState>();
             if (state == null)
-                element.Storage.AddLast(state = CreateState());
+                element.AddAnnotation(state = CreateState());
 
             return state;
         }
@@ -74,14 +73,9 @@ namespace NXKit.XForms
             return state;
         }
 
-        void IInitialize.Init()
+        void IOnInitialize.Init()
         {
             State.Initialize(Model, element);
-        }
-
-        IEnumerable<NXNode> INodeContents.GetContents()
-        {
-            yield break;
         }
 
     }

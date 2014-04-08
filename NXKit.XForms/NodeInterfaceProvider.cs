@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -9,7 +10,7 @@ namespace NXKit.XForms
         NodeInterfaceProviderBase
     {
 
-        public override IEnumerable<object> GetInterfaces(NXNode node)
+        public override IEnumerable<object> GetInterfaces(XNode node)
         {
             yield break;
         }

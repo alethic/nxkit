@@ -30,9 +30,9 @@ namespace NXKit.XForms.Tests
     </xf:group>
 </unknown>");
 
-        NXDocument GetSampleDocument()
+        NXDocumentHost GetSampleDocument()
         {
-            return NXDocument.Load(SampleUri);
+            return NXDocumentHost.Load(SampleUri);
         }
 
         [TestMethod]

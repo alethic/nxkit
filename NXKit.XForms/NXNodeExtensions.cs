@@ -1,4 +1,8 @@
-﻿namespace NXKit.XForms
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
+
+namespace NXKit.XForms
 {
 
     /// <summary>
@@ -12,8 +16,11 @@
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public static EvaluationContext ResolveEvaluationContext(this NXNode node)
+        public static EvaluationContext ResolveEvaluationContext(this XNode node)
         {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(node.Host() != null);
+
             var ecs = node.InterfaceOrDefault<IEvaluationContextScope>();
             if (ecs != null &&
                 ecs.Context != null)

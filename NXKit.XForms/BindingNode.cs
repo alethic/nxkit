@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-
+using System.Xml.Linq;
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms
@@ -15,7 +15,7 @@ namespace NXKit.XForms
         IEvaluationContextScope
     {
 
-        readonly NXElement element;
+        readonly XElement element;
         readonly BindingAttributes attributes;
         readonly Lazy<Binding> binding;
 
@@ -23,7 +23,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public BindingNode(NXElement element)
+        public BindingNode(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 

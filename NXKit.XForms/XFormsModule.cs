@@ -38,7 +38,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="document"></param>
         [ImportingConstructor]
-        public XFormsModule(NXDocument document)
+        public XFormsModule(NXDocumentHost document)
             : base(document)
         {
 
@@ -48,33 +48,17 @@ namespace NXKit.XForms
         {
             base.Initialize();
 
-            Document.Changed += Document_Changed;
-        }
-
-        void Document_Changed(object sender, NXObjectChangeEventArgs args)
-        {
-            // objects added to document
-            if (args.Change != NXObjectChange.Add)
-                return;
-
-            var element = args.Object as NXElement;
-            if (element == null)
-                return;
-
             // obtain all model visuals
-            var models = element
-                .Descendants(true)
-                .OfType<NXElement>()
-                .Where(i => i.Name == Constants.XForms_1_0 + "model")
+            var models = Document.Root
+                .DescendantsAndSelf(Constants.XForms_1_0 + "model")
+                .OfType<XElement>()
                 .ToList();
 
             foreach (var model in models)
             {
                 // obtain instances
                 var instances = model
-                    .Descendants(false)
-                    .OfType<NXElement>()
-                    .Where(i => i.Name == Constants.XForms_1_0 + "instance")
+                    .Descendants(Constants.XForms_1_0 + "instance")
                     .ToList();
 
                 // initialize the instances
@@ -86,27 +70,6 @@ namespace NXKit.XForms
             //if (models.All(i => i.State.Ready))
             //    foreach (var binding in Document.Root.Descendants(true).OfType<BindingElement>())
             //        binding.
-        }
-
-        /// <summary>
-        /// Creates the appropriate <see cref="NXNode"/> instance.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        public override NXNode CreateNode(XNode node)
-        {
-            var element = node as XElement;
-            if (element == null)
-                return null;
-
-            if (element.Name.Namespace != Constants.XForms_1_0)
-                return null;
-
-            var type = visualTypeMap.GetOrDefault(element.Name);
-            if (type == null)
-                return null;
-
-            return (NXNode)Activator.CreateInstance(type, new object[] { node });
         }
 
         /// <summary>
@@ -139,81 +102,66 @@ namespace NXKit.XForms
 
         public override bool Invoke()
         {
-            if (Document.Root.GetState<ModuleState>().Failed)
-                return false;
-
             var work = false;
 
             // obtain all model visuals
             var models = Document.Root
-                .Descendants(true)
-                .OfType<NXElement>()
-                .Where(i => i.Name == Constants.XForms_1_0 + "model")
+                .Descendants(Constants.XForms_1_0 + "model")
                 .Select(i => i.Interface<Model>())
                 .ToList();
 
             // raise construct event on all non-constructed models
             foreach (var model in models)
-                if (!Document.Root.GetState<ModuleState>().Failed)
-                    if (!model.State.Construct)
-                    {
-                        model.Element.Interface<INXEventTarget>().DispatchEvent(Events.ModelConstruct);
-                        work = true;
-                    }
+                if (!model.State.Construct)
+                {
+                    model.Element.Interface<INXEventTarget>().DispatchEvent(Events.ModelConstruct);
+                    work = true;
+                }
 
             // if all models have passed construct, raise construct done event
             if (models.All(i => i.State.Construct))
-                if (!Document.Root.GetState<ModuleState>().Failed)
-                    foreach (var model in models)
-                        if (!model.State.ConstructDone)
-                        {
-                            model.Element.Interface<INXEventTarget>().DispatchEvent(Events.ModelConstructDone);
-                            work = true;
-                        }
+                foreach (var model in models)
+                    if (!model.State.ConstructDone)
+                    {
+                        model.Element.Interface<INXEventTarget>().DispatchEvent(Events.ModelConstructDone);
+                        work = true;
+                    }
 
             // if all models have passed construct-done, raise ready event
             if (models.All(i => i.State.ConstructDone))
-                if (!Document.Root.GetState<ModuleState>().Failed)
-                    foreach (var model in models)
-                        if (!model.State.Ready)
-                        {
-                            model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Ready);
-                            work = true;
-                        }
-
-            if (Document.Root.GetState<ModuleState>().Failed)
-                return work;
+                foreach (var model in models)
+                    if (!model.State.Ready)
+                    {
+                        model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Ready);
+                        work = true;
+                    }
 
             // only process main events if all models are ready
             if (models.All(i => i.State.Ready))
             {
                 foreach (var model in models.Where(i => i.State.RebuildFlag))
-                    if (!Document.Root.GetState<ModuleState>().Failed)
-                    {
-                        work = true;
-                        model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Rebuild);
-                    }
+                {
+                    work = true;
+                    model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Rebuild);
+                }
 
                 foreach (var model in models.Where(i => i.State.RecalculateFlag))
-                    if (!Document.Root.GetState<ModuleState>().Failed)
-                    {
-                        work = true;
-                        model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Recalculate);
-                    }
+                {
+                    work = true;
+                    model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Recalculate);
+                }
 
                 foreach (var model in models.Where(i => i.State.RevalidateFlag))
-                    if (!Document.Root.GetState<ModuleState>().Failed)
-                    {
-                        work = true;
-                        model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Revalidate);
-                    }
+                {
+                    work = true;
+                    model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Revalidate);
+                }
 
                 foreach (var model in models.Where(i => i.State.RefreshFlag))
-                    if (!Document.Root.GetState<ModuleState>().Failed)
-                    {
-                        work = true;
-                        model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Refresh);
-                    }
+                {
+                    work = true;
+                    model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Refresh);
+                }
             }
 
             return work;
@@ -232,12 +180,9 @@ namespace NXKit.XForms
 
             foreach (var instance in model.Instances)
             {
-                // generate required 'id' attribute
-                Document.GetElementId(instance.Element.Xml);
-
                 // extract instance values from xml
-                var instanceSrc = GetAttributeValue(instance.Element.Xml, "src");
-                var instanceChildElements = instance.Element.Xml.Elements().ToArray();
+                var instanceSrc = GetAttributeValue(instance.Element, "src");
+                var instanceChildElements = instance.Element.Elements().ToArray();
 
                 if (!string.IsNullOrWhiteSpace(instanceSrc))
                 {
@@ -307,9 +252,10 @@ namespace NXKit.XForms
         /// <param name="expression"></param>
         /// <param name="resultType"></param>
         /// <returns></returns>
-        internal object EvaluateXPath(NXNode node, EvaluationContext evaluationContext, string expression, XPathResultType resultType)
+        internal object EvaluateXPath(XNode node, EvaluationContext evaluationContext, string expression, XPathResultType resultType)
         {
             Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(node.Host() != null);
             Contract.Requires<ArgumentNullException>(evaluationContext != null);
             Contract.Requires<ArgumentNullException>(expression != null);
 
@@ -349,7 +295,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        internal EvaluationContext ResolveInScopeEvaluationContext(NXElement element)
+        internal EvaluationContext ResolveInScopeEvaluationContext(XElement element)
         {
             EvaluationContext ec = null;
 
@@ -357,7 +303,6 @@ namespace NXKit.XForms
             if (ec == null)
                 ec = element
                     .Ancestors()
-                    .OfType<NXElement>()
                     .SelectMany(i => i.Interfaces<IEvaluationContextScope>())
                     .Select(i => i.Context)
                     .FirstOrDefault(i => i != null);
@@ -365,122 +310,12 @@ namespace NXKit.XForms
             // default to default model
             if (ec == null)
                 ec = Document.Root
-                    .Descendants(true)
-                    .TakeWhile(i => !(i is Group))
-                    .OfType<NXElement>()
-                    .Where(i => i.Name == Constants.XForms_1_0 + "model")
+                    .DescendantsAndSelf(Constants.XForms_1_0 + "model")
                     .SelectMany(i => i.Interfaces<Model>())
                     .Select(i => i.DefaultEvaluationContext)
                     .FirstOrDefault();
 
             return ec;
-        }
-
-        /// <summary>
-        /// Resolves the <see cref="EvaluationContext"/> to be used by the given visual.
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        internal EvaluationContext ResolveBindingEvaluationContext(NXElement element)
-        {
-            // attempt to retrieve model state given by 'model' attribute
-            var modelAttr = GetAttributeValue(element.Xml, "model");
-            if (!string.IsNullOrWhiteSpace(modelAttr))
-            {
-                // find referenced model visual
-                var model = Document.Root
-                    .Descendants(true)
-                    .TakeWhile(i => !(i is Group))
-                    .OfType<NXElement>()
-                    .Where(i => i.Name == Constants.XForms_1_0 + "model")
-                    .SingleOrDefault(i => Document.GetElementId(i.Xml) == modelAttr);
-
-                if (model != null)
-                    return model.Interface<Model>().Context;
-                else
-                {
-                    element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
-                    return null;
-                }
-            }
-
-            return ResolveInScopeEvaluationContext(element);
-        }
-
-        /// <summary>
-        /// Resolves the single-node binding on <paramref name="element"/>.
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        internal Binding ResolveSingleNodeBinding(BindingElement element)
-        {
-            // attempt to resolve 'bind' attribute to bind element's context
-            var bd = GetAttributeValue(element.Xml, "bind");
-            if (bd != null)
-            {
-                var bindElement = element.ResolveId(bd);
-                var bind = bindElement != null ? bindElement.Interface<Bind>() : null;
-
-                // invalid bind element
-                if (bind == null ||
-                    bind.Context == null)
-                {
-                    element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
-                    return null;
-                }
-
-                return bind.Binding;
-            }
-
-            // attempt to resolve 'ref' attribute
-            var xp = GetAttributeValue(element.Xml, "ref");
-            if (xp != null)
-            {
-                var ec = ResolveBindingEvaluationContext(element);
-                if (ec == null)
-                    return null;
-
-                // otherwise continue by evaluating expression
-                return new Binding(element, ec, xp);
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Resolves the node-set binding on <paramref name="element"/>.
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        internal Binding ResolveNodeSetBinding(BindingElement element)
-        {
-            // attempt to resolve 'bind' attribute to bind element's context
-            var bindAttr = GetAttributeValue(element.Xml, "bind");
-            if (bindAttr != null)
-            {
-                var bindElement = element.ResolveId(bindAttr);
-                var bind = bindElement != null ? bindElement.Interface<Bind>() : null;
-
-                // invalid bind element
-                if (bind == null ||
-                    bind.Binding == null)
-                {
-                    element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
-                    return null;
-                }
-
-                return bind.Binding;
-            }
-
-            var ec = ResolveBindingEvaluationContext(element);
-            if (ec != null)
-            {
-                var nodesetAttr = GetAttributeValue(element.Xml, "nodeset");
-                if (nodesetAttr != null)
-                    return new Binding(element, ec, nodesetAttr);
-            }
-
-            return null;
         }
 
         /// <summary>

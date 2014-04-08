@@ -12,7 +12,7 @@ namespace NXKit.DOMEvents
         IEventProvider
     {
 
-        readonly NXDocument document;
+        readonly NXDocumentHost document;
         readonly IEnumerable<IEventInfoTable> tables;
         IDocumentEvent documentEvent;
 
@@ -23,7 +23,7 @@ namespace NXKit.DOMEvents
         /// <param name="tables"></param>
         [ImportingConstructor]
         public EventInfoTableProvider(
-            NXDocument document,
+            NXDocumentHost document,
             [ImportMany] IEnumerable<IEventInfoTable> tables)
         {
             Contract.Requires<ArgumentNullException>(document != null);
@@ -35,7 +35,7 @@ namespace NXKit.DOMEvents
 
         IDocumentEvent DocumentEvent
         {
-            get { return documentEvent ?? (documentEvent = document.Interface<IDocumentEvent>()); }
+            get { return documentEvent ?? (documentEvent = document.Xml.Interface<IDocumentEvent>()); }
         }
 
         public Event CreateEvent(string type)

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Xml.Linq;
-using NXKit.DOMEvents;
+﻿using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
 
-    [Element("range")]
+    [NXElementInterface("{http://www.w3.org/2002/xforms}range")]
     [Public]
-    public class Range : 
-        SingleNodeUIBindingElement
+    public class Range 
     {
 
         /// <summary>
@@ -16,43 +13,27 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Range(XElement element)
-            : base(element)
         {
 
         }
 
-        protected override void OnAdded(NXObjectEventArgs args)
-        {
-            base.OnAdded(args);
+        //[Public]
+        //public string Start
+        //{
+        //    get { return Module.GetAttributeValue(Xml, "start"); }
+        //}
 
-            this.Interface<INXEventTarget>().AddEventHandler("xforms-invalid", i =>
-            {
-                Console.WriteLine(i);
-            });
+        //[Public]
+        //public string End
+        //{
+        //    get { return Module.GetAttributeValue(Xml, "end"); }
+        //}
 
-            this.Interface<INXEventTarget>().AddEventHandler("xforms-valid", i =>
-            {
-                Console.WriteLine(i);
-            });
-        }
-
-        [Public]
-        public string Start
-        {
-            get { return Module.GetAttributeValue(Xml, "start"); }
-        }
-
-        [Public]
-        public string End
-        {
-            get { return Module.GetAttributeValue(Xml, "end"); }
-        }
-
-        [Public]
-        public string Step
-        {
-            get { return Module.GetAttributeValue(Xml, "step"); }
-        }
+        //[Public]
+        //public string Step
+        //{
+        //    get { return Module.GetAttributeValue(Xml, "step"); }
+        //}
 
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 using NXKit.DOM;
 
@@ -13,13 +14,13 @@ namespace NXKit.DOMEvents
         IDocumentEvent
     {
 
-        readonly NXDocument document;
+        readonly XDocument document;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="document"></param>
-        public DocumentEvent(NXDocument document)
+        public DocumentEvent(XDocument document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 

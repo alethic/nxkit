@@ -17,7 +17,7 @@ namespace NXKit.XForms
         XsltContext
     {
 
-        readonly NXNode node;
+        readonly XNode node;
         readonly EvaluationContext evaluationContext;
         readonly IXsltContextFunctionProvider functionProvider;
 
@@ -27,7 +27,7 @@ namespace NXKit.XForms
         /// <param name="node"></param>
         /// <param name="evaluationContext"></param>
         internal XFormsXsltContext(
-            NXNode node,
+            XNode node,
             EvaluationContext evaluationContext)
         {
             Contract.Requires<ArgumentNullException>(node != null);
@@ -35,13 +35,13 @@ namespace NXKit.XForms
 
             this.node = node;
             this.evaluationContext = evaluationContext;
-            this.functionProvider = node.Document.Container.GetExportedValue<IXsltContextFunctionProvider>();
+            this.functionProvider = node.Host().Container.GetExportedValue<IXsltContextFunctionProvider>();
         }
 
         /// <summary>
         /// Gets the <see cref="Node"/> associated with the XSLT operation.
         /// </summary>
-        public NXNode Node
+        public XNode Node
         {
             get { return node; }
         }
@@ -73,9 +73,9 @@ namespace NXKit.XForms
         {
             Contract.Requires<ArgumentNullException>(prefix != null);
 
-            var element = node.Xml as XElement;
+            var element = node as XElement;
             if (element == null)
-                element = node.Parent.Xml as XElement;
+                element = node.Parent as XElement;
             if (element == null)
                 throw new NullReferenceException();
 
@@ -86,9 +86,9 @@ namespace NXKit.XForms
         {
             Contract.Requires<ArgumentNullException>(namespaceName != null);
 
-            var element = node.Xml as XElement;
+            var element = node as XElement;
             if (element == null)
-                element = node.Parent.Xml as XElement;
+                element = node.Parent as XElement;
             if (element == null)
                 throw new NullReferenceException();
 

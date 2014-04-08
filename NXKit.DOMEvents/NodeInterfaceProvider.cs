@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Xml.Linq;
 
 namespace NXKit.DOMEvents
 {
@@ -9,18 +10,18 @@ namespace NXKit.DOMEvents
         NodeInterfaceProviderBase
     {
 
-        public override IEnumerable<object> GetInterfaces(NXNode node)
+        public override IEnumerable<object> GetInterfaces(XNode node)
         {
-            if (node is NXElement)
+            if (node is XElement)
             {
-                yield return GetOrCreate(node, () => new EventTarget((NXElement)node));
-                yield return GetOrCreate(node, () => new NXEventTarget((NXElement)node));
+                yield return GetOrCreate(node, () => new EventTarget((XElement)node));
+                yield return GetOrCreate(node, () => new NXEventTarget((XElement)node));
             }
 
-            if (node is NXDocument)
+            if (node is XDocument)
             {
-                yield return GetOrCreate(node, () => new DocumentEvent((NXDocument)node));
-                yield return GetOrCreate(node, () => new NXDocumentEvent((NXDocument)node));
+                yield return GetOrCreate(node, () => new DocumentEvent((XDocument)node));
+                yield return GetOrCreate(node, () => new NXDocumentEvent((XDocument)node));
             }
         }
 

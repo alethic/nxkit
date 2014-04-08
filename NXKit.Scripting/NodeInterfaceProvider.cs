@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Xml.Linq;
 
 namespace NXKit.Scripting
 {
@@ -10,10 +11,10 @@ namespace NXKit.Scripting
         NodeInterfaceProviderBase
     {
 
-        public override IEnumerable<object> GetInterfaces(NXNode node)
+        public override IEnumerable<object> GetInterfaces(XNode node)
         {
-            if (node is NXDocument)
-                yield return GetOrCreate(node, () => new DocumentScript((NXDocument)node));
+            if (node is XDocument)
+                yield return GetOrCreate(node, () => new DocumentScript((XDocument)node));
         }
 
     }

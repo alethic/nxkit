@@ -2,12 +2,12 @@
 {
 
     /// <summary>
-    /// Hosts a <see cref="NXDocument"/> instance and provides interaction services for the client Web UI.
+    /// Hosts a <see cref="NXDocumentHost"/> instance and provides interaction services for the client Web UI.
     /// </summary>
     public class NXDocumentHost
     {
 
-        readonly NXDocument document;
+        readonly NXDocumentHost document;
 
         /// <summary>
         /// Initializes a new instance.
@@ -18,9 +18,9 @@
         }
 
         /// <summary>
-        /// Gets the currently hosted <see cref="NXDocument"/>.
+        /// Gets the currently hosted <see cref="NXDocumentHost"/>.
         /// </summary>
-        public NXDocument Document
+        public NXDocumentHost Document
         {
             get { return document; }
         }
