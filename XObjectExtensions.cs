@@ -24,6 +24,22 @@ namespace NXKit
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// Gets the first annotation object of the specified type, or creates a new one.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static T AnnotationOrCreate<T>(this XObject self)
+            where T : class, new()
+        {
+            var value = self.Annotation<T>();
+            if (value == null)
+                self.AddAnnotation(value = new T());
+
+            return value;
+        }
+
     }
 
 }
