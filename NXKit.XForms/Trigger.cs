@@ -3,17 +3,15 @@
 namespace NXKit.XForms
 {
 
-    [Element("trigger")]
-    public class Trigger :
-        SingleNodeUIBindingElement
+    [NXElementInterface("{http://www.w3.org/2002/xforms}trigger")]
+    public class Trigger
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="xml"></param>
-        public Trigger(XElement xml)
-            : base(xml)
+        /// <param name="element"></param>
+        public Trigger(XElement element)
         {
 
         }

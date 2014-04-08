@@ -114,37 +114,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the identifier of the model item.
-        /// </summary>
-        /// <returns></returns>
-        public int Id
-        {
-            get { return GetId(); }
-        }
-
-        int GetId()
-        {
-            if (State.Id == null)
-                State.Id = Instance.State.AllocateItemId();
-
-            return (int)State.Id;
-        }
-
-        /// <summary>
-        /// Gets the unique identifier for the given instance data node.
-        /// </summary>
-        /// <returns></returns>
-        public string UniqueId
-        {
-            get { return GetUniqueId(); }
-        }
-
-        string GetUniqueId()
-        {
-            return module.GetAttributeValue(GetInstance().Element.Xml, "id") + "$" + GetId();
-        }
-
-        /// <summary>
         /// Gets or sets the type of the given model item.
         /// </summary>
         /// <returns></returns>

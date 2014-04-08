@@ -1,12 +1,13 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
+
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms
 {
 
-    [Element("load")]
-    public class LoadElement : 
-        SingleNodeUIBindingElement,
+    [NXElementInterface("{http://www.w3.org/2002/xforms}dispatch")]
+    public class Dispatch :
         IAction
     {
 
@@ -14,20 +15,19 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public LoadElement(XElement element)
-            : base(element)
+        public Dispatch(XElement element)
         {
 
         }
 
         public void Handle(Event ev)
         {
-            Module.InvokeAction(this);
+            Invoke();
         }
 
         public void Invoke()
         {
-
+            throw new NotImplementedException();
         }
 
     }

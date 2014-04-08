@@ -9,10 +9,7 @@ namespace NXKit.XForms
     /// Serves as a generated item within a repeat.
     /// </summary>
     public class RepeatItem :
-        XFormsElement,
-        IEvaluationContextScope,
-        INamingScope,
-        IUIBindingNode
+        IEvaluationContextProvider
     {
 
         EvaluationContext context;
@@ -23,17 +20,8 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="xml"></param>
         public RepeatItem(XElement xml)
-            : base(xml)
         {
             Contract.Requires<ArgumentNullException>(xml != null);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public override string Id
-        {
-            get { return "NODE" + Context.ModelItem.Id; }
         }
 
         /// <summary>
@@ -42,25 +30,7 @@ namespace NXKit.XForms
         public EvaluationContext Context
         {
             get { return context; }
-        }
-
-        /// <summary>
-        /// Sets the context to a new value, should only be used by the repeat container.
-        /// </summary>
-        /// <param name="ec"></param>
-        internal void SetContext(EvaluationContext ec)
-        {
-            context = ec;
-        }
-
-        public UIBinding UIBinding
-        {
-            get { return uiBinding ?? (uiBinding = CreateUIBinding()); }
-        }
-
-        UIBinding CreateUIBinding()
-        {
-            return new UIBinding(this, Context.ModelItem);
+            internal set { context = value; }
         }
 
     }

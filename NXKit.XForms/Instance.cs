@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Xml.Linq;
+using NXKit.DOMEvents;
 
 namespace NXKit.XForms
 {
@@ -12,7 +15,8 @@ namespace NXKit.XForms
     {
 
         readonly XElement element;
-        InstanceState state;
+        readonly InstanceAttributes attributes;
+        readonly Lazy<InstanceState> state;
 
         /// <summary>
         /// Initializes a new instance.
@@ -23,6 +27,8 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
+            this.attributes = new InstanceAttributes(element);
+            this.state = new Lazy<InstanceState>(() => element.AnnotationOrCreate<InstanceState>());
         }
 
         /// <summary>
@@ -46,20 +52,63 @@ namespace NXKit.XForms
         /// </summary>
         public InstanceState State
         {
-            get { return state ?? (state = GetState()); }
+            get { return state.Value; }
         }
 
         /// <summary>
-        /// Implements the getter for State.
+        /// Loads the instance data.
         /// </summary>
-        /// <returns></returns>
-        InstanceState GetState()
+        internal bool Load()
         {
-            var state = element.Annotation<InstanceState>();
-            if (state == null)
-                element.AddAnnotation(state = CreateState());
+            if (attributes.Src != null)
+            {
+                try
+                {
+                    // normalize uri with base
+                    var u = new Uri(attributes.Src, UriKind.RelativeOrAbsolute);
+                    if (element.BaseUri != null && !u.IsAbsoluteUri)
+                        u = new Uri(new Uri(element.BaseUri), u);
 
-            return state;
+                    // return resource as a stream
+                    var request = WebRequest.Create(u);
+                    request.Method = "GET";
+                    var response = request.GetResponse().GetResponseStream();
+                    if (response == null)
+                        throw new FileNotFoundException("Could not load resource", attributes.Src);
+
+                    // parse resource into new DOM
+                    var instanceDataDocument = XDocument.Load(response);
+
+                    // add to model
+                    State.Initialize(Model, element, instanceDataDocument);
+
+                    return true;
+                }
+                catch (UriFormatException)
+                {
+                    element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
+                }
+
+                return false;
+            }
+
+            // extract instance values from xml
+            var instanceChildElements = element.Elements().ToArray();
+            if (instanceChildElements.Length >= 2)
+            {
+                // invalid number of child elements
+                element.Interface<INXEventTarget>().DispatchEvent(Events.LinkException);
+                return false;
+            }
+
+            // proper number of child elements
+            if (instanceChildElements.Length == 1)
+            {
+                State.Initialize(Model, element, new XDocument(instanceChildElements[0]));
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

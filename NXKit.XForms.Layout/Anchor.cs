@@ -1,11 +1,12 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms.Layout
 {
 
-    [Element("a")]
-    public class Anchor : 
-        LayoutElement
+    [NXElementInterface("{http://schemas.nxkit.org/nxkit/2014/xforms-layout}a")]
+    public class Anchor
     {
 
         /// <summary>
@@ -13,14 +14,8 @@ namespace NXKit.XForms.Layout
         /// </summary>
         /// <param name="element"></param>
         public Anchor(XElement element)
-            : base(element)
         {
-
-        }
-
-        public string Href
-        {
-            get { return Document.Module<LayoutModule>().GetAttributeValue(Xml, "href"); }
+            Contract.Requires<ArgumentNullException>(element != null);
         }
 
     }

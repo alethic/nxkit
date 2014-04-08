@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
@@ -8,8 +7,8 @@ using NXKit.DOMEvents;
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}action")]
-    public class Action :
+    [NXElementInterface("{http://www.w3.org/2002/xforms}revalidate")]
+    public class Revalidate :
         IAction
     {
 
@@ -19,19 +18,11 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Action(XElement element)
+        public Revalidate(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
-        }
-
-        /// <summary>
-        /// Gets the associated element.
-        /// </summary>
-        public XElement Element
-        {
-            get { return element; }
         }
 
         /// <summary>
@@ -44,17 +35,25 @@ namespace NXKit.XForms
 
         public void Handle(Event ev)
         {
-            Module.InvokeAction(this);
+            Invoke();
         }
 
         public void Invoke()
         {
-            var actions = element
-                .Elements()
-                .SelectMany(i => i.Interfaces<IAction>());
+            throw new NotImplementedException();
 
-            foreach (var action in actions)
-                Module.InvokeAction(action);
+            //var modelAttr = Module.GetAttributeValue(Xml, "model");
+            //if (modelAttr != null)
+            //{
+            //    var element = (NXElement)ResolveId(modelAttr);
+            //    if (element != null)
+            //        element.Interface<Model>().OnRevalidate();
+            //    else
+            //    {
+            //        this.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
+            //        return;
+            //    }
+            //}
         }
 
     }

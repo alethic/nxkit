@@ -15,7 +15,7 @@ namespace NXKit.XForms
     public class Binding
     {
 
-        readonly XNode node;
+        readonly XElement element;
         readonly EvaluationContext context;
         readonly string xpath;
 
@@ -37,17 +37,17 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="element"></param>
         /// <param name="context"></param>
         /// <param name="xpath"></param>
-        internal Binding(XNode node, EvaluationContext context, string xpath)
+        internal Binding(XElement element, EvaluationContext context, string xpath)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(node.Host() != null);
+            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(element.Host() != null);
             Contract.Requires<ArgumentNullException>(context != null);
             Contract.Requires<ArgumentNullException>(xpath != null);
 
-            this.node = node;
+            this.element = element;
             this.context = context;
             this.xpath = xpath;
 
@@ -60,15 +60,15 @@ namespace NXKit.XForms
         /// </summary>
         XFormsModule Module
         {
-            get { return Node.Host().Module<XFormsModule>(); }
+            get { return Element.Host().Module<XFormsModule>(); }
         }
 
         /// <summary>
-        /// <see cref="Node"/> to which this binding is related.
+        /// <see cref="Element"/> to which this binding is related.
         /// </summary>
-        public XNode Node
+        public XElement Element
         {
-            get { return node; }
+            get { return element; }
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace NXKit.XForms
 
         object GetResult()
         {
-            return Module.EvaluateXPath(Node, Context, XPathExpression, XPathResultType.NodeSet);
+            return Module.EvaluateXPath(Element, Context, XPathExpression, XPathResultType.NodeSet);
         }
 
         /// <summary>

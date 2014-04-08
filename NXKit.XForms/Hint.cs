@@ -6,11 +6,8 @@ namespace NXKit.XForms
     /// <summary>
     /// The author-optional element hint provides a convenient way to attach hint information to a form control.
     /// </summary>
-    [Element("hint")]
-    public class Hint : 
-        SingleNodeUIBindingElement,
-        ISupportsCommonAttributes,
-        IUIAppearance
+    [NXElementInterface("{http://www.w3.org/2002/xforms}hint")]
+    public class Hint
     {
         
         /// <summary>
@@ -18,14 +15,8 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Hint(XElement element)
-            : base(element)
         {
 
-        }
-
-        public XName Appearance
-        {
-            get { return (string)Module.ResolveAttribute(Xml, "appearance"); }
         }
 
     }

@@ -1,33 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-
 using NXKit.Util;
 
 namespace NXKit.XForms
 {
 
-    [Element("repeat")]
+    [NXElementInterface("{http://www.w3.org/2002/xforms}repeat")]
     public class Repeat :
-        NodeSetBindingElement,
-        INamingScope,
         IUINode
     {
 
+        readonly XElement element;
         readonly RepeatAttributes attributes;
+        readonly Lazy<IUIBindingNode> uiBinding;
         int nextId;
-
-        readonly Dictionary<XObject, RepeatItem> items =
-            new Dictionary<XObject, RepeatItem>();
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="xml"></param>
-        public Repeat(XElement xml)
-            : base(xml)
+        /// <param name="element"></param>
+        public Repeat(XElement element)
         {
-            this.attributes = new RepeatAttributes(this);
+            Contract.Requires<ArgumentNullException>(element != null);
+
+            this.element = element;
+            this.attributes = new RepeatAttributes(element);
+            this.uiBinding = new Lazy<IUIBindingNode>(() => element.Interface<IUIBindingNode>());
         }
 
         /// <summary>
@@ -43,22 +44,24 @@ namespace NXKit.XForms
         /// Dynamically generate repeat items, reusing existing instances if available.
         /// </summary>
         /// <returns></returns>
-        protected override void CreateNodes()
+        protected void CreateNodes()
         {
-            RemoveNodes();
+            throw new NotImplementedException();
 
-            if (Binding == null ||
-                Binding.ModelItems == null)
-                return;
+            //element.RemoveNodes();
 
-            // build proper list of items
-            for (int i = 0; i < Binding.ModelItems.Length; i++)
-                Add(GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.ModelItems[i], i + 1, Binding.ModelItems.Length));
+            //if (Binding == null ||
+            //    Binding.ModelItems == null)
+            //    return;
 
-            // clear stale items from cache
-            foreach (var i in items.ToList())
-                if (!Nodes().Contains(i.Value))
-                    items.Remove(i.Key);
+            //// build proper list of items
+            //for (int i = 0; i < Binding.ModelItems.Length; i++)
+            //    Add(GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.ModelItems[i], i + 1, Binding.ModelItems.Length));
+
+            //// clear stale items from cache
+            //foreach (var i in items.ToList())
+            //    if (!Nodes().Contains(i.Value))
+            //        items.Remove(i.Key);
         }
 
         /// <summary>
@@ -72,57 +75,52 @@ namespace NXKit.XForms
         /// <returns></returns>
         RepeatItem GetOrCreateItem(Model model, Instance instance, ModelItem modelItem, int position, int size)
         {
-            // new context for child
-            var ec = new EvaluationContext(model, instance, modelItem, position, size);
+            throw new NotImplementedException();
 
-            // obtain or create child
-            var item = items.GetOrDefault(modelItem.Xml);
-            if (item == null)
-                item = items[modelItem.Xml] = new RepeatItem(Xml);
+            //// new context for child
+            //var ec = new EvaluationContext(model, instance, modelItem, position, size);
 
-            // ensure child is configured
-            item.SetContext(ec);
+            //// obtain or create child
+            //var item = items.GetOrDefault(modelItem.Xml);
+            //if (item == null)
+            //    item = items[modelItem.Xml] = new RepeatItem(Xml);
 
-            return item;
+            //// ensure child is configured
+            //item.SetContext(ec);
+
+            //return item;
         }
 
-        /// <summary>
-        /// Gets or sets the current index of the repeat.
-        /// </summary>
-        public int Index
+        public void Refresh()
         {
-            get { return GetState<RepeatState>().Index ?? attributes.StartIndex; }
-            set { GetState<RepeatState>().Index = value; }
-        }
+            throw new NotImplementedException();
 
-        public override void Refresh()
-        {
-            // ensure index value is within range
-            if (Index < 0)
-                if (Binding == null ||
-                    Binding.ModelItems == null ||
-                    Binding.ModelItems.Length == 0)
-                    Index = 0;
-                else
-                    Index = attributes.StartIndex;
+            //// ensure index value is within range
+            //if (Index < 0)
+            //    if (Binding == null ||
+            //        Binding.ModelItems == null ||
+            //        Binding.ModelItems.Length == 0)
+            //        Index = 0;
+            //    else
+            //        Index = attributes.StartIndex;
 
-            if (Binding != null &&
-                Binding.ModelItems != null)
-                if (Index > Binding.ModelItems.Length)
-                    Index = Binding.ModelItems.Length;
+            //if (Binding != null &&
+            //    Binding.ModelItems != null)
+            //    if (Index > Binding.ModelItems.Length)
+            //        Index = Binding.ModelItems.Length;
 
-            // rebuild node tree
-            CreateNodes();
+            //// rebuild node tree
+            //CreateNodes();
 
-            // refresh children
-            foreach (var node in this.Descendants().Select(i => i.InterfaceOrDefault<IUIBindingNode>()))
-                if (node != null)
-                    node.UIBinding.Refresh();
+            //// refresh children
+            //foreach (var node in this.Descendants().Select(i => i.InterfaceOrDefault<IUIBindingNode>()))
+            //    if (node != null)
+            //        node.UIBinding.Refresh();
 
-            // refresh children
-            foreach (var node in this.Descendants().Select(i => i.InterfaceOrDefault<IUINode>()))
-                if (node != null)
-                    node.Refresh();
+            //// refresh children
+            //foreach (var node in this.Descendants().Select(i => i.InterfaceOrDefault<IUINode>()))
+            //    if (node != null)
+            //        node.Refresh();
         }
 
     }

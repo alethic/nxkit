@@ -1,30 +1,24 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
 
-    [Element("group")]
-    public class Group :
-        SingleNodeUIBindingElement
+    [NXElementInterface("{http://www.w3.org/2002/xforms}group")]
+    public class Group 
     {
 
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        public Group()
-            : base(Constants.XForms_1_0 + "group")
-        {
-
-        }
+        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="xml"></param>
-        public Group(XElement xml)
-            : base(xml)
+        public Group(XElement element)
         {
+            Contract.Requires<ArgumentNullException>(element != null);
 
+            this.element = element;
         }
 
     }

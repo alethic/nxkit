@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Xml.XPath;
-
+using NXKit.DOMEvents;
 using NXKit.Util;
 using NXKit.XPath;
 
@@ -40,11 +40,21 @@ namespace NXKit.XForms.XPath.Functions
                     .Select(i => i.State.Document.Root.CreateNavigator().Select("."))
                     .FirstOrDefault();
             else
-                return GetModel(context, navigator).Instances
-                    .Where(i => i.Element.Id == id)
+            {
+                // resolve instance based on id
+                var instance = context.Element.ResolveId(id);
+                if (instance == null)
+                {
+                    context.Element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
+                    return null;
+                }
+
+                return instance.Interfaces<Instance>()
                     .Select(i => i.State.Document.Root.CreateNavigator().Select("."))
                     .FirstOrDefault();
+            }
         }
+
     }
 
 }

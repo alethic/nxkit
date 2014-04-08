@@ -1,24 +1,33 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms
 {
 
-    [Element("message")]
-    public class MessageElement : 
-        SingleNodeUIBindingElement, 
+    [NXElementInterface("{http://www.w3.org/2002/xforms}message")]
+    public class Message :
         IAction
     {
+
+        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public MessageElement(XElement element)
-            : base(element)
+        public Message(XElement element)
         {
+            Contract.Requires<ArgumentNullException>(element != null);
 
+            this.element = element;
+        }
+
+        XFormsModule Module
+        {
+            get { return element.Host().Module<XFormsModule>(); }
         }
 
         public void Handle(Event ev)

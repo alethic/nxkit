@@ -17,33 +17,33 @@ namespace NXKit.XForms
         XsltContext
     {
 
-        readonly XNode node;
+        readonly XElement element;
         readonly EvaluationContext evaluationContext;
         readonly IXsltContextFunctionProvider functionProvider;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="element"></param>
         /// <param name="evaluationContext"></param>
         internal XFormsXsltContext(
-            XNode node,
+            XElement element,
             EvaluationContext evaluationContext)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(evaluationContext != null);
 
-            this.node = node;
+            this.element = element;
             this.evaluationContext = evaluationContext;
-            this.functionProvider = node.Host().Container.GetExportedValue<IXsltContextFunctionProvider>();
+            this.functionProvider = element.Host().Container.GetExportedValue<IXsltContextFunctionProvider>();
         }
 
         /// <summary>
-        /// Gets the <see cref="Node"/> associated with the XSLT operation.
+        /// Gets the <see cref="XElement"/> associated with the XSLT operation.
         /// </summary>
-        public XNode Node
+        public XElement Element
         {
-            get { return node; }
+            get { return element; }
         }
 
         /// <summary>
@@ -73,24 +73,12 @@ namespace NXKit.XForms
         {
             Contract.Requires<ArgumentNullException>(prefix != null);
 
-            var element = node as XElement;
-            if (element == null)
-                element = node.Parent as XElement;
-            if (element == null)
-                throw new NullReferenceException();
-
             return prefix != "" ? element.GetNamespaceOfPrefix(prefix).NamespaceName : element.GetDefaultNamespace().NamespaceName;
         }
 
         public override string LookupPrefix(string namespaceName)
         {
             Contract.Requires<ArgumentNullException>(namespaceName != null);
-
-            var element = node as XElement;
-            if (element == null)
-                element = node.Parent as XElement;
-            if (element == null)
-                throw new NullReferenceException();
 
             return element.GetPrefixOfNamespace(namespaceName);
         }

@@ -17,7 +17,9 @@ namespace NXKit.XForms
     {
 
         readonly XElement element;
-        ModelState state;
+        readonly ModelAttributes attributes;
+        readonly Lazy<ModelState> state;
+        readonly Lazy<DocumentAnnotation> documentAnnotation;
 
         /// <summary>
         /// Initializes a new instance.
@@ -28,14 +30,20 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
+            this.attributes = new ModelAttributes(element);
+            this.state = new Lazy<ModelState>(() => element.AnnotationOrCreate<ModelState>());
+            this.documentAnnotation = new Lazy<DocumentAnnotation>(() => element.Document.AnnotationOrCreate<DocumentAnnotation>());
         }
 
+        /// <summary>
+        /// Gets a reference to the encapsulated 'model' element.
+        /// </summary>
         public XElement Element
         {
             get { return element; }
         }
 
-        public XFormsModule Module
+        XFormsModule Module
         {
             get { return element.Host().Container.GetExportedValue<XFormsModule>(); }
         }
@@ -45,29 +53,12 @@ namespace NXKit.XForms
         /// </summary>
         public ModelState State
         {
-            get { return state ?? (state = GetState()); }
+            get { return state.Value; }
         }
 
-        /// <summary>
-        /// Implements the getter for State.
-        /// </summary>
-        /// <returns></returns>
-        ModelState GetState()
+        DocumentAnnotation DocumentAnnotation
         {
-            var state = element.Annotation<ModelState>();
-            if (state == null)
-                element.AddAnnotation(state = CreateState());
-
-            return state;
-        }
-
-        /// <summary>
-        /// Creates a new state instance.
-        /// </summary>
-        /// <returns></returns>
-        ModelState CreateState()
-        {
-            return new ModelState();
+            get { return documentAnnotation.Value; }
         }
 
         /// <summary>
@@ -83,7 +74,7 @@ namespace NXKit.XForms
         /// </summary>
         public IEnumerable<Instance> Instances
         {
-            get { return element.Elements().Where(i => i.Name == Constants.XForms_1_0 + "instance").Select(i => i.Interface<Instance>()); }
+            get { return element.Elements(Constants.XForms_1_0 + "instance").SelectMany(i => i.Interfaces<Instance>()); }
         }
 
         /// <summary>
@@ -182,37 +173,25 @@ namespace NXKit.XForms
             State.Construct = true;
 
             // validate model version, we only support 1.0
-            var versions = Module.GetAttributeValue(element, "version");
-            if (versions != null)
-                foreach (var version in versions.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
+            if (attributes.Version != null)
+                foreach (var version in attributes.Version.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     if (version != "1.0")
                     {
                         element.Interface<INXEventTarget>().DispatchEvent(Events.VersionException);
                         return;
                     }
 
-            var schema = Module.GetAttributeValue(element, "schema");
-            if (schema != null)
-                foreach (var item in schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
+            if (attributes.Schema != null)
+                foreach (var item in attributes.Schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     continue; // TODO
 
             // attempt to load model instance data, if possible; if no instance loaded, exit
-            Module.ProcessModelInstance(this);
-            if (!Instances.Any(i => i.State.Document != null))
-                return;
-
-            OnRebuild();
-            OnRecalculate();
-            OnRevalidate();
-        }
-
-        ModuleState ModuleState()
-        {
-            var state = element.Document.Root.Annotation<ModuleState>();
-            if (state == null)
-                element.AddAnnotation(state = new ModuleState());
-
-            return state;
+            if (Instances.Select(i => i.Load()).ToList().Any())
+            {
+                OnRebuild();
+                OnRecalculate();
+                OnRevalidate();
+            }
         }
 
         /// <summary>
@@ -222,7 +201,7 @@ namespace NXKit.XForms
         {
             State.ConstructDone = true;
 
-            if (ModuleState().ConstructDoneOnce)
+            if (DocumentAnnotation.ConstructDoneOnce)
                 return;
 
             // refresh interface bindings
@@ -237,7 +216,7 @@ namespace NXKit.XForms
             foreach (var ui in GetUINodes())
                 ui.Refresh();
 
-            ModuleState().ConstructDoneOnce = true;
+            DocumentAnnotation.ConstructDoneOnce = true;
         }
 
         /// <summary>

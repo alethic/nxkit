@@ -1,11 +1,12 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms.Layout
 {
 
-    [Element("p")]
-    public class Paragraph : 
-        LayoutElement
+    [NXElementInterface("{http://schemas.nxkit.org/nxkit/2014/xforms-layout}p")]
+    public class Paragraph 
     {
 
         /// <summary>
@@ -13,9 +14,8 @@ namespace NXKit.XForms.Layout
         /// </summary>
         /// <param name="element"></param>
         public Paragraph(XElement element)
-            : base(element)
         {
-
+            Contract.Requires<ArgumentNullException>(element != null);
         }
 
     }

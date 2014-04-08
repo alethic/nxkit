@@ -12,26 +12,39 @@ namespace NXKit.XForms
     {
 
         readonly XElement element;
+        readonly XNamespace defaultNamespace;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="defaultNamespace"></param>
+        public AttributeAccessor(XElement element, XNamespace defaultNamespace)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(defaultNamespace != null);
+
+            this.element = element;
+            this.defaultNamespace = defaultNamespace;
+        }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         public AttributeAccessor(XElement element)
+            :this(element, Constants.XForms_1_0)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-
-            this.element = element;
         }
-
 
         public XAttribute GetAttribute(string name)
         {
-            var fq = element.Attribute(Constants.XForms_1_0 + name);
+            var fq = element.Attribute(defaultNamespace + name);
             if (fq != null)
                 return fq;
 
-            var ln = element.Name.Namespace == Constants.XForms_1_0 ? element.Attribute(name) : null;
+            var ln = element.Name.Namespace == defaultNamespace ? element.Attribute(name) : null;
             if (ln != null)
                 return ln;
 

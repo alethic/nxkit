@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 
@@ -26,10 +27,7 @@ namespace NXKit.XForms.Layout
 
         public override Stream OpenSchema(string location)
         {
-            if (location == Constants.Layout_1_0_HREF)
-                return typeof(LayoutModule).Assembly.GetManifestResourceStream("ISIS.Forms.Layout.Layout-1.0.xsd");
-            else
-                return null;
+            throw new NotImplementedException();
         }
 
     }

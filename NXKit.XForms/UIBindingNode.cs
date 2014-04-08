@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -11,14 +12,14 @@ namespace NXKit.XForms
     public class UIBindingNode
     {
 
-        readonly NXElement element;
+        readonly XElement element;
         readonly Lazy<UIBinding> uiBinding;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public UIBindingNode(NXElement element)
+        public UIBindingNode(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 

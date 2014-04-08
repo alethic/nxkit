@@ -3,16 +3,15 @@
 namespace NXKit.XForms
 {
 
-    public class ListItemElement :
-        XFormsElement
+    [NXElementInterface("{http://www.w3.org/2002/xforms}choices")]
+    public class Choices
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="xml"></param>
-        public ListItemElement(XElement xml)
-            : base(xml)
+        /// <param name="element"></param>
+        public Choices(XElement element)
         {
 
         }

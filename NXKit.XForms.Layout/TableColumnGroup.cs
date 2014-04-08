@@ -1,28 +1,33 @@
-﻿using System.Xml.Linq;
-using NXKit.Util;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms.Layout
 {
 
-    [Element("table-column-group")]
+    [NXElementInterface("{http://schemas.nxkit.org/nxkit/2014/xforms-layout}table-column-group")]
     public class TableColumnGroup :
-        LayoutElement,
         ITableColumnGroupContainer
     {
+
+        readonly XElement element;
+        readonly TableColumnGroupAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="xml"></param>
-        public TableColumnGroup(XElement xml)
-            : base(xml)
+        /// <param name="element"></param>
+        public TableColumnGroup(XElement element)
         {
+            Contract.Requires<ArgumentNullException>(element != null);
 
+            this.element = element;
+            this.attributes = new TableColumnGroupAttributes(element);
         }
 
-        public new string Name
+        public string Name
         {
-            get { return Module.GetAttributeValue(Xml, "name").TrimToNull(); }
+            get { return attributes.Name; }
         }
 
     }

@@ -1,11 +1,12 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms.Layout
 {
 
-    [Element("form")]
-    public class Form : 
-        LayoutElement
+    [NXElementInterface("{http://schemas.nxkit.org/nxkit/2014/xforms-layout}form")]
+    public class Form
     {
 
         /// <summary>
@@ -13,14 +14,8 @@ namespace NXKit.XForms.Layout
         /// </summary>
         /// <param name="element"></param>
         public Form(XElement element)
-            : base(element)
         {
-
-        }
-
-        public override string Id
-        {
-            get { return "FORM"; }
+            Contract.Requires<ArgumentNullException>(element != null);
         }
 
     }

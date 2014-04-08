@@ -6,28 +6,33 @@ namespace NXKit.XForms
 {
 
     /// <summary>
-    /// Provides the XForms 'delete' attributes.
+    /// Provides the XForms 'model' attributes.
     /// </summary>
-    public class DeleteAttributes :
-        CommonAttributes
+    public class ModelAttributes :
+        AttributeAccessor
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public DeleteAttributes(XElement element)
+        public ModelAttributes(XElement element)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }
 
         /// <summary>
-        /// Gets the 'ref' attribute values.
+        /// Gets the 'version' attribute values.
         /// </summary>
-        public string At
+        public string Version
         {
-            get { return GetAttributeValue("at"); }
+            get { return GetAttributeValue("version"); }
+        }
+
+        public string Schema
+        {
+            get { return GetAttributeValue("schema"); }
         }
 
     }

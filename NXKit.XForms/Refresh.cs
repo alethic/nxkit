@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 using NXKit.DOMEvents;
 
@@ -11,13 +12,13 @@ namespace NXKit.XForms
         IAction
     {
 
-        readonly NXElement element;
+        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Refresh(NXElement element)
+        public Refresh(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -25,19 +26,11 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the associated element.
-        /// </summary>
-        public NXElement Element
-        {
-            get { return element; }
-        }
-
-        /// <summary>
         /// Gets the XForms module.
         /// </summary>
         XFormsModule Module
         {
-            get { return element.Document.Module<XFormsModule>(); }
+            get { return element.Host().Module<XFormsModule>(); }
         }
 
         public void Handle(Event ev)
@@ -47,15 +40,15 @@ namespace NXKit.XForms
 
         public void Invoke()
         {
-            var modelAttr = Module.GetAttributeValue(Element.Xml, "model");
+            var modelAttr = Module.GetAttributeValue(element, "model");
             if (modelAttr != null)
             {
-                var element = Element.ResolveId(modelAttr);
-                if (element != null)
-                    element.Interface<Model>().OnRefresh();
+                var model = element.ResolveId(modelAttr);
+                if (model != null)
+                    model.Interface<Model>().OnRefresh();
                 else
                 {
-                    Element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
+                    element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                     return;
                 }
             }

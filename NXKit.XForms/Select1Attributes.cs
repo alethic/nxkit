@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -8,14 +9,14 @@ namespace NXKit.XForms
     /// Provides the attributes for the select1 element.
     /// </summary>
     public class Select1Attributes :
-        AttributeAccessor
+        CommonAttributes
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Select1Attributes(NXElement element)
+        public Select1Attributes(XElement element)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);

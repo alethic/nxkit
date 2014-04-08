@@ -5,28 +5,26 @@ using System.Xml.Linq;
 namespace NXKit.XForms.Layout
 {
 
-    [NXElementInterface("{http://schemas.nxkit.org/nxkit/2014/xforms-layout}table-row")]
-    public class TableRow
+    /// <summary>
+    /// Provides the attributes for the 'table-row' element.
+    /// </summary>
+    public class TableRowAttributes :
+        AttributeAccessor
     {
-
-        readonly XElement element;
-        readonly TableRowAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public TableRow(XElement element)
+        public TableRowAttributes(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-
-            this.element = element;
-            this.attributes = new TableRowAttributes(element);
         }
 
         public string ColumnGroup
         {
-            get { return attributes.ColumnGroup; }
+            get { return GetAttributeValue("column-group"); }
         }
 
     }

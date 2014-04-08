@@ -1,11 +1,12 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms.Layout
 {
 
-    [Element("table-cell")]
-    public class TableCell : 
-        LayoutElement
+    [NXElementInterface("{http://schemas.nxkit.org/nxkit/2014/xforms-layout}table-cell")]
+    public class TableCell
     {
 
         /// <summary>
@@ -13,14 +14,8 @@ namespace NXKit.XForms.Layout
         /// </summary>
         /// <param name="element"></param>
         public TableCell(XElement element)
-            : base(element)
         {
-
-        }
-
-        public Importance Importance
-        {
-            get { return LayoutHelper.GetImportance(this); }
+            Contract.Requires<ArgumentNullException>(element != null);
         }
 
     }

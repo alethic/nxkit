@@ -2,32 +2,29 @@
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
-namespace NXKit.XForms
+namespace NXKit.XForms.Layout
 {
 
     /// <summary>
-    /// Provides the XForms 'delete' attributes.
+    /// Provides the attributes for the 'table-column-group' element.
     /// </summary>
-    public class DeleteAttributes :
-        CommonAttributes
+    public class TableColumnGroupAttributes :
+        AttributeAccessor
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public DeleteAttributes(XElement element)
+        public TableColumnGroupAttributes(XElement element)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }
 
-        /// <summary>
-        /// Gets the 'ref' attribute values.
-        /// </summary>
-        public string At
+        public string Name
         {
-            get { return GetAttributeValue("at"); }
+            get { return GetAttributeValue("name"); }
         }
 
     }

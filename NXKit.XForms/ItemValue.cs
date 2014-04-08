@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using System.Linq;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -10,7 +10,7 @@ namespace NXKit.XForms
         ISelectableValue
     {
 
-        readonly NXElement element;
+        readonly XElement element;
         readonly ItemValueAttributes attributes;
         readonly Lazy<IBindingNode> nodeBinding;
         readonly Lazy<Binding> valueBinding;
@@ -19,7 +19,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public ItemValue(NXElement element)
+        public ItemValue(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -32,7 +32,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the 'value' element.
         /// </summary>
-        public NXElement Element
+        public XElement Element
         {
             get { return element; }
         }
@@ -73,11 +73,7 @@ namespace NXKit.XForms
             if (ValueBinding != null)
                 return ValueBinding.Value;
 
-            var text = element.Nodes().OfType<NXText>();
-            if (text.Any())
-                return string.Join("", text.Select(i => i.Value));
-
-            return null;
+            return element.Value;
         }
 
         public void Select(UIBinding ui)

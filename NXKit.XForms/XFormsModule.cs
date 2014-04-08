@@ -21,14 +21,6 @@ namespace NXKit.XForms
     {
 
         /// <summary>
-        /// Map of <see cref="XName"/> to <see cref="NXNode"/> type.
-        /// </summary>
-        static readonly Dictionary<XName, Type> visualTypeMap = typeof(XFormsModule).Assembly.GetTypes()
-               .Select(i => new { Type = i, Attribute = i.GetCustomAttribute<ElementAttribute>() })
-               .Where(i => i.Attribute != null)
-               .ToDictionary(i => Constants.XForms_1_0 + i.Attribute.Name, i => i.Type);
-
-        /// <summary>
         /// Tracks whether the processor is currently executing an outermost action handler.
         /// </summary>
         internal bool executingOutermostActionHandler;
@@ -168,62 +160,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Loads the instance data associated with the given model.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        internal void ProcessModelInstance(Model model)
-        {
-            var target = model.Element.Interface<INXEventTarget>();
-            if (target == null)
-                throw new NullReferenceException();
-
-            foreach (var instance in model.Instances)
-            {
-                // extract instance values from xml
-                var instanceSrc = GetAttributeValue(instance.Element, "src");
-                var instanceChildElements = instance.Element.Elements().ToArray();
-
-                if (!string.IsNullOrWhiteSpace(instanceSrc))
-                {
-                    try
-                    {
-                        // normalize uri with base
-                        var u = new Uri(instanceSrc, UriKind.RelativeOrAbsolute);
-                        if (instance.Element.Xml.BaseUri.TrimToNull() != null && !u.IsAbsoluteUri)
-                            u = new Uri(new Uri(instance.Element.Xml.BaseUri), u);
-
-                        // return resource as a stream
-                        var request = WebRequest.Create(u);
-                        request.Method = "GET";
-                        var response = request.GetResponse().GetResponseStream();
-                        if (response == null)
-                            throw new FileNotFoundException("Could not load resource", instanceSrc);
-
-                        // parse resource into new DOM
-                        var instanceDataDocument = XDocument.Load(response);
-
-                        // add to model
-                        instance.State.Initialize(model.Element, instance.Element, instanceDataDocument);
-                    }
-                    catch (UriFormatException)
-                    {
-                        target.DispatchEvent(Events.Rebuild);
-                    }
-                }
-                else if (instanceChildElements.Length >= 2)
-                {
-                    // invalid number of child elements
-                    target.DispatchEvent(Events.LinkException);
-                }
-                else if (instanceChildElements.Length == 1)
-                {
-                    instance.State.Initialize(model.Element, instance.Element, new XDocument(instanceChildElements[0]));
-                }
-            }
-        }
-
-        /// <summary>
         /// Creates a <see cref="XPathNavigator"/> for the given model item.
         /// </summary>
         /// <param name="item"></param>
@@ -247,19 +183,19 @@ namespace NXKit.XForms
         /// <summary>
         /// Evaluates the given XPath expression.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="element"></param>
         /// <param name="evaluationContext"></param>
         /// <param name="expression"></param>
         /// <param name="resultType"></param>
         /// <returns></returns>
-        internal object EvaluateXPath(XNode node, EvaluationContext evaluationContext, string expression, XPathResultType resultType)
+        internal object EvaluateXPath(XElement element, EvaluationContext evaluationContext, string expression, XPathResultType resultType)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(node.Host() != null);
+            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(element.Host() != null);
             Contract.Requires<ArgumentNullException>(evaluationContext != null);
             Contract.Requires<ArgumentNullException>(expression != null);
 
-            var nc = new XFormsXsltContext(node, evaluationContext);
+            var nc = new XFormsXsltContext(element, evaluationContext);
             var nv = CreateNavigator(evaluationContext.ModelItem);
             var xp = XPathExpression.Compile(expression, nc);
             var nd = nv.Evaluate(xp);

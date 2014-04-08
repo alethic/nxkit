@@ -1,11 +1,12 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
+
 namespace NXKit.XForms
 {
 
-    [Element("select")]
-    public class Select :
-        SingleNodeUIBindingElement,
-        ISupportsUiCommonAttributes
+    [NXElementInterface("{}select")]
+    public class Select
     {
 
         /// <summary>
@@ -13,14 +14,8 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Select(XElement element)
-            : base(element)
         {
-
-        }
-
-        public bool Incremental
-        {
-            get { return Module.GetAttributeValue(Xml, "incremental") == "true"; }
+            Contract.Requires<ArgumentNullException>(element != null);
         }
 
     }

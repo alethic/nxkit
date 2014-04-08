@@ -1,12 +1,12 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
+
 namespace NXKit.XForms
 {
 
-    [Element("textarea")]
-    public class TextArea :
-        SingleNodeUIBindingElement,
-        ISupportsUiCommonAttributes,
-        ISupportsIncrementalAttribute
+    [NXElementInterface("{http://www.w3.org/2002/xforms}textarea")]
+    public class TextArea 
     {
 
         /// <summary>
@@ -14,14 +14,8 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public TextArea(XElement element)
-            : base(element)
         {
-
-        }
-
-        public bool Incremental
-        {
-            get { return Module.GetAttributeValue(Xml, "incremental") == "true"; }
+            Contract.Requires<ArgumentNullException>(element != null);
         }
 
     }

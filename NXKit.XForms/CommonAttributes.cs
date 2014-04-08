@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -17,7 +18,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public CommonAttributes(NXElement element)
+        public CommonAttributes(XElement element)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);

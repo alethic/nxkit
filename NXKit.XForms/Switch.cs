@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -8,13 +9,13 @@ namespace NXKit.XForms
     public class Switch
     {
 
-        readonly NXElement element;
+        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Switch(NXElement element)
+        public Switch(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 

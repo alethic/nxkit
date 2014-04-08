@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Linq;
-
+using System.Xml.Linq;
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms
@@ -14,9 +14,9 @@ namespace NXKit.XForms
     public class NodeEvaluationContext
     {
 
-        readonly NXElement element;
+        readonly XElement element;
         readonly CommonAttributes attributes;
-        readonly Lazy<NXElement> modelElement;
+        readonly Lazy<XElement> modelElement;
         readonly Lazy<Model> model;
         readonly Lazy<EvaluationContext> context;
 
@@ -24,13 +24,13 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public NodeEvaluationContext(NXElement element)
+        public NodeEvaluationContext(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
             this.attributes = new CommonAttributes(element);
-            this.modelElement = new Lazy<NXElement>(() => GetModelElement());
+            this.modelElement = new Lazy<XElement>(() => GetModelElement());
             this.model = new Lazy<Model>(() => modelElement.Value != null ? modelElement.Value.Interface<Model>() : null);
             this.context = new Lazy<EvaluationContext>(() => GetContext());
         }
@@ -39,7 +39,7 @@ namespace NXKit.XForms
         /// Attempts to obtain the model element.
         /// </summary>
         /// <returns></returns>
-        NXElement GetModelElement()
+        XElement GetModelElement()
         {
             var r = attributes.Model != null ? element.ResolveId(attributes.Model) : null;
             if (r == null)
@@ -67,7 +67,6 @@ namespace NXKit.XForms
         EvaluationContext GetInScopeEvaluationContext()
         {
             return element.Ancestors()
-                .OfType<NXElement>()
                 .Select(i => i.ResolveEvaluationContext())
                 .FirstOrDefault(i => i != null);
         }

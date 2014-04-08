@@ -15,7 +15,7 @@ namespace NXKit.XForms
     public class UIBinding
     {
 
-        readonly NXElement element;
+        readonly XElement element;
         readonly Binding binding;
         readonly Lazy<UIBindingState> state;
         ModelItem modelItem;
@@ -24,19 +24,19 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="node"></param>
-        public UIBinding(NXElement node)
+        public UIBinding(XElement node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
             this.element = node;
-            this.state = new Lazy<UIBindingState>(() => GetState());
+            this.state = new Lazy<UIBindingState>(() => element.AnnotationOrCreate<UIBindingState>());
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="node"></param>
-        internal UIBinding(NXElement node, ModelItem modelItem)
+        internal UIBinding(XElement node, ModelItem modelItem)
             : this(node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
@@ -49,7 +49,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="node"></param>
         /// <param name="binding"></param>
-        internal UIBinding(NXElement node, Binding binding)
+        internal UIBinding(XElement node, Binding binding)
             : this(node, binding.ModelItem)
         {
             Contract.Requires<ArgumentNullException>(node != null);
@@ -63,7 +63,7 @@ namespace NXKit.XForms
         /// </summary>
         public XFormsModule Module
         {
-            get { return element.Document.Module<XFormsModule>(); }
+            get { return element.Host().Module<XFormsModule>(); }
         }
 
         /// <summary>
@@ -80,19 +80,6 @@ namespace NXKit.XForms
         UIBindingState State
         {
             get { return state.Value; }
-        }
-
-        /// <summary>
-        /// Gets the binding state.
-        /// </summary>
-        /// <returns></returns>
-        UIBindingState GetState()
-        {
-            var state = element.Storage.OfType<UIBindingState>().FirstOrDefault();
-            if (state == null)
-                element.Storage.AddLast(state = new UIBindingState());
-
-            return state;
         }
 
         /// <summary>

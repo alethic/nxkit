@@ -1,27 +1,22 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms.Layout
 {
 
-    [Element("table")]
-    public class Table : 
-        Group,
+    [NXElementInterface("{http://schemas.nxkit.org/nxkit/2014/xforms-layout}table")]
+    public class Table :
         ITableColumnGroupContainer
     {
-        
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="xml"></param>
-        public Table(XElement xml)
-            : base(xml)
+        /// <param name="element"></param>
+        public Table(XElement element)
         {
-
-        }
-
-        public Importance Importance
-        {
-            get { return LayoutHelper.GetImportance(this); }
+            Contract.Requires<ArgumentNullException>(element != null);
         }
 
     }

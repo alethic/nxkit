@@ -1,17 +1,18 @@
-﻿using System.Xml.Linq;
+﻿using System.IO;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
 
-    [NXElementInterface("{http://www.w3.org/2002/xforms}alert")]
-    public class Alert
+    [NXElementInterface("{http://www.w3.org/2002/xforms}output")]
+    public class Output
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Alert(XElement element)
+        public Output(XElement element)
         {
 
         }

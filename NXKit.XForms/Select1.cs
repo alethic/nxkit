@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -11,7 +12,7 @@ namespace NXKit.XForms
         IEvaluationContextScope
     {
 
-        readonly NXElement element;
+        readonly XElement element;
         readonly Select1Attributes attributes;
         readonly Lazy<IBindingNode> nodeBinding;
         readonly Lazy<UIBinding> uiBinding;
@@ -20,7 +21,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Select1(NXElement element)
+        public Select1(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -33,7 +34,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the 'select1' element.
         /// </summary>
-        public NXElement Element
+        public XElement Element
         {
             get { return element; }
         }
@@ -126,7 +127,6 @@ namespace NXKit.XForms
         ISelectable GetSelected()
         {
             return element.Descendants()
-                .OfType<NXElement>()
                 .SelectMany(i => i.Interfaces<ISelectable>())
                 .Where(i => i.IsSelected(UIBinding))
                 .FirstOrDefault();
@@ -166,7 +166,6 @@ namespace NXKit.XForms
         void SetSelectedId(string id)
         {
             Selected = element.Descendants()
-                .OfType<NXElement>()
                 .SelectMany(i => i.Interfaces<ISelectable>())
                 .FirstOrDefault(i => i.Id == id);
         }

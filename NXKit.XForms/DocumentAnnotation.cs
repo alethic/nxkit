@@ -4,7 +4,7 @@ namespace NXKit.XForms
 {
 
     [Serializable]
-    class ModuleState
+    class DocumentAnnotation
     {
 
         public bool ConstructDoneOnce { get; set; }

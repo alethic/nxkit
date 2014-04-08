@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
+
 using NXKit.DOMEvents;
 using NXKit.Scripting;
 
@@ -16,13 +17,13 @@ namespace NXKit.XForms
         IAction
     {
 
-        readonly NXElement element;
+        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Script(NXElement element)
+        public Script(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -41,14 +42,7 @@ namespace NXKit.XForms
 
         public void Invoke()
         {
-            var code = string.Join("", element.Nodes()
-                .OfType<NXText>()
-                .Select(i => i.Value));
-            if (code == null)
-                return;
-
-            // execute script
-            DocumentScript.Execute(Type, code);
+            DocumentScript.Execute(Type, element.Value);
         }
 
         public void Handle(Event evt)

@@ -14,7 +14,7 @@ namespace NXKit.XForms
         IAction
     {
 
-        readonly NXElement element;
+        readonly XElement element;
         readonly DeleteAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<EvaluationContext> context;
@@ -24,7 +24,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Delete(NXElement element)
+        public Delete(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -40,7 +40,7 @@ namespace NXKit.XForms
         /// </summary>
         XFormsModule Module
         {
-            get { return element.Document.Module<XFormsModule>(); }
+            get { return element.Host().Module<XFormsModule>(); }
         }
 
         /// <summary>

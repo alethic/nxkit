@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -10,28 +11,43 @@ namespace NXKit.XForms
         ISelectable
     {
 
-        readonly NXElement element;
+        readonly XElement element;
         readonly Lazy<ISelectableValue> value;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Item(NXElement element)
+        public Item(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
             this.value = new Lazy<ISelectableValue>(() => element
                 .Descendants()
-                .OfType<NXElement>()
                 .SelectMany(i => i.Interfaces<ISelectableValue>())
                 .FirstOrDefault());
         }
 
+        /// <summary>
+        /// Gets a unique identifier for the selectable.
+        /// </summary>
         public string Id
         {
-            get { return element.UniqueId; }
+            get { return GetId(); }
+        }
+
+        /// <summary>
+        /// Implements the getter for Id.
+        /// </summary>
+        /// <returns></returns>
+        string GetId()
+        {
+            var state = element.AnnotationOrCreate<ItemState>();
+            if (state.id == null)
+                state.id = Guid.NewGuid().ToString("N");
+
+            return state.id;
         }
 
         public void Select(UIBinding ui)

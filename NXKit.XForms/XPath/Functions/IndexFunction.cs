@@ -1,4 +1,5 @@
-﻿using System.Xml.XPath;
+﻿using System;
+using System.Xml.XPath;
 
 using NXKit.XPath;
 
@@ -36,11 +37,11 @@ namespace NXKit.XForms.XPath.Functions
             if (repeatId == null)
                 return double.NaN;
 
-            var repeatVisual = (Repeat)context.Node.ResolveId(repeatId);
-            if (repeatVisual == null)
+            var repeat = context.Element.ResolveId(repeatId);
+            if (repeat == null)
                 return double.NaN;
 
-            return repeatVisual.Index;
+            throw new NotImplementedException();
         }
 
     }

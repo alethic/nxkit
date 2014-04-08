@@ -11,7 +11,7 @@ namespace NXKit.XForms
     public class Bind
     {
 
-        readonly NXElement element;
+        readonly XElement element;
         readonly ModelItemPropertyAttributes attributes;
         readonly Lazy<IBindingNode> nodeBinding;
         readonly Lazy<EvaluationContext> context;
@@ -25,7 +25,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Bind(NXElement element)
+        public Bind(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -44,7 +44,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the 'bind' element.
         /// </summary>
-        public NXElement Element
+        public XElement Element
         {
             get { return element; }
         }
