@@ -14,7 +14,7 @@ namespace NXKit
     {
 
         /// <summary>
-        /// Gets all the implemented interfaces of the given <see cref="XElement"/>.
+        /// Resolves a <see cref="XElement"/> by IDREF from the vantage point of this <see cref="XElement"/>.
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
@@ -23,25 +23,56 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(self != null);
             Contract.Requires<ArgumentNullException>(self.Host() != null);
 
-            // discover the root visual
-            var root = self.AncestorsAndSelf()
-                .First(i => i != null && i.Parent == null);
+            // search referencable elements for matching id
+            foreach (var element in RefElements(self))
+                if ((string)element.Attribute("id") == id)
+                    return element;
 
-            // naming scope of current element
-            var namingScopes = self
+            return null;
+        }
+
+        /// <summary>
+        /// Returns a filtered collection of <see cref="XElement"/>s within the containing <see cref="XDocument"/>
+        /// which are reachable from the given <see cref="XElement"/> when considering ref scope.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public static IEnumerable<XElement> RefElements(this XElement element)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+
+            // obtain all scopes this element is a member of
+            var scopes = new HashSet<IRefScope>(element
                 .Ancestors()
-                .SelectMany(i => i.Interfaces<INamingScope>())
-                .ToArray();
+                .SelectMany(i => i.Interfaces<IRefScope>()));
 
+            // return elements that share one of these scopes
+            return DescendantsAndSelfInRefScope(element.Document.Root, scopes);
+        }
 
-            throw new NotImplementedException();
+        /// <summary>
+        /// Yields each descendant <see cref="XElement"/> of the specified <see cref="XElement"/> which falls within
+        /// one of the specified <see cref="IRefScope"/>s.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="scopes"></param>
+        /// <returns></returns>
+        static IEnumerable<XElement> DescendantsAndSelfInRefScope(XElement self, HashSet<IRefScope> scopes)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(scopes != null);
 
-            //// search all descendents of the root element that are sharing naming scopes with myself
-            //foreach (var visual in root.DescendantsIncludeNS(namingScopes).OfType<NXElement>())
-            //    if (visual.Id == id)
-            //        return visual;
+            yield return self;
 
-            //return null;
+            // if this node establishes an unknown ref scope, ignore its descendants
+            var scope = self.InterfaceOrDefault<IRefScope>();
+            if (scope != null && !scopes.Contains(scope))
+                yield break;
+
+            // else, recurse into its descendants
+            foreach (var element in self.Elements())
+                foreach (var i in DescendantsAndSelfInRefScope(element, scopes))
+                    yield return i;
         }
 
     }

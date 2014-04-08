@@ -8,14 +8,14 @@ namespace NXKit
     /// <summary>
     /// Returns the node type itself.
     /// </summary>
-    [Export(typeof(INodeInterfaceProvider))]
+    [Export(typeof(IInterfaceProvider))]
     public class TypeNodeInterfaceProvider :
-        INodeInterfaceProvider
+        IInterfaceProvider
     {
 
-        public IEnumerable<object> GetInterfaces(XNode node)
+        public IEnumerable<object> GetInterfaces(XObject obj)
         {
-            yield return node;
+            yield return obj;
         }
 
     }
