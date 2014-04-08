@@ -15,6 +15,8 @@ namespace NXKit.XForms
     public class Binding
     {
 
+        static readonly ModelItem[] EmptyModelItemSequence = new ModelItem[0];
+
         readonly XElement element;
         readonly EvaluationContext context;
         readonly string xpath;
@@ -109,7 +111,7 @@ namespace NXKit.XForms
                     .Select(i => i.AnnotationOrCreate<ModelItem>(() => new ModelItem(i)))
                     .ToArray();
             else
-                return null;
+                return EmptyModelItemSequence;
         }
 
         /// <summary>

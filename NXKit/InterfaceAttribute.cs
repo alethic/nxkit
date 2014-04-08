@@ -22,7 +22,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         public InterfaceAttribute()
-            :this(XmlNodeType.None)
+            : this(XmlNodeType.Element)
         {
 
         }

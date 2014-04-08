@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
@@ -21,15 +22,17 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(node.Host() != null);
 
-            var ecs = node.InterfaceOrDefault<IEvaluationContextScope>();
-            if (ecs != null &&
-                ecs.Context != null)
-                return ecs.Context;
+            var ecs = node.Interfaces<IEvaluationContextScope>()
+                .Select(i => i.Context)
+                .FirstOrDefault(i => i != null);
+            if (ecs != null)
+                return ecs;
 
-            var nec = node.InterfaceOrDefault<NodeEvaluationContext>();
-            if (nec != null &&
-                nec.Context != null)
-                return nec.Context;
+            var nec = node.Interfaces<NodeEvaluationContext>()
+                .Select(i => i.Context)
+                .FirstOrDefault(i => i != null);
+            if (nec != null)
+                return nec;
 
             return null;
         }
