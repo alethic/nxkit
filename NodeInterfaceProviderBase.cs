@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit
 {
@@ -19,7 +20,7 @@ namespace NXKit
         /// <param name="node"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        protected object Get(NXNode node, Type type)
+        protected object Get(XNode node, Type type)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(type != null);
@@ -33,7 +34,8 @@ namespace NXKit
         /// <typeparam name="T"></typeparam>
         /// <param name="node"></param>
         /// <returns></returns>
-        protected T Get<T>(NXNode node)
+        protected T Get<T>(XNode node)
+            where T : class
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
@@ -47,7 +49,7 @@ namespace NXKit
         /// <param name="node"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        protected object CreateAndAdd(NXNode node, Type type, Func<object> func)
+        protected object CreateAndAdd(XNode node, Type type, Func<object> func)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(type != null);
@@ -71,7 +73,8 @@ namespace NXKit
         /// <param name="node"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        protected T CreateAndAdd<T>(NXNode node, Func<T> func)
+        protected T CreateAndAdd<T>(XNode node, Func<T> func)
+            where T : class
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(func != null);
@@ -86,7 +89,7 @@ namespace NXKit
         /// <param name="node"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        protected object GetOrCreate(NXNode node, Type type, Func<object> func)
+        protected object GetOrCreate(XNode node, Type type, Func<object> func)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(type != null);
@@ -102,7 +105,7 @@ namespace NXKit
         /// <param name="node"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        protected T GetOrCreate<T>(NXNode node, Func<T> func)
+        protected T GetOrCreate<T>(XNode node, Func<T> func)
             where T : class
         {
             Contract.Requires<ArgumentNullException>(node != null);
@@ -116,7 +119,7 @@ namespace NXKit
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public abstract IEnumerable<object> GetInterfaces(NXNode node);
+        public abstract IEnumerable<object> GetInterfaces(XNode node);
 
     }
 

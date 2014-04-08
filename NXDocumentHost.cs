@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Xml.Linq;
+
 using NXKit.Util;
 
 namespace NXKit
@@ -16,38 +14,36 @@ namespace NXKit
     /// <summary>
     /// Hosts an NXKit document. Provides access to the visual tree for a renderer or other processor.
     /// </summary>
-    public class NXDocument :
-        NXContainer
+    public class NXDocumentHost
     {
 
         /// <summary>
         /// Initializes the static instance.
         /// </summary>
-        static NXDocument()
+        static NXDocumentHost()
         {
             ResourceUriParser.Register();
             ResourceWebRequestFactory.Register();
         }
 
         /// <summary>
-        /// Loads a <see cref="NXDocument"/> from the given <see cref="Uri"/>.
+        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="Uri"/>.
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        public static NXDocument Load(Uri uri)
+        public static NXDocumentHost Load(Uri uri)
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            return new NXDocument(
+            return new NXDocumentHost(
                 CompositionUtil.CreateContainer(),
                 uri);
         }
 
-        readonly LinkedList<object> storage = new LinkedList<object>();
         readonly CompositionContainer container;
         readonly Uri uri;
-        readonly NodeStateCollection nodeState;
         int nextElementId;
+        XDocument xml;
 
         Module[] modules;
 
@@ -56,7 +52,6 @@ namespace NXKit
         void ObjectInvariant()
         {
             Contract.Invariant(container != null);
-            Contract.Invariant(nodeState != null);
             Contract.Invariant(nextElementId >= 0);
         }
 
@@ -65,14 +60,13 @@ namespace NXKit
         /// </summary>
         /// <param name="container"></param>
         /// <param name="uri"></param>
-        public NXDocument(CompositionContainer container, Uri uri)
+        public NXDocumentHost(CompositionContainer container, Uri uri)
             : base()
         {
             Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(uri != null);
 
             this.nextElementId = 1;
-            this.nodeState = new NodeStateCollection();
 
             //// resolve uri
             //var request = WebRequest.Create(uri);
@@ -99,8 +93,8 @@ namespace NXKit
         /// </summary>
         /// <param name="container"></param>
         /// <param name="state"></param>
-        public NXDocument(CompositionContainer container, NXDocumentState state)
-            : this(container, state.Uri, state.Xml, state.NextElementId, state.NodeState)
+        public NXDocumentHost(CompositionContainer container, NXDocumentState state)
+            : this(container, state.Uri, state.Xml, state.NextElementId)
         {
             Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(state != null);
@@ -115,17 +109,15 @@ namespace NXKit
         /// <param name="xml"></param>
         /// <param name="nextElementId"></param>
         /// <param name="nodeState"></param>
-        NXDocument(CompositionContainer container, Uri uri, string xml, int nextElementId, NodeStateCollection nodeState)
+        NXDocumentHost(CompositionContainer container, Uri uri, string xml, int nextElementId)
             : base()
         {
             Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(uri != null);
             Contract.Requires<ArgumentNullException>(xml != null);
             Contract.Requires<ArgumentOutOfRangeException>(nextElementId >= 0);
-            Contract.Requires<ArgumentNullException>(nodeState != null);
 
             this.nextElementId = nextElementId;
-            this.nodeState = nodeState;
 
             this.container = container;
             this.uri = uri;
@@ -140,7 +132,7 @@ namespace NXKit
         void Initialize()
         {
             // ensures the document is in the container
-            Container.WithExport<NXDocument>(this);
+            Container.WithExport<NXDocumentHost>(this);
 
             // generate final module list
             modules = Container.GetExportedValues<Module>()
@@ -149,9 +141,6 @@ namespace NXKit
             // initialize modules
             foreach (var module in modules)
                 module.Initialize();
-
-            // create the root node and add it to the document
-            Add(CreateRootNode());
 
             // ensure document has been invoked at least once
             Invoke();
@@ -165,18 +154,13 @@ namespace NXKit
             get { return container; }
         }
 
-        public override NXDocument Document
-        {
-            get { return this; }
-        }
-
         /// <summary>
         /// Gets a reference to the current <see cref="Xml"/> being handled.
         /// </summary>
-        public new XDocument Xml
+        public XDocument Xml
         {
-            get { return (XDocument)base.Xml; }
-            internal set { base.Xml = value; }
+            get { return xml; }
+            internal set { xml = value; }
         }
 
         /// <summary>
@@ -196,14 +180,6 @@ namespace NXKit
             where T : Module
         {
             return modules.OfType<T>().FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Gets a reference to the per-<see cref="NXNode"/> state collection.
-        /// </summary>
-        public NodeStateCollection NodeState
-        {
-            get { return nodeState; }
         }
 
         /// <summary>
@@ -227,98 +203,25 @@ namespace NXKit
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        public string GetElementId(NXElement element)
+        public string GetElementId(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            var idAttr = (string)element.Attribute("id") ?? (string)element.Xml.Attribute("id");
+            var idAttr = (string)element.Attribute("id");
             if (idAttr == null)
                 idAttr = "_element" + ++nextElementId;
 
             element.SetAttributeValue("id", idAttr);
-            element.Xml.SetAttributeValue("id", idAttr);
 
             return idAttr;
         }
 
         /// <summary>
-        /// Gets the 'id' attribute for the given Element, or creates it on demand.
+        /// Gets a reference to the root <see cref="XElement"/> instance for navigating the visual tree.
         /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        public string GetElementId(XElement element)
+        public XElement Root
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-
-            var idAttr = element.Attribute("id");
-            if (idAttr == null)
-            {
-                element.SetAttributeValue("id", "_element" + ++nextElementId);
-                idAttr = element.Attribute("id");
-            }
-
-            return idAttr.Value;
-        }
-
-        /// <summary>
-        /// Gets a reference to the root <see cref="NXELement"/> instance for navigating the visual tree.
-        /// </summary>
-        public NXElement Root
-        {
-            get { return Elements().FirstOrDefault(); }
-        }
-
-        /// <summary>
-        /// Creates a new root <see cref="NXNode"/> instance for navigating the visual tree.
-        /// </summary>
-        /// <returns></returns>
-        NXElement CreateRootNode()
-        {
-            Contract.Ensures(Contract.Result<NXElement>() != null);
-
-            return (NXElement)CreateNodeFromModules(Xml.Root) ?? new UnknownRootElement(Xml.Root);
-        }
-
-        /// <summary>
-        /// Creates a <see cref="NXNode"/> from the loaded <see cref="Module"/>s.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="xml"></param>
-        /// <returns></returns>
-        NXNode CreateNodeFromModules(XElement xml)
-        {
-            Contract.Requires<ArgumentNullException>(xml != null);
-
-            return modules
-                .Select(i => i.CreateNode(xml))
-                .FirstOrDefault(i => i != null);
-        }
-
-        /// <summary>
-        /// Implements IVisualBuilder.CreateVisual.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="xml"></param>
-        /// <returns></returns>
-        internal NXNode CreateNode(XNode xml)
-        {
-            if (xml is XText)
-                return new NXText((XText)xml);
-            else if (xml is XElement)
-            {
-                // create new instance of visual using extensions
-                var node = CreateNodeFromModules((XElement)xml);
-                if (node != null)
-                    return node;
-
-                return new NXElement((XElement)xml);
-            }
-            else if (xml is XComment)
-                return new NXComment((XComment)xml);
-            else if (xml is XCData)
-                return new NXCData((XCData)xml);
-
-            return null;
+            get { return xml.Root; }
         }
 
         /// <summary>
@@ -330,23 +233,8 @@ namespace NXKit
             return new NXDocumentState(
                 uri,
                 Xml.ToString(SaveOptions.DisableFormatting),
-                nextElementId,
-                nodeState);
+                nextElementId);
         }
-
-        /// <summary>
-        /// Invoke to begin a form submission.
-        /// </summary>
-        public void Submit()
-        {
-            if (ProcessSubmit != null)
-                ProcessSubmit(this, EventArgs.Empty);
-        }
-
-        /// <summary>
-        /// Raised to initiate submission of the form.
-        /// </summary>
-        public event EventHandler ProcessSubmit;
 
     }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Xml.Linq;
 
 namespace NXKit
 {
@@ -12,7 +13,7 @@ namespace NXKit
         INodeInterfaceProvider
     {
 
-        public IEnumerable<object> GetInterfaces(NXNode node)
+        public IEnumerable<object> GetInterfaces(XNode node)
         {
             yield return node;
         }

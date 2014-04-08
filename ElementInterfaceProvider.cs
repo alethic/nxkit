@@ -9,7 +9,7 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Provides interfaces decorated with the <see cref="NXElementInterfaceAttribute"/>.
+    /// Provides interfaces decorated with the <see cref="XElementInterfaceAttribute"/>.
     /// </summary>
     [Export(typeof(INodeInterfaceProvider))]
     public class ElementInterfaceProvider :
@@ -75,9 +75,9 @@ namespace NXKit
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public override IEnumerable<object> GetInterfaces(NXNode node)
+        public override IEnumerable<object> GetInterfaces(XNode node)
         {
-            var element = node as NXElement;
+            var element = node as XElement;
             if (element == null)
                 yield break;
 
@@ -97,7 +97,7 @@ namespace NXKit
         /// <param name="element"></param>
         /// <param name="types"></param>
         /// <returns></returns>
-        IEnumerable<object> GetInstances(NXElement element, IEnumerable<Type> types)
+        IEnumerable<object> GetInstances(XElement element, IEnumerable<Type> types)
         {
             var objects = types
                 .Select(i => GetOrCreate(element, i, () => CreateInstance(element, i)))
@@ -113,11 +113,11 @@ namespace NXKit
         /// <param name="element"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        object CreateInstance(NXElement element, Type type)
+        object CreateInstance(XElement element, Type type)
         {
-            var ctor = type.GetConstructor(new[] { typeof(NXElement) });
+            var ctor = type.GetConstructor(new[] { typeof(XElement) });
             if (ctor == null)
-                throw new NullReferenceException("Could not find ctor accepting NXElement.");
+                throw new NullReferenceException("Could not find ctor accepting XElement.");
 
             // create new instance
             return ctor.Invoke(new object[] { element });

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics.Contracts;
-using System.Linq;
-using NXKit.Util;
+using System.Xml.Linq;
 
 namespace NXKit.Web
 {
@@ -24,52 +22,10 @@ namespace NXKit.Web
         }
 
         /// <summary>
-        /// Writes the given <see cref="NXNode"/> to the underlying output.
+        /// Writes the given <see cref="XNode"/> to the underlying output.
         /// </summary>
         /// <param name="node"></param>
-        public abstract void Write(NXNode node);
-
-        /// <summary>
-        /// Gets the type of the specified <see cref="NXNode"/>.
-        /// </summary>
-        /// <param name="visual"></param>
-        /// <returns></returns>
-        protected virtual Type GetNodeType(NXNode visual)
-        {
-            Contract.Requires<ArgumentNullException>(visual != null);
-
-            return TypeDescriptor.GetReflectionType(visual);
-        }
-
-        /// <summary>
-        /// Gets the base types of the specified <see cref="NXNode"/>.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        protected virtual Type[] GetNodeBaseTypes(NXNode node)
-        {
-            Contract.Requires<ArgumentNullException>(node != null);
-
-            return TypeDescriptor.GetReflectionType(node).BaseType
-                .Recurse(i => i.BaseType)
-                .TakeWhile(i => typeof(NXNode).IsAssignableFrom(i))
-                .ToArray();
-        }
-
-        /// <summary>
-        /// Gets the properties of the specified <see cref="NXNode"/>.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        protected PropertyDescriptor[] GetNodeProperties(NXNode node)
-        {
-            Contract.Requires<ArgumentNullException>(node != null);
-
-            return TypeDescriptor.GetProperties(node)
-                .Cast<PropertyDescriptor>()
-                .Where(i => i.Attributes.OfType<PublicAttribute>().Any())
-                .ToArray();
-        }
+        public abstract void Write(XNode node);
 
         /// <summary>
         /// Flushes whatever is in the buffer to the underlying streams.
@@ -93,7 +49,7 @@ namespace NXKit.Web
         NodeWriter
     {
 
-        public override void Write(NXNode node)
+        public override void Write(XNode node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             throw new NotImplementedException();
