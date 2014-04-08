@@ -127,6 +127,11 @@
     <Compile Include="InterfaceAttribute.cs" />
     <Compile Include="DefaultInterfaceProvider.cs" />
     <Compile Include="IInterfaceProvider.cs" />
+    <Compile Include="IO\XAnnotationDocument.cs" />
+    <Compile Include="IO\XAnnotationRootElement.cs" />
+    <Compile Include="IO\XAnnotationElement.cs" />
+    <Compile Include="IO\XDocumentAnnotationReader.cs" />
+    <Compile Include="IO\XNodeReaderBase.cs" />
     <Compile Include="PublicAttribute.cs" />
     <Compile Include="IO\NodeWriter.cs" />
     <Compile Include="CompositionUtil.cs" />
