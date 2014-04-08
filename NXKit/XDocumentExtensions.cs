@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Xml;
 using System.Xml.Linq;
+
+using NXKit.IO;
 
 namespace NXKit
 {
@@ -24,6 +27,18 @@ namespace NXKit
             yield return document;
             foreach (var node in document.DescendantNodes())
                 yield return node;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="XmlReader"/> that includes annotation data in special nodes.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
+        public static XmlReader CreateAnnotationReader(this XDocument document)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+
+            return new XDocumentAnnotationReader(document);
         }
 
     }
