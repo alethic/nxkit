@@ -141,6 +141,9 @@ namespace NXKit.DOMEvents
         /// <param name="useCapture"></param>
         void HandleEventOnNode(XElement node, Event evt, bool useCapture)
         {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(evt != null);
+
             evt.CurrentTarget = node.Interface<IEventTarget>();
 
             var listenerMap = node.Annotation<EventListenerMap>();

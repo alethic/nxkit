@@ -4,29 +4,67 @@ using System.Xml.Serialization;
 namespace NXKit.XForms
 {
 
+    [XmlRoot("model")]
     public class ModelState
     {
 
-        [XmlAttribute]
-        public bool Construct { get; set; }
+        bool construct;
+        bool constructDone;
+        bool ready;
+        bool rebuild;
+        bool recalculate;
+        bool revalidate;
+        bool refresh;
 
-        [XmlAttribute]
-        public bool ConstructDone { get; set; }
+        [XmlAttribute("construct")]
+        public bool Construct
+        {
+            get { return construct; }
+            set { construct = value; }
+        }
 
-        [XmlAttribute]
-        public bool Ready { get; set; }
+        [XmlAttribute("construct-done")]
+        public bool ConstructDone
+        {
+            get { return constructDone; }
+            set { constructDone = value; }
+        }
 
-        [XmlAttribute]
-        public bool RebuildFlag { get; set; }
+        [XmlAttribute("ready")]
+        public bool Ready
+        {
+            get { return ready; }
+            set { ready = value; }
+        }
 
-        [XmlAttribute]
-        public bool RecalculateFlag { get; set; }
+        [XmlAttribute("rebuild")]
+        public bool Rebuild
+        {
+            get { return rebuild; }
+            set { rebuild = value; }
+        }
 
-        [XmlAttribute]
-        public bool RevalidateFlag { get; set; }
+        [XmlAttribute("recalculate")]
+        public bool Recalculate
+        {
+            get { return recalculate; }
+            set { recalculate = value; }
+        }
 
-        [XmlAttribute]
-        public bool RefreshFlag { get; set; }
+        [XmlAttribute("revalidate")]
+        public bool Revalidate
+        {
+            get { return revalidate; }
+            set { revalidate = value; }
+        }
+
+        [XmlAttribute("refresh")]
+        public bool Refresh
+        {
+            get { return refresh; }
+            set { refresh = value; }
+        }
+
     }
 
 }

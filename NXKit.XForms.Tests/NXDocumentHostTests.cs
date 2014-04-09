@@ -11,7 +11,7 @@ namespace NXKit.XForms.Tests
 {
 
     [TestClass]
-    public class SaveTests
+    public class NXDocumentHostTests
     {
 
         static Uri SampleUri = DynamicUriUtil.GetUriFor(@"

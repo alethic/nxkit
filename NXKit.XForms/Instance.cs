@@ -83,26 +83,25 @@ namespace NXKit.XForms
                     // add to model
                     State.Initialize(Model, element, instanceDataDocument);
 
+                    // clear body of instance
+                    element.RemoveNodes();
+
                     return true;
                 }
                 catch (UriFormatException)
                 {
-                    element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
+                    throw new DOMTargetEventException(element, Events.BindingException);
                 }
-
-                return false;
             }
 
             // extract instance values from xml
             var instanceChildElements = element.Elements().ToArray();
-            if (instanceChildElements.Length >= 2)
-            {
-                // invalid number of child elements
-                element.Interface<INXEventTarget>().DispatchEvent(Events.LinkException);
-                return false;
-            }
+            element.RemoveNodes();
 
-            // proper number of child elements
+            // invalid number of children elements
+            if (instanceChildElements.Length >= 2)
+                throw new DOMTargetEventException(element, Events.LinkException);
+
             if (instanceChildElements.Length == 1)
             {
                 State.Initialize(Model, element, new XDocument(instanceChildElements[0]));

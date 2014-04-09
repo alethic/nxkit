@@ -232,10 +232,10 @@ namespace NXKit.XForms
         {
             do
             {
-                State.RebuildFlag = false;
-                State.RecalculateFlag = true;
+                State.Rebuild = false;
+                State.Recalculate = true;
             }
-            while (State.RebuildFlag);
+            while (State.Rebuild);
         }
 
         /// <summary>
@@ -245,13 +245,14 @@ namespace NXKit.XForms
         {
             do
             {
-                State.RecalculateFlag = false;
-                State.RevalidateFlag = true;
+                State.Recalculate = false;
+                State.Revalidate = true;
 
+                // update each binding
                 foreach (var bind in GetBindNodes())
                 {
-                    if (bind.Binding != null)
-                        bind.Binding.Refresh();
+                    // refresh binding properties
+                    bind.Refresh();
 
                     if (bind.ModelItems == null)
                         continue;
@@ -260,26 +261,32 @@ namespace NXKit.XForms
                     {
                         var modelItemState = modelItem.State;
 
+                        // bind applies a type
                         if (bind.Type != null)
                             if (modelItemState.Type != bind.Type)
                                 modelItemState.Type = bind.Type;
 
+                        // bind applies read-only
                         if (bind.ReadOnly != null)
                             if (modelItemState.ReadOnly != bind.ReadOnly)
                                 modelItemState.ReadOnly = bind.ReadOnly;
 
+                        // bind applies reqired
                         if (bind.Required != null)
                             if (modelItemState.Required != bind.Required)
                                 modelItemState.Required = bind.Required;
 
+                        // bind applies relevant
                         if (bind.Relevant != null)
                             if (modelItemState.Relevant != bind.Relevant)
                                 modelItemState.Relevant = bind.Relevant;
 
+                        // bind applies constraint
                         if (bind.Constraint != null)
                             if (modelItemState.Constraint != bind.Constraint)
                                 modelItemState.Constraint = bind.Constraint;
 
+                        // bind applies calculate
                         if (bind.Calculate != null)
                         {
                             if (modelItemState.ReadOnly == false)
@@ -290,7 +297,7 @@ namespace NXKit.XForms
                     }
                 }
             }
-            while (State.RecalculateFlag);
+            while (State.Recalculate);
         }
 
         /// <summary>
@@ -300,7 +307,7 @@ namespace NXKit.XForms
         {
             do
             {
-                State.RevalidateFlag = false;
+                State.Revalidate = false;
 
                 foreach (var instance in Instances)
                 {
@@ -315,7 +322,7 @@ namespace NXKit.XForms
                         modelItem.State.Valid = (modelItem.Required ? modelItem.Value.TrimToNull() != null : true) && modelItem.Constraint;
                 }
             }
-            while (State.RevalidateFlag);
+            while (State.Revalidate);
         }
 
         /// <summary>
@@ -325,7 +332,7 @@ namespace NXKit.XForms
         {
             do
             {
-                State.RefreshFlag = false;
+                State.Refresh = false;
 
                 // refresh interface bindings
                 foreach (var item in GetUIBindingNodes())
@@ -341,7 +348,7 @@ namespace NXKit.XForms
                     if (item.UIBinding != null)
                         item.UIBinding.DispatchEvents();
             }
-            while (State.RefreshFlag);
+            while (State.Refresh);
         }
 
         /// <summary>

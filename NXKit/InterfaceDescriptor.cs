@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -91,15 +92,14 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Tests whether the given <see cref="XObjectXElement"/> matches the interface.
+        /// Tests whether the given <see cref="XElement"/> matches the interface.
         /// </summary>
         /// <param name="element"></param>
-        /// <param name="nodeType"></param>
-        /// <param name="namespaceName"></param>
-        /// <param name="localName"></param>
         /// <returns></returns>
         internal bool IsMatch(XElement element)
         {
+            Contract.Requires<ArgumentNullException>(element != null);
+
             var name = element.Name.LocalName;
 
             if (namespaceName != null &&

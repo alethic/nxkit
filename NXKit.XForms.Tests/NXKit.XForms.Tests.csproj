@@ -125,7 +125,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="SaveTests.cs" />
+    <Compile Include="NXDocumentHostTests.cs" />
     <Compile Include="RelevantTests.cs" />
     <Compile Include="XPathFunctions\InstanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

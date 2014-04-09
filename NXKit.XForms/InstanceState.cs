@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+
 using NXKit.IO;
-using NXKit.Util;
 
 namespace NXKit.XForms
 {
@@ -15,6 +13,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Serialable storage for an instance visual's state.
     /// </summary>
+    [XmlRoot("instance")]
     public class InstanceState :
         IXmlSerializable
     {
@@ -89,79 +88,6 @@ namespace NXKit.XForms
             return obj.AnnotationOrCreate<ModelItemState>();
         }
 
-        /// <summary>
-        /// Persists the model item properties of the given instance into a serializable value.
-        /// </summary>
-        /// <param name="state"></param>
-        /// <returns></returns>
-        Tuple<int, ModelItemState>[] SaveModelItems()
-        {
-            if (document == null)
-                return null;
-
-            // calculate index positions for instance data node
-            var nodeItems = document.Root
-                .DescendantsAndSelf()
-                .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
-                .Where(i => i is XElement || i is XAttribute)
-                .Select((i, j) => new { Index = j, Node = i });
-
-            // serializable list
-            var saved = new List<Tuple<int, ModelItemState>>(20);
-
-            foreach (var nodeItem in nodeItems)
-            {
-                // look up model item for node
-                var modelItemProperty = GetModelItem(nodeItem.Node);
-                if (modelItemProperty == null)
-                    continue;
-
-                // skip empty model items
-                if (modelItemProperty.Id == null &&
-                    modelItemProperty.Type == null &&
-                    modelItemProperty.ReadOnly == null &&
-                    modelItemProperty.Required == null &&
-                    modelItemProperty.Relevant == null &&
-                    modelItemProperty.Valid == null)
-                    continue;
-
-                saved.Add(new Tuple<int, ModelItemState>(nodeItem.Index, modelItemProperty));
-            }
-
-            return saved.ToArray();
-        }
-
-        /// <summary>
-        /// Associates
-        /// </summary>
-        /// <param name="state"></param>
-        void LoadModelItems(Tuple<int, ModelItemState>[] state)
-        {
-            Contract.Requires<ArgumentNullException>(state != null);
-
-            // map incoming state by index
-            var stateMap = state.ToDictionary(i => i.Item1, i => i.Item2);
-
-            // calculate index positions for instance data node
-            var nodeItems = Document.Root
-                .DescendantsAndSelf()
-                .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
-                .Where(i => i is XElement || i is XAttribute)
-                .Select((i, j) => new { Index = j, Node = i });
-
-            foreach (var nodeItem in nodeItems)
-            {
-                // find the incoming state for the item
-                var itemState = stateMap.GetOrDefault(nodeItem.Index);
-                if (itemState == null)
-                    continue;
-
-                // associate state with node
-                nodeItem.Node.AddAnnotation(itemState);
-            }
-        }
-
-
         XmlSchema IXmlSerializable.GetSchema()
         {
             return null;
@@ -176,7 +102,7 @@ namespace NXKit.XForms
         {
             if (Document != null)
             {
-                writer.WriteStartElement("Document");
+                writer.WriteStartElement("xml");
                 writer.WriteNode(new XDocumentAnnotationReader(Document), true);
                 writer.WriteEndElement();
             }

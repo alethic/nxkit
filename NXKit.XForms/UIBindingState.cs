@@ -10,6 +10,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Serializable storage for a <see cref="UIBinding"/>'s state.
     /// </summary>
+    [XmlRoot("ui-binding")]
     public class UIBindingState :
         IXmlSerializable
     {
@@ -30,14 +31,6 @@ namespace NXKit.XForms
         bool dispatchDisabled;
         bool dispatchValid;
         bool dispatchInvalid;
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        public UIBindingState()
-        {
-
-        }
 
         public string Value
         {
@@ -141,12 +134,14 @@ namespace NXKit.XForms
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteAttributeString("DataType", dataType != null ? dataType.ToString() : "");
-            writer.WriteAttributeString("Relevant", relevant.ToString());
-            writer.WriteAttributeString("ReadOnly", readOnly.ToString());
-            writer.WriteAttributeString("Required", required.ToString());
-            writer.WriteAttributeString("Valid", valid.ToString());
-            writer.WriteAttributeString("Value", value);
+            if (dataType != null)
+                writer.WriteAttributeString("type", dataType.ToString());
+            writer.WriteAttributeString("relevant", relevant ? "true" : "false");
+            writer.WriteAttributeString("readonly", readOnly ? "true" : "false");
+            writer.WriteAttributeString("required", required ? "true" : "false");
+            writer.WriteAttributeString("valid", valid ? "true" : "false");
+            if (value != null)
+                writer.WriteAttributeString("value", value);
         }
 
     }

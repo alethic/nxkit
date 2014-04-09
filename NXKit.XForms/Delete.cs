@@ -149,10 +149,10 @@ namespace NXKit.XForms
                     attribute.Remove();
                 }
 
-                item.Model.State.RebuildFlag = true;
-                item.Model.State.RecalculateFlag = true;
-                item.Model.State.RevalidateFlag = true;
-                item.Model.State.RefreshFlag = true;
+                item.Model.State.Rebuild = true;
+                item.Model.State.Recalculate = true;
+                item.Model.State.Revalidate = true;
+                item.Model.State.Refresh = true;
 
                 dispatch.Add(item.Instance);
             }

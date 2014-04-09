@@ -23,6 +23,8 @@ namespace NXKit
         /// <returns></returns>
         static string LoadXml(byte[] buffer)
         {
+            Contract.Requires<ArgumentNullException>(buffer != null);
+
             var mstm = new MemoryStream(buffer);
             var gstm = new GZipStream(mstm, CompressionMode.Decompress);
             return new StreamReader(gstm, Encoding.UTF8).ReadToEnd();

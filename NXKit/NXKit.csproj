@@ -128,7 +128,6 @@
     <Compile Include="DefaultInterfaceProvider.cs" />
     <Compile Include="IInterfaceProvider.cs" />
     <Compile Include="IO\XAnnotationDocument.cs" />
-    <Compile Include="IO\XAnnotationRootElement.cs" />
     <Compile Include="IO\XAnnotationElement.cs" />
     <Compile Include="IO\XDocumentAnnotationReader.cs" />
     <Compile Include="IO\XmlAttributeOverrides.cs" />
