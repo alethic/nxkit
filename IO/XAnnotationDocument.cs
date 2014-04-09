@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace NXKit.IO
@@ -13,8 +14,6 @@ namespace NXKit.IO
         XDocument
     {
 
-        readonly XDocument document;
-
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -24,16 +23,9 @@ namespace NXKit.IO
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
-            this.document = document;
-            this.Add(GetContents());
-        }
+            var l = GetContents(document).ToList();
 
-        /// <summary>
-        /// Gets the source document.
-        /// </summary>
-        public XDocument Source
-        {
-            get { return document; }
+            Add(l);
         }
 
         /// <summary>
@@ -41,15 +33,17 @@ namespace NXKit.IO
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
-        IEnumerable<object> GetContents()
+        IEnumerable<object> GetContents(XDocument document)
         {
+            Contract.Requires<ArgumentNullException>(document != null);
+
             if (document.DocumentType != null)
                 yield return document.DocumentType;
 
             foreach (var node in document.Nodes())
                 if (node is XElement)
                     // replace original element with annotating element.
-                    yield return new XAnnotationRootElement((XElement)node);
+                    yield return new XAnnotationElement((XElement)node);
                 else
                     yield return node;
         }
