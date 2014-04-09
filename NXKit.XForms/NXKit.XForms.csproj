@@ -121,6 +121,7 @@
     <Compile Include="BindingUtil.cs" />
     <Compile Include="ElementEvaluationContextResolver.cs" />
     <Compile Include="EvaluationContextResolver.cs" />
+    <Compile Include="IUIBinding.cs" />
     <Compile Include="ModelAttributes.cs" />
     <Compile Include="InstanceAttributes.cs" />
     <Compile Include="AttributeAccessor.cs" />
@@ -133,8 +134,6 @@
     <Compile Include="DocumentInvoke.cs" />
     <Compile Include="RepeatAttributes.cs" />
     <Compile Include="ItemValueAttributes.cs" />
-    <Compile Include="EvaluationContextFuncProvider.cs" />
-    <Compile Include="IEvaluationContextProvider.cs" />
     <Compile Include="ISelectableValue.cs" />
     <Compile Include="Select1Attributes.cs" />
     <Compile Include="ModelItemPropertyAttributes.cs" />
@@ -147,9 +146,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="IBindingNode.cs" />
-    <Compile Include="IModelItemValue.cs" />
-    <Compile Include="IUIAppearance.cs" />
-    <Compile Include="IModelItemBinding.cs" />
     <Compile Include="BindingAttributes.cs" />
     <Compile Include="IAction.cs" />
     <Compile Include="IEvaluationContextScope.cs" />

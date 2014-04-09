@@ -39,6 +39,14 @@ namespace NXKit.XForms
         }
 
         /// <summary>
+        /// Gets the element.
+        /// </summary>
+        public XElement Element
+        {
+            get { return element; }
+        }
+
+        /// <summary>
         /// Gets the <see cref="UIBinding"/> associated with the node.
         /// </summary>
         public UIBinding UIBinding
@@ -58,6 +66,11 @@ namespace NXKit.XForms
                 return new UIBinding(element, b.Binding);
 
             return null;
+        }
+        
+        IUIBinding IUIBindingNode.UIBinding
+        {
+            get { return UIBinding; }
         }
 
     }

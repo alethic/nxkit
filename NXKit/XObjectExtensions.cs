@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-
 using NXKit.Util;
 
 namespace NXKit
@@ -24,7 +24,21 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            return node.Host().Container
+            return Interfaces(node, node.Host().Container);
+        }
+
+        /// <summary>
+        /// Implements Interfaces, allowing the specification of a container.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        internal static IEnumerable<object> Interfaces(this XObject node, CompositionContainer container)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(container != null);
+
+            return container
                 .GetExportedValues<IInterfaceProvider>()
                 .SelectMany(i => i.GetInterfaces(node));
         }

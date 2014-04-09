@@ -129,11 +129,14 @@
   <ItemGroup>
     <Compile Include="AssemblyHtmlTemplateProvider.cs" />
     <Compile Include="HtmlTemplateInfo.cs" />
+    <Compile Include="IO\XTextJsonConverter.cs" />
+    <Compile Include="IO\RemoteElementJsonConverter.cs" />
+    <Compile Include="IO\RemoteJsonConvert.cs" />
+    <Compile Include="IO\RemoteObjectJsonConverter.cs" />
+    <Compile Include="IO\RemoteNodeJsonConverter.cs" />
     <Compile Include="Template.cs" />
     <TypeScriptCompile Include="ICallbackRequestEvent.ts" />
     <Compile Include="IHtmlTemplateProvider.cs" />
-    <Compile Include="IO\JsonNodeReader.cs" />
-    <Compile Include="IO\JsonNodeWriter.cs" />
     <Compile Include="IO\XNameJsonConverter.cs" />
     <TypeScriptCompile Include="ICallbackComplete.ts" />
     <TypeScriptCompile Include="IEvent.ts" />

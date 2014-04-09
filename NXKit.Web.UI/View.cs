@@ -115,10 +115,8 @@ namespace NXKit.Web.UI
         {
             // serialize document state to data field
             using (var str = new JTokenWriter())
-            using (var wrt = new JsonNodeWriter(str))
             {
-                wrt.Write(document.Root);
-                wrt.Close();
+                RemoteJsonConvert.WriteTo(str, document.Root);
                 return (JObject)str.Token;
             }
         }
@@ -131,9 +129,9 @@ namespace NXKit.Web.UI
         {
             // serialize document state to data field
             using (var str = new StringWriter())
-            using (var wrt = new JsonNodeWriter(str))
+            using (var wrt = new JsonTextWriter(str))
             {
-                wrt.Write(document.Root);
+                RemoteJsonConvert.WriteTo(wrt, document.Root);
                 wrt.Close();
                 return str.ToString();
             }
