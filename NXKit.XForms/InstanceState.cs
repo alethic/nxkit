@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Diagnostics.Contracts;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-using NXKit.IO;
+using NXKit.Serialization;
+using NXKit.Util;
 
 namespace NXKit.XForms
 {
@@ -95,15 +97,25 @@ namespace NXKit.XForms
 
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            throw new NotImplementedException();
+            if (reader.MoveToContent() == XmlNodeType.Element &&
+                reader.LocalName == "instance")
+            {
+                if (reader.ReadToDescendant("xml"))
+                    document = XNodeAnnotationSerializer.Deserialize(new XDocument(
+                        XElement.Load(
+                            reader.ReadSubtree(), 
+                            LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)
+                        .Elements()
+                        .FirstOrDefault()));
+            }
         }
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            if (Document != null)
+            if (document != null)
             {
                 writer.WriteStartElement("xml");
-                writer.WriteNode(new XDocumentAnnotationReader(Document), true);
+                writer.WriteNode(XNodeAnnotationSerializer.Serialize(document).CreateReader(ReaderOptions.OmitDuplicateNamespaces), true);
                 writer.WriteEndElement();
             }
         }

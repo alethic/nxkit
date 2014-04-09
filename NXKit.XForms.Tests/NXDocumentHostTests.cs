@@ -67,12 +67,46 @@ namespace NXKit.XForms.Tests
             Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             using (var str = new StringWriter())
-            using (var wrt = XmlWriter.Create(str))
             {
-                doc.Save(wrt);
-                wrt.Flush();
-
+                doc.Save(str);
                 var xml = str.ToString();
+            }
+        }
+
+        [TestMethod]
+        public void Test_save_load_after_events()
+        {
+            var doc = GetSampleDocument();
+
+            var inputs = doc.Root
+                .Descendants()
+                .Where(i => i.Interfaces<Input>().Any())
+                .Select(i => i.Interface<IUIBindingNode>())
+                .ToList();
+
+            Assert.IsTrue(inputs[1].UIBinding.Relevant);
+
+            inputs[0].UIBinding.Value = "false";
+            doc.Invoke();
+            Assert.IsFalse(inputs[1].UIBinding.Relevant);
+
+            inputs[0].UIBinding.Value = "true";
+            doc.Invoke();
+            Assert.IsTrue(inputs[1].UIBinding.Relevant);
+
+            inputs[0].UIBinding.Value = "false";
+            doc.Invoke();
+            Assert.IsFalse(inputs[1].UIBinding.Relevant);
+
+            inputs[0].UIBinding.Value = "true";
+            doc.Invoke();
+            Assert.IsTrue(inputs[1].UIBinding.Relevant);
+
+            using (var str = new StringWriter())
+            {
+                doc.Save(str);
+                var xml = str.ToString();
+                NXDocumentHost.Load(new StringReader(xml));
             }
         }
 

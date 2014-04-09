@@ -92,7 +92,7 @@ namespace NXKit.Web.IO
                         .GetInterfaces()
                         .Concat(TypeDescriptor.GetReflectionType(i)
                             .Recurse(j => j.BaseType))
-                        .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
+                        .Where(j => j.GetCustomAttribute<RemoteAttribute>(false) != null)
                         .ToList(),
                 })
                 .Where(i => i.Types.Any())
@@ -118,14 +118,14 @@ namespace NXKit.Web.IO
                     Properties = TypeDescriptor.GetReflectionType(i.Type)
                         .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                         .Where(j => j.DeclaringType == i.Type)
-                        .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
+                        .Where(j => j.GetCustomAttribute<RemoteAttribute>(false) != null)
                         .GroupBy(j => j.Name)
                         .Select(j => j.First())
                         .ToList(),
                     Methods = TypeDescriptor.GetReflectionType(i.Type)
                         .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                         .Where(j => j.DeclaringType == i.Type)
-                        .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
+                        .Where(j => j.GetCustomAttribute<RemoteAttribute>(false) != null)
                         .GroupBy(j => j.Name)
                         .Select(j => j.First())
                         .ToList(),

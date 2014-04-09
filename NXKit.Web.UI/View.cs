@@ -73,13 +73,11 @@ namespace NXKit.Web.UI
         /// Loads the specified <see cref="Uri"/> into the view.
         /// </summary>
         /// <param name="uri"></param>
-        public void Configure(Uri uri)
+        public void Open(Uri uri)
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            document = new NXKit.NXDocumentHost(
-                CompositionUtil.CreateContainer(),
-                uri);
+            document = NXKit.NXDocumentHost.Load(uri);
             document.Invoke();
         }
 
@@ -87,11 +85,11 @@ namespace NXKit.Web.UI
         /// Loads the specified <see cref="Uri"/> into the view.
         /// </summary>
         /// <param name="uri"></param>
-        public void Configure(string uri)
+        public void Open(string uri)
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            Configure(new Uri(uri, UriKind.RelativeOrAbsolute));
+            Open(new Uri(uri, UriKind.RelativeOrAbsolute));
         }
 
         /// <summary>
@@ -241,9 +239,7 @@ namespace NXKit.Web.UI
                 if (state == null)
                     throw new NullReferenceException();
 
-                document = new NXKit.NXDocumentHost(
-                    CompositionUtil.CreateContainer(),
-                    state);
+                document = NXKit.NXDocumentHost.Load(new StringReader(save));
                 document.Invoke();
             }
         }
@@ -317,7 +313,7 @@ namespace NXKit.Web.UI
                         .GetInterfaces()
                         .Concat(TypeDescriptor.GetReflectionType(i)
                             .Recurse(j => j.BaseType))
-                        .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
+                        .Where(j => j.GetCustomAttribute<RemoteAttribute>(false) != null)
                         .ToList(),
                 })
                 .Where(i => i.Types.Any())
@@ -331,14 +327,14 @@ namespace NXKit.Web.UI
                     Properties = TypeDescriptor.GetReflectionType(i.Key)
                         .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                         .Where(j => j.DeclaringType == i.Key)
-                        .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
+                        .Where(j => j.GetCustomAttribute<RemoteAttribute>(false) != null)
                         .GroupBy(j => j.Name)
                         .Select(j => j.First())
                         .ToList(),
                     Methods = TypeDescriptor.GetReflectionType(i.Key)
                         .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                         .Where(j => j.DeclaringType == i.Key)
-                        .Where(j => j.GetCustomAttribute<PublicAttribute>(false) != null)
+                        .Where(j => j.GetCustomAttribute<RemoteAttribute>(false) != null)
                         .GroupBy(j => j.Name)
                         .Select(j => j.First())
                         .ToList(),

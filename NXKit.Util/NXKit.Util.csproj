@@ -116,6 +116,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseUriAnnotation.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="DisposableUri.cs" />
     <Compile Include="AuthorityUri.cs" />

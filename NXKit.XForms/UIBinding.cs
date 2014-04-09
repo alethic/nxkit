@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
+using NXKit.Util;
 
 namespace NXKit.XForms
 {
@@ -77,7 +78,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the current data type of the interface.
         /// </summary>
-        [Public]
+        [Remote]
         public XName DataType
         {
             get { return State.DataType; }

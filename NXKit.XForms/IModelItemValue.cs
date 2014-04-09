@@ -1,11 +1,11 @@
 ﻿namespace NXKit.XForms
 {
 
-    [Public]
+    [Remote]
     public interface IModelItemValue
     {
 
-        [Public]
+        [Remote]
         string Value { get; set; }
 
     }

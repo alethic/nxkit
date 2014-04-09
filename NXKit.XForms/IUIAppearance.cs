@@ -3,11 +3,11 @@
 namespace NXKit.XForms
 {
 
-    [Public]
+    [Remote]
     public interface IUIAppearance
     {
 
-        [Public]
+        [Remote]
         XName Appearance { get; }
 
     }

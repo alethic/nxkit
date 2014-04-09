@@ -6,24 +6,24 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides access to the bound model item.
     /// </summary>
-    [Public]
+    [Remote]
     public interface IModelItemBinding :
         IModelItemValue
     {
 
-        [Public]
+        [Remote]
         XName DataType { get; }
 
-        [Public]
+        [Remote]
         bool Relevant { get; }
 
-        [Public]
+        [Remote]
         bool ReadOnly { get; }
 
-        [Public]
+        [Remote]
         bool Required { get; }
 
-        [Public]
+        [Remote]
         bool Valid { get; }
 
     }

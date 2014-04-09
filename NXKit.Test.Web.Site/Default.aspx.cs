@@ -20,15 +20,15 @@ namespace NXKit.Test.Web.Site
         {
             if (!IsPostBack)
             {
-                UriTextBox.Text = new Uri(Request.Url, "../Resources/form.xml").ToString();
-                View.Configure(UriTextBox.Text);
+                UriTextBox.Text = new Uri(Request.Url, "../Resources/trigger.xml").ToString();
+                View.Open(UriTextBox.Text);
             }
         }
 
         public void RaisePostBackEvent(string eventArgument)
         {
             if (eventArgument == "Load")
-                View.Configure(UriTextBox.Text);
+                View.Open(UriTextBox.Text);
         }
 
     }
