@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Xml;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using NXKit.Util;
