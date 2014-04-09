@@ -255,7 +255,11 @@ namespace NXKit.XForms
 
                 foreach (var bind in GetBindNodes())
                 {
-                    bind.Binding.Refresh();
+                    if (bind.Binding != null)
+                        bind.Binding.Refresh();
+
+                    if (bind.ModelItems == null)
+                        continue;
 
                     foreach (var modelItem in bind.ModelItems)
                     {
