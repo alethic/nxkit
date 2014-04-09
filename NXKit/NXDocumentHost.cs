@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.Composition.Hosting;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Xml;
 using System.Xml.Linq;
-
 using NXKit.Util;
 
 namespace NXKit
@@ -56,7 +57,7 @@ namespace NXKit
 
             this.container = container;
             this.uri = new Uri(uri.ToString());
-            this.Xml = XDocument.Load(uri.ToString(), LoadOptions.SetBaseUri);
+            this.Xml = XDocument.Load(uri.ToString(), LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
 
             Initialize();
         }
@@ -88,7 +89,7 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(uri != null);
             Contract.Requires<ArgumentNullException>(xml != null);
-            
+
             this.container = container;
             this.uri = uri;
             this.xml = XDocument.Parse(xml);
@@ -156,14 +157,28 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Saves the current state of the processor in a serializable format.
+        /// Saves the current state of the <see cref="NXDocumentHost"/> to the specified <see cref="XmlWriter"/>.
         /// </summary>
+        /// <param name="writer"></param>
         /// <returns></returns>
-        public NXDocumentState Save()
+        public void Save(XmlWriter writer)
         {
-            return new NXDocumentState(
-                uri,
-                Xml.ToString(SaveOptions.DisableFormatting));
+            Contract.Requires<ArgumentNullException>(writer != null);
+
+            using (var i = xml.CreateAnnotationReader())
+                writer.WriteNode(i, true);
+        }
+
+        /// <summary>
+        /// Saves the current state of the <see cref="NXDocumentHost"/> to the specified <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="stream"></param>
+        public void Save(Stream stream)
+        {
+            Contract.Requires<ArgumentNullException>(stream != null);
+
+            using (var wrt = XmlWriter.Create(stream, new XmlWriterSettings() { Encoding = Encoding.UTF8, OmitXmlDeclaration = true }))
+                Save(wrt);
         }
 
     }

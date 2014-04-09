@@ -26,7 +26,7 @@ namespace NXKit.XForms
             this.element = element;
             this.attributes = new ItemValueAttributes(element);
             this.nodeBinding = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
-            this.valueBinding = new Lazy<Binding>(() => attributes.Value != null ? new Binding(element, element.Interface<NodeEvaluationContext>().Context, attributes.Value) : null);
+            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
         }
 
         /// <summary>

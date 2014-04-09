@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Runtime.Serialization;
+using System.Xml;
 using System.Xml.Linq;
-
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using NXKit.IO;
 using NXKit.Util;
 
 namespace NXKit.XForms
@@ -14,66 +15,13 @@ namespace NXKit.XForms
     /// <summary>
     /// Serialable storage for an instance visual's state.
     /// </summary>
-    [Serializable]
     public class InstanceState :
-        ISerializable
+        IXmlSerializable
     {
 
         XElement model;
         XElement instance;
-
-        int nextItemId;
         XDocument document;
-        readonly Tuple<int, ModelItemState>[] deserializedModelItemState;
-
-        [ContractInvariantMethod]
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
-        void ObjectInvariant()
-        {
-            Contract.Invariant(nextItemId >= 0);
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        public InstanceState()
-        {
-
-        }
-
-        /// <summary>
-        /// Deserializes an instance.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public InstanceState(SerializationInfo info, StreamingContext context)
-        {
-            Contract.Requires<ArgumentNullException>(info != null);
-
-            this.nextItemId = info.GetInt32("NextNodeId");
-            this.deserializedModelItemState = (Tuple<int, ModelItemState>[])info.GetValue("ModelItems", typeof(Tuple<int, ModelItemState>[]));
-
-            Initialize(info.GetString("Document") != null ? XDocument.Parse(info.GetString("Document")) : null);
-        }
-
-        /// <summary>
-        /// Finishes deserialization of the model items.
-        /// </summary>
-        /// <param name="context"></param>
-        [OnDeserialized]
-        void OnDeserialized(StreamingContext context)
-        {
-            LoadModelItems(deserializedModelItemState);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public int AllocateItemId()
-        {
-            return ++nextItemId;
-        }
 
         /// <summary>
         /// DOM of instance.
@@ -130,18 +78,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Serializes the instance.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("NextNodeId", nextItemId);
-            info.AddValue("Document", document != null ? document.ToString(SaveOptions.DisableFormatting) : null);
-            info.AddValue("ModelItems", SaveModelItems());
-        }
-
-        /// <summary>
         /// Obtains the model item properties for <paramref name="obj"/>.
         /// </summary>
         /// <param name="obj"></param>
@@ -150,11 +86,7 @@ namespace NXKit.XForms
         {
             Contract.Requires<ArgumentNullException>(obj != null);
 
-            var modelItem = obj.Annotation<ModelItemState>();
-            if (modelItem == null)
-                obj.AddAnnotation(modelItem = new ModelItemState());
-
-            return modelItem;
+            return obj.AnnotationOrCreate<ModelItemState>();
         }
 
         /// <summary>
@@ -226,6 +158,27 @@ namespace NXKit.XForms
 
                 // associate state with node
                 nodeItem.Node.AddAnnotation(itemState);
+            }
+        }
+
+
+        XmlSchema IXmlSerializable.GetSchema()
+        {
+            return null;
+        }
+
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            if (Document != null)
+            {
+                writer.WriteStartElement("Document");
+                writer.WriteNode(new XDocumentAnnotationReader(Document), true);
+                writer.WriteEndElement();
             }
         }
 

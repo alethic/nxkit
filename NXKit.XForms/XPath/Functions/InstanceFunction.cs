@@ -44,12 +44,10 @@ namespace NXKit.XForms.XPath.Functions
                 // resolve instance based on id
                 var instance = context.Element.ResolveId(id);
                 if (instance == null)
-                {
-                    context.Element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
-                    return null;
-                }
+                    throw new DOMTargetEventException(context.Element, Events.BindingException);
 
-                return instance.Interfaces<Instance>()
+                return instance
+                    .Interfaces<Instance>()
                     .Select(i => i.State.Document.Root.CreateNavigator().Select("."))
                     .FirstOrDefault();
             }

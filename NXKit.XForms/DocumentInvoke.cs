@@ -11,7 +11,7 @@ namespace NXKit.XForms
 
     [Interface(XmlNodeType.Document)]
     public class DocumentInvoke :
-            IOnInvoke
+        IOnInvoke
     {
 
         readonly XDocument document;

@@ -104,8 +104,7 @@ namespace NXKit.Web.UI
             using (var stm = new MemoryStream())
             using (var zip = new GZipStream(stm, CompressionMode.Compress))
             {
-                new BinaryFormatter().Serialize(zip, document.Save());
-                zip.Close();
+                document.Save(zip);
                 return Convert.ToBase64String(stm.ToArray());
             }
         }

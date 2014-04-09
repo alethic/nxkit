@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml;
 using System.Xml.Linq;
 
 using NXKit.DOM;
@@ -10,8 +11,9 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Provides a <see cref="IDocumentEvent"/> implementation.
     /// </summary>
-    class DocumentEvent :
-        IDocumentEvent
+    [Interface(XmlNodeType.Document)]
+    public class DocumentEvent :
+         IDocumentEvent
     {
 
         readonly XDocument document;

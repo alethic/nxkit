@@ -100,7 +100,8 @@ namespace NXKit.XForms
                 .Select(i => i.InterfaceOrDefault<IUIBindingNode>())
                 .Where(i => i != null)
                 .FirstOrDefault();
-            if (next != null)
+            if (next != null &&
+                next.UIBinding != null)
                 return next.UIBinding.Relevant;
 
             return true;
@@ -169,7 +170,6 @@ namespace NXKit.XForms
                     modelItem = binding.ModelItem;
             }
 
-
             if (modelItem != null)
             {
                 State.DataType = modelItem.ItemType;
@@ -190,53 +190,53 @@ namespace NXKit.XForms
                 State.Value = null;
             }
 
-                // mark all required events
-                var valueChanged = Value != oldValue;
-                if (valueChanged)
-                {
-                    Debug.WriteLine("{0}: Value changed: {1}", element, Value);
-                    State.DispatchValueChanged = true;
-                }
+            // mark all required events
+            var valueChanged = Value != oldValue;
+            if (valueChanged)
+            {
+                Debug.WriteLine("{0}: Value changed: {1}", element, Value);
+                State.DispatchValueChanged = true;
+            }
 
-                if (Relevant != oldRelevant || valueChanged)
-                {
-                    Debug.WriteLine("{0}: Relevant changed: {1}", element, Relevant);
+            if (Relevant != oldRelevant || valueChanged)
+            {
+                Debug.WriteLine("{0}: Relevant changed: {1}", element, Relevant);
 
-                    if (Relevant)
-                        State.DispatchEnabled = true;
-                    else
-                        State.DispatchDisabled = true;
-                }
+                if (Relevant)
+                    State.DispatchEnabled = true;
+                else
+                    State.DispatchDisabled = true;
+            }
 
-                if (ReadOnly != oldReadOnly || valueChanged)
-                {
-                    Debug.WriteLine("{0}: ReadOnly changed: {1}", element, Relevant);
+            if (ReadOnly != oldReadOnly || valueChanged)
+            {
+                Debug.WriteLine("{0}: ReadOnly changed: {1}", element, Relevant);
 
-                    if (ReadOnly)
-                        State.DispatchReadOnly = true;
-                    else
-                        State.DispatchReadWrite = true;
-                }
+                if (ReadOnly)
+                    State.DispatchReadOnly = true;
+                else
+                    State.DispatchReadWrite = true;
+            }
 
-                if (Required != oldRequired || valueChanged)
-                {
-                    Debug.WriteLine("{0}: Required changed: {1}", element, Required);
+            if (Required != oldRequired || valueChanged)
+            {
+                Debug.WriteLine("{0}: Required changed: {1}", element, Required);
 
-                    if (Required)
-                        State.DispatchRequired = true;
-                    else
-                        State.DispatchOptional = true;
-                }
+                if (Required)
+                    State.DispatchRequired = true;
+                else
+                    State.DispatchOptional = true;
+            }
 
-                if (Valid != oldValid || valueChanged)
-                {
-                    Debug.WriteLine("{0}: Valid changed: {1}", element, Valid);
+            if (Valid != oldValid || valueChanged)
+            {
+                Debug.WriteLine("{0}: Valid changed: {1}", element, Valid);
 
-                    if (Valid)
-                        State.DispatchValid = true;
-                    else
-                        State.DispatchInvalid = true;
-                }
+                if (Valid)
+                    State.DispatchValid = true;
+                else
+                    State.DispatchInvalid = true;
+            }
         }
 
         /// <summary>

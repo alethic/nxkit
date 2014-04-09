@@ -12,7 +12,6 @@ namespace NXKit.XForms
 
     [Interface("{http://www.w3.org/2002/xforms}model")]
     public class Model :
-        IEvaluationContextScope,
         IEventDefaultActionHandler
     {
 
@@ -111,13 +110,12 @@ namespace NXKit.XForms
         /// Gets all of the bound nodes for this model.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<UIBinding> GetUIBindingNodes()
+        IEnumerable<IUIBindingNode> GetUIBindingNodes()
         {
             // all available ui bindings
             return element.Document.Root
                 .DescendantsAndSelf()
-                .SelectMany(i => i.Interfaces<IUIBindingNode>())
-                .Select(i => i.UIBinding);
+                .SelectMany(i => i.Interfaces<IUIBindingNode>());
         }
 
         /// <summary>
@@ -204,11 +202,13 @@ namespace NXKit.XForms
 
             // refresh interface bindings
             foreach (var ui in GetUIBindingNodes())
-                ui.Refresh();
+                if (ui.UIBinding != null)
+                    ui.UIBinding.Refresh();
 
             // discard interface events
             foreach (var ui in GetUIBindingNodes())
-                ui.DiscardEvents();
+                if (ui.UIBinding != null)
+                    ui.UIBinding.DiscardEvents();
 
             // refresh interfaces
             foreach (var ui in GetUINodes())
@@ -247,11 +247,6 @@ namespace NXKit.XForms
             {
                 State.RecalculateFlag = false;
                 State.RevalidateFlag = true;
-
-                var binds = element
-                    .Descendants()
-                    .SelectMany(i => i.Interfaces<Bind>())
-                    .ToList();
 
                 foreach (var bind in GetBindNodes())
                 {
@@ -334,7 +329,8 @@ namespace NXKit.XForms
 
                 // refresh interface bindings
                 foreach (var item in GetUIBindingNodes())
-                    item.Refresh();
+                    if (item.UIBinding != null)
+                        item.UIBinding.Refresh();
 
                 // refresh interfaces
                 foreach (var ui in GetUINodes())
@@ -342,7 +338,8 @@ namespace NXKit.XForms
 
                 // dispatch interface events
                 foreach (var item in GetUIBindingNodes())
-                    item.DispatchEvents();
+                    if (item.UIBinding != null)
+                        item.UIBinding.DispatchEvents();
             }
             while (State.RefreshFlag);
         }

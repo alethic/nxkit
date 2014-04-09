@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace NXKit.DOMEvents
@@ -8,6 +9,7 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// NX-specified document event interface.
     /// </summary>
+    [Interface(XmlNodeType.Document)]
     public class NXDocumentEvent :
         INXDocumentEvent
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace NXKit.Scripting
@@ -8,6 +9,7 @@ namespace NXKit.Scripting
     /// <summary>
     /// Provides an interface towards executing scripts within the document.
     /// </summary>
+    [Interface(XmlNodeType.Document)]
     public class DocumentScript :
         IDocumentScript
     {

@@ -31,8 +31,10 @@ namespace NXKit.XForms
             this.element = element;
             this.attributes = new DeleteAttributes(element);
             this.bindingNode = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
-            this.context = new Lazy<EvaluationContext>(() => element.ResolveEvaluationContext());
-            this.atBinding = new Lazy<Binding>(() => attributes.At != null ? new Binding(element, context.Value, attributes.At) : null);
+            this.atBinding = new Lazy<Binding>(() => 
+                attributes.At != null ? 
+                new Binding(element, attributes.AtAttribute.Interface<AttributeEvaluationContextResolver>().GetContextForAttribute(), attributes.At) : 
+                null);
         }
 
         /// <summary>

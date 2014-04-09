@@ -23,6 +23,14 @@ namespace NXKit.XForms
         }
 
         /// <summary>
+        /// Gets the 'value' attribute.
+        /// </summary>
+        public XAttribute ValueAttribute
+        {
+            get { return GetAttribute("value"); }
+        }
+
+        /// <summary>
         /// Gets the 'value' attribute values.
         /// </summary>
         public string Value

@@ -15,11 +15,11 @@ namespace NXKit.XForms
         readonly ModelItemPropertyAttributes attributes;
         readonly Lazy<IBindingNode> nodeBinding;
         readonly Lazy<EvaluationContext> context;
-        readonly Lazy<Binding> calculate;
-        readonly Lazy<Binding> readOnly;
-        readonly Lazy<Binding> required;
-        readonly Lazy<Binding> relevant;
-        readonly Lazy<Binding> constraint;
+        readonly Lazy<Binding> calculateBinding;
+        readonly Lazy<Binding> readOnlyBinding;
+        readonly Lazy<Binding> requiredBinding;
+        readonly Lazy<Binding> relevantBinding;
+        readonly Lazy<Binding> constraintBinding;
 
         /// <summary>
         /// Initializes a new instance.
@@ -33,12 +33,12 @@ namespace NXKit.XForms
             this.attributes = new ModelItemPropertyAttributes(element);
             this.nodeBinding = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
 
-            this.context = new Lazy<EvaluationContext>(() => element.ResolveEvaluationContext());
-            this.calculate = new Lazy<Binding>(() => attributes.Calculate != null ? new Binding(element, Context, attributes.Calculate) : null);
-            this.readOnly = new Lazy<Binding>(() => attributes.ReadOnly != null ? new Binding(element, Context, attributes.ReadOnly) : null);
-            this.required = new Lazy<Binding>(() => attributes.Required != null ? new Binding(element, Context, attributes.Required) : null);
-            this.relevant = new Lazy<Binding>(() => attributes.Relevant != null ? new Binding(element, Context, attributes.Relevant) : null);
-            this.constraint = new Lazy<Binding>(() => attributes.Constraint != null ? new Binding(element, Context, attributes.Constraint) : null);
+            this.context = new Lazy<EvaluationContext>(() => element.Interface<EvaluationContextResolver>().Context);
+            this.calculateBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.CalculateAttribute));
+            this.readOnlyBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ReadOnlyAttribute));
+            this.requiredBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.RequiredAttribute));
+            this.relevantBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.RelevantAttribute));
+            this.constraintBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.CalculateAttribute));
         }
 
         /// <summary>
@@ -127,27 +127,27 @@ namespace NXKit.XForms
 
         public string Calculate
         {
-            get { return calculate.Value != null ? calculate.Value.Value : null; }
+            get { return calculateBinding.Value != null ? calculateBinding.Value.Value : null; }
         }
 
         public bool? ReadOnly
         {
-            get { return ParseBooleanValue(readOnly); }
+            get { return ParseBooleanValue(readOnlyBinding); }
         }
 
         public bool? Required
         {
-            get { return ParseBooleanValue(required); }
+            get { return ParseBooleanValue(requiredBinding); }
         }
 
         public bool? Relevant
         {
-            get { return ParseBooleanValue(relevant); }
+            get { return ParseBooleanValue(relevantBinding); }
         }
 
         public bool? Constraint
         {
-            get { return ParseBooleanValue(constraint); }
+            get { return ParseBooleanValue(constraintBinding); }
         }
 
         /// <summary>
@@ -159,25 +159,25 @@ namespace NXKit.XForms
                 nodeBinding.Value != null)
                 nodeBinding.Value.Binding.Refresh();
 
-            if (calculate.IsValueCreated &&
-                calculate.Value != null)
-                calculate.Value.Refresh();
+            if (calculateBinding.IsValueCreated &&
+                calculateBinding.Value != null)
+                calculateBinding.Value.Refresh();
 
-            if (readOnly.IsValueCreated &&
-                readOnly.Value != null)
-                readOnly.Value.Refresh();
+            if (readOnlyBinding.IsValueCreated &&
+                readOnlyBinding.Value != null)
+                readOnlyBinding.Value.Refresh();
 
-            if (required.IsValueCreated &&
-                required.Value != null)
-                required.Value.Refresh();
+            if (requiredBinding.IsValueCreated &&
+                requiredBinding.Value != null)
+                requiredBinding.Value.Refresh();
 
-            if (relevant.IsValueCreated &&
-                relevant.Value != null)
-                relevant.Value.Refresh();
+            if (relevantBinding.IsValueCreated &&
+                relevantBinding.Value != null)
+                relevantBinding.Value.Refresh();
 
-            if (constraint.IsValueCreated &&
-                constraint.Value != null)
-                constraint.Value.Refresh();
+            if (constraintBinding.IsValueCreated &&
+                constraintBinding.Value != null)
+                constraintBinding.Value.Refresh();
         }
 
     }

@@ -8,9 +8,20 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides a <see cref="UIBinding"/> for a node.
     /// </summary>
-    [Interface("http://www.w3.org/2002/xforms", null)]
-    public class UIBindingNode
+    public class UIBindingNode :
+        IUIBindingNode
     {
+
+        class UIBindingNodePredicate :
+            IInterfacePredicate
+        {
+
+            public bool IsMatch(XObject obj, Type type)
+            {
+                throw new NotImplementedException();
+            }
+
+        }
 
         readonly XElement element;
         readonly Lazy<UIBinding> uiBinding;
@@ -25,6 +36,14 @@ namespace NXKit.XForms
 
             this.element = element;
             this.uiBinding = new Lazy<UIBinding>(() => CreateUIBinding());
+        }
+
+        /// <summary>
+        /// Gets the <see cref="UIBinding"/> associated with the node.
+        /// </summary>
+        public UIBinding UIBinding
+        {
+            get { return uiBinding.Value; }
         }
 
         /// <summary>

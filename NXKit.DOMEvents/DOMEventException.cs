@@ -5,7 +5,7 @@ namespace NXKit.DOMEvents
 {
 
     /// <summary>
-    /// Signifies a DOM event to be raised by the initiating DOM element.
+    /// Signifies a DOM event to be raised.
     /// </summary>
     public class DOMEventException :
         Exception
@@ -16,16 +16,16 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="eventType"></param>
-        public DOMEventException(string eventType)
+        /// <param name="type"></param>
+        public DOMEventException(string type)
         {
-            Contract.Requires<ArgumentNullException>(eventType != null);
+            Contract.Requires<ArgumentNullException>(type != null);
 
-            this.type = eventType;
+            this.type = type;
         }
 
         /// <summary>
-        /// Gets the type of event to be raise.
+        /// Gets the type of event to be raised.
         /// </summary>
         public string EventType
         {

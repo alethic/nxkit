@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace NXKit.XForms
 {
@@ -7,8 +10,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Serializable storage for a <see cref="UIBinding"/>'s state.
     /// </summary>
-    [Serializable]
-    public class UIBindingState
+    public class UIBindingState :
+        IXmlSerializable
     {
 
         XName dataType;
@@ -124,6 +127,26 @@ namespace NXKit.XForms
         {
             get { return dispatchInvalid; }
             set { dispatchInvalid = value; if (dispatchInvalid) dispatchValid = false; }
+        }
+
+        XmlSchema IXmlSerializable.GetSchema()
+        {
+            return null;
+        }
+
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteAttributeString("DataType", dataType != null ? dataType.ToString() : "");
+            writer.WriteAttributeString("Relevant", relevant.ToString());
+            writer.WriteAttributeString("ReadOnly", readOnly.ToString());
+            writer.WriteAttributeString("Required", required.ToString());
+            writer.WriteAttributeString("Valid", valid.ToString());
+            writer.WriteAttributeString("Value", value);
         }
 
     }

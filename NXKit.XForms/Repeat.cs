@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Xml.Linq;
-using NXKit.Util;
 
 namespace NXKit.XForms
 {
@@ -14,7 +11,7 @@ namespace NXKit.XForms
     {
 
         readonly XElement element;
-        readonly RepeatAttributes attributes;
+        readonly Lazy<RepeatAttributes> attributes;
         readonly Lazy<IUIBindingNode> uiBinding;
         int nextId;
 
@@ -27,8 +24,16 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
-            this.attributes = new RepeatAttributes(element);
+            this.attributes = new Lazy<RepeatAttributes>(() => element.AnnotationOrCreate<RepeatAttributes>(() => new RepeatAttributes(element)));
             this.uiBinding = new Lazy<IUIBindingNode>(() => element.Interface<IUIBindingNode>());
+        }
+
+        /// <summary>
+        /// Gets the attributes of the repeat element.
+        /// </summary>
+        public RepeatAttributes Attributes
+        {
+            get { return attributes.Value; }
         }
 
         /// <summary>
