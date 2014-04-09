@@ -125,12 +125,12 @@ namespace NXKit.XForms.Tests
             var d = GetSampleDocument();
 
             var inputs = d.Root
-                .Descendants()
+                .Descendants(Constants.XForms_1_0 + "input")
                 .Select(i => new
                 {
-                    Input = i.InterfaceOrDefault<Input>(),
-                    BindingNode = i.InterfaceOrDefault<IUIBindingNode>(),
-                    Target = i.InterfaceOrDefault<INXEventTarget>(),
+                    Input = i.Interface<Input>(),
+                    BindingNode = i.Interface<IUIBindingNode>(),
+                    Target = i.Interface<INXEventTarget>(),
                 })
                 .Where(i => i.Input != null)
                 .ToList();

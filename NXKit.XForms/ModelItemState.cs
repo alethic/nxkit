@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -11,23 +10,17 @@ namespace NXKit.XForms
     /// <summary>
     /// Records additional information associated with a model item.
     /// </summary>
+    [XmlRoot("model-item")]
     public class ModelItemState :
         IXmlSerializable
     {
 
-        int? id;
         XName type;
         bool? readOnly;
         bool? required;
         bool? relevant;
         bool? constraint;
         bool? valid;
-
-        public int? Id
-        {
-            get { return id; }
-            set { id = value; }
-        }
 
         public XName Type
         {
@@ -78,17 +71,17 @@ namespace NXKit.XForms
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             if (type != null)
-                writer.WriteAttributeString("Type", type.ToString());
+                writer.WriteAttributeString("type", type.ToString());
             if (readOnly != null)
-                writer.WriteAttributeString("ReadOnly", readOnly.ToString());
+                writer.WriteAttributeString("readonly", (bool)readOnly ? "true" : "false");
             if (required != null)
-                writer.WriteAttributeString("Required", required.ToString());
+                writer.WriteAttributeString("required", (bool)required ? "true" : "false");
             if (relevant != null)
-                writer.WriteAttributeString("Relevant", relevant.ToString());
+                writer.WriteAttributeString("relevant", (bool)relevant ? "true" : "false");
             if (constraint != null)
-                writer.WriteAttributeString("Constraint", constraint.ToString());
+                writer.WriteAttributeString("constraint", (bool)constraint ? "true" : "false");
             if (valid != null)
-                writer.WriteAttributeString("Valid", valid.ToString());
+                writer.WriteAttributeString("valid", (bool)valid ? "true" : "false");
         }
 
     }

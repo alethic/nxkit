@@ -20,6 +20,8 @@ namespace NXKit.Web
         /// <returns></returns>
         static IEnumerable<HtmlTemplateInfo> GetTemplates(Assembly assembly)
         {
+            Contract.Requires<ArgumentNullException>(assembly != null);
+
             return assembly.GetManifestResourceNames()
                 .Where(j => j.EndsWith(".html"))
                 .Select(j => new HtmlTemplateInfo(j, () => assembly.GetManifestResourceStream(j)))

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Xml;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using NXKit.Util;
@@ -10,7 +11,7 @@ namespace NXKit.XForms.Tests
 {
 
     [TestClass]
-    public class SaveTests
+    public class NXDocumentHostTests
     {
 
         static Uri SampleUri = DynamicUriUtil.GetUriFor(@"

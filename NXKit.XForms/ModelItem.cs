@@ -230,9 +230,9 @@ namespace NXKit.XForms
                 throw new InvalidOperationException();
 
             // trigger recalculate event to collect new value
-            Model.State.RecalculateFlag = true;
-            Model.State.RevalidateFlag = true;
-            Model.State.RefreshFlag = true;
+            Model.State.Recalculate = true;
+            Model.State.Revalidate = true;
+            Model.State.Refresh = true;
         }
 
         /// <summary>

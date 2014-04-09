@@ -114,6 +114,9 @@ namespace NXKit.XForms
         /// <returns></returns>
         bool ResolveFunctionPredicate(XName name, bool isPrefixRequired, XName requested)
         {
+            Contract.Requires<ArgumentNullException>(name != null);
+            Contract.Requires<ArgumentNullException>(requested != null);
+
             if (requested.LocalName != name.LocalName)
                 return false;
 

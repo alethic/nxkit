@@ -112,6 +112,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         bool? ParseBooleanValue(Lazy<Binding> binding)
         {
+            Contract.Requires<ArgumentNullException>(binding != null);
+
             if (binding.Value == null)
                 return null;
 

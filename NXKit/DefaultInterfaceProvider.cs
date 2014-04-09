@@ -115,6 +115,9 @@ namespace NXKit
         /// <returns></returns>
         object CreateInstance(XObject obj, Type type)
         {
+            Contract.Requires<ArgumentNullException>(obj != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+
             var ctor1 = type.GetConstructors()
                 .Where(i => i.GetParameters().Length == 1)
                 .Where(i => i.GetParameters()[0].ParameterType.IsInstanceOfType(obj))

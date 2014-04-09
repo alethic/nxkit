@@ -70,25 +70,25 @@ namespace NXKit.XForms
             // only process main events if all models are ready
             if (models.All(i => i.State.Ready))
             {
-                foreach (var model in models.Where(i => i.State.RebuildFlag))
+                foreach (var model in models.Where(i => i.State.Rebuild))
                 {
                     work = true;
                     model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Rebuild);
                 }
 
-                foreach (var model in models.Where(i => i.State.RecalculateFlag))
+                foreach (var model in models.Where(i => i.State.Recalculate))
                 {
                     work = true;
                     model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Recalculate);
                 }
 
-                foreach (var model in models.Where(i => i.State.RevalidateFlag))
+                foreach (var model in models.Where(i => i.State.Revalidate))
                 {
                     work = true;
                     model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Revalidate);
                 }
 
-                foreach (var model in models.Where(i => i.State.RefreshFlag))
+                foreach (var model in models.Where(i => i.State.Refresh))
                 {
                     work = true;
                     model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Refresh);
