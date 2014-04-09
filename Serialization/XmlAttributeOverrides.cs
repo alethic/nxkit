@@ -1,4 +1,4 @@
-﻿namespace NXKit.IO
+﻿namespace NXKit.Serialization
 {
 
     class XmlAttributeOverrides :
