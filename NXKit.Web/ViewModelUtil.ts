@@ -26,13 +26,19 @@
       * Nodes which are considered to be transparent, and ignored when calculating content membership.
       */
     export var TransparentNodes: string[] = [];
-
+    
+    /**
+      * Returns true of the given node is an empty text node.
+      */
     export function IsEmptyTextNode(node: Node): boolean {
         return node.Type == NodeType.Text && (node.Value() || '').trim() === '';
     }
-
+    
+    /**
+      * Returns true if the current node is one that should be completely ignored.
+      */
     export function IsIgnoredNode(node: Node): boolean {
-        return IsEmptyTextNode(node);
+        return node == null || IsEmptyTextNode(node);
     }
 
     /**
