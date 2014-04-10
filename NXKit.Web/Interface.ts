@@ -41,36 +41,41 @@ module NXKit.Web {
         }
 
         public Update(source: any) {
-            var self = this;
+            try {
+                var self = this;
 
-            for (var i in source) {
-                var s = <string>i;
-                if (s.indexOf('@') === 0) {
-                    var n = s.substring(1, s.length);
-                    var m = self._methods[n];
-                    if (m == null) {
-                        self._methods[n] = new Method(self,n, source[s]);
-                        self._methods[n].MethodInvoked.add((node, intf, method, params) => {
-                            self.MethodInvoked.trigger(node, intf, method, params);
-                        });
+                for (var i in source) {
+                    var s = <string>i;
+                    if (s.indexOf('@') === 0) {
+                        var n = s.substring(1, s.length);
+                        var m = self._methods[n];
+                        if (m == null) {
+                            self._methods[n] = new Method(self, n, source[s]);
+                            self._methods[n].MethodInvoked.add((node, intf, method, params) => {
+                                self.MethodInvoked.trigger(node, intf, method, params);
+                            });
+                        } else {
+                            m.Update(source[s]);
+                        }
                     } else {
-                        m.Update(source[s]);
-                    }
-                } else {
-                    var n = s;
-                    var p = self._properties[n];
-                    if (p == null) {
-                        self._properties[n] = new Property(self,n, source[s]);
-                        self._properties[n].PropertyChanged.add((node, intf, property, value) => {
-                            self.PropertyChanged.trigger(node, intf, property, value);
-                        });
-                        self._properties[n].MethodInvoked.add((node, intf, method, params) => {
-                            self.MethodInvoked.trigger(node, intf, method, params);
-                        });
-                    } else {
-                        p.Update(source[s]);
+                        var n = s;
+                        var p = self._properties[n];
+                        if (p == null) {
+                            self._properties[n] = new Property(self, n, source[s]);
+                            self._properties[n].PropertyChanged.add((node, intf, property, value) => {
+                                self.PropertyChanged.trigger(node, intf, property, value);
+                            });
+                            self._properties[n].MethodInvoked.add((node, intf, method, params) => {
+                                self.MethodInvoked.trigger(node, intf, method, params);
+                            });
+                        } else {
+                            p.Update(source[s]);
+                        }
                     }
                 }
+            } catch (ex) {
+                ex.message = "Interface.Update()" + '\nMessage: ' + ex.message;
+                throw ex;
             }
         }
 

@@ -173,10 +173,15 @@ module NXKit.Web {
          * Integrates the set of interfaces given with this node.
          */
         UpdateInterfaces(source: any) {
-            var self = this;
-            for (var i in source) {
-                if (i.indexOf('.') > -1)
-                    self.UpdateInterface(<string>i, source[<string>i]);
+            try {
+                var self = this;
+                for (var i in source) {
+                    if (i.indexOf('.') > -1)
+                        self.UpdateInterface(<string>i, source[<string>i]);
+                }
+            } catch (ex) {
+                ex.message = "Node.UpdateInterfaces()" + '\nMessage: ' + ex.message;
+                throw ex;
             }
         }
 

@@ -46,9 +46,11 @@
         <input type="checkbox" />
 
         <!-- ko if: ShowLabel -->
-        <!-- ko with: $parent.Label -->
+        <!-- ko with: Label -->
         <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <label data-bind="nxkit_template" />
+        <label data-bind="nxkit_template: {
+node: $data,
+    }" />
         <!-- /ko -->
         <!-- /ko -->
         <!-- /ko -->

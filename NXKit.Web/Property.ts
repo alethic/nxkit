@@ -24,7 +24,7 @@ module NXKit.Web {
          */
         public MethodInvoked: INodeMethodInvokedEvent = new TypedEvent();
 
-        constructor($interface: Interface,name: string, source: any) {
+        constructor($interface: Interface, name: string, source: any) {
             var self = this;
 
             self._interface = $interface;
@@ -109,36 +109,43 @@ module NXKit.Web {
         }
 
         public Update(source: any) {
-            var self = this;
+            try {
+                var self = this;
 
-            if (source.Type === 'Object') {
-                self._suspend = true;
-                if (self._value() != null &&
-                    self._value() instanceof Node) {
-                    (<Node>self._value()).Update(source);
-                    console.log(self.Name + ': ' + 'Node' + '=>' + 'Node');
-                } else {
-                    var node = new Node(source);
-                    node.PropertyChanged.add((n, intf, property, value) => {
-                        self.PropertyChanged.trigger(n, intf, property, value);
-                    });
-                    node.MethodInvoked.add((n, intf, method, params) => {
-                        self.MethodInvoked.trigger(n, intf, method, params);
-                    });
-                    self._value(node);
-                    console.log(self.Name + ': ' + 'Node' + '+>' + 'Node');
+                if (source != null &&
+                    source.Type != null &&
+                    source.Type === 'Object') {
+                    self._suspend = true;
+                    if (self._value() != null &&
+                        self._value() instanceof Node) {
+                        (<Node>self._value()).Update(source);
+                        console.log(self.Name + ': ' + 'Node' + '=>' + 'Node');
+                    } else {
+                        var node = new Node(source);
+                        node.PropertyChanged.add((n, intf, property, value) => {
+                            self.PropertyChanged.trigger(n, intf, property, value);
+                        });
+                        node.MethodInvoked.add((n, intf, method, params) => {
+                            self.MethodInvoked.trigger(n, intf, method, params);
+                        });
+                        self._value(node);
+                        console.log(self.Name + ': ' + 'Node' + '+>' + 'Node');
+                    }
+                    self._suspend = false;
+
+                    return;
                 }
-                self._suspend = false;
 
-                return;
-            }
-
-            var old = self._value();
-            if (old !== source) {
-                self._suspend = true;
-                self._value(source);
-                console.log(self.Name + ': ' + old + '=>' + source);
-                self._suspend = false;
+                var old = self._value();
+                if (old !== source) {
+                    self._suspend = true;
+                    self._value(source);
+                    console.log(self.Name + ': ' + old + '=>' + source);
+                    self._suspend = false;
+                }
+            } catch (ex) {
+                ex.message = "Property.Update()" + '\nMessage: ' + ex.message;
+                throw ex;
             }
         }
 
