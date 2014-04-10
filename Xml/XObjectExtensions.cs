@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+using NXKit.Util;
 
-namespace NXKit.Xml
+namespace NXKit
 {
 
     /// <summary>
@@ -22,7 +24,21 @@ namespace NXKit.Xml
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            return node.Host().Container
+            return Interfaces(node, node.Host().Container);
+        }
+
+        /// <summary>
+        /// Implements Interfaces, allowing the specification of a container.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        internal static IEnumerable<object> Interfaces(this XObject node, CompositionContainer container)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(container != null);
+
+            return container
                 .GetExportedValues<IInterfaceProvider>()
                 .SelectMany(i => i.GetInterfaces(node));
         }
@@ -96,43 +112,6 @@ namespace NXKit.Xml
             Contract.Ensures(Contract.Result<NXDocumentHost>() != null);
 
             return self.AnnotationOrCreate<NXDocumentHost>(() => self.Document != null ? self.Document.Host() : null);
-        }
-
-        /// <summary>
-        /// Gets the first annotation object of the specified type, or creates a new one.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="self"></param>
-        /// <returns></returns>
-        public static T AnnotationOrCreate<T>(this XObject self)
-            where T : class, new()
-        {
-            Contract.Requires<ArgumentNullException>(self != null);
-
-            var value = self.Annotation<T>();
-            if (value == null)
-                self.AddAnnotation(value = new T());
-
-            return value;
-        }
-
-        /// <summary>
-        /// Gets the first annotation object of the specified type, or creates a new one.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="self"></param>
-        /// <returns></returns>
-        public static T AnnotationOrCreate<T>(this XObject self, Func<T> create)
-            where T : class
-        {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(create != null);
-
-            var value = self.Annotation<T>();
-            if (value == null)
-                self.AddAnnotation(value = create());
-
-            return value;
         }
 
     }
