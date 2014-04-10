@@ -132,6 +132,8 @@
     <Compile Include="Net\ResourceWebRequest.cs" />
     <Compile Include="Net\ResourceWebRequestFactory.cs" />
     <Compile Include="Net\ResourceWebResponse.cs" />
+    <Compile Include="ElementExtension.cs" />
+    <Compile Include="NodeExtension.cs" />
     <Compile Include="RemoteAttribute.cs" />
     <Compile Include="Serialization\XmlAttributeOverrides.cs" />
     <Compile Include="Serialization\XNodeAnnotationSerializer.cs" />
