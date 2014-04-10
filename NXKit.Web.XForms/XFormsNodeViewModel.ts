@@ -16,11 +16,11 @@
         }
 
         public get ValueAsBoolean(): KnockoutObservable<boolean> {
-            return ViewModelUtil.GetValueAsBoolean(this.Node);
+            return ViewModelUtil.GetDataValueAsBoolean(this.Node);
         }
 
         public get ValueAsNumber(): KnockoutObservable<number> {
-            return ViewModelUtil.GetValueAsNumber(this.Node);
+            return ViewModelUtil.GetDataValueAsNumber(this.Node);
         }
 
         public get Relevant(): KnockoutObservable<boolean> {

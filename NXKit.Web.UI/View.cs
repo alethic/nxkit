@@ -99,11 +99,13 @@ namespace NXKit.Web.UI
         string GetSaveString()
         {
             // serialize document state to save field
-            using (var stm = new MemoryStream())
-            using (var zip = new GZipStream(stm, CompressionMode.Compress))
+            //using (var stm = new MemoryStream())
+            //using (var zip = new GZipStream(stm, CompressionMode.Compress))
+            //{
+            using (var wrt = new StringWriter())
             {
-                document.Save(zip);
-                return Convert.ToBase64String(stm.ToArray());
+                document.Save(wrt);
+                return wrt.ToString();
             }
         }
 
@@ -229,12 +231,12 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(save != null);
 
-            using (var stm = new MemoryStream(Convert.FromBase64String(save)))
-            using (var zip = new GZipStream(stm, CompressionMode.Decompress))
-            {
+            //using (var stm = new MemoryStream(Convert.FromBase64String(save)))
+            //using (var zip = new GZipStream(stm, CompressionMode.Decompress))
+            //{
                 document = NXKit.NXDocumentHost.Load(new StringReader(save));
                 document.Invoke();
-            }
+            //}
         }
 
         bool IPostBackDataHandler.LoadPostData(string postDataKey, NameValueCollection postCollection)

@@ -350,6 +350,13 @@ namespace NXKit.Serialization
             // apply serialied contents
             DeserializeContents(xml);
 
+            // strip out NX namespaces
+            xml.Root.DescendantsAndSelf()
+                .SelectMany(i => i.Attributes())
+                .Where(i => i.IsNamespaceDeclaration)
+                .Where(i => i.Value == NX_NS)
+                .Remove();
+
             return xml;
         }
 

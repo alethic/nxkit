@@ -31,6 +31,10 @@ module NXKit.Web.XForms {
 
 module NXKit.Web.XForms.ViewModelUtil {
 
+    export function GetValue(node: Node): KnockoutObservable<string> {
+        return node.Value;
+    }
+
     export function IsDataNode(node: Node): boolean {
         return node.Interfaces[Constants.DataNode] != null;
     }
@@ -43,15 +47,15 @@ module NXKit.Web.XForms.ViewModelUtil {
         return node.Property(Constants.DataNode, 'Value').ValueAsString;
     }
 
-    export function GetValueAsBoolean(node: Node): KnockoutObservable<boolean> {
+    export function GetDataValueAsBoolean(node: Node): KnockoutObservable<boolean> {
         return node.Property(Constants.DataNode, 'Value').ValueAsBoolean;
     }
 
-    export function GetValueAsNumber(node: Node): KnockoutObservable<number> {
+    export function GetDataValueAsNumber(node: Node): KnockoutObservable<number> {
         return node.Property(Constants.DataNode, 'Value').ValueAsNumber;
     }
 
-    export function GetValueAsDate(node: Node): KnockoutObservable<Date> {
+    export function GetDataValueAsDate(node: Node): KnockoutObservable<Date> {
         return node.Property(Constants.DataNode, 'Value').ValueAsDate;
     }
 

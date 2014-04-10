@@ -8,7 +8,7 @@ module NXKit.Web {
         _data: any;
         _type: NodeType;
         _name: string;
-        _value: string;
+        _value: KnockoutObservable<string>;
         _interfaces: IInterfaceMap;
         _nodes: KnockoutObservableArray<Node>;
 
@@ -29,7 +29,7 @@ module NXKit.Web {
             this._data = null;
             this._type = null;
             this._name = null;
-            this._value = null;
+            this._value = ko.observable<string>(null);
             this._interfaces = new InterfaceMap();
             this._nodes = ko.observableArray<Node>();
 
@@ -66,7 +66,7 @@ module NXKit.Web {
         /**
          * Gets the value of this node.
          */
-        public get Value(): string {
+        public get Value(): KnockoutObservable<string> {
             return this._value;
         }
 
@@ -166,7 +166,7 @@ module NXKit.Web {
          * Updates the value of this node with the new value.
          */
         UpdateValue(value: string) {
-            this._value = value;
+            this._value(value);
         }
 
         /**

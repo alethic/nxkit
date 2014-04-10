@@ -1,5 +1,5 @@
 ﻿module NXKit.Web.ViewModelUtil {
-    
+
     /**
       * Set of functions to inject layout managers at the top of the hierarchy.
       */
@@ -27,11 +27,19 @@
       */
     export var TransparentNodes: string[] = [];
 
+    export function IsEmptyTextNode(node: Node): boolean {
+        return node.Type == NodeType.Text && (node.Value() || '').trim() === '';
+    }
+
+    export function IsIgnoredNode(node: Node): boolean {
+        return IsEmptyTextNode(node);
+    }
+
     /**
       * Returns true if the given node is a control node.
       */
     export function IsGroupNode(node: Node): boolean {
-        return GroupNodes.some(_ => node.Name == _);
+        return !IsIgnoredNode(node) && GroupNodes.some(_ => node.Name == _);
     }
 
     /**
@@ -52,7 +60,7 @@
       * Returns true if the given node is a control node.
       */
     export function IsControlNode(node: Node): boolean {
-        return ControlNodes.some(_ => node.Name == _);
+        return !IsIgnoredNode(node) && ControlNodes.some(_ => node.Name == _);
     }
 
     /**
@@ -73,7 +81,7 @@
       * Returns true if the given node is a transparent node.
       */
     export function IsMetadataNode(node: Node): boolean {
-        return MetadataNodes.some(_ => node.Name == _);
+        return !IsIgnoredNode(node) && MetadataNodes.some(_ => node.Name == _);
     }
 
     /**
@@ -94,7 +102,7 @@
       * Returns true if the given node is a transparent node.
       */
     export function IsTransparentNode(node: Node): boolean {
-        return TransparentNodes.some(_ => node.Name == _);
+        return IsIgnoredNode(node) || TransparentNodes.some(_ => node.Name == _);
     }
 
     /**

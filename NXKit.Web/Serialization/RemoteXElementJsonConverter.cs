@@ -20,6 +20,23 @@ namespace NXKit.Web.Serialization
             return typeof(XElement).IsAssignableFrom(objectType);
         }
 
+        /// <summary>
+        /// Serializes the given <see cref="XNode"/>
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="serializer"></param>
+        /// <returns></returns>
+        JObject FromXNode(XNode node, JsonSerializer serializer)
+        {
+            // ignore empty text
+            var text = node as XText;
+            if (text != null)
+                if (string.IsNullOrWhiteSpace(text.Value))
+                    return null;
+
+            return JObject.FromObject(node, serializer);
+        }
+
         protected override void Apply(XNode node, JsonSerializer serializer, JObject obj)
         {
             var element = node as XElement;
@@ -33,8 +50,8 @@ namespace NXKit.Web.Serialization
             // append children nodes
             obj["Nodes"] = new JArray(
                 element.Nodes()
-                    .Select(i => 
-                        JObject.FromObject(i, serializer)));
+                    .Select(i => FromXNode(i, serializer))
+                    .Where(i => i != null));
         }
 
     }

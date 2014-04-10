@@ -30,7 +30,7 @@ module NXKit.Web {
             self._interface = $interface;
             self._name = name;
 
-            self._value = ko.observable<any>();
+            self._value = ko.observable<any>(null);
             self._value.subscribe(_ => {
                 if (!self._suspend) {
                     self.PropertyChanged.trigger(self._interface.Node, self._interface, self, self._value());
