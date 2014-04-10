@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
+using NXKit.Xml;
 using NXKit.XPath;
 
 namespace NXKit.XForms

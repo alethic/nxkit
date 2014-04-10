@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-using NXKit.Util;
+using NXKit.Xml;
 
 namespace NXKit.XForms
 {

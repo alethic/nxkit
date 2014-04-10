@@ -1,4 +1,4 @@
-﻿namespace NXKit.Util
+﻿namespace NXKit.Net
 {
 
     public static class ResourceUriHelper

@@ -4,6 +4,8 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
+using NXKit.Xml;
+
 namespace NXKit.DOMEvents
 {
 

@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 
 using NXKit.Web.IO;
+using NXKit.Xml;
 
 namespace NXKit.Web.Tests
 {
@@ -100,6 +101,7 @@ namespace NXKit.Web.Tests
             var i = e.Interfaces(NXKit.CompositionUtil.CreateContainer()).ToList();
 
             var jo1 = RemoteNodeJsonConverter.ToObject(i);
+            var js1 = jo1.ToString();
         }
 
     }

@@ -3,16 +3,17 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Xml;
+
 namespace NXKit.XForms
 {
 
     [Interface("{http://www.w3.org/2002/xforms}select1")]
     [Remote]
     public class Select1 :
-        IEvaluationContextScope
+        UIBindingNode
     {
 
-        readonly XElement element;
         readonly Select1Attributes attributes;
         readonly Lazy<IBindingNode> nodeBinding;
         readonly Lazy<UIBinding> uiBinding;
@@ -22,21 +23,13 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Select1(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.element = element;
             this.attributes = new Select1Attributes(element);
             this.nodeBinding = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
             this.uiBinding = new Lazy<UIBinding>(() => new UIBinding(element, nodeBinding.Value.Binding));
-        }
-
-        /// <summary>
-        /// Gets the 'select1' element.
-        /// </summary>
-        public XElement Element
-        {
-            get { return element; }
         }
 
         /// <summary>
@@ -126,7 +119,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         ISelectable GetSelected()
         {
-            return element.Descendants()
+            return Element.Descendants()
                 .SelectMany(i => i.Interfaces<ISelectable>())
                 .Where(i => i.IsSelected(UIBinding))
                 .FirstOrDefault();
@@ -165,7 +158,7 @@ namespace NXKit.XForms
         /// <param name="id"></param>
         void SetSelectedId(string id)
         {
-            Selected = element.Descendants()
+            Selected = Element.Descendants()
                 .SelectMany(i => i.Interfaces<ISelectable>())
                 .FirstOrDefault(i => i.Id == id);
         }

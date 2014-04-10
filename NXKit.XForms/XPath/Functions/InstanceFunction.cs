@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using System.Xml.XPath;
+
 using NXKit.DOMEvents;
 using NXKit.Util;
+using NXKit.Xml;
 using NXKit.XPath;
 
 namespace NXKit.XForms.XPath.Functions

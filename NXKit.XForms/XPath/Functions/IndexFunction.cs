@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.XPath;
 
+using NXKit.Xml;
 using NXKit.XPath;
 
 namespace NXKit.XForms.XPath.Functions

@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Linq;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
 using NXKit.Serialization;
-using NXKit.Util;
+using NXKit.Xml;
 
 namespace NXKit.XForms
 {

@@ -3,6 +3,8 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
+using NXKit.Xml;
+
 namespace NXKit.XForms
 {
 

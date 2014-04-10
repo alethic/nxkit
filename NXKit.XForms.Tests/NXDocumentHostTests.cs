@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Xml;
+using System.Xml.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using NXKit.Util;
+using NXKit.Xml;
 
 namespace NXKit.XForms.Tests
 {
@@ -14,7 +13,7 @@ namespace NXKit.XForms.Tests
     public class NXDocumentHostTests
     {
 
-        static Uri SampleUri = DynamicUriUtil.GetUriFor(@"
+        static XDocument Sample =XDocument.Parse(@"
 <unknown xmlns:xf=""http://www.w3.org/2002/xforms"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
     <xf:model id=""data"">
         <xf:instance id=""instance1"">
@@ -34,7 +33,7 @@ namespace NXKit.XForms.Tests
 
         NXDocumentHost GetSampleDocument()
         {
-            return NXDocumentHost.Load(SampleUri);
+            return NXDocumentHost.Load(Sample);
         }
 
         [TestMethod]

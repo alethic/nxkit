@@ -4,7 +4,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
-using NXKit.Util;
+using NXKit.Xml;
 
 namespace NXKit.XForms.XPath.Functions
 {

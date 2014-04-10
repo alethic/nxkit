@@ -24,6 +24,9 @@ namespace NXKit.Net
             public FuncResponse(DynamicWebRequest request, Func<Stream> getFunc)
                 : base(request)
             {
+                Contract.Requires<ArgumentNullException>(request != null);
+                Contract.Requires<ArgumentNullException>(getFunc != null);
+
                 this.getFunc = getFunc;
             }
 

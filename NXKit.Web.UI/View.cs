@@ -7,7 +7,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Web.UI;
 using System.Xml.Linq;
 
@@ -16,6 +15,7 @@ using Newtonsoft.Json.Linq;
 
 using NXKit.Util;
 using NXKit.Web.IO;
+using NXKit.Xml;
 
 namespace NXKit.Web.UI
 {
@@ -232,11 +232,6 @@ namespace NXKit.Web.UI
             using (var stm = new MemoryStream(Convert.FromBase64String(save)))
             using (var zip = new GZipStream(stm, CompressionMode.Decompress))
             {
-                // deserialize value into state
-                var state = (NXDocumentState)new BinaryFormatter().Deserialize(zip);
-                if (state == null)
-                    throw new NullReferenceException();
-
                 document = NXKit.NXDocumentHost.Load(new StringReader(save));
                 document.Invoke();
             }
