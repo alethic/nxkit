@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 using NXKit.Util;
 
-namespace NXKit.Web.IO
+namespace NXKit.Web.Serialization
 {
 
     /// <summary>
@@ -115,10 +115,10 @@ namespace NXKit.Web.IO
 
             return TypeDescriptor.GetReflectionType(type)
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(j => j.DeclaringType == type)
-                .Where(j => j.GetCustomAttribute<RemoteAttribute>(false) != null)
-                .GroupBy(j => j.Name)
-                .Select(j => j.First());
+                .Where(i => i.DeclaringType == type)
+                .Where(i => i.GetCustomAttribute<RemoteAttribute>(false) != null)
+                .GroupBy(i => i.Name)
+                .Select(i => i.First());
         }
 
         /// <summary>
@@ -139,15 +139,31 @@ namespace NXKit.Web.IO
         }
 
         /// <summary>
+        /// Null-safe invocation for JToken.FromObject.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="serializer"></param>
+        /// <returns></returns>
+        internal static JToken JTokenFromObject(object value, JsonSerializer serializer)
+        {
+            Contract.Requires<ArgumentNullException>(serializer != null);
+
+            return value != null ? JToken.FromObject(value, serializer) : null;
+        }
+
+        /// <summary>
         /// Returns all of the properties for a given <see cref="Interface"/>.
         /// </summary>
         /// <param name="type"></param>
+        /// <param name="serializer"></param>
         /// <returns></returns>
-        internal static IEnumerable<JProperty> InterfaceToProperties(Interface type)
+        internal static IEnumerable<JProperty> InterfaceToProperties(Interface type, JsonSerializer serializer)
         {
+            Contract.Requires<ArgumentNullException>(serializer != null);
+
             foreach (var property in GetRemoteProperties(type.type))
                 yield return new JProperty(property.Name,
-                    property.GetValue(type.target));
+                    JTokenFromObject(property.GetValue(type.target), serializer));
 
             foreach (var method in GetRemoteMethods(type.type))
                 yield return new JProperty("@" + method.Name,
@@ -158,35 +174,78 @@ namespace NXKit.Web.IO
         /// Converts the given source object into a <see cref="JObject"/> of compatible interfaces.
         /// </summary>
         /// <param name="source"></param>
+        /// <param name="destination"></param>
+        /// <param name="serializer"></param>
         /// <returns></returns>
-        internal static JObject ToObject(object source)
+        internal static void RemoteToObject(object source, JObject destination, JsonSerializer serializer)
         {
             Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(destination != null);
+            Contract.Requires<ArgumentNullException>(serializer != null);
 
-            return new JObject(
+            // append interfaces to object
+            destination.Add(
                 GetRemoteInterfaces(source)
                     .Select(i => new JProperty(
                         i.type.FullName,
                         new JObject(
-                            InterfaceToProperties(i)))));
+                            InterfaceToProperties(i, serializer)))));
+        }
+
+        /// <summary>
+        /// Converts the given source object into a <see cref="JObject"/> of compatible interfaces.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="serializer"></param>
+        /// <returns></returns>
+        internal static JObject RemoteToObject(object source, JsonSerializer serializer)
+        {
+            Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(serializer != null);
+
+            var obj = new JObject();
+            RemoteToObject(source, obj, serializer);
+            return obj;
         }
 
         /// <summary>
         /// Converts the given set of source objects into a single <see cref="JObject"/> of compatible interfaces.
         /// </summary>
         /// <param name="source"></param>
+        /// <param name="destination"></param>
+        /// <param name="serializer"></param>
         /// <returns></returns>
-        internal static JObject ToObject(IEnumerable<object> source)
+        internal static void RemotesToObject(IEnumerable<object> source, JObject destination, JsonSerializer serializer)
         {
             Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(destination != null);
+            Contract.Requires<ArgumentNullException>(serializer != null);
 
-            return new JObject(
+            // append interfaces to object
+            destination.Add(
                 GetRemoteInterfaces(source)
                     .Select(i => new JProperty(
                         i.type.FullName,
                         new JObject(
-                            InterfaceToProperties(i)))));
+                            InterfaceToProperties(i, serializer)))));
         }
+
+        /// <summary>
+        /// Converts the given set of source objects into a single <see cref="JObject"/> of compatible interfaces.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="serializer"></param>
+        /// <returns></returns>
+        internal static JObject RemotesToObject(IEnumerable<object> source, JsonSerializer serializer)
+        {
+            Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(serializer != null);
+
+            var obj = new JObject();
+            RemotesToObject(source, obj, serializer);
+            return obj;
+        }
+
 
         public override bool CanConvert(Type objectType)
         {
@@ -198,11 +257,20 @@ namespace NXKit.Web.IO
             throw new NotImplementedException();
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override sealed void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            writer.WriteStartObject();
-            ToObject(value).WriteTo(writer);
-            writer.WriteEndObject();
+            var jobj = new JObject();
+            Apply(value, serializer, jobj);
+            jobj.WriteTo(writer);
+        }
+
+        protected virtual void Apply(object value, JsonSerializer serializer, JObject obj)
+        {
+            Contract.Requires<ArgumentNullException>(value != null);
+            Contract.Requires<ArgumentNullException>(serializer != null);
+            Contract.Requires<ArgumentNullException>(obj != null);
+
+            RemoteToObject(value, obj, serializer);
         }
 
     }

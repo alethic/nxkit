@@ -20,109 +20,43 @@ module NXKit.Web {
                 // extract data to be used to search for a template
                 var value = valueAccessor();
 
-                // template specified
+                // name specified
                 if (value != null &&
-                    value.template != null) {
-                    var tmpl = <string>ko.unwrap(value.template);
-                    if (tmpl != null) {
-                        data.template = tmpl;
+                    value.name != null) {
+                    var name = <string>ko.unwrap(value.name);
+                    if (name != null) {
+                        data.name = name;
                     }
                 }
 
-                // value with template
-                if (data.template == null &&
-                    data.node == null &&
+                // node
+                if (data.name == null &&
                     value != null &&
                     ko.unwrap(value) instanceof Node) {
                     var node = <Node>ko.unwrap(value);
-                    var intf = node.Interfaces['NXKit.Web.ITemplate'];
-                    if (intf != null) {
-                        var prop = intf.Properties['Name'];
-                        if (prop != null) {
-                            var tmpl = prop.ValueAsString();
-                            if (tmpl != null) {
-                                data.template = tmpl;
-                            }
-                        }
-                    }
-                }
-
-                // value
-                if (data.template == null &&
-                    data.node == null &&
-                    value != null &&
-                    ko.unwrap(value) instanceof Node) {
-                    var node = <Node>ko.unwrap(value);
-                    if (node.Type != null) {
-                        data.node = node.Type;
-                    }
-                }
-
-                // value.node with template
-                if (data.template == null &&
-                    data.node == null &&
-                    value != null &&
-                    value.node != null &&
-                    ko.unwrap(value.node) instanceof Node) {
-                    var node = <Node>ko.unwrap(value.node);
-                    var intf = node.Interfaces['NXKit.Web.ITemplate'];
-                    if (intf != null) {
-                        var prop = intf.Properties['Name'];
-                        if (prop != null) {
-                            var tmpl = prop.ValueAsString();
-                            if (tmpl != null) {
-                                data.template = tmpl;
-                            }
-                        }
+                    if (node.Name != null) {
+                        data.name = node.Name;
                     }
                 }
 
                 // value.node
-                if (data.template == null &&
-                    data.node == null &&
+                if (data.name == null &&
                     value != null &&
                     value.node != null &&
                     ko.unwrap(value.node) instanceof Node) {
                     var node = <Node>ko.unwrap(value.node);
-                    if (node.Type != null) {
-                        data.node = node.Type;
+                    if (node.Name != null) {
+                        data.name = node.Name;
                     }
                 }
 
                 // viewModel with template
-                if (data.template == null &&
-                    data.node == null) {
-                    if (viewModel instanceof Node) {
-                        var node = <Node>viewModel;
-                        var intf = node.Interfaces['NXKit.Web.ITemplate'];
-                        if (intf != null) {
-                            var prop = intf.Properties['Name'];
-                            if (prop != null) {
-                                var tmpl = prop.ValueAsString();
-                                if (tmpl != null) {
-                                    data.template = tmpl;
-                                }
-                            }
-                        }
+                if (data.name == null &&
+                    viewModel instanceof Node) {
+                    var node = <Node>viewModel;
+                    if (node.Name != null) {
+                        data.name = node.Name;
                     }
-                }
-
-                // viewModel
-                if (data.template == null &&
-                    data.node == null) {
-                    if (viewModel instanceof Node) {
-                        var node = <Node>viewModel;
-                        if (node.Type != null) {
-                            data.node = node.Type;
-                        }
-                    }
-                }
-
-                // node specified as string
-                if (value != null &&
-                    value.node != null &&
-                    typeof value.node === 'string') {
-                    data.node = <string>value.node;
                 }
 
                 // specified data type

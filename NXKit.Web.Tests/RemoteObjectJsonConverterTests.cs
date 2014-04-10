@@ -1,10 +1,8 @@
 ﻿using System.Linq;
-
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
-using NXKit.Web.IO;
+using NXKit.Web.Serialization;
 using NXKit.Xml;
 
 namespace NXKit.Web.Tests
@@ -88,7 +86,7 @@ namespace NXKit.Web.Tests
                         new JProperty("@RemoteMethod", new JArray()))));
             var js1 = jo1.ToString();
 
-            var jo2 = RemoteObjectJsonConverter.ToObject(new Remote1Test());
+            var jo2 = RemoteObjectJsonConverter.RemoteToObject(new Remote1Test(), new JsonSerializer());
             var js2 = jo2.ToString();
 
             Assert.AreEqual(js1, js2);
@@ -100,7 +98,7 @@ namespace NXKit.Web.Tests
             var e = new System.Xml.Linq.XElement("element");
             var i = e.Interfaces(NXKit.CompositionUtil.CreateContainer()).ToList();
 
-            var jo1 = RemoteNodeJsonConverter.ToObject(i);
+            var jo1 = RemoteXNodeJsonConverter.RemotesToObject(i, new JsonSerializer());
             var js1 = jo1.ToString();
         }
 

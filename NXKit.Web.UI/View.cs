@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using NXKit.Util;
-using NXKit.Web.IO;
+using NXKit.Web.Serialization;
 using NXKit.Xml;
 
 namespace NXKit.Web.UI

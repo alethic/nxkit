@@ -129,15 +129,15 @@
   <ItemGroup>
     <Compile Include="AssemblyHtmlTemplateProvider.cs" />
     <Compile Include="HtmlTemplateInfo.cs" />
-    <Compile Include="IO\XTextJsonConverter.cs" />
-    <Compile Include="IO\RemoteElementJsonConverter.cs" />
-    <Compile Include="IO\RemoteJsonConvert.cs" />
-    <Compile Include="IO\RemoteObjectJsonConverter.cs" />
-    <Compile Include="IO\RemoteNodeJsonConverter.cs" />
-    <Compile Include="Template.cs" />
+    <Compile Include="Serialization\RemoteXCommentJsonConverter.cs" />
+    <Compile Include="Serialization\RemoteXTextJsonConverter.cs" />
+    <Compile Include="Serialization\RemoteXElementJsonConverter.cs" />
+    <Compile Include="Serialization\RemoteJsonConvert.cs" />
+    <Compile Include="Serialization\RemoteObjectJsonConverter.cs" />
+    <Compile Include="Serialization\RemoteXNodeJsonConverter.cs" />
     <TypeScriptCompile Include="ICallbackRequestEvent.ts" />
     <Compile Include="IHtmlTemplateProvider.cs" />
-    <Compile Include="IO\XNameJsonConverter.cs" />
+    <Compile Include="Serialization\XNameJsonConverter.cs" />
     <TypeScriptCompile Include="ICallbackComplete.ts" />
     <TypeScriptCompile Include="IEvent.ts" />
     <TypeScriptCompile Include="IPropertyChangedEvent.ts" />
@@ -153,7 +153,6 @@
     <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\HorizontalVisibleBindingHandler.ts" />
     <TypeScriptCompile Include="LayoutOptions.ts" />
-    <Compile Include="ITemplate.cs" />
     <Compile Include="NXDocumentHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Ref.cs" />

@@ -1,7 +1,8 @@
 ﻿using System.Xml.Linq;
+
 using Newtonsoft.Json;
 
-namespace NXKit.Web.IO
+namespace NXKit.Web.Serialization
 {
 
     /// <summary>
@@ -12,9 +13,9 @@ namespace NXKit.Web.IO
 
         static readonly JsonConverter[] converters = new JsonConverter[] {
             new XNameJsonConverter(),
-            new XTextJsonConverter(),
+            new RemoteXTextJsonConverter(),
             new RemoteObjectJsonConverter(),
-            new RemoteElementJsonConverter(),
+            new RemoteXElementJsonConverter(),
         };
 
         static readonly JsonSerializer serializer;

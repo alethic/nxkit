@@ -3,15 +3,15 @@
     /**
       * Node types which represent a grouping element.
       */
-    export var StepNodeTypes: string[] = [
-        'NXKit.XForms.Layout.Section',
+    export var StepNodes: string[] = [
+        '{http://schemas.nxkit.org/2014/xforms-layout}section',
     ];
 
     /**
       * Returns true if the given node is a step node.
       */
     export function IsStepNode(node: Node): boolean {
-        return StepNodeTypes.some(_ => node.Type == _);
+        return StepNodes.some(_ => node.Name == _);
     }
 
     /**

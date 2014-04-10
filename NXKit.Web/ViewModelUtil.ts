@@ -1,30 +1,30 @@
 ﻿module NXKit.Web.ViewModelUtil {
 
     /**
-      * Node types which represent a grouping element.
+      * Nodes which represent a grouping element.
       */
-    export var GroupNodeTypes: string[] = [];
+    export var GroupNodes: string[] = [];
 
     /**
-      * Node types which are considered to be control elements.
+      * Nodes which are considered to be control elements.
       */
-    export var ControlNodeTypes: string[] = [];
+    export var ControlNodes: string[] = [];
 
     /**
-      * Node types which are considered to be metadata elements for their parents.
+      * Nodes which are considered to be metadata elements for their parents.
       */
-    export var MetadataNodeTypes: string[] = [];
+    export var MetadataNodes: string[] = [];
 
     /**
-      * Node types which are considered to be transparent, and ignored when calculating content membership.
+      * Nodes which are considered to be transparent, and ignored when calculating content membership.
       */
-    export var TransparentNodeTypes: string[] = [];
+    export var TransparentNodes: string[] = [];
 
     /**
       * Returns true if the given node is a control node.
       */
     export function IsGroupNode(node: Node): boolean {
-        return GroupNodeTypes.some(_ => node.Type == _);
+        return GroupNodes.some(_ => node.Name == _);
     }
 
     /**
@@ -45,7 +45,7 @@
       * Returns true if the given node is a control node.
       */
     export function IsControlNode(node: Node): boolean {
-        return ControlNodeTypes.some(_ => node.Type == _);
+        return ControlNodes.some(_ => node.Name == _);
     }
 
     /**
@@ -66,7 +66,7 @@
       * Returns true if the given node is a transparent node.
       */
     export function IsMetadataNode(node: Node): boolean {
-        return MetadataNodeTypes.some(_ => node.Type == _);
+        return MetadataNodes.some(_ => node.Name == _);
     }
 
     /**
@@ -87,7 +87,7 @@
       * Returns true if the given node is a transparent node.
       */
     export function IsTransparentNode(node: Node): boolean {
-        return TransparentNodeTypes.some(_ => node.Type == _);
+        return TransparentNodes.some(_ => node.Name == _);
     }
 
     /**

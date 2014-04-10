@@ -1,5 +1,5 @@
 ﻿<f:form xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        xmlns:f="http://schemas.nxkit.org/nxkit/2014/xforms-layout"
+        xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
         xmlns:xf="http://www.w3.org/2002/xforms"
         xmlns:ev="http://www.w3.org/2001/xml-events">
     <xf:model id="data">

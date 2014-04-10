@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 using Newtonsoft.Json;
 
-namespace NXKit.Web.IO
+namespace NXKit.Web.Serialization
 {
 
     public class XNameJsonConverter :

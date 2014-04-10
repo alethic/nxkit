@@ -1,19 +1,19 @@
-﻿NXKit.Web.ViewModelUtil.ControlNodeTypes.push(
-    'NXKit.XForms.Input',
-    'NXKit.XForms.Range',
-    'NXKit.XForms.Select1',
-    'NXKit.XForms.Select',
-    'NXKit.XForms.TextArea');
+﻿NXKit.Web.ViewModelUtil.ControlNodes.push(
+    '{http://www.w3.org/2002/xforms}input',
+    '{http://www.w3.org/2002/xforms}range',
+    '{http://www.w3.org/2002/xforms}select1',
+    '{http://www.w3.org/2002/xforms}select',
+    '{http://www.w3.org/2002/xforms}textarea');
 
-NXKit.Web.ViewModelUtil.MetadataNodeTypes.push(
-    'NXKit.XForms.Label',
-    'NXKit.XForms.Help',
-    'NXKit.XForms.Hint',
-    'NXKit.XForms.Alert');
+NXKit.Web.ViewModelUtil.MetadataNodes.push(
+    '{http://www.w3.org/2002/xforms}label',
+    '{http://www.w3.org/2002/xforms}help',
+    '{http://www.w3.org/2002/xforms}hint',
+    '{http://www.w3.org/2002/xforms}alert');
 
-NXKit.Web.ViewModelUtil.TransparentNodeTypes.push(
-    'NXKit.XForms.Repeat',
-    'NXKit.XForms.RepeatItem');
+NXKit.Web.ViewModelUtil.TransparentNodes.push(
+    '{http://www.w3.org/2002/xforms}repeat',
+    '{http://www.w3.org/2002/xforms}repeatItem');
 
 module NXKit.Web.XForms.ViewModelUtil {
 
@@ -26,7 +26,7 @@ module NXKit.Web.XForms.ViewModelUtil {
     }
 
     export function GetValueAsBoolean(node: Node): KnockoutObservable<boolean> {
-        return node.ValueAsBoolean('NXKit.XForms.IModelItemValue', 'Value');
+        return node.ValueAsBoolean('NXKit.XForms.IUIBindingNode.UIBinding', 'Value');
     }
 
     export function GetValueAsNumber(node: Node): KnockoutObservable<number> {

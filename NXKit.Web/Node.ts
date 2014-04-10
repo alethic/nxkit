@@ -6,7 +6,7 @@ module NXKit.Web {
     export class Node {
 
         _type: string;
-        _baseTypes: string[];
+        _name: string;
         _interfaces: IInterfaceMap;
         _nodes: KnockoutObservableArray<Node>;
 
@@ -25,7 +25,7 @@ module NXKit.Web {
          */
         constructor(source: any) {
             this._type = null;
-            this._baseTypes = new Array<string>();
+            this._name = null;
             this._interfaces = new InterfaceMap();
             this._nodes = ko.observableArray<Node>();
 
@@ -46,10 +46,10 @@ module NXKit.Web {
         }
 
         /**
-         * Gets the inheritence hierarchy of this node.
+         * Gets the name of this node.
          */
-        public get BaseTypes(): string[] {
-            return this._baseTypes;
+        public get Name(): string {
+            return this._name;
         }
 
         /**
@@ -143,7 +143,7 @@ module NXKit.Web {
          */
         public Update(source: any) {
             this.UpdateType(source.Type);
-            this.UpdateBaseTypes(source.BaseTypes);
+            this.UpdateName(source.Name);
             this.UpdateInterfaces(source);
             this.UpdateNodes(source.Nodes);
         }
@@ -156,10 +156,10 @@ module NXKit.Web {
         }
 
         /**
-         * Updates the base types of this node with the new set of values.
+         * Updates the name of this node with the new value.
          */
-        UpdateBaseTypes(baseTypes: string[]) {
-            this._baseTypes = baseTypes;
+        UpdateName(name: string) {
+            this._name = name;
         }
 
         /**
@@ -227,7 +227,6 @@ module NXKit.Web {
         public ToData(): any {
             var r: any = {
                 Type: this._type,
-                BaseTypes: this._baseTypes,
                 Nodes: this.NodesToData(),
             };
 
