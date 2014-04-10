@@ -14,7 +14,7 @@ namespace NXKit.XForms
 
         readonly XElement element;
         readonly ItemValueAttributes attributes;
-        readonly Lazy<IBindingNode> nodeBinding;
+        readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace NXKit.XForms
 
             this.element = element;
             this.attributes = new ItemValueAttributes(element);
-            this.nodeBinding = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
+            this.bindingNode = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
             this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
         }
 
@@ -52,7 +52,7 @@ namespace NXKit.XForms
         /// </summary>
         public Binding Binding
         {
-            get { return nodeBinding.Value != null ? nodeBinding.Value.Binding : null; }
+            get { return bindingNode.Value != null ? bindingNode.Value.Binding : null; }
         }
 
         /// <summary>

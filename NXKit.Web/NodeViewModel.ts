@@ -38,13 +38,6 @@ module NXKit.Web {
         }
 
         /**
-          * Gets the unique document ID of the wrapped node.
-          */
-        public get UniqueId(): string {
-            return Util.GetUniqueId(this.Node);
-        }
-
-        /**
           * Gets the content nodes of the current node.
           */
         public get Contents(): Node[] {

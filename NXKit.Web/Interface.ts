@@ -4,23 +4,28 @@ module NXKit.Web {
 
     export class Interface {
 
+        private _node: Node;
         private _name: string;
-
         private _properties: IPropertyMap;
         private _methods: IMethodMap;
 
-        public PropertyChanged: IInterfacePropertyChangedEvent = new TypedEvent();
-        public MethodInvoked: IInterfaceMethodInvokedEvent = new TypedEvent();
+        public PropertyChanged: INodePropertyChangedEvent = new TypedEvent();
+        public MethodInvoked: INodeMethodInvokedEvent = new TypedEvent();
 
-        constructor(name: string, source: any) {
+        constructor(node: Node, name: string, source: any) {
             var self = this;
 
+            self._node = node;
             self._name = name;
             self._properties = new PropertyMap();
             self._methods = new MethodMap();
 
             if (source != null)
                 self.Update(source);
+        }
+
+        public get Node(): Node {
+            return this._node;
         }
 
         public get Name(): string {
@@ -44,9 +49,9 @@ module NXKit.Web {
                     var n = s.substring(1, s.length);
                     var m = self._methods[n];
                     if (m == null) {
-                        self._methods[n] = new Method(n, source[s]);
-                        self._methods[n].MethodInvoked.add((_, params) => {
-                            self.OnMethodInvoked(_, params);
+                        self._methods[n] = new Method(self,n, source[s]);
+                        self._methods[n].MethodInvoked.add((node, intf, method, params) => {
+                            self.MethodInvoked.trigger(node, intf, method, params);
                         });
                     } else {
                         m.Update(source[s]);
@@ -55,9 +60,12 @@ module NXKit.Web {
                     var n = s;
                     var p = self._properties[n];
                     if (p == null) {
-                        self._properties[n] = new Property(n, source[s]);
-                        self._properties[n].PropertyChanged.add((_, value) => {
-                            self.OnPropertyChanged(_, value);
+                        self._properties[n] = new Property(self,n, source[s]);
+                        self._properties[n].PropertyChanged.add((node, intf, property, value) => {
+                            self.PropertyChanged.trigger(node, intf, property, value);
+                        });
+                        self._properties[n].MethodInvoked.add((node, intf, method, params) => {
+                            self.MethodInvoked.trigger(node, intf, method, params);
                         });
                     } else {
                         p.Update(source[s]);
@@ -85,14 +93,6 @@ module NXKit.Web {
             }
 
             return r;
-        }
-
-        OnPropertyChanged(property: Property, value: any) {
-            this.PropertyChanged.trigger(this, property, value);
-        }
-
-        OnMethodInvoked(method: Method, params: any) {
-            this.MethodInvoked.trigger(this, method, params);
         }
 
     }

@@ -28,6 +28,7 @@ namespace NXKit.Web.Serialization
             if (node == null)
                 throw new JsonException();
 
+            obj["Type"] = "Node";
             Apply(node, serializer, obj);
         }
 
@@ -35,6 +36,7 @@ namespace NXKit.Web.Serialization
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(serializer != null);
+            Contract.Requires<ArgumentNullException>(obj != null);
 
             RemotesToObject(node.Interfaces(), obj, serializer);
         }

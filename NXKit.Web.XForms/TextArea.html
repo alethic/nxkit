@@ -1,4 +1,5 @@
-﻿<script type="text/html" data-nxkit-node="NXKit.XForms.TextAreaElement">
+﻿<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}textarea">
     <!-- ko with: new NXKit.Web.XForms.TextAreaViewModel($context, $data) -->
     <!-- ko nxkit_template: {
         node: Node,
@@ -8,6 +9,8 @@
     <!-- /ko -->
 </script>
 
-<script type="text/html" data-nxkit-node="NXKit.XForms.TextAreaElement" data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
-    <textarea data-bind="value: ValueAsString('NXKit.XForms.IModelItemValue', 'Value')" />
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}textarea"
+        data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
+    <textarea data-bind="value: ValueAsString" />
 </script>

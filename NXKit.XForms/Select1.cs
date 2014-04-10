@@ -10,26 +10,34 @@ namespace NXKit.XForms
 
     [Interface("{http://www.w3.org/2002/xforms}select1")]
     [Remote]
-    public class Select1 :
-        UIBindingNode
+    public class Select1
     {
 
+        readonly XElement element;
         readonly Select1Attributes attributes;
-        readonly Lazy<IBindingNode> nodeBinding;
-        readonly Lazy<UIBinding> uiBinding;
+        readonly Lazy<IBindingNode> bindingNode;
+        readonly Lazy<IUIBindingNode> uiBindingNode;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         public Select1(XElement element)
-            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
+            this.element = element;
             this.attributes = new Select1Attributes(element);
-            this.nodeBinding = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
-            this.uiBinding = new Lazy<UIBinding>(() => new UIBinding(element, nodeBinding.Value.Binding));
+            this.bindingNode = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
+            this.uiBindingNode = new Lazy<IUIBindingNode>(() => element.Interface<IUIBindingNode>());
+        }
+
+        /// <summary>
+        /// Gets the element.
+        /// </summary>
+        public XElement Element
+        {
+            get { return element; }
         }
 
         /// <summary>
@@ -53,7 +61,7 @@ namespace NXKit.XForms
         /// </summary>
         public Binding Binding
         {
-            get { return nodeBinding.Value != null ? nodeBinding.Value.Binding : null; }
+            get { return bindingNode.Value.Binding; }
         }
 
         /// <summary>
@@ -61,7 +69,7 @@ namespace NXKit.XForms
         /// </summary>
         public UIBinding UIBinding
         {
-            get { return uiBinding.Value; }
+            get { return uiBindingNode.Value.UIBinding; }
         }
 
         /// <summary>

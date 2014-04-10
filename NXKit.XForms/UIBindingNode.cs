@@ -10,6 +10,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides a <see cref="UIBinding"/> for a node.
     /// </summary>
+    [Interface]
     public class UIBindingNode :
         IUIBindingNode
     {
@@ -68,11 +69,6 @@ namespace NXKit.XForms
                 return new UIBinding(element, b.Binding);
 
             return null;
-        }
-        
-        IUIBinding IUIBindingNode.UIBinding
-        {
-            get { return UIBinding; }
         }
 
     }

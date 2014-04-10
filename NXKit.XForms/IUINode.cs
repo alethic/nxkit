@@ -2,10 +2,14 @@
 {
 
     /// <summary>
-    /// Describes a UI element that can be refreshed.
+    /// Describes a UI element.
     /// </summary>
+    [Remote]
     public interface IUINode
     {
+
+        [Remote]
+        UI UI { get; }
 
         /// <summary>
         /// Initiates a refresh of the node.

@@ -222,7 +222,7 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Loads the <see cref="NXDocumentHost"/> from the given saved state.
+        /// Loads the <see cref="NXDocumentWebService"/> from the given saved state.
         /// </summary>
         /// <param name="save"></param>
         void LoadDocumentFromSave(string save)

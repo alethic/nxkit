@@ -12,7 +12,7 @@
         /// Gets the UI binding for the node.
         /// </summary>
         [Remote]
-        IUIBinding UIBinding { get; }
+        UIBinding UIBinding { get; }
 
     }
 

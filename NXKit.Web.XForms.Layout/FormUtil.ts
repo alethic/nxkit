@@ -42,14 +42,19 @@
         private _disabled: KnockoutObservable<boolean>;
 
         constructor(node: Node, parent: Step, isActive: (step: Step) => boolean, setActive: (step: Step) => void) {
-            var self = this;
-            self._node = node;
-            self._parent = parent;
-            self._isActive = isActive;
-            self._setActive = setActive;
-            self._active = ko.computed(() => self._isActive(self));
-            self._disabled = ko.computed(() => ViewModelUtil.IsModelItemBinding(self._node) ? !ViewModelUtil.GetRelevant(self._node)() : false);
-            self._steps = GetSteps(node, self, isActive, setActive);
+            try {
+                var self = this;
+                self._node = node;
+                self._parent = parent;
+                self._isActive = isActive;
+                self._setActive = setActive;
+                self._active = ko.computed(() => self._isActive(self));
+                self._disabled = ko.computed(() => ViewModelUtil.HasUIBinding(self._node) ? !ViewModelUtil.GetRelevant(self._node)() : false);
+                self._steps = GetSteps(node, self, isActive, setActive);
+            } catch (ex) {
+                ex.message = "FormUtil:Step.ctor()" + '\nMessage: ' + ex.message;
+                throw ex;
+            }
         }
 
         public get Node(): Node {

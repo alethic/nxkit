@@ -68,13 +68,6 @@
     }
 
     /**
-      * Gets the unique document ID of the given node.
-      */
-    export function GetUniqueId(node: Node): string {
-        return node.Property('NXKit.NXElement', 'UniqueId').ValueAsString();
-    }
-
-    /**
      * Returns the entire context item chain from the specified context upwards.
      */
     export function GetContextItems(context: KnockoutBindingContext): any[] {

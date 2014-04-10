@@ -38,10 +38,6 @@ namespace NXKit.Web.Serialization
         {
             Contract.Requires<ArgumentNullException>(obj != null);
 
-            var xobj = obj as XObject;
-            if (xobj != null)
-                return GetRemoteInterfaces(xobj);
-
             return GetRemoteInterfaces(new[] { obj });
         }
 
@@ -270,6 +266,7 @@ namespace NXKit.Web.Serialization
             Contract.Requires<ArgumentNullException>(serializer != null);
             Contract.Requires<ArgumentNullException>(obj != null);
 
+            obj["Type"] = "Object";
             RemoteToObject(value, obj, serializer);
         }
 

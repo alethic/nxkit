@@ -4,14 +4,16 @@ module NXKit.Web {
 
     export class Method {
 
+        private _interface: Interface;
         private _name: string;
         private _data: any[];
 
-        public MethodInvoked: IMethodInvokedEvent = new TypedEvent();
+        public MethodInvoked: INodeMethodInvokedEvent = new TypedEvent();
 
-        constructor(name: string, source: any) {
+        constructor($interface: Interface, name: string, source: any) {
             var self = this;
 
+            this._interface = $interface;
             this._name = name;
             this._data = [];
         }
@@ -35,7 +37,7 @@ module NXKit.Web {
         }
 
         OnMethodInvoked(params: any) {
-            this.MethodInvoked.trigger(this, params);
+            this.MethodInvoked.trigger(this._interface.Node, this._interface, this, params);
         }
 
     }

@@ -14,7 +14,7 @@ namespace NXKit.XForms
     /// Encapsulates the binding information for a UI element.
     /// </summary>
     [Remote]
-    public class UIBinding
+    public class UI
     {
 
         readonly XElement element;

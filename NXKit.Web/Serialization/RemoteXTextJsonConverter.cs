@@ -25,9 +25,9 @@ namespace NXKit.Web.Serialization
             if (text == null)
                 throw new JsonException();
 
+            base.Apply(node, serializer, obj);
             obj["Type"] = "Text";
             obj["Value"] = text.Value;
-            base.Apply(node, serializer, obj);
         }
 
     }

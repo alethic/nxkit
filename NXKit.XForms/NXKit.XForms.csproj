@@ -158,6 +158,7 @@
     <Compile Include="SchemaPackage.cs" />
     <Compile Include="Script.cs" />
     <Compile Include="Switch.cs" />
+    <Compile Include="UI.cs" />
     <Compile Include="UIBinding.cs" />
     <Compile Include="UIBindingNode.cs" />
     <Compile Include="UIBindingState.cs" />

@@ -4,6 +4,7 @@ module NXKit.Web {
 
     export class Property {
 
+        private _interface: Interface;
         private _name: string;
         private _value: KnockoutObservable<any>;
         private _suspend: boolean = false;
@@ -14,19 +15,25 @@ module NXKit.Web {
         private _valueAsDate: KnockoutComputed<Date>;
 
         /**
-         * Raised when the Property's value has changed.
+         * Raised when this property, or a nested property's value changes.
          */
-        public PropertyChanged: IPropertyChangedEvent = new TypedEvent();
+        public PropertyChanged: INodePropertyChangedEvent = new TypedEvent();
 
-        constructor(name: string, source: any) {
+        /**
+         * Raised when a nested node method is invoked.
+         */
+        public MethodInvoked: INodeMethodInvokedEvent = new TypedEvent();
+
+        constructor($interface: Interface,name: string, source: any) {
             var self = this;
 
+            self._interface = $interface;
             self._name = name;
 
             self._value = ko.observable<any>();
             self._value.subscribe(_ => {
                 if (!self._suspend) {
-                    self.PropertyChanged.trigger(self, self._value());
+                    self.PropertyChanged.trigger(self._interface.Node, self._interface, self, self._value());
                 }
             });
 
@@ -103,11 +110,34 @@ module NXKit.Web {
 
         public Update(source: any) {
             var self = this;
+
+            if (source.Type === 'Object') {
+                self._suspend = true;
+                if (self._value() != null &&
+                    self._value() instanceof Node) {
+                    (<Node>self._value()).Update(source);
+                    console.log(self.Name + ': ' + 'Node' + '=>' + 'Node');
+                } else {
+                    var node = new Node(source);
+                    node.PropertyChanged.add((n, intf, property, value) => {
+                        self.PropertyChanged.trigger(n, intf, property, value);
+                    });
+                    node.MethodInvoked.add((n, intf, method, params) => {
+                        self.MethodInvoked.trigger(n, intf, method, params);
+                    });
+                    self._value(node);
+                    console.log(self.Name + ': ' + 'Node' + '+>' + 'Node');
+                }
+                self._suspend = false;
+
+                return;
+            }
+
             var old = self._value();
             if (old !== source) {
                 self._suspend = true;
                 self._value(source);
-                console.log(self.Name + ': ' + old + '->' + source);
+                console.log(self.Name + ': ' + old + '=>' + source);
                 self._suspend = false;
             }
         }

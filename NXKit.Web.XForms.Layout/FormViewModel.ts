@@ -12,11 +12,17 @@ module NXKit.Web.XForms.Layout {
 
         constructor(context: KnockoutBindingContext, node: Node) {
             super(context, node);
-            var self = this;
 
-            self._activeStep = ko.observable<FormUtil.Step>();
-            self._rootStep = new FormUtil.Step(node, null, _ => _ === self._activeStep(), _ => self._activeStep(_));
-            self._activeStep(self.GetNextStep(self._rootStep));
+            try {
+                var self = this;
+
+                self._activeStep = ko.observable<FormUtil.Step>();
+                self._rootStep = new FormUtil.Step(node, null, _ => _ === self._activeStep(), _ => self._activeStep(_));
+                self._activeStep(self.GetNextStep(self._rootStep));
+            } catch (ex) {
+                ex.message = "FormViewModel.ctor()" + '\nMessage: ' + ex.message;
+                throw ex;
+            }
         }
 
         public get RootStep(): FormUtil.Step {
@@ -28,16 +34,21 @@ module NXKit.Web.XForms.Layout {
         }
 
         GetPreviousStep(step: FormUtil.Step): FormUtil.Step {
-            var self = this;
-            if (step.Parent != null) {
-                for (var i = step.Parent.Steps.indexOf(step) - 1; i >= 0; i--) {
-                    if (!step.Parent.Steps[i].Disabled()) {
-                        return step.Parent.Steps[i];
+            try {
+                var self = this;
+                if (step.Parent != null) {
+                    for (var i = step.Parent.Steps.indexOf(step) - 1; i >= 0; i--) {
+                        if (!step.Parent.Steps[i].Disabled()) {
+                            return step.Parent.Steps[i];
+                        }
                     }
                 }
-            }
 
-            return null;
+                return null;
+            } catch (ex) {
+                ex.message = "FormViewModel.GetPreviousStep()" + '\nMessage: ' + ex.message;
+                throw ex;
+            }
         }
 
         public get HasPreviousStep(): KnockoutObservable<boolean> {
@@ -46,34 +57,44 @@ module NXKit.Web.XForms.Layout {
         }
 
         public GoPreviousStep(): void {
-            var self = this;
-            var p = self.GetPreviousStep(self.ActiveStep());
-            if (p != null) {
-                self.ActiveStep(p);
-                self.Node.Invoke('NXKit.DOMEvents.INXEventTarget', 'DispatchEvent', {
-                    type: 'xforms-layout-step-previous',
-                });
+            try {
+                var self = this;
+                var p = self.GetPreviousStep(self.ActiveStep());
+                if (p != null) {
+                    self.ActiveStep(p);
+                    self.Node.Invoke('NXKit.DOMEvents.INXEventTarget', 'DispatchEvent', {
+                        type: 'xforms-layout-step-previous',
+                    });
+                }
+            } catch (ex) {
+                ex.message = "FormViewModel.GoPreviousStep()" + '\nMessage: ' + ex.message;
+                throw ex;
             }
         }
 
         GetNextStep(step: FormUtil.Step): FormUtil.Step {
-            var self = this;
+            try {
+                var self = this;
 
-            // if step has children
-            if (step.Steps.length > 0) {
-                var s = step.Steps[0];
-                return !s.Disabled() ? s : self.GetNextStep(s);
-            }
+                // if step has children
+                if (step.Steps.length > 0) {
+                    var s = step.Steps[0];
+                    return !s.Disabled() ? s : self.GetNextStep(s);
+                }
 
-            if (step.Parent != null) {
-                for (var i = step.Parent.Steps.indexOf(step) + 1; i < step.Parent.Steps.length; i++) {
-                    if (!step.Parent.Steps[i].Disabled()) {
-                        return step.Parent.Steps[i];
+                if (step.Parent != null) {
+                    for (var i = step.Parent.Steps.indexOf(step) + 1; i < step.Parent.Steps.length; i++) {
+                        if (!step.Parent.Steps[i].Disabled()) {
+                            return step.Parent.Steps[i];
+                        }
                     }
                 }
-            }
 
-            return null;
+                return null;
+            } catch (ex) {
+                ex.message = "FormViewModel.GetNextStep()" + '\nMessage: ' + ex.message;
+                throw ex;
+            }
         }
 
         public get HasNextStep(): KnockoutObservable<boolean> {
@@ -82,13 +103,18 @@ module NXKit.Web.XForms.Layout {
         }
 
         public GoNextStep(): void {
-            var self = this;
-            var p = self.GetNextStep(self.ActiveStep());
-            if (p != null) {
-                self.ActiveStep(p);
-                self.Node.Invoke('NXKit.DOMEvents.INXEventTarget', 'DispatchEvent', {
-                    type: 'xforms-layout-step-next',
-                });
+            try {
+                var self = this;
+                var p = self.GetNextStep(self.ActiveStep());
+                if (p != null) {
+                    self.ActiveStep(p);
+                    self.Node.Invoke('NXKit.DOMEvents.INXEventTarget', 'DispatchEvent', {
+                        type: 'xforms-layout-step-next',
+                    });
+                }
+            } catch (ex) {
+                ex.message = "FormViewModel.GoNextStep()" + '\nMessage: ' + ex.message;
+                throw ex;
             }
         }
 

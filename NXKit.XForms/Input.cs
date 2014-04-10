@@ -10,8 +10,7 @@ namespace NXKit.XForms
     /// bound node.
     /// </summary>
     [Interface("{http://www.w3.org/2002/xforms}input")]
-    public class Input :
-        UIBindingNode
+    public class Input
     {
 
         /// <summary>
@@ -19,7 +18,6 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Input(XElement element)
-            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }

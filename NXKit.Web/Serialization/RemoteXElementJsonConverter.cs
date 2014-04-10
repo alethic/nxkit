@@ -26,9 +26,9 @@ namespace NXKit.Web.Serialization
             if (element == null)
                 return;
 
-            obj["Type"] = "Element";
-            obj["Name"] = JToken.FromObject(element.Name, serializer);
             base.Apply(element, serializer, obj);
+            obj["Name"] = JToken.FromObject(element.Name, serializer);
+            obj["Type"] = "Element";
 
             // append children nodes
             obj["Nodes"] = new JArray(
