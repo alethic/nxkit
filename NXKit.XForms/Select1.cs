@@ -7,7 +7,7 @@ namespace NXKit.XForms
 {
 
     [Interface("{http://www.w3.org/2002/xforms}select1")]
-    [Public]
+    [Remote]
     public class Select1 :
         IEvaluationContextScope
     {
@@ -82,7 +82,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets or sets the text value of an open selection.
         /// </summary>
-        [Public]
+        [Remote]
         public string Value
         {
             get { return GetValue(); }
@@ -152,7 +152,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets or sets the unique identifier of the selected item.
         /// </summary>
-        [Public]
+        [Remote]
         public string SelectedId
         {
             get { return Selected != null ? Selected.Id : null; }

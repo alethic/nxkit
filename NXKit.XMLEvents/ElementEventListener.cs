@@ -12,7 +12,8 @@ namespace NXKit.XmlEvents
     /// Listens for a given event on an element.
     /// </summary>
     [Interface(XmlNodeType.Element)]
-    public class ElementEventListener
+    public class ElementEventListener :
+        IOnInitialize
     {
 
         readonly XElement element;
@@ -26,8 +27,6 @@ namespace NXKit.XmlEvents
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
-
-            Initialize();
         }
 
         /// <summary>
@@ -180,6 +179,11 @@ namespace NXKit.XmlEvents
                     evt,
                     new EventListener(_ => handler.Handle(_)),
                     GetCapture());
+        }
+
+        void IOnInitialize.Init()
+        {
+            Initialize();
         }
 
     }

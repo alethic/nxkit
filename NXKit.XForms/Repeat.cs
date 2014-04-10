@@ -2,6 +2,8 @@
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Util;
+
 namespace NXKit.XForms
 {
 

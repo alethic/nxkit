@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
+using NXKit.Util;
 
 namespace NXKit.XForms
 {
@@ -12,7 +13,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Encapsulates the binding information for a UI element.
     /// </summary>
-    public class UIBinding
+    public class UIBinding :
+        IUIBinding
     {
 
         readonly XElement element;
@@ -47,12 +49,12 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="element"></param>
         /// <param name="binding"></param>
-        internal UIBinding(XElement node, Binding binding)
-            : this(node, binding.ModelItem)
+        internal UIBinding(XElement element, Binding binding)
+            : this(element, binding.ModelItem)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(binding != null);
 
             this.binding = binding;
@@ -77,7 +79,6 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the current data type of the interface.
         /// </summary>
-        [Public]
         public XName DataType
         {
             get { return State.DataType; }

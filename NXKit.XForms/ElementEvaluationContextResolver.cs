@@ -5,6 +5,7 @@ using System.Xml;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
+using NXKit.Util;
 
 namespace NXKit.XForms
 {

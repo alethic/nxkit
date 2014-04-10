@@ -4,11 +4,11 @@
     /// <summary>
     /// Provides information for the web template.
     /// </summary>
-    [Public]
+    [Remote]
     public interface ITemplate
     {
 
-        [Public]
+        [Remote]
         string Name { get; }
 
     }

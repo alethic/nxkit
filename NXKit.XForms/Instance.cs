@@ -6,6 +6,7 @@ using System.Net;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
+using NXKit.Util;
 
 namespace NXKit.XForms
 {
@@ -67,8 +68,8 @@ namespace NXKit.XForms
                 {
                     // normalize uri with base
                     var u = new Uri(attributes.Src, UriKind.RelativeOrAbsolute);
-                    if (element.BaseUri != null && !u.IsAbsoluteUri)
-                        u = new Uri(new Uri(element.BaseUri), u);
+                    if (element.BaseUri() != null && !u.IsAbsoluteUri)
+                        u = new Uri(new Uri(element.BaseUri()), u);
 
                     // return resource as a stream
                     var request = WebRequest.Create(u);

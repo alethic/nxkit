@@ -4,14 +4,14 @@
     /// <summary>
     /// Provides an interface to an item that can be selected.
     /// </summary>
-    [Public]
+    [Remote]
     public interface ISelectable
     {
 
         /// <summary>
         /// Gets a unique value that can be used to specify the selection.
         /// </summary>
-        [Public]
+        [Remote]
         string Id { get; }
 
         /// <summary>

@@ -4,7 +4,7 @@ namespace NXKit.XForms
 {
 
     [Interface("{http://www.w3.org/2002/xforms}range")]
-    [Public]
+    [Remote]
     public class Range 
     {
 

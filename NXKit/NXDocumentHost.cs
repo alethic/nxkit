@@ -7,6 +7,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.Serialization;
 using NXKit.Util;
 using NXKit.Xml;
 
@@ -29,6 +30,47 @@ namespace NXKit
         }
 
         /// <summary>
+        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="XmlReader"/>.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static NXDocumentHost Load(XmlReader reader)
+        {
+            Contract.Requires<ArgumentNullException>(reader != null);
+
+            return new NXDocumentHost(
+                CompositionUtil.CreateContainer(),
+                XNodeAnnotationSerializer.Deserialize(
+                    XDocument.Load(
+                        reader,
+                        LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)));
+        }
+
+        /// <summary>
+        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="TextReader"/>.
+        /// </summary>
+        /// <param name="reader"></param>
+        public static NXDocumentHost Load(TextReader reader)
+        {
+            Contract.Requires<ArgumentNullException>(reader != null);
+
+            using (var rdr = XmlReader.Create(reader))
+                return Load(rdr);
+        }
+
+        /// <summary>
+        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="stream"></param>
+        public static NXDocumentHost Load(Stream stream)
+        {
+            Contract.Requires<ArgumentNullException>(stream != null);
+
+            using (var rdr = new StreamReader(stream))
+                return Load(rdr);
+        }
+
+        /// <summary>
         /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="Uri"/>.
         /// </summary>
         /// <param name="uri"></param>
@@ -37,13 +79,10 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            return new NXDocumentHost(
-                CompositionUtil.CreateContainer(),
-                uri);
+            return Load(XmlReader.Create(uri.ToString()));
         }
 
         readonly CompositionContainer container;
-        readonly Uri uri;
         XDocument xml;
 
         /// <summary>
@@ -51,50 +90,15 @@ namespace NXKit
         /// </summary>
         /// <param name="container"></param>
         /// <param name="uri"></param>
-        public NXDocumentHost(CompositionContainer container, Uri uri)
-            : base()
-        {
-            Contract.Requires<ArgumentNullException>(container != null);
-            Contract.Requires<ArgumentNullException>(uri != null);
-
-            this.container = container;
-            this.uri = new Uri(uri.ToString());
-            this.Xml = XDocument.Load(uri.ToString(), LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
-
-            Initialize();
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="state"></param>
-        public NXDocumentHost(CompositionContainer container, NXDocumentState state)
-            : this(container, state.Uri, state.Xml)
-        {
-            Contract.Requires<ArgumentNullException>(container != null);
-            Contract.Requires<ArgumentNullException>(state != null);
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="uri"></param>
-        /// <param name="configuration"></param>
         /// <param name="xml"></param>
-        /// <param name="nextElementId"></param>
-        /// <param name="nodeState"></param>
-        NXDocumentHost(CompositionContainer container, Uri uri, string xml)
+        NXDocumentHost(CompositionContainer container, XDocument xml)
             : base()
         {
             Contract.Requires<ArgumentNullException>(container != null);
-            Contract.Requires<ArgumentNullException>(uri != null);
             Contract.Requires<ArgumentNullException>(xml != null);
 
             this.container = container;
-            this.uri = uri;
-            this.xml = XDocument.Parse(xml);
+            this.xml = xml;
 
             Initialize();
         }
@@ -128,7 +132,6 @@ namespace NXKit
         public XDocument Xml
         {
             get { return xml; }
-            internal set { xml = value; }
         }
 
         /// <summary>
@@ -167,8 +170,26 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(writer != null);
 
-            using (var i = xml.CreateAnnotationReader())
-                writer.WriteNode(i, true);
+            XNodeAnnotationSerializer.Serialize(xml).Save(writer);
+        }
+
+        /// <summary>
+        /// Saves the current state of the <see cref="NXDocumentHost"/> to the specified <see cref="TextWriter"/>.
+        /// </summary>
+        /// <param name="writer"></param>
+        public void Save(TextWriter writer)
+        {
+            Contract.Requires<ArgumentNullException>(writer != null);
+
+            var settings = new XmlWriterSettings()
+            {
+                Encoding = Encoding.UTF8,
+                OmitXmlDeclaration = true,
+                NamespaceHandling = NamespaceHandling.OmitDuplicates,
+            };
+
+            using (var wrt = XmlWriter.Create(writer, settings))
+                Save(wrt);
         }
 
         /// <summary>
@@ -179,7 +200,7 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(stream != null);
 
-            using (var wrt = XmlWriter.Create(stream, new XmlWriterSettings() { Encoding = Encoding.UTF8, OmitXmlDeclaration = true }))
+            using (var wrt = new StreamWriter(stream, Encoding.UTF8))
                 Save(wrt);
         }
 

@@ -4,6 +4,8 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
+using NXKit.Util;
+
 namespace NXKit.XForms.XPath.Functions
 {
 

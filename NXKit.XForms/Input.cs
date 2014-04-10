@@ -14,8 +14,6 @@ namespace NXKit.XForms
         UIBindingNode
     {
 
-        readonly XElement element;
-
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -24,16 +22,6 @@ namespace NXKit.XForms
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-
-            this.element = element;
-        }
-
-        /// <summary>
-        /// Gets the <see cref="XElement"/>.
-        /// </summary>
-        public XElement Element
-        {
-            get { return element; }
         }
 
     }

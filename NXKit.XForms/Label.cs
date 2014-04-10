@@ -1,4 +1,6 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -9,7 +11,8 @@ namespace NXKit.XForms
     /// short description of form controls while navigating among them.
     /// </summary>
     [Interface("{http://www.w3.org/2002/xforms}label")]
-    public class Label 
+    public class Label :
+        UIBindingNode
     {
 
         /// <summary>
@@ -17,8 +20,9 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Label(XElement element)
+            : base(element)
         {
-
+            Contract.Requires<ArgumentNullException>(element != null);
         }
 
     }

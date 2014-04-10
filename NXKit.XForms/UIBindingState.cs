@@ -129,7 +129,33 @@ namespace NXKit.XForms
 
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            throw new NotImplementedException();
+            if (reader.MoveToContent() == XmlNodeType.Element &&
+                reader.LocalName == "ui-binding")
+            {
+                var type_ = reader["type"];
+                if (type_ != null)
+                    dataType = (XName)type_;
+
+                var readOnly_ = reader["readonly"];
+                if (readOnly_ != null)
+                    readOnly = bool.Parse(readOnly_);
+
+                var required_ = reader["required"];
+                if (required_ != null)
+                    required = bool.Parse(required_);
+
+                var relevant_ = reader["relevant"];
+                if (relevant_ != null)
+                    relevant = bool.Parse(relevant_);
+
+                var valid_ = reader["valid"];
+                if (valid_ != null)
+                    valid = bool.Parse(valid_);
+
+                var value_ = reader["value"];
+                if (value_ != null)
+                    value = value_;
+            }
         }
 
         void IXmlSerializable.WriteXml(XmlWriter writer)

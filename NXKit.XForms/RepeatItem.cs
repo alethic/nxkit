@@ -8,8 +8,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Serves as a generated item within a repeat.
     /// </summary>
-    public class RepeatItem :
-        IEvaluationContextProvider
+    public class RepeatItem
     {
 
         EvaluationContext context;
