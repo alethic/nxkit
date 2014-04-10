@@ -99,6 +99,9 @@ namespace NXKit
         /// <returns></returns>
         IEnumerable<object> GetInstances(XObject obj, IEnumerable<Type> types)
         {
+            Contract.Requires<ArgumentNullException>(obj != null);
+            Contract.Requires<ArgumentNullException>(types != null);
+
             var objects = types
                 .Select(i => GetOrCreate(obj, i, () => CreateInstance(obj, i)))
                 .Where(i => i != null)

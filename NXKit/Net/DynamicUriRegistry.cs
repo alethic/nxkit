@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
-namespace NXKit.Util
+using NXKit.Util;
+
+namespace NXKit.Net
 {
 
     /// <summary>
@@ -49,6 +51,8 @@ namespace NXKit.Util
         /// <param name="id"></param>
         internal static DynamicUriAuthority Get(Guid id)
         {
+            Contract.Requires<ArgumentException>(id != Guid.Empty);
+
             lock (authorities)
             {
                 DynamicUriAuthority a = null;

@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 using NXKit.IO;
 
-namespace NXKit
+namespace NXKit.Xml
 {
 
     /// <summary>

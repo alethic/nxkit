@@ -2,7 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Net;
 
-namespace NXKit.Util
+namespace NXKit.Net
 {
 
     public abstract class DynamicUriAuthority :
