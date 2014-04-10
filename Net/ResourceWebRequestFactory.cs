@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Net;
 
-namespace NXKit.Util
+namespace NXKit.Net
 {
 
     [Export(typeof(IWebRequestCreate))]

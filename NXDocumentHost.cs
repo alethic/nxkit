@@ -7,8 +7,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.Net;
 using NXKit.Serialization;
-using NXKit.Util;
 using NXKit.Xml;
 
 namespace NXKit
@@ -80,6 +80,18 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(uri != null);
 
             return Load(XmlReader.Create(uri.ToString()));
+        }
+
+        /// <summary>
+        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="XDocument"/>.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
+        public static NXDocumentHost Load(XDocument document)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+
+            return Load(document.CreateReader());
         }
 
         readonly CompositionContainer container;

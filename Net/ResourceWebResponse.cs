@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 
-namespace NXKit.Util
+namespace NXKit.Net
 {
 
     class ResourceWebResponse :

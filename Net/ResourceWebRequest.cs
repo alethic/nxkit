@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net;
 
-namespace NXKit.Util
+namespace NXKit.Net
 {
 
     class ResourceWebRequest :

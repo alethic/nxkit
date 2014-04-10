@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 
-namespace NXKit.Util
+namespace NXKit.Net
 {
 
     [Export(typeof(UriParser))]
