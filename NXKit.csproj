@@ -132,15 +132,33 @@
     <Compile Include="IO\XDocumentAnnotationReader.cs" />
     <Compile Include="IO\XmlAttributeOverrides.cs" />
     <Compile Include="IO\XNodeReaderBase.cs" />
+    <Compile Include="Net\ResourceUriHelper.cs" />
+    <Compile Include="Net\ResourceUriParser.cs" />
+    <Compile Include="Net\ResourceWebRequest.cs" />
+    <Compile Include="Net\ResourceWebRequestFactory.cs" />
+    <Compile Include="Net\ResourceWebResponse.cs" />
+    <Compile Include="Util\DictionaryExtensions.cs" />
+    <Compile Include="Net\DynamicUriAuthority.cs" />
+    <Compile Include="Net\DynamicUriHelper.cs" />
+    <Compile Include="Net\DynamicUriParser.cs" />
+    <Compile Include="Net\DynamicUriRegistry.cs" />
+    <Compile Include="Net\DynamicUriRootFunc.cs" />
+    <Compile Include="Net\DynamicWebRequest.cs" />
+    <Compile Include="Net\DynamicWebRequestFactory.cs" />
+    <Compile Include="Net\DynamicWebResponse.cs" />
+    <Compile Include="Util\EnumerableExtensions.cs" />
+    <Compile Include="Util\LinkedListExtensions.cs" />
+    <Compile Include="Util\ObjectExtensions.cs" />
+    <Compile Include="Util\StringExtensions.cs" />
     <Compile Include="PublicAttribute.cs" />
     <Compile Include="IO\NodeWriter.cs" />
     <Compile Include="CompositionUtil.cs" />
     <Compile Include="InterfaceProviderBase.cs" />
-    <Compile Include="XContainerExtensions.cs" />
-    <Compile Include="XElementExtensions.cs" />
-    <Compile Include="XDocumentExtensions.cs" />
-    <Compile Include="XNodeExtensions.cs" />
-    <Compile Include="XObjectExtensions.cs" />
+    <Compile Include="Xml\XContainerExtensions.cs" />
+    <Compile Include="Xml\XElementExtensions.cs" />
+    <Compile Include="Xml\XDocumentExtensions.cs" />
+    <Compile Include="Xml\XNodeExtensions.cs" />
+    <Compile Include="Xml\XObjectExtensions.cs" />
     <Compile Include="PriorityAttribute.cs" />
     <Compile Include="TypeNodeInterfaceProvider.cs" />
     <Compile Include="XmlSchemaConstants.cs" />
@@ -149,7 +167,6 @@
     <Compile Include="SchemaContainer.cs" />
     <Compile Include="IRefScope.cs" />
     <Compile Include="NXDocumentHost.cs" />
-    <Compile Include="NXDocumentState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
