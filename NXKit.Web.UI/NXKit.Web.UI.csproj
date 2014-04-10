@@ -133,10 +133,6 @@
       <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
       <Name>NXKit.DOMEvents</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.Util\NXKit.Util.csproj">
-      <Project>{1e5fae9e-f890-487b-bfcd-e3ed5c4f8d41}</Project>
-      <Name>NXKit.Util</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NXKit.Web.XForms.Layout\NXKit.Web.XForms.Layout.csproj">
       <Project>{9499152c-156e-4005-a01f-4d6f1c480c63}</Project>
       <Name>NXKit.Web.XForms.Layout</Name>

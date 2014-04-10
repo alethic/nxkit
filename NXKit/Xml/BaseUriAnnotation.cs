@@ -3,7 +3,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace NXKit.Util
+namespace NXKit.Xml
 {
 
     /// <summary>
