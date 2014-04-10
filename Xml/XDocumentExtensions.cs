@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
-using NXKit.IO;
-
 namespace NXKit.Xml
 {
 

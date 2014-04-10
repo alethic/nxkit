@@ -127,16 +127,14 @@
     <Compile Include="InterfaceAttribute.cs" />
     <Compile Include="DefaultInterfaceProvider.cs" />
     <Compile Include="IInterfaceProvider.cs" />
-    <Compile Include="IO\XAnnotationDocument.cs" />
-    <Compile Include="IO\XAnnotationElement.cs" />
-    <Compile Include="IO\XDocumentAnnotationReader.cs" />
-    <Compile Include="IO\XmlAttributeOverrides.cs" />
-    <Compile Include="IO\XNodeReaderBase.cs" />
     <Compile Include="Net\ResourceUriHelper.cs" />
     <Compile Include="Net\ResourceUriParser.cs" />
     <Compile Include="Net\ResourceWebRequest.cs" />
     <Compile Include="Net\ResourceWebRequestFactory.cs" />
     <Compile Include="Net\ResourceWebResponse.cs" />
+    <Compile Include="RemoteAttribute.cs" />
+    <Compile Include="Serialization\XmlAttributeOverrides.cs" />
+    <Compile Include="Serialization\XNodeAnnotationSerializer.cs" />
     <Compile Include="Util\DictionaryExtensions.cs" />
     <Compile Include="Net\DynamicUriAuthority.cs" />
     <Compile Include="Net\DynamicUriHelper.cs" />
@@ -150,10 +148,9 @@
     <Compile Include="Util\LinkedListExtensions.cs" />
     <Compile Include="Util\ObjectExtensions.cs" />
     <Compile Include="Util\StringExtensions.cs" />
-    <Compile Include="PublicAttribute.cs" />
-    <Compile Include="IO\NodeWriter.cs" />
     <Compile Include="CompositionUtil.cs" />
     <Compile Include="InterfaceProviderBase.cs" />
+    <Compile Include="Xml\BaseUriAnnotation.cs" />
     <Compile Include="Xml\XContainerExtensions.cs" />
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="Xml\XDocumentExtensions.cs" />
@@ -178,12 +175,6 @@
     <EmbeddedResource Include="xsdschema.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NXKit.Util\NXKit.Util.csproj">
-      <Project>{1e5fae9e-f890-487b-bfcd-e3ed5c4f8d41}</Project>
-      <Name>NXKit.Util</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="NXKit.nuspec">
