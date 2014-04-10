@@ -9,20 +9,18 @@ namespace NXKit.XForms
 
     [Interface("{http://www.w3.org/2002/xforms}setvalue")]
     public class SetValue :
+        ElementExtension,
         IAction
     {
-
-        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         public SetValue(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-
-            this.element = element;
         }
 
         public void Handle(Event ev)

@@ -12,21 +12,11 @@ namespace NXKit.XForms
     /// </summary>
     [Interface]
     public class UIBindingNode :
-        IUIBindingNode
+        ElementExtension,
+        IUIBindingNode,
+        IOnRefresh
     {
 
-        class UIBindingNodePredicate :
-            IInterfacePredicate
-        {
-
-            public bool IsMatch(XObject obj, Type type)
-            {
-                throw new NotImplementedException();
-            }
-
-        }
-
-        readonly XElement element;
         readonly Lazy<UIBinding> uiBinding;
 
         /// <summary>
@@ -34,19 +24,11 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public UIBindingNode(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.element = element;
             this.uiBinding = new Lazy<UIBinding>(() => CreateUIBinding());
-        }
-
-        /// <summary>
-        /// Gets the element.
-        /// </summary>
-        public XElement Element
-        {
-            get { return element; }
         }
 
         /// <summary>
@@ -63,12 +45,35 @@ namespace NXKit.XForms
         /// <returns></returns>
         UIBinding CreateUIBinding()
         {
-            var b = element.InterfaceOrDefault<IBindingNode>();
+            var b = Element.InterfaceOrDefault<IBindingNode>();
             if (b != null &&
                 b.Binding != null)
-                return new UIBinding(element, b.Binding);
+                return new UIBinding(Element, b.Binding);
 
             return null;
+        }
+        
+        void IOnRefresh.RefreshBinding()
+        {
+            if (UIBinding != null)
+                UIBinding.Refresh();
+        }
+
+        void IOnRefresh.Refresh()
+        {
+            
+        }
+
+        void IOnRefresh.DispatchEvents()
+        {
+            if (UIBinding != null)
+                UIBinding.DispatchEvents();
+        }
+
+        void IOnRefresh.DiscardEvents()
+        {
+            if (UIBinding != null)
+                UIBinding.DiscardEvents();
         }
 
     }

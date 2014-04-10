@@ -10,10 +10,10 @@ namespace NXKit.XForms
 {
 
     [Interface("{http://www.w3.org/2002/xforms}bind")]
-    public class Bind
+    public class Bind :
+        ElementExtension
     {
 
-        readonly XElement element;
         readonly ModelItemPropertyAttributes attributes;
         readonly Lazy<IBindingNode> nodeBinding;
         readonly Lazy<EvaluationContext> context;
@@ -28,27 +28,19 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Bind(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.element = element;
-            this.attributes = new ModelItemPropertyAttributes(element);
-            this.nodeBinding = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
+            this.attributes = new ModelItemPropertyAttributes(Element);
+            this.nodeBinding = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
 
-            this.context = new Lazy<EvaluationContext>(() => element.Interface<EvaluationContextResolver>().Context);
+            this.context = new Lazy<EvaluationContext>(() => Element.Interface<EvaluationContextResolver>().Context);
             this.calculateBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.CalculateAttribute));
             this.readOnlyBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ReadOnlyAttribute));
             this.requiredBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.RequiredAttribute));
             this.relevantBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.RelevantAttribute));
             this.constraintBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.CalculateAttribute));
-        }
-
-        /// <summary>
-        /// Gets the 'bind' element.
-        /// </summary>
-        public XElement Element
-        {
-            get { return element; }
         }
 
         /// <summary>

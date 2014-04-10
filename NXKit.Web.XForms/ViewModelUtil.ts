@@ -15,84 +15,68 @@ NXKit.Web.ViewModelUtil.TransparentNodes.push(
     '{http://www.w3.org/2002/xforms}repeat',
     '{http://www.w3.org/2002/xforms}repeatItem');
 
+NXKit.Web.ViewModelUtil.LayoutManagers.push(
+    (c) => new NXKit.Web.XForms.DefaultLayoutManager(c));
+
+module NXKit.Web.XForms {
+
+    export class Constants {
+
+        public static UINode = "NXKit.XForms.IUINode";
+        public static DataNode = "NXKit.XForms.IDataNode";
+
+    }
+
+}
+
 module NXKit.Web.XForms.ViewModelUtil {
 
-    function GetUIBinding(node: Node): KnockoutObservable<Node> {
-        return node.Value('NXKit.XForms.IUIBindingNode', 'UIBinding')();
+    export function IsDataNode(node: Node): boolean {
+        return node.Interfaces[Constants.DataNode] != null;
     }
 
-    export function HasUIBinding(node: Node): boolean {
-        return GetUIBinding(node)() != null;
+    export function GetDataValue(node: Node): KnockoutObservable<any> {
+        return node.Property(Constants.DataNode, 'Value').ValueAsString;
     }
 
-    export function GetValue(node: Node): KnockoutObservable<any> {
-        if (!HasUIBinding(node))
-            return null;
-
-        return GetUIBinding(node)().Value('NXKit.XForms.UIBinding', 'Value');
-    }
-
-    export function GetValueAsString(node: Node): KnockoutObservable<string> {
-        if (!HasUIBinding(node))
-            return null;
-
-        return GetUIBinding(node)().ValueAsString('NXKit.XForms.UIBinding', 'Value');
+    export function GetDataValueAsString(node: Node): KnockoutObservable<string> {
+        return node.Property(Constants.DataNode, 'Value').ValueAsString;
     }
 
     export function GetValueAsBoolean(node: Node): KnockoutObservable<boolean> {
-        if (!HasUIBinding(node))
-            return null;
-
-        return GetUIBinding(node)().ValueAsBoolean('NXKit.XForms.UIBinding', 'Value');
+        return node.Property(Constants.DataNode, 'Value').ValueAsBoolean;
     }
 
     export function GetValueAsNumber(node: Node): KnockoutObservable<number> {
-        if (!HasUIBinding(node))
-            return null;
-
-        return GetUIBinding(node)().ValueAsNumber('NXKit.XForms.UIBinding', 'Value');
+        return node.Property(Constants.DataNode, 'Value').ValueAsNumber;
     }
 
     export function GetValueAsDate(node: Node): KnockoutObservable<Date> {
-        if (!HasUIBinding(node))
-            return null;
+        return node.Property(Constants.DataNode, 'Value').ValueAsDate;
+    }
 
-        return GetUIBinding(node)().ValueAsDate('NXKit.XForms.UIBinding', 'Value');
+    export function GetDataType(node: Node): KnockoutObservable<string> {
+        return node.Property(Constants.DataNode, 'DataType').ValueAsString;
+    }
+
+    export function IsUINode(node: Node): boolean {
+        return node.Interfaces[Constants.UINode] != null;
     }
 
     export function GetRelevant(node: Node): KnockoutObservable<boolean> {
-        if (!HasUIBinding(node))
-            return null;
-
-        return GetUIBinding(node)().ValueAsBoolean('NXKit.XForms.UIBinding', 'Relevant');
+        return node.Property(Constants.UINode, 'Relevant').ValueAsBoolean;
     }
 
     export function GetReadOnly(node: Node): KnockoutObservable<boolean> {
-        if (!HasUIBinding(node))
-            return null;
-
-        return GetUIBinding(node)().ValueAsBoolean('NXKit.XForms.UIBinding', 'ReadOnly');
+        return node.Property(Constants.UINode, 'ReadOnly').ValueAsBoolean;
     }
 
     export function GetRequired(node: Node): KnockoutObservable<boolean> {
-        if (!HasUIBinding(node))
-            return null;
-
-        return GetUIBinding(node)().ValueAsBoolean('NXKit.XForms.UIBinding', 'Required');
+        return node.Property(Constants.UINode, 'Required').ValueAsBoolean;
     }
 
     export function GetValid(node: Node): KnockoutObservable<boolean> {
-        if (!HasUIBinding(node))
-            return null;
-
-        return GetUIBinding(node)().ValueAsBoolean('NXKit.XForms.UIBinding', 'Valid');
-    }
-
-    export function GetType(node: Node): KnockoutObservable<string> {
-        if (!HasUIBinding(node))
-            return null;
-
-        return GetUIBinding(node)().ValueAsString('NXKit.XForms.UIBinding', 'DataType');
+        return node.Property(Constants.UINode, 'Valid').ValueAsBoolean;
     }
 
     export function GetAppearance(node: Node): KnockoutObservable<string> {

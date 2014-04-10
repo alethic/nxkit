@@ -12,10 +12,10 @@ namespace NXKit.XForms
 
     [Interface("{http://www.w3.org/2002/xforms}delete")]
     public class Delete :
+        ElementExtension,
         IAction
     {
 
-        readonly XElement element;
         readonly DeleteAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<EvaluationContext> context;
@@ -26,12 +26,12 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Delete(XElement element)
+            :base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.element = element;
-            this.attributes = new DeleteAttributes(element);
-            this.bindingNode = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
+            this.attributes = new DeleteAttributes(Element);
+            this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
             this.atBinding = new Lazy<Binding>(() => 
                 attributes.At != null ? 
                 new Binding(element, attributes.AtAttribute.Interface<AttributeEvaluationContextResolver>().GetContextForAttribute(), attributes.At) : 

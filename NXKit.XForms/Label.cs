@@ -12,7 +12,7 @@ namespace NXKit.XForms
     /// </summary>
     [Interface("{http://www.w3.org/2002/xforms}label")]
     public class Label :
-        UIBindingNode
+        ElementExtension
     {
 
         /// <summary>

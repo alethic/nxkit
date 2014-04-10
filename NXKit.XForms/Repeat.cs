@@ -9,12 +9,14 @@ namespace NXKit.XForms
 
     [Interface("{http://www.w3.org/2002/xforms}repeat")]
     public class Repeat :
-        IUINode
+        ElementExtension,
+        IOnRefresh
     {
 
-        readonly XElement element;
         readonly Lazy<RepeatAttributes> attributes;
-        readonly Lazy<IUIBindingNode> uiBinding;
+        readonly Lazy<IUIBindingNode> uiBindingNode;
+        readonly Lazy<UIBinding> uiBinding;
+        readonly Lazy<RepeatState> state;
         int nextId;
 
         /// <summary>
@@ -22,12 +24,14 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Repeat(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.element = element;
-            this.attributes = new Lazy<RepeatAttributes>(() => element.AnnotationOrCreate<RepeatAttributes>(() => new RepeatAttributes(element)));
-            this.uiBinding = new Lazy<IUIBindingNode>(() => element.Interface<IUIBindingNode>());
+            this.attributes = new Lazy<RepeatAttributes>(() => Element.AnnotationOrCreate<RepeatAttributes>(() => new RepeatAttributes(element)));
+            this.uiBindingNode = new Lazy<IUIBindingNode>(() => Element.Interface<IUIBindingNode>());
+            this.uiBinding = new Lazy<UIBinding>(() => uiBindingNode.Value.UIBinding);
+            this.state = new Lazy<RepeatState>(() => Element.AnnotationOrCreate<RepeatState>());
         }
 
         /// <summary>
@@ -98,7 +102,10 @@ namespace NXKit.XForms
             //return item;
         }
 
-        public void Refresh()
+        /// <summary>
+        /// Refreshes the interface of this element.
+        /// </summary>
+        void Refresh()
         {
             throw new NotImplementedException();
 
@@ -128,6 +135,27 @@ namespace NXKit.XForms
             //foreach (var node in this.Descendants().Select(i => i.InterfaceOrDefault<IUINode>()))
             //    if (node != null)
             //        node.Refresh();
+        }
+
+
+        void IOnRefresh.RefreshBinding()
+        {
+
+        }
+
+        void IOnRefresh.Refresh()
+        {
+            Refresh();
+        }
+
+        void IOnRefresh.DispatchEvents()
+        {
+
+        }
+
+        void IOnRefresh.DiscardEvents()
+        {
+
         }
 
     }

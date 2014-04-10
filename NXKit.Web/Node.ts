@@ -6,8 +6,9 @@ module NXKit.Web {
     export class Node {
 
         _data: any;
-        _type: string;
+        _type: NodeType;
         _name: string;
+        _value: string;
         _interfaces: IInterfaceMap;
         _nodes: KnockoutObservableArray<Node>;
 
@@ -28,6 +29,7 @@ module NXKit.Web {
             this._data = null;
             this._type = null;
             this._name = null;
+            this._value = null;
             this._interfaces = new InterfaceMap();
             this._nodes = ko.observableArray<Node>();
 
@@ -50,7 +52,7 @@ module NXKit.Web {
         /**
          * Gets the type of this node.
          */
-        public get Type(): string {
+        public get Type(): NodeType {
             return this._type;
         }
 
@@ -59,6 +61,13 @@ module NXKit.Web {
          */
         public get Name(): string {
             return this._name;
+        }
+
+        /**
+         * Gets the value of this node.
+         */
+        public get Value(): string {
+            return this._value;
         }
 
         /**
@@ -96,66 +105,6 @@ module NXKit.Web {
         }
 
         /**
-         * Gets the property value accessor for the named property on the specified interface.
-         */
-        public Value(interfaceName: string, propertyName: string): KnockoutObservable<any> {
-            var p = this.Property(interfaceName, propertyName);
-            if (p != null) {
-                return p.Value;
-            }
-
-            return null;
-        }
-
-        /**
-         * Gets the property value accessor for the named property on the specified interface as a string.
-         */
-        public ValueAsString(interfaceName: string, propertyName: string): KnockoutObservable<string> {
-            var p = this.Property(interfaceName, propertyName);
-            if (p != null) {
-                return p.ValueAsString;
-            }
-
-            return null;
-        }
-
-        /**
-         * Gets the property value accessor for the named property on the specified interface as a boolean.
-         */
-        public ValueAsBoolean(interfaceName: string, propertyName: string): KnockoutObservable<boolean> {
-            var p = this.Property(interfaceName, propertyName);
-            if (p != null) {
-                return p.ValueAsBoolean;
-            }
-
-            return null;
-        }
-
-        /**
-         * Gets the property value accessor for the named property on the specified interface as a number.
-         */
-        public ValueAsNumber(interfaceName: string, propertyName: string): KnockoutObservable<number> {
-            var p = this.Property(interfaceName, propertyName);
-            if (p != null) {
-                return p.ValueAsNumber;
-            }
-
-            return null;
-        }
-
-        /**
-         * Gets the property value accessor for the named property on the specified interface as a date.
-         */
-        public ValueAsDate(interfaceName: string, propertyName: string): KnockoutObservable<Date> {
-            var p = this.Property(interfaceName, propertyName);
-            if (p != null) {
-                return p.ValueAsDate;
-            }
-
-            return null;
-        }
-
-        /**
          * Gets the named method on the named interface.
          */
         public Method(interfaceName: string, methodName: string): Method {
@@ -190,6 +139,7 @@ module NXKit.Web {
                 this._data = source;
                 this.UpdateType(source.Type);
                 this.UpdateName(source.Name);
+                this.UpdateValue(source.Value);
                 this.UpdateInterfaces(source);
                 this.UpdateNodes(source.Nodes);
             } catch (ex) {
@@ -202,7 +152,7 @@ module NXKit.Web {
          * Updates the type of this node with the new value.
          */
         UpdateType(type: string) {
-            this._type = type;
+            this._type = NodeType.Parse(type);
         }
 
         /**
@@ -210,6 +160,13 @@ module NXKit.Web {
          */
         UpdateName(name: string) {
             this._name = name;
+        }
+
+        /**
+         * Updates the value of this node with the new value.
+         */
+        UpdateValue(value: string) {
+            this._value = value;
         }
 
         /**

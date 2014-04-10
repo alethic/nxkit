@@ -150,6 +150,7 @@
     <TypeScriptCompile Include="Knockout\InputBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\HorizontalVisibleBindingHandler.ts" />
+    <TypeScriptCompile Include="Knockout\LayoutManagerExportBindingHandler.ts" />
     <TypeScriptCompile Include="LayoutOptions.ts" />
     <Compile Include="NXDocumentWebService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -162,6 +163,7 @@
     <TypeScriptCompile Include="Method.ts" />
     <TypeScriptCompile Include="InterfaceMap.ts" />
     <TypeScriptCompile Include="MethodMap.ts" />
+    <TypeScriptCompile Include="NodeType.ts" />
     <TypeScriptCompile Include="PropertyMap.ts" />
     <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
@@ -202,7 +204,7 @@
     <EmbeddedResource Include="Text.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="UnknownRootElement.html" />
+    <EmbeddedResource Include="Unknown.html" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="View.html" />

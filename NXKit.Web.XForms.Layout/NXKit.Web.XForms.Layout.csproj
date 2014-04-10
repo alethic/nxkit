@@ -82,7 +82,6 @@
     <TypeScriptCompile Include="SectionViewModel.ts" />
     <TypeScriptCompile Include="TableViewModel.ts" />
     <TypeScriptCompile Include="LayoutNodeViewModel.ts" />
-    <TypeScriptCompile Include="ViewModelUtil.ts" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Section.html" />

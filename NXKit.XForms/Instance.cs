@@ -13,10 +13,10 @@ namespace NXKit.XForms
 
     [Interface("{http://www.w3.org/2002/xforms}instance")]
     public class Instance :
+        ElementExtension,
         IOnInitialize
     {
 
-        readonly XElement element;
         readonly InstanceAttributes attributes;
         readonly Lazy<InstanceState> state;
 
@@ -25,20 +25,12 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Instance(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.element = element;
-            this.attributes = new InstanceAttributes(element);
-            this.state = new Lazy<InstanceState>(() => element.AnnotationOrCreate<InstanceState>());
-        }
-
-        /// <summary>
-        /// Gets the associated element.
-        /// </summary>
-        public XElement Element
-        {
-            get { return element; }
+            this.attributes = new InstanceAttributes(Element);
+            this.state = new Lazy<InstanceState>(() => Element.AnnotationOrCreate<InstanceState>());
         }
 
         /// <summary>
@@ -46,7 +38,7 @@ namespace NXKit.XForms
         /// </summary>
         XElement Model
         {
-            get { return element.Ancestors(Constants.XForms_1_0 + "model").First(); }
+            get { return Element.Ancestors(Constants.XForms_1_0 + "model").First(); }
         }
 
         /// <summary>
@@ -68,8 +60,8 @@ namespace NXKit.XForms
                 {
                     // normalize uri with base
                     var u = new Uri(attributes.Src, UriKind.RelativeOrAbsolute);
-                    if (element.BaseUri() != null && !u.IsAbsoluteUri)
-                        u = new Uri(new Uri(element.BaseUri()), u);
+                    if (Element.BaseUri() != null && !u.IsAbsoluteUri)
+                        u = new Uri(new Uri(Element.BaseUri()), u);
 
                     // return resource as a stream
                     var request = WebRequest.Create(u);
@@ -82,30 +74,30 @@ namespace NXKit.XForms
                     var instanceDataDocument = XDocument.Load(response);
 
                     // add to model
-                    State.Initialize(Model, element, instanceDataDocument);
+                    State.Initialize(Model, Element  , instanceDataDocument);
 
                     // clear body of instance
-                    element.RemoveNodes();
+                    Element.RemoveNodes();
 
                     return true;
-                }
+                }        
                 catch (UriFormatException)
                 {
-                    throw new DOMTargetEventException(element, Events.BindingException);
+                    throw new DOMTargetEventException(Element, Events.BindingException);
                 }
             }
 
             // extract instance values from xml
-            var instanceChildElements = element.Elements().ToArray();
-            element.RemoveNodes();
+            var instanceChildElements = Element.Elements().ToArray();
+            Element.RemoveNodes();
 
             // invalid number of children elements
             if (instanceChildElements.Length >= 2)
-                throw new DOMTargetEventException(element, Events.LinkException);
+                throw new DOMTargetEventException(Element, Events.LinkException);
 
             if (instanceChildElements.Length == 1)
             {
-                State.Initialize(Model, element, new XDocument(instanceChildElements[0]));
+                State.Initialize(Model, Element, new XDocument(instanceChildElements[0]));
                 return true;
             }
 
@@ -114,7 +106,7 @@ namespace NXKit.XForms
 
         void IOnInitialize.Init()
         {
-            State.Initialize(Model, element);
+            State.Initialize(Model, Element);
         }
 
     }

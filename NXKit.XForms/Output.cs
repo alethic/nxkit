@@ -1,11 +1,13 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
 
     [Interface("{http://www.w3.org/2002/xforms}output")]
-    public class Output
+    public class Output :
+        ElementExtension
     {
 
         /// <summary>
@@ -13,8 +15,9 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Output(XElement element)
+            : base(element)
         {
-
+            Contract.Requires<ArgumentNullException>(element != null);
         }
 
     }

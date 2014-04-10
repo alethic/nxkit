@@ -13,10 +13,10 @@ namespace NXKit.XForms
 
     [Interface("{http://www.w3.org/2002/xforms}model")]
     public class Model :
+        ElementExtension,
         IEventDefaultActionHandler
     {
 
-        readonly XElement element;
         readonly ModelAttributes attributes;
         readonly Lazy<ModelState> state;
         readonly Lazy<DocumentAnnotation> documentAnnotation;
@@ -26,21 +26,13 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Model(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.element = element;
-            this.attributes = new ModelAttributes(element);
-            this.state = new Lazy<ModelState>(() => element.AnnotationOrCreate<ModelState>());
-            this.documentAnnotation = new Lazy<DocumentAnnotation>(() => element.Document.AnnotationOrCreate<DocumentAnnotation>());
-        }
-
-        /// <summary>
-        /// Gets a reference to the encapsulated 'model' element.
-        /// </summary>
-        public XElement Element
-        {
-            get { return element; }
+            this.attributes = new ModelAttributes(Element);
+            this.state = new Lazy<ModelState>(() => Element.AnnotationOrCreate<ModelState>());
+            this.documentAnnotation = new Lazy<DocumentAnnotation>(() => Element.Document.AnnotationOrCreate<DocumentAnnotation>());
         }
 
         /// <summary>
@@ -69,7 +61,7 @@ namespace NXKit.XForms
         /// </summary>
         public IEnumerable<Instance> Instances
         {
-            get { return element.Elements(Constants.XForms_1_0 + "instance").SelectMany(i => i.Interfaces<Instance>()); }
+            get { return Element.Elements(Constants.XForms_1_0 + "instance").SelectMany(i => i.Interfaces<Instance>()); }
         }
 
         /// <summary>
@@ -98,36 +90,15 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets all 'bind' elements for this model.
+        /// Gets all implementations of the given extension type.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        IEnumerable<Bind> GetBindNodes()
+        IEnumerable<T> GetAllExtensions<T>()
         {
-            return element.Descendants()
-                .SelectMany(i => i.Interfaces<Bind>());
-        }
-
-        /// <summary>
-        /// Gets all of the bound nodes for this model.
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<IUIBindingNode> GetUIBindingNodes()
-        {
-            // all available ui bindings
-            return element.Document.Root
-                .DescendantsAndSelf()
-                .SelectMany(i => i.Interfaces<IUIBindingNode>());
-        }
-
-        /// <summary>
-        /// Gets all of teh UI nodes for this model.
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<IUINode> GetUINodes()
-        {
-            return element.Document.Root
-                .DescendantsAndSelf()
-                .SelectMany(i => i.Interfaces<IUINode>());
+            return Element.Document.Root
+                .DescendantNodesAndSelf()
+                .SelectMany(i => i.Interfaces<T>());
         }
 
         void IEventDefaultActionHandler.DefaultAction(Event evt)
@@ -173,10 +144,7 @@ namespace NXKit.XForms
             if (attributes.Version != null)
                 foreach (var version in attributes.Version.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     if (version != "1.0")
-                    {
-                        element.Interface<INXEventTarget>().DispatchEvent(Events.VersionException);
-                        return;
-                    }
+                        throw new DOMTargetEventException(Element, Events.VersionException);
 
             if (attributes.Schema != null)
                 foreach (var item in attributes.Schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
@@ -202,17 +170,15 @@ namespace NXKit.XForms
                 return;
 
             // refresh interface bindings
-            foreach (var ui in GetUIBindingNodes())
-                if (ui.UIBinding != null)
-                    ui.UIBinding.Refresh();
+            foreach (var ui in GetAllExtensions<IOnRefresh>())
+                ui.RefreshBinding();
 
             // discard interface events
-            foreach (var ui in GetUIBindingNodes())
-                if (ui.UIBinding != null)
-                    ui.UIBinding.DiscardEvents();
+            foreach (var ui in GetAllExtensions<IOnRefresh>())
+                ui.DiscardEvents();
 
             // refresh interfaces
-            foreach (var ui in GetUINodes())
+            foreach (var ui in GetAllExtensions<IOnRefresh>())
                 ui.Refresh();
 
             DocumentAnnotation.ConstructDoneOnce = true;
@@ -250,7 +216,7 @@ namespace NXKit.XForms
                 State.Revalidate = true;
 
                 // update each binding
-                foreach (var bind in GetBindNodes())
+                foreach (var bind in GetAllExtensions<Bind>())
                 {
                     // refresh binding properties
                     bind.Refresh();
@@ -335,19 +301,17 @@ namespace NXKit.XForms
             {
                 State.Refresh = false;
 
-                // refresh interface bindings
-                foreach (var item in GetUIBindingNodes())
-                    if (item.UIBinding != null)
-                        item.UIBinding.Refresh();
+                // refresh bindings
+                foreach (var ui in GetAllExtensions<IOnRefresh>())
+                    ui.RefreshBinding();
 
                 // refresh interfaces
-                foreach (var ui in GetUINodes())
+                foreach (var ui in GetAllExtensions<IOnRefresh>())
                     ui.Refresh();
 
-                // dispatch interface events
-                foreach (var item in GetUIBindingNodes())
-                    if (item.UIBinding != null)
-                        item.UIBinding.DispatchEvents();
+                // dispatch events
+                foreach (var item in GetAllExtensions<IOnRefresh>())
+                    item.DispatchEvents();
             }
             while (State.Refresh);
         }

@@ -1,4 +1,11 @@
 ﻿module NXKit.Web.ViewModelUtil {
+    
+    /**
+      * Set of functions to inject layout managers at the top of the hierarchy.
+      */
+    export var LayoutManagers: Array<(context) => LayoutManager> = [
+        (c) => new DefaultLayoutManager(c),
+    ];
 
     /**
       * Nodes which represent a grouping element.
@@ -113,6 +120,9 @@
             var r = new Array<Node>();
             for (var i = 0; i < l.length; i++) {
                 var v = l[i];
+                if (v == null) {
+                    throw new Error('ViewModelUtil.GetContentNodes(): prospective Node is null');
+                }
                 if (IsTransparentNode(v)) {
                     var s = GetContentNodes(v.Nodes());
                     for (var j = 0; j < s.length; j++)

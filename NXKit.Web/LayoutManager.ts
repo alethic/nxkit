@@ -46,8 +46,15 @@ module NXKit.Web {
         /**
          * Parses the given template binding information for a data structure to pass to the template lookup procedures.
          */
-        public ParseTemplateBinding(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext, data: any): any {
-            return this.Parent != null ? this.Parent.ParseTemplateBinding(valueAccessor, viewModel, bindingContext, data || {}) : data || {};
+        public GetTemplateOptions_(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext, options: any): any {
+            return this.GetTemplateOptions(valueAccessor, viewModel, bindingContext, options);
+        }
+
+        /**
+         * Parses the given template binding information for a data structure to pass to the template lookup procedures.
+         */
+        public GetTemplateOptions(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext, options: any): any {
+            return this.Parent != null ? this.Parent.GetTemplateOptions(valueAccessor, viewModel, bindingContext, options || {}) : options || {};
         }
 
         /**
@@ -64,6 +71,34 @@ module NXKit.Web {
             // append parent templates to local templates
             return this.GetLocalTemplates()
                 .concat(this.Parent != null ? this.Parent.GetTemplates() : new Array<HTMLElement>());
+        }
+
+        /**
+         * Helper method for resolving a node given a Knockout context.
+         */
+        public GetNode(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext): Node {
+            // extract data to be used to search for a template
+            var value = ko.unwrap(valueAccessor());
+
+            // node specified as existing view model
+            if (viewModel != null) {
+                var viewModel_ = ko.unwrap(viewModel);
+                if (viewModel_ instanceof Node) {
+                    return viewModel_;
+                }
+            }
+
+            // node specified explicitely as value
+            if (value != null &&
+                value instanceof Node) {
+                return value;
+            }
+
+            // node specified as value.node
+            if (value != null &&
+                value.node != null) {
+                return ko.unwrap(value.node);
+            }
         }
 
         /**
@@ -103,9 +138,20 @@ module NXKit.Web {
          * Tests whether a template node matches the given data.
          */
         public TemplatePredicate(node: HTMLElement, data: any): boolean {
-            var d1 = this.GetTemplateNodeData(node);
-            var d2 = data;
-            return Util.DeepEquals(d1, d2);
+
+            // data has no properties
+            if (data != null &&
+                Object.getOwnPropertyNames(data).length == 0)
+                return false;
+
+            // extract data-nxkit attributes from template node
+            var tmpl = this.GetTemplateNodeData(node);
+
+            // template has no properties, should not correspond with anything
+            if (Object.getOwnPropertyNames(tmpl).length == 0)
+                return false;
+
+            return Util.DeepEquals(tmpl, data);
         }
 
         /**
@@ -119,18 +165,17 @@ module NXKit.Web {
         /**
          * Gets the appropriate template for the given data.
          */
-        public GetTemplate(data: any): KnockoutObservable<HTMLElement> {
-            return ko.computed<HTMLElement>(() => this.TemplateFilter(this.GetTemplates(), data)[0] || this.GetUnknownTemplate(data));
+        public GetTemplate(data: any): HTMLElement {
+            return this.TemplateFilter(this.GetTemplates(), data)[0] || this.GetUnknownTemplate(data);
         }
 
         /**
          * Gets the template that applies for the given data.
          */
-        public GetTemplateName(data: any): KnockoutObservable<string> {
-            return ko.computed<string>(() => {
-                var node = this.GetTemplate(data)();
+        public GetTemplateName(data: any): string {
+                var node = this.GetTemplate(data);
                 if (node == null)
-                    throw new Error('GetTemplate: no template located');
+                    throw new Error('LayoutManager.GetTemplate: no template located');
 
                 // ensure the node has a valid and unique id
                 if (node.id == '')
@@ -138,7 +183,6 @@ module NXKit.Web {
 
                 // caller expects the id
                 return node.id;
-            });
         }
 
     }

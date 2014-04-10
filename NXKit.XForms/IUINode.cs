@@ -8,13 +8,29 @@
     public interface IUINode
     {
 
+        /// <summary>
+        /// Gets whether the given node is considered relevant.
+        /// </summary>
         [Remote]
-        UI UI { get; }
+        bool Relevant { get; }
 
         /// <summary>
-        /// Initiates a refresh of the node.
+        /// Gets whether the given node is considered read-only.
         /// </summary>
-        void Refresh();
+        [Remote]
+        bool ReadOnly { get; }
+
+        /// <summary>
+        /// Gets whether the given node is considered required.
+        /// </summary>
+        [Remote]
+        bool Required { get; }
+
+        /// <summary>
+        /// Gets whether the give node is considered valid.
+        /// </summary>
+        [Remote]
+        bool Valid { get; }
 
     }
 

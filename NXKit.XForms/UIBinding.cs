@@ -11,9 +11,8 @@ namespace NXKit.XForms
 {
 
     /// <summary>
-    /// Encapsulates the binding information for a UI element.
+    /// Encapsulates the binding information for an interface element.
     /// </summary>
-    [Remote]
     public class UIBinding
     {
 
@@ -94,6 +93,10 @@ namespace NXKit.XForms
             get { return GetRelevant(); }
         }
 
+        /// <summary>
+        /// Implements the getter for Relevant.
+        /// </summary>
+        /// <returns></returns>
         bool GetRelevant()
         {
             if (State.Relevant == false)
@@ -311,7 +314,7 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Clears all pending events.
+        /// Discards all pending events.
         /// </summary>
         public void DiscardEvents()
         {

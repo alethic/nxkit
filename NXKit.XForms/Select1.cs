@@ -10,10 +10,10 @@ namespace NXKit.XForms
 
     [Interface("{http://www.w3.org/2002/xforms}select1")]
     [Remote]
-    public class Select1
+    public class Select1 :
+        ElementExtension
     {
 
-        readonly XElement element;
         readonly Select1Attributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<IUIBindingNode> uiBindingNode;
@@ -23,21 +23,13 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Select1(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.element = element;
-            this.attributes = new Select1Attributes(element);
-            this.bindingNode = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
-            this.uiBindingNode = new Lazy<IUIBindingNode>(() => element.Interface<IUIBindingNode>());
-        }
-
-        /// <summary>
-        /// Gets the element.
-        /// </summary>
-        public XElement Element
-        {
-            get { return element; }
+            this.attributes = new Select1Attributes(Element);
+            this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
+            this.uiBindingNode = new Lazy<IUIBindingNode>(() => Element.Interface<IUIBindingNode>());
         }
 
         /// <summary>

@@ -1,39 +1,28 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
 
     [Interface("{http://www.w3.org/2002/xforms}range")]
-    [Remote]
-    public class Range 
+    public class Range :
+        ElementExtension
     {
+
+        readonly RangeAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         public Range(XElement element)
+            : base(element)
         {
+            Contract.Requires<ArgumentNullException>(element != null);
 
+            this.attributes = new RangeAttributes(Element);
         }
-
-        //[Public]
-        //public string Start
-        //{
-        //    get { return Module.GetAttributeValue(Xml, "start"); }
-        //}
-
-        //[Public]
-        //public string End
-        //{
-        //    get { return Module.GetAttributeValue(Xml, "end"); }
-        //}
-
-        //[Public]
-        //public string Step
-        //{
-        //    get { return Module.GetAttributeValue(Xml, "step"); }
-        //}
 
     }
 

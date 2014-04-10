@@ -94,25 +94,25 @@
         }
 
         GetRelevant(): KnockoutObservable<boolean> {
-            return ko.computed(() => ViewModelUtil.HasUIBinding(this._itemNode) ? ViewModelUtil.GetRelevant(this._itemNode)() : true);
+            return ko.computed(() => ViewModelUtil.IsUINode(this._itemNode) ? ViewModelUtil.GetRelevant(this._itemNode)() : true);
         }
 
         GetReadOnly(): KnockoutObservable<boolean> {
-            return ko.computed(() => ViewModelUtil.HasUIBinding(this._itemNode) ? ViewModelUtil.GetReadOnly(this._itemNode)() : false);
+            return ko.computed(() => ViewModelUtil.IsUINode(this._itemNode) ? ViewModelUtil.GetReadOnly(this._itemNode)() : false);
         }
 
         GetRequired(): KnockoutObservable<boolean> {
-            return ko.computed(() => ViewModelUtil.HasUIBinding(this._itemNode) ? ViewModelUtil.GetRequired(this._itemNode)() : false);
+            return ko.computed(() => ViewModelUtil.IsUINode(this._itemNode) ? ViewModelUtil.GetRequired(this._itemNode)() : false);
         }
 
         GetValid(): KnockoutObservable<boolean> {
-            return ko.computed(() => ViewModelUtil.HasUIBinding(this._itemNode) ? ViewModelUtil.GetValid(this._itemNode)() : true);
+            return ko.computed(() => ViewModelUtil.IsUINode(this._itemNode) ? ViewModelUtil.GetValid(this._itemNode)() : true);
         }
 
         GetLabel(): Node {
             var self = this;
-            if (self._itemNode.Type == 'NXKit.XForms.Input' &&
-                ViewModelUtil.GetType(self._itemNode)() == '{http://www.w3.org/2001/XMLSchema}boolean')
+            if (self._itemNode.Name == '{http://www.w3.org/2002/xforms}input' &&
+                ViewModelUtil.GetDataType(self._itemNode)() == '{http://www.w3.org/2001/XMLSchema}boolean')
                 // boolean inputs provide their own label
                 return null;
             else
@@ -125,7 +125,7 @@
 
         GetLayout(): any {
             return {
-                template: 'NXKit.XForms.Group',
+                name: '{http://www.w3.org/2002/xforms}group',
                 data: this,
                 layout: 'node',
                 level: this.Level,
@@ -186,7 +186,7 @@
 
         GetLayout(): any {
             return {
-                template: 'NXKit.XForms.Group',
+                name: '{http://www.w3.org/2002/xforms}group',
                 data: this,
                 layout: this.GetLayoutName(),
                 level: this.Level,
@@ -254,7 +254,7 @@
 
         GetLayout(): any {
             return {
-                template: 'NXKit.XForms.Group',
+                name: '{http://www.w3.org/2002/xforms}group',
                 data: this,
                 layout: 'group',
                 level: this.Level,
@@ -280,11 +280,11 @@
                 var v = cnts[i];
 
                 // nested group obtains single child
-                if (v.Type == 'NXKit.XForms.Group') {
+                if (v.Name == '{http://www.w3.org/2002/xforms}group') {
                     var groupItem = GetGroupItem(viewModel, v, level);
                     list.push(groupItem);
                     continue;
-                } else if (v.Type == 'NXKit.XForms.TextArea') {
+                } else if (v.Name == '{http://www.w3.org/2002/xforms}textarea') {
                     var textAreaItem = new Row(viewModel, level);
                     textAreaItem.Done = true;
                     list.push(textAreaItem);

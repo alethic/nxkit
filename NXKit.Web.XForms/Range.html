@@ -1,29 +1,28 @@
 ﻿<script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}range">
+    <!-- ko nxkit_template: {
+        node: Node,
+        data: $data,
+        'data-type': '{http://www.w3.org/2001/XMLSchema}integer',
+    } -->
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}range"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}int">
+    <!-- ko nxkit_template: {
+        node: Node,
+        data: $data,
+        'data-type': '{http://www.w3.org/2001/XMLSchema}integer',
+    } -->
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}range"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}integer">
     <!-- ko with: new NXKit.Web.XForms.RangeViewModel($context, $data) -->
-    <!-- ko nxkit_template: {
-        node: Node,
-        data: $data,
-        type: Type,
-    } -->
-    <!-- /ko -->
-    <!-- /ko -->
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}range"
-        data-nxkit-type="{http://www.w3.org/2001/XMLSchema}int">
-    <!-- ko nxkit_template: {
-        node: Node,
-        data: $data,
-        type: '{http://www.w3.org/2001/XMLSchema}integer',
-    } -->
-    <!-- /ko -->
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}range"
-        data-nxkit-type="{http://www.w3.org/2001/XMLSchema}integer">
     <input type="number"
            data-bind="
     value: ValueAsNumber,
@@ -32,4 +31,5 @@
         max: End,
         step: Step,
     }" />
+    <!-- /ko -->
 </script>

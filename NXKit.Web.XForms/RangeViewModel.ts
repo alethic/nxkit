@@ -10,15 +10,15 @@ module NXKit.Web.XForms {
         }
 
         public get Start(): KnockoutObservable<number> {
-            return this.Node.ValueAsNumber('NXKit.XForms.Range', 'Start');
+            return this.Node.Property('NXKit.XForms.Range', 'Start').ValueAsNumber;
         }
 
         public get End(): KnockoutObservable<number> {
-            return this.Node.ValueAsNumber('NXKit.XForms.Range', 'End');
+            return this.Node.Property('NXKit.XForms.Range', 'End').ValueAsNumber;
         }
 
         public get Step(): KnockoutObservable<number> {
-            return this.Node.ValueAsNumber('NXKit.XForms.Range', 'Step');
+            return this.Node.Property('NXKit.XForms.Range', 'Step').ValueAsNumber;
         }
 
     }

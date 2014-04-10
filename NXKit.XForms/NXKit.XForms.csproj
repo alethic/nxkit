@@ -121,7 +121,9 @@
     <Compile Include="BindingUtil.cs" />
     <Compile Include="ElementEvaluationContextResolver.cs" />
     <Compile Include="EvaluationContextResolver.cs" />
-    <Compile Include="IUIBinding.cs" />
+    <Compile Include="IOnRecalculate.cs" />
+    <Compile Include="IOnRefresh.cs" />
+    <Compile Include="IDataNode.cs" />
     <Compile Include="ModelAttributes.cs" />
     <Compile Include="InstanceAttributes.cs" />
     <Compile Include="AttributeAccessor.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="DeleteAttributes.cs" />
     <Compile Include="ItemState.cs" />
     <Compile Include="DocumentInvoke.cs" />
+    <Compile Include="RangeAttributes.cs" />
     <Compile Include="RepeatAttributes.cs" />
     <Compile Include="ItemValueAttributes.cs" />
     <Compile Include="ISelectableValue.cs" />
@@ -153,12 +156,13 @@
     <Compile Include="IUIBindingNode.cs" />
     <Compile Include="IUINode.cs" />
     <Compile Include="ModelItem.cs" />
-    <Compile Include="BindingElement.cs" />
+    <Compile Include="BindingNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaPackage.cs" />
     <Compile Include="Script.cs" />
     <Compile Include="Switch.cs" />
-    <Compile Include="UI.cs" />
+    <Compile Include="DataNode.cs" />
+    <Compile Include="UINode.cs" />
     <Compile Include="UIBinding.cs" />
     <Compile Include="UIBindingNode.cs" />
     <Compile Include="UIBindingState.cs" />

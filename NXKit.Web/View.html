@@ -1,11 +1,8 @@
 ﻿<script type="text/html"
-        id="NXKit.View"
-        data-nxkit-template="NXKit.View">
+        id="NXKit.View">
 
-    <div class="ui inline loader" data-bind="css: { active: Busy }"></div>
-
-    <!-- ko with: new NXKit.Web.DefaultLayoutManager($context) -->
-    <!-- ko nxkit_template: $parent.Root -->
+    <!-- ko nxkit_layout_manager_export -->
+    <!-- ko nxkit_template: $data.Root -->
     <!-- /ko -->
     <!-- /ko -->
 </script>

@@ -128,6 +128,7 @@
     <TypeScriptCompile Include="..\NXKit.Web\NXKit.d.ts">
       <Link>Scripts\nxkit\NXKit.d.ts</Link>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="DefaultLayoutManager.ts" />
     <TypeScriptCompile Include="GroupLayoutManager.ts" />
   </ItemGroup>
   <ItemGroup>

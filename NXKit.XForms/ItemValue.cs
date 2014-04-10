@@ -9,10 +9,10 @@ namespace NXKit.XForms
 
     [Interface("{http://www.w3.org/2002/xforms}value")]
     public class ItemValue :
+        ElementExtension,
         ISelectableValue
     {
 
-        readonly XElement element;
         readonly ItemValueAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
@@ -22,21 +22,13 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public ItemValue(XElement element)
+            :base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.element = element;
-            this.attributes = new ItemValueAttributes(element);
-            this.bindingNode = new Lazy<IBindingNode>(() => element.Interface<IBindingNode>());
+            this.attributes = new ItemValueAttributes(Element);
+            this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
             this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
-        }
-
-        /// <summary>
-        /// Gets the 'value' element.
-        /// </summary>
-        public XElement Element
-        {
-            get { return element; }
         }
 
         /// <summary>
@@ -75,7 +67,7 @@ namespace NXKit.XForms
             if (ValueBinding != null)
                 return ValueBinding.Value;
 
-            return element.Value;
+            return Element.Value;
         }
 
         public void Select(UIBinding ui)

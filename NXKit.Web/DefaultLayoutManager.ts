@@ -13,68 +13,39 @@ module NXKit.Web {
         /**
          * Parses the given template binding information for a data structure to pass to the template lookup procedures.
          */
-        public ParseTemplateBinding(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, data: any): any {
+        public GetTemplateOptions(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, options: any): any {
             try {
-                data = super.ParseTemplateBinding(valueAccessor, viewModel, bindingContext, data);
+                options = super.GetTemplateOptions(valueAccessor, viewModel, bindingContext, options);
+                var node = super.GetNode(valueAccessor, viewModel, bindingContext);
+                var value = ko.unwrap(valueAccessor());
 
-                // extract data to be used to search for a template
-                var value = valueAccessor();
+                // find element types by element name
+                if (node != null &&
+                    node.Type == NodeType.Element) {
+                    options.name = node.Name;
+                }
 
-                // name specified
+                // find text node by type
+                if (node != null &&
+                    node.Type == NodeType.Text) {
+                    options.type = NodeType.Text.ToString();
+                }
+
+                // name specified explicitely
                 if (value != null &&
                     value.name != null) {
-                    var name = <string>ko.unwrap(value.name);
-                    if (name != null) {
-                        data.name = name;
-                    }
-                }
-
-                // node
-                if (data.name == null &&
-                    value != null &&
-                    ko.unwrap(value) instanceof Node) {
-                    var node = <Node>ko.unwrap(value);
-                    if (node.Name != null) {
-                        data.name = node.Name;
-                    }
-                }
-
-                // value.node
-                if (data.name == null &&
-                    value != null &&
-                    value.node != null &&
-                    ko.unwrap(value.node) instanceof Node) {
-                    var node = <Node>ko.unwrap(value.node);
-                    if (node.Name != null) {
-                        data.name = node.Name;
-                    }
-                }
-
-                // viewModel with template
-                if (data.name == null &&
-                    viewModel instanceof Node) {
-                    var node = <Node>viewModel;
-                    if (node.Name != null) {
-                        data.name = node.Name;
-                    }
-                }
-
-                // specified data type
-                if (value != null &&
-                    value.type != null) {
-                    data.type = ko.unwrap(value.type);
+                    options.name = <string>ko.unwrap(value.name);
                 }
 
                 // extract layout binding
                 if (value != null &&
-                    value.layout != null &&
-                    ko.unwrap(value.layout) != null) {
-                    data.layout = ko.unwrap(value.layout);
+                    value.layout != null) {
+                    options.layout = ko.unwrap(value.layout);
                 }
 
-                return data;
+                return options;
             } catch (ex) {
-                ex.message = "DefaultLayoutManager.ParseTemplateBinding()" + '\nMessage: ' + ex.message;
+                ex.message = "DefaultLayoutManager.GetTemplateOptions()" + '\nMessage: ' + ex.message;
                 throw ex;
             }
         }

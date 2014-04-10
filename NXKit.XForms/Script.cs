@@ -15,35 +15,33 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}script")]
     [Remote]
     public class Script :
+        ElementExtension,
         IAction
     {
-
-        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         public Script(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-
-            this.element = element;
         }
 
         public string Type
         {
-            get { return (string)element.Attribute("type"); }
+            get { return (string)Element.Attribute("type"); }
         }
 
         IDocumentScript DocumentScript
         {
-            get { return element.Document.Interface<IDocumentScript>(); }
+            get { return Element.Document.Interface<IDocumentScript>(); }
         }
 
         public void Invoke()
         {
-            DocumentScript.Execute(Type, element.Value);
+            DocumentScript.Execute(Type, Element.Value);
         }
 
         public void Handle(Event evt)

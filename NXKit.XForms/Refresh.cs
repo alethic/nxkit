@@ -10,10 +10,10 @@ namespace NXKit.XForms
 
     [Interface("{http://www.w3.org/2002/xforms}refresh")]
     public class Refresh :
+        ElementExtension,
         IAction
     {
 
-        readonly XElement element;
         readonly AttributeAccessor attributes;
 
         /// <summary>
@@ -21,10 +21,9 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Refresh(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-
-            this.element = element;
         }
 
         public void Handle(Event ev)
@@ -37,12 +36,12 @@ namespace NXKit.XForms
             var modelAttr = attributes.GetAttributeValue("model");
             if (modelAttr != null)
             {
-                var model = element.ResolveId(modelAttr);
+                var model = Element.ResolveId(modelAttr);
                 if (model != null)
                     model.Interface<Model>().OnRefresh();
                 else
                 {
-                    element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
+                    Element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
                     return;
                 }
             }

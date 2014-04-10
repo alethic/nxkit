@@ -8,11 +8,11 @@
         }
 
         public get Value(): KnockoutObservable<any> {
-            return ViewModelUtil.GetValue(this.Node);
+            return ViewModelUtil.GetDataValue(this.Node);
         }
 
         public get ValueAsString(): KnockoutObservable<string> {
-            return ViewModelUtil.GetValueAsString(this.Node);
+            return ViewModelUtil.GetDataValueAsString(this.Node);
         }
 
         public get ValueAsBoolean(): KnockoutObservable<boolean> {
@@ -40,7 +40,7 @@
         }
 
         public get Type(): KnockoutObservable<string> {
-            return ViewModelUtil.GetType(this.Node);
+            return ViewModelUtil.GetDataType(this.Node);
         }
 
         public get Appearance(): KnockoutObservable<string> {

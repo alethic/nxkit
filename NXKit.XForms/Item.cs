@@ -10,10 +10,10 @@ namespace NXKit.XForms
 
     [Interface("{http://www.w3.org/2002/xforms}item")]
     public class Item :
+        ElementExtension,
         ISelectable
     {
 
-        readonly XElement element;
         readonly Lazy<ISelectableValue> value;
 
         /// <summary>
@@ -21,11 +21,11 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public Item(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.element = element;
-            this.value = new Lazy<ISelectableValue>(() => element
+            this.value = new Lazy<ISelectableValue>(() => Element
                 .Descendants()
                 .SelectMany(i => i.Interfaces<ISelectableValue>())
                 .FirstOrDefault());
@@ -45,7 +45,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         string GetId()
         {
-            var state = element.AnnotationOrCreate<ItemState>();
+            var state = Element.AnnotationOrCreate<ItemState>();
             if (state.id == null)
                 state.id = Guid.NewGuid().ToString("N");
 

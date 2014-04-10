@@ -9,15 +9,15 @@ module NXKit.Web.XForms {
             return ko.computed<string>({
                 read: () => {
                     if (node != null &&
-                        node.ValueAsString('NXKit.XForms.Select1', 'SelectedId') != null)
-                        return node.ValueAsString('NXKit.XForms.Select1', 'SelectedId')();
+                        node.Property('NXKit.XForms.Select1', 'SelectedId') != null)
+                        return node.Property('NXKit.XForms.Select1', 'SelectedId').ValueAsString();
                     else
                         return null;
                 },
                 write: _ => {
                     if (node != null &&
-                        node.ValueAsString('NXKit.XForms.Select1', 'SelectedId') != null)
-                        node.ValueAsString('NXKit.XForms.Select1', 'SelectedId')(_);
+                        node.Property('NXKit.XForms.Select1', 'SelectedId') != null)
+                        node.Property('NXKit.XForms.Select1', 'SelectedId').ValueAsString(_);
                 },
             });
         }

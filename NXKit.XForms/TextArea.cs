@@ -6,7 +6,8 @@ namespace NXKit.XForms
 {
 
     [Interface("{http://www.w3.org/2002/xforms}textarea")]
-    public class TextArea 
+    public class TextArea :
+        ElementExtension
     {
 
         /// <summary>
@@ -14,6 +15,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public TextArea(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }

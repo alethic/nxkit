@@ -11,28 +11,18 @@ namespace NXKit.XForms
 
     [Interface("{http://www.w3.org/2002/xforms}action")]
     public class Action :
+        ElementExtension,
         IAction
     {
-
-        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         public Action(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-
-            this.element = element;
-        }
-
-        /// <summary>
-        /// Gets the associated element.
-        /// </summary>
-        public XElement Element
-        {
-            get { return element; }
         }
 
         public void Handle(Event ev)
@@ -42,7 +32,7 @@ namespace NXKit.XForms
 
         public void Invoke()
         {
-            var actions = element
+            var actions = Element
                 .Elements()
                 .SelectMany(i => i.Interfaces<IAction>());
 

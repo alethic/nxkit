@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using System.Xml;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
@@ -10,14 +9,14 @@ namespace NXKit.XForms
 {
 
     /// <summary>
-    /// Provides a <see cref="Binding"/> for a UI element.
+    /// Provides a <see cref="Binding"/> for an element.
     /// </summary>
-    [Interface(XmlNodeType.Element)]
-    public class BindingElement :
+    [Interface]
+    public class BindingNode :
+        ElementExtension,
         IBindingNode
     {
 
-        readonly XElement element;
         readonly BindingAttributes attributes;
         readonly Lazy<EvaluationContextResolver> resolver;
         readonly Lazy<Binding> binding;
@@ -26,13 +25,13 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public BindingElement(XElement element)
+        public BindingNode(XElement element)
+            :base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.element = element;
-            this.attributes = new BindingAttributes(element);
-            this.resolver = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
+            this.attributes = new BindingAttributes(Element);
+            this.resolver = new Lazy<EvaluationContextResolver>(() => Element.Interface<EvaluationContextResolver>());
             this.binding = new Lazy<Binding>(() => GetOrCreateBinding());
         }
 
@@ -71,9 +70,9 @@ namespace NXKit.XForms
             // obtain evaluation context
             var context = resolver.Value.Context;
             if (context == null)
-                throw new DOMTargetEventException(element, Events.BindingException);
+                throw new DOMTargetEventException(Element, Events.BindingException);
 
-            return new Binding(element, context, expression);
+            return new Binding(Element, context, expression);
         }
 
         /// <summary>
@@ -83,9 +82,9 @@ namespace NXKit.XForms
         Binding GetBindBinding(string bindIdRef)
         {
             // resolve bind element
-            var bind = element.ResolveId(bindIdRef);
+            var bind = Element.ResolveId(bindIdRef);
             if (bind == null)
-                throw new DOMTargetEventException(element, Events.BindingException);
+                throw new DOMTargetEventException(Element, Events.BindingException);
 
             var binding = bind.InterfaceOrDefault<IBindingNode>();
             if (binding != null)

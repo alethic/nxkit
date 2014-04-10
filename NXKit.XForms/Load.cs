@@ -8,21 +8,19 @@ namespace NXKit.XForms
 {
 
     [Interface("{http://www.w3.org/2002/xforms}load")]
-    public class Load : 
+    public class Load :
+        ElementExtension,
         IAction
     {
-
-        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         public Load(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-
-            this.element = element;
         }
 
         public void Handle(Event ev)

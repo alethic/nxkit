@@ -6,19 +6,17 @@ namespace NXKit.XForms
 {
 
     [Interface("{http://www.w3.org/2002/xforms}group")]
-    public class Group 
+    public class Group :
+        ElementExtension
     {
-
-        readonly XElement element;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public Group(XElement element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-
-            this.element = element;
         }
 
     }

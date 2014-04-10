@@ -21,8 +21,8 @@ module NXKit.Web.XForms {
             var s = '';
             var l = n.Nodes();
             for (var i = 0; i < l.length; i++)
-                if (l[i].Type === 'NXKit.NXText')
-                    s += l[i].Property('NXKit.NXText', 'Value').ValueAsString();
+                if (l[i].Type === NodeType.Text)
+                    s += l[i].Value;
             return s;
         }
 
