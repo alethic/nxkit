@@ -119,13 +119,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IOnInitialize.cs" />
     <Compile Include="NodeAnnotation.cs" />
     <Compile Include="DocumentAnnotation.cs" />
     <Compile Include="IInterfacePredicate.cs" />
     <Compile Include="InterfaceDescriptor.cs" />
     <Compile Include="InterfacePredicateBase.cs" />
     <Compile Include="IOnInvoke.cs" />
-    <Compile Include="IOnInitialize.cs" />
+    <Compile Include="IOnLoad.cs" />
     <Compile Include="InterfaceAttribute.cs" />
     <Compile Include="DefaultInterfaceProvider.cs" />
     <Compile Include="IInterfaceProvider.cs" />

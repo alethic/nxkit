@@ -126,8 +126,34 @@ namespace NXKit
             // ensure XML document has access to document host
             xml.AddAnnotation(this);
 
-            // ensure document has been invoked at least once
+            // start up document
+            InvokeInitialize();
+            InvokeLoad();
             Invoke();
+        }
+
+        /// <summary>
+        /// Invokes any IOnInitialize interfaces the first time the document is loaded.
+        /// </summary>
+        void InvokeInitialize()
+        {
+            var state = xml.AnnotationOrCreate<DocumentAnnotation>();
+            if (state.Initialized)
+                return;
+
+            foreach (var init in xml.DescendantsAndSelf().SelectMany(i => i.Interfaces<IOnInitialize>()))
+                init.Initialize();
+
+            state.Initialized = true;
+        }
+
+        /// <summary>
+        /// Invokes any IOnLoad interfaces.
+        /// </summary>
+        void InvokeLoad()
+        {
+            foreach (var load in xml.DescendantsAndSelf().SelectMany(i => i.Interfaces<IOnLoad>()))
+                load.Load();
         }
 
         /// <summary>
