@@ -1,4 +1,6 @@
-﻿namespace NXKit.XForms
+﻿using System.Xml.Linq;
+
+namespace NXKit.XForms
 {
 
     /// <summary>
@@ -31,6 +33,12 @@
         /// </summary>
         [Remote]
         bool Valid { get; }
+
+        /// <summary>
+        /// Author-optional attribute to define an appearance hint. If absent, the user agent may freely choose any suitable rendering.
+        /// </summary>
+        [Remote]
+        XName Appearance { get; }
 
     }
 

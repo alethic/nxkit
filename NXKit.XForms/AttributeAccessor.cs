@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+using System.Linq;
 
 namespace NXKit.XForms
 {
@@ -33,7 +35,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public AttributeAccessor(XElement element)
-            :this(element, Constants.XForms_1_0)
+            : this(element, Constants.XForms_1_0)
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }
@@ -61,6 +63,57 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(name != null);
 
             return (string)GetAttribute(name);
+        }
+
+        /// <summary>
+        /// Extracts a prefixed name from an attribute.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public XName GetAttributePrefixedName(string name)
+        {
+            Contract.Requires<ArgumentNullException>(name != null);
+
+            return GetAttributePrefixedNames(name).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Extracts a sequence of prefixed names from an attribute.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public IEnumerable<XName> GetAttributePrefixedNames(string name)
+        {
+            Contract.Requires<ArgumentNullException>(name != null);
+
+            var attr = GetAttribute(name);
+            if (attr == null)
+                yield break;
+
+            var value = attr.Value;
+            if (string.IsNullOrEmpty(value))
+                yield break;
+
+            foreach (var v in value.Split(' '))
+            {
+                var i = v.IndexOf(':');
+                if (i == -1)
+                    yield return attr.Parent.Name.Namespace + v;
+
+                var prefix = value.Substring(0, i + 1);
+                if (string.IsNullOrWhiteSpace(prefix))
+                    prefix = null;
+
+                var suffix = value.Substring(i);
+                if (string.IsNullOrWhiteSpace(suffix))
+                    suffix = null;
+
+                var ns = prefix != null ? attr.Parent.GetNamespaceOfPrefix(prefix) : attr.Parent.Name.Namespace;
+                if (ns == null)
+                    throw new Exception();
+
+                yield return ns + suffix;
+            }
         }
 
         /// <summary>

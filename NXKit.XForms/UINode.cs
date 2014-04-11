@@ -17,6 +17,8 @@ namespace NXKit.XForms
         IUINode
     {
 
+        readonly CommonAttributes attributes;
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -25,6 +27,8 @@ namespace NXKit.XForms
             :base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+
+            this.attributes = new CommonAttributes(Element);
         }
 
         /// <summary>
@@ -121,6 +125,14 @@ namespace NXKit.XForms
                 return next.Valid;
 
             return true;
+        }
+
+        /// <summary>
+        /// Author-optional attribute to define an appearance hint. If absent, the user agent may freely choose any suitable rendering.
+        /// </summary>
+        public XName Appearance
+        {
+            get { return attributes.Appearance; }
         }
 
     }

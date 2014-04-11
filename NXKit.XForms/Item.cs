@@ -34,7 +34,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets a unique identifier for the selectable.
         /// </summary>
-        public string Id
+        public Guid Id
         {
             get { return GetId(); }
         }
@@ -43,13 +43,13 @@ namespace NXKit.XForms
         /// Implements the getter for Id.
         /// </summary>
         /// <returns></returns>
-        string GetId()
+        Guid GetId()
         {
             var state = Element.AnnotationOrCreate<ItemState>();
-            if (state.id == null)
-                state.id = Guid.NewGuid().ToString("N");
+            if (state.Id == Guid.Empty)
+                state.Id = Guid.NewGuid();
 
-            return state.id;
+            return state.Id;
         }
 
         public void Select(UIBinding ui)

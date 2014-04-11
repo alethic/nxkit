@@ -40,6 +40,14 @@ namespace NXKit.XForms
             get { return GetAttributeValue("context"); }
         }
 
+        /// <summary>
+        /// Gets the 'appearance' attribute.
+        /// </summary>
+        public XName Appearance
+        {
+            get { return GetAttributePrefixedName("appearance"); }
+        }
+
     }
 
 }

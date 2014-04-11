@@ -84,10 +84,7 @@ module NXKit.Web.XForms.ViewModelUtil {
     }
 
     export function GetAppearance(node: Node): KnockoutObservable<string> {
-        return ko.computed(() => {
-            var p = node.Property('NXKit.XForms.IUIAppearance', "Appearance");
-            return p != null ? p.ValueAsString() : null;
-        });
+        return node.Property(Constants.UINode, 'Appearance').ValueAsString;
     }
 
     export function GetLabelNode(node: Node): Node {

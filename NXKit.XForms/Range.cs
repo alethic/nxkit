@@ -6,6 +6,7 @@ namespace NXKit.XForms
 {
 
     [Interface("{http://www.w3.org/2002/xforms}range")]
+    [Remote]
     public class Range :
         ElementExtension
     {
@@ -22,6 +23,24 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.attributes = new RangeAttributes(Element);
+        }
+
+        [Remote]
+        public int? Start
+        {
+            get { return attributes.Start; }
+        }
+
+        [Remote]
+        public int? End
+        {
+            get { return attributes.End; }
+        }
+
+        [Remote]
+        public int? Step
+        {
+            get { return attributes.Step; }
         }
 
     }

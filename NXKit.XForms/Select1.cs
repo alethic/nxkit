@@ -43,6 +43,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets whether the selection is open or closed.
         /// </summary>
+        [Remote]
         public bool Open
         {
             get { return Attributes.Selection != "closed"; }
@@ -107,6 +108,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the currently selected item element.
         /// </summary>
+        [Remote]
         public ISelectable Selected
         {
             get { return GetSelected(); }
@@ -146,9 +148,9 @@ namespace NXKit.XForms
         /// Gets or sets the unique identifier of the selected item.
         /// </summary>
         [Remote]
-        public string SelectedId
+        public Guid? SelectedId
         {
-            get { return Selected != null ? Selected.Id : null; }
+            get { return Selected != null ? (Guid?)Selected.Id : null; }
             set { SetSelectedId(value); }
         }
 
@@ -156,11 +158,11 @@ namespace NXKit.XForms
         /// Implements the setter for SelectedItemVisualId.
         /// </summary>
         /// <param name="id"></param>
-        void SetSelectedId(string id)
+        void SetSelectedId(Guid? id)
         {
-            Selected = Element.Descendants()
+            Selected = id != null ? Element.Descendants()
                 .SelectMany(i => i.Interfaces<ISelectable>())
-                .FirstOrDefault(i => i.Id == id);
+                .FirstOrDefault(i => i.Id == (Guid)id) : null;
         }
 
     }
