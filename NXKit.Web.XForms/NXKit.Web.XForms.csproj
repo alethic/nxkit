@@ -132,6 +132,7 @@
     <TypeScriptCompile Include="GroupLayoutManager.ts" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="TriggerViewModel.ts" />
     <TypeScriptCompile Include="SelectUtil.ts" />
     <TypeScriptCompile Include="GroupUtil.ts" />
@@ -154,7 +155,6 @@
     <TypeScriptCompile Include="RangeViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Select1ViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
