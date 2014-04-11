@@ -15,34 +15,35 @@ namespace NXKit.DOMEvents
     /// Implements the <see cref="IEventTarget"/> interface.
     /// </summary>
     [Interface(XmlNodeType.Element)]
+    [Interface(XmlNodeType.Text)]
     public class EventTarget :
         IEventTarget
     {
 
-        readonly XElement element;
+        readonly XNode node;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="element"></param>
-        public EventTarget(XElement element)
+        /// <param name="node"></param>
+        public EventTarget(XNode node)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(node != null);
 
-            this.element = element;
+            this.node = node;
         }
 
-        public XElement Node
+        public XNode Node
         {
-            get { return element; }
+            get { return node; }
         }
 
         public void AddEventListener(string type, IEventListener listener, bool useCapture)
         {
             // initialize listener map
-            var listenerMap = element.Annotation<EventListenerMap>();
+            var listenerMap = node.Annotation<EventListenerMap>();
             if (listenerMap == null)
-                element.AddAnnotation(listenerMap = new EventListenerMap());
+                node.AddAnnotation(listenerMap = new EventListenerMap());
 
             // initialize listeners list
             var listeners = listenerMap.GetOrDefault(type);
@@ -59,7 +60,7 @@ namespace NXKit.DOMEvents
 
         public void RemoveEventListener(string type, IEventListener listener, bool useCapture)
         {
-            var listenerMap = element.Annotation<EventListenerMap>();
+            var listenerMap = node.Annotation<EventListenerMap>();
             if (listenerMap == null)
                 return;
 
@@ -76,7 +77,7 @@ namespace NXKit.DOMEvents
 
         public void DispatchEvent(Event evt)
         {
-            var target = element.Interface<IEventTarget>();
+            var target = node.Interface<IEventTarget>();
             if (target == null)
                 throw new Exception();
 
@@ -92,12 +93,14 @@ namespace NXKit.DOMEvents
             evt.Target = target;
 
             // path to root from root
-            var path = element.Ancestors()
+            var path = node.Ancestors()
+                .Cast<XNode>()
+                .Append(node.Document)
                 .ToList();
 
             // capture phase
             evt.EventPhase = EventPhase.Capturing;
-            foreach (var visual_ in path.Reverse<XElement>())
+            foreach (var visual_ in path.Reverse<XNode>())
             {
                 HandleEventOnNode(visual_, evt, true);
 
@@ -108,7 +111,7 @@ namespace NXKit.DOMEvents
 
             // at-target phase
             evt.EventPhase = EventPhase.AtTarget;
-            HandleEventOnNode(element, evt, false);
+            HandleEventOnNode(node, evt, false);
 
             // was told to stop propagation
             if (evt.StopPropagationSet)
@@ -128,7 +131,7 @@ namespace NXKit.DOMEvents
             if (!evt.PreventDefaultSet)
             {
                 // handle default action
-                foreach (var da in element.Interfaces<IEventDefaultActionHandler>())
+                foreach (var da in node.Interfaces<IEventDefaultActionHandler>())
                     if (da != null)
                         da.DefaultAction(evt);
             }
@@ -140,7 +143,7 @@ namespace NXKit.DOMEvents
         /// <param name="node"></param>
         /// <param name="evt"></param>
         /// <param name="useCapture"></param>
-        void HandleEventOnNode(XElement node, Event evt, bool useCapture)
+        void HandleEventOnNode(XNode node, Event evt, bool useCapture)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(evt != null);
