@@ -9,7 +9,7 @@ namespace NXKit
     /// <summary>
     /// Marks the interface object as being associated with a given fully qualified element name.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class InterfaceAttribute :
         Attribute
     {
