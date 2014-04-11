@@ -6,21 +6,22 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Stores various information on a <see cref="XDocument"/>.
+    /// Stores various NXKit information on a <see cref="XDocument"/>.
     /// </summary>
-    [XmlRoot("document")]
-    public class DocumentAnnotation :
+    [XmlRoot("nx-document")]
+    public class NXDocumentAnnotation :
         IXmlSerializable
     {
 
-        int nextNodeId;
+        bool initialized;
 
         /// <summary>
-        /// Gets the next available node ID.
+        /// Gets whether or not the document has been initialied.
         /// </summary>
-        public int GetNextNodeId()
+        public bool Initialized
         {
-            return nextNodeId++;
+            get { return initialized; }
+            internal set { initialized = value; }
         }
 
         XmlSchema IXmlSerializable.GetSchema()
@@ -33,13 +34,13 @@ namespace NXKit
             if (reader.MoveToContent() == XmlNodeType.Element &&
                 reader.LocalName == "document")
             {
-                nextNodeId = int.Parse(reader["next-node-id"]);
+                initialized = bool.Parse(reader["initialized"]);
             }
         }
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteAttributeString("next-node-id", nextNodeId.ToString());
+            writer.WriteAttributeString("initialized", initialized ? "true" : "false");
         }
 
     }

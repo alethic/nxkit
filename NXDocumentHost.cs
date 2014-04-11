@@ -137,7 +137,7 @@ namespace NXKit
         /// </summary>
         void InvokeInitialize()
         {
-            var state = xml.AnnotationOrCreate<DocumentAnnotation>();
+            var state = xml.AnnotationOrCreate<NXDocumentAnnotation>();
             if (state.Initialized)
                 return;
 
