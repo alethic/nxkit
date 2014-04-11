@@ -18,10 +18,6 @@
         <copyright>$copyright$</copyright>
         <tags>xml xforms</tags>
         <dependencies>
-            <package
-                id="jquery.TypeScript.DefinitelyTyped" />
-            <package
-                id="knockout.TypeScript.DefinitelyTyped" />
             <dependency
                 id="NXKit.Web"
                 version="$version$"/>

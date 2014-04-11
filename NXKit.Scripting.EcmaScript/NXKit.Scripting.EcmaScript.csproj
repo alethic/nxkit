@@ -117,6 +117,9 @@
     <Compile Include="V8ScriptEngine.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="NXKit.Scripting.EcmaScript.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

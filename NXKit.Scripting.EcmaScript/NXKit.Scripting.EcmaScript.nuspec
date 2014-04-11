@@ -19,10 +19,10 @@
         <tags>xml xforms</tags>
         <dependencies>
             <dependency
-                id="NXKit.Web"
+                id="NXKit"
                 version="$version$"/>
             <dependency
-                id="NXKit.Web.XForms"
+                id="NXKit.Scripting"
                 version="$version$"/>
         </dependencies>
     </metadata>

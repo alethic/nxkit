@@ -123,7 +123,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="NXKit.Events.nuspec" />
+    <None Include="NXKit.XMLEvents.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

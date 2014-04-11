@@ -12,18 +12,18 @@
         <description>
             NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
 
-            Schema support is available in other NXKit packages.
+            NXKit.XPath2 
         </description>
         <releaseNotes />
-        <copyright>$copyright$</copyright>
+        <copyright>Copyright © 2013 Jerome Haltom</copyright>
         <tags>xml xforms</tags>
         <dependencies>
             <dependency
-                id="NXKit.Web"
-                version="$version$"/>
+                id="NXKit"
+                version="$version$" />
             <dependency
-                id="NXKit.Web.XForms"
-                version="$version$"/>
+                id="NXKit.XPath"
+                version="$version$" />
         </dependencies>
     </metadata>
 </package>

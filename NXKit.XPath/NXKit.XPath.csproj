@@ -118,6 +118,7 @@
     <Compile Include="XsltContextFunctionAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="NXKit.XPath.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

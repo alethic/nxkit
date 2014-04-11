@@ -22,7 +22,7 @@
                 id="NXKit"
                 version="$version$" />
             <dependency
-                id="NXKit.Util"
+                id="NXKit"
                 version="$version$" />
             <dependency
                 id="NXKit.XForms"

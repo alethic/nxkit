@@ -12,18 +12,18 @@
         <description>
             NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
 
-            NXKit.Events contains the processing model for handing W3C Events containing documents.
+            Schema support is available in other NXKit packages.
         </description>
         <releaseNotes />
-        <copyright>Copyright © 2013 Jerome Haltom</copyright>
+        <copyright>$copyright$</copyright>
         <tags>xml xforms</tags>
         <dependencies>
             <dependency
                 id="NXKit"
-                version="$version$" />
+                version="$version$"/>
             <dependency
-                id="NXKit.Util"
-                version="$version$" />
+                id="NXKit.DOM"
+                version="$version$"/>
         </dependencies>
     </metadata>
 </package>

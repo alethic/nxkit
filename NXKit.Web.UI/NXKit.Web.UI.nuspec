@@ -21,9 +21,6 @@
             <dependency
                 id="NXKit"
                 version="$version$" />
-            <dependency
-                id="NXKit.Util"
-                version="$version$" />
         </dependencies>
         <frameworkAssemblies>
             <frameworkAssembly

@@ -167,6 +167,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Events.partial.cs</LastGenOutput>
     </None>
+    <None Include="NXKit.DOMEvents.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

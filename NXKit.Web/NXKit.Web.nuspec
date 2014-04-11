@@ -19,16 +19,9 @@
         <tags>xml xforms</tags>
         <dependencies>
             <package
-                id="jquery.TypeScript.DefinitelyTyped" />
-            <package
-                id="knockout.TypeScript.DefinitelyTyped" />
-            <package
                 id="Newtonsoft.Json" />
             <dependency
                 id="NXKit"
-                version="$version$"/>
-            <dependency
-                id="NXKit.Util"
                 version="$version$"/>
         </dependencies>
     </metadata>
