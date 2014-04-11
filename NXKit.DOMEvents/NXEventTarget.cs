@@ -11,12 +11,14 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Implements the <see cref="INXEventTarget"/> interface.
     /// </summary>
+    [Interface(XmlNodeType.Document)]
     [Interface(XmlNodeType.Element)]
+    [Interface(XmlNodeType.Text)]
     public class NXEventTarget :
         INXEventTarget
     {
 
-        readonly XElement element;
+        readonly XNode node;
         readonly IEventFactory provider;
         readonly Lazy<IEventTarget> target;
 
@@ -24,19 +26,19 @@ namespace NXKit.DOMEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public NXEventTarget(XElement element)
+        public NXEventTarget(XNode element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Ensures(provider != null);
 
-            this.element = element;
+            this.node = element;
             this.provider = element.Host().Container.GetExportedValue<IEventFactory>();
             this.target = new Lazy<IEventTarget>(() => element.Interface<IEventTarget>());
         }
 
-        public XElement Element
+        public XNode Node
         {
-            get { return element; }
+            get { return node; }
         }
 
         public IEventTarget Target

@@ -14,6 +14,7 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Implements the <see cref="IEventTarget"/> interface.
     /// </summary>
+    [Interface(XmlNodeType.Document)]
     [Interface(XmlNodeType.Element)]
     [Interface(XmlNodeType.Text)]
     public class EventTarget :

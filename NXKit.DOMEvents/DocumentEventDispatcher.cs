@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Xml;
 using System.Xml.Linq;
+using System.Linq;
 
 using NXKit.Xml;
 
@@ -13,10 +15,12 @@ namespace NXKit.DOMEvents
     /// </summary>
     [Interface(XmlNodeType.Document)]
     public class DocumentEventDispatcher :
-        IOnInitialize
+        IOnLoad,
+        IOnInvoke
     {
 
         readonly XDocument document;
+        readonly LinkedList<XNode> subtreeDispatchList = new LinkedList<XNode>();
 
         /// <summary>
         /// Initializes a new instance.
@@ -30,9 +34,9 @@ namespace NXKit.DOMEvents
         }
 
         /// <summary>
-        /// Ensures we're initialized at the start.
+        /// Attach to events at document load.
         /// </summary>
-        public void Init()
+        public void Load()
         {
             this.document.Changing += document_Changing;
             this.document.Changed += document_Changed;
@@ -43,20 +47,24 @@ namespace NXKit.DOMEvents
             Contract.Requires<ArgumentNullException>(sender != null);
             Contract.Requires<ArgumentNullException>(args != null);
 
+            // store parent for subtree dispatch
+            var obj = (XObject)sender;
+            var par = (XNode)obj.Parent ?? (XNode)obj.Document;
+            if (par != null)
+                subtreeDispatchList.AddLast(par);
+
             switch (args.ObjectChange)
             {
                 case XObjectChange.Add:
                     break;
                 case XObjectChange.Remove:
-                    OnRemoving((XObject)sender);
+                    OnRemoving(obj);
                     break;
                 case XObjectChange.Value:
                     break;
                 case XObjectChange.Name:
                     break;
             }
-
-            OnSubtreeModified((XObject)sender);
         }
 
         void document_Changed(object sender, XObjectChangeEventArgs args)
@@ -64,10 +72,16 @@ namespace NXKit.DOMEvents
             Contract.Requires<ArgumentNullException>(sender != null);
             Contract.Requires<ArgumentNullException>(args != null);
 
+            // store parent for subtree dispatch
+            var obj = (XObject)sender;
+            var par = (XNode)obj.Parent ?? (XNode)obj.Document;
+            if (par != null)
+                subtreeDispatchList.AddLast(par);
+
             switch (args.ObjectChange)
             {
                 case XObjectChange.Add:
-                    OnAdded((XObject)sender);
+                    OnAdded(obj);
                     break;
                 case XObjectChange.Remove:
                     break;
@@ -76,8 +90,6 @@ namespace NXKit.DOMEvents
                 case XObjectChange.Name:
                     break;
             }
-
-            OnSubtreeModified((XObject)sender);
         }
 
         /// <summary>
@@ -89,10 +101,11 @@ namespace NXKit.DOMEvents
         MutationEvent CreateEvent(XObject obj, string eventType)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
+            Contract.Requires<ArgumentNullException>(obj.Document != null);
             Contract.Requires<ArgumentNullException>(eventType != null);
 
             var events = obj.Document.Interface<INXDocumentEvent>();
-            var event_ = events.CreateEvent<MutationEvent>("MutationEvent");
+            var event_ = events.CreateEvent<MutationEvent>(eventType);
             event_.InitMutationEvent(eventType, event_.Bubbles, event_.Cancelable);
             return event_;
         }
@@ -105,6 +118,7 @@ namespace NXKit.DOMEvents
         void DispatchEvent(XNode node, string eventType)
         {
             Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(node.Document != null);
             Contract.Requires<ArgumentNullException>(eventType != null);
 
             node.Interface<IEventTarget>().DispatchEvent(CreateEvent(node, eventType));
@@ -191,31 +205,32 @@ namespace NXKit.DOMEvents
         }
 
         /// <summary>
-        /// Raises the DOMSubtreeModifed event for the specified object.
+        /// Raises the DOMSubtreeModified event.
         /// </summary>
-        /// <param name="obj"></param>
-        void OnSubtreeModified(XObject obj)
+        bool OnSubtreeModified()
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (subtreeDispatchList.Count == 0)
+                return false;
 
-            var node = obj as XNode;
-            if (node != null)
-                OnSubtreeModified(node);
+            // copy list
+            var nodes = subtreeDispatchList
+                .Distinct()
+                .ToList();
 
-            var attr = obj as XAttribute;
-            if (attr != null)
-                OnSubtreeModified(attr.Parent);
+            // clear before dispatching events (events might add more)
+            subtreeDispatchList.Clear();
+
+            // dispatch event to nodes
+            foreach (var node in nodes)
+                DispatchEvent(node, Events.DOMSubtreeModified);
+
+            // indicate we did work
+            return nodes.Count > 0;
         }
-        /// <summary>
-        /// Raises the DOMSubtreeModifed event for the specified node.
-        /// </summary>
-        /// <param name="obj"></param>
 
-        void OnSubtreeModified(XNode node)
+        bool IOnInvoke.Invoke()
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-
-            DispatchEvent(node, Events.DOMSubtreeModified);
+            return OnSubtreeModified();
         }
 
     }
