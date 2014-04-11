@@ -17,6 +17,23 @@ namespace NXKit.Xml
     {
 
         /// <summary>
+        /// Gets the unique identifier for the object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static int GetObjectId(this XObject obj)
+        {
+            Contract.Requires<ArgumentNullException>(obj != null);
+            Contract.Requires<ArgumentNullException>(obj.Document != null);
+
+            // gets the node id, or allocates a new one with the document
+            return obj.AnnotationOrCreate<ObjectAnnotation>(() =>
+                new ObjectAnnotation(
+                    obj.Document.AnnotationOrCreate<DocumentAnnotation>()
+                        .GetNextNodeId())).Id;
+        }
+
+        /// <summary>
         /// Gets the BaseUri of the <see cref="XObject"/>.
         /// </summary>
         /// <param name="self"></param>

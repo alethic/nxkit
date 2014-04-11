@@ -23,7 +23,7 @@ namespace NXKit.Web.Serialization
             if (node == null)
                 throw new JsonException();
 
-            obj["Id"] = node.GetNodeId();
+            obj["Id"] = node.GetObjectId();
             obj["Type"] = "Node";
             Apply(node, serializer, obj);
         }

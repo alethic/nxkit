@@ -314,7 +314,7 @@ namespace NXKit.Web.UI
                 throw new InvalidOperationException("Client Push sent invalid Node ID.");
 
             var node = document.Root.DescendantsAndSelf()
-                .FirstOrDefault(i => i.GetNodeId() == id);
+                .FirstOrDefault(i => i.GetObjectId() == id);
             if (node == null)
                 throw new InvalidOperationException("Client Push sent unknown Node ID.");
 

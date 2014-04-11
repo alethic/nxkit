@@ -13,7 +13,7 @@ namespace NXKit
         IXmlSerializable
     {
 
-        int nextNodeId;
+        int nextNodeId = 1;
 
         /// <summary>
         /// Gets the next available node ID.

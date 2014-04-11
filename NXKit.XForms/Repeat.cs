@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml.Linq;
-
-using NXKit.Util;
 using NXKit.Xml;
+
 
 namespace NXKit.XForms
 {
@@ -80,7 +79,7 @@ namespace NXKit.XForms
         {
             // acquire template
             Template = new XElement(
-                Constants.XForms_1_0 + "group", 
+                Constants.XForms_1_0 + "group",
                 Element.GetNamespacePrefixAttributes(),
                 Element.Nodes());
             Element.RemoveNodes();
@@ -90,20 +89,47 @@ namespace NXKit.XForms
         /// Dynamically generate repeat items, reusing existing instances if available.
         /// </summary>
         /// <returns></returns>
-        protected void RefreshNodes()
+        void RefreshNodes()
         {
-            //if (Binding == null ||
-            //    Binding.ModelItems == null)
-            //    Element.RemoveNodes();
+            if (Binding == null ||
+                Binding.ModelItems == null)
+                Element.RemoveNodes();
 
-            //// build proper list of items
-            //for (int i = 0; i < Binding.ModelItems.Length; i++)
-            //    GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.ModelItems[i], i + 1, Binding.ModelItems.Length);
+            var nodes = new LinkedList<XNode>();
 
-            //// clear stale items from cache
-            //foreach (var i in items.ToList())
-            //    if (!Nodes().Contains(i.Value))
-            //        items.Remove(i.Key);
+            for (int index = 1; index <= Binding.ModelItems.Length; index++)
+            {
+                var modelItem = Binding.ModelItems[index - 1];
+                if (modelItem == null)
+                    continue;
+
+                // get existing item or create new
+                var node = Element.Elements()
+                    .FirstOrDefault(i => i.AnnotationOrCreate<RepeatItemState>().ModelItemId == modelItem.Xml.GetObjectId());
+                if (node == null)
+                    node = new XElement(
+                        Constants.XForms_1_0 + "group",
+                        Template.GetNamespacePrefixAttributes(),
+                        Template.Nodes());
+
+                // configure item state
+                var anno = node.AnnotationOrCreate<RepeatItemState>();
+                var swap = anno.Index != index;
+                anno.Index = index;
+                anno.ModelItemId = modelItem.Xml.GetObjectId();
+
+                // node has moved or been created, reset evaluation context
+                if (swap)
+                {
+                    node.RemoveAnnotations<EvaluationContext>();
+                    node.AddAnnotation(new EvaluationContext(modelItem.Model, modelItem.Instance, modelItem, index, Binding.ModelItems.Length));
+                }
+
+                nodes.AddLast(node);
+            }
+
+            // replace child nodes with assembled list
+            Element.ReplaceNodes(nodes);
         }
 
         /// <summary>

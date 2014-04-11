@@ -2,6 +2,7 @@
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+
 using NXKit.Serialization;
 
 namespace NXKit.XForms
@@ -15,13 +16,13 @@ namespace NXKit.XForms
         int index;
         XElement template;
 
-        public int Index
+        internal int Index
         {
             get { return index; }
-            internal set { index = value; }
+            set { index = value; }
         }
 
-        public XElement Template
+        internal XElement Template
         {
             get { return template; }
             set { template = value; }

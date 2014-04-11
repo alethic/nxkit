@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
@@ -6,10 +7,10 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Stores various NXKit information on the <see cref="XNode"/>.
+    /// Stores various NXKit information on the <see cref="XObject"/>.
     /// </summary>
-    [XmlRoot("node")]
-    public class NodeAnnotation :
+    [XmlRoot("object")]
+    public class ObjectAnnotation :
         IXmlSerializable
     {
 
@@ -18,16 +19,16 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public NodeAnnotation()
+        public ObjectAnnotation()
         {
-            this.id = -1;
+            this.id = 0;
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="id"></param>
-        internal NodeAnnotation(int id)
+        internal ObjectAnnotation(int id)
         {
             this.id = id;
         }
@@ -48,7 +49,7 @@ namespace NXKit
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
             if (reader.MoveToContent() == XmlNodeType.Element &&
-                reader.LocalName == "node")
+                reader.LocalName == "object")
                 id = int.Parse(reader["id"]);
         }
 

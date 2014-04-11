@@ -138,6 +138,7 @@
     <Compile Include="RepeatAttributes.cs" />
     <Compile Include="ItemValueAttributes.cs" />
     <Compile Include="ISelectableValue.cs" />
+    <Compile Include="RepeatItemState.cs" />
     <Compile Include="Select1Attributes.cs" />
     <Compile Include="ModelItemPropertyAttributes.cs" />
     <Compile Include="CommonAttributes.cs" />
@@ -220,6 +221,10 @@
     <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
       <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
       <Name>NXKit.DOMEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj">
+      <Project>{075ba36b-f95a-4563-bbe9-20d4405e9c9e}</Project>
+      <Name>NXKit.DOM</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.Scripting\NXKit.Scripting.csproj">
       <Project>{f509df8d-af13-468d-8381-028835a79dec}</Project>
