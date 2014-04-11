@@ -40,6 +40,9 @@ namespace NXKit.DOMEvents
 
         void document_Changing(object sender, XObjectChangeEventArgs args)
         {
+            Contract.Requires<ArgumentNullException>(sender != null);
+            Contract.Requires<ArgumentNullException>(args != null);
+
             switch (args.ObjectChange)
             {
                 case XObjectChange.Add:
@@ -58,6 +61,9 @@ namespace NXKit.DOMEvents
 
         void document_Changed(object sender, XObjectChangeEventArgs args)
         {
+            Contract.Requires<ArgumentNullException>(sender != null);
+            Contract.Requires<ArgumentNullException>(args != null);
+
             switch (args.ObjectChange)
             {
                 case XObjectChange.Add:

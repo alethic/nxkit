@@ -119,6 +119,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NodeAnnotation.cs" />
+    <Compile Include="DocumentAnnotation.cs" />
     <Compile Include="IInterfacePredicate.cs" />
     <Compile Include="InterfaceDescriptor.cs" />
     <Compile Include="InterfacePredicateBase.cs" />
