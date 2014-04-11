@@ -1,5 +1,6 @@
 ﻿using System.Xml;
 using System.Xml.Linq;
+using System.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
@@ -40,11 +41,10 @@ namespace NXKit.XForms
             {
                 index = int.Parse(reader["index"]);
 
-                if (reader.ReadToDescendant("xml"))
-                    template = XNodeAnnotationSerializer.Deserialize(new XDocument(
-                        XElement.Load(
-                            reader.ReadSubtree(),
-                            LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri))).Root;
+                if (reader.ReadToDescendant("template"))
+                    template = XElement.Load(reader.ReadSubtree())
+                        .Elements()
+                        .First();
             }
         }
 
@@ -55,7 +55,7 @@ namespace NXKit.XForms
             if (template != null)
             {
                 writer.WriteStartElement("template");
-                writer.WriteNode(XNodeAnnotationSerializer.Serialize(new XDocument(template)).CreateReader(), true);
+                writer.WriteNode(template.CreateReader(), true);
                 writer.WriteEndElement();
             }
         }

@@ -106,11 +106,12 @@ css: {
 }">
 
         <!-- ko nxkit_template: {
-            node: ViewModel.Node,
+            name: '{http://www.w3.org/2002/xforms}group',
             data: $data,
             layout: 'field-label',
         } -->
         <!-- /ko -->
+
         <!-- ko nxkit_layout: {
             SuppressLabel: true,
         } -->
@@ -151,7 +152,7 @@ css: {
         data-nxkit-layout="field">
 
     <!-- ko nxkit_template: {
-        node: ViewModel.Node,
+        name: '{http://www.w3.org/2002/xforms}group',
         data: $data,
         layout: Label != null ? 'field-with-label' : 'field-without-label',
     } -->
@@ -165,7 +166,7 @@ css: {
         data-nxkit-layout="single">
 
     <!-- ko nxkit_template: {
-        node: ViewModel.Node,
+        name: '{http://www.w3.org/2002/xforms}group',
         data: $data.Items[0],
         layout: 'field',
     }-->
@@ -183,7 +184,7 @@ css: {
 
         <!-- ko foreach: Items -->
         <!-- ko nxkit_template: {
-            node: ViewModel.Node,
+            name: '{http://www.w3.org/2002/xforms}group',
             data: $data,
             layout: 'field',
         }-->
