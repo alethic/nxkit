@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace NXKit.XmlEvents
+namespace NXKit.XMLEvents
 {
 
     public static class SchemaConstants

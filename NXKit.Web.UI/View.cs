@@ -278,7 +278,7 @@ namespace NXKit.Web.UI
             switch ((string)args.Action)
             {
                 case "Push":
-                    ClientPush((JObject)args.Args);
+                    ClientPush((JToken)args.Args);
                     break;
             }
         }
@@ -287,11 +287,11 @@ namespace NXKit.Web.UI
         /// Client has sent us a "Push" request, consisting of a single argument "Nodes" which contains an array of node data.
         /// </summary>
         /// <param name="data"></param>
-        void ClientPush(dynamic args)
+        void ClientPush(JToken args)
         {
             Contract.Requires<ArgumentNullException>(args != null);
 
-            var nodes = args.Nodes as JArray;
+            var nodes = args["Nodes"] as JArray;
             if (nodes == null)
                 throw new InvalidOperationException("Push requires JSON array of node data.");
 

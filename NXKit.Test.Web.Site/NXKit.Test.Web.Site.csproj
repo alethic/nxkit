@@ -399,9 +399,9 @@
       <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
       <Name>NXKit.XForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.XmlEvents\NXKit.XmlEvents.csproj">
+    <ProjectReference Include="..\NXKit.XMLEvents\NXKit.XMLEvents.csproj">
       <Project>{db71b395-df60-470a-b761-b083d7acafe8}</Project>
-      <Name>NXKit.XmlEvents</Name>
+      <Name>NXKit.XMLEvents</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XPath2\NXKit.XPath2.csproj">
       <Project>{4fc0495c-b8e7-407a-9505-fba9e973ba4c}</Project>

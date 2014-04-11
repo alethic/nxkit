@@ -8,8 +8,8 @@
     <ProjectGuid>{DB71B395-DF60-470A-B761-B083D7ACAFE8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NXKit.XmlEvents</RootNamespace>
-    <AssemblyName>NXKit.Events</AssemblyName>
+    <RootNamespace>NXKit.XMLEvents</RootNamespace>
+    <AssemblyName>NXKit.XMLEvents</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
@@ -102,7 +102,7 @@
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-    <DocumentationFile>bin\Release\NXKit.Events.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\NXKit.XMLEvents.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

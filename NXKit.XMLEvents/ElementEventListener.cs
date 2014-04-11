@@ -6,7 +6,7 @@ using System.Xml.Linq;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
-namespace NXKit.XmlEvents
+namespace NXKit.XMLEvents
 {
 
     /// <summary>
