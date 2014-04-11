@@ -18,9 +18,9 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        internal NodeAnnotation()
+        public NodeAnnotation()
         {
-
+            this.id = -1;
         }
 
         /// <summary>
@@ -35,10 +35,9 @@ namespace NXKit
         /// <summary>
         /// Gets the next available node ID.
         /// </summary>
-        public int Id
+        internal int Id
         {
             get { return id; }
-            internal set { id = value; }
         }
 
         XmlSchema IXmlSerializable.GetSchema()

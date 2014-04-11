@@ -13,6 +13,7 @@ namespace NXKit
         IXmlSerializable
     {
 
+        bool initialized;
         int nextNodeId;
 
         /// <summary>
@@ -23,6 +24,14 @@ namespace NXKit
             return nextNodeId++;
         }
 
+        /// <summary>
+        /// Gets whether or not the document has been initialied.
+        /// </summary>
+        public bool Initialized
+        {
+            get { return initialized; }
+            internal set { initialized = value; }
+        }
 
         XmlSchema IXmlSerializable.GetSchema()
         {
@@ -33,11 +42,15 @@ namespace NXKit
         {
             if (reader.MoveToContent() == XmlNodeType.Element &&
                 reader.LocalName == "document")
+            {
+                initialized = bool.Parse(reader["initialized"]);
                 nextNodeId = int.Parse(reader["next-node-id"]);
+            }
         }
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
+            writer.WriteAttributeString("initialized", initialized ? "true" : "false");
             writer.WriteAttributeString("next-node-id", nextNodeId.ToString());
         }
 
