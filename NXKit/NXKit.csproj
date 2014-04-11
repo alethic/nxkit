@@ -119,6 +119,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NXDocumentAnnotation.cs" />
     <Compile Include="IOnInitialize.cs" />
     <Compile Include="NodeAnnotation.cs" />
     <Compile Include="DocumentAnnotation.cs" />

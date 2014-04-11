@@ -1,13 +1,41 @@
-﻿using System;
+﻿using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace NXKit.XForms
 {
 
-    [Serializable]
-    public class RepeatState
+    [XmlRoot("repeat")]
+    public class RepeatState :
+        IXmlSerializable
     {
 
-        public int? Index { get; set; }
+        int index;
+
+        public int Index
+        {
+            get { return index; }
+            internal set { index = value; }
+        }
+
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            if (reader.MoveToContent() == XmlNodeType.Element &&
+                reader.LocalName == "repeat")
+            {
+                index = int.Parse(reader["index"]);
+            }
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteAttributeString("index", index.ToString());
+        }
 
     }
 

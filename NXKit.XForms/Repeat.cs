@@ -13,11 +13,12 @@ namespace NXKit.XForms
         IOnRefresh
     {
 
-        readonly Lazy<RepeatAttributes> attributes;
+        readonly RepeatAttributes attributes;
+        readonly Lazy<IBindingNode> bindingNode;
+        readonly Lazy<Binding> binding;
         readonly Lazy<IUIBindingNode> uiBindingNode;
         readonly Lazy<UIBinding> uiBinding;
         readonly Lazy<RepeatState> state;
-        int nextId;
 
         /// <summary>
         /// Initializes a new instance.
@@ -28,46 +29,51 @@ namespace NXKit.XForms
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.attributes = new Lazy<RepeatAttributes>(() => Element.AnnotationOrCreate<RepeatAttributes>(() => new RepeatAttributes(element)));
+            this.attributes = new RepeatAttributes(Element);
+            this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
+            this.binding = new Lazy<Binding>(() => bindingNode.Value.Binding);
             this.uiBindingNode = new Lazy<IUIBindingNode>(() => Element.Interface<IUIBindingNode>());
             this.uiBinding = new Lazy<UIBinding>(() => uiBindingNode.Value.UIBinding);
             this.state = new Lazy<RepeatState>(() => Element.AnnotationOrCreate<RepeatState>());
         }
 
-        /// <summary>
-        /// Gets the attributes of the repeat element.
-        /// </summary>
-        public RepeatAttributes Attributes
+        RepeatState State
         {
-            get { return attributes.Value; }
+            get { return state.Value; }
+        }
+
+        UIBinding UIBinding
+        {
+            get { return uiBinding.Value; }
+        }
+
+        Binding Binding
+        {
+            get { return binding.Value; }
         }
 
         /// <summary>
-        /// Allocates a new ID for this naming scope.
+        /// Gets or sets the current repeat index.
         /// </summary>
-        /// <returns></returns>
-        public string AllocateId()
+        public int Index
         {
-            return (nextId++).ToString();
+            get { return State.Index; }
+            set { State.Index = value; }
         }
 
         /// <summary>
         /// Dynamically generate repeat items, reusing existing instances if available.
         /// </summary>
         /// <returns></returns>
-        protected void CreateNodes()
+        protected void RefreshNodes()
         {
-            throw new NotImplementedException();
-
-            //element.RemoveNodes();
-
             //if (Binding == null ||
             //    Binding.ModelItems == null)
-            //    return;
+            //    Element.RemoveNodes();
 
             //// build proper list of items
             //for (int i = 0; i < Binding.ModelItems.Length; i++)
-            //    Add(GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.ModelItems[i], i + 1, Binding.ModelItems.Length));
+            //    GetOrCreateItem(Binding.Context.Model, Binding.Context.Instance, Binding.ModelItems[i], i + 1, Binding.ModelItems.Length);
 
             //// clear stale items from cache
             //foreach (var i in items.ToList())
@@ -107,34 +113,22 @@ namespace NXKit.XForms
         /// </summary>
         void Refresh()
         {
-            throw new NotImplementedException();
+            // ensure index value is within range
+            if (Index < 0)
+                if (Binding == null ||
+                    Binding.ModelItems == null ||
+                    Binding.ModelItems.Length == 0)
+                    Index = 0;
+                else
+                    Index = attributes.StartIndex;
 
-            //// ensure index value is within range
-            //if (Index < 0)
-            //    if (Binding == null ||
-            //        Binding.ModelItems == null ||
-            //        Binding.ModelItems.Length == 0)
-            //        Index = 0;
-            //    else
-            //        Index = attributes.StartIndex;
+            if (Binding != null &&
+                Binding.ModelItems != null)
+                if (Index > Binding.ModelItems.Length)
+                    Index = Binding.ModelItems.Length;
 
-            //if (Binding != null &&
-            //    Binding.ModelItems != null)
-            //    if (Index > Binding.ModelItems.Length)
-            //        Index = Binding.ModelItems.Length;
-
-            //// rebuild node tree
-            //CreateNodes();
-
-            //// refresh children
-            //foreach (var node in this.Descendants().Select(i => i.InterfaceOrDefault<IUIBindingNode>()))
-            //    if (node != null)
-            //        node.UIBinding.Refresh();
-
-            //// refresh children
-            //foreach (var node in this.Descendants().Select(i => i.InterfaceOrDefault<IUINode>()))
-            //    if (node != null)
-            //        node.Refresh();
+            // rebuild node tree
+            RefreshNodes();
         }
 
 
