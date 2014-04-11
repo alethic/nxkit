@@ -121,7 +121,7 @@
   <ItemGroup>
     <Compile Include="NXDocumentAnnotation.cs" />
     <Compile Include="IOnInitialize.cs" />
-    <Compile Include="NodeAnnotation.cs" />
+    <Compile Include="ObjectAnnotation.cs" />
     <Compile Include="DocumentAnnotation.cs" />
     <Compile Include="IInterfacePredicate.cs" />
     <Compile Include="InterfaceDescriptor.cs" />
