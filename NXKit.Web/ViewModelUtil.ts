@@ -3,7 +3,7 @@
     /**
       * Set of functions to inject layout managers at the top of the hierarchy.
       */
-    export var LayoutManagers: Array<(context) => LayoutManager> = [
+    export var LayoutManagers: Array<(context: KnockoutBindingContext) => LayoutManager> = [
         (c) => new DefaultLayoutManager(c),
     ];
 
