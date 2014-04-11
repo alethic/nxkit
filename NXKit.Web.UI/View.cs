@@ -289,6 +289,8 @@ namespace NXKit.Web.UI
         /// <param name="data"></param>
         void ClientPush(dynamic args)
         {
+            Contract.Requires<ArgumentNullException>(args != null);
+
             var nodes = args.Nodes as JArray;
             if (nodes == null)
                 throw new InvalidOperationException("Push requires JSON array of node data.");
@@ -305,6 +307,8 @@ namespace NXKit.Web.UI
         /// <param name="data"></param>
         void ClientPushNode(JObject data)
         {
+            Contract.Requires<ArgumentNullException>(data != null);
+
             var id = (int)data["Id"];
             if (id < 0)
                 throw new InvalidOperationException("Client Push sent invalid Node ID.");
@@ -319,6 +323,8 @@ namespace NXKit.Web.UI
 
         void ApplyToNode(XElement node, JObject data)
         {
+            Contract.Requires<ArgumentNullException>(data != null);
+
             RemoteJson.SetJson(data.CreateReader(), node);
         }
 
