@@ -96,11 +96,9 @@ _NXKit.Web.UI.View.prototype = {
 
         // generate event argument to pass to server
         var args = JSON.stringify({
-            Action: 'Push',
+            Action: data.Action,
             Save: $(self._save).val(),
-            Args: {
-                Data: data,
-            },
+            Args: data.Args,
         });
 
         // initiate server request

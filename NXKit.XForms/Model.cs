@@ -150,13 +150,13 @@ namespace NXKit.XForms
                 foreach (var item in attributes.Schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     continue; // TODO
 
-            // attempt to load model instance data, if possible; if no instance loaded, exit
-            if (Instances.Select(i => i.Load()).ToList().Any())
-            {
-                OnRebuild();
-                OnRecalculate();
-                OnRevalidate();
-            }
+            // attempt to load model instance data
+            foreach (var instance in Instances)
+                instance.Load();
+
+            OnRebuild();
+            OnRecalculate();
+            OnRevalidate();
         }
 
         /// <summary>

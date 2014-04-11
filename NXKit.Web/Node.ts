@@ -5,6 +5,7 @@ module NXKit.Web {
 
     export class Node {
 
+        _id: number;
         _data: any;
         _type: NodeType;
         _name: string;
@@ -26,6 +27,7 @@ module NXKit.Web {
          * Initializes a new instance from the given initial data.
          */
         constructor(source: any) {
+            this._id = -1;
             this._data = null;
             this._type = null;
             this._name = null;
@@ -47,6 +49,13 @@ module NXKit.Web {
          */
         public get Data(): any {
             return this._data;
+        }
+
+        /**
+         * Gets the unique ID of this node.
+         */
+        public get Id(): number {
+            return this._id;
         }
 
         /**
@@ -137,6 +146,7 @@ module NXKit.Web {
         public Update(source: any) {
             try {
                 this._data = source;
+                this.UpdateId(source.Id);
                 this.UpdateType(source.Type);
                 this.UpdateName(source.Name);
                 this.UpdateValue(source.Value);
@@ -146,6 +156,13 @@ module NXKit.Web {
                 ex.message = "Node.Update()" + '\nMessage: ' + ex.message;
                 throw ex;
             }
+        }
+
+        /**
+         * Updates the type of this node with the new value.
+         */
+        UpdateId(id: number) {
+            this._id = id;
         }
 
         /**
@@ -246,13 +263,15 @@ module NXKit.Web {
                 throw ex;
             }
         }
-
+        
+        /**
+         * Transforms the node and its hierarchy into JSON data.
+         */
         public ToData(): any {
             var self = this;
 
             var r: any = {
-                Type: self._type,
-                Nodes: self.NodesToData(),
+                Id: self._id,
             };
 
             for (var i in self._interfaces)

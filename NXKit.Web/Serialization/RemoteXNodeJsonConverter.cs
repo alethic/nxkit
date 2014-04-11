@@ -17,11 +17,6 @@ namespace NXKit.Web.Serialization
         RemoteObjectJsonConverter
     {
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-
         protected sealed override void Apply(object value, JsonSerializer serializer, JObject obj)
         {
             var node = value as XNode;

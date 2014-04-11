@@ -14,7 +14,7 @@ namespace NXKit.XmlEvents
     /// </summary>
     [Interface(XmlNodeType.Element)]
     public class ElementEventListener :
-        IOnInitialize
+        IOnLoad
     {
 
         readonly XElement element;
@@ -161,7 +161,10 @@ namespace NXKit.XmlEvents
             return (string)element.Attribute(SchemaConstants.Events_1_0 + "defaultAction") != "cancel";
         }
 
-        void Initialize()
+        /// <summary>
+        /// Attaches event listeners to elements that possess them.
+        /// </summary>
+        void Attach()
         {
             var evt = GetEvent();
             if (evt == null)
@@ -182,9 +185,9 @@ namespace NXKit.XmlEvents
                     GetCapture());
         }
 
-        void IOnInitialize.Init()
+        void IOnLoad.Load()
         {
-            Initialize();
+            Attach();
         }
 
     }

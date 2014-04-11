@@ -129,10 +129,12 @@
   <ItemGroup>
     <Compile Include="AssemblyHtmlTemplateProvider.cs" />
     <Compile Include="HtmlTemplateInfo.cs" />
+    <Compile Include="Serialization\RemoteDescriptor.cs" />
+    <Compile Include="Serialization\RemoteJsonSerializer.cs" />
     <Compile Include="Serialization\RemoteXCommentJsonConverter.cs" />
     <Compile Include="Serialization\RemoteXTextJsonConverter.cs" />
     <Compile Include="Serialization\RemoteXElementJsonConverter.cs" />
-    <Compile Include="Serialization\RemoteJsonConvert.cs" />
+    <Compile Include="Serialization\RemoteJson.cs" />
     <Compile Include="Serialization\RemoteObjectJsonConverter.cs" />
     <Compile Include="Serialization\RemoteXNodeJsonConverter.cs" />
     <TypeScriptCompile Include="ICallbackRequestEvent.ts" />

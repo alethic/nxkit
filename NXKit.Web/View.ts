@@ -100,24 +100,29 @@ module NXKit.Web {
          * Invoked to handle root node value change events.
          */
         OnRootNodePropertyChanged(node: Node, $interface: Interface, property: Property, value: any) {
-            this.Push();
+            this.Push(node);
         }
 
         /**
          * Invoked to handle root node method invocations.
          */
         OnRootNodeMethodInvoked(node: Node, $interface: Interface, method: Method, params: any) {
-            this.Push();
+            this.Push(node);
         }
 
         /**
-         * Invoked when the view model initiates a request to push updates.
+         * Invoked when the view model initiates a request to push an update to a node.
          */
-        Push() {
+        Push(node: Node) {
             var self = this;
 
             this.Queue((cb: ICallbackComplete) => {
-                self.CallbackRequest.trigger(self._root.ToData(), cb);
+                self.CallbackRequest.trigger({
+                    Action: 'Push',
+                    Args: {
+                        Nodes: [node.ToData()],
+                    }
+                }, cb);
             });
         }
 
@@ -169,7 +174,7 @@ module NXKit.Web {
                 // clear existing bindings
                 ko.cleanNode(
                     self._body);
-                
+
                 // ensure body is to render template
                 $(self._body)
                     .attr('data-bind', 'template: { name: \'NXKit.View\' }');

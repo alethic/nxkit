@@ -14,7 +14,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}instance")]
     public class Instance :
         ElementExtension,
-        IOnInitialize
+        IOnLoad
     {
 
         readonly InstanceAttributes attributes;
@@ -52,7 +52,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Loads the instance data.
         /// </summary>
-        internal bool Load()
+        internal void Load()
         {
             if (attributes.Src != null)
             {
@@ -74,13 +74,11 @@ namespace NXKit.XForms
                     var instanceDataDocument = XDocument.Load(response);
 
                     // add to model
-                    State.Initialize(Model, Element  , instanceDataDocument);
+                    State.Initialize(Model, Element, instanceDataDocument);
 
                     // clear body of instance
                     Element.RemoveNodes();
-
-                    return true;
-                }        
+                }
                 catch (UriFormatException)
                 {
                     throw new DOMTargetEventException(Element, Events.BindingException);
@@ -96,16 +94,12 @@ namespace NXKit.XForms
                 throw new DOMTargetEventException(Element, Events.LinkException);
 
             if (instanceChildElements.Length == 1)
-            {
                 State.Initialize(Model, Element, new XDocument(instanceChildElements[0]));
-                return true;
-            }
-
-            return false;
         }
 
-        void IOnInitialize.Init()
+        void IOnLoad.Load()
         {
+            // ensure instances are reloaded properly
             State.Initialize(Model, Element);
         }
 

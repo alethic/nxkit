@@ -21,31 +21,23 @@ namespace NXKit.Web.Serialization
         JsonConverter
     {
 
-        internal struct Interface
-        {
-
-            internal object target;
-            internal Type type;
-
-        }
-
         /// <summary>
         /// Gets the supported remote interface types of the given <see cref="Object"/>.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        internal static IEnumerable<Interface> GetRemoteInterfaces(object obj)
+        internal static IEnumerable<RemoteDescriptor> GetRemotes(object obj)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
 
-            return GetRemoteInterfaces(new[] { obj });
+            return GetRemotes(new[] { obj });
         }
 
         /// <summary>
         /// Gets the combined supported remote interface types of the given objects.
         /// </summary>
         /// <param name="obj"></param>
-        internal static IEnumerable<Interface> GetRemoteInterfaces(IEnumerable<object> objects)
+        internal static IEnumerable<RemoteDescriptor> GetRemotes(IEnumerable<object> objects)
         {
             Contract.Requires<ArgumentNullException>(objects != null);
 
@@ -65,11 +57,7 @@ namespace NXKit.Web.Serialization
                     }))
                 .GroupBy(i => i.Type)
                 .Select(i => i.First())
-                .Select(i => new Interface()
-                {
-                    target = i.Target,
-                    type = i.Type,
-                });
+                .Select(i => new RemoteDescriptor(i.Target, i.Type));
         }
 
         /// <summary>
@@ -150,18 +138,18 @@ namespace NXKit.Web.Serialization
         /// <summary>
         /// Returns all of the properties for a given <see cref="Interface"/>.
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="remote"></param>
         /// <param name="serializer"></param>
         /// <returns></returns>
-        internal static IEnumerable<JProperty> InterfaceToProperties(Interface type, JsonSerializer serializer)
+        internal static IEnumerable<JProperty> InterfaceToProperties(RemoteDescriptor remote, JsonSerializer serializer)
         {
             Contract.Requires<ArgumentNullException>(serializer != null);
 
-            foreach (var property in GetRemoteProperties(type.type))
+            foreach (var property in GetRemoteProperties(remote.Type))
                 yield return new JProperty(property.Name,
-                    JTokenFromObject(property.GetValue(type.target), serializer));
+                    JTokenFromObject(property.GetValue(remote.Target), serializer));
 
-            foreach (var method in GetRemoteMethods(type.type))
+            foreach (var method in GetRemoteMethods(remote.Type))
                 yield return new JProperty("@" + method.Name,
                     new JArray());
         }
@@ -181,9 +169,9 @@ namespace NXKit.Web.Serialization
 
             // append interfaces to object
             destination.Add(
-                GetRemoteInterfaces(source)
+                GetRemotes(source)
                     .Select(i => new JProperty(
-                        i.type.FullName,
+                        i.Type.FullName,
                         new JObject(
                             InterfaceToProperties(i, serializer)))));
         }
@@ -219,9 +207,9 @@ namespace NXKit.Web.Serialization
 
             // append interfaces to object
             destination.Add(
-                GetRemoteInterfaces(source)
+                GetRemotes(source)
                     .Select(i => new JProperty(
-                        i.type.FullName,
+                        i.Type.FullName,
                         new JObject(
                             InterfaceToProperties(i, serializer)))));
         }
@@ -248,9 +236,9 @@ namespace NXKit.Web.Serialization
             return GetRemoteTypes(objectType).Any();
         }
 
-        public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public override sealed void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

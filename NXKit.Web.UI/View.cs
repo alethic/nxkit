@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Reflection;
 using System.Web.UI;
 using System.Xml.Linq;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-using NXKit.Util;
 using NXKit.Web.Serialization;
 using NXKit.Xml;
 
@@ -118,7 +114,7 @@ namespace NXKit.Web.UI
             // serialize document state to data field
             using (var str = new JTokenWriter())
             {
-                RemoteJsonConvert.WriteTo(str, document.Root);
+                RemoteJson.GetJson(str, document.Root);
                 return (JObject)str.Token;
             }
         }
@@ -133,7 +129,7 @@ namespace NXKit.Web.UI
             using (var str = new StringWriter())
             using (var wrt = new JsonTextWriter(str))
             {
-                RemoteJsonConvert.WriteTo(wrt, document.Root);
+                RemoteJson.GetJson(wrt, document.Root);
                 wrt.Close();
                 return str.ToString();
             }
@@ -234,8 +230,8 @@ namespace NXKit.Web.UI
             //using (var stm = new MemoryStream(Convert.FromBase64String(save)))
             //using (var zip = new GZipStream(stm, CompressionMode.Decompress))
             //{
-                document = NXKit.NXDocumentHost.Load(new StringReader(save));
-                document.Invoke();
+            document = NXKit.NXDocumentHost.Load(new StringReader(save));
+            document.Invoke();
             //}
         }
 
@@ -282,132 +278,48 @@ namespace NXKit.Web.UI
             switch ((string)args.Action)
             {
                 case "Push":
-                    ClientPush((JObject)args.Args.Data);
+                    ClientPush((JObject)args.Args);
                     break;
             }
         }
 
         /// <summary>
-        /// Client has sent us a complete object tree.
+        /// Client has sent us a "Push" request, consisting of a single argument "Nodes" which contains an array of node data.
         /// </summary>
         /// <param name="data"></param>
-        void ClientPush(JObject data)
+        void ClientPush(dynamic args)
         {
-            VisitAndPush(data, document.Root);
+            var nodes = args.Nodes as JArray;
+            if (nodes == null)
+                throw new InvalidOperationException("Push requires JSON array of node data.");
+
+            foreach (JObject node in nodes)
+                ClientPushNode(node);
+
             document.Invoke();
         }
 
-        void VisitAndPush(JObject s, XNode d)
+        /// <summary>
+        /// Client 
+        /// </summary>
+        /// <param name="data"></param>
+        void ClientPushNode(JObject data)
         {
-            var items = d.Interfaces()
-                .Where(i => i != null)
-                .Select(i => new
-                {
-                    Object = i,
-                    Types = TypeDescriptor.GetReflectionType(i)
-                        .GetInterfaces()
-                        .Concat(TypeDescriptor.GetReflectionType(i)
-                            .Recurse(j => j.BaseType))
-                        .Where(j => j.GetCustomAttribute<RemoteAttribute>(false) != null)
-                        .ToList(),
-                })
-                .Where(i => i.Types.Any())
-                .SelectMany(i => i.Types
-                    .Select(j => new { Object = i.Object, Type = j }))
-                .GroupBy(i => i.Type)
-                .Select(i => new
-                {
-                    Type = i.Key,
-                    Object = i.First().Object,
-                    Properties = TypeDescriptor.GetReflectionType(i.Key)
-                        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                        .Where(j => j.DeclaringType == i.Key)
-                        .Where(j => j.GetCustomAttribute<RemoteAttribute>(false) != null)
-                        .GroupBy(j => j.Name)
-                        .Select(j => j.First())
-                        .ToList(),
-                    Methods = TypeDescriptor.GetReflectionType(i.Key)
-                        .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                        .Where(j => j.DeclaringType == i.Key)
-                        .Where(j => j.GetCustomAttribute<RemoteAttribute>(false) != null)
-                        .GroupBy(j => j.Name)
-                        .Select(j => j.First())
-                        .ToList(),
-                })
-                .Where(i => i.Properties.Any() || i.Methods.Any());
+            var id = (int)data["Id"];
+            if (id < 0)
+                throw new InvalidOperationException("Client Push sent invalid Node ID.");
 
-            foreach (var item in items)
-            {
-                var sourceObj = s[item.Type.FullName] as JObject;
-                if (sourceObj == null)
-                    continue;
+            var node = document.Root.DescendantsAndSelf()
+                .FirstOrDefault(i => i.GetNodeId() == id);
+            if (node == null)
+                throw new InvalidOperationException("Client Push sent unknown Node ID.");
 
-                foreach (var property in item.Properties)
-                {
-                    var p = sourceObj.Property(property.Name);
-                    if (p != null)
-                    {
-                        var v = p.Value;
-                        var t = property.PropertyType;
-                        var o = v != null ? v.ToObject(t) : null;
+            ApplyToNode(node, data);
+        }
 
-                        if (property.CanWrite && property.CanRead)
-                            if (!object.Equals(property.GetValue(item.Object), o))
-                                property.SetValue(item.Object, o);
-                    }
-                }
-
-                foreach (var method in item.Methods)
-                {
-                    var methodObj = sourceObj['@' + method.Name] as JArray;
-                    if (methodObj == null)
-                        continue;
-
-                    foreach (var invokeObj in methodObj.OfType<JObject>())
-                    {
-                        var count = 0;
-                        var parameters = method.GetParameters();
-                        var invoke = new object[parameters.Length];
-                        for (int i = 0; i < invoke.Length; i++)
-                        {
-                            // submitted JSON parameter value
-                            var j = invokeObj[parameters[i].Name];
-                            if (j == null)
-                                break;
-
-                            // convert JObject to appropriate type
-                            var t = parameters[i].ParameterType;
-                            var o = j != null ? j.ToObject(t) : null;
-
-                            // successful conversion
-                            invoke[i] = o;
-                            count = i + 1;
-                        }
-
-                        // unsuccessful parameter count, try next method
-                        if (count != parameters.Length)
-                            continue;
-
-                        // successful; done with invoke object
-                        method.Invoke(item.Object, invoke);
-                        break;
-                    }
-                }
-            }
-
-            if (d is XElement)
-            {
-                var sNodes = s.Value<JArray>("Nodes")
-                    .Values<JObject>()
-                    .ToArray();
-
-                var dNodes = ((XElement)d)
-                    .Nodes()
-                    .ToArray();
-
-                foreach (var i in sNodes.Zip(dNodes, (sV, dV) => new { sV, dV }))
-                    VisitAndPush(i.sV, i.dV);
-            }
+        void ApplyToNode(XElement node, JObject data)
+        {
+            RemoteJson.SetJson(data.CreateReader(), node);
         }
 
     }
