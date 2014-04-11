@@ -5,12 +5,8 @@ module NXKit.Web.XForms {
     export class GroupViewModel
         extends XFormsNodeViewModel {
 
-        private _count: number;
-
-        constructor(context: KnockoutBindingContext, node: Node, count: number) {
+        constructor(context: KnockoutBindingContext, node: Node) {
             super(context, node);
-
-            this._count = count;
         }
 
         public get Items(): GroupUtil.Item[] {

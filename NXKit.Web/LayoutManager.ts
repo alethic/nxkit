@@ -114,7 +114,7 @@ module NXKit.Web {
         /**
          * Extracts a JSON representation of a template node's data-nxkit bindings.
          */
-        public GetTemplateNodeData(node: HTMLElement): any {
+        public static GetTemplateNodeData(node: HTMLElement): any {
             // check whether we've already cached the node data
             var d = $(node).data('nxkit');
             if (d != null)
@@ -137,42 +137,54 @@ module NXKit.Web {
         /**
          * Tests whether a template node matches the given data.
          */
-        public TemplatePredicate(node: HTMLElement, data: any): boolean {
+        public static TemplatePredicate(node: HTMLElement, opts: any): boolean {
+            return Log.Group('TemplatePredicate', () => {
+                // data has no properties
+                if (opts != null &&
+                    Object.getOwnPropertyNames(opts).length == 0) {
+                    console.debug('opts: empty');
+                    return false;
+                }
 
-            // data has no properties
-            if (data != null &&
-                Object.getOwnPropertyNames(data).length == 0)
-                return false;
+                // extract data-nxkit attributes from template node
+                var tmpl = LayoutManager.GetTemplateNodeData(node);
 
-            // extract data-nxkit attributes from template node
-            var tmpl = this.GetTemplateNodeData(node);
+                // template has no properties, should not correspond with anything
+                if (Object.getOwnPropertyNames(tmpl).length == 0) {
+                    console.debug('tmpl: empty');
+                    return false;
+                }
 
-            // template has no properties, should not correspond with anything
-            if (Object.getOwnPropertyNames(tmpl).length == 0)
-                return false;
+                console.dir({
+                    tmpl: tmpl,
+                    opts: opts,
+                });
 
-            return Util.DeepEquals(tmpl, data);
+                return Util.DeepEquals(tmpl, opts, (a, b) => {
+                    return (a === '*' || b === '*') ? true : null;
+                });
+            });
         }
 
         /**
          * Tests each given node against the predicate function.
          */
-        private TemplateFilter(nodes: HTMLElement[], data: any): HTMLElement[] {
-            var self = this;
-            return nodes.filter(_ => self.TemplatePredicate(_, data));
+        private static TemplateFilter(nodes: HTMLElement[], data: any): HTMLElement[] {
+            return nodes.filter(_ => LayoutManager.TemplatePredicate(_, data));
         }
 
         /**
          * Gets the appropriate template for the given data.
          */
         public GetTemplate(data: any): HTMLElement {
-            return this.TemplateFilter(this.GetTemplates(), data)[0] || this.GetUnknownTemplate(data);
+            return LayoutManager.TemplateFilter(this.GetTemplates(), data)[0] || this.GetUnknownTemplate(data);
         }
 
         /**
          * Gets the template that applies for the given data.
          */
         public GetTemplateName(data: any): string {
+            return Log.Group('LayoutManager.GetTemplateName', () => {
                 var node = this.GetTemplate(data);
                 if (node == null)
                     throw new Error('LayoutManager.GetTemplate: no template located');
@@ -181,8 +193,15 @@ module NXKit.Web {
                 if (node.id == '')
                     node.id = 'NXKit.Web__' + Util.GenerateGuid().replace(/-/g, '');
 
+                // log result
+                console.dir({
+                    id: node.id,
+                    data: LayoutManager.GetTemplateNodeData(node)
+                });
+
                 // caller expects the id
                 return node.id;
+            });
         }
 
     }

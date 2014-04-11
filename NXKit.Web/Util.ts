@@ -3,7 +3,15 @@
     /**
      * Tests two objects for equality.
      */
-    export function DeepEquals(a: any, b: any): boolean {
+    export function DeepEquals(a: any, b: any, f?: (a: any, b: any) => boolean): boolean {
+
+        // allow overrides
+        if (f != null) {
+            var t = f(a, b);
+            if (t != null) {
+                return t;
+            }
+        }
 
         if (a == null &&
             b === null)
@@ -30,19 +38,27 @@
 
         for (var i in a) {
             if (a.hasOwnProperty(i)) {
-                if (!b.hasOwnProperty(i))
+                if (!b.hasOwnProperty(i)) {
+                    if (!Util.DeepEquals(a[i], null, f)) {
+                        return false;
+                    }
+                }
+                else if (!Util.DeepEquals(a[i], b[i], f)) {
                     return false;
-                if (!Util.DeepEquals(a[i], b[i]))
-                    return false;
+                }
             }
         }
 
         for (var i in b) {
             if (b.hasOwnProperty(i)) {
-                if (!a.hasOwnProperty(i))
+                if (!a.hasOwnProperty(i)) {
+                    if (!Util.DeepEquals(null, b[i], f)) {
+                        return false;
+                    }
+                }
+                else if (!Util.DeepEquals(a[i], b[i], f)) {
                     return false;
-                if (!Util.DeepEquals(b[i], a[i]))
-                    return false;
+                }
             }
         }
 

@@ -27,41 +27,53 @@ module NXKit.Web.Knockout {
           * Converts the given value accessor into a value accessor compatible with the default template implementation.
           */
         static ConvertValueAccessor(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): () => any {
-            return () => {
+            return () => Log.Group('TemplateBindingHandler.ConvertValueAccessor', () => {
+                console.dir({
+                    value: valueAccessor(),
+                    viewModel: viewModel,
+                });
 
                 // resolve the view model to be passed to the template
                 var data = this.GetTemplateViewModel(valueAccessor, viewModel, bindingContext);
                 if (data == null ||
                     Object.getOwnPropertyNames(data).length == 0) {
-                    console.debug('TemplateBindingHandler: unknown viewModel');
+                    console.error('unknown viewModel');
+                    return null;
                 }
 
                 // resolve the options to use to look up the template
                 var opts = this.GetTemplateOptions(valueAccessor, viewModel, bindingContext);
                 if (opts == null ||
                     Object.getOwnPropertyNames(opts).length == 0) {
-                    console.debug('TemplateBindingHandler: unknown template options');
+                    console.error('unknown template options');
+                    return null;
                 }
 
                 // resolve the template name from the options
                 var name = this.GetTemplateName(bindingContext, opts);
                 if (name == null) {
-                    console.debug('TemplateBindingHandler: unknown template');
+                    console.error('unknown template');
+                    return null;
                 }
+
+                console.dir({
+                    data: data,
+                    opts: opts,
+                    name: name,
+                });
 
                 return {
                     data: data,
                     name: name,
                 };
-
-            };
+            });
         }
 
         /**
          * Gets the recommended view model for the given binding information.
          */
         static GetTemplateViewModel(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any {
-            var value = valueAccessor() || viewModel;
+            var value = valueAccessor();
 
             // value itself is a node
             if (value != null &&
