@@ -74,7 +74,6 @@
 -->
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-layout="field-label">
 
     <!-- ko with: Label -->
@@ -96,7 +95,6 @@
 -->
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-layout="field-with-label">
 
     <div class="field"
@@ -129,7 +127,6 @@ css: {
 -->
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-layout="field-without-label">
 
     <div class="inline field"
@@ -151,7 +148,6 @@ css: {
 -->
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-layout="field">
 
     <!-- ko nxkit_template: {
@@ -165,7 +161,6 @@ css: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-level="1"
         data-nxkit-layout="single">
 
@@ -180,7 +175,6 @@ css: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-level="1"
         data-nxkit-layout="double">
 
@@ -202,7 +196,6 @@ css: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-level="1"
         data-nxkit-layout="group">
 
@@ -226,7 +219,6 @@ css: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-level="1"
         data-nxkit-layout="node">
 
@@ -237,7 +229,6 @@ css: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-level="1"
         data-nxkit-layout="input">
 
@@ -248,7 +239,6 @@ css: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-level="2"
         data-nxkit-layout="single">
 
@@ -270,7 +260,6 @@ css: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-level="2"
         data-nxkit-layout="double">
 
@@ -300,7 +289,6 @@ css: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-level="2"
         data-nxkit-layout="group">
 
@@ -330,7 +318,6 @@ css: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-level="2"
         data-nxkit-layout="node">
     <!-- ko nxkit_template: ItemNode -->
@@ -339,7 +326,6 @@ css: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
         data-nxkit-level="2"
         data-nxkit-layout="input">
     <!-- ko nxkit_template: ItemNode -->
@@ -348,7 +334,27 @@ css: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
+        data-nxkit-level="3"
+        data-nxkit-layout="single">
+
+    <!-- ko with: Items[0] -->
+    <div class="field">
+
+        <!-- ko with: Label -->
+        <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+        <label data-bind="nxkit_template: $data" />
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- ko nxkit_template: Layout -->
+        <!-- /ko -->
+
+    </div>
+    <!-- /ko -->
+
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
         data-nxkit-level="3"
         data-nxkit-layout="double">
 
@@ -373,7 +379,35 @@ css: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*"
+        data-nxkit-level="3"
+        data-nxkit-layout="group">
+
+    <div style="margin-bottom: 10px;"
+         data-bind="nxkit_visible: Relevant">
+
+        <!-- ko with: Label -->
+        <!-- ko if: ($data.Appearance || 'full') == 'full' -->
+        <header class="ui top attached tiny header"
+                data-bind="nxkit_template: $data" />
+        <!-- /ko -->
+        <!-- /ko -->
+
+        <div class="ui secondary segment"
+             data-bind="css: { attached: Label }">
+
+            <!-- ko foreach: Items -->
+            <!-- ko nxkit_template: Layout -->
+            <!-- /ko -->
+            <!-- /ko -->
+
+        </div>
+
+    </div>
+
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
         data-nxkit-level="3"
         data-nxkit-layout="node">
     <!-- ko nxkit_template: ItemNode -->
