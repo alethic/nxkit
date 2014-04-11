@@ -18,7 +18,7 @@ namespace NXKit.Serialization
     {
 
         internal static readonly XNamespace NX_NS = "http://schemas.nxkit.org/2014/serialization";
-        internal static readonly XName NX_ANNOTATION = "annotation";
+        internal static readonly XName NX_ANNOTATION = NX_NS + "annotation";
         internal static readonly XName NX_FOR = "for";
         internal const string NX_FOR_DOCUMENT = "document";
         internal const string NX_FOR_ELEMENT = "element";

@@ -94,7 +94,7 @@ namespace NXKit.XForms
                 throw new DOMTargetEventException(Element, Events.LinkException);
 
             if (instanceChildElements.Length == 1)
-                State.Initialize(Model, Element, new XDocument(instanceChildElements[0]));
+                State.Initialize(Model, Element, new XDocument(instanceChildElements[0].PrefixSafeClone()));
         }
 
         void IOnLoad.Load()

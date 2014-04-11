@@ -223,7 +223,7 @@ namespace NXKit
             {
                 Encoding = Encoding.UTF8,
                 OmitXmlDeclaration = true,
-                NamespaceHandling = NamespaceHandling.OmitDuplicates,
+                NamespaceHandling = NamespaceHandling.Default,
             };
 
             using (var wrt = XmlWriter.Create(writer, settings))

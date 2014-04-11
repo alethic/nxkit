@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Util;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -10,7 +13,8 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}repeat")]
     public class Repeat :
         ElementExtension,
-        IOnRefresh
+        IOnRefresh,
+        IOnInitialize
     {
 
         readonly RepeatAttributes attributes;
@@ -19,6 +23,7 @@ namespace NXKit.XForms
         readonly Lazy<IUIBindingNode> uiBindingNode;
         readonly Lazy<UIBinding> uiBinding;
         readonly Lazy<RepeatState> state;
+        readonly Lazy<XElement> template;
 
         /// <summary>
         /// Initializes a new instance.
@@ -35,6 +40,7 @@ namespace NXKit.XForms
             this.uiBindingNode = new Lazy<IUIBindingNode>(() => Element.Interface<IUIBindingNode>());
             this.uiBinding = new Lazy<UIBinding>(() => uiBindingNode.Value.UIBinding);
             this.state = new Lazy<RepeatState>(() => Element.AnnotationOrCreate<RepeatState>());
+            this.template = new Lazy<XElement>(() => State.Template);
         }
 
         RepeatState State
@@ -59,6 +65,25 @@ namespace NXKit.XForms
         {
             get { return State.Index; }
             set { State.Index = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the persisted template.
+        /// </summary>
+        XElement Template
+        {
+            get { return State.Template; }
+            set { State.Template = value; }
+        }
+
+        void Initialize()
+        {
+            // acquire template
+            Template = new XElement(
+                Constants.XForms_1_0 + "group", 
+                Element.GetNamespacePrefixAttributes(),
+                Element.Nodes());
+            Element.RemoveNodes();
         }
 
         /// <summary>
@@ -150,6 +175,11 @@ namespace NXKit.XForms
         void IOnRefresh.DiscardEvents()
         {
 
+        }
+
+        void IOnInitialize.Initialize()
+        {
+            Initialize();
         }
 
     }

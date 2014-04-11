@@ -115,7 +115,7 @@ namespace NXKit.XForms
             if (document != null)
             {
                 writer.WriteStartElement("xml");
-                writer.WriteNode(XNodeAnnotationSerializer.Serialize(document).CreateReader(ReaderOptions.OmitDuplicateNamespaces), true);
+                writer.WriteNode(XNodeAnnotationSerializer.Serialize(document).CreateReader(), true);
                 writer.WriteEndElement();
             }
         }

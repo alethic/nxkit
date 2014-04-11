@@ -4,6 +4,8 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Util;
+
 namespace NXKit.Xml
 {
 
@@ -73,6 +75,39 @@ namespace NXKit.Xml
             foreach (var element in self.Elements())
                 foreach (var i in DescendantsAndSelfInRefScope(element, scopes))
                     yield return i;
+        }
+
+        /// <summary>
+        /// Creates a clone of the given <see cref="XElement"/>, maintaining namespace prefixes.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static XElement PrefixSafeClone(this XElement self)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+
+            return new XElement(self.Name,
+                GetNamespacePrefixAttributes(self),
+                self.Nodes());
+        }
+
+        /// <summary>
+        /// Gets the first namespace attribute for each prefix ascending in the hierarchy. This describes the current
+        /// namespace prefixes available to the children nodes of the given <see cref="XElement"/>.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public static IEnumerable<XAttribute> GetNamespacePrefixAttributes(this XElement element)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+
+            return element.AncestorsAndSelf()
+                .Attributes()
+                .Prepend(new XAttribute("xmlns", element.GetDefaultNamespace().NamespaceName))
+                .Where(i => i.IsNamespaceDeclaration)
+                .GroupBy(i => i.Name.LocalName)
+                .Select(i => i.First())
+                .Select(i => new XAttribute(i));
         }
 
     }
