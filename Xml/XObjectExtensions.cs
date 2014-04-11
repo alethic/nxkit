@@ -40,7 +40,7 @@ namespace NXKit.Xml
         {
             Contract.Requires<ArgumentNullException>(self != null);
 
-            var baseUriAttr = (string)self.Attribute("xml:base");
+            var baseUriAttr = (string)self.Attribute(XNamespace.Xml + "base");
             if (baseUriAttr != null)
                 return baseUriAttr;
 
