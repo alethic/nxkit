@@ -160,6 +160,7 @@
     <Compile Include="Xml\XContainerExtensions.cs" />
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="Xml\XDocumentExtensions.cs" />
+    <Compile Include="Xml\XAttributeExceptions.cs" />
     <Compile Include="Xml\XNodeExtensions.cs" />
     <Compile Include="Xml\XObjectExtensions.cs" />
     <Compile Include="PriorityAttribute.cs" />

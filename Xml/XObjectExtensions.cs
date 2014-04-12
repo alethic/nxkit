@@ -17,21 +17,145 @@ namespace NXKit.Xml
     {
 
         /// <summary>
+        /// Resolves a <see cref="XElement"/> by IDREF from the vantage point of this <see cref="XObject"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static XElement ResolveId(this XObject self, string id)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(self.Parent != null);
+            Contract.Requires<ArgumentNullException>(id != null);
+
+            var attr = self as XAttribute;
+            if (attr != null)
+                return attr.ResolveId(id);
+
+            var node = self as XNode;
+            if (node != null)
+                return node.ResolveId(id);
+
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
         /// Gets the unique identifier for the object.
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="self"></param>
         /// <returns></returns>
-        public static int GetObjectId(this XObject obj)
+        public static int GetObjectId(this XObject self)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
-            Contract.Requires<ArgumentNullException>(obj.Document != null);
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(self.Document != null);
 
             // gets the node id, or allocates a new one with the document
-            return obj.AnnotationOrCreate<ObjectAnnotation>(() =>
+            return self.AnnotationOrCreate<ObjectAnnotation>(() =>
                 new ObjectAnnotation(
-                    obj.Document.AnnotationOrCreate<DocumentAnnotation>()
+                    self.Document.AnnotationOrCreate<DocumentAnnotation>()
                         .GetNextNodeId())).Id;
         }
+
+        #region Naming
+
+        /// <summary>
+        /// Gets the namespace associated with a prefix for this <see cref="XObject"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
+        public static XNamespace GetNamespaceOfPrefix(this XObject self, string prefix)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(self is XAttribute || self is XNode);
+            Contract.Requires<ArgumentException>(self.Parent != null);
+            Contract.Requires<ArgumentNullException>(prefix != null);
+
+            var attr = self as XAttribute;
+            if (attr != null)
+                return attr.GetNamespaceOfPrefix(prefix);
+
+            var node = self as XNode;
+            if (node != null)
+                return node.GetNamespaceOfPrefix(prefix);
+
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Gets the prefix associated with a namespace for this <see cref="XObject"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="ns"></param>
+        /// <returns></returns>
+        public static string GetPrefixOfNamespace(this XObject self, XNamespace ns)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(self is XAttribute || self is XNode);
+            Contract.Requires<ArgumentException>(self.Parent != null);
+            Contract.Requires<ArgumentNullException>(ns != null);
+
+            var attr = self as XAttribute;
+            if (attr != null)
+                return attr.GetPrefixOfNamespace(ns);
+
+            var node = self as XNode;
+            if (node != null)
+                return node.GetPrefixOfNamespace(ns);
+
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Resolves a <see cref="XName"/> from the given prefixed name, given the specified <see cref="XObject"/>'s
+        /// naming context.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="prefixedName"></param>
+        /// <returns></returns>
+        public static XName ResolvePrefixedName(this XObject self, string prefixedName)
+        {
+            var i = prefixedName.IndexOf(':');
+            if (i == -1)
+                return self.GetNamespaceOfPrefix("") + prefixedName;
+
+            var prefix = prefixedName.Substring(0, i + 1);
+            if (string.IsNullOrWhiteSpace(prefix))
+                prefix = null;
+
+            var localName = prefixedName.Substring(i);
+            if (string.IsNullOrWhiteSpace(localName))
+                localName = null;
+
+            var ns = self.GetNamespaceOfPrefix(prefix);
+            if (ns == null)
+                throw new NullReferenceException();
+
+            return ns + localName;
+        }
+
+        /// <summary>
+        /// Resolves a sequence of <see cref="XName"/>s from the given prefixed names, given the specified <see cref="XObject"/>'s
+        /// naming context.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static IEnumerable<XName> ResolvePrefixedNames(this XObject self, string prefixedNames)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(prefixedNames != null);
+
+            foreach (var v in prefixedNames.Split(' '))
+            {
+                var name = ResolvePrefixedName(self, v);
+                if (name != null)
+                    yield return name;
+            }
+        }
+
+        #endregion
+
+        #region BaseUri
 
         /// <summary>
         /// Gets the BaseUri of the <see cref="XObject"/>.
@@ -53,6 +177,11 @@ namespace NXKit.Xml
             return null;
         }
 
+        /// <summary>
+        /// Gets the BaseUri of the <see cref="XElement"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
         public static string BaseUri(this XElement self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
@@ -97,6 +226,10 @@ namespace NXKit.Xml
             BaseUri(self, !string.IsNullOrWhiteSpace(baseUri) ? new Uri(baseUri) : null);
         }
 
+        #endregion
+
+        #region Navigation
+
         /// <summary>
         /// Obtains the ancestors of the given <see cref="XObject"/>
         /// </summary>
@@ -136,6 +269,10 @@ namespace NXKit.Xml
             return self.Ancestors().Prepend(self);
         }
 
+        #endregion
+
+        #region Annotations
+
         /// <summary>
         /// Gets the first annotation object of the specified type, or creates a new one.
         /// </summary>
@@ -172,6 +309,10 @@ namespace NXKit.Xml
 
             return value;
         }
+
+        #endregion
+
+        #region NXKit
 
         /// <summary>
         /// Gets all the implemented interfaces of this <see cref="XObject"/>.
@@ -271,6 +412,8 @@ namespace NXKit.Xml
 
             return self.AnnotationOrCreate<NXDocumentHost>(() => self.Document != null ? self.Document.Host() : null);
         }
+
+        #endregion
 
     }
 
