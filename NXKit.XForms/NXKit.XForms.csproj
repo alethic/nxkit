@@ -140,7 +140,7 @@
     <Compile Include="ISelectableValue.cs" />
     <Compile Include="RepeatItemState.cs" />
     <Compile Include="Select1Attributes.cs" />
-    <Compile Include="ModelItemPropertyAttributes.cs" />
+    <Compile Include="BindAttributes.cs" />
     <Compile Include="CommonAttributes.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Events.cs" />
@@ -167,7 +167,7 @@
     <Compile Include="UIBinding.cs" />
     <Compile Include="UIBindingNode.cs" />
     <Compile Include="UIBindingState.cs" />
-    <Compile Include="XFormsXsltContext.cs" />
+    <Compile Include="EvaluationXsltContext.cs" />
     <Compile Include="Action.cs" />
     <Compile Include="Alert.cs" />
     <Compile Include="Binding.cs" />

@@ -215,53 +215,11 @@ namespace NXKit.XForms
                 State.Recalculate = false;
                 State.Revalidate = true;
 
-                // update each binding
+                // apply all of the bind elements
                 foreach (var bind in GetAllExtensions<Bind>())
                 {
-                    // refresh binding properties
-                    bind.Refresh();
-
-                    if (bind.ModelItems == null)
-                        continue;
-
-                    foreach (var modelItem in bind.ModelItems)
-                    {
-                        var modelItemState = modelItem.State;
-
-                        // bind applies a type
-                        if (bind.Type != null)
-                            if (modelItemState.Type != bind.Type)
-                                modelItemState.Type = bind.Type;
-
-                        // bind applies read-only
-                        if (bind.ReadOnly != null)
-                            if (modelItemState.ReadOnly != bind.ReadOnly)
-                                modelItemState.ReadOnly = bind.ReadOnly;
-
-                        // bind applies reqired
-                        if (bind.Required != null)
-                            if (modelItemState.Required != bind.Required)
-                                modelItemState.Required = bind.Required;
-
-                        // bind applies relevant
-                        if (bind.Relevant != null)
-                            if (modelItemState.Relevant != bind.Relevant)
-                                modelItemState.Relevant = bind.Relevant;
-
-                        // bind applies constraint
-                        if (bind.Constraint != null)
-                            if (modelItemState.Constraint != bind.Constraint)
-                                modelItemState.Constraint = bind.Constraint;
-
-                        // bind applies calculate
-                        if (bind.Calculate != null)
-                        {
-                            if (modelItemState.ReadOnly == false)
-                                modelItemState.ReadOnly = true;
-                            if (modelItem.Value != bind.Calculate)
-                                modelItem.Value = bind.Calculate;
-                        }
-                    }
+                    bind.Recalculate();
+                    bind.Apply();
                 }
             }
             while (State.Recalculate);

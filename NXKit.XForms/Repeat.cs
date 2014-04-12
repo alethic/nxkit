@@ -91,45 +91,52 @@ namespace NXKit.XForms
         /// <returns></returns>
         void RefreshNodes()
         {
-            if (Binding == null ||
-                Binding.ModelItems == null)
-                Element.RemoveNodes();
+            // store current index item
+            var lastIndexItem = Element
+                .Nodes()
+                .FirstOrDefault(i => i.AnnotationOrCreate<RepeatItemState>().Index == Index);
 
-            var nodes = new LinkedList<XNode>();
-
-            for (int index = 1; index <= Binding.ModelItems.Length; index++)
-            {
-                var modelItem = Binding.ModelItems[index - 1];
-                if (modelItem == null)
-                    continue;
-
-                // get existing item or create new
-                var node = Element.Elements()
-                    .FirstOrDefault(i => i.AnnotationOrCreate<RepeatItemState>().ModelItemId == modelItem.Xml.GetObjectId());
-                if (node == null)
-                    node = new XElement(
-                        Constants.XForms_1_0 + "group",
-                        Template.GetNamespacePrefixAttributes(),
-                        Template.Nodes());
-
-                // configure item state
-                var anno = node.AnnotationOrCreate<RepeatItemState>();
-                var swap = anno.Index != index;
-                anno.Index = index;
-                anno.ModelItemId = modelItem.Xml.GetObjectId();
-
-                // node has moved or been created, reset evaluation context
-                if (swap)
+            // build new list of properly ordered nodes
+            var nodes = new LinkedList<XElement>();
+            if (Binding != null &&
+                Binding.ModelItems.Length > 0)
+                for (int index = 1; index <= Binding.ModelItems.Length; index++)
                 {
-                    node.RemoveAnnotations<EvaluationContext>();
-                    node.AddAnnotation(new EvaluationContext(modelItem.Model, modelItem.Instance, modelItem, index, Binding.ModelItems.Length));
+                    var modelItem = Binding.ModelItems[index - 1];
+                    if (modelItem == null)
+                        continue;
+
+                    // get existing item or create new
+                    var node = Element.Elements()
+                        .FirstOrDefault(i => i.AnnotationOrCreate<RepeatItemState>().ModelItemId == modelItem.Xml.GetObjectId());
+                    if (node == null)
+                        node = new XElement(
+                            Constants.XForms_1_0 + "group",
+                            Template.GetNamespacePrefixAttributes(),
+                            Template.Nodes());
+
+                    // configure item state
+                    var anno = node.AnnotationOrCreate<RepeatItemState>();
+                    var swap = anno.Index != index;
+                    anno.Index = index;
+                    anno.ModelItemId = modelItem.Xml.GetObjectId();
+
+                    // node has moved or been created, reset evaluation context
+                    if (swap)
+                    {
+                        node.RemoveAnnotations<EvaluationContext>();
+                        node.AddAnnotation(new EvaluationContext(modelItem.Model, modelItem.Instance, modelItem, index, Binding.ModelItems.Length));
+                    }
+
+                    nodes.AddLast(node);
                 }
 
-                nodes.AddLast(node);
-            }
+            // move kept nodes to the front, and remove the tail
+            Element.AddFirst(nodes);
+            Element.Nodes().Skip(nodes.Count).Remove();
 
-            // replace child nodes with assembled list
-            Element.ReplaceNodes(nodes);
+            // restore or reset index
+            Index = lastIndexItem != null && lastIndexItem.Parent != null ? lastIndexItem.AnnotationOrCreate<RepeatItemState>().Index : 0;
         }
 
         /// <summary>

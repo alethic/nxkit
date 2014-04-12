@@ -214,6 +214,7 @@
     <Content Include="Resources\primaryelections.xml" />
     <Content Include="Resources\primaryperson.xml" />
     <Content Include="Resources\primaryquestions.xml" />
+    <Content Include="Resources\repeat.xml" />
     <Content Include="Resources\secondaryelections.xml" />
     <Content Include="Resources\secondaryperson.xml" />
     <Content Include="Resources\secondaryquestions.xml" />

@@ -29,7 +29,7 @@ namespace NXKit.XForms.XPath.Functions
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        protected abstract object Invoke(XFormsXsltContext context, XPathNavigator navigator, params object[] args);
+        protected abstract object Invoke(EvaluationXsltContext context, XPathNavigator navigator, params object[] args);
 
         /// <summary>
         /// Implements <see cref="IXsltContextFunction"/>.Invoke.
@@ -40,7 +40,7 @@ namespace NXKit.XForms.XPath.Functions
         /// <returns></returns>
         object IXsltContextFunction.Invoke(XsltContext xsltContext, object[] args, XPathNavigator docContext)
         {
-            return Invoke((XFormsXsltContext)xsltContext, docContext, args);
+            return Invoke((EvaluationXsltContext)xsltContext, docContext, args);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace NXKit.XForms.XPath.Functions
         /// <param name="context"></param>
         /// <param name="navigator"></param>
         /// <returns></returns>
-        protected Model GetModel(XFormsXsltContext context, XPathNavigator navigator)
+        protected Model GetModel(EvaluationXsltContext context, XPathNavigator navigator)
         {
             Contract.Requires<ArgumentNullException>(context != null);
             Contract.Requires<ArgumentNullException>(navigator != null);
@@ -69,7 +69,7 @@ namespace NXKit.XForms.XPath.Functions
         /// <param name="context"></param>
         /// <param name="navigator"></param>
         /// <returns></returns>
-        protected Instance GetInstance(XFormsXsltContext context, XPathNavigator navigator)
+        protected Instance GetInstance(EvaluationXsltContext context, XPathNavigator navigator)
         {
             Contract.Requires<ArgumentNullException>(context != null);
             Contract.Requires<ArgumentNullException>(navigator != null);

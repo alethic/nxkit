@@ -32,13 +32,13 @@ namespace NXKit.XForms.XPath.Functions
             get { return XPathResultType.Number; }
         }
 
-        protected override object Invoke(XFormsXsltContext context, XPathNavigator navigator, params object[] args)
+        protected override object Invoke(EvaluationXsltContext context, XPathNavigator navigator, params object[] args)
         {
             var repeatId = (string)args[0];
             if (repeatId == null)
                 return double.NaN;
 
-            var repeat = context.Element.ResolveId(repeatId);
+            var repeat = context.Xml.ResolveId(repeatId);
             if (repeat == null)
                 return double.NaN;
 

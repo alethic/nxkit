@@ -1,0 +1,71 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xf="http://www.w3.org/2002/xforms">
+    <head>
+        <title>Binds in Repeats</title>
+        <style type="text/css">
+            @namespace xf url("http://www.w3.org/2002/xforms");
+            body {{
+                font-family:Helvetica, sans-serif;
+            }}</style>
+        <xf:model>
+            <xf:instance id="my-data">
+                <data xmlns="">
+                    <group>
+                        <code>yes</code>
+                        <field>display 1</field>
+                    </group>
+                    <group>
+                        <code>no</code>
+                        <field>display 2</field>
+                    </group>
+                    <group>
+                        <code>yes</code>
+                        <field>display 3</field>
+                    </group>
+                    <group>
+                        <code>no</code>
+                        <field>display 4</field>
+                    </group>
+                </data>
+            </xf:instance>
+ 
+ 
+            <xf:bind id="field" 
+                nodeset="instance('my-data')/group/field"
+                relevant="../code = 'yes'"/>
+ 
+ 
+        </xf:model>
+    </head>
+    <body>
+        <h1>Test of binding rules within a repeat</h1>
+        <xf:repeat nodeset="instance('my-data')/group" id="my-repeat">
+             <fieldset>
+                 <legend>
+                     Group # <xf:output value="count(preceding-sibling::*) +1"></xf:output>
+                 </legend>
+                 <xf:select1 ref="code">
+                     <xf:label>Display Input Field: </xf:label>
+                     <xf:item>
+                         <xf:label>Yes</xf:label>
+                         <xf:value>yes</xf:value>
+                     </xf:item>
+                     <xf:item>
+                         <xf:label>No</xf:label>
+                         <xf:value>no</xf:value>
+                     </xf:item>
+                 </xf:select1>
+ 
+ 
+                 <xf:input ref="field" >
+                     <xf:label>Conditional Display: </xf:label>
+                 </xf:input>
+ 
+             </fieldset>
+        </xf:repeat>
+ 
+        <xf:output value="index('my-repeat')">
+            <xf:label>Current Selected Group: </xf:label>
+        </xf:output>
+    </body>
+</html>

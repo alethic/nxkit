@@ -86,18 +86,17 @@ namespace NXKit.XForms
         /// <summary>
         /// Evaluates the given XPath expression.
         /// </summary>
-        /// <param name="element"></param>
-        /// <param name="evaluationContext"></param>
+        /// <param name="xml"></param>
         /// <param name="expression"></param>
         /// <param name="resultType"></param>
         /// <returns></returns>
-        internal object EvaluateXPath(XElement element, string expression, XPathResultType resultType)
+        internal object EvaluateXPath(XObject xml, string expression, XPathResultType resultType)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(element.Host() != null);
+            Contract.Requires<ArgumentNullException>(xml != null);
+            Contract.Requires<ArgumentNullException>(xml.Host() != null);
             Contract.Requires<ArgumentNullException>(expression != null);
 
-            var nc = new XFormsXsltContext(element, this);
+            var nc = new EvaluationXsltContext(xml, this);
             var nv = modelItem.CreateNavigator();
             var xp = XPathExpression.Compile(expression, nc);
             var nd = nv.Evaluate(xp);

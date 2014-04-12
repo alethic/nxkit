@@ -8,7 +8,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the attributes for the bind element.
     /// </summary>
-    public class ModelItemPropertyAttributes :
+    public class BindAttributes :
         AttributeAccessor
     {
 
@@ -16,7 +16,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public ModelItemPropertyAttributes(XElement element)
+        public BindAttributes(XElement element)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);

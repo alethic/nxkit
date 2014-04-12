@@ -14,7 +14,7 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly ModelItemPropertyAttributes attributes;
+        readonly BindAttributes attributes;
         readonly Lazy<IBindingNode> nodeBinding;
         readonly Lazy<EvaluationContext> context;
         readonly Lazy<Binding> calculateBinding;
@@ -32,7 +32,7 @@ namespace NXKit.XForms
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.attributes = new ModelItemPropertyAttributes(Element);
+            this.attributes = new BindAttributes(Element);
             this.nodeBinding = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
 
             this.context = new Lazy<EvaluationContext>(() => Element.Interface<EvaluationContextResolver>().Context);
@@ -46,7 +46,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the model item property attribute collection.
         /// </summary>
-        public ModelItemPropertyAttributes Attributes
+        BindAttributes Attributes
         {
             get { return attributes; }
         }
@@ -54,7 +54,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the evaluation context under which binding expressions are built.
         /// </summary>
-        public EvaluationContext Context
+        EvaluationContext Context
         {
             get { return context.Value; }
         }
@@ -62,12 +62,12 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the binding of the element.
         /// </summary>
-        public Binding Binding
+        Binding Binding
         {
             get { return nodeBinding.Value != null ? nodeBinding.Value.Binding : null; }
         }
 
-        public IEnumerable<ModelItem> ModelItems
+        IEnumerable<ModelItem> ModelItems
         {
             get { return GetModelItems(); }
         }
@@ -90,13 +90,7 @@ namespace NXKit.XForms
             if (Attributes.Type == null)
                 return null;
 
-            // lookup namespace of type specifier
-            var nc = new XFormsXsltContext(Element, Context);
-            var st = Attributes.Type.Split(':');
-            var ns = st.Length == 2 ? nc.LookupNamespace(st[0]) : null;
-            var lp = st.Length == 2 ? st[1] : st[0];
-
-            return XName.Get(lp, ns);
+            return attributes.TypeAttribute.ResolvePrefixedName(attributes.Type);
         }
 
         /// <summary>
@@ -147,33 +141,80 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Refreshes all of the bindings.
+        /// Recalculates all of the bindings.
         /// </summary>
-        public void Refresh()
+        public void Recalculate()
         {
             if (nodeBinding.IsValueCreated &&
                 nodeBinding.Value != null)
-                nodeBinding.Value.Binding.Refresh();
+                nodeBinding.Value.Binding.Recalculate();
 
             if (calculateBinding.IsValueCreated &&
                 calculateBinding.Value != null)
-                calculateBinding.Value.Refresh();
+                calculateBinding.Value.Recalculate();
 
             if (readOnlyBinding.IsValueCreated &&
                 readOnlyBinding.Value != null)
-                readOnlyBinding.Value.Refresh();
+                readOnlyBinding.Value.Recalculate();
 
             if (requiredBinding.IsValueCreated &&
                 requiredBinding.Value != null)
-                requiredBinding.Value.Refresh();
+                requiredBinding.Value.Recalculate();
 
             if (relevantBinding.IsValueCreated &&
                 relevantBinding.Value != null)
-                relevantBinding.Value.Refresh();
+                relevantBinding.Value.Recalculate();
 
             if (constraintBinding.IsValueCreated &&
                 constraintBinding.Value != null)
-                constraintBinding.Value.Refresh();
+                constraintBinding.Value.Recalculate();
+        }
+
+        /// <summary>
+        /// Applies the bindings to the model item.
+        /// </summary>
+        public void Apply()
+        {
+            foreach (var modelItem in ModelItems)
+            {
+                var state = modelItem.State;
+                if (state == null)
+                    continue;
+
+                // bind applies a type
+                if (Type != null)
+                    if (state.Type != Type)
+                        state.Type = Type;
+
+                // bind applies read-only
+                if (ReadOnly != null)
+                    if (state.ReadOnly != ReadOnly)
+                        state.ReadOnly = ReadOnly;
+
+                // bind applies reqired
+                if (Required != null)
+                    if (state.Required != Required)
+                        state.Required = Required;
+
+                // bind applies relevant
+                if (Relevant != null)
+                    if (state.Relevant != Relevant)
+                        state.Relevant = Relevant;
+
+                // bind applies constraint
+                if (Constraint != null)
+                    if (state.Constraint != Constraint)
+                        state.Constraint = Constraint;
+
+                // bind applies calculate
+                if (Calculate != null)
+                {
+                    if (state.ReadOnly == false)
+                        state.ReadOnly = true;
+                    if (modelItem.Value != Calculate)
+                        modelItem.Value = Calculate;
+                }
+            }
         }
 
     }

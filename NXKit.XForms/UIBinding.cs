@@ -174,7 +174,7 @@ namespace NXKit.XForms
 
             if (binding != null)
             {
-                binding.Refresh();
+                binding.Recalculate();
 
                 if (modelItem != binding.ModelItem)
                     modelItem = binding.ModelItem;

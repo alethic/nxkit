@@ -34,7 +34,7 @@ namespace NXKit.XForms.XPath.Functions
             get { return XPathResultType.NodeSet; }
         }
 
-        protected override object Invoke(XFormsXsltContext context, XPathNavigator navigator, params object[] args)
+        protected override object Invoke(EvaluationXsltContext context, XPathNavigator navigator, params object[] args)
         {
             var id = args.Length > 0 ? ((string)args[0]).TrimToNull() : null;
             if (id == null)
@@ -44,9 +44,9 @@ namespace NXKit.XForms.XPath.Functions
             else
             {
                 // resolve instance based on id
-                var instance = context.Element.ResolveId(id);
+                var instance = context.Xml.ResolveId(id);
                 if (instance == null)
-                    throw new DOMTargetEventException(context.Element, Events.BindingException);
+                    throw new DOMTargetEventException(context.Xml.Parent, Events.BindingException);
 
                 return instance
                     .Interfaces<Instance>()

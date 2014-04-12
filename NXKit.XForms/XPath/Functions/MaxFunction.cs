@@ -30,7 +30,7 @@ namespace NXKit.XForms.XPath.Functions
             get { return XPathResultType.Number; }
         }
 
-        protected override object Invoke(XFormsXsltContext context, XPathNavigator navigator, params object[] args)
+        protected override object Invoke(EvaluationXsltContext context, XPathNavigator navigator, params object[] args)
         {
             var nodes = args[0] as XPathNodeIterator;
             if (nodes == null)

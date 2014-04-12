@@ -56,7 +56,7 @@ namespace NXKit.XForms
             this.xpath = xpath;
 
             // initial load of values
-            Refresh();
+            Recalculate();
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Initiates a refresh of the binding.
         /// </summary>
-        public void Refresh()
+        public void Recalculate()
         {
             result = new Lazy<object>(() => GetResult());
             modelItems = new Lazy<ModelItem[]>(() => GetModelItems());
