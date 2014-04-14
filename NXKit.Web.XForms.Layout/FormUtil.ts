@@ -90,10 +90,15 @@
     /**
       * Converts each node into a step item.
       */
-    function GetSteps(node: Node, parent: Step, isActive: (step: Step) => boolean, setActive: (step: Step) => void): Step[] {
-        return node.Nodes()
-            .filter(_ => IsStepNode(_))
-            .map(_ => new Step(_, parent, isActive, setActive));
+    function GetSteps(node: Node, parent: Step, isActive: (step: Step) => boolean, setActive: (step: Step) => void): Step[]{
+        var nodes = node.Nodes();
+
+        var steps = new Array<Step>();
+        for (var i = 0; i < nodes.length; i++)
+            if (!IsStepNode(nodes[i]))
+                steps.push(new Step(nodes[i], parent, isActive, setActive));
+
+        return steps;
     }
 
 }

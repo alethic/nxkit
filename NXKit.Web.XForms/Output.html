@@ -1,0 +1,15 @@
+﻿<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}output"
+        data-nxkit-data-type="*">
+    <!-- ko with: new NXKit.Web.XForms.LabelViewModel($context, $data) -->
+    <span class="xforms-output">
+        <!-- ko foreach: Contents -->
+        <!-- ko nxkit_template -->
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- ko if: Text -->
+        <span data-bind="text: Text" />
+        <!-- /ko -->
+    </span>
+    <!-- /ko -->
+</script>

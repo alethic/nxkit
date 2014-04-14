@@ -207,9 +207,6 @@
     <EmbeddedResource Include="Text.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Unknown.html" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="View.html" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

@@ -19,7 +19,7 @@ namespace NXKit.XForms
 
         static readonly ModelItem[] EmptyModelItemSequence = new ModelItem[0];
 
-        readonly XElement element;
+        readonly XObject xml;
         readonly EvaluationContext context;
         readonly string xpath;
 
@@ -41,17 +41,17 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="element"></param>
+        /// <param name="xml"></param>
         /// <param name="context"></param>
         /// <param name="xpath"></param>
-        internal Binding(XElement element, EvaluationContext context, string xpath)
+        internal Binding(XObject xml, EvaluationContext context, string xpath)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(element.Host() != null);
+            Contract.Requires<ArgumentNullException>(xml != null);
+            Contract.Requires<ArgumentNullException>(xml.Host() != null);
             Contract.Requires<ArgumentNullException>(context != null);
             Contract.Requires<ArgumentNullException>(xpath != null);
 
-            this.element = element;
+            this.xml = xml;
             this.context = context;
             this.xpath = xpath;
 
@@ -60,11 +60,11 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// <see cref="Element"/> to which this binding is related.
+        /// <see cref="XElement"/> to which this binding is related.
         /// </summary>
-        public XElement Element
+        public XObject Xml
         {
-            get { return element; }
+            get { return xml; }
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace NXKit.XForms
 
         object GetResult()
         {
-            return Context.EvaluateXPath(Element, XPathExpression, XPathResultType.NodeSet);
+            return Context.EvaluateXPath(Xml, XPathExpression, XPathResultType.NodeSet);
         }
 
         /// <summary>

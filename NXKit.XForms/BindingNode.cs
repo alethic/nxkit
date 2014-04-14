@@ -62,8 +62,13 @@ namespace NXKit.XForms
             if (bindIdRef != null)
                 return GetBindBinding(bindIdRef);
 
-            // otherwise 'ref' or 'nodeset'
-            var expression = Attributes.Ref ?? Attributes.NodeSet;
+            // determine 'ref' or 'nodeset' attribute
+            var attribute = Attributes.RefAttribute ?? Attributes.NodeSetAttribute;
+            if (attribute == null)
+                return null;
+
+            // obtain expression
+            var expression = attribute.Value;
             if (expression == null)
                 return null;
 
@@ -72,7 +77,7 @@ namespace NXKit.XForms
             if (context == null)
                 throw new DOMTargetEventException(Element, Events.BindingException);
 
-            return new Binding(Element, context, expression);
+            return new Binding(attribute, context, expression);
         }
 
         /// <summary>

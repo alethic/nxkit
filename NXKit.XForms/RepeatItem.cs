@@ -6,30 +6,39 @@ namespace NXKit.XForms
 {
 
     /// <summary>
-    /// Serves as a generated item within a repeat.
+    /// Describes the implicit 'repeat item' group element.
     /// </summary>
-    public class RepeatItem
+    [Interface(typeof(RepeatItemPredicate))]
+    [Remote]
+    public class RepeatItem :
+        ElementExtension
     {
 
-        EvaluationContext context;
-        UIBinding uiBinding;
+        public class RepeatItemPredicate :
+            InterfacePredicateBase
+        {
+
+            public override bool IsMatch(XObject obj, Type type)
+            {
+                return type == typeof(RepeatItem) && obj.Annotation<RepeatItemState>() != null;
+            }
+
+        }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="xml"></param>
-        public RepeatItem(XElement xml)
+        /// <param name="element"></param>
+        public RepeatItem(XElement element)
+            : base(element)
         {
-            Contract.Requires<ArgumentNullException>(xml != null);
+            Contract.Requires<System.ArgumentNullException>(element != null);
         }
 
-        /// <summary>
-        /// Obtains the evaluation context for this visual.
-        /// </summary>
-        public EvaluationContext Context
+        [Remote]
+        public bool IsRepeatItem
         {
-            get { return context; }
-            internal set { context = value; }
+            get { return true; }
         }
 
     }

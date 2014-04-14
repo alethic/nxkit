@@ -41,7 +41,11 @@ namespace NXKit.XPath
         /// <returns></returns>
         public override IXsltContextFunction ResolveFunction(string prefix, string localName, XPathResultType[] argTypes)
         {
-            var name = XName.Get(localName, prefix != "" ? LookupNamespace(prefix) : XNamespace.None.NamespaceName);
+            Contract.Assert(prefix != null);
+            Contract.Assert(localName != null);
+            Contract.Assert(argTypes != null);
+
+            var name = XName.Get(localName, LookupNamespace(prefix));
             if (name == null)
                 throw new XPathException("Unable to resolve function name.");
 

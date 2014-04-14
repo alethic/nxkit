@@ -48,7 +48,7 @@ namespace NXKit.Xml
 
             var element = self as XElement;
             if (element != null)
-                return element.GetNamespaceOfPrefix(prefix);
+                return prefix != "" ? element.GetNamespaceOfPrefix(prefix) : element.GetDefaultNamespace();
 
             var document = self as XDocument;
             if (document != null)
@@ -66,7 +66,6 @@ namespace NXKit.Xml
         public static string GetPrefixOfNamespace(this XNode self, XNamespace ns)
         {
             Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self is XAttribute || self is XNode);
             Contract.Requires<ArgumentException>(self.Parent != null);
             Contract.Requires<ArgumentNullException>(ns != null);
 

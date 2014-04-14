@@ -132,6 +132,7 @@
     <TypeScriptCompile Include="GroupLayoutManager.ts" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="OutputViewModel.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="TriggerViewModel.ts" />
     <TypeScriptCompile Include="SelectUtil.ts" />
@@ -182,6 +183,7 @@
     <EmbeddedResource Include="Label.html" />
     <EmbeddedResource Include="Alert.html" />
     <EmbeddedResource Include="Trigger.html" />
+    <EmbeddedResource Include="Output.html" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

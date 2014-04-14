@@ -37,7 +37,7 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentNullException>(self != null);
             Contract.Requires<ArgumentNullException>(prefix != null);
 
-            return self.Root.GetNamespaceOfPrefix(prefix);
+            return prefix != "" ? self.Root.GetNamespaceOfPrefix(prefix) : self.Root.GetDefaultNamespace();
         }
 
         /// <summary>
