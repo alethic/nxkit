@@ -40,7 +40,7 @@ namespace NXKit.Xml
 
             if (prefix == "")
                 // default prefix
-                if (self.Name.Namespace != null)
+                if (self.Name.Namespace != XNamespace.None)
                     // attribute's specified prefix takes priority
                     return self.Name.Namespace;
                 else
