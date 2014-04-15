@@ -26,6 +26,13 @@
       * Nodes which are considered to be transparent, and ignored when calculating content membership.
       */
     export var TransparentNodes: string[] = [];
+
+    /**
+      * Nodes which are considered to be transparent, and ignored when calculating content membership.
+      */
+    export var TransparentNodePredicates: Array<(n: Node) => boolean> = [
+        (n: Node) => TransparentNodes.some(_ => _ === n.Name),
+    ];
     
     /**
       * Returns true of the given node is an empty text node.
@@ -108,7 +115,7 @@
       * Returns true if the given node is a transparent node.
       */
     export function IsTransparentNode(node: Node): boolean {
-        return IsIgnoredNode(node) || TransparentNodes.some(_ => node.Name == _);
+        return IsIgnoredNode(node) || TransparentNodePredicates.some(_ => _(node));
     }
 
     /**
