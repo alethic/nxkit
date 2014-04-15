@@ -79,9 +79,10 @@ namespace NXKit.Web.Serialization
                     var jvalue = jproperty.Value;
                     var type = property.PropertyType;
                     var value = jvalue != null ? jvalue.ToObject(type) : null;
+                    var oldValue = property.GetValue(remote.Target);
 
                     // if value has been changed, apply change to remote
-                    if (!object.Equals(property.GetValue(remote.Target), value))
+                    if (!object.Equals(oldValue, value))
                         property.SetValue(remote.Target, value);
                 }
 
