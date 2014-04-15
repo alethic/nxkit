@@ -37,23 +37,20 @@ module NXKit.Web.Knockout {
                 var data = this.GetTemplateViewModel(valueAccessor, viewModel, bindingContext);
                 if (data == null ||
                     Object.getOwnPropertyNames(data).length == 0) {
-                    console.error('unknown viewModel');
-                    return null;
+                    throw new Error('unknown viewModel');
                 }
 
                 // resolve the options to use to look up the template
                 var opts = this.GetTemplateOptions(valueAccessor, viewModel, bindingContext);
                 if (opts == null ||
                     Object.getOwnPropertyNames(opts).length == 0) {
-                    console.error('unknown template options');
-                    return null;
+                    throw new Error('unknown template options');
                 }
 
                 // resolve the template name from the options
                 var name = this.GetTemplateName(bindingContext, opts);
                 if (name == null) {
-                    console.error('unknown template');
-                    return null;
+                    throw new Error('unknown template');
                 }
 
                 console.dir({
