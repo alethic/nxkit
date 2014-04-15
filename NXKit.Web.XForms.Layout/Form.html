@@ -3,41 +3,10 @@
     <!-- ko with: new NXKit.Web.XForms.Layout.FormViewModel($context, $data) -->
     <div class="xforms-layout-form">
 
-        <div class="ui small steps">
-            <!-- ko foreach: RootStep.Steps -->
-            <!-- ko if: Label -->
-            <div class="ui step" data-bind="
-    click: SetActive,
-    nxkit_hvisible: !Disabled(),
-    css: {
-        active: Active,
-    }">
-                <!-- ko nxkit_template: {
-                    node: Label,
-                } -->
-                <!-- /ko -->
-            </div>
-            <!-- /ko -->
-            <!-- /ko -->
-        </div>
-
         <!-- ko foreach: Contents -->
         <!-- ko nxkit_template -->
         <!-- /ko -->
         <!-- /ko -->
-
-        <div class="ui center aligned segment">
-            <div class="ui massive buttons">
-                <button class="ui button" data-bind="click: GoPreviousStep">Previous</button>
-                <div class="or"></div>
-                <button class="ui animated positive button" data-bind="click: GoNextStep">
-                    <div class="visible content">Continue</div>
-                    <div class="hidden content">
-                        <i class="right arrow icon"></i>
-                    </div>
-                </button>
-            </div>
-        </div>
 
     </div>
     <!-- /ko -->

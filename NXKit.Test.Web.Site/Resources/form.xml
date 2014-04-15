@@ -1,391 +1,388 @@
-﻿<f:form xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+﻿<f:form xmlns="http://www.w3.org/2002/xforms"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
         xmlns:xf="http://www.w3.org/2002/xforms"
         xmlns:ev="http://www.w3.org/2001/xml-events">
-    <xf:model id="data">
+    <model id="data">
 
-        <xf:instance id="misc">
+        <instance id="misc">
             <data xmlns="">
                 <secondary>false</secondary>
             </data>
-        </xf:instance>
+        </instance>
 
-        <xf:bind ref="xf:instance('misc')/secondary"
-                 type="xsd:boolean" />
+        <bind ref="instance('misc')/secondary"
+              type="xsd:boolean" />
 
-        <xf:instance id="primaryperson"
-                     src="primaryperson.xml" />
+        <instance id="primaryperson"
+                  src="primaryperson.xml" />
 
-        <xf:bind ref="xf:instance('primaryperson')">
-            <xf:bind ref="heightfeet"
-                     required="true()"
-                     type="xsd:int"/>
-            <xf:bind ref="heightinches"
-                     required="true()"
-                     type="xsd:int"/>
-            <xf:bind ref="weight"
-                     required="true()"
-                     type="xsd:int"/>
-            <xf:bind ref="gender"
-                     required="true()"
-                     type="xsd:string"/>
-            <xf:bind ref="dateofbirth"
-                     required="true()"
-                     type="xsd:date"/>
-            <xf:bind ref="socialsecuritynumber"
-                     required="true()"
-                     constraint="matches(., '^(\d{3}-\d{2}-\d{4})|(\d{9})$')"/>
-            <xf:bind ref="telephone1"
-                     required="true()"
-                     constraint="string-length()>=10"/>
-            <xf:bind ref="telephone2"
-                     required="false()"
-                     constraint=".='' or string-length()>=10" />
-        </xf:bind>
+        <bind ref="instance('primaryperson')">
+            <bind ref="heightfeet"
+                  required="true()"
+                  type="xsd:int"/>
+            <bind ref="heightinches"
+                  required="true()"
+                  type="xsd:int"/>
+            <bind ref="weight"
+                  required="true()"
+                  type="xsd:int"/>
+            <bind ref="gender"
+                  required="true()"
+                  type="xsd:string"/>
+            <bind ref="dateofbirth"
+                  required="true()"
+                  type="xsd:date"/>
+            <bind ref="socialsecuritynumber"
+                  required="true()"
+                  constraint="matches(., '^(\d{3}-\d{2}-\d{4})|(\d{9})$')"/>
+            <bind ref="telephone1"
+                  required="true()"
+                  constraint="string-length()>=10"/>
+            <bind ref="telephone2"
+                  required="false()"
+                  constraint=".='' or string-length()>=10" />
+        </bind>
 
 
-        <xf:instance id="secondaryperson"
-                     src="secondaryperson.xml" />
+        <instance id="secondaryperson"
+                  src="secondaryperson.xml" />
 
-        <xf:bind ref="xf:instance('secondaryperson')"
-                 id="secondary"
-                 relevant="xf:instance('misc')/secondary = 'true'">
-            <xf:bind ref="heightfeet"
-                     required="true()"
-                     type="xsd:int"/>
-            <xf:bind ref="heightinches"
-                     required="true()"
-                     type="xsd:int"/>
-            <xf:bind ref="weight"
-                     required="true()"
-                     type="xsd:int"/>
-            <xf:bind ref="dateofbirth"
-                     type="xsd:date"/>
-        </xf:bind>
+        <bind ref="instance('secondaryperson')"
+              id="secondary"
+              relevant="instance('misc')/secondary = 'true'">
+            <bind ref="heightfeet"
+                  required="true()"
+                  type="xsd:int"/>
+            <bind ref="heightinches"
+                  required="true()"
+                  type="xsd:int"/>
+            <bind ref="weight"
+                  required="true()"
+                  type="xsd:int"/>
+            <bind ref="dateofbirth"
+                  type="xsd:date"/>
+        </bind>
 
-        <xf:instance id="primaryelections"
-                     src="primaryelections.xml" />
+        <instance id="primaryelections"
+                  src="primaryelections.xml" />
 
-        <xf:instance id="secondaryelections"
-                     src="secondaryelections.xml" />
+        <instance id="secondaryelections"
+                  src="secondaryelections.xml" />
 
-        <xf:instance id="primaryquestions"
-                     src="questions.xml" />
+        <instance id="primaryquestions"
+                  src="questions.xml" />
 
-        <xf:bind ref="xf:instance('primaryquestions')">
-            <xf:bind ref="//healthinfo"
-                     relevant="../answer='true' and ./@enable='true'" />
-            <xf:bind ref="//healthinfo/*"
-                     type="xsd:string" />
-        </xf:bind>
+        <bind ref="instance('primaryquestions')">
+            <bind ref="//healthinfo"
+                  relevant="../answer='true' and ./@enable='true'" />
+            <bind ref="//healthinfo/*"
+                  type="xsd:string" />
+        </bind>
 
-        <xf:instance id="secondaryquestions"
-                     src="questions.xml" />
+        <instance id="secondaryquestions"
+                  src="questions.xml" />
 
-        <xf:bind ref="xf:instance('secondaryquestions')"
-                 relevant="xf:instance('misc')/secondary='true'">
-            <xf:bind ref="//healthinfo"
-                     relevant="../answer='true' and ./@enable='true'" />
-            <xf:bind ref="//healthinfo/*"
-                     type="xsd:string" />
-        </xf:bind>
+        <bind ref="instance('secondaryquestions')"
+              relevant="instance('misc')/secondary='true'">
+            <bind ref="//healthinfo"
+                  relevant="../answer='true' and ./@enable='true'" />
+            <bind ref="//healthinfo/*"
+                  type="xsd:string" />
+        </bind>
 
-        <xf:instance id="relationships"
-                     src="relationships.xml" />
+        <instance id="relationships"
+                  src="relationships.xml" />
 
-        <xf:instance id="beneficiaries"
-                     src="beneficiaries.xml" />
+        <instance id="beneficiaries"
+                  src="beneficiaries.xml" />
 
-        <xf:bind ref="xf:instance('beneficiaries')//percentage"
-                 type="xsd:integer" />
+        <bind ref="instance('beneficiaries')//percentage"
+              type="xsd:integer" />
 
-        <xf:submission ref="xf:instance('primaryperson')"
-                       method="put"
-                       action="primaryperson.xml" />
-        <xf:submission ref="xf:instance('secondaryperson')"
-                       method="put"
-                       action="secondaryperson.xml" />
-        <xf:submission ref="xf:instance('primaryelections')"
-                       method="put"
-                       action="primaryelections.xml" />
-        <xf:submission ref="xf:instance('secondaryelections')"
-                       method="put"
-                       action="secondaryelections.xml" />
-        <xf:submission ref="xf:instance('primaryquestions')"
-                       method="put"
-                       action="primaryquestions.xml" />
-        <xf:submission ref="xf:instance('secondaryquestions')"
-                       method="put"
-                       action="secondaryquestions.xml" />
-        <xf:submission ref="xf:instance('beneficiaries')"
-                       method="put"
-                       action="beneficiaries.xml" />
-    </xf:model>
+        <submission ref="instance('primaryperson')"
+                    method="put"
+                    action="primaryperson.xml" />
+        <submission ref="instance('secondaryperson')"
+                    method="put"
+                    action="secondaryperson.xml" />
+        <submission ref="instance('primaryelections')"
+                    method="put"
+                    action="primaryelections.xml" />
+        <submission ref="instance('secondaryelections')"
+                    method="put"
+                    action="secondaryelections.xml" />
+        <submission ref="instance('primaryquestions')"
+                    method="put"
+                    action="primaryquestions.xml" />
+        <submission ref="instance('secondaryquestions')"
+                    method="put"
+                    action="secondaryquestions.xml" />
+        <submission ref="instance('beneficiaries')"
+                    method="put"
+                    action="beneficiaries.xml" />
+    </model>
     <f:section>
-        <xf:label>Applicant Enrollment</xf:label>
-        <xf:group>
-            <xf:label>Additional Enrollees</xf:label>
-            <xf:input ref="xf:instance('misc')/secondary"
-                      appearance="full">
-                <xf:label>Yes, I'd like to take advantage of this offer for my spouse or other partner or whatever and stuff and we will fill in the contents of the rest of this text later.</xf:label>
-            </xf:input>
-        </xf:group>
-        <xf:group ref="xf:instance('primaryperson')">
-            <xf:label>Additional Information About You</xf:label>
-            <xf:help>Complete the form by providing your physical characterists, personal information, and contact information.</xf:help>
-            <xf:group>
-                <xf:label>Physical Characteristics</xf:label>
-                <xf:range ref="heightfeet"
-                          start="2"
-                          end="15"
-                          step="1">
-                    <xf:label>Feet</xf:label>
-                </xf:range>
-                <xf:range ref="heightinches"
-                          start="0"
-                          end="11"
-                          step="1">
-                    <xf:label>Inches</xf:label>
-                </xf:range>
-                <xf:range ref="weight"
-                          start="50"
-                          end="500"
-                          step="5">
-                    <xf:label>Weight</xf:label>
-                </xf:range>
-                <xf:select1 ref="gender">
-                    <xf:label>Sex</xf:label>
-                    <xf:item>
-                        <xf:label>Male</xf:label>
-                        <xf:value>M</xf:value>
-                    </xf:item>
-                    <xf:item>
-                        <xf:label>Female</xf:label>
-                        <xf:value>F</xf:value>
-                    </xf:item>
-                </xf:select1>
-            </xf:group>
-            <xf:input ref="dateofbirth">
-                <xf:label>Date of Birth</xf:label>
-                <xf:help>Provide your date of birth to continue.</xf:help>
-                <xf:hint appearance="minimal">mm/dd/yyyy</xf:hint>
-            </xf:input>
-            <xf:input ref="socialsecuritynumber">
-                <xf:label>Social Security Number</xf:label>
-                <xf:hint appearance="minimal">___-__-____</xf:hint>
-                <xf:alert>Your social security number is required to continue.</xf:alert>
-            </xf:input>
-            <xf:group>
-                <xf:label>Contact Information</xf:label>
-                <xf:input ref="telephone1">
-                    <xf:label>Home Phone</xf:label>
-                    <xf:hint appearance="minimal">1 (___) ___-____</xf:hint>
-                </xf:input>
-                <xf:input ref="telephone2">
-                    <xf:label>Work Phone</xf:label>
-                </xf:input>
-            </xf:group>
-        </xf:group>
-        <xf:group ref="xf:instance('primaryelections')/term-life">
-            <xf:label>Coverage Election</xf:label>
-            <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
-            <xf:select1 ref="coverage-amount"
-                        appearance="full">
-                <xf:item>
-                    <xf:label>$75,000</xf:label>
-                    <xf:value>75000</xf:value>
-                </xf:item>
-                <xf:item>
-                    <xf:label>$100,000</xf:label>
-                    <xf:value>100000</xf:value>
-                </xf:item>
-                <xf:item>
-                    <xf:label>$150,000</xf:label>
-                    <xf:value>150000</xf:value>
-                </xf:item>
-            </xf:select1>
-        </xf:group>
-        <xf:group ref="xf:instance('primaryquestions')">
-            <xf:label>Health Questions</xf:label>
-            <xf:hint>Please answer the following questions by checking “Yes” or “No.”</xf:hint>
-            <xf:repeat ref="question">
-                <xf:select1 ref="answer"
-                            incremental="true">
-                    <xf:label ref="../text" />
-                    <xf:item>
-                        <xf:label>No</xf:label>
-                        <xf:value>false</xf:value>
-                    </xf:item>
-                    <xf:item>
-                        <xf:label>Yes</xf:label>
-                        <xf:value>true</xf:value>
-                    </xf:item>
-                </xf:select1>
-                <xf:group ref="healthinfo">
-                    <xf:input ref="condition">
-                        <xf:label>Condition</xf:label>
-                    </xf:input>
-                    <xf:input ref="dates">
-                        <xf:label>Dates</xf:label>
-                    </xf:input>
-                    <xf:input ref="currentstatus">
-                        <xf:label>Current Status</xf:label>
-                    </xf:input>
-                    <xf:input ref="physicianname">
-                        <xf:label>Physician Name</xf:label>
-                    </xf:input>
-                    <xf:input ref="physicianaddress">
-                        <xf:label>Physician Address</xf:label>
-                    </xf:input>
-                    <xf:input ref="physicianphonenumber">
-                        <xf:label>Physician Phone Number</xf:label>
-                    </xf:input>
-                </xf:group>
-            </xf:repeat>
-        </xf:group>
-    </f:section>
-    <f:section xf:ref="xf:instance('secondaryperson')">
-        <xf:label>Spousal Enrollment</xf:label>
-        <xf:group ref="xf:instance('secondaryperson')">
-            <xf:label>Spouse Information</xf:label>
-            <xf:group>
-                <xf:label>Name</xf:label>
-                <xf:input ref="firstname">
-                    <xf:label>First</xf:label>
-                </xf:input>
-                <xf:input ref="middlename">
-                    <xf:label>Middle</xf:label>
-                </xf:input>
-                <xf:input ref="lastname">
-                    <xf:label>Last</xf:label>
-                </xf:input>
-            </xf:group>
-            <xf:group>
-                <xf:label>Physical Characteristics</xf:label>
-                <xf:range ref="heightfeet"
-                          start="2"
-                          end="15"
-                          step="1">
-                    <xf:label>Feet</xf:label>
-                </xf:range>
-                <xf:range ref="heightinches"
-                          start="0"
-                          end="11"
-                          step="1">
-                    <xf:label>Inches</xf:label>
-                </xf:range>
-                <xf:range ref="weight"
-                          start="50"
-                          end="500"
-                          step="5">
-                    <xf:label>Weight</xf:label>
-                </xf:range>
-                <xf:select1 ref="gender">
-                    <xf:label>Sex</xf:label>
-                    <xf:item>
-                        <xf:label>Male</xf:label>
-                        <xf:value>M</xf:value>
-                    </xf:item>
-                    <xf:item>
-                        <xf:label>Female</xf:label>
-                        <xf:value>F</xf:value>
-                    </xf:item>
-                </xf:select1>
-            </xf:group>
-            <xf:input ref="dateofbirth">
-                <xf:label>Date of Birth</xf:label>
-            </xf:input>
-            <xf:input ref="socialsecuritynumber">
-                <xf:label>Social Security Number</xf:label>
-            </xf:input>
-        </xf:group>
-        <xf:group ref="xf:instance('secondaryelections')/term-life">
-            <xf:label>Coverage Selection</xf:label>
-            <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
-            <xf:select1 ref="coverage-amount">
-                <xf:item>
-                    <xf:label>$75,000</xf:label>
-                    <xf:value>75000</xf:value>
-                </xf:item>
-                <xf:item>
-                    <xf:label>$100,000</xf:label>
-                    <xf:value>100000</xf:value>
-                </xf:item>
-                <xf:item>
-                    <xf:label>$150,000</xf:label>
-                    <xf:value>150000</xf:value>
-                </xf:item>
-            </xf:select1>
-        </xf:group>
-        <xf:group ref="xf:instance('secondaryquestions')">
-            <xf:label>Health Questions</xf:label>
-            <xf:hint>Please answer the following questions by checking “Yes” or “No.”</xf:hint>
-            <xf:repeat ref="question">
-                <xf:select1 ref="answer"
-                            incremental="true">
-                    <xf:label ref="../text" />
-                    <xf:item>
-                        <xf:label>No</xf:label>
-                        <xf:value>false</xf:value>
-                    </xf:item>
-                    <xf:item>
-                        <xf:label>Yes</xf:label>
-                        <xf:value>true</xf:value>
-                    </xf:item>
-                </xf:select1>
-                <xf:group ref="healthinfo">
-                    <xf:input ref="condition">
-                        <xf:label>Condition</xf:label>
-                    </xf:input>
-                    <xf:input ref="dates">
-                        <xf:label>Dates</xf:label>
-                    </xf:input>
-                    <xf:input ref="currentstatus">
-                        <xf:label>Current Status</xf:label>
-                    </xf:input>
-                    <xf:input ref="physicianname">
-                        <xf:label>Physician Name</xf:label>
-                    </xf:input>
-                    <xf:input ref="physicianaddress">
-                        <xf:label>Physician Address</xf:label>
-                    </xf:input>
-                    <xf:input ref="physicianphonenumber">
-                        <xf:label>Physician Phone Number</xf:label>
-                    </xf:input>
-                </xf:group>
-            </xf:repeat>
-        </xf:group>
+        <label>Primary Enrollment</label>
+        <group ref="instance('primaryperson')">
+            <label>Additional Information About You</label>
+            <help>Complete the form by providing your physical characterists, personal information, and contact information.</help>
+            <group>
+                <label>Physical Characteristics</label>
+                <range ref="heightfeet"
+                       start="2"
+                       end="15"
+                       step="1">
+                    <label>Feet</label>
+                </range>
+                <range ref="heightinches"
+                       start="0"
+                       end="11"
+                       step="1">
+                    <label>Inches</label>
+                </range>
+                <range ref="weight"
+                       start="50"
+                       end="500"
+                       step="5">
+                    <label>Weight</label>
+                </range>
+                <select1 ref="gender">
+                    <label>Sex</label>
+                    <item>
+                        <label>Male</label>
+                        <value>M</value>
+                    </item>
+                    <item>
+                        <label>Female</label>
+                        <value>F</value>
+                    </item>
+                </select1>
+            </group>
+            <input ref="dateofbirth">
+                <label>Date of Birth</label>
+                <help>Provide your date of birth to continue.</help>
+                <hint appearance="minimal">mm/dd/yyyy</hint>
+            </input>
+            <input ref="socialsecuritynumber">
+                <label>Social Security Number</label>
+                <hint appearance="minimal">___-__-____</hint>
+                <alert>Your social security number is required to continue.</alert>
+            </input>
+            <group>
+                <label>Contact Information</label>
+                <input ref="telephone1">
+                    <label>Home Phone</label>
+                    <hint appearance="minimal">1 (___) ___-____</hint>
+                </input>
+                <input ref="telephone2">
+                    <label>Work Phone</label>
+                </input>
+            </group>
+        </group>
+        <group ref="instance('primaryelections')/term-life">
+            <label>Coverage Election</label>
+            <hint>Choose the type of coverage and amounts for which you are applying.</hint>
+            <select1 ref="coverage-amount"
+                     appearance="full">
+                <item>
+                    <label>$75,000</label>
+                    <value>75000</value>
+                </item>
+                <item>
+                    <label>$100,000</label>
+                    <value>100000</value>
+                </item>
+                <item>
+                    <label>$150,000</label>
+                    <value>150000</value>
+                </item>
+            </select1>
+        </group>
+        <group ref="instance('primaryquestions')">
+            <label>Health Questions</label>
+            <hint>Please answer the following questions by checking “Yes” or “No.”</hint>
+            <repeat ref="question">
+                <select1 ref="answer"
+                         incremental="true">
+                    <label ref="../text" />
+                    <item>
+                        <label>No</label>
+                        <value>false</value>
+                    </item>
+                    <item>
+                        <label>Yes</label>
+                        <value>true</value>
+                    </item>
+                </select1>
+                <group ref="healthinfo">
+                    <input ref="condition">
+                        <label>Condition</label>
+                    </input>
+                    <input ref="dates">
+                        <label>Dates</label>
+                    </input>
+                    <input ref="currentstatus">
+                        <label>Current Status</label>
+                    </input>
+                    <input ref="physicianname">
+                        <label>Physician Name</label>
+                    </input>
+                    <input ref="physicianaddress">
+                        <label>Physician Address</label>
+                    </input>
+                    <input ref="physicianphonenumber">
+                        <label>Physician Phone Number</label>
+                    </input>
+                </group>
+            </repeat>
+        </group>
     </f:section>
     <f:section>
-        <xf:label>Additional Information</xf:label>
-        <xf:repeat ref="xf:instance('beneficiaries')/beneficiary">
-            <xf:input ref="firstname"
-                      appearance="minimal">
-                <xf:label />
-            </xf:input>
-            <xf:input ref="middlename"
-                      appearance="minimal">
-                <xf:label />
-            </xf:input>
-            <xf:input ref="lastname"
-                      appearance="minimal">
-                <xf:label />
-            </xf:input>
-            <xf:input ref="socialsecuritynumber"
-                      appearance="minimal">
-                <xf:label />
-            </xf:input>
-            <xf:input ref="telephone"
-                      appearance="minimal">
-                <xf:label />
-            </xf:input>
-            <xf:input ref="relationship" />
-            <xf:range ref="percentage"
-                      start="0"
-                      step="5"
-                      end="100">
-                <xf:label />
-            </xf:range>
-        </xf:repeat>
+        <label>Spousal Enrollment</label>
+        <input ref="instance('misc')/secondary">
+            <label>Yes, I'd like to take advantage of this offer for my spouse or other partner or whatever and stuff and we will fill in the contents of the rest of this text later.</label>
+        </input>
+        <group ref="instance('secondaryperson')">
+            <label>Spouse Information</label>
+            <group>
+                <label>Name</label>
+                <input ref="firstname">
+                    <label>First</label>
+                </input>
+                <input ref="middlename">
+                    <label>Middle</label>
+                </input>
+                <input ref="lastname">
+                    <label>Last</label>
+                </input>
+            </group>
+            <group>
+                <label>Physical Characteristics</label>
+                <range ref="heightfeet"
+                       start="2"
+                       end="15"
+                       step="1">
+                    <label>Feet</label>
+                </range>
+                <range ref="heightinches"
+                       start="0"
+                       end="11"
+                       step="1">
+                    <label>Inches</label>
+                </range>
+                <range ref="weight"
+                       start="50"
+                       end="500"
+                       step="5">
+                    <label>Weight</label>
+                </range>
+                <select1 ref="gender">
+                    <label>Sex</label>
+                    <item>
+                        <label>Male</label>
+                        <value>M</value>
+                    </item>
+                    <item>
+                        <label>Female</label>
+                        <value>F</value>
+                    </item>
+                </select1>
+            </group>
+            <input ref="dateofbirth">
+                <label>Date of Birth</label>
+            </input>
+            <input ref="socialsecuritynumber">
+                <label>Social Security Number</label>
+            </input>
+        </group>
+        <group ref="instance('secondaryelections')/term-life">
+            <label>Coverage Selection</label>
+            <hint>Choose the type of coverage and amounts for which you are applying.</hint>
+            <select1 ref="coverage-amount">
+                <item>
+                    <label>$75,000</label>
+                    <value>75000</value>
+                </item>
+                <item>
+                    <label>$100,000</label>
+                    <value>100000</value>
+                </item>
+                <item>
+                    <label>$150,000</label>
+                    <value>150000</value>
+                </item>
+            </select1>
+        </group>
+        <group ref="instance('secondaryquestions')">
+            <label>Health Questions</label>
+            <hint>Please answer the following questions by checking “Yes” or “No.”</hint>
+            <repeat ref="question">
+                <select1 ref="answer"
+                         incremental="true">
+                    <label ref="../text" />
+                    <item>
+                        <label>No</label>
+                        <value>false</value>
+                    </item>
+                    <item>
+                        <label>Yes</label>
+                        <value>true</value>
+                    </item>
+                </select1>
+                <group ref="healthinfo">
+                    <input ref="condition">
+                        <label>Condition</label>
+                    </input>
+                    <input ref="dates">
+                        <label>Dates</label>
+                    </input>
+                    <input ref="currentstatus">
+                        <label>Current Status</label>
+                    </input>
+                    <input ref="physicianname">
+                        <label>Physician Name</label>
+                    </input>
+                    <input ref="physicianaddress">
+                        <label>Physician Address</label>
+                    </input>
+                    <input ref="physicianphonenumber">
+                        <label>Physician Phone Number</label>
+                    </input>
+                </group>
+            </repeat>
+        </group>
+    </f:section>
+    <f:section>
+        <label>Beneficiaries</label>
+        <repeat ref="instance('beneficiaries')/beneficiary">
+            <input ref="firstname"
+                   appearance="minimal">
+                <label />
+            </input>
+            <input ref="middlename"
+                   appearance="minimal">
+                <label />
+            </input>
+            <input ref="lastname"
+                   appearance="minimal">
+                <label />
+            </input>
+            <input ref="socialsecuritynumber"
+                   appearance="minimal">
+                <label />
+            </input>
+            <input ref="telephone"
+                   appearance="minimal">
+                <label />
+            </input>
+            <input ref="relationship" />
+            <range ref="percentage"
+                   start="0"
+                   step="5"
+                   end="100">
+                <label />
+            </range>
+        </repeat>
     </f:section>
 </f:form>

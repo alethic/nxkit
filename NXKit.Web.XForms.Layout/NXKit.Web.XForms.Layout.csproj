@@ -75,7 +75,6 @@
       <Link>Scripts\typings\nxkit\NXKit.d.ts</Link>
     </TypeScriptCompile>
     <TypeScriptCompile Include="FormViewModel.ts" />
-    <TypeScriptCompile Include="IStepChangedEvent.ts" />
     <TypeScriptCompile Include="ParagraphViewModel.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />

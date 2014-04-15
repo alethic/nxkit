@@ -78,15 +78,15 @@ namespace NXKit
                 nodeType != obj.NodeType)
                 return false;
 
-            var element = obj as XElement;
-            if (element != null && !IsMatch(element))
-                return false;
-
             // test against specified predicate type
             var predicate = predicateType != null ? predicates.FirstOrDefault(i => self.predicateType.IsInstanceOfType(i)) : null;
             if (predicate != null)
                 if (!predicate.IsMatch(obj, type))
                     return false;
+
+            var element = obj as XElement;
+            if (element != null && !IsMatch(element))
+                return false;
 
             return true;
         }

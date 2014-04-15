@@ -12,8 +12,7 @@ NXKit.Web.ViewModelUtil.MetadataNodes.push(
     '{http://www.w3.org/2002/xforms}alert');
 
 NXKit.Web.ViewModelUtil.TransparentNodes.push(
-    '{http://www.w3.org/2002/xforms}repeat',
-    '{http://www.w3.org/2002/xforms}repeatItem');
+    '{http://www.w3.org/2002/xforms}repeat');
 
 NXKit.Web.ViewModelUtil.LayoutManagers.push(
     (c) => new NXKit.Web.XForms.DefaultLayoutManager(c));

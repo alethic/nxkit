@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
@@ -14,6 +15,7 @@ namespace NXKit.XForms
         ElementExtension
     {
 
+        [Export(typeof(IInterfacePredicate))]
         public class RepeatItemPredicate :
             InterfacePredicateBase
         {
