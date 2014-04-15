@@ -32,7 +32,7 @@ namespace NXKit
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
             if (reader.MoveToContent() == XmlNodeType.Element &&
-                reader.LocalName == "document")
+                reader.LocalName == "nx-document")
             {
                 initialized = bool.Parse(reader["initialized"]);
             }
