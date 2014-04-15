@@ -17,7 +17,9 @@
         <i class="dropdown icon"></i>
         <div class="ui menu" data-bind="foreach: Selectables">
             <div class="item" data-bind="attr: { 'data-value': Id }">
-                <!-- ko nxkit_template: Label -->
+                <!-- ko with: Label -->
+                <!-- ko nxkit_template -->
+                <!-- /ko -->
                 <!-- /ko -->
             </div>
         </div>
