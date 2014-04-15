@@ -38,16 +38,10 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentException>(self.Parent != null);
             Contract.Requires<ArgumentNullException>(prefix != null);
 
+            // resolve through element
             if (prefix == "")
-                // default prefix
-                if (self.Name.Namespace != XNamespace.None)
-                    // attribute's specified prefix takes priority
-                    return self.Name.Namespace;
-                else
-                    // attribute's element provides default
-                    return self.Parent.Name.Namespace;
+                return self.Parent.GetDefaultNamespace();
             else
-                // resolve through element
                 return self.Parent.GetNamespaceOfPrefix(prefix);
         }
 
