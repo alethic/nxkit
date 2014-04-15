@@ -169,17 +169,17 @@ namespace NXKit.XForms
             if (DocumentAnnotation.ConstructDoneOnce)
                 return;
 
-            // refresh interface bindings
-            foreach (var ui in GetAllExtensions<IOnRefresh>())
-                ui.RefreshBinding();
+            // refresh bindings
+            foreach (var i in GetAllExtensions<IOnRefresh>())
+                i.RefreshBinding();
 
-            // discard interface events
-            foreach (var ui in GetAllExtensions<IOnRefresh>())
-                ui.DiscardEvents();
+            // discard refresh events
+            foreach (var i in GetAllExtensions<IOnRefresh>())
+                i.DiscardEvents();
 
-            // refresh interfaces
-            foreach (var ui in GetAllExtensions<IOnRefresh>())
-                ui.Refresh();
+            // final refresh
+            foreach (var i in GetAllExtensions<IOnRefresh>())
+                i.Refresh();
 
             DocumentAnnotation.ConstructDoneOnce = true;
         }

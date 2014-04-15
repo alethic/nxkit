@@ -78,23 +78,29 @@ namespace NXKit.XForms
 
                     // clear body of instance
                     Element.RemoveNodes();
+
+                    return;
                 }
                 catch (UriFormatException)
                 {
                     throw new DOMTargetEventException(Element, Events.BindingException);
                 }
             }
+            else
+            {
+                // extract instance values from xml
+                var instanceChildElements = Element.Elements().ToArray();
 
-            // extract instance values from xml
-            var instanceChildElements = Element.Elements().ToArray();
+                // invalid number of children elements
+                if (instanceChildElements.Length >= 2)
+                    throw new DOMTargetEventException(Element, Events.LinkException);
+
+                if (instanceChildElements.Length == 1)
+                    State.Initialize(Model, Element, new XDocument(instanceChildElements[0].PrefixSafeClone()));
+            }
+
+            // clear body of the instance element
             Element.RemoveNodes();
-
-            // invalid number of children elements
-            if (instanceChildElements.Length >= 2)
-                throw new DOMTargetEventException(Element, Events.LinkException);
-
-            if (instanceChildElements.Length == 1)
-                State.Initialize(Model, Element, new XDocument(instanceChildElements[0].PrefixSafeClone()));
         }
 
         void IOnLoad.Load()
