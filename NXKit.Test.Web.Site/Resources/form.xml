@@ -51,7 +51,7 @@
 
         <bind ref="instance('secondaryperson')"
               id="secondary"
-              relevant="instance('misc')/d:secondary = 'true'">
+              relevant="instance('misc')/d:secondary='true'">
             <bind ref="d:heightfeet"
                   required="true()"
                   type="xsd:int"/>
@@ -70,6 +70,9 @@
 
         <instance id="secondaryelections"
                   src="secondaryelections.xml" />
+
+        <bind ref="instance('secondaryelections')"
+              relevant="instance('misc')/d:secondary='true'" />
 
         <instance id="primaryquestions"
                   src="questions.xml" />
