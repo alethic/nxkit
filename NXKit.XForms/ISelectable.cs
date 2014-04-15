@@ -14,7 +14,7 @@ namespace NXKit.XForms
         /// Gets a unique value that can be used to specify the selection.
         /// </summary>
         [Remote]
-        Guid Id { get; }
+        int Id { get; }
 
         /// <summary>
         /// Applies the appropriate value to the binding for a selection.

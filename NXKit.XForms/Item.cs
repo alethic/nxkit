@@ -34,22 +34,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets a unique identifier for the selectable.
         /// </summary>
-        public Guid Id
+        public int Id
         {
-            get { return GetId(); }
-        }
-
-        /// <summary>
-        /// Implements the getter for Id.
-        /// </summary>
-        /// <returns></returns>
-        Guid GetId()
-        {
-            var state = Element.AnnotationOrCreate<ItemState>();
-            if (state.Id == Guid.Empty)
-                state.Id = Guid.NewGuid();
-
-            return state.Id;
+            get { return Element.GetObjectId(); }
         }
 
         public void Select(UIBinding ui)

@@ -12,8 +12,8 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}repeat")]
     public class Repeat :
         ElementExtension,
-        IOnRefresh,
-        IOnInitialize
+        IOnInitialize,
+        IOnRefresh
     {
 
         readonly RepeatAttributes attributes;
@@ -79,7 +79,7 @@ namespace NXKit.XForms
         {
             // acquire template
             Template = new XElement(
-                Constants.XForms_1_0 + "group",
+                Constants.XForms_1_0 + "template",
                 Element.GetNamespacePrefixAttributes(),
                 Element.Nodes());
             Element.RemoveNodes();
@@ -97,7 +97,7 @@ namespace NXKit.XForms
                 .FirstOrDefault(i => i.AnnotationOrCreate<RepeatItemState>().Index == Index);
 
             // build new list of properly ordered nodes
-            var nodes = new LinkedList<XElement>();
+            var items = new LinkedList<XElement>();
             if (Binding != null &&
                 Binding.ModelItems.Length > 0)
                 for (int index = 1; index <= Binding.ModelItems.Length; index++)
@@ -120,50 +120,57 @@ namespace NXKit.XForms
                     var swap = anno.Index != index;
                     anno.Index = index;
                     anno.ModelItemId = modelItem.Xml.GetObjectId();
-
-                    // node has moved or been created, reset evaluation context
-                    if (swap)
-                    {
-                        node.RemoveAnnotations<EvaluationContext>();
-                        node.AddAnnotation(new EvaluationContext(modelItem.Model, modelItem.Instance, modelItem, index, Binding.ModelItems.Length));
-                    }
-
-                    nodes.AddLast(node);
+                    items.AddLast(node);
                 }
 
-            // move kept nodes to the front, and remove the tail
-            Element.AddFirst(nodes);
-            Element.Nodes().Skip(nodes.Count).Remove();
+            // items which have been added
+            var additions = items
+                .Except(Element.Nodes())
+                .OfType<XElement>()
+                .ToList();
+
+            // replace the element's content
+            Element.RemoveNodes(); // remove first to prevent cloning
+            Element.Add(items);
+
+            // model-construct-done sequence applied to new children
+            foreach (var addition in additions)
+            {
+                // refresh bindings
+                foreach (var i in GetAllExtensions<IOnRefresh>(addition))
+                    i.RefreshBinding();
+
+                // discard refresh events
+                foreach (var i in GetAllExtensions<IOnRefresh>(addition))
+                    i.DiscardEvents();
+
+                // final refresh
+                foreach (var i in GetAllExtensions<IOnRefresh>(addition))
+                    i.Refresh();
+            }
 
             // restore or reset index
-            Index = lastIndexItem != null && lastIndexItem.Parent != null ? lastIndexItem.AnnotationOrCreate<RepeatItemState>().Index : 0;
+            if (lastIndexItem != null &&
+                lastIndexItem.Parent != null)
+                Index = lastIndexItem.AnnotationOrCreate<RepeatItemState>().Index;
+            else if (items.Count > 0)
+                Index = 1;
+            else
+                Index = 0;
         }
 
         /// <summary>
-        /// Gets or creates a repeat item for the specified node and position.
+        /// Gets all implementations of the given extension type.
         /// </summary>
-        /// <param name="model"></param>
-        /// <param name="instance"></param>
-        /// <param name="modelItem"></param>
-        /// <param name="position"></param>
-        /// <param name="size"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        RepeatItem GetOrCreateItem(Model model, Instance instance, ModelItem modelItem, int position, int size)
+        IEnumerable<T> GetAllExtensions<T>(XElement root)
         {
-            throw new NotImplementedException();
+            Contract.Requires<ArgumentNullException>(root != null);
 
-            //// new context for child
-            //var ec = new EvaluationContext(model, instance, modelItem, position, size);
-
-            //// obtain or create child
-            //var item = items.GetOrDefault(modelItem.Xml);
-            //if (item == null)
-            //    item = items[modelItem.Xml] = new RepeatItem(Xml);
-
-            //// ensure child is configured
-            //item.SetContext(ec);
-
-            //return item;
+            return root
+                .DescendantNodesAndSelf()
+                .SelectMany(i => i.Interfaces<T>());
         }
 
         /// <summary>
@@ -189,6 +196,34 @@ namespace NXKit.XForms
             RefreshNodes();
         }
 
+        /// <summary>
+        /// Gets the <see cref="EvaluationContext"/> for a specific item.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        internal EvaluationContext GetItemContext(XElement element)
+        {
+            var index = element.Interface<RepeatItem>().Index;
+            if (index <= 0)
+                throw new InvalidOperationException();
+
+            if (Binding == null ||
+                Binding.ModelItems == null ||
+                Binding.ModelItems.Length < index)
+                return null;
+
+            return new EvaluationContext(
+                Binding.ModelItems[index - 1].Model,
+                Binding.ModelItems[index - 1].Instance,
+                Binding.ModelItems[index - 1],
+                index,
+                Binding.ModelItems.Length);
+        }
+
+        void IOnInitialize.Initialize()
+        {
+            Initialize();
+        }
 
         void IOnRefresh.RefreshBinding()
         {
@@ -210,10 +245,6 @@ namespace NXKit.XForms
 
         }
 
-        void IOnInitialize.Initialize()
-        {
-            Initialize();
-        }
 
     }
 

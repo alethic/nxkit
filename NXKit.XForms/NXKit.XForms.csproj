@@ -120,6 +120,7 @@
     <Compile Include="AttributeEvaluationContextResolver.cs" />
     <Compile Include="BindingUtil.cs" />
     <Compile Include="ElementEvaluationContextResolver.cs" />
+    <Compile Include="IEvaluationContextProvider.cs" />
     <Compile Include="EvaluationContextResolver.cs" />
     <Compile Include="IOnRecalculate.cs" />
     <Compile Include="IOnRefresh.cs" />
@@ -132,12 +133,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DeleteAttributes.cs" />
-    <Compile Include="ItemState.cs" />
     <Compile Include="DocumentInvoke.cs" />
     <Compile Include="RangeAttributes.cs" />
     <Compile Include="RepeatAttributes.cs" />
     <Compile Include="ItemValueAttributes.cs" />
     <Compile Include="ISelectableValue.cs" />
+    <Compile Include="BindState.cs" />
     <Compile Include="RepeatItemState.cs" />
     <Compile Include="Select1Attributes.cs" />
     <Compile Include="BindAttributes.cs" />

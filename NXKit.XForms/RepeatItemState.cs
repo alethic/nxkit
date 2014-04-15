@@ -33,7 +33,7 @@ namespace NXKit.XForms
         public void ReadXml(XmlReader reader)
         {
             if (reader.MoveToContent() == XmlNodeType.Element &&
-                reader.LocalName == "repeat")
+                reader.LocalName == "repeat-item")
             {
                 index = int.Parse(reader["index"]);
                 modelItemId = int.Parse(reader["model-item-id"]);

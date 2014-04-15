@@ -108,7 +108,6 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the currently selected item element.
         /// </summary>
-        [Remote]
         public ISelectable Selected
         {
             get { return GetSelected(); }
@@ -148,9 +147,9 @@ namespace NXKit.XForms
         /// Gets or sets the unique identifier of the selected item.
         /// </summary>
         [Remote]
-        public Guid? SelectedId
+        public int? SelectedId
         {
-            get { return Selected != null ? (Guid?)Selected.Id : null; }
+            get { return Selected != null ? (int?)Selected.Id : null; }
             set { SetSelectedId(value); }
         }
 
@@ -158,11 +157,11 @@ namespace NXKit.XForms
         /// Implements the setter for SelectedItemVisualId.
         /// </summary>
         /// <param name="id"></param>
-        void SetSelectedId(Guid? id)
+        void SetSelectedId(int? id)
         {
             Selected = id != null ? Element.Descendants()
                 .SelectMany(i => i.Interfaces<ISelectable>())
-                .FirstOrDefault(i => i.Id == (Guid)id) : null;
+                .FirstOrDefault(i => i.Id == (int)id) : null;
         }
 
     }

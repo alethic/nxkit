@@ -91,7 +91,9 @@ namespace NXKit.XForms
         /// <returns></returns>
         public EvaluationContext GetSelfEvaluationContext()
         {
-            return obj.Annotation<EvaluationContext>();
+            return obj.Interfaces<IEvaluationContextProvider>()
+                .Select(i => i.Context)
+                .FirstOrDefault(i => i != null);
         }
 
         /// <summary>
