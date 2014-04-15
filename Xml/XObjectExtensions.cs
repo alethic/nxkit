@@ -115,17 +115,20 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XName ResolvePrefixedName(this XObject self, string prefixedName)
         {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(prefixedName != null);
+
             var i = prefixedName.IndexOf(':');
             if (i == -1)
                 return self.GetNamespaceOfPrefix("") + prefixedName;
 
-            var prefix = prefixedName.Substring(0, i + 1);
+            var prefix = prefixedName.Substring(0, i);
             if (string.IsNullOrWhiteSpace(prefix))
-                prefix = null;
+                prefix = "";
 
-            var localName = prefixedName.Substring(i);
+            var localName = prefixedName.Substring(i + 1);
             if (string.IsNullOrWhiteSpace(localName))
-                localName = null;
+                localName = "";
 
             var ns = self.GetNamespaceOfPrefix(prefix);
             if (ns == null)
