@@ -1,4 +1,4 @@
-<questions>
+<questions xmlns="urn::data">
     <question1>
         <answer>false</answer>
     </question1>

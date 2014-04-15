@@ -1,4 +1,4 @@
-<beneficiaries>
+<beneficiaries xmlns="urn::data">
 	<beneficiary>
 		<firstname />
 		<middlename />

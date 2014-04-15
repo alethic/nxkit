@@ -1,4 +1,4 @@
-<person>
+<person xmlns="urn::data">
     <firstname />
     <middlename />
     <lastname />

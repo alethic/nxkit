@@ -1,4 +1,4 @@
-﻿<relationships>
+﻿<relationships xmlns="urn::data">
     <relationship label="Spouse"
                   value="spouse" />
     <relationship label="Child"

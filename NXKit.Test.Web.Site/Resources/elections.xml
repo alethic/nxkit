@@ -1,4 +1,4 @@
-﻿<elections>
+﻿<elections xmlns="urn::data">
     <lfi>
         <election />
         <plan />

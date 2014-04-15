@@ -1,4 +1,4 @@
-<elections>
+<elections xmlns="urn::data">
     <term-life>
         <coverage-amount />
     </term-life>

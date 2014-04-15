@@ -2,44 +2,45 @@
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
         xmlns:xf="http://www.w3.org/2002/xforms"
-        xmlns:ev="http://www.w3.org/2001/xml-events">
+        xmlns:ev="http://www.w3.org/2001/xml-events"
+        xmlns:d="urn::data">
     <model id="data">
 
         <instance id="misc">
-            <data xmlns="">
+            <data xmlns="urn::data">
                 <secondary>false</secondary>
             </data>
         </instance>
 
-        <bind ref="instance('misc')/secondary"
+        <bind ref="instance('misc')/d:secondary"
               type="xsd:boolean" />
 
         <instance id="primaryperson"
                   src="primaryperson.xml" />
 
         <bind ref="instance('primaryperson')">
-            <bind ref="heightfeet"
+            <bind ref="d:heightfeet"
                   required="true()"
                   type="xsd:int"/>
-            <bind ref="heightinches"
+            <bind ref="d:heightinches"
                   required="true()"
                   type="xsd:int"/>
-            <bind ref="weight"
+            <bind ref="d:weight"
                   required="true()"
                   type="xsd:int"/>
-            <bind ref="gender"
+            <bind ref="d:gender"
                   required="true()"
                   type="xsd:string"/>
-            <bind ref="dateofbirth"
+            <bind ref="d:dateofbirth"
                   required="true()"
                   type="xsd:date"/>
-            <bind ref="socialsecuritynumber"
+            <bind ref="d:socialsecuritynumber"
                   required="true()"
                   constraint="matches(., '^(\d{3}-\d{2}-\d{4})|(\d{9})$')"/>
-            <bind ref="telephone1"
+            <bind ref="d:telephone1"
                   required="true()"
                   constraint="string-length()>=10"/>
-            <bind ref="telephone2"
+            <bind ref="d:telephone2"
                   required="false()"
                   constraint=".='' or string-length()>=10" />
         </bind>
@@ -50,17 +51,17 @@
 
         <bind ref="instance('secondaryperson')"
               id="secondary"
-              relevant="instance('misc')/secondary = 'true'">
-            <bind ref="heightfeet"
+              relevant="instance('misc')/d:secondary = 'true'">
+            <bind ref="d:heightfeet"
                   required="true()"
                   type="xsd:int"/>
-            <bind ref="heightinches"
+            <bind ref="d:heightinches"
                   required="true()"
                   type="xsd:int"/>
-            <bind ref="weight"
+            <bind ref="d:weight"
                   required="true()"
                   type="xsd:int"/>
-            <bind ref="dateofbirth"
+            <bind ref="d:dateofbirth"
                   type="xsd:date"/>
         </bind>
 
@@ -74,9 +75,9 @@
                   src="questions.xml" />
 
         <bind ref="instance('primaryquestions')">
-            <bind ref="//healthinfo"
-                  relevant="../answer='true' and ./@enable='true'" />
-            <bind ref="//healthinfo/*"
+            <bind ref="//d:healthinfo"
+                  relevant="../d:answer='true' and ./@enable='true'" />
+            <bind ref="//d:healthinfo/*"
                   type="xsd:string" />
         </bind>
 
@@ -84,10 +85,10 @@
                   src="questions.xml" />
 
         <bind ref="instance('secondaryquestions')"
-              relevant="instance('misc')/secondary='true'">
-            <bind ref="//healthinfo"
-                  relevant="../answer='true' and ./@enable='true'" />
-            <bind ref="//healthinfo/*"
+              relevant="instance('misc')/d:secondary='true'">
+            <bind ref="//d:healthinfo"
+                  relevant="../d:answer='true' and ./@enable='true'" />
+            <bind ref="//d:healthinfo/*"
                   type="xsd:string" />
         </bind>
 
@@ -97,7 +98,7 @@
         <instance id="beneficiaries"
                   src="beneficiaries.xml" />
 
-        <bind ref="instance('beneficiaries')//percentage"
+        <bind ref="instance('beneficiaries')//d:percentage"
               type="xsd:integer" />
 
         <submission ref="instance('primaryperson')"
@@ -129,25 +130,25 @@
             <help>Complete the form by providing your physical characterists, personal information, and contact information.</help>
             <group>
                 <label>Physical Characteristics</label>
-                <range ref="heightfeet"
+                <range ref="d:heightfeet"
                        start="2"
                        end="15"
                        step="1">
                     <label>Feet</label>
                 </range>
-                <range ref="heightinches"
+                <range ref="d:heightinches"
                        start="0"
                        end="11"
                        step="1">
                     <label>Inches</label>
                 </range>
-                <range ref="weight"
+                <range ref="d:weight"
                        start="50"
                        end="500"
                        step="5">
                     <label>Weight</label>
                 </range>
-                <select1 ref="gender">
+                <select1 ref="d:gender">
                     <label>Sex</label>
                     <item>
                         <label>Male</label>
@@ -159,31 +160,31 @@
                     </item>
                 </select1>
             </group>
-            <input ref="dateofbirth">
+            <input ref="d:dateofbirth">
                 <label>Date of Birth</label>
                 <help>Provide your date of birth to continue.</help>
                 <hint appearance="minimal">mm/dd/yyyy</hint>
             </input>
-            <input ref="socialsecuritynumber">
+            <input ref="d:socialsecuritynumber">
                 <label>Social Security Number</label>
                 <hint appearance="minimal">___-__-____</hint>
                 <alert>Your social security number is required to continue.</alert>
             </input>
             <group>
                 <label>Contact Information</label>
-                <input ref="telephone1">
+                <input ref="d:telephone1">
                     <label>Home Phone</label>
                     <hint appearance="minimal">1 (___) ___-____</hint>
                 </input>
-                <input ref="telephone2">
+                <input ref="d:telephone2">
                     <label>Work Phone</label>
                 </input>
             </group>
         </group>
-        <group ref="instance('primaryelections')/term-life">
+        <group ref="instance('primaryelections')/d:term-life">
             <label>Coverage Election</label>
             <hint>Choose the type of coverage and amounts for which you are applying.</hint>
-            <select1 ref="coverage-amount"
+            <select1 ref="d:coverage-amount"
                      appearance="full">
                 <item>
                     <label>$75,000</label>
@@ -202,10 +203,10 @@
         <group ref="instance('primaryquestions')">
             <label>Health Questions</label>
             <hint>Please answer the following questions by checking “Yes” or “No.”</hint>
-            <repeat ref="question">
-                <select1 ref="answer"
+            <repeat ref="d:question">
+                <select1 ref="d:answer"
                          incremental="true">
-                    <label ref="../text" />
+                    <label ref="../d:text" />
                     <item>
                         <label>No</label>
                         <value>false</value>
@@ -215,23 +216,23 @@
                         <value>true</value>
                     </item>
                 </select1>
-                <group ref="healthinfo">
-                    <input ref="condition">
+                <group ref="d:healthinfo">
+                    <input ref="d:condition">
                         <label>Condition</label>
                     </input>
-                    <input ref="dates">
+                    <input ref="d:dates">
                         <label>Dates</label>
                     </input>
-                    <input ref="currentstatus">
+                    <input ref="d:currentstatus">
                         <label>Current Status</label>
                     </input>
-                    <input ref="physicianname">
+                    <input ref="d:physicianname">
                         <label>Physician Name</label>
                     </input>
-                    <input ref="physicianaddress">
+                    <input ref="d:physicianaddress">
                         <label>Physician Address</label>
                     </input>
-                    <input ref="physicianphonenumber">
+                    <input ref="d:physicianphonenumber">
                         <label>Physician Phone Number</label>
                     </input>
                 </group>
@@ -239,45 +240,45 @@
         </group>
     </f:section>
     <f:section>
-        <label>Spousal Enrollment</label>
-        <input ref="instance('misc')/secondary">
+        <label appearance="compact">Spousal Enrollment</label>
+        <input ref="instance('misc')/d:secondary">
             <label>Yes, I'd like to take advantage of this offer for my spouse or other partner or whatever and stuff and we will fill in the contents of the rest of this text later.</label>
         </input>
         <group ref="instance('secondaryperson')">
             <label>Spouse Information</label>
             <group>
                 <label>Name</label>
-                <input ref="firstname">
+                <input ref="d:firstname">
                     <label>First</label>
                 </input>
-                <input ref="middlename">
+                <input ref="d:middlename">
                     <label>Middle</label>
                 </input>
-                <input ref="lastname">
+                <input ref="d:lastname">
                     <label>Last</label>
                 </input>
             </group>
             <group>
                 <label>Physical Characteristics</label>
-                <range ref="heightfeet"
+                <range ref="d:heightfeet"
                        start="2"
                        end="15"
                        step="1">
                     <label>Feet</label>
                 </range>
-                <range ref="heightinches"
+                <range ref="d:heightinches"
                        start="0"
                        end="11"
                        step="1">
                     <label>Inches</label>
                 </range>
-                <range ref="weight"
+                <range ref="d:weight"
                        start="50"
                        end="500"
                        step="5">
                     <label>Weight</label>
                 </range>
-                <select1 ref="gender">
+                <select1 ref="d:gender">
                     <label>Sex</label>
                     <item>
                         <label>Male</label>
@@ -289,17 +290,17 @@
                     </item>
                 </select1>
             </group>
-            <input ref="dateofbirth">
+            <input ref="d:dateofbirth">
                 <label>Date of Birth</label>
             </input>
-            <input ref="socialsecuritynumber">
+            <input ref="d:socialsecuritynumber">
                 <label>Social Security Number</label>
             </input>
         </group>
-        <group ref="instance('secondaryelections')/term-life">
+        <group ref="instance('secondaryelections')/d:term-life">
             <label>Coverage Selection</label>
             <hint>Choose the type of coverage and amounts for which you are applying.</hint>
-            <select1 ref="coverage-amount">
+            <select1 ref="d:coverage-amount">
                 <item>
                     <label>$75,000</label>
                     <value>75000</value>
@@ -317,10 +318,10 @@
         <group ref="instance('secondaryquestions')">
             <label>Health Questions</label>
             <hint>Please answer the following questions by checking “Yes” or “No.”</hint>
-            <repeat ref="question">
-                <select1 ref="answer"
+            <repeat ref="d:question">
+                <select1 ref="d:answer"
                          incremental="true">
-                    <label ref="../text" />
+                    <label ref="../d:text" />
                     <item>
                         <label>No</label>
                         <value>false</value>
@@ -330,23 +331,23 @@
                         <value>true</value>
                     </item>
                 </select1>
-                <group ref="healthinfo">
-                    <input ref="condition">
+                <group ref="d:healthinfo">
+                    <input ref="d:condition">
                         <label>Condition</label>
                     </input>
-                    <input ref="dates">
+                    <input ref="d:dates">
                         <label>Dates</label>
                     </input>
-                    <input ref="currentstatus">
+                    <input ref="d:currentstatus">
                         <label>Current Status</label>
                     </input>
-                    <input ref="physicianname">
+                    <input ref="d:physicianname">
                         <label>Physician Name</label>
                     </input>
-                    <input ref="physicianaddress">
+                    <input ref="d:physicianaddress">
                         <label>Physician Address</label>
                     </input>
-                    <input ref="physicianphonenumber">
+                    <input ref="d:physicianphonenumber">
                         <label>Physician Phone Number</label>
                     </input>
                 </group>
@@ -355,29 +356,29 @@
     </f:section>
     <f:section>
         <label>Beneficiaries</label>
-        <repeat ref="instance('beneficiaries')/beneficiary">
-            <input ref="firstname"
+        <repeat ref="instance('beneficiaries')/d:beneficiary">
+            <input ref="d:firstname"
                    appearance="minimal">
                 <label />
             </input>
-            <input ref="middlename"
+            <input ref="d:middlename"
                    appearance="minimal">
                 <label />
             </input>
-            <input ref="lastname"
+            <input ref="d:lastname"
                    appearance="minimal">
                 <label />
             </input>
-            <input ref="socialsecuritynumber"
+            <input ref="d:socialsecuritynumber"
                    appearance="minimal">
                 <label />
             </input>
-            <input ref="telephone"
+            <input ref="d:telephone"
                    appearance="minimal">
                 <label />
             </input>
-            <input ref="relationship" />
-            <range ref="percentage"
+            <input ref="d:relationship" />
+            <range ref="d:percentage"
                    start="0"
                    step="5"
                    end="100">
