@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
-using NXKit.Xml;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+using NXKit.Xml;
 
 namespace NXKit.Web.Serialization
 {
@@ -94,7 +94,11 @@ namespace NXKit.Web.Serialization
                     if (jmethod == null)
                         continue;
 
-                    foreach (JObject jinvoke in jmethod.Value<JArray>())
+                    var jarray = jmethod.Value as JArray;
+                    if (jarray == null)
+                        continue;
+
+                    foreach (JObject jinvoke in jarray)
                     {
                         var count = 0;
                         var parameters = method.GetParameters();
