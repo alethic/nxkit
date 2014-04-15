@@ -44,6 +44,14 @@ module NXKit.Web {
             try {
                 var self = this;
 
+                var removeM: Method[] = [];
+                for (var i in self._methods)
+                    removeM.push(self._methods[i]);
+
+                var removeP: Property[] = [];
+                for (var i in self._properties)
+                    removeP.push(self._properties[i]);
+
                 for (var i in source) {
                     var s = <string>i;
                     if (s.indexOf('@') === 0) {
@@ -56,6 +64,11 @@ module NXKit.Web {
                             });
                         } else {
                             m.Update(source[s]);
+                        }
+
+                        var index = removeM.indexOf(m);
+                        if (index != -1) {
+                            removeM[index] = null;
                         }
                     } else {
                         var n = s;
@@ -71,8 +84,30 @@ module NXKit.Web {
                         } else {
                             p.Update(source[s]);
                         }
+
+                        var index = removeP.indexOf(p);
+                        if (index != -1) {
+                            removeP[index] = null;
+                        }
                     }
                 }
+
+                // remove stale methods
+                for (var j = 0; j < removeM.length; j++) {
+                    var m = removeM[j];
+                    if (m != null) {
+                        delete self._methods[m.Name];
+                    }
+                }
+
+                // remove stale properties
+                for (var j = 0; j < removeP.length; j++) {
+                    var p = removeP[j];
+                    if (p != null) {
+                        delete self._properties[p.Name];
+                    }
+                }
+
             } catch (ex) {
                 ex.message = "Interface.Update()" + '\nMessage: ' + ex.message;
                 throw ex;

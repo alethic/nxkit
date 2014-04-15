@@ -244,9 +244,11 @@ module NXKit.Web {
                     if (self._nodes().length < i + 1) {
                         var v = new Node(sources[i]);
                         v.PropertyChanged.add((n, intf, property, value) => {
+                            console.debug('Node.PropertyChanged: %s %s', property.Name, value);
                             self.PropertyChanged.trigger(n, intf, property, value);
                         });
                         v.MethodInvoked.add((n, intf, method, params) => {
+                            console.debug('Node.MethodInvoked: %s %s', method.Name, params);
                             self.MethodInvoked.trigger(n, intf, method, params);
                         });
                         self._nodes.push(v);
