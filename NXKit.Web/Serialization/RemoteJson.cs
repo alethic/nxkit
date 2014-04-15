@@ -84,6 +84,46 @@ namespace NXKit.Web.Serialization
                     if (!object.Equals(property.GetValue(remote.Target), value))
                         property.SetValue(remote.Target, value);
                 }
+
+                foreach (var method in RemoteObjectJsonConverter.GetRemoteMethods(remote.Type))
+                {
+                    if (!method.IsPublic)
+                        continue;
+
+                    var jmethod = jremote.Property("@" + method.Name);
+                    if (jmethod == null)
+                        continue;
+
+                    foreach (JObject jinvoke in jmethod.Value<JArray>())
+                    {
+                        var count = 0;
+                        var parameters = method.GetParameters();
+                        var invoke = new object[parameters.Length];
+                        for (int i = 0; i < invoke.Length; i++)
+                        {
+                            // submitted JSON parameter value
+                            var j = jinvoke[parameters[i].Name];
+                            if (j == null)
+                                break;
+
+                            // convert JObject to appropriate type
+                            var t = parameters[i].ParameterType;
+                            var o = j != null ? j.ToObject(t) : null;
+
+                            // successful conversion
+                            invoke[i] = o;
+                            count = i + 1;
+                        }
+
+                        // unsuccessful parameter count, try next method
+                        if (count != parameters.Length)
+                            continue;
+
+                        // successful; done with invoke object
+                        method.Invoke(remote.Target, invoke);
+                        break;
+                    }
+                }
             }
         }
 
