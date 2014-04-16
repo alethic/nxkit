@@ -13,7 +13,15 @@
         /// </summary>
         /// <param name="type"></param>
         [Remote]
-        void DispatchEvent(string type);
+        Event DispatchEvent(string type);
+
+        /// <summary>
+        /// Dispatches an event of the given type, searching for the default event settings in the container. Provides
+        /// an object for attaching contextual information to the event.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="context"></param>
+        Event DispatchEvent(string type, object context);
 
         /// <summary>
         /// Adds an event handler delegate to be invoked when an event is called.

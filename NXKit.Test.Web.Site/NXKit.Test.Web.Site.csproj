@@ -130,6 +130,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
@@ -214,6 +215,9 @@
     <Content Include="Resources\primaryelections.xml" />
     <Content Include="Resources\primaryperson.xml" />
     <Content Include="Resources\primaryquestions.xml" />
+    <Content Include="Resources\submit.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Resources\repeat.xml" />
     <Content Include="Resources\secondaryelections.xml" />
     <Content Include="Resources\secondaryperson.xml" />
@@ -264,6 +268,7 @@
     <Content Include="Content\semantic\packaged\javascript\semantic.min.js" />
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\asd.pubxml" />
+    <Content Include="Resources\Post.ashx" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Resources\script.xml" />
     <Content Include="Resources\relevant.xml" />
@@ -292,6 +297,9 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Post.ashx.cs">
+      <DependentUpon>Post.ashx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup />

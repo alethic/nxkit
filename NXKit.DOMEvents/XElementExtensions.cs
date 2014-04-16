@@ -37,6 +37,26 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="element"></param>
         /// <param name="type"></param>
+        /// <param name="context"></param>
+        public static void DispatchEvent(this XElement element, string type, object context)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(element.Host() != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(type.Length > 0);
+
+            var target = element.InterfaceOrDefault<INXEventTarget>();
+            if (target == null)
+                throw new NullReferenceException();
+
+            target.DispatchEvent(type, context);
+        }
+
+        /// <summary>
+        /// Dispatches the event to this <see cref="XElement"/>.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="type"></param>
         public static void DispatchEvent(this XElement element, Event evt)
         {
             Contract.Requires<ArgumentNullException>(element != null);

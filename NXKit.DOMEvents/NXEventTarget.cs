@@ -46,13 +46,29 @@ namespace NXKit.DOMEvents
             get { return target.Value; }
         }
 
-        public void DispatchEvent(string type)
+        public Event DispatchEvent(string type)
         {
             var evt = provider.CreateEvent(type);
             if (evt == null)
                 throw new NullReferenceException();
 
             Target.DispatchEvent(evt);
+
+            return evt;
+        }
+
+        public Event DispatchEvent(string type, object context)
+        {
+            var evt = provider.CreateEvent(type);
+            if (evt == null)
+                throw new NullReferenceException();
+
+            // set supplied context information
+            evt.Context = context;
+
+            Target.DispatchEvent(evt);
+
+            return evt;
         }
 
         public void AddEventHandler(string type, EventHandlerDelegate handler)

@@ -12,6 +12,19 @@ namespace NXKit.DOMEvents
     {
 
         readonly string type;
+        readonly object contextInfo;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="type"></param>
+        public DOMEventException(string type, object contextInfo)
+            : this(type)
+        {
+            Contract.Requires<ArgumentNullException>(type != null);
+
+            this.contextInfo = contextInfo;
+        }
 
         /// <summary>
         /// Initializes a new instance.
@@ -30,6 +43,11 @@ namespace NXKit.DOMEvents
         public string EventType
         {
             get { return type; }
+        }
+
+        public object ContextInfo
+        {
+            get { return contextInfo; }
         }
 
     }

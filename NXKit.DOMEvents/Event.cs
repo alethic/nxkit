@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Dynamic;
 
 namespace NXKit.DOMEvents
 {
@@ -23,6 +24,7 @@ namespace NXKit.DOMEvents
         bool stopPropagationSet;
         bool stopImmediatePropagationSet;
         bool preventDefaultSet;
+        dynamic context;
 
         /// <summary>
         /// Initializes a new instance.
@@ -31,6 +33,7 @@ namespace NXKit.DOMEvents
         {
             this.eventPhase = EventPhase.Uninitialized;
             this.timeStamp = (ulong)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+            this.context = new ExpandoObject();
         }
 
         /// <summary>
@@ -146,6 +149,15 @@ namespace NXKit.DOMEvents
         public bool IsTrusted
         {
             get { return isTrusted; }
+        }
+
+        /// <summary>
+        /// Gets an object that can be used to attach arbitrary dynamic information to an <see cref="Event"/>.
+        /// </summary>
+        public dynamic Context
+        {
+            get { return context; }
+            set { context = value; }
         }
 
     }

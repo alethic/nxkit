@@ -7,24 +7,16 @@ using NXKit.Xml;
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}value", PredicateType = typeof(ItemValuePredicate))]
-    public class ItemValue :
-        ElementExtension,
-        ISelectableValue
+    /// <summary>
+    /// The resource element (deprecated in favor of using an AVT in the resource attribute) allows the URI used for
+    /// a submission to be dynamically calculated based on instance data.
+    /// </summary>
+    [Interface("{http://www.w3.org/2002/xforms}resource")]
+    public class Resource :
+        ElementExtension
     {
 
-        class ItemValuePredicate :
-            IInterfacePredicate
-        {
-
-            public bool IsMatch(XObject obj, Type type)
-            {
-                return obj.Parent != null && obj.Parent.Name == Constants.XForms_1_0 + "item";
-            }
-
-        }
-
-        readonly ItemValueAttributes attributes;
+        readonly ResourceAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
@@ -32,35 +24,27 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public ItemValue(XElement element)
+        public Resource(XElement element)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(element.Name == Constants.XForms_1_0 + "resource");
 
-            this.attributes = new ItemValueAttributes(Element);
+            this.attributes = new ResourceAttributes(element);
             this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
             this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
         }
 
-        /// <summary>
-        /// Gets the 'value' element attributes.
-        /// </summary>
-        ItemValueAttributes Attributes
+        ResourceAttributes Attributes
         {
             get { return attributes; }
         }
 
-        /// <summary>
-        /// Gets the binding of the element.
-        /// </summary>
         Binding Binding
         {
             get { return bindingNode.Value != null ? bindingNode.Value.Binding : null; }
         }
 
-        /// <summary>
-        /// Gets the 'value' attribute binding.
-        /// </summary>
         Binding ValueBinding
         {
             get { return valueBinding.Value; }
@@ -81,25 +65,18 @@ namespace NXKit.XForms
             return Element.Value;
         }
 
-        public void Select(UIBinding ui)
+        public Uri Uri
         {
-            ui.Value = GetValue();
+            get { return GetUri(); }
         }
 
-        public void Deselect(UIBinding ui)
-        {
-            ui.Value = "";
-        }
-
-        public bool IsSelected(UIBinding ui)
+        Uri GetUri()
         {
             var value = GetValue();
-            return ui.Value == value;
-        }
+            if (!string.IsNullOrWhiteSpace(value))
+                return new Uri(Element.GetBaseUri(), new Uri(value, UriKind.RelativeOrAbsolute));
 
-        public int GetValueHashCode()
-        {
-            return (GetValue() ?? "").GetHashCode();
+            return null;
         }
 
     }

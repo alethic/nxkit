@@ -60,8 +60,8 @@ namespace NXKit.XForms
                 {
                     // normalize uri with base
                     var u = new Uri(attributes.Src, UriKind.RelativeOrAbsolute);
-                    if (Element.BaseUri() != null && !u.IsAbsoluteUri)
-                        u = new Uri(new Uri(Element.BaseUri()), u);
+                    if (Element.GetBaseUri() != null && !u.IsAbsoluteUri)
+                        u = new Uri(Element.GetBaseUri(), u);
 
                     // return resource as a stream
                     var request = WebRequest.Create(u);

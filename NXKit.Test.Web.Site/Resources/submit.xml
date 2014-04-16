@@ -1,0 +1,23 @@
+﻿<f:form
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
+    xmlns:xf="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events">
+    <xf:model>
+        <xf:instance>
+            <data>
+                <value>Sample Value</value>
+            </data>
+        </xf:instance>
+        <xf:submission resource="Post.ashx" method="post" replace="none" />
+    </xf:model>
+        <xf:group>
+            <xf:label>Submit Example</xf:label>
+            <xf:input ref="value">
+                <xf:label>Sample Value</xf:label>
+            </xf:input>
+            <xf:submit>
+                <xf:label>Submit</xf:label>
+            </xf:submit>
+        </xf:group>
+</f:form>

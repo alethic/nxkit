@@ -7,24 +7,27 @@ using NXKit.Xml;
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}value", PredicateType = typeof(ItemValuePredicate))]
-    public class ItemValue :
-        ElementExtension,
-        ISelectableValue
+    /// <summary>
+    /// When the name element appears as a child of element header, it is used to specify the name of a header entry to
+    /// be provided to the submission protocol.
+    /// </summary>
+    [Interface("{http://www.w3.org/2002/xforms}name", PredicateType = typeof(HeaderNamePredicate))]
+    public class HeaderName :
+        ElementExtension
     {
 
-        class ItemValuePredicate :
+        class HeaderNamePredicate :
             IInterfacePredicate
         {
 
             public bool IsMatch(XObject obj, Type type)
             {
-                return obj.Parent != null && obj.Parent.Name == Constants.XForms_1_0 + "item";
+                return obj.Parent != null && obj.Parent.Name == Constants.XForms_1_0 + "header";
             }
 
         }
 
-        readonly ItemValueAttributes attributes;
+        readonly HeaderNameAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
@@ -32,35 +35,22 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public ItemValue(XElement element)
+        public HeaderName(XElement element)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(element.Name == Constants.XForms_1_0 + "name");
 
-            this.attributes = new ItemValueAttributes(Element);
+            this.attributes = new HeaderNameAttributes(element);
             this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
             this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
         }
 
-        /// <summary>
-        /// Gets the 'value' element attributes.
-        /// </summary>
-        ItemValueAttributes Attributes
-        {
-            get { return attributes; }
-        }
-
-        /// <summary>
-        /// Gets the binding of the element.
-        /// </summary>
         Binding Binding
         {
             get { return bindingNode.Value != null ? bindingNode.Value.Binding : null; }
         }
 
-        /// <summary>
-        /// Gets the 'value' attribute binding.
-        /// </summary>
         Binding ValueBinding
         {
             get { return valueBinding.Value; }
@@ -70,7 +60,7 @@ namespace NXKit.XForms
         /// Gets the appropriate value to use when selecting the item.
         /// </summary>
         /// <returns></returns>
-        string GetValue()
+        internal string GetValue()
         {
             if (Binding != null)
                 return Binding.Value;
@@ -79,27 +69,6 @@ namespace NXKit.XForms
                 return ValueBinding.Value;
 
             return Element.Value;
-        }
-
-        public void Select(UIBinding ui)
-        {
-            ui.Value = GetValue();
-        }
-
-        public void Deselect(UIBinding ui)
-        {
-            ui.Value = "";
-        }
-
-        public bool IsSelected(UIBinding ui)
-        {
-            var value = GetValue();
-            return ui.Value == value;
-        }
-
-        public int GetValueHashCode()
-        {
-            return (GetValue() ?? "").GetHashCode();
         }
 
     }

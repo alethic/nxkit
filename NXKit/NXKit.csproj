@@ -119,6 +119,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IdRef.cs" />
     <Compile Include="NXDocumentAnnotation.cs" />
     <Compile Include="IOnInitialize.cs" />
     <Compile Include="ObjectAnnotation.cs" />
@@ -150,8 +151,13 @@
     <Compile Include="Net\DynamicWebRequest.cs" />
     <Compile Include="Net\DynamicWebRequestFactory.cs" />
     <Compile Include="Net\DynamicWebResponse.cs" />
+    <Compile Include="Util\DynamicDictionary.cs" />
+    <Compile Include="Util\DynamicDictionaryValue.cs" />
     <Compile Include="Util\EnumerableExtensions.cs" />
     <Compile Include="Util\LinkedListExtensions.cs" />
+    <Compile Include="Util\MediaRangeParameters.cs" />
+    <Compile Include="Util\MediaType.cs" />
+    <Compile Include="Util\MediaRange.cs" />
     <Compile Include="Util\ObjectExtensions.cs" />
     <Compile Include="Util\StringExtensions.cs" />
     <Compile Include="CompositionUtil.cs" />
@@ -172,6 +178,8 @@
     <Compile Include="IRefScope.cs" />
     <Compile Include="NXDocumentHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Xml\XTransformer.cs" />
+    <Compile Include="Xml\XVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="xml.xsd">

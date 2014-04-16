@@ -27,7 +27,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the 'model' attribute value.
         /// </summary>
-        public string Model
+        public IdRef Model
         {
             get { return GetAttributeValue("model"); }
         }
