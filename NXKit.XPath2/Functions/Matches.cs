@@ -9,7 +9,8 @@ using NXKit.XPath;
 namespace NXKit.XPath2.Functions
 {
 
-    [XsltContextFunction("{http://www.w3.org/2005/xpath-functions}matches", IsPrefixRequired = false)]
+    [XsltContextFunction("{http://www.w3.org/2005/xpath-functions}matches")]
+    [XsltContextFunction("matches")]
     public class Matches :
         IXsltContextFunction
     {

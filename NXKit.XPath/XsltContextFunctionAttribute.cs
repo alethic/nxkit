@@ -17,7 +17,6 @@ namespace NXKit.XPath
     {
 
         readonly string expandedName;
-        bool isPrefixRequired;
 
         /// <summary>
         /// Initializes a new instance.
@@ -29,7 +28,6 @@ namespace NXKit.XPath
             Contract.Requires<ArgumentNullException>(name != null);
 
             this.expandedName = name.ToString();
-            this.isPrefixRequired = true;
         }
 
         /// <summary>
@@ -48,15 +46,6 @@ namespace NXKit.XPath
         public string ExpandedName
         {
             get { return expandedName; }
-        }
-
-        /// <summary>
-        /// Gets or sets whether the function requires a prefix.
-        /// </summary>
-        public bool IsPrefixRequired
-        {
-            get { return isPrefixRequired; }
-            set { isPrefixRequired = value; }
         }
 
     }

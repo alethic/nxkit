@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -112,38 +113,46 @@ namespace NXKit.XForms
                 nodeBinding.Value.Binding.Recalculate();
         }
 
-        /// <summary>
-        /// Applies the bindings to the model item.
-        /// </summary>
-        public void Apply()
+        ModelItem[] GetBoundNodes()
         {
             // TODO this is a poor implementation of nested bind elements
             var modelItems = Binding.ModelItems.ToList();
             var parentBind = Element.Ancestors(Constants.XForms_1_0 + "bind")
                 .SelectMany(i => i.Interfaces<Bind>())
                 .FirstOrDefault();
-            if (parentBind != null &&
-                parentBind.Binding != null)
+            if (parentBind != null)
             {
                 var xpath = Element.Attribute("ref") ?? Element.Attribute("nodeset");
                 if (xpath != null)
                 {
+                    var parentItems = parentBind.GetBoundNodes();
                     modelItems.Clear();
-                    for (int i = 1; i <= parentBind.Binding.ModelItems.Length; i++)
+                    for (int i = 1; i <= parentItems.Length; i++)
                     {
-                        var parentModelItem = parentBind.Binding.ModelItems[i - 1];
+                        var parentModelItem = parentItems[i - 1];
                         var ec = new EvaluationContext(
                             parentModelItem.Model,
                             parentModelItem.Instance,
                             parentModelItem,
                             i,
-                            parentBind.Binding.ModelItems.Length);
+                            parentItems.Length);
                         modelItems.AddRange(new Binding(xpath, ec, (string)xpath).ModelItems);
                     }
                 }
             }
 
-            for (int i = 1; i <= modelItems.Count; i++)
+            return modelItems.ToArray();
+        }
+
+        /// <summary>
+        /// Applies the bindings to the model item.
+        /// </summary>
+        public void Apply()
+        {
+            // TODO this is a poor implementation of nested bind elements
+            var modelItems = GetBoundNodes();
+
+            for (int i = 1; i <= modelItems.Length; i++)
             {
                 var modelItem = modelItems[i - 1];
                 if (modelItem == null)
@@ -157,7 +166,7 @@ namespace NXKit.XForms
                     if (state.Type != Type)
                         state.Type = Type;
 
-                var ec = new EvaluationContext(modelItem.Model, modelItem.Instance, modelItem, i, Binding.ModelItems.Length);
+                var ec = new EvaluationContext(modelItem.Model, modelItem.Instance, modelItem, i, modelItems.Length);
 
                 if (!string.IsNullOrWhiteSpace(attributes.ReadOnly))
                 {

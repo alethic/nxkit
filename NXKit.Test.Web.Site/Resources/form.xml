@@ -78,10 +78,11 @@
                   src="questions.xml" />
 
         <bind ref="instance('primaryquestions')">
-            <bind ref="//d:healthinfo"
-                  relevant="../d:answer='true' and ./@enable='true'" />
-            <bind ref="//d:healthinfo/*"
-                  type="xsd:string" />
+            <bind ref="d:question/d:healthinfo"
+                  relevant="../d:answer='true' and ./@enable='true'">
+                <bind ref="./*"
+                      type="xsd:string" />
+            </bind>
         </bind>
 
         <instance id="secondaryquestions"

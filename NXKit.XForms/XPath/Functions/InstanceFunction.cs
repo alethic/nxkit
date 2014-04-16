@@ -10,6 +10,7 @@ namespace NXKit.XForms.XPath.Functions
 {
 
     [XsltContextFunction("{http://www.w3.org/2002/xforms}instance")]
+    [XsltContextFunction("instance")]
     public class InstanceFunction :
         XPathFunction
     {

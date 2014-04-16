@@ -14,11 +14,6 @@ namespace NXKit.XPath
         /// </summary>
         string[] ExpandedName { get; }
 
-        /// <summary>
-        /// Gets whether or not the function requires a prefix.
-        /// </summary>
-        bool[] IsPrefixRequired { get; }
-
     }
 
 }

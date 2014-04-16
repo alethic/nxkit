@@ -50,12 +50,10 @@ namespace NXKit.XPath
                     .Select((j, k) => new
                     {
                         Name = i.Metadata.ExpandedName[k],
-                        IsPrefixRequired = i.Metadata.IsPrefixRequired[k],
                         Item = i,
                     }))
                 .Where(i => ResolveFunctionPredicate(
                     XName.Get(i.Name),
-                    i.IsPrefixRequired,
                     prefix,
                     localName))
                 .Select(i => i.Item.Value)
@@ -66,10 +64,10 @@ namespace NXKit.XPath
         /// Test whether the given candidate function data matches with the requested name.
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="isPrefixRequired"></param>
-        /// <param name="requested"></param>
+        /// <param name="prefix"></param>
+        /// <param name="localName"></param>
         /// <returns></returns>
-        bool ResolveFunctionPredicate(XName name, bool isPrefixRequired, string prefix, string localName)
+        bool ResolveFunctionPredicate(XName name, string prefix, string localName)
         {
             Contract.Requires<ArgumentNullException>(name != null);
             Contract.Requires<ArgumentNullException>(prefix != null);
@@ -78,11 +76,6 @@ namespace NXKit.XPath
             // local name must match
             if (localName != name.LocalName)
                 return false;
-
-            // prefix not required
-            if (prefix == "")
-                if (!isPrefixRequired)
-                    return true;
 
             // test matching namespace
             var ns = LookupNamespace(prefix);

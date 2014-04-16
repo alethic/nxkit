@@ -44,11 +44,19 @@ namespace NXKit.XPath
 
         public override string LookupNamespace(string prefix)
         {
+            // default prefix resolve to default namespace
+            if (prefix == "")
+                return "";
+
             return xml.GetNamespaceOfPrefix(prefix).NamespaceName;
         }
 
         public override string LookupPrefix(string uri)
         {
+            // default namespace resolves to default prefix
+            if (uri == "")
+                return "";
+
             return xml.GetPrefixOfNamespace(uri);
         }
 
