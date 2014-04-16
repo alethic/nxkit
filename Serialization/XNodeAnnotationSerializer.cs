@@ -345,7 +345,7 @@ namespace NXKit.Serialization
 
             // document being read expresses a base URI, set on element
             if (!string.IsNullOrEmpty(document.BaseUri))
-                xml.BaseUri(document.BaseUri);
+                xml.SetBaseUri(document.BaseUri);
 
             // apply serialied contents
             DeserializeContents(xml);

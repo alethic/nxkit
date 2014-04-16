@@ -165,17 +165,17 @@ namespace NXKit.Xml
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static string BaseUri(this XObject self)
+        public static Uri GetBaseUri(this XObject self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
 
             var baseUriAnno = self.Annotation<BaseUriAnnotation>();
             if (baseUriAnno != null &&
                 baseUriAnno.BaseUri != null)
-                return baseUriAnno.BaseUri.ToString();
+                return baseUriAnno.BaseUri;
 
             if (self is XElement)
-                return BaseUri((XElement)self);
+                return GetBaseUri((XElement)self);
 
             return null;
         }
@@ -185,19 +185,19 @@ namespace NXKit.Xml
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static string BaseUri(this XElement self)
+        public static Uri GetBaseUri(this XElement self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
 
             var baseUriAttr = (string)self.Attribute(XNamespace.Xml + "base");
             if (baseUriAttr != null)
-                return baseUriAttr;
+                return new Uri(baseUriAttr, UriKind.RelativeOrAbsolute);
 
             if (self.Parent != null)
-                return BaseUri(self.Parent);
+                return GetBaseUri(self.Parent);
 
             if (self.Document != null)
-                return BaseUri(self.Document);
+                return GetBaseUri(self.Document);
 
             return null;
         }
@@ -207,7 +207,7 @@ namespace NXKit.Xml
         /// </summary>
         /// <param name="self"></param>
         /// <param name="baseUri"></param>
-        public static void BaseUri(this XObject self, Uri baseUri)
+        public static void SetBaseUri(this XObject self, Uri baseUri)
         {
             Contract.Requires<ArgumentNullException>(self != null);
 
@@ -222,11 +222,11 @@ namespace NXKit.Xml
         /// </summary>
         /// <param name="self"></param>
         /// <param name="baseUri"></param>
-        public static void BaseUri(this XObject self, string baseUri)
+        public static void SetBaseUri(this XObject self, string baseUri)
         {
             Contract.Requires<ArgumentNullException>(self != null);
 
-            BaseUri(self, !string.IsNullOrWhiteSpace(baseUri) ? new Uri(baseUri) : null);
+            SetBaseUri(self, !string.IsNullOrWhiteSpace(baseUri) ? new Uri(baseUri) : null);
         }
 
         #endregion

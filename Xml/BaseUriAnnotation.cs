@@ -17,14 +17,6 @@ namespace NXKit.Xml
         Uri baseUri;
 
         /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        public BaseUriAnnotation()
-        {
-
-        }
-
-        /// <summary>
         /// Gets or sets the base URI value.
         /// </summary>
         public Uri BaseUri
