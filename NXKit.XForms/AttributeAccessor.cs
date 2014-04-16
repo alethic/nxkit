@@ -42,6 +42,8 @@ namespace NXKit.XForms
 
         public XAttribute GetAttribute(string name)
         {
+            Contract.Requires<ArgumentNullException>(name != null);
+
             var fq = element.Attribute(defaultNamespace + name);
             if (fq != null)
                 return fq;

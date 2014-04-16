@@ -204,14 +204,11 @@ namespace NXKit.XForms
             var valueChanged = Value != oldValue;
             if (valueChanged)
             {
-                Debug.WriteLine("{0}: Value changed: {1}", element, Value);
                 State.DispatchValueChanged = true;
             }
 
             if (Relevant != oldRelevant || valueChanged)
             {
-                Debug.WriteLine("{0}: Relevant changed: {1}", element, Relevant);
-
                 if (Relevant)
                     State.DispatchEnabled = true;
                 else
@@ -220,8 +217,6 @@ namespace NXKit.XForms
 
             if (ReadOnly != oldReadOnly || valueChanged)
             {
-                Debug.WriteLine("{0}: ReadOnly changed: {1}", element, Relevant);
-
                 if (ReadOnly)
                     State.DispatchReadOnly = true;
                 else
@@ -230,8 +225,6 @@ namespace NXKit.XForms
 
             if (Required != oldRequired || valueChanged)
             {
-                Debug.WriteLine("{0}: Required changed: {1}", element, Required);
-
                 if (Required)
                     State.DispatchRequired = true;
                 else
@@ -240,8 +233,6 @@ namespace NXKit.XForms
 
             if (Valid != oldValid || valueChanged)
             {
-                Debug.WriteLine("{0}: Valid changed: {1}", element, Valid);
-
                 if (Valid)
                     State.DispatchValid = true;
                 else

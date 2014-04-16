@@ -82,7 +82,8 @@ namespace NXKit.XForms
 
         public bool IsSelected(UIBinding ui)
         {
-            return ui.Value == GetValue();
+            var value = GetValue();
+            return ui.Value == value;
         }
 
         public int GetValueHashCode()

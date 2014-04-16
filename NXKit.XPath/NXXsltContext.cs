@@ -45,10 +45,6 @@ namespace NXKit.XPath
             Contract.Assert(localName != null);
             Contract.Assert(argTypes != null);
 
-            var name = XName.Get(localName, LookupNamespace(prefix));
-            if (name == null)
-                throw new XPathException("Unable to resolve function name.");
-
             return functionProvider.GetFunctions()
                 .SelectMany(i => i.Metadata.ExpandedName
                     .Select((j, k) => new
@@ -60,7 +56,8 @@ namespace NXKit.XPath
                 .Where(i => ResolveFunctionPredicate(
                     XName.Get(i.Name),
                     i.IsPrefixRequired,
-                    name))
+                    prefix,
+                    localName))
                 .Select(i => i.Item.Value)
                 .FirstOrDefault();
         }
@@ -72,19 +69,24 @@ namespace NXKit.XPath
         /// <param name="isPrefixRequired"></param>
         /// <param name="requested"></param>
         /// <returns></returns>
-        bool ResolveFunctionPredicate(XName name, bool isPrefixRequired, XName requested)
+        bool ResolveFunctionPredicate(XName name, bool isPrefixRequired, string prefix, string localName)
         {
             Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(requested != null);
+            Contract.Requires<ArgumentNullException>(prefix != null);
+            Contract.Requires<ArgumentNullException>(localName != null);
 
-            if (requested.LocalName != name.LocalName)
+            // local name must match
+            if (localName != name.LocalName)
                 return false;
 
-            if (requested.NamespaceName == "")
+            // prefix not required
+            if (prefix == "")
                 if (!isPrefixRequired)
                     return true;
 
-            if (requested.NamespaceName == name.NamespaceName)
+            // test matching namespace
+            var ns = LookupNamespace(prefix);
+            if (ns == name.NamespaceName)
                 return true;
 
             return false;

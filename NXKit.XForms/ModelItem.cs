@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
-
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -172,7 +172,7 @@ namespace NXKit.XForms
         public string Value
         {
             get { return GetValue(); }
-            set { SetValue(value); }
+            set { Contract.Requires<ArgumentNullException>(value != null); SetValue(value); }
         }
 
         /// <summary>
@@ -215,6 +215,8 @@ namespace NXKit.XForms
                     throw new DOMEventException(Events.BindingException);
 
                 ((XElement)Xml).SetValue(newValue);
+
+                Debug.WriteLine("ModelItem value changed: {0}", Xml);
             }
             else if (Xml is XAttribute)
             {

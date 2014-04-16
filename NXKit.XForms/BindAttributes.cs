@@ -9,7 +9,7 @@ namespace NXKit.XForms
     /// Provides the attributes for the bind element.
     /// </summary>
     public class BindAttributes :
-        AttributeAccessor
+        CommonAttributes
     {
 
         /// <summary>
