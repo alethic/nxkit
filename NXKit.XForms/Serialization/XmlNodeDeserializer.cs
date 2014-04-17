@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 using NXKit.Util;
 
-namespace NXKit.Serialization
+namespace NXKit.XForms.Serialization
 {
 
     [Export(typeof(INodeDeserializer))]

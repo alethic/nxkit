@@ -46,6 +46,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Web.Tests", "NXKit.We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XMLEvents", "NXKit.XMLEvents\NXKit.XMLEvents.csproj", "{DB71B395-DF60-470A-B761-B083D7ACAFE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Json", "NXKit.XForms.Json\NXKit.XForms.Json.csproj", "{FDA6D401-D67E-4DAC-80B4-4FE0AA4CE338}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Json.Tests", "NXKit.XForms.Json.Tests\NXKit.XForms.Json.Tests.csproj", "{E5478294-82C4-4FD1-9FDA-830C3020E612}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,6 +128,14 @@ Global
 		{DB71B395-DF60-470A-B761-B083D7ACAFE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB71B395-DF60-470A-B761-B083D7ACAFE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB71B395-DF60-470A-B761-B083D7ACAFE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDA6D401-D67E-4DAC-80B4-4FE0AA4CE338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDA6D401-D67E-4DAC-80B4-4FE0AA4CE338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDA6D401-D67E-4DAC-80B4-4FE0AA4CE338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDA6D401-D67E-4DAC-80B4-4FE0AA4CE338}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5478294-82C4-4FD1-9FDA-830C3020E612}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5478294-82C4-4FD1-9FDA-830C3020E612}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5478294-82C4-4FD1-9FDA-830C3020E612}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5478294-82C4-4FD1-9FDA-830C3020E612}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

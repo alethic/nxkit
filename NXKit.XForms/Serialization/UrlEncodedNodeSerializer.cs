@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-using NXKit.Serialization;
 using NXKit.Util;
 
 namespace NXKit.XForms.Serialization
@@ -15,11 +14,14 @@ namespace NXKit.XForms.Serialization
         INodeSerializer
     {
 
-        static readonly MediaRange URLENCODED_MEDIARANGE = "application/x-www-form-urlencoded";
+        static readonly MediaRange[] MEDIA_RANGE = new MediaRange[]
+        {
+            "application/x-www-form-urlencoded",
+        };
 
         public Priority CanSerialize(XNode node, MediaRange mediaType)
         {
-            return URLENCODED_MEDIARANGE.Matches(mediaType) && (node is XDocument || node is XElement) ? Priority.Default : Priority.Ignore;
+            return MEDIA_RANGE.Any(i => i.Matches(mediaType)) && (node is XDocument || node is XElement) ? Priority.Default : Priority.Ignore;
         }
 
         public void Serialize(TextWriter writer, XNode node, MediaRange mediaType)

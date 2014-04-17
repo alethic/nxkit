@@ -119,6 +119,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileSubmissionProcessor.cs" />
+    <Compile Include="Serialization\INodeDeserializer.cs" />
+    <Compile Include="Serialization\INodeSerializer.cs" />
+    <Compile Include="Serialization\XmlNodeDeserializer.cs" />
+    <Compile Include="Serialization\XmlNodeSerializer.cs" />
     <Compile Include="WebRequestSubmissionProcessor.cs" />
     <Compile Include="Serialization\UrlEncodedNodeSerializer.cs" />
     <Compile Include="SubmissionProcessor.cs" />
