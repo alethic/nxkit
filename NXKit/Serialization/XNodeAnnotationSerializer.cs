@@ -33,6 +33,35 @@ namespace NXKit.Serialization
         #region Serialize
 
         /// <summary>
+        /// Serializes a normal <see cref="XNode"/> into a new <see cref="XNode"/>, integrating the annotations.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public static XNode Serialize(XNode node)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+
+            if (node is XDocument)
+                return Serialize((XDocument)node);
+            if (node is XElement)
+                return Serialize((XElement)node);
+
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Serializes a normal <see cref="XElement"/> into a new <see cref="XElement"/>, integrating the annotations.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public static XElement Serialize(XElement element)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+
+            return new XElement(element.Name, SerializeContents(element));
+        }
+
+        /// <summary>
         /// Serialize a normal <see cref="XDocument"/> into a new <see cref="XDocument"/>, integrating the annotations
         /// into the elements.
         /// </summary>

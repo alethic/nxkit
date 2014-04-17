@@ -4,8 +4,8 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-
 using NXKit.DOMEvents;
+using NXKit.XForms.IO;
 using NXKit.Xml;
 
 namespace NXKit.XForms

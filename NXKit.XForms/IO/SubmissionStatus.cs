@@ -1,4 +1,4 @@
-﻿namespace NXKit.XForms
+﻿namespace NXKit.XForms.IO
 {
 
     public enum SubmissionStatus

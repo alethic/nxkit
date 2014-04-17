@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using System.Dynamic;
 using System.Text;
 using System.Xml.Linq;
+
 using NXKit.Util;
 
-namespace NXKit.XForms
+namespace NXKit.XForms.IO
 {
 
     /// <summary>

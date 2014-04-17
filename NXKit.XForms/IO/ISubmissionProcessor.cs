@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-namespace NXKit.XForms
+namespace NXKit.XForms.IO
 {
 
     /// <summary>

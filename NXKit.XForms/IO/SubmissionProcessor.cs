@@ -6,10 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-using NXKit.Serialization;
 using NXKit.Util;
+using NXKit.XForms.Serialization;
 
-namespace NXKit.XForms
+namespace NXKit.XForms.IO
 {
 
     /// <summary>

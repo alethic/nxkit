@@ -4,16 +4,16 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Net;
 
-using NXKit.Serialization;
+using NXKit.XForms.Serialization;
 
-namespace NXKit.XForms
+namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Handles submissions of the default HTTP scheme's expressed by the XForms standard.
+    /// Handles submissions of the 'file' scheme.
     /// </summary>
     [Export(typeof(ISubmissionProcessor))]
-    public class HttpSubmissionProcessor :
+    public class FileSubmissionProcessor :
         WebRequestSubmissionProcessor
     {
 
@@ -23,7 +23,7 @@ namespace NXKit.XForms
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
         [ImportingConstructor]
-        public HttpSubmissionProcessor(
+        public FileSubmissionProcessor(
             [ImportMany] IEnumerable<INodeSerializer> serializers,
             [ImportMany] IEnumerable<INodeDeserializer> deserializers)
             : base(serializers, deserializers)
@@ -39,25 +39,29 @@ namespace NXKit.XForms
         /// <returns></returns>
         public override Priority CanSubmit(SubmissionRequest submit)
         {
-            if (submit.ResourceUri.Scheme == Uri.UriSchemeHttp ||
-                submit.ResourceUri.Scheme == Uri.UriSchemeHttps)
+            if (submit.ResourceUri.Scheme == Uri.UriSchemeFile)
                 return Priority.Default;
             else
                 return Priority.Ignore;
         }
 
-        protected override SubmissionStatus ReadRequestStatus(WebResponse response)
+        protected override string GetMethod(SubmissionRequest request)
         {
-            var webResponse = response as HttpWebResponse;
-            if (webResponse == null)
-                throw new InvalidOperationException();
+            switch (request.Method.ToLowerInvariant())
+            {
+                case "get":
+                    return WebRequestMethods.File.DownloadFile;
+                case "put":
+                case "post":
+                    return WebRequestMethods.File.UploadFile;
+            }
 
-            // success ranges for HTTP
-            if ((int)webResponse.StatusCode >= 200 &&
-                (int)webResponse.StatusCode <= 299)
-                return SubmissionStatus.Success;
-            else
-                return SubmissionStatus.Error;
+            return null;
+        }
+
+        protected override bool IsQuery(SubmissionRequest request)
+        {
+            return false;
         }
 
     }

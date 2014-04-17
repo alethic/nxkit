@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Net;
-using NXKit.Serialization;
 
-namespace NXKit.XForms
+using NXKit.XForms.Serialization;
+
+namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Handles submissions of the 'file' scheme.
+    /// Handles submissions of the default HTTP scheme's expressed by the XForms standard.
     /// </summary>
     [Export(typeof(ISubmissionProcessor))]
-    public class FileSubmissionProcessor :
+    public class HttpSubmissionProcessor :
         WebRequestSubmissionProcessor
     {
 
@@ -22,7 +23,7 @@ namespace NXKit.XForms
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
         [ImportingConstructor]
-        public FileSubmissionProcessor(
+        public HttpSubmissionProcessor(
             [ImportMany] IEnumerable<INodeSerializer> serializers,
             [ImportMany] IEnumerable<INodeDeserializer> deserializers)
             : base(serializers, deserializers)
@@ -38,29 +39,25 @@ namespace NXKit.XForms
         /// <returns></returns>
         public override Priority CanSubmit(SubmissionRequest submit)
         {
-            if (submit.ResourceUri.Scheme == Uri.UriSchemeFile)
+            if (submit.ResourceUri.Scheme == Uri.UriSchemeHttp ||
+                submit.ResourceUri.Scheme == Uri.UriSchemeHttps)
                 return Priority.Default;
             else
                 return Priority.Ignore;
         }
 
-        protected override string GetMethod(SubmissionRequest request)
+        protected override SubmissionStatus ReadRequestStatus(WebResponse response)
         {
-            switch (request.Method.ToLowerInvariant())
-            {
-                case "get":
-                    return WebRequestMethods.File.DownloadFile;
-                case "put":
-                case "post":
-                    return WebRequestMethods.File.UploadFile;
-            }
+            var webResponse = response as HttpWebResponse;
+            if (webResponse == null)
+                throw new InvalidOperationException();
 
-            return null;
-        }
-
-        protected override bool IsQuery(SubmissionRequest request)
-        {
-            return false;
+            // success ranges for HTTP
+            if ((int)webResponse.StatusCode >= 200 &&
+                (int)webResponse.StatusCode <= 299)
+                return SubmissionStatus.Success;
+            else
+                return SubmissionStatus.Error;
         }
 
     }

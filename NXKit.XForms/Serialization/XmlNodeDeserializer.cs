@@ -2,6 +2,7 @@
 using System.IO;
 using System.Xml.Linq;
 
+using NXKit.Serialization;
 using NXKit.Util;
 
 namespace NXKit.XForms.Serialization
@@ -21,7 +22,7 @@ namespace NXKit.XForms.Serialization
 
         public XNode Deserialize(TextReader reader, MediaRange mediaType)
         {
-            return XDocument.Load(reader);
+            return XNodeAnnotationSerializer.Deserialize(XDocument.Load(reader));
         }
 
     }

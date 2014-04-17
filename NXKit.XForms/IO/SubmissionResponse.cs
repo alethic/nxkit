@@ -2,7 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
-namespace NXKit.XForms
+namespace NXKit.XForms.IO
 {
 
     /// <summary>

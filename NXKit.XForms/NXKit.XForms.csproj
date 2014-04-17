@@ -118,14 +118,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileSubmissionProcessor.cs" />
+    <Compile Include="IO\FileSubmissionProcessor.cs" />
+    <Compile Include="IO\SubmissionRequest.cs" />
+    <Compile Include="IO\SubmissionResponse.cs" />
+    <Compile Include="IO\SubmissionStatus.cs" />
     <Compile Include="Serialization\INodeDeserializer.cs" />
     <Compile Include="Serialization\INodeSerializer.cs" />
     <Compile Include="Serialization\XmlNodeDeserializer.cs" />
     <Compile Include="Serialization\XmlNodeSerializer.cs" />
-    <Compile Include="WebRequestSubmissionProcessor.cs" />
+    <Compile Include="IO\WebRequestSubmissionProcessor.cs" />
     <Compile Include="Serialization\UrlEncodedNodeSerializer.cs" />
-    <Compile Include="SubmissionProcessor.cs" />
+    <Compile Include="IO\SubmissionProcessor.cs" />
     <Compile Include="SubmitAttributes.cs" />
     <Compile Include="AttributeEvaluationContextResolver.cs" />
     <Compile Include="HeaderAttributes.cs" />
@@ -134,15 +137,12 @@
     <Compile Include="Header.cs" />
     <Compile Include="IEvaluationContextProvider.cs" />
     <Compile Include="EvaluationContextResolver.cs" />
-    <Compile Include="ISubmissionProcessor.cs" />
+    <Compile Include="IO\ISubmissionProcessor.cs" />
     <Compile Include="HeaderValueAttributes.cs" />
     <Compile Include="HeaderValue.cs" />
     <Compile Include="HeaderNameAttributes.cs" />
     <Compile Include="HeaderName.cs" />
-    <Compile Include="SubmissionStatus.cs" />
     <Compile Include="SubmissionHeaders.cs" />
-    <Compile Include="SubmissionRequest.cs" />
-    <Compile Include="SubmissionResponse.cs" />
     <Compile Include="SubmissionSerialization.cs" />
     <Compile Include="ResourceAttributes.cs" />
     <Compile Include="Resource.cs" />
@@ -243,7 +243,7 @@
     <Compile Include="TextArea.cs" />
     <Compile Include="Trigger.cs" />
     <Compile Include="ItemValue.cs" />
-    <Compile Include="HttpSubmissionProcessor.cs" />
+    <Compile Include="IO\HttpSubmissionProcessor.cs" />
     <Compile Include="XPath\Functions\BooleanFromString.cs" />
     <Compile Include="XPath\Functions\IfFunction.cs" />
     <Compile Include="XPath\Functions\IndexFunction.cs" />
