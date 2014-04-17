@@ -28,7 +28,7 @@ namespace NXKit.XForms.Serialization
         /// <param name="reader"></param>
         /// <param name="mediaType"></param>
         /// <returns></returns>
-        XNode Deserialize(TextReader reader, MediaRange mediaType);
+        XDocument Deserialize(TextReader reader, MediaRange mediaType);
 
     }
 
@@ -43,7 +43,7 @@ namespace NXKit.XForms.Serialization
             throw new NotImplementedException();
         }
 
-        public XNode Deserialize(TextReader reader, MediaRange mediaType)
+        public XDocument Deserialize(TextReader reader, MediaRange mediaType)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
             Contract.Requires<ArgumentNullException>(mediaType != null);

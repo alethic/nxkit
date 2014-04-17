@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
-
+using NXKit.XForms.IO;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -54,7 +54,7 @@ namespace NXKit.XForms
         /// Gets the appropriate value to use when selecting the item.
         /// </summary>
         /// <returns></returns>
-        internal string GetValue()
+        string GetValue()
         {
             if (Binding != null)
                 return Binding.Value;
@@ -63,6 +63,11 @@ namespace NXKit.XForms
                 return ValueBinding.Value;
 
             return Element.Value;
+        }
+
+        public RequestMethod RequestMethod
+        {
+            get { return !string.IsNullOrEmpty(GetValue()) ? RequestMethodHelper.Parse(GetValue()) : RequestMethod.None; }
         }
 
     }

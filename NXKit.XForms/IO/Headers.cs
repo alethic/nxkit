@@ -29,6 +29,12 @@ namespace NXKit.XForms.IO
             Get(name).AddRange(values);
         }
 
+        public void Add(Headers headers)
+        {
+            foreach (var header in headers)
+                Add(header.Key, header.Value);
+        }
+
         public IEnumerator<KeyValuePair<string, IEnumerable<string>>> GetEnumerator()
         {
             return items

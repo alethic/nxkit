@@ -291,6 +291,7 @@ namespace NXKit.XForms
                 if (document != null)
                 {
                     Instance.Load(document);
+                    Model.State.Rebuild = true;
                     Model.State.Recalculate = true;
                     Model.State.Revalidate = true;
                     Model.State.Refresh = true;
@@ -302,6 +303,7 @@ namespace NXKit.XForms
                 if (element != null)
                 {
                     Instance.Load(new XDocument(element));
+                    Model.State.Rebuild = true;
                     Model.State.Recalculate = true;
                     Model.State.Revalidate = true;
                     Model.State.Refresh = true;
@@ -351,7 +353,7 @@ namespace NXKit.XForms
             Contract.Requires<InvalidOperationException>(Xml is XElement);
 
             ((XElement)Xml).ReplaceWith(element);
-
+            Model.State.Rebuild = true;
             Model.State.Recalculate = true;
             Model.State.Revalidate = true;
             Model.State.Refresh = true;

@@ -120,6 +120,8 @@
   <ItemGroup>
     <Compile Include="IO\FileRequestProcessor.cs" />
     <Compile Include="IO\Request.cs" />
+    <Compile Include="IO\RequestMethod.cs" />
+    <Compile Include="IO\RequestMethodHelper.cs" />
     <Compile Include="IO\Response.cs" />
     <Compile Include="IO\ResponseStatus.cs" />
     <Compile Include="Serialization\INodeDeserializer.cs" />
@@ -128,7 +130,7 @@
     <Compile Include="Serialization\XmlNodeSerializer.cs" />
     <Compile Include="IO\WebRequestProcessor.cs" />
     <Compile Include="Serialization\UrlEncodedNodeSerializer.cs" />
-    <Compile Include="IO\RequestProcessor.cs" />
+    <Compile Include="IO\RequestHandler.cs" />
     <Compile Include="SubmitAttributes.cs" />
     <Compile Include="AttributeEvaluationContextResolver.cs" />
     <Compile Include="HeaderAttributes.cs" />
@@ -137,7 +139,7 @@
     <Compile Include="Header.cs" />
     <Compile Include="IEvaluationContextProvider.cs" />
     <Compile Include="EvaluationContextResolver.cs" />
-    <Compile Include="IO\IRequestProcessor.cs" />
+    <Compile Include="IO\IRequestHandler.cs" />
     <Compile Include="HeaderValueAttributes.cs" />
     <Compile Include="HeaderValue.cs" />
     <Compile Include="HeaderNameAttributes.cs" />

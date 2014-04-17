@@ -12,7 +12,7 @@ namespace NXKit.XForms.IO
     /// <summary>
     /// Handles submissions of the 'file' scheme.
     /// </summary>
-    [Export(typeof(IRequestProcessor))]
+    [Export(typeof(IRequestHandler))]
     public class FileRequestProcessor :
         WebRequestProcessor
     {
@@ -47,12 +47,12 @@ namespace NXKit.XForms.IO
 
         protected override string GetMethod(Request request)
         {
-            switch (request.Method.ToLowerInvariant())
+            switch (request.Method)
             {
-                case "get":
+                case RequestMethod.Get:
                     return WebRequestMethods.File.DownloadFile;
-                case "put":
-                case "post":
+                case RequestMethod.Put:
+                case RequestMethod.Post:
                     return WebRequestMethods.File.UploadFile;
             }
 

@@ -13,11 +13,11 @@ namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Base <see cref="IRequestProcessor"/> implementation for using the Web request framework.
+    /// Base <see cref="IRequestHandler"/> implementation for using the Web request framework.
     /// </summary>
-    [Export(typeof(IRequestProcessor))]
+    [Export(typeof(IRequestHandler))]
     public class WebRequestProcessor :
-        RequestProcessor
+        RequestHandler
     {
 
         /// <summary>
@@ -49,16 +49,16 @@ namespace NXKit.XForms.IO
         {
             switch (request.Method)
             {
-                case "post":
-                case "put":
+                case RequestMethod.Post:
+                case RequestMethod.Put:
                     return "application/xml";
-                case "get":
-                case "delete":
-                case "urlencoded-post":
+                case RequestMethod.Get:
+                case RequestMethod.Delete:
+                case RequestMethod.UrlEncodedPost:
                     return "application/x-www-form-urlencoded";
-                case "multipart-post":
+                case RequestMethod.MultipartPost:
                     return "multipart/related";
-                case "form-data-post":
+                case RequestMethod.FormDataPost:
                     return "multipart/form-data";
             }
 
@@ -74,15 +74,18 @@ namespace NXKit.XForms.IO
         {
             Contract.Requires<ArgumentNullException>(request != null);
 
-            switch (request.Method.ToLowerInvariant())
+            switch (request.Method)
             {
-                case "get":
+                case RequestMethod.Get:
                     return "GET";
-                case "put":
+                case RequestMethod.Put:
                     return "PUT";
-                case "post":
+                case RequestMethod.Post:
+                case RequestMethod.UrlEncodedPost:
+                case RequestMethod.MultipartPost:
+                case RequestMethod.FormDataPost:
                     return "POST";
-                case "delete":
+                case RequestMethod.Delete:
                     return "DELETE";
                 default:
                     return null;

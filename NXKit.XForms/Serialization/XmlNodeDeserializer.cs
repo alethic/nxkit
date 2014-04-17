@@ -20,7 +20,7 @@ namespace NXKit.XForms.Serialization
             return XML_MEDIARANGE.Matches(mediaRange) ? Priority.Default : Priority.Ignore;
         }
 
-        public XNode Deserialize(TextReader reader, MediaRange mediaType)
+        public XDocument Deserialize(TextReader reader, MediaRange mediaType)
         {
             return XNodeAnnotationSerializer.Deserialize(XDocument.Load(reader));
         }

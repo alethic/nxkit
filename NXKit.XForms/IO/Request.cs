@@ -9,86 +9,93 @@ namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Describes a submission for forwarding to <see cref="IRequestProcessor"/>s.
+    /// Describes an IO request to be dispatched towards a resource in order to obtain a response.
     /// </summary>
     public class Request
     {
 
         readonly Uri resourceUri;
-        readonly string method;
-        readonly SubmissionSerialization serialization;
-        readonly MediaRange mediaType;
-        readonly XNode body;
-        readonly Encoding encoding;
         readonly Headers headers;
         readonly DynamicDictionary context;
+        RequestMethod method;
+        MediaRange mediaType;
+        XNode body;
+        Encoding encoding;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="resourceUri"></param>
         /// <param name="method"></param>
-        /// <param name="serialization"></param>
-        /// <param name="mediaType"></param>
-        /// <param name="body"></param>
         public Request(
             Uri resourceUri,
-            string method,
-            SubmissionSerialization serialization,
-            MediaRange mediaType,
-            XNode body,
-            Encoding encoding,
-            Headers headers)
+            RequestMethod method)
         {
             Contract.Requires<ArgumentNullException>(resourceUri != null);
             Contract.Requires<ArgumentException>(resourceUri.IsAbsoluteUri);
-            Contract.Requires<ArgumentNullException>(encoding != null);
-            Contract.Requires<ArgumentNullException>(headers != null);
 
             this.resourceUri = resourceUri;
             this.method = method;
-            this.mediaType = mediaType;
-            this.body = body;
-            this.encoding = encoding;
-            this.headers = headers;
+            this.encoding = Encoding.UTF8;
+            this.headers = new Headers();
             this.context = new DynamicDictionary();
         }
 
+        /// <summary>
+        /// Gets the <see cref="Uri"/> of the resource being requested.
+        /// </summary>
         public Uri ResourceUri
         {
             get { return resourceUri; }
         }
 
-        public string Method
+        /// <summary>
+        /// Gets or sets the method type of the request.
+        /// </summary>
+        public RequestMethod Method
         {
             get { return method; }
+            set { method = value; }
         }
 
-        public SubmissionSerialization Serialization
-        {
-            get { return serialization; }
-        }
-
-        public MediaRange MediaType
-        {
-            get { return mediaType; }
-        }
-
+        /// <summary>
+        /// Gets or sets the body to be sent along with the request.
+        /// </summary>
         public XNode Body
         {
             get { return body; }
+            set { body = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the preferred media type in which to submit the request.
+        /// </summary>
+        public MediaRange MediaType
+        {
+            get { return mediaType; }
+            set { mediaType = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the encoding in which to submit the request.
+        /// </summary>
         public Encoding Encoding
         {
             get { return encoding; }
+            set { encoding = value; }
         }
 
+        /// <summary>
+        /// Gets the set of additional headers to be provided along with the request.
+        /// </summary>
         public Headers Headers
         {
             get { return headers; }
         }
 
+        /// <summary>
+        /// Gets a dynamic object which can be used to attach other information to the request.
+        /// </summary>
         public dynamic Context
         {
             get { return context; }

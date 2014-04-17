@@ -12,7 +12,7 @@ namespace NXKit.XForms.IO
     /// <summary>
     /// Handles submissions of the default HTTP scheme's expressed by the XForms standard.
     /// </summary>
-    [Export(typeof(IRequestProcessor))]
+    [Export(typeof(IRequestHandler))]
     public class HttpRequestProcessor :
         WebRequestProcessor
     {

@@ -2,7 +2,9 @@
 using System.Diagnostics.Contracts;
 using System.Text;
 using System.Xml.Linq;
+
 using NXKit.Util;
+using NXKit.XForms.IO;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -98,9 +100,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the 'method' attribute value.
         /// </summary>
-        public string Method
+        public RequestMethod Method
         {
-            get { return attributes.Method; }
+            get { return RequestMethodHelper.Parse(attributes.Method); }
         }
 
         /// <summary>

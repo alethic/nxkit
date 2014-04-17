@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+
 using NXKit.DOMEvents;
 using NXKit.XForms.IO;
 using NXKit.Xml;
@@ -197,7 +198,7 @@ namespace NXKit.XForms
             // must be selected for use. Individually, the method element and the method attribute are not required.
             // However, one of the two is mandatory as there is no default submission method.
             var method = GetMethod();
-            if (string.IsNullOrEmpty(method))
+            if (method == RequestMethod.None)
                 throw new DOMTargetEventException(Element, Events.SubmitError);
 
             // The resource element provides the submission URI, overriding the resource attribute and the action 
@@ -231,22 +232,14 @@ namespace NXKit.XForms
             // The submission is performed based on the submission headers, submission method, submission resource, and
             // submission data serialization. The exact rules of submission are based on the URI scheme and the 
             // submission method, as defined in Submission Options.
-            var request = new Request(
-                resource,
-                method,
-                properties.Serialization,
-                properties.MediaType,
-                node,
-                properties.Encoding,
-                GetHeaders());
+            var request = new Request(resource, method);
+            request.MediaType = properties.MediaType;
+            request.Body = node;
+            request.Encoding = properties.Encoding;
+            request.Headers.Add(GetHeaders());
 
             // obtain the handler capable of dealing with the submission
-            var handler = GetHandlers()
-                .Select(i => new { Priority = i.CanSubmit(request), Processor = i })
-                .Where(i => i.Priority != Priority.Ignore)
-                .OrderByDescending(i => i.Priority)
-                .Select(i => i.Processor)
-                .FirstOrDefault();
+            var handler = RequestHandler.GetProcessor(Element, request);
             if (handler == null)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
                     SubmitErrorErrorType.ResourceError));
@@ -312,16 +305,13 @@ namespace NXKit.XForms
         /// one of the two is mandatory as there is no default submission method.
         /// </summary>
         /// <returns></returns>
-        string GetMethod()
+        RequestMethod GetMethod()
         {
             var method = Element.Element(Constants.XForms_1_0 + "method");
             if (method != null)
-                return method.Interface<Method>().GetValue();
+                return method.Interface<Method>().RequestMethod;
 
-            if (properties.Method != null)
-                return properties.Method;
-
-            return null;
+            return properties.Method;
         }
 
         /// <summary>
@@ -379,16 +369,6 @@ namespace NXKit.XForms
             return new Headers();
         }
 
-
-        /// <summary>
-        /// Gets the set of available submission handlers.
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<IRequestProcessor> GetHandlers()
-        {
-            return Element.Host().Container.GetExportedValues<IRequestProcessor>();
-        }
-
         /// <summary>
         /// Finishes a submission with instance replacement.
         /// </summary>
@@ -396,14 +376,9 @@ namespace NXKit.XForms
         /// <param name="modelItem">Instance data node that was submitted.</param>
         void FinishWithReplaceInstance(Response response, ModelItem modelItem)
         {
-            // extract document from response
-            var document = response.Body as XDocument;
-            if (document == null)
-            {
-                var element = response.Body as XElement;
-                if (element != null)
-                    document = element.Document;
-            }
+            Contract.Requires<ArgumentNullException>(response != null);
+            Contract.Requires<ArgumentException>(response.Body != null);
+            Contract.Requires<ArgumentNullException>(modelItem != null);
 
             // When the attribute is absent, then the default is the instance that contains the submission data.
             var instance = modelItem != null ? modelItem.Instance : null;
@@ -451,7 +426,7 @@ namespace NXKit.XForms
 
             // Otherwise, those processing instructions and comments replace any processing instructions and comments
             // that previously appeared outside of the document element of the instance being replaced.
-            target.Replace(document);
+            target.Replace(response.Body);
         }
 
     }

@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Xml.Linq;
-
 using NXKit.DOMEvents;
+using NXKit.XForms.IO;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -50,66 +50,78 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Loads the given <see cref="XDocument"/> into the instance.
+        /// Loads the instance data from the instance element.
+        /// </summary>
+        internal void Load()
+        {
+            if (attributes.Src != null)
+                Load(attributes.Src);
+            else
+            {
+                // extract instance data model from xml
+                var instanceChildElements = Element.Elements().ToArray();
+                Element.RemoveNodes();
+
+                // invalid number of elements
+                if (instanceChildElements.Length >= 2)
+                    throw new DOMTargetEventException(Element, Events.LinkException);
+
+                // proper number of elements
+                if (instanceChildElements.Length == 1)
+                    Load(new XDocument(instanceChildElements[0].PrefixSafeClone()));
+            }
+        }
+
+        /// <summary>
+        /// Loads the instance data from the given URI in string format.
+        /// </summary>
+        /// <param name="resourceUri"></param>
+        internal void Load(string resourceUri)
+        {
+            try
+            {
+                Load(new Uri(resourceUri, UriKind.RelativeOrAbsolute));
+            }
+            catch (UriFormatException)
+            {
+                throw new DOMTargetEventException(Element, Events.LinkException);
+            }
+        }
+
+        /// <summary>
+        /// Loads the instance data from the given <see cref="Uri"/>.
+        /// </summary>
+        /// <param name="resourceUri"></param>
+        internal void Load(Uri resourceUri)
+        {
+            try
+            {
+                // normalize uri with base
+                if (Element.GetBaseUri() != null && !resourceUri.IsAbsoluteUri)
+                    resourceUri = new Uri(Element.GetBaseUri(), resourceUri);
+            }
+            catch (UriFormatException)
+            {
+                throw new DOMTargetEventException(Element, Events.LinkException);
+            }
+
+            // return resource as a stream
+            var response = RequestHandler.Submit(Element, new Request(resourceUri, RequestMethod.Get));
+            if (response == null ||
+                response.Status == ResponseStatus.Error)
+                throw new DOMTargetEventException(Element, Events.LinkException);
+
+            // load instance
+            Load(response.Body);
+        }
+
+        /// <summary>
+        /// Loads the instance data from the given <see cref="XDocument"/>.
         /// </summary>
         /// <param name="document"></param>
         internal void Load(XDocument document)
         {
             State.Initialize(Model, Element, document);
-        }
-
-        /// <summary>
-        /// Loads the instance data.
-        /// </summary>
-        internal void Load()
-        {
-            if (attributes.Src != null)
-            {
-                try
-                {
-                    // normalize uri with base
-                    var u = new Uri(attributes.Src, UriKind.RelativeOrAbsolute);
-                    if (Element.GetBaseUri() != null && !u.IsAbsoluteUri)
-                        u = new Uri(Element.GetBaseUri(), u);
-
-                    // return resource as a stream
-                    var request = WebRequest.Create(u);
-                    request.Method = "GET";
-                    var response = request.GetResponse().GetResponseStream();
-                    if (response == null)
-                        throw new FileNotFoundException("Could not load resource", attributes.Src);
-
-                    // parse resource into new DOM
-                    var instanceDataDocument = XDocument.Load(response);
-
-                    // add to model
-                    Load(instanceDataDocument);
-
-                    // clear body of instance
-                    Element.RemoveNodes();
-
-                    return;
-                }
-                catch (UriFormatException)
-                {
-                    throw new DOMTargetEventException(Element, Events.BindingException);
-                }
-            }
-            else
-            {
-                // extract instance values from xml
-                var instanceChildElements = Element.Elements().ToArray();
-
-                // invalid number of children elements
-                if (instanceChildElements.Length >= 2)
-                    throw new DOMTargetEventException(Element, Events.LinkException);
-
-                if (instanceChildElements.Length == 1)
-                    Load(new XDocument(instanceChildElements[0].PrefixSafeClone()));
-            }
-
-            // clear body of the instance element
-            Element.RemoveNodes();
         }
 
         void IOnLoad.Load()

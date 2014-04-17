@@ -5,10 +5,10 @@ namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Defines a class capable of handling a submission.
+    /// Describes a class capable of handling a <see cref="Request"/> and generating a <see cref="Response"/>.
     /// </summary>
-    [ContractClass(typeof(ISubmissionProcessor_Contract))]
-    public interface IRequestProcessor
+    [ContractClass(typeof(IRequestHandler_Contract))]
+    public interface IRequestHandler
     {
 
         /// <summary>
@@ -27,9 +27,9 @@ namespace NXKit.XForms.IO
 
     }
 
-    [ContractClassFor(typeof(IRequestProcessor))]
-    abstract class ISubmissionProcessor_Contract:
-        IRequestProcessor
+    [ContractClassFor(typeof(IRequestHandler))]
+    abstract class IRequestHandler_Contract:
+        IRequestHandler
     {
 
         public Priority CanSubmit(Request request)
@@ -41,6 +41,7 @@ namespace NXKit.XForms.IO
         public Response Submit(Request request)
         {
             Contract.Requires<ArgumentNullException>(request != null);
+            Contract.Ensures(Contract.Result<Response>() != null);
             throw new NotImplementedException();
         }
 

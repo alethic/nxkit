@@ -8,16 +8,49 @@ using System.Xml.Linq;
 
 using NXKit.Util;
 using NXKit.XForms.Serialization;
+using NXKit.Xml;
 
 namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Base implementation of the <see cref="IRequestProcessor"/> interface.
+    /// Base implementation of the <see cref="IRequestHandler"/> interface.
     /// </summary>
-    public abstract class RequestProcessor :
-        IRequestProcessor
+    public abstract class RequestHandler :
+        IRequestHandler
     {
+
+        /// <summary>
+        /// Gets the <see cref="IRequestHandler"/> to handle the given request.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public static IRequestHandler GetProcessor(XObject node, Request request)
+        {
+            return node.Host().Container.GetExportedValues<IRequestHandler>()
+                .Select(i => new { Priority = i.CanSubmit(request), Processor = i })
+                .Where(i => i.Priority != Priority.Ignore)
+                .OrderByDescending(i => i.Priority)
+                .Select(i => i.Processor)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Submits the given request.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public static Response Submit(XObject node, Request request)
+        {
+            var handler = GetProcessor(node, request);
+            if (handler == null)
+                return null;
+
+            return handler.Submit(request);
+        }
+
 
         readonly IEnumerable<INodeSerializer> serializers;
         readonly IEnumerable<INodeDeserializer> deserializers;
@@ -28,7 +61,7 @@ namespace NXKit.XForms.IO
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
         [ImportingConstructor]
-        public RequestProcessor(
+        public RequestHandler(
             [ImportMany] IEnumerable<INodeSerializer> serializers,
             [ImportMany] IEnumerable<INodeDeserializer> deserializers)
         {
@@ -40,7 +73,7 @@ namespace NXKit.XForms.IO
         }
 
         /// <summary>
-        /// Return <c>true</c> if your <see cref="IRequestProcessor"/> supports the given <see cref="Request"/>.
+        /// Return <c>true</c> if your <see cref="IRequestHandler"/> supports the given <see cref="Request"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -80,6 +113,8 @@ namespace NXKit.XForms.IO
         /// <param name="mediaType"></param>
         protected void Serialize(TextWriter writer, XNode node, MediaRange mediaType)
         {
+            Contract.Requires<ArgumentNullException>(writer != null);
+
             // obtain serializer
             var serializer = GetSerializer(node, mediaType);
             if (serializer == null)
