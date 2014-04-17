@@ -278,6 +278,86 @@ namespace NXKit.XForms
         }
 
         /// <summary>
+        /// Replaces the referenced model item with a new object.
+        /// </summary>
+        /// <param name="newObject"></param>
+        public void Replace(XObject newObject)
+        {
+            // i am either the document or the root node
+            if (Xml is XDocument || Xml == Xml.Document.Root)
+            {
+                // new object is a document, replace the entire instance
+                var document = newObject as XDocument;
+                if (document != null)
+                {
+                    Instance.Load(document);
+                    Model.State.Recalculate = true;
+                    Model.State.Revalidate = true;
+                    Model.State.Refresh = true;
+                    return;
+                }
+
+                // new object is an element, replace entire instance with derived document
+                var element = newObject as XElement;
+                if (element != null)
+                {
+                    Instance.Load(new XDocument(element));
+                    Model.State.Recalculate = true;
+                    Model.State.Revalidate = true;
+                    Model.State.Refresh = true;
+                    return;
+                }
+
+                throw new InvalidOperationException();
+            }
+            else if (Xml is XElement)
+            {
+                // new object is a document, replace with root element
+                var document = newObject as XDocument;
+                if (document != null)
+                {
+                    Replace(document.Root);
+                    return;
+                }
+
+                // new object is an element
+                var element = newObject as XElement;
+                if (element != null)
+                {
+                    Replace(element);
+                    return;
+                }
+
+                // new object is text
+                var text = newObject as XText;
+                {
+                    Replace(text);
+                    return;
+                }
+
+                throw new InvalidOperationException();
+            }
+
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Replaces this element with the given element.
+        /// </summary>
+        /// <param name="element"></param>
+        void Replace(XElement element)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<InvalidOperationException>(Xml is XElement);
+
+            ((XElement)Xml).ReplaceWith(element);
+
+            Model.State.Recalculate = true;
+            Model.State.Revalidate = true;
+            Model.State.Refresh = true;
+        }
+
+        /// <summary>
         /// Applies all of the known values from the given model item to the current one.
         /// </summary>
         /// <param name="item"></param>

@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using System.Xml.Linq;
 
 namespace NXKit.Test.Web.Site.Resources
@@ -12,7 +13,13 @@ namespace NXKit.Test.Web.Site.Resources
         {
             context.Response.ContentType = "application/xml";
 
-            new XDocument(new XElement("value", "New Value")).Save(context.Response.Output);
+            var input = XDocument.Load(context.Request.InputStream);
+            Console.WriteLine(input.Element("data").Element("value").Value);
+
+            new XDocument(
+                new XElement("data",
+                    new XElement("value", "New Value From Server")))
+                .Save(context.Response.Output);
         }
 
         public bool IsReusable

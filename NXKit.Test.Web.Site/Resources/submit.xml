@@ -9,7 +9,7 @@
                 <value>Sample Value</value>
             </data>
         </xf:instance>
-        <xf:submission resource="Post.ashx" method="get" replace="none" />
+        <xf:submission resource="Post.ashx" method="post" replace="instance" />
     </xf:model>
     <xf:group>
         <xf:label>Submit Example</xf:label>

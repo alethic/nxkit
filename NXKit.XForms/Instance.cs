@@ -50,6 +50,15 @@ namespace NXKit.XForms
         }
 
         /// <summary>
+        /// Loads the given <see cref="XDocument"/> into the instance.
+        /// </summary>
+        /// <param name="document"></param>
+        internal void Load(XDocument document)
+        {
+            State.Initialize(Model, Element, document);
+        }
+
+        /// <summary>
         /// Loads the instance data.
         /// </summary>
         internal void Load()
@@ -74,7 +83,7 @@ namespace NXKit.XForms
                     var instanceDataDocument = XDocument.Load(response);
 
                     // add to model
-                    State.Initialize(Model, Element, instanceDataDocument);
+                    Load(instanceDataDocument);
 
                     // clear body of instance
                     Element.RemoveNodes();
@@ -96,7 +105,7 @@ namespace NXKit.XForms
                     throw new DOMTargetEventException(Element, Events.LinkException);
 
                 if (instanceChildElements.Length == 1)
-                    State.Initialize(Model, Element, new XDocument(instanceChildElements[0].PrefixSafeClone()));
+                    Load(new XDocument(instanceChildElements[0].PrefixSafeClone()));
             }
 
             // clear body of the instance element

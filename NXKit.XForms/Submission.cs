@@ -291,7 +291,7 @@ namespace NXKit.XForms
                 // then instance data replacement is performed according to Replacing Data with the Submission Response.
                 // If this operation fails, submission fails with target-error. Otherwise, submission succeeds.
                 case SubmissionReplace.Instance:
-                    FinishWithReplaceInstance(response);
+                    FinishWithReplaceInstance(response, modelItems[0]);
                     break;
 
                 // text: If the body is neither an XML media type (i.e. with a content type not matching any of the
@@ -396,13 +396,13 @@ namespace NXKit.XForms
         /// <param name="modelItem">Instance data node that was submitted.</param>
         void FinishWithReplaceInstance(SubmissionResponse response, ModelItem modelItem)
         {
-            // extract element from response
-            var data = response.Body as XElement;
-            if (data == null)
+            // extract document from response
+            var document = response.Body as XDocument;
+            if (document == null)
             {
-                var document = response.Body as XDocument;
-                if (document != null)
-                    data = document.Root;
+                var element = response.Body as XElement;
+                if (element != null)
+                    document = element.Document;
             }
 
             // When the attribute is absent, then the default is the instance that contains the submission data.
@@ -414,9 +414,9 @@ namespace NXKit.XForms
             // indicate an instance in the same model as the submission.
             if (properties.Instance != null)
             {
-                var instance = Element.ResolveId(properties.Instance);
-                if (instance != null)
-                    instance = instance.Interface<Instance>();
+                var instanceElement = Element.ResolveId(properties.Instance);
+                if (instanceElement != null)
+                    instance = instanceElement.Interface<Instance>();
             }
 
             if (instance == null ||
@@ -451,8 +451,7 @@ namespace NXKit.XForms
 
             // Otherwise, those processing instructions and comments replace any processing instructions and comments
             // that previously appeared outside of the document element of the instance being replaced.
-            if (target.Xml == target.Xml.Document.Element)
-                target.Xml
+            target.Replace(document);
         }
 
     }
