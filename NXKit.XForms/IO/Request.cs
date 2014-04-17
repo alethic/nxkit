@@ -46,7 +46,7 @@ namespace NXKit.XForms.IO
         /// </summary>
         public Uri ResourceUri
         {
-            get { return resourceUri; }
+            get { Contract.Ensures(Contract.Result<Uri>() != null); return resourceUri; }
         }
 
         /// <summary>
@@ -54,8 +54,8 @@ namespace NXKit.XForms.IO
         /// </summary>
         public RequestMethod Method
         {
-            get { return method; }
-            set { method = value; }
+            get { Contract.Ensures(Contract.Result<RequestMethod>() != RequestMethod.None); return method; }
+            set { Contract.Requires<ArgumentException>(value != RequestMethod.None); method = value; }
         }
 
         /// <summary>
@@ -81,8 +81,8 @@ namespace NXKit.XForms.IO
         /// </summary>
         public Encoding Encoding
         {
-            get { return encoding; }
-            set { encoding = value; }
+            get { Contract.Ensures(Contract.Result<Encoding>() != null); return encoding; }
+            set { Contract.Requires<ArgumentException>(value != null); encoding = value; }
         }
 
         /// <summary>

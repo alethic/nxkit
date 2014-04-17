@@ -10,11 +10,11 @@ namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Handles submissions of the 'file' scheme.
+    /// Handles submissions of the default HTTP scheme's expressed by the XForms standard.
     /// </summary>
     [Export(typeof(IRequestHandler))]
-    public class FileRequestProcessor :
-        WebRequestProcessor
+    public class HttpRequestHandler :
+        WebRequestHandler
     {
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace NXKit.XForms.IO
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
         [ImportingConstructor]
-        public FileRequestProcessor(
+        public HttpRequestHandler(
             [ImportMany] IEnumerable<INodeSerializer> serializers,
             [ImportMany] IEnumerable<INodeDeserializer> deserializers)
             : base(serializers, deserializers)
@@ -39,29 +39,25 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         public override Priority CanSubmit(Request submit)
         {
-            if (submit.ResourceUri.Scheme == Uri.UriSchemeFile)
+            if (submit.ResourceUri.Scheme == Uri.UriSchemeHttp ||
+                submit.ResourceUri.Scheme == Uri.UriSchemeHttps)
                 return Priority.Default;
             else
                 return Priority.Ignore;
         }
 
-        protected override string GetMethod(Request request)
+        protected override ResponseStatus ReadRequestStatus(WebResponse response)
         {
-            switch (request.Method)
-            {
-                case RequestMethod.Get:
-                    return WebRequestMethods.File.DownloadFile;
-                case RequestMethod.Put:
-                case RequestMethod.Post:
-                    return WebRequestMethods.File.UploadFile;
-            }
+            var webResponse = response as HttpWebResponse;
+            if (webResponse == null)
+                throw new InvalidOperationException();
 
-            return null;
-        }
-
-        protected override bool IsQuery(Request request)
-        {
-            return false;
+            // success ranges for HTTP
+            if ((int)webResponse.StatusCode >= 200 &&
+                (int)webResponse.StatusCode <= 299)
+                return ResponseStatus.Success;
+            else
+                return ResponseStatus.Error;
         }
 
     }

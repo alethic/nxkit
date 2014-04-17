@@ -118,7 +118,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IO\FileRequestProcessor.cs" />
+    <Compile Include="IO\FileRequestHandler.cs" />
     <Compile Include="IO\IRequestService.cs" />
     <Compile Include="IO\Request.cs" />
     <Compile Include="IO\RequestMethod.cs" />
@@ -126,11 +126,13 @@
     <Compile Include="IO\RequestService.cs" />
     <Compile Include="IO\Response.cs" />
     <Compile Include="IO\ResponseStatus.cs" />
+    <Compile Include="IO\RequestException.cs" />
+    <Compile Include="IO\UnsupportedMediaTypeException.cs" />
     <Compile Include="Serialization\INodeDeserializer.cs" />
     <Compile Include="Serialization\INodeSerializer.cs" />
     <Compile Include="Serialization\XmlNodeDeserializer.cs" />
     <Compile Include="Serialization\XmlNodeSerializer.cs" />
-    <Compile Include="IO\WebRequestProcessor.cs" />
+    <Compile Include="IO\WebRequestHandler.cs" />
     <Compile Include="Serialization\UrlEncodedNodeSerializer.cs" />
     <Compile Include="IO\RequestHandler.cs" />
     <Compile Include="SubmitAttributes.cs" />
@@ -247,7 +249,7 @@
     <Compile Include="TextArea.cs" />
     <Compile Include="Trigger.cs" />
     <Compile Include="ItemValue.cs" />
-    <Compile Include="IO\HttpRequestProcessor.cs" />
+    <Compile Include="IO\HttpRequestHandler.cs" />
     <Compile Include="XPath\Functions\BooleanFromString.cs" />
     <Compile Include="XPath\Functions\IfFunction.cs" />
     <Compile Include="XPath\Functions\IndexFunction.cs" />

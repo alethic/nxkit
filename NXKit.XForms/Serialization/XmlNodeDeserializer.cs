@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 
 using NXKit.Serialization;
@@ -13,11 +14,15 @@ namespace NXKit.XForms.Serialization
         INodeDeserializer
     {
 
-        static readonly MediaRange XML_MEDIARANGE = "application/xml";
-
-        public Priority CanDeserialize(MediaRange mediaRange)
+        static readonly MediaRange[] MEDIA_RANGE = new MediaRange[]
         {
-            return XML_MEDIARANGE.Matches(mediaRange) ? Priority.Default : Priority.Ignore;
+            "application/xml",
+            "text/xml",
+        };
+
+        public Priority CanDeserialize(MediaRange mediaType)
+        {
+            return MEDIA_RANGE.Any(i => i.Matches(mediaType)) ? Priority.Default : Priority.Ignore;
         }
 
         public XDocument Deserialize(TextReader reader, MediaRange mediaType)

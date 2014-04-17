@@ -20,7 +20,7 @@ namespace NXKit.Test.Web.Site
         {
             if (!IsPostBack)
             {
-                UriTextBox.Text = new Uri(Request.Url, "../Resources/submit.xml").ToString();
+                UriTextBox.Text = new Uri(Request.Url, "../Resources/form.xml").ToString();
                 View.Open(UriTextBox.Text);
             }
         }

@@ -16,7 +16,7 @@ namespace NXKit.XForms.IO
     /// Base <see cref="IRequestHandler"/> implementation for using the Web request framework.
     /// </summary>
     [Export(typeof(IRequestHandler))]
-    public class WebRequestProcessor :
+    public class WebRequestHandler :
         RequestHandler
     {
 
@@ -26,7 +26,7 @@ namespace NXKit.XForms.IO
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
         [ImportingConstructor]
-        public WebRequestProcessor(
+        public WebRequestHandler(
             [ImportMany] IEnumerable<INodeSerializer> serializers,
             [ImportMany] IEnumerable<INodeDeserializer> deserializers)
             : base(serializers, deserializers)
@@ -126,7 +126,7 @@ namespace NXKit.XForms.IO
             var cnt = (string)null;
             var stm = new MemoryStream();
             var uri = request.ResourceUri;
-            if (IsQuery(request))
+            if (IsQuery(request) && request.Body != null)
             {
                 // serialize body to string
                 var u = new UriBuilder(uri);
@@ -138,7 +138,7 @@ namespace NXKit.XForms.IO
                 // replace uri
                 uri = u.Uri;
             }
-            else
+            else if (request.Body != null)
             {
                 // serialize data to body
                 using (var w = new StreamWriter(stm, request.Encoding, 1024, true))
@@ -191,7 +191,7 @@ namespace NXKit.XForms.IO
             // obtain serializer
             var deserializer = GetDeserializer(webResponse.ContentType);
             if (deserializer == null)
-                throw new InvalidOperationException();
+                throw new UnsupportedMediaTypeException();
 
             // generate new response
             var response = new Response(

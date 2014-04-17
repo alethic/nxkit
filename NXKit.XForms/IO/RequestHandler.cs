@@ -81,11 +81,13 @@ namespace NXKit.XForms.IO
         protected void Serialize(TextWriter writer, XNode node, MediaRange mediaType)
         {
             Contract.Requires<ArgumentNullException>(writer != null);
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(mediaType != null);
 
             // obtain serializer
             var serializer = GetSerializer(node, mediaType);
             if (serializer == null)
-                throw new InvalidOperationException();
+                throw new UnsupportedMediaTypeException();
 
             serializer.Serialize(writer, node, mediaType);
         }

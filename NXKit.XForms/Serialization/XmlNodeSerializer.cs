@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -13,11 +14,15 @@ namespace NXKit.XForms.Serialization
         INodeSerializer
     {
 
-        static readonly MediaRange XML_MEDIARANGE = "application/xml";
+        static readonly MediaRange[] MEDIA_RANGE = new MediaRange[]
+        {
+            "application/xml",
+            "text/xml",
+        };
 
         public Priority CanSerialize(XNode node, MediaRange mediaType)
         {
-            return XML_MEDIARANGE.Matches(mediaType) && (node is XDocument || node is XElement) ? Priority.Default : Priority.Ignore;
+            return MEDIA_RANGE.Any(i => i.Matches(mediaType)) && (node is XDocument || node is XElement) ? Priority.Default : Priority.Ignore;
         }
 
         public void Serialize(TextWriter writer, XNode node, MediaRange mediaType)

@@ -51,6 +51,8 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         public Response Submit(Request request)
         {
+            Contract.Requires<ArgumentNullException>(request != null);
+
             var handler = GetHandler(request);
             if (handler == null)
                 return new Response(request, ResponseStatus.Error, null);
