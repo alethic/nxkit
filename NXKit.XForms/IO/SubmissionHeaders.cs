@@ -4,7 +4,7 @@ using System.Linq;
 
 using NXKit.Util;
 
-namespace NXKit.XForms
+namespace NXKit.XForms.IO
 {
 
     public class SubmissionHeaders :

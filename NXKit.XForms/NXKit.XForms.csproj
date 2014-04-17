@@ -142,7 +142,7 @@
     <Compile Include="HeaderValue.cs" />
     <Compile Include="HeaderNameAttributes.cs" />
     <Compile Include="HeaderName.cs" />
-    <Compile Include="SubmissionHeaders.cs" />
+    <Compile Include="IO\SubmissionHeaders.cs" />
     <Compile Include="SubmissionSerialization.cs" />
     <Compile Include="ResourceAttributes.cs" />
     <Compile Include="Resource.cs" />
