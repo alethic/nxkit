@@ -6,7 +6,7 @@ namespace NXKit.XForms
 {
 
     /// <summary>
-    /// Describes a response of a submission returned from a <see cref="ISubmissionHandler"/>.
+    /// Describes a response of a submission returned from a <see cref="ISubmissionProcessor"/>.
     /// </summary>
     public class SubmissionResponse
     {

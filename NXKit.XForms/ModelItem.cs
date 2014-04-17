@@ -283,6 +283,8 @@ namespace NXKit.XForms
         /// <param name="item"></param>
         public void Apply(ModelItem item)
         {
+            Contract.Requires<ArgumentNullException>(item != null);
+
             State.Type = item.State.Type;
             State.Relevant = item.State.Relevant;
             State.ReadOnly = item.State.ReadOnly;

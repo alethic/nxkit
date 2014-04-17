@@ -7,8 +7,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Defines a class capable of handling a submission.
     /// </summary>
-    [ContractClass(typeof(ISubmissionHandler_Contract))]
-    public interface ISubmissionHandler
+    [ContractClass(typeof(ISubmissionProcessor_Contract))]
+    public interface ISubmissionProcessor
     {
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        bool CanSubmit(SubmissionRequest request);
+        Priority CanSubmit(SubmissionRequest request);
 
         /// <summary>
         /// Initiates the submission.
@@ -27,12 +27,12 @@ namespace NXKit.XForms
 
     }
 
-    [ContractClassFor(typeof(ISubmissionHandler))]
-    abstract class ISubmissionHandler_Contract:
-        ISubmissionHandler
+    [ContractClassFor(typeof(ISubmissionProcessor))]
+    abstract class ISubmissionProcessor_Contract:
+        ISubmissionProcessor
     {
 
-        public bool CanSubmit(SubmissionRequest request)
+        public Priority CanSubmit(SubmissionRequest request)
         {
             Contract.Requires<ArgumentNullException>(request != null);
             throw new NotImplementedException();

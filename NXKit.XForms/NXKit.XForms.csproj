@@ -118,7 +118,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISubmissionDeserializer.cs" />
+    <Compile Include="FileSubmissionProcessor.cs" />
+    <Compile Include="WebRequestSubmissionProcessor.cs" />
+    <Compile Include="Serialization\UrlEncodedNodeSerializer.cs" />
+    <Compile Include="SubmissionProcessor.cs" />
     <Compile Include="SubmitAttributes.cs" />
     <Compile Include="AttributeEvaluationContextResolver.cs" />
     <Compile Include="HeaderAttributes.cs" />
@@ -127,8 +130,7 @@
     <Compile Include="Header.cs" />
     <Compile Include="IEvaluationContextProvider.cs" />
     <Compile Include="EvaluationContextResolver.cs" />
-    <Compile Include="ISubmissionHandler.cs" />
-    <Compile Include="ISubmissionSerializer.cs" />
+    <Compile Include="ISubmissionProcessor.cs" />
     <Compile Include="HeaderValueAttributes.cs" />
     <Compile Include="HeaderValue.cs" />
     <Compile Include="HeaderNameAttributes.cs" />
@@ -237,9 +239,7 @@
     <Compile Include="TextArea.cs" />
     <Compile Include="Trigger.cs" />
     <Compile Include="ItemValue.cs" />
-    <Compile Include="WebSubmissionHandler.cs" />
-    <Compile Include="XmlSubmissionDeserializer.cs" />
-    <Compile Include="XmlSubmissionSerializer.cs" />
+    <Compile Include="HttpSubmissionProcessor.cs" />
     <Compile Include="XPath\Functions\BooleanFromString.cs" />
     <Compile Include="XPath\Functions\IfFunction.cs" />
     <Compile Include="XPath\Functions\IndexFunction.cs" />

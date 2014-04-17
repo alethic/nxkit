@@ -41,59 +41,28 @@ namespace NXKit.XForms
 
         }
 
-        class ValidityVisitor :
-            XVisitor
-        {
-
-            bool isValid = true;
-
-            /// <summary>
-            /// Visits the node until an invalid node is found.
-            /// </summary>
-            /// <param name="node"></param>
-            /// <returns></returns>
-            public new bool Visit(XNode node)
-            {
-                base.Visit(node);
-
-                return isValid;
-            }
-
-            public override void Visit(XObject obj)
-            {
-                isValid &= obj.Annotation<ValidityAnnotation>().Valid;
-                if (!isValid)
-                    return;
-
-                base.Visit(obj);
-            }
-
-        }
-
         /// <summary>
-        /// Visits each node in a document and removes those which are not relevant if specified.
+        /// Transforms the given document nodes, optionally removing nodes which are not relevant.
         /// </summary>
-        class RelevantTransformer :
+        class SubmitTransformer :
             XTransformer
         {
 
-            readonly bool exclude;
+            readonly bool excludeRelevant;
 
             /// <summary>
             /// Initializes a new instance.
             /// </summary>
-            /// <param name="exclude"></param>
-            public RelevantTransformer(bool exclude)
+            /// <param name="excludeRelevant"></param>
+            public SubmitTransformer(bool excludeRelevant)
             {
-                this.exclude = exclude;
+                this.excludeRelevant = excludeRelevant;
             }
 
             public override XObject Visit(XObject obj)
             {
                 var modelItem = obj.AnnotationOrCreate<ModelItem>(() => new ModelItem(obj));
-                if (modelItem == null ||
-                    modelItem.Relevant ||
-                    exclude == false /* exclude overrides */)
+                if (modelItem == null || modelItem.Relevant || !excludeRelevant)
                 {
                     // visit node
                     var o = base.Visit(obj);
@@ -107,6 +76,44 @@ namespace NXKit.XForms
                 }
                 else
                     return null;
+            }
+
+        }
+
+        /// <summary>
+        /// Visits each node and checks for validity.
+        /// </summary>
+        class ValidationVisitor :
+            XVisitor
+        {
+
+            bool isValid = true;
+
+            /// <summary>
+            /// Visits the node until an invalid node is found.
+            /// </summary>
+            /// <param name="node"></param>
+            /// <returns></returns>
+            public bool Validate(XNode node)
+            {
+                isValid = true;
+                Visit(node);
+                return isValid;
+            }
+
+            public override void Visit(XObject obj)
+            {
+                // any invalid node?
+                isValid &= IsValid(obj);
+                if (!isValid)
+                    return;
+
+                base.Visit(obj);
+            }
+
+            bool IsValid(XObject obj)
+            {
+                return obj.AnnotationOrCreate<ValidityAnnotation>(() => new ValidityAnnotation(true)).Valid;
             }
 
         }
@@ -166,7 +173,7 @@ namespace NXKit.XForms
             // true, whether by default or declaration, then any selected node which is not relevant as defined in The
             // relevant Property is deselected (pruned). If all instance nodes are deselected, then submission fails
             // with no-data.
-            var node = (XNode)new RelevantTransformer(properties.Relevant)
+            var node = (XNode)new SubmitTransformer(!properties.Relevant)
                 .Visit((XNode)modelItems[0].Xml);
             if (node == null)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
@@ -178,7 +185,7 @@ namespace NXKit.XForms
             // notification events are marked for dispatching due to this operation). If any selected instance data
             // node is found to be invalid, submission fails with validation-error.
             if (properties.Validate &&
-                new ValidityVisitor().Visit(node) == false)
+                new ValidationVisitor().Validate(node) == false)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
                     SubmitErrorErrorType.ValidationError
                 ));
@@ -235,7 +242,11 @@ namespace NXKit.XForms
 
             // obtain the handler capable of dealing with the submission
             var handler = GetHandlers()
-                .FirstOrDefault(i => i.CanSubmit(request));
+                .Select(i => new { Priority = i.CanSubmit(request), Processor = i })
+                .Where(i => i.Priority != Priority.Ignore)
+                .OrderByDescending(i => i.Priority)
+                .Select(i => i.Processor)
+                .FirstOrDefault();
             if (handler == null)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
                     SubmitErrorErrorType.ResourceError));
@@ -252,6 +263,13 @@ namespace NXKit.XForms
             if (response.Status == SubmissionStatus.Error)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
                     SubmitErrorErrorType.ResourceError));
+
+            // For success responses, if the response does not include a body, submission succeeds.
+            if (response.Body == null)
+            {
+                Element.DispatchEvent(Events.SubmitDone);
+                return;
+            }
 
             // handle result based on 'replace' property
             switch (properties.Replace)
@@ -273,7 +291,8 @@ namespace NXKit.XForms
                 // then instance data replacement is performed according to Replacing Data with the Submission Response.
                 // If this operation fails, submission fails with target-error. Otherwise, submission succeeds.
                 case SubmissionReplace.Instance:
-                    throw new NotImplementedException();
+                    FinishWithReplaceInstance(response);
+                    break;
 
                 // text: If the body is neither an XML media type (i.e. with a content type not matching any of the
                 // specifiers in [RFC 3023]) nor a text type (i.e. with a content type not matching text/*), nothing in the
@@ -365,9 +384,75 @@ namespace NXKit.XForms
         /// Gets the set of available submission handlers.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<ISubmissionHandler> GetHandlers()
+        IEnumerable<ISubmissionProcessor> GetHandlers()
         {
-            return Element.Host().Container.GetExportedValues<ISubmissionHandler>();
+            return Element.Host().Container.GetExportedValues<ISubmissionProcessor>();
+        }
+
+        /// <summary>
+        /// Finishes a submission with instance replacement.
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="modelItem">Instance data node that was submitted.</param>
+        void FinishWithReplaceInstance(SubmissionResponse response, ModelItem modelItem)
+        {
+            // extract element from response
+            var data = response.Body as XElement;
+            if (data == null)
+            {
+                var document = response.Body as XDocument;
+                if (document != null)
+                    data = document.Root;
+            }
+
+            // When the attribute is absent, then the default is the instance that contains the submission data.
+            var instance = modelItem != null ? modelItem.Instance : null;
+
+            // Author-optional attribute specifying the instance to replace when the replace attribute value is
+            // "instance". When the attribute is absent, then the default is the instance that contains the submission
+            // data. An xforms-binding-exception (The xforms-binding-exception Event) occurs if this attribute does not
+            // indicate an instance in the same model as the submission.
+            if (properties.Instance != null)
+            {
+                var instance = Element.ResolveId(properties.Instance);
+                if (instance != null)
+                    instance = instance.Interface<Instance>();
+            }
+
+            if (instance == null ||
+                instance.Element.Parent != Element.Parent)
+                throw new DOMTargetEventException(Element, Events.BindingException);
+
+            var target = instance.State.Document.Root.Annotation<ModelItem>();
+            if (target == null)
+                throw new InvalidOperationException();
+
+            // Author-optional attribute containing an expression that indicates the target node for data replacement.
+            if (properties.TargetRef != null)
+            {
+                // The evaluation context for this attribute is the in-scope evaluation context for the submission 
+                // element, except the context node is modified to be the document element of the instance identified
+                // by the instance attribute if present.
+                var ec = new EvaluationContext(
+                    context.Value.Context.Model,
+                    context.Value.Context.Instance,
+                    context.Value.Context.Instance.State.Document.Root.Annotation<ModelItem>(),
+                    1,
+                    1);
+
+                // If the submission element has a targetref attribute, the attribute value is interpreted as a binding
+                // expression to which the first-item rule is applied to obtain the replacement target node.
+                target = new Binding(Element, ec, properties.TargetRef).ModelItem;
+            }
+
+            // final check
+            if (target == null)
+                throw new DOMTargetEventException(Element, Events.BindingException);
+
+            // Otherwise, those processing instructions and comments replace any processing instructions and comments
+            // that previously appeared outside of the document element of the instance being replaced.
+            if (target.Xml == target.Xml.Document.Element)
+                target.Xml
         }
 
     }

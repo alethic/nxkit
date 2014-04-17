@@ -9,7 +9,7 @@ namespace NXKit.XForms
 {
 
     /// <summary>
-    /// Describes a submission for forwarding to <see cref="ISubmissionHandler"/>s.
+    /// Describes a submission for forwarding to <see cref="ISubmissionProcessor"/>s.
     /// </summary>
     public class SubmissionRequest
     {
