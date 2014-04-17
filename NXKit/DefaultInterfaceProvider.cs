@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition.Primitives;
+using System.ComponentModel.Composition.ReflectionModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+
+using NXKit.Xml;
 
 namespace NXKit
 {
@@ -121,20 +127,183 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(type != null);
 
-            var ctor1 = type.GetConstructors()
-                .Where(i => i.GetParameters().Length == 1)
-                .Where(i => i.GetParameters()[0].ParameterType.IsInstanceOfType(obj))
-                .FirstOrDefault();
-            if (ctor1 != null)
-                return ctor1.Invoke(new object[] { obj });
+            var func = GetConstructor(obj, type, obj.Host().Container);
+            if (func == null)
+                throw new InvalidOperationException("Could not find ctor for interface type.");
 
-            var ctor2 = type.GetConstructors()
-                .Where(i => i.GetParameters().Length == 0)
-                .FirstOrDefault();
-            if (ctor2 != null)
-                return ctor2.Invoke(new object[] { });
+            return func();
+        }
 
-            throw new InvalidOperationException("Could not find ctor for interface type.");
+        /// <summary>
+        /// Gets the most appropriate constructor that can be fulfilled from the container.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="type"></param>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        Func<object> GetConstructor(XObject obj, Type type, CompositionContainer container)
+        {
+            return type.GetConstructors()
+                .Select(i => GetConstructorFunc(obj, type, i, container))
+                .Where(i => i != null)
+                .OrderByDescending(i => i.Item2)
+                .Select(i => i.Item1)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// For a given constructor, generates a function that if invoked will return the new object. Returns 
+        /// <c>null</c> if the given constructor cannot be fulfilled. Tuple also contains a value to sort by given the
+        /// number of fulfilled parameters.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="type"></param>
+        /// <param name="ctor"></param>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        Tuple<Func<object>, int> GetConstructorFunc(XObject obj, Type type, ConstructorInfo ctor, CompositionContainer container)
+        {
+            var p = ctor.GetParameters();
+            var l = new object[p.Length];
+            int c = 0;
+
+            for (int i = 0; i < l.Length; i++)
+            {
+                if (p[i].ParameterType.IsInstanceOfType(obj))
+                {
+                    l[i] = obj;
+
+                    // increment filled parameter count
+                    c++;
+                }
+                else
+                {
+                    l[i] = GetConstructorParameterValue(obj, type, ctor, p[i], container);
+
+                    // increment filled parameter count
+                    if (l[i] != null)
+                        c++;
+                }
+            }
+
+            return Tuple.Create<Func<object>, int>(() => ctor.Invoke(l), c);
+        }
+
+        /// <summary>
+        /// Gets a value for the given constructor parameter from the container.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="type"></param>
+        /// <param name="ctor"></param>
+        /// <param name="param"></param>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        object GetConstructorParameterValue(XObject obj, Type type, ConstructorInfo ctor, ParameterInfo param, CompositionContainer container)
+        {
+            Contract.Requires<ArgumentNullException>(obj != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(ctor != null);
+            Contract.Requires<ArgumentNullException>(param != null);
+            Contract.Requires<ArgumentNullException>(container != null);
+
+            var paramContractType = GetContractType(param.ParameterType);
+            var paramContractName = GetContractName(paramContractType);
+            var paramTypeIdentity = AttributedModelServices.GetTypeIdentity(paramContractType);
+
+            // ImportAttribute present
+            var attr1 = param.GetCustomAttribute<ImportAttribute>();
+            if (attr1 != null)
+                return container.GetExports(ReflectionModelServices.CreateImportDefinition(
+                        new Lazy<ParameterInfo>(() => param),
+                        attr1.ContractName ?? paramContractName,
+                        attr1.ContractType != null ? AttributedModelServices.GetTypeIdentity(attr1.ContractType) : paramTypeIdentity,
+                        Enumerable.Empty<KeyValuePair<string, Type>>(),
+                        ImportCardinality.ZeroOrMore,
+                        CreationPolicy.Any,
+                        null))
+                    .Select(i => i.Value)
+                    .FirstOrDefault();
+
+            // ImportManyAttribute present
+            var attr2 = param.GetCustomAttribute<ImportManyAttribute>();
+            if (attr2 != null)
+                return container.GetExports(ReflectionModelServices.CreateImportDefinition(
+                    new Lazy<ParameterInfo>(() => param),
+                        attr2.ContractName ?? paramContractName,
+                        attr2.ContractType != null ? AttributedModelServices.GetTypeIdentity(attr2.ContractType) : paramTypeIdentity,
+                        Enumerable.Empty<KeyValuePair<string, Type>>(),
+                        ImportCardinality.ZeroOrMore,
+                        CreationPolicy.Any,
+                        null))
+                    .Select(i => i.Value);
+
+            // no attribute present
+            if (typeof(IEnumerable).IsAssignableFrom(param.ParameterType))
+                return container.GetExports(ReflectionModelServices.CreateImportDefinition(
+                    new Lazy<ParameterInfo>(() => param),
+                        paramContractName,
+                        paramTypeIdentity,
+                        Enumerable.Empty<KeyValuePair<string, Type>>(),
+                        ImportCardinality.ZeroOrMore,
+                        CreationPolicy.Any,
+                        null))
+                    .Select(i => i.Value);
+
+            return container.GetExports(ReflectionModelServices.CreateImportDefinition(
+                new Lazy<ParameterInfo>(() => param),
+                    paramContractName,
+                    paramTypeIdentity,
+                    Enumerable.Empty<KeyValuePair<string, Type>>(),
+                    ImportCardinality.ZeroOrMore,
+                    CreationPolicy.Any,
+                    null))
+                .Select(i => i.Value)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the contract name of the given type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        string GetContractName(Type type)
+        {
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Ensures(Contract.Result<string>() != null);
+
+            return AttributedModelServices.GetContractName(type);
+        }
+
+        /// <summary>
+        /// Gets the contract type of the given type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        Type GetContractType(Type type)
+        {
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Ensures(Contract.Result<Type>() != null);
+
+            return typeof(IEnumerable).IsAssignableFrom(type) ? GetCollectionContractType(type) : type;
+        }
+
+        /// <summary>
+        /// Gets the contract type of the given collection type.
+        /// </summary>
+        /// <param name="collectionType"></param>
+        /// <returns></returns>
+        Type GetCollectionContractType(Type collectionType)
+        {
+            Contract.Requires<ArgumentNullException>(collectionType != null);
+            Contract.Requires<ArgumentException>(typeof(IEnumerable).IsAssignableFrom(collectionType));
+            Contract.Ensures(Contract.Result<Type>() != null);
+
+            if (!collectionType.IsGenericType)
+                return typeof(object);
+            else
+                return collectionType
+                    .GetGenericArguments()
+                    .First();
         }
 
     }

@@ -119,6 +119,7 @@ namespace NXKit.XForms
 
         }
 
+        readonly IRequestService requestService;
         readonly SubmissionProperties properties;
         readonly Lazy<EvaluationContextResolver> context;
 
@@ -126,11 +127,13 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Submission(XElement element)
+        public Submission(XElement element, IRequestService requestService)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(requestService != null);
 
+            this.requestService = requestService;
             this.properties = new SubmissionProperties(element);
             this.context = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
         }
@@ -238,14 +241,8 @@ namespace NXKit.XForms
             request.Encoding = properties.Encoding;
             request.Headers.Add(GetHeaders());
 
-            // obtain the handler capable of dealing with the submission
-            var handler = RequestHandler.GetProcessor(Element, request);
-            if (handler == null)
-                throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
-                    SubmitErrorErrorType.ResourceError));
-
             // submit and check for response
-            var response = handler.Submit(request);
+            var response = requestService.Submit(request);
             if (response == null)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
                     SubmitErrorErrorType.ResourceError));

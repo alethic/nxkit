@@ -17,7 +17,7 @@ namespace NXKit
         /// </summary>
         /// <param name="element"></param>
         public ElementExtension(XElement element)
-            :base(element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }

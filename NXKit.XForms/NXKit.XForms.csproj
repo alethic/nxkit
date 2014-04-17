@@ -119,9 +119,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IO\FileRequestProcessor.cs" />
+    <Compile Include="IO\IRequestService.cs" />
     <Compile Include="IO\Request.cs" />
     <Compile Include="IO\RequestMethod.cs" />
     <Compile Include="IO\RequestMethodHelper.cs" />
+    <Compile Include="IO\RequestService.cs" />
     <Compile Include="IO\Response.cs" />
     <Compile Include="IO\ResponseStatus.cs" />
     <Compile Include="Serialization\INodeDeserializer.cs" />

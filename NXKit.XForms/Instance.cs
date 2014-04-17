@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Xml.Linq;
+
 using NXKit.DOMEvents;
 using NXKit.XForms.IO;
 using NXKit.Xml;
@@ -17,6 +16,7 @@ namespace NXKit.XForms
         IOnLoad
     {
 
+        readonly IRequestService requestService;
         readonly InstanceAttributes attributes;
         readonly Lazy<InstanceState> state;
 
@@ -24,11 +24,13 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Instance(XElement element)
+        public Instance(XElement element, IRequestService requestService)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(requestService != null);
 
+            this.requestService = requestService;
             this.attributes = new InstanceAttributes(Element);
             this.state = new Lazy<InstanceState>(() => Element.AnnotationOrCreate<InstanceState>());
         }
@@ -106,7 +108,7 @@ namespace NXKit.XForms
             }
 
             // return resource as a stream
-            var response = RequestHandler.Submit(Element, new Request(resourceUri, RequestMethod.Get));
+            var response = requestService.Submit(new Request(resourceUri, RequestMethod.Get));
             if (response == null ||
                 response.Status == ResponseStatus.Error)
                 throw new DOMTargetEventException(Element, Events.LinkException);

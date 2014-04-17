@@ -8,7 +8,6 @@ using System.Xml.Linq;
 
 using NXKit.Util;
 using NXKit.XForms.Serialization;
-using NXKit.Xml;
 
 namespace NXKit.XForms.IO
 {
@@ -19,38 +18,6 @@ namespace NXKit.XForms.IO
     public abstract class RequestHandler :
         IRequestHandler
     {
-
-        /// <summary>
-        /// Gets the <see cref="IRequestHandler"/> to handle the given request.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public static IRequestHandler GetProcessor(XObject node, Request request)
-        {
-            return node.Host().Container.GetExportedValues<IRequestHandler>()
-                .Select(i => new { Priority = i.CanSubmit(request), Processor = i })
-                .Where(i => i.Priority != Priority.Ignore)
-                .OrderByDescending(i => i.Priority)
-                .Select(i => i.Processor)
-                .FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Submits the given request.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public static Response Submit(XObject node, Request request)
-        {
-            var handler = GetProcessor(node, request);
-            if (handler == null)
-                return null;
-
-            return handler.Submit(request);
-        }
-
 
         readonly IEnumerable<INodeSerializer> serializers;
         readonly IEnumerable<INodeDeserializer> deserializers;
@@ -148,6 +115,9 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected XNode Deserialize(TextReader reader, MediaRange mediaType)
         {
+            Contract.Requires<ArgumentNullException>(reader != null);
+            Contract.Requires<ArgumentNullException>(mediaType != null);
+
             // obtain serializer
             var deserializer = GetDeserializer(mediaType);
             if (deserializer == null)
