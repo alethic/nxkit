@@ -171,7 +171,6 @@
     <Compile Include="Xml\XNodeExtensions.cs" />
     <Compile Include="Xml\XObjectExtensions.cs" />
     <Compile Include="PriorityAttribute.cs" />
-    <Compile Include="TypeNodeInterfaceProvider.cs" />
     <Compile Include="XmlSchemaConstants.cs" />
     <Compile Include="XmlSchemaPackage.cs" />
     <Compile Include="SchemaPackage.cs" />
