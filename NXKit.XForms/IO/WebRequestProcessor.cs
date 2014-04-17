@@ -16,8 +16,8 @@ namespace NXKit.XForms.IO
     /// Base <see cref="ISubmissionProcessor"/> implementation for using the Web request framework.
     /// </summary>
     [Export(typeof(ISubmissionProcessor))]
-    public class WebRequestSubmissionProcessor :
-        SubmissionProcessor
+    public class WebRequestProcessor :
+        RequestProcessor
     {
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace NXKit.XForms.IO
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
         [ImportingConstructor]
-        public WebRequestSubmissionProcessor(
+        public WebRequestProcessor(
             [ImportMany] IEnumerable<INodeSerializer> serializers,
             [ImportMany] IEnumerable<INodeDeserializer> deserializers)
             : base(serializers, deserializers)
@@ -35,7 +35,7 @@ namespace NXKit.XForms.IO
             Contract.Requires<ArgumentNullException>(deserializers != null);
         }
 
-        public override Priority CanSubmit(SubmissionRequest request)
+        public override Priority CanSubmit(Request request)
         {
             return Priority.Low;
         }
@@ -45,7 +45,7 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override MediaRange GetMediaType(SubmissionRequest request)
+        protected override MediaRange GetMediaType(Request request)
         {
             switch (request.Method)
             {
@@ -66,11 +66,11 @@ namespace NXKit.XForms.IO
         }
 
         /// <summary>
-        /// Gets the appropriate Web Request method type for the given <see cref="SubmissionRequest"/>.
+        /// Gets the appropriate Web Request method type for the given <see cref="Request"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected virtual string GetMethod(SubmissionRequest request)
+        protected virtual string GetMethod(Request request)
         {
             Contract.Requires<ArgumentNullException>(request != null);
 
@@ -94,7 +94,7 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected virtual bool IsQuery(SubmissionRequest request)
+        protected virtual bool IsQuery(Request request)
         {
             // get http method
             var method = GetMethod(request);
@@ -107,11 +107,11 @@ namespace NXKit.XForms.IO
         }
 
         /// <summary>
-        /// Retrieves a <see cref="WebRequest"/> for the given <see cref="SubmissionRequest"/>.
+        /// Retrieves a <see cref="WebRequest"/> for the given <see cref="Request"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected virtual WebRequest WriteWebRequest(SubmissionRequest request)
+        protected virtual WebRequest WriteWebRequest(Request request)
         {
             Contract.Requires<ArgumentNullException>(request != null);
 
@@ -175,12 +175,12 @@ namespace NXKit.XForms.IO
         }
 
         /// <summary>
-        /// Deserializes the <see cref="WebResponse"/> into a <see cref="SubmissionResponse"/>.
+        /// Deserializes the <see cref="WebResponse"/> into a <see cref="Response"/>.
         /// </summary>
         /// <param name="webResponse"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected virtual SubmissionResponse ReadWebResponse(WebResponse webResponse, SubmissionRequest request)
+        protected virtual Response ReadWebResponse(WebResponse webResponse, Request request)
         {
             Contract.Requires<ArgumentNullException>(webResponse != null);
             Contract.Requires<ArgumentNullException>(request != null);
@@ -191,7 +191,7 @@ namespace NXKit.XForms.IO
                 throw new InvalidOperationException();
 
             // generate new response
-            var response = new SubmissionResponse(
+            var response = new Response(
                 request,
                 ReadRequestStatus(webResponse),
                 deserializer.Deserialize(
@@ -210,7 +210,7 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public override SubmissionResponse Submit(SubmissionRequest request)
+        public override Response Submit(Request request)
         {
             // write request
             var webRequest = WriteWebRequest(request);

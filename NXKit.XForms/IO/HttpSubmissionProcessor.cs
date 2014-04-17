@@ -14,7 +14,7 @@ namespace NXKit.XForms.IO
     /// </summary>
     [Export(typeof(ISubmissionProcessor))]
     public class HttpSubmissionProcessor :
-        WebRequestSubmissionProcessor
+        WebRequestProcessor
     {
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="submit"></param>
         /// <returns></returns>
-        public override Priority CanSubmit(SubmissionRequest submit)
+        public override Priority CanSubmit(Request submit)
         {
             if (submit.ResourceUri.Scheme == Uri.UriSchemeHttp ||
                 submit.ResourceUri.Scheme == Uri.UriSchemeHttps)

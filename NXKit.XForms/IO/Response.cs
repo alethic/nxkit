@@ -8,10 +8,10 @@ namespace NXKit.XForms.IO
     /// <summary>
     /// Describes a response of a submission returned from a <see cref="ISubmissionProcessor"/>.
     /// </summary>
-    public class SubmissionResponse
+    public class Response
     {
 
-        readonly SubmissionRequest request;
+        readonly Request request;
         readonly SubmissionStatus status;
         readonly XObject body;
         readonly SubmissionHeaders headers;
@@ -20,7 +20,7 @@ namespace NXKit.XForms.IO
         /// Initializes a new instance.
         /// </summary>
         /// <param name="request"></param>
-        public SubmissionResponse(SubmissionRequest request, SubmissionStatus status, XObject body)
+        public Response(Request request, SubmissionStatus status, XObject body)
         {
             Contract.Requires<ArgumentNullException>(request != null);
 
@@ -33,7 +33,7 @@ namespace NXKit.XForms.IO
         /// <summary>
         /// Gets the original submitted request that resulted in this response.
         /// </summary>
-        public SubmissionRequest Request
+        public Request Request
         {
             get { return request; }
         }

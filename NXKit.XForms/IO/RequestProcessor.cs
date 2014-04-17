@@ -15,7 +15,7 @@ namespace NXKit.XForms.IO
     /// <summary>
     /// Base implementation of the <see cref="ISubmissionProcessor"/> interface.
     /// </summary>
-    public abstract class SubmissionProcessor :
+    public abstract class RequestProcessor :
         ISubmissionProcessor
     {
 
@@ -28,7 +28,7 @@ namespace NXKit.XForms.IO
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
         [ImportingConstructor]
-        public SubmissionProcessor(
+        public RequestProcessor(
             [ImportMany] IEnumerable<INodeSerializer> serializers,
             [ImportMany] IEnumerable<INodeDeserializer> deserializers)
         {
@@ -40,18 +40,18 @@ namespace NXKit.XForms.IO
         }
 
         /// <summary>
-        /// Return <c>true</c> if your <see cref="ISubmissionProcessor"/> supports the given <see cref="SubmissionRequest"/>.
+        /// Return <c>true</c> if your <see cref="ISubmissionProcessor"/> supports the given <see cref="Request"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public abstract Priority CanSubmit(SubmissionRequest request);
+        public abstract Priority CanSubmit(Request request);
 
         /// <summary>
         /// Gets the <see cref="MediaRange"/> to determine the format of the outgoing data.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected abstract MediaRange GetMediaType(SubmissionRequest request);
+        protected abstract MediaRange GetMediaType(Request request);
 
         /// <summary>
         /// Gets the serializer which supports the given <see cref="MediaRange"/>.
@@ -126,7 +126,7 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public abstract SubmissionResponse Submit(SubmissionRequest request);
+        public abstract Response Submit(Request request);
 
     }
 

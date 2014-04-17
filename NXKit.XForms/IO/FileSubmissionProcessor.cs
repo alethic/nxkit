@@ -14,7 +14,7 @@ namespace NXKit.XForms.IO
     /// </summary>
     [Export(typeof(ISubmissionProcessor))]
     public class FileSubmissionProcessor :
-        WebRequestSubmissionProcessor
+        WebRequestProcessor
     {
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="submit"></param>
         /// <returns></returns>
-        public override Priority CanSubmit(SubmissionRequest submit)
+        public override Priority CanSubmit(Request submit)
         {
             if (submit.ResourceUri.Scheme == Uri.UriSchemeFile)
                 return Priority.Default;
@@ -45,7 +45,7 @@ namespace NXKit.XForms.IO
                 return Priority.Ignore;
         }
 
-        protected override string GetMethod(SubmissionRequest request)
+        protected override string GetMethod(Request request)
         {
             switch (request.Method.ToLowerInvariant())
             {
@@ -59,7 +59,7 @@ namespace NXKit.XForms.IO
             return null;
         }
 
-        protected override bool IsQuery(SubmissionRequest request)
+        protected override bool IsQuery(Request request)
         {
             return false;
         }

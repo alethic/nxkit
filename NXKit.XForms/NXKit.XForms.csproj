@@ -119,16 +119,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IO\FileSubmissionProcessor.cs" />
-    <Compile Include="IO\SubmissionRequest.cs" />
-    <Compile Include="IO\SubmissionResponse.cs" />
+    <Compile Include="IO\Request.cs" />
+    <Compile Include="IO\Response.cs" />
     <Compile Include="IO\SubmissionStatus.cs" />
     <Compile Include="Serialization\INodeDeserializer.cs" />
     <Compile Include="Serialization\INodeSerializer.cs" />
     <Compile Include="Serialization\XmlNodeDeserializer.cs" />
     <Compile Include="Serialization\XmlNodeSerializer.cs" />
-    <Compile Include="IO\WebRequestSubmissionProcessor.cs" />
+    <Compile Include="IO\WebRequestProcessor.cs" />
     <Compile Include="Serialization\UrlEncodedNodeSerializer.cs" />
-    <Compile Include="IO\SubmissionProcessor.cs" />
+    <Compile Include="IO\RequestProcessor.cs" />
     <Compile Include="SubmitAttributes.cs" />
     <Compile Include="AttributeEvaluationContextResolver.cs" />
     <Compile Include="HeaderAttributes.cs" />

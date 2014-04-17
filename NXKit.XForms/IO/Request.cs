@@ -11,7 +11,7 @@ namespace NXKit.XForms.IO
     /// <summary>
     /// Describes a submission for forwarding to <see cref="ISubmissionProcessor"/>s.
     /// </summary>
-    public class SubmissionRequest
+    public class Request
     {
 
         readonly Uri resourceUri;
@@ -31,7 +31,7 @@ namespace NXKit.XForms.IO
         /// <param name="serialization"></param>
         /// <param name="mediaType"></param>
         /// <param name="body"></param>
-        public SubmissionRequest(
+        public Request(
             Uri resourceUri,
             string method,
             SubmissionSerialization serialization,

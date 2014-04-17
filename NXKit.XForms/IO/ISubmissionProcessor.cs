@@ -16,14 +16,14 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Priority CanSubmit(SubmissionRequest request);
+        Priority CanSubmit(Request request);
 
         /// <summary>
         /// Initiates the submission.
         /// </summary>
         /// <param name="elementrequest"></param>
         /// <returns></returns>
-        SubmissionResponse Submit(SubmissionRequest request);
+        Response Submit(Request request);
 
     }
 
@@ -32,13 +32,13 @@ namespace NXKit.XForms.IO
         ISubmissionProcessor
     {
 
-        public Priority CanSubmit(SubmissionRequest request)
+        public Priority CanSubmit(Request request)
         {
             Contract.Requires<ArgumentNullException>(request != null);
             throw new NotImplementedException();
         }
 
-        public SubmissionResponse Submit(SubmissionRequest request)
+        public Response Submit(Request request)
         {
             Contract.Requires<ArgumentNullException>(request != null);
             throw new NotImplementedException();

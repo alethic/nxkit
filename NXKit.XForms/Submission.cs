@@ -231,7 +231,7 @@ namespace NXKit.XForms
             // The submission is performed based on the submission headers, submission method, submission resource, and
             // submission data serialization. The exact rules of submission are based on the URI scheme and the 
             // submission method, as defined in Submission Options.
-            var request = new SubmissionRequest(
+            var request = new Request(
                 resource,
                 method,
                 properties.Serialization,
@@ -394,7 +394,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="response"></param>
         /// <param name="modelItem">Instance data node that was submitted.</param>
-        void FinishWithReplaceInstance(SubmissionResponse response, ModelItem modelItem)
+        void FinishWithReplaceInstance(Response response, ModelItem modelItem)
         {
             // extract document from response
             var document = response.Body as XDocument;
