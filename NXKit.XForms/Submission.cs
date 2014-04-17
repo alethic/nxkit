@@ -260,7 +260,7 @@ namespace NXKit.XForms
             // For error responses, processing depends on the value of the replace attribute on element submission:
             // all: either the document is replaced with an implementation-specific indication of an error or submission fails with resource-error.
             // any other value: nothing in the document is replaced, and submission fails with resource-error.
-            if (response.Status == SubmissionStatus.Error)
+            if (response.Status == ResponseStatus.Error)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
                     SubmitErrorErrorType.ResourceError));
 
@@ -374,9 +374,9 @@ namespace NXKit.XForms
         /// submission and the mediatype attribute or its default.
         /// </summary>
         /// <returns></returns>
-        SubmissionHeaders GetHeaders()
+        Headers GetHeaders()
         {
-            return new SubmissionHeaders();
+            return new Headers();
         }
 
 
@@ -384,9 +384,9 @@ namespace NXKit.XForms
         /// Gets the set of available submission handlers.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<ISubmissionProcessor> GetHandlers()
+        IEnumerable<IRequestProcessor> GetHandlers()
         {
-            return Element.Host().Container.GetExportedValues<ISubmissionProcessor>();
+            return Element.Host().Container.GetExportedValues<IRequestProcessor>();
         }
 
         /// <summary>

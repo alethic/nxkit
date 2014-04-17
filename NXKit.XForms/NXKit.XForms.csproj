@@ -118,10 +118,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IO\FileSubmissionProcessor.cs" />
+    <Compile Include="IO\FileRequestProcessor.cs" />
     <Compile Include="IO\Request.cs" />
     <Compile Include="IO\Response.cs" />
-    <Compile Include="IO\SubmissionStatus.cs" />
+    <Compile Include="IO\ResponseStatus.cs" />
     <Compile Include="Serialization\INodeDeserializer.cs" />
     <Compile Include="Serialization\INodeSerializer.cs" />
     <Compile Include="Serialization\XmlNodeDeserializer.cs" />
@@ -137,12 +137,12 @@
     <Compile Include="Header.cs" />
     <Compile Include="IEvaluationContextProvider.cs" />
     <Compile Include="EvaluationContextResolver.cs" />
-    <Compile Include="IO\ISubmissionProcessor.cs" />
+    <Compile Include="IO\IRequestProcessor.cs" />
     <Compile Include="HeaderValueAttributes.cs" />
     <Compile Include="HeaderValue.cs" />
     <Compile Include="HeaderNameAttributes.cs" />
     <Compile Include="HeaderName.cs" />
-    <Compile Include="IO\SubmissionHeaders.cs" />
+    <Compile Include="IO\Headers.cs" />
     <Compile Include="SubmissionSerialization.cs" />
     <Compile Include="ResourceAttributes.cs" />
     <Compile Include="Resource.cs" />
@@ -243,7 +243,7 @@
     <Compile Include="TextArea.cs" />
     <Compile Include="Trigger.cs" />
     <Compile Include="ItemValue.cs" />
-    <Compile Include="IO\HttpSubmissionProcessor.cs" />
+    <Compile Include="IO\HttpRequestProcessor.cs" />
     <Compile Include="XPath\Functions\BooleanFromString.cs" />
     <Compile Include="XPath\Functions\IfFunction.cs" />
     <Compile Include="XPath\Functions\IndexFunction.cs" />

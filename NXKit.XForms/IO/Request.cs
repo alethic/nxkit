@@ -9,7 +9,7 @@ namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Describes a submission for forwarding to <see cref="ISubmissionProcessor"/>s.
+    /// Describes a submission for forwarding to <see cref="IRequestProcessor"/>s.
     /// </summary>
     public class Request
     {
@@ -20,7 +20,7 @@ namespace NXKit.XForms.IO
         readonly MediaRange mediaType;
         readonly XNode body;
         readonly Encoding encoding;
-        readonly SubmissionHeaders headers;
+        readonly Headers headers;
         readonly DynamicDictionary context;
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace NXKit.XForms.IO
             MediaRange mediaType,
             XNode body,
             Encoding encoding,
-            SubmissionHeaders headers)
+            Headers headers)
         {
             Contract.Requires<ArgumentNullException>(resourceUri != null);
             Contract.Requires<ArgumentException>(resourceUri.IsAbsoluteUri);
@@ -84,7 +84,7 @@ namespace NXKit.XForms.IO
             get { return encoding; }
         }
 
-        public SubmissionHeaders Headers
+        public Headers Headers
         {
             get { return headers; }
         }

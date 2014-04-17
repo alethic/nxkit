@@ -7,7 +7,7 @@ using NXKit.Util;
 namespace NXKit.XForms.IO
 {
 
-    public class SubmissionHeaders :
+    public class Headers :
         IEnumerable<KeyValuePair<string, IEnumerable<string>>>
     {
 

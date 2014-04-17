@@ -12,8 +12,8 @@ namespace NXKit.XForms.IO
     /// <summary>
     /// Handles submissions of the 'file' scheme.
     /// </summary>
-    [Export(typeof(ISubmissionProcessor))]
-    public class FileSubmissionProcessor :
+    [Export(typeof(IRequestProcessor))]
+    public class FileRequestProcessor :
         WebRequestProcessor
     {
 
@@ -23,7 +23,7 @@ namespace NXKit.XForms.IO
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
         [ImportingConstructor]
-        public FileSubmissionProcessor(
+        public FileRequestProcessor(
             [ImportMany] IEnumerable<INodeSerializer> serializers,
             [ImportMany] IEnumerable<INodeDeserializer> deserializers)
             : base(serializers, deserializers)

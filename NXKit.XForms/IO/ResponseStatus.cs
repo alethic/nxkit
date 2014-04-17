@@ -1,7 +1,7 @@
 ﻿namespace NXKit.XForms.IO
 {
 
-    public enum SubmissionStatus
+    public enum ResponseStatus
     {
 
         Success,

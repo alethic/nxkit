@@ -8,7 +8,7 @@ namespace NXKit.XForms.IO
     /// Defines a class capable of handling a submission.
     /// </summary>
     [ContractClass(typeof(ISubmissionProcessor_Contract))]
-    public interface ISubmissionProcessor
+    public interface IRequestProcessor
     {
 
         /// <summary>
@@ -27,9 +27,9 @@ namespace NXKit.XForms.IO
 
     }
 
-    [ContractClassFor(typeof(ISubmissionProcessor))]
+    [ContractClassFor(typeof(IRequestProcessor))]
     abstract class ISubmissionProcessor_Contract:
-        ISubmissionProcessor
+        IRequestProcessor
     {
 
         public Priority CanSubmit(Request request)

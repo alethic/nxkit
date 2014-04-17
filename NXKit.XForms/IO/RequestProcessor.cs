@@ -13,10 +13,10 @@ namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Base implementation of the <see cref="ISubmissionProcessor"/> interface.
+    /// Base implementation of the <see cref="IRequestProcessor"/> interface.
     /// </summary>
     public abstract class RequestProcessor :
-        ISubmissionProcessor
+        IRequestProcessor
     {
 
         readonly IEnumerable<INodeSerializer> serializers;
@@ -40,7 +40,7 @@ namespace NXKit.XForms.IO
         }
 
         /// <summary>
-        /// Return <c>true</c> if your <see cref="ISubmissionProcessor"/> supports the given <see cref="Request"/>.
+        /// Return <c>true</c> if your <see cref="IRequestProcessor"/> supports the given <see cref="Request"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>

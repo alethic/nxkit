@@ -13,9 +13,9 @@ namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Base <see cref="ISubmissionProcessor"/> implementation for using the Web request framework.
+    /// Base <see cref="IRequestProcessor"/> implementation for using the Web request framework.
     /// </summary>
-    [Export(typeof(ISubmissionProcessor))]
+    [Export(typeof(IRequestProcessor))]
     public class WebRequestProcessor :
         RequestProcessor
     {
@@ -165,13 +165,13 @@ namespace NXKit.XForms.IO
         }
 
         /// <summary>
-        /// Gets the <see cref="SubmissionStatus"/> for the response.
+        /// Gets the <see cref="ResponseStatus"/> for the response.
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        protected virtual SubmissionStatus ReadRequestStatus(WebResponse response)
+        protected virtual ResponseStatus ReadRequestStatus(WebResponse response)
         {
-            return SubmissionStatus.Error;
+            return ResponseStatus.Error;
         }
 
         /// <summary>

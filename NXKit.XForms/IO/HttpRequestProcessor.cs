@@ -12,8 +12,8 @@ namespace NXKit.XForms.IO
     /// <summary>
     /// Handles submissions of the default HTTP scheme's expressed by the XForms standard.
     /// </summary>
-    [Export(typeof(ISubmissionProcessor))]
-    public class HttpSubmissionProcessor :
+    [Export(typeof(IRequestProcessor))]
+    public class HttpRequestProcessor :
         WebRequestProcessor
     {
 
@@ -23,7 +23,7 @@ namespace NXKit.XForms.IO
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
         [ImportingConstructor]
-        public HttpSubmissionProcessor(
+        public HttpRequestProcessor(
             [ImportMany] IEnumerable<INodeSerializer> serializers,
             [ImportMany] IEnumerable<INodeDeserializer> deserializers)
             : base(serializers, deserializers)
@@ -46,7 +46,7 @@ namespace NXKit.XForms.IO
                 return Priority.Ignore;
         }
 
-        protected override SubmissionStatus ReadRequestStatus(WebResponse response)
+        protected override ResponseStatus ReadRequestStatus(WebResponse response)
         {
             var webResponse = response as HttpWebResponse;
             if (webResponse == null)
@@ -55,9 +55,9 @@ namespace NXKit.XForms.IO
             // success ranges for HTTP
             if ((int)webResponse.StatusCode >= 200 &&
                 (int)webResponse.StatusCode <= 299)
-                return SubmissionStatus.Success;
+                return ResponseStatus.Success;
             else
-                return SubmissionStatus.Error;
+                return ResponseStatus.Error;
         }
 
     }
