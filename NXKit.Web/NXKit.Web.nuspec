@@ -19,8 +19,6 @@
         <tags>xml xforms</tags>
         <dependencies>
             <dependency
-                id="Newtonsoft.Json" />
-            <dependency
                 id="NXKit"
                 version="$version$" />
         </dependencies>
