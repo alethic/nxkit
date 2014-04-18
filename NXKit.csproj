@@ -16,7 +16,6 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
-    <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <NuGetPackageImportStamp>2834e3a4</NuGetPackageImportStamp>
   </PropertyGroup>
