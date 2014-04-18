@@ -1,13 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit", "NXKit\NXKit.csproj", "{2B27233A-849A-4339-96C6-BABCB968B8B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Layout", "NXKit.XForms.Layout\NXKit.XForms.Layout.csproj", "{0B8BC4B5-851F-4B8E-B5D4-0A8925B23886}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Test.Web.Site", "NXKit.Test.Web.Site\NXKit.Test.Web.Site.csproj", "{606CFC52-D06A-4B21-B295-A52C5D8C979E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9742529E-8881-4AA3-91EF-1A474CB38AC4} = {9742529E-8881-4AA3-91EF-1A474CB38AC4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms", "NXKit.XForms\NXKit.XForms.csproj", "{67ECD54B-BD0D-442F-A184-65B4CA014E75}"
 EndProject

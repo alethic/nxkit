@@ -10,7 +10,7 @@ namespace NXKit.XInclude
     [Interface("{http://www.w3.org/2001/XInclude}include")]
     public class Include :
         ElementExtension,
-        IOnInitialize
+        IOnInit
     {
 
         class IncludeAnnotation
@@ -48,7 +48,7 @@ namespace NXKit.XInclude
             this.attributes = new IncludeAttributes(element);
         }
 
-        public void Initialize()
+        public void Init()
         {
             var uri = new Uri(attributes.Href ?? "", UriKind.RelativeOrAbsolute);
             if (Element.GetBaseUri() != null && !uri.IsAbsoluteUri)
@@ -61,12 +61,7 @@ namespace NXKit.XInclude
                 var element = new XElement(xml.Root);
                 element.AnnotationOrCreate<IncludeAnnotation>(() => new IncludeAnnotation(xml.BaseUri));
                 Element.AddBeforeSelf(element);
-
-                // initialize element and descendants
-                var inits = element.DescendantNodesAndSelf()
-                    .SelectMany(i => i.Interfaces<IOnInitialize>());
-                foreach (var init in inits)
-                    init.Initialize();
+                Element.Remove();
             }
         }
 

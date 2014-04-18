@@ -12,7 +12,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}repeat")]
     public class Repeat :
         ElementExtension,
-        IOnInitialize,
+        IOnInit,
         IOnRefresh
     {
 
@@ -220,7 +220,7 @@ namespace NXKit.XForms
                 Binding.ModelItems.Length);
         }
 
-        void IOnInitialize.Initialize()
+        void IOnInit.Init()
         {
             Initialize();
         }

@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
+
 using NXKit.DOMEvents;
 using NXKit.Xml;
 

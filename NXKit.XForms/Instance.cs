@@ -107,6 +107,9 @@ namespace NXKit.XForms
                 throw new DOMTargetEventException(Element, Events.LinkException);
             }
 
+            if (resourceUri == null)
+                throw new DOMTargetEventException(Element, Events.LinkException);
+
             // return resource as a stream
             var response = requestService.Submit(new Request(resourceUri, RequestMethod.Get));
             if (response == null ||
