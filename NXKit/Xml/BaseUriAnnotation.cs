@@ -19,7 +19,7 @@ namespace NXKit.Xml
         /// <summary>
         /// Gets or sets the base URI value.
         /// </summary>
-        public Uri BaseUri
+        internal Uri BaseUri
         {
             get { return baseUri; }
             set { baseUri = value; }

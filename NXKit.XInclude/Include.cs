@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
-using NXKit.Xml;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
+using NXKit.Xml;
 
 namespace NXKit.XInclude
 {
@@ -12,27 +12,6 @@ namespace NXKit.XInclude
         ElementExtension,
         IOnInit
     {
-
-        class IncludeAnnotation
-        {
-
-            readonly string source;
-
-            /// <summary>
-            /// Initializes a new instance.
-            /// </summary>
-            /// <param name="source"></param>
-            public IncludeAnnotation(string source)
-            {
-                this.source = source;
-            }
-
-            public string Source
-            {
-                get { return source; }
-            }
-
-        }
 
         readonly IncludeAttributes attributes;
 
@@ -59,7 +38,7 @@ namespace NXKit.XInclude
             {
                 // annotate element and replace self in graph
                 var element = new XElement(xml.Root);
-                element.AnnotationOrCreate<IncludeAnnotation>(() => new IncludeAnnotation(xml.BaseUri));
+                element.SetBaseUri(xml.BaseUri);
                 Element.AddBeforeSelf(element);
                 Element.Remove();
             }
