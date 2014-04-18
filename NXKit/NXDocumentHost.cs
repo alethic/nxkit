@@ -141,7 +141,7 @@ namespace NXKit
             if (state.Initialized)
                 return;
 
-            foreach (var init in xml.DescendantsAndSelf().SelectMany(i => i.Interfaces<IOnInitialize>()))
+            foreach (var init in xml.DescendantNodesAndSelf(true).SelectMany(i => i.Interfaces<IOnInitialize>()))
                 init.Initialize();
 
             state.Initialized = true;

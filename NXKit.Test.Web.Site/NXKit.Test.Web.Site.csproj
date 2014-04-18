@@ -207,6 +207,9 @@
     <Content Include="Resources\form.xml" />
     <Content Include="Resources\elections.xml" />
     <Content Include="Resources\basic.xml" />
+    <Content Include="Resources\include2.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Resources\persons.xml" />
     <Content Include="Resources\relationships.xml" />
     <Content Include="Content\styles.less" />
@@ -215,6 +218,9 @@
     <Content Include="Resources\primaryelections.xml" />
     <Content Include="Resources\primaryperson.xml" />
     <Content Include="Resources\primaryquestions.xml" />
+    <Content Include="Resources\include.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Resources\submit.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -407,6 +413,10 @@
     <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
       <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
       <Name>NXKit.XForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XInclude\NXKit.XInclude.csproj">
+      <Project>{9742529e-8881-4aa3-91ef-1a474cb38ac4}</Project>
+      <Name>NXKit.XInclude</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XMLEvents\NXKit.XMLEvents.csproj">
       <Project>{db71b395-df60-470a-b761-b083d7acafe8}</Project>

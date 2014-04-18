@@ -1,0 +1,4 @@
+﻿<xf:input
+    xmlns:xf="http://www.w3.org/2002/xforms"
+    ref="value">
+</xf:input>
