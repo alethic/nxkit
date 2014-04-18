@@ -16,7 +16,7 @@
         </description>
         <releaseNotes />
         <copyright>Copyright © 2013 Jerome Haltom</copyright>
-        <tags>xml xforms</tags>
+        <tags>xml xforms xpath2</tags>
         <dependencies>
             <dependency
                 id="NXKit"

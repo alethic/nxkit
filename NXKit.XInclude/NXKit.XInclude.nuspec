@@ -18,6 +18,9 @@
         <copyright>$copyright$</copyright>
         <tags>xml xforms xinclude</tags>
         <dependencies>
+            <dependency
+                id="NXKit"
+                version="$version$" />
         </dependencies>
     </metadata>
 </package>
