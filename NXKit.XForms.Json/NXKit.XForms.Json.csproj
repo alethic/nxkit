@@ -121,6 +121,7 @@
     <Compile Include="Serialization\JsonNodeSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="NXKit.XForms.Json.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

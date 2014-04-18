@@ -22,6 +22,9 @@
                 id="NXKit"
                 version="$version$" />
             <dependency
+                id="NXKit.DOMEvents"
+                version="$version$" />
+            <dependency
                 id="NXKit.XForms"
                 version="$version$" />
         </dependencies>
