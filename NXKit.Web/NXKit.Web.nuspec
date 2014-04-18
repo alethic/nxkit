@@ -18,11 +18,11 @@
         <copyright>$copyright$</copyright>
         <tags>xml xforms</tags>
         <dependencies>
-            <package
+            <dependency
                 id="Newtonsoft.Json" />
             <dependency
                 id="NXKit"
-                version="$version$"/>
+                version="$version$" />
         </dependencies>
     </metadata>
 </package>
