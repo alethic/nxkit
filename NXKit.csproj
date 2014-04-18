@@ -120,8 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IdRef.cs" />
-    <Compile Include="NXDocumentAnnotation.cs" />
-    <Compile Include="IOnInitialize.cs" />
+    <Compile Include="IOnInit.cs" />
     <Compile Include="ObjectAnnotation.cs" />
     <Compile Include="DocumentAnnotation.cs" />
     <Compile Include="IInterfacePredicate.cs" />

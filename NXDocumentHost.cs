@@ -127,33 +127,49 @@ namespace NXKit
             xml.AddAnnotation(this);
 
             // start up document
-            InvokeInitialize();
+            InvokeInit();
             InvokeLoad();
             Invoke();
         }
 
         /// <summary>
-        /// Invokes any IOnInitialize interfaces the first time the document is loaded.
+        /// Invokes any <see cref="IOnInit"/> interfaces the first time the document is loaded.
         /// </summary>
-        void InvokeInitialize()
+        void InvokeInit()
         {
-            var state = xml.AnnotationOrCreate<NXDocumentAnnotation>();
-            if (state.Initialized)
-                return;
+            while (true)
+            {
+                var inits = xml
+                    .DescendantNodesAndSelf()
+                    .Where(i => i.InterfaceOrDefault<IOnInit>() != null)
+                    .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Init == false)
+                    .ToList();
 
-            foreach (var init in xml.DescendantNodesAndSelf(true).SelectMany(i => i.Interfaces<IOnInitialize>()))
-                init.Initialize();
+                if (inits.Count == 0)
+                    break;
 
-            state.Initialized = true;
+                foreach (var init in inits)
+                    if (init.Document != null)
+                    {
+                        init.Interface<IOnInit>().Init();
+                        init.AnnotationOrCreate<ObjectAnnotation>().Init = true;
+                    }
+            }
         }
 
         /// <summary>
-        /// Invokes any IOnLoad interfaces.
+        /// Invokes any <see cref="IOnLoad"/> interfaces.
         /// </summary>
         void InvokeLoad()
         {
-            foreach (var load in xml.DescendantsAndSelf().SelectMany(i => i.Interfaces<IOnLoad>()))
-                load.Load();
+            var loads = xml
+                .DescendantNodesAndSelf()
+                .Where(i => i.InterfaceOrDefault<IOnLoad>() != null)
+                .ToList();
+
+            foreach (var load in loads)
+                if (load.Document != null)
+                    load.Interface<IOnLoad>().Load();
         }
 
         /// <summary>

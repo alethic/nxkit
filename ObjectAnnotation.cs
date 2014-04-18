@@ -15,13 +15,15 @@ namespace NXKit
     {
 
         int id;
+        bool init;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public ObjectAnnotation()
+            : this(0)
         {
-            this.id = 0;
+
         }
 
         /// <summary>
@@ -31,6 +33,7 @@ namespace NXKit
         internal ObjectAnnotation(int id)
         {
             this.id = id;
+            this.init = false;
         }
 
         /// <summary>
@@ -39,6 +42,15 @@ namespace NXKit
         internal int Id
         {
             get { return id; }
+        }
+
+        /// <summary>
+        /// Gets if the init phase has been run.
+        /// </summary>
+        internal bool Init
+        {
+            get { return init; }
+            set { init = value; }
         }
 
         XmlSchema IXmlSerializable.GetSchema()
@@ -50,12 +62,16 @@ namespace NXKit
         {
             if (reader.MoveToContent() == XmlNodeType.Element &&
                 reader.LocalName == "object")
+            {
                 id = int.Parse(reader["id"]);
+                init = bool.Parse(reader["init"]);
+            }
         }
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             writer.WriteAttributeString("id", id.ToString());
+            writer.WriteAttributeString("init", init ? "true" : "false");
         }
 
     }
