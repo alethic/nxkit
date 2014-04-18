@@ -36,7 +36,7 @@ namespace NXKit.XForms.Json.Serialization
         /// <param name="reader"></param>
         /// <param name="mediaType"></param>
         /// <returns></returns>
-        public XNode Deserialize(TextReader reader, MediaRange mediaType)
+        public XDocument Deserialize(TextReader reader, MediaRange mediaType)
         {
             using (var json = new JsonTextReader(reader))
             {
