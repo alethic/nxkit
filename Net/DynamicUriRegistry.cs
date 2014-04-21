@@ -10,7 +10,7 @@ namespace NXKit.Net
     /// <summary>
     /// Provides for registration of dynamic URI authorities.
     /// </summary>
-    public static class DynamicUriRegistry
+    static class DynamicUriRegistry
     {
 
         static Dictionary<Guid, WeakReference<DynamicUriAuthority>> authorities =
