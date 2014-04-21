@@ -1,10 +1,13 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Net;
 
 namespace NXKit.Net
 {
 
+    /// <summary>
+    /// Base class for custom URI namespaces under the 'nx' scheme. Extend this class to implement your own custom
+    /// namespaces.
+    /// </summary>
     public abstract class DynamicUriAuthority :
         IDisposable
     {
