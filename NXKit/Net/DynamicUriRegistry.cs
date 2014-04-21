@@ -39,10 +39,10 @@ namespace NXKit.Net
         {
             Contract.Requires<ArgumentNullException>(authority != null);
 
-            if (!authorities.ContainsKey(authority.Id))
-                throw new InvalidOperationException();
-            lock (authorities)
-                authorities.Remove(authority.Id);
+            if (authorities.ContainsKey(authority.Id))
+                lock (authorities)
+                    if (authorities.ContainsKey(authority.Id))
+                        authorities.Remove(authority.Id);
         }
 
         /// <summary>
