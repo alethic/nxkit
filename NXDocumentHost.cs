@@ -7,6 +7,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.IO;
 using NXKit.Net;
 using NXKit.Serialization;
 using NXKit.Xml;
@@ -29,21 +30,36 @@ namespace NXKit
             ResourceWebRequestFactory.Register();
         }
 
+
+        /// <summary>
+        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="XmlReader"/>.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static NXDocumentHost Load(CompositionContainer container, System.Xml.XmlReader reader)
+        {
+            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(reader != null);
+
+            return new NXDocumentHost(
+                container,
+                XNodeAnnotationSerializer.Deserialize(
+                    XDocument.Load(
+                        reader,
+                        LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)));
+        }
+
         /// <summary>
         /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="XmlReader"/>.
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public static NXDocumentHost Load(XmlReader reader)
+        public static NXDocumentHost Load(System.Xml.XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
-            return new NXDocumentHost(
-                CompositionUtil.CreateContainer(),
-                XNodeAnnotationSerializer.Deserialize(
-                    XDocument.Load(
-                        reader,
-                        LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)));
+            return Load(CompositionUtil.CreateContainer(), reader);
         }
 
         /// <summary>
@@ -79,7 +95,13 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            return Load(XmlReader.Create(uri.ToString()));
+            var container = CompositionUtil.CreateContainer();
+
+            return Load(
+                container,
+                NXKit.Xml.IOXmlReader.Create(
+                    container.GetExportedValue<IIOService>(),
+                    uri));
         }
 
         /// <summary>

@@ -10,7 +10,7 @@ namespace NXKit.Util
     /// <summary>
     /// Provides strongly-typed access to media range parameters.
     /// </summary>
-    public class MediaRangeParameters : 
+    public class MediaRangeParameters :
         IEnumerable<KeyValuePair<string, string>>
     {
 
@@ -56,6 +56,8 @@ namespace NXKit.Util
         /// <param name="parameters">The parameters.</param>
         internal MediaRangeParameters(IDictionary<string, string> parameters)
         {
+            Contract.Requires<ArgumentNullException>(parameters != null);
+
             this.parameters = new Dictionary<string, string>(parameters, StringComparer.OrdinalIgnoreCase);
         }
 
@@ -93,6 +95,8 @@ namespace NXKit.Util
         /// <returns>True if matching, false if not</returns>
         public bool Matches(MediaRangeParameters other)
         {
+            Contract.Requires<ArgumentNullException>(other != null);
+
             return parameters.OrderBy(p => p.Key).SequenceEqual(other.parameters.OrderBy(p => p.Key));
         }
 
@@ -112,7 +116,7 @@ namespace NXKit.Util
         /// <returns>The value for the parameter. If the parameter is not defined then null is returned.</returns>
         public string this[string name]
         {
-            get { return (parameters.ContainsKey(name)) ? parameters[name] : null; }
+            get { Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(name)); return (parameters.ContainsKey(name)) ? parameters[name] : null; }
         }
 
         public override string ToString()

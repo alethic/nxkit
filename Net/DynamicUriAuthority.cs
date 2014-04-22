@@ -58,6 +58,14 @@ namespace NXKit.Net
         }
 
         /// <summary>
+        /// Disposes of the instance.
+        /// </summary>
+        ~DynamicUriAuthority()
+        {
+            Dispose();
+        }
+
+        /// <summary>
         /// Gets the response for the given registered request.
         /// </summary>
         /// <returns></returns>
