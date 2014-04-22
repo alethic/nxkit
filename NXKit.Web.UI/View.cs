@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace NXKit.Web.UI
 
         string cssClass;
         string validationGroup;
+        CompositionContainer container;
         NXKit.NXDocumentHost document;
 
         /// <summary>
@@ -35,6 +37,15 @@ namespace NXKit.Web.UI
         public View()
         {
 
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="CompositionContainer"/> to use when hosting documents.
+        /// </summary>
+        public CompositionContainer Container
+        {
+            get { return container; }
+            set { container = value; }
         }
 
         /// <summary>
@@ -73,7 +84,7 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            document = NXKit.NXDocumentHost.Load(uri);
+            document = container != null ? NXKit.NXDocumentHost.Load(container, uri) : NXKit.NXDocumentHost.Load(uri);
             document.Invoke();
         }
 
