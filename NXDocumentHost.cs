@@ -8,7 +8,6 @@ using System.Xml;
 using System.Xml.Linq;
 
 using NXKit.IO;
-using NXKit.Net;
 using NXKit.Serialization;
 using NXKit.Xml;
 
@@ -22,22 +21,12 @@ namespace NXKit
     {
 
         /// <summary>
-        /// Initializes the static instance.
-        /// </summary>
-        static NXDocumentHost()
-        {
-            ResourceUriParser.Register();
-            ResourceWebRequestFactory.Register();
-        }
-
-
-        /// <summary>
         /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="XmlReader"/>.
         /// </summary>
         /// <param name="container"></param>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public static NXDocumentHost Load(CompositionContainer container, System.Xml.XmlReader reader)
+        public static NXDocumentHost Load(CompositionContainer container, XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(reader != null);
@@ -55,11 +44,25 @@ namespace NXKit
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public static NXDocumentHost Load(System.Xml.XmlReader reader)
+        public static NXDocumentHost Load(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
             return Load(CompositionUtil.CreateContainer(), reader);
+        }
+
+        /// <summary>
+        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="TextReader"/>.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="reader"></param>
+        public static NXDocumentHost Load(CompositionContainer container, TextReader reader)
+        {
+            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(reader != null);
+
+            using (var rdr = XmlReader.Create(reader))
+                return Load(container, rdr);
         }
 
         /// <summary>
@@ -70,8 +73,22 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
-            using (var rdr = XmlReader.Create(reader))
-                return Load(rdr);
+            return Load(CompositionUtil.CreateContainer(), reader);
+        }
+
+        /// <summary>
+        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static NXDocumentHost Load(CompositionContainer container, Stream stream)
+        {
+            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(stream != null);
+
+            using (var rdr = new StreamReader(stream))
+                return Load(container, rdr);
         }
 
         /// <summary>
@@ -82,8 +99,25 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(stream != null);
 
-            using (var rdr = new StreamReader(stream))
-                return Load(rdr);
+            return Load(CompositionUtil.CreateContainer(), stream);
+        }
+
+        /// <summary>
+        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="Uri"/>.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="uri"></param>
+        /// <returns></returns>
+        public static NXDocumentHost Load(CompositionContainer container, Uri uri)
+        {
+            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(uri != null);
+
+            return Load(
+                container,
+                NXKit.Xml.IOXmlReader.Create(
+                    container.GetExportedValue<IIOService>(),
+                    uri));
         }
 
         /// <summary>
@@ -95,13 +129,21 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            var container = CompositionUtil.CreateContainer();
+            return Load(CompositionUtil.CreateContainer(), uri);
+        }
 
-            return Load(
-                container,
-                NXKit.Xml.IOXmlReader.Create(
-                    container.GetExportedValue<IIOService>(),
-                    uri));
+        /// <summary>
+        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="XDocument"/>.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="document"></param>
+        /// <returns></returns>
+        public static NXDocumentHost Load(CompositionContainer container, XDocument document)
+        {
+            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(document != null);
+
+            return Load(container, document.CreateReader());
         }
 
         /// <summary>
@@ -113,7 +155,7 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
-            return Load(document.CreateReader());
+            return Load(CompositionUtil.CreateContainer(), document);
         }
 
         readonly CompositionContainer container;
