@@ -14,10 +14,10 @@ namespace NXKit.IO
     {
 
         readonly IORequest request;
-        readonly Stream content;
-        readonly MediaRange contentType;
-        readonly Headers headers;
-        readonly IOStatus status;
+        Headers headers;
+        IOStatus status;
+        Stream content;
+        MediaRange contentType;
 
         /// <summary>
         /// Initializes a new instance.
@@ -64,6 +64,7 @@ namespace NXKit.IO
         public IOStatus Status
         {
             get { return status; }
+            set { status = value; }
         }
 
         /// <summary>
@@ -71,7 +72,8 @@ namespace NXKit.IO
         /// </summary>
         public Stream Content
         {
-            get { Contract.Ensures(Contract.Result<Stream>() != null); return content; }
+            get { return content; }
+            set { content = value; }
         }
 
         /// <summary>
@@ -80,6 +82,7 @@ namespace NXKit.IO
         public MediaRange ContentType
         {
             get { return contentType; }
+            set { contentType = value; }
         }
 
         /// <summary>
