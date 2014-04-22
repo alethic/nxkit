@@ -19,6 +19,12 @@
         <tags>xml xforms</tags>
         <dependencies>
             <dependency
+                id="NXKit.XForms"
+                version="$version$"/>
+            <dependency
+                id="NXKit.XForms.Layout"
+                version="$version$"/>
+            <dependency
                 id="NXKit.Web"
                 version="$version$"/>
             <dependency

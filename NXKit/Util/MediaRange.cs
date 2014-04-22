@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
@@ -14,29 +15,28 @@ namespace NXKit.Util
         /// <summary>
         /// Parses a new instance of <see cref="MediaRange"/> from a 'type/subtype' string.
         /// </summary>
-        /// <param name="contentType"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static MediaRange Parse(string contentType)
+        public static MediaRange Parse(string value)
         {
-            Contract.Requires<ArgumentNullException>(contentType != null);
-            Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(contentType));
+            Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(value));
 
-            if (contentType.Equals("*"))
-                contentType = "*/*";
+            if (value.Equals("*"))
+                value = "*/*";
 
-            var parts = contentType.Split('/', ';');
+            var parts = value.Split('/', ';');
             if (parts.Length < 2)
-                throw new ArgumentException("Content type not in correct 'type/subType' format.", contentType);
+                throw new ArgumentException("Content type not in correct 'type/subType' format.", value);
 
             return new MediaRange(
                 parts[0],
                 parts[1].TrimEnd(),
-                parts.Length > 2 ? MediaRangeParameters.Parse(contentType.Substring(contentType.IndexOf(';'))) : new MediaRangeParameters());
+                parts.Length > 2 ? MediaRangeParameters.Parse(value.Substring(value.IndexOf(';'))) : new MediaRangeParameters());
         }
 
-        public static implicit operator MediaRange(string contentType)
+        public static implicit operator MediaRange(string value)
         {
-            return contentType != null ? MediaRange.Parse(contentType) : null;
+            return value != null ? MediaRange.Parse(value) : null;
         }
 
         public static implicit operator string(MediaRange mediaRange)
@@ -92,7 +92,10 @@ namespace NXKit.Util
         /// <summary>
         /// Media range parameters
         /// </summary>
-        public MediaRangeParameters Parameters { get; set; }
+        public MediaRangeParameters Parameters
+        {
+            get { return parameters; }
+        }
 
         /// <summary>
         /// Gets a value indicating if the media range is the */* wildcard.
@@ -109,6 +112,8 @@ namespace NXKit.Util
         /// <returns>True if matching, false if not.</returns>
         public bool Matches(MediaRange other)
         {
+            Contract.Requires<ArgumentNullException>(other != null);
+
             return type.Matches(other.type) && subtype.Matches(other.subtype);
         }
 
@@ -119,7 +124,35 @@ namespace NXKit.Util
         /// <returns>True if matching, false if not.</returns>
         public bool MatchesWithParameters(MediaRange other)
         {
+            Contract.Requires<ArgumentNullException>(other != null);
+
             return Matches(other) && parameters.Matches(other.parameters);
+        }
+
+        /// <summary>
+        /// Whether or not a media range matches any other media ranges, taking into account wildcards.
+        /// </summary>
+        /// <param name="others"></param>
+        /// <returns></returns>
+        public bool Matches(IEnumerable<MediaRange> others)
+        {
+            Contract.Requires<ArgumentNullException>(others != null);
+
+            var self = this;
+            return others.Any(i => self.Matches(i));
+        }
+
+        /// <summary>
+        /// Whether or not a media range matches any other media ranges, taking into account wildcards and parameters.
+        /// </summary>
+        /// <param name="others"></param>
+        /// <returns></returns>
+        public bool MatchesWithParameters(IEnumerable<MediaRange> others)
+        {
+            Contract.Requires<ArgumentNullException>(others != null);
+
+            var self = this;
+            return others.Any(i => self.MatchesWithParameters(i));
         }
 
         public override string ToString()

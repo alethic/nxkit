@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
+using NXKit.IO;
 using NXKit.XForms.IO;
 using NXKit.Xml;
 
@@ -119,7 +120,7 @@ namespace NXKit.XForms
 
         }
 
-        readonly IRequestService requestService;
+        readonly IModelRequestService requestService;
         readonly SubmissionProperties properties;
         readonly Lazy<EvaluationContextResolver> context;
 
@@ -127,7 +128,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Submission(XElement element, IRequestService requestService)
+        public Submission(XElement element, IModelRequestService requestService)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
@@ -201,7 +202,7 @@ namespace NXKit.XForms
             // must be selected for use. Individually, the method element and the method attribute are not required.
             // However, one of the two is mandatory as there is no default submission method.
             var method = GetMethod();
-            if (method == RequestMethod.None)
+            if (method == ModelMethod.None)
                 throw new DOMTargetEventException(Element, Events.SubmitError);
 
             // The resource element provides the submission URI, overriding the resource attribute and the action 
@@ -235,7 +236,7 @@ namespace NXKit.XForms
             // The submission is performed based on the submission headers, submission method, submission resource, and
             // submission data serialization. The exact rules of submission are based on the URI scheme and the 
             // submission method, as defined in Submission Options.
-            var request = new Request(resource, method);
+            var request = new ModelRequest(resource, method);
             request.MediaType = properties.MediaType;
             request.Body = node;
             request.Encoding = properties.Encoding;
@@ -250,7 +251,7 @@ namespace NXKit.XForms
             // For error responses, processing depends on the value of the replace attribute on element submission:
             // all: either the document is replaced with an implementation-specific indication of an error or submission fails with resource-error.
             // any other value: nothing in the document is replaced, and submission fails with resource-error.
-            if (response.Status == ResponseStatus.Error)
+            if (response.Status == ModelResponseStatus.Error)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
                     SubmitErrorErrorType.ResourceError));
 
@@ -302,7 +303,7 @@ namespace NXKit.XForms
         /// one of the two is mandatory as there is no default submission method.
         /// </summary>
         /// <returns></returns>
-        RequestMethod GetMethod()
+        ModelMethod GetMethod()
         {
             var method = Element.Element(Constants.XForms_1_0 + "method");
             if (method != null)
@@ -371,7 +372,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="response"></param>
         /// <param name="modelItem">Instance data node that was submitted.</param>
-        void FinishWithReplaceInstance(Response response, ModelItem modelItem)
+        void FinishWithReplaceInstance(ModelResponse response, ModelItem modelItem)
         {
             Contract.Requires<ArgumentNullException>(response != null);
             Contract.Requires<ArgumentException>(response.Body != null);

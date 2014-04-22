@@ -7,7 +7,7 @@ namespace NXKit.Util
     /// <summary>
     /// Represents a media type or subtype in a <see cref="MediaRange"/>.
     /// </summary>
-    public class MediaType
+    public struct MediaType
     {
 
         public static implicit operator MediaType(string value)
@@ -29,7 +29,6 @@ namespace NXKit.Util
         /// <param name="value"></param>
         MediaType(string value)
         {
-            Contract.Requires<ArgumentNullException>(value != null);
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(value));
 
             this.value = value;
@@ -59,13 +58,9 @@ namespace NXKit.Util
             return value;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object other)
         {
-            var other = obj as MediaType;
-            if (other == null)
-                return false;
-
-            return Matches(other);
+            return other is MediaType ? Matches((MediaType)other) : false;
         }
 
         public override int GetHashCode()

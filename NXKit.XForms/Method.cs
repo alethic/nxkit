@@ -65,9 +65,9 @@ namespace NXKit.XForms
             return Element.Value;
         }
 
-        public RequestMethod RequestMethod
+        public ModelMethod RequestMethod
         {
-            get { return !string.IsNullOrEmpty(GetValue()) ? RequestMethodHelper.Parse(GetValue()) : RequestMethod.None; }
+            get { return GetValue(); }
         }
 
     }

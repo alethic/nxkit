@@ -11,8 +11,8 @@ namespace NXKit.XForms.Serialization
     /// <summary>
     /// Defines a deserializer capable of deserializing a body into a <see cref="XNode"/>.
     /// </summary>
-    [ContractClass(typeof(INodeDeserializer_Contract))]
-    public interface INodeDeserializer
+    [ContractClass(typeof(IModelDeserializer_Contract))]
+    public interface IModelDeserializer
     {
 
         /// <summary>
@@ -32,9 +32,9 @@ namespace NXKit.XForms.Serialization
 
     }
 
-    [ContractClassFor(typeof(INodeDeserializer))]
-    abstract class INodeDeserializer_Contract :
-        INodeDeserializer
+    [ContractClassFor(typeof(IModelDeserializer))]
+    abstract class IModelDeserializer_Contract :
+        IModelDeserializer
     {
 
         public Priority CanDeserialize(MediaRange mediaType)

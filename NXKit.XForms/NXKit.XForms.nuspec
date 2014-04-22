@@ -30,6 +30,18 @@
             <dependency
                 id="NXKit.Events"
                 version="$version$" />
+            <dependency
+                id="NXKit.Scripting"
+                version="$version$"/>
+            <dependency
+                id="NXKit.XMLEvents"
+                version="$version$"/>
+            <dependency
+                id="NXKit.XPath"
+                version="$version$"/>
+            <dependency
+                id="NXKit.XPath2"
+                version="$version$"/>
         </dependencies>
     </metadata>
 </package>

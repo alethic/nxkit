@@ -11,8 +11,8 @@ namespace NXKit.XForms.Serialization
     /// <summary>
     /// Defines a serializer capable of serializing a model item into a body.
     /// </summary>
-    [ContractClass(typeof(INodeSerializer_Contract))]
-    public interface INodeSerializer
+    [ContractClass(typeof(IModelSerializer_Contract))]
+    public interface IModelSerializer
     {
 
         /// <summary>
@@ -33,9 +33,9 @@ namespace NXKit.XForms.Serialization
 
     }
 
-    [ContractClassFor(typeof(INodeSerializer))]
-    abstract class INodeSerializer_Contract :
-        INodeSerializer
+    [ContractClassFor(typeof(IModelSerializer))]
+    abstract class IModelSerializer_Contract :
+        IModelSerializer
     {
 
         public Priority CanSerialize(XNode node, MediaRange mediaType)

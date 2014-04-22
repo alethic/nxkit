@@ -16,7 +16,7 @@ namespace NXKit.XForms
         IOnLoad
     {
 
-        readonly IRequestService requestService;
+        readonly IModelRequestService requestService;
         readonly InstanceAttributes attributes;
         readonly Lazy<InstanceState> state;
 
@@ -24,7 +24,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Instance(XElement element, IRequestService requestService)
+        public Instance(XElement element, IModelRequestService requestService)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
@@ -111,9 +111,9 @@ namespace NXKit.XForms
                 throw new DOMTargetEventException(Element, Events.LinkException);
 
             // return resource as a stream
-            var response = requestService.Submit(new Request(resourceUri, RequestMethod.Get));
+            var response = requestService.Submit(new ModelRequest(resourceUri, ModelMethod.Get));
             if (response == null ||
-                response.Status == ResponseStatus.Error)
+                response.Status == ModelResponseStatus.Error)
                 throw new DOMTargetEventException(Element, Events.LinkException);
 
             // load instance

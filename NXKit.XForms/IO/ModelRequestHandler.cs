@@ -13,14 +13,14 @@ namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Base implementation of the <see cref="IRequestHandler"/> interface.
+    /// Base implementation of the <see cref="IModelRequestHandler"/> interface.
     /// </summary>
-    public abstract class RequestHandler :
-        IRequestHandler
+    public abstract class ModelRequestHandler :
+        IModelRequestHandler
     {
 
-        readonly IEnumerable<INodeSerializer> serializers;
-        readonly IEnumerable<INodeDeserializer> deserializers;
+        readonly IEnumerable<IModelSerializer> serializers;
+        readonly IEnumerable<IModelDeserializer> deserializers;
 
         /// <summary>
         /// Initializes a new instance.
@@ -28,9 +28,9 @@ namespace NXKit.XForms.IO
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
         [ImportingConstructor]
-        public RequestHandler(
-            [ImportMany] IEnumerable<INodeSerializer> serializers,
-            [ImportMany] IEnumerable<INodeDeserializer> deserializers)
+        public ModelRequestHandler(
+            [ImportMany] IEnumerable<IModelSerializer> serializers,
+            [ImportMany] IEnumerable<IModelDeserializer> deserializers)
         {
             Contract.Requires<ArgumentNullException>(serializers != null);
             Contract.Requires<ArgumentNullException>(deserializers != null);
@@ -40,18 +40,18 @@ namespace NXKit.XForms.IO
         }
 
         /// <summary>
-        /// Return <c>true</c> if your <see cref="IRequestHandler"/> supports the given <see cref="Request"/>.
+        /// Return <c>true</c> if your <see cref="IModelRequestHandler"/> supports the given <see cref="ModelRequest"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public abstract Priority CanSubmit(Request request);
+        public abstract Priority CanSubmit(ModelRequest request);
 
         /// <summary>
         /// Gets the <see cref="MediaRange"/> to determine the format of the outgoing data.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected abstract MediaRange GetMediaType(Request request);
+        protected abstract MediaRange GetMediaType(ModelRequest request);
 
         /// <summary>
         /// Gets the serializer which supports the given <see cref="MediaRange"/>.
@@ -59,7 +59,7 @@ namespace NXKit.XForms.IO
         /// <param name="node"></param>
         /// <param name="mediaType"></param>
         /// <returns></returns>
-        protected INodeSerializer GetSerializer(XNode node, MediaRange mediaType)
+        protected IModelSerializer GetSerializer(XNode node, MediaRange mediaType)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(mediaType != null);
@@ -97,7 +97,7 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="mediaType"></param>
         /// <returns></returns>
-        protected INodeDeserializer GetDeserializer(MediaRange mediaType)
+        protected IModelDeserializer GetDeserializer(MediaRange mediaType)
         {
             Contract.Requires<ArgumentNullException>(mediaType != null);
 
@@ -133,7 +133,7 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public abstract Response Submit(Request request);
+        public abstract ModelResponse Submit(ModelRequest request);
 
     }
 

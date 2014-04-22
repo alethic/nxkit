@@ -7,20 +7,20 @@ using System.Linq;
 namespace NXKit.XForms.IO
 {
     
-    [Export(typeof(IRequestService))]
-    public class RequestService :
-        IRequestService
+    [Export(typeof(IModelRequestService))]
+    public class ModelRequestService :
+        IModelRequestService
     {
 
-        readonly IEnumerable<IRequestHandler> handlers;
+        readonly IEnumerable<IModelRequestHandler> handlers;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="handlers"></param>
         [ImportingConstructor]
-        public RequestService(
-            [ImportMany] IEnumerable<IRequestHandler> handlers)
+        public ModelRequestService(
+            [ImportMany] IEnumerable<IModelRequestHandler> handlers)
         {
             Contract.Requires<ArgumentNullException>(handlers != null);
 
@@ -28,11 +28,11 @@ namespace NXKit.XForms.IO
         }
 
         /// <summary>
-        /// Gets the <see cref="IRequestHandler"/> to handle the given request.
+        /// Gets the <see cref="IModelRequestHandler"/> to handle the given request.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        IRequestHandler GetHandler(Request request)
+        IModelRequestHandler GetHandler(ModelRequest request)
         {
             Contract.Requires<ArgumentNullException>(request != null);
 
@@ -49,13 +49,13 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public Response Submit(Request request)
+        public ModelResponse Submit(ModelRequest request)
         {
             Contract.Requires<ArgumentNullException>(request != null);
 
             var handler = GetHandler(request);
             if (handler == null)
-                return new Response(request, ResponseStatus.Error, null);
+                return new ModelResponse(request, ModelResponseStatus.Error, null);
 
             return handler.Submit(request);
         }
