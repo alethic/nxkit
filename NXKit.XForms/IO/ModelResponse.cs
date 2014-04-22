@@ -2,17 +2,19 @@
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.IO;
+
 namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Describes a response of a submission returned from a <see cref="IRequestHandler"/>.
+    /// Describes a response of a submission returned from a <see cref="IModelRequestHandler"/>.
     /// </summary>
-    public class Response
+    public class ModelResponse
     {
 
-        readonly Request request;
-        readonly ResponseStatus status;
+        readonly ModelRequest request;
+        readonly ModelResponseStatus status;
         readonly XDocument body;
         readonly Headers headers;
 
@@ -20,7 +22,7 @@ namespace NXKit.XForms.IO
         /// Initializes a new instance.
         /// </summary>
         /// <param name="request"></param>
-        public Response(Request request, ResponseStatus status, XDocument body)
+        public ModelResponse(ModelRequest request, ModelResponseStatus status, XDocument body)
         {
             Contract.Requires<ArgumentNullException>(request != null);
 
@@ -33,7 +35,7 @@ namespace NXKit.XForms.IO
         /// <summary>
         /// Gets the original submitted request that resulted in this response.
         /// </summary>
-        public Request Request
+        public ModelRequest Request
         {
             get { return request; }
         }
@@ -41,7 +43,7 @@ namespace NXKit.XForms.IO
         /// <summary>
         /// Gets the resulting status.
         /// </summary>
-        public ResponseStatus Status
+        public ModelResponseStatus Status
         {
             get { return status; }
         }

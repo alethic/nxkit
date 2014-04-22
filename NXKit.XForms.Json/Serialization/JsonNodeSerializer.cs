@@ -13,9 +13,9 @@ using NXKit.XForms.Serialization;
 namespace NXKit.XForms.Json.Serialization
 {
 
-    [Export(typeof(INodeSerializer))]
+    [Export(typeof(IModelSerializer))]
     public class JsonNodeSerializer :
-        INodeSerializer
+        IModelSerializer
     {
 
         static readonly MediaRange[] MEDIA_RANGE = new MediaRange[]

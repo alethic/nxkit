@@ -3,21 +3,22 @@ using System.Diagnostics.Contracts;
 using System.Text;
 using System.Xml.Linq;
 
+using NXKit.IO;
 using NXKit.Util;
 
 namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Describes an IO request to be dispatched towards a resource in order to obtain a response.
+    /// Describes an IO request to be dispatched towards a resource.
     /// </summary>
-    public class Request
+    public class ModelRequest
     {
 
         readonly Uri resourceUri;
         readonly Headers headers;
         readonly DynamicDictionary context;
-        RequestMethod method;
+        ModelMethod method;
         MediaRange mediaType;
         XNode body;
         Encoding encoding;
@@ -27,9 +28,9 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="resourceUri"></param>
         /// <param name="method"></param>
-        public Request(
+        public ModelRequest(
             Uri resourceUri,
-            RequestMethod method)
+            ModelMethod method)
         {
             Contract.Requires<ArgumentNullException>(resourceUri != null);
             Contract.Requires<ArgumentException>(resourceUri.IsAbsoluteUri);
@@ -52,10 +53,10 @@ namespace NXKit.XForms.IO
         /// <summary>
         /// Gets or sets the method type of the request.
         /// </summary>
-        public RequestMethod Method
+        public ModelMethod Method
         {
-            get { Contract.Ensures(Contract.Result<RequestMethod>() != RequestMethod.None); return method; }
-            set { Contract.Requires<ArgumentException>(value != RequestMethod.None); method = value; }
+            get { return method; }
+            set { method = value; }
         }
 
         /// <summary>

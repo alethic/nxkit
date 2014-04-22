@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-namespace NXKit.XForms.IO
+namespace NXKit.IO
 {
 
     /// <summary>
-    /// Describes a class capable of handling a <see cref="Request"/> and generating a <see cref="Response"/>.
+    /// Describes a class capable of handling a <see cref="IORequest"/> and generating a <see cref="IOResponse"/>.
     /// </summary>
     [ContractClass(typeof(IRequestHandler_Contract))]
-    public interface IRequestHandler
+    public interface IIOTransport
     {
 
         /// <summary>
@@ -16,32 +16,32 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Priority CanSubmit(Request request);
+        Priority CanSend(IORequest request);
 
         /// <summary>
         /// Initiates the submission.
         /// </summary>
         /// <param name="elementrequest"></param>
         /// <returns></returns>
-        Response Submit(Request request);
+        IOResponse Submit(IORequest request);
 
     }
 
-    [ContractClassFor(typeof(IRequestHandler))]
+    [ContractClassFor(typeof(IIOTransport))]
     abstract class IRequestHandler_Contract:
-        IRequestHandler
+        IIOTransport
     {
 
-        public Priority CanSubmit(Request request)
+        public Priority CanSend(IORequest request)
         {
             Contract.Requires<ArgumentNullException>(request != null);
             throw new NotImplementedException();
         }
 
-        public Response Submit(Request request)
+        public IOResponse Submit(IORequest request)
         {
             Contract.Requires<ArgumentNullException>(request != null);
-            Contract.Ensures(Contract.Result<Response>() != null);
+            Contract.Ensures(Contract.Result<IOResponse>() != null);
             throw new NotImplementedException();
         }
 

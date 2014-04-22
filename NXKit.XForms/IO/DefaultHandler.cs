@@ -5,7 +5,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net;
 using System.Text;
-
+using NXKit.IO;
 using NXKit.Util;
 using NXKit.XForms.Serialization;
 
@@ -13,12 +13,14 @@ namespace NXKit.XForms.IO
 {
 
     /// <summary>
-    /// Base <see cref="IRequestHandler"/> implementation for using the Web request framework.
+    /// Base <see cref="IModelRequestHandler"/> implementation for using the Web request framework.
     /// </summary>
-    [Export(typeof(IRequestHandler))]
-    public class WebRequestHandler :
-        RequestHandler
+    [Export(typeof(IModelRequestHandler))]
+    public class DefaultHandler :
+        ModelRequestHandler
     {
+
+        readonly IIOService ioService;
 
         /// <summary>
         /// Initializes a new instance.
@@ -26,16 +28,20 @@ namespace NXKit.XForms.IO
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
         [ImportingConstructor]
-        public WebRequestHandler(
-            [ImportMany] IEnumerable<INodeSerializer> serializers,
-            [ImportMany] IEnumerable<INodeDeserializer> deserializers)
+        public DefaultHandler(
+            IIOService ioService,
+            [ImportMany] IEnumerable<IModelSerializer> serializers,
+            [ImportMany] IEnumerable<IModelDeserializer> deserializers)
             : base(serializers, deserializers)
         {
+            Contract.Requires<ArgumentNullException>(ioService != null);
             Contract.Requires<ArgumentNullException>(serializers != null);
             Contract.Requires<ArgumentNullException>(deserializers != null);
+
+            this.ioService = ioService;
         }
 
-        public override Priority CanSubmit(Request request)
+        public override Priority CanSubmit(ModelRequest request)
         {
             return Priority.Low;
         }
@@ -45,51 +51,51 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override MediaRange GetMediaType(Request request)
+        protected override MediaRange GetMediaType(ModelRequest request)
         {
-            switch (request.Method)
-            {
-                case RequestMethod.Post:
-                case RequestMethod.Put:
-                    return "application/xml";
-                case RequestMethod.Get:
-                case RequestMethod.Delete:
-                case RequestMethod.UrlEncodedPost:
-                    return "application/x-www-form-urlencoded";
-                case RequestMethod.MultipartPost:
-                    return "multipart/related";
-                case RequestMethod.FormDataPost:
-                    return "multipart/form-data";
-            }
+            if (request.Method == ModelMethod.Post ||
+                request.Method == ModelMethod.Put)
+                return "application/xml";
+
+            if (request.Method == ModelMethod.Get ||
+                request.Method == ModelMethod.Delete ||
+                request.Method == ModelMethod.UrlEncodedPost)
+                return "application/x-www-form-urlencoded";
+
+            if (request.Method == ModelMethod.MultipartPost)
+                return "multipart/related";
+
+            if (request.Method == ModelMethod.FormDataPost)
+                return "multipart/form-data";
 
             return null;
         }
 
         /// <summary>
-        /// Gets the appropriate Web Request method type for the given <see cref="Request"/>.
+        /// Gets the appropriate Web Request method type for the given <see cref="ModelRequest"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected virtual string GetMethod(Request request)
+        protected virtual IOMethod GetMethod(ModelRequest request)
         {
             Contract.Requires<ArgumentNullException>(request != null);
 
-            switch (request.Method)
-            {
-                case RequestMethod.Get:
-                    return "GET";
-                case RequestMethod.Put:
-                    return "PUT";
-                case RequestMethod.Post:
-                case RequestMethod.UrlEncodedPost:
-                case RequestMethod.MultipartPost:
-                case RequestMethod.FormDataPost:
-                    return "POST";
-                case RequestMethod.Delete:
-                    return "DELETE";
-                default:
-                    return null;
-            }
+            if (request.Method == ModelMethod.Get)
+                return IOMethod.Get;
+
+            if (request.Method == ModelMethod.Put)
+                return IOMethod.Put;
+
+            if (request.Method == ModelMethod.Post ||
+                request.Method == ModelMethod.UrlEncodedPost ||
+                request.Method == ModelMethod.MultipartPost ||
+                request.Method == ModelMethod.FormDataPost)
+                return IOMethod.Post;
+
+            if (request.Method == ModelMethod.Delete)
+                return IOMethod.Delete;
+
+            return IOMethod.None;
         }
 
         /// <summary>
@@ -97,24 +103,26 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected virtual bool IsQuery(Request request)
+        protected virtual bool IsQuery(ModelRequest request)
         {
+            Contract.Requires<ArgumentNullException>(request != null);
+
             // get http method
             var method = GetMethod(request);
             if (method == null)
                 throw new InvalidOperationException();
 
             return
-                method == "GET" ||
-                method == "DELETE";
+                method == IOMethod.Get ||
+                method == IOMethod.Delete;
         }
 
         /// <summary>
-        /// Retrieves a <see cref="WebRequest"/> for the given <see cref="Request"/>.
+        /// Retrieves a <see cref="WebRequest"/> for the given <see cref="ModelRequest"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected virtual WebRequest WriteWebRequest(Request request)
+        protected virtual IORequest WriteIORequest(ModelRequest request)
         {
             Contract.Requires<ArgumentNullException>(request != null);
 
@@ -150,40 +158,31 @@ namespace NXKit.XForms.IO
             }
 
             // generate new web request
-            var webRequest = WebRequest.Create(uri);
-            webRequest.Method = GetMethod(request);
-            webRequest.ContentType = cnt;
+            var ioRequest = new IORequest(uri, GetMethod(request));
+            ioRequest.ContentType = cnt;
+            ioRequest.Headers.Add(request.Headers);
+            ioRequest.Content = stm;
 
-            // populate headers
-            foreach (var pair in request.Headers)
-                foreach (var value in pair.Value)
-                    webRequest.Headers.Add(pair.Key, value);
-
-            // write body to stream, if available
-            if (stm.Length > 0)
-                using (var req = webRequest.GetRequestStream())
-                    stm.CopyTo(req);
-
-            return webRequest;
+            return ioRequest;
         }
 
         /// <summary>
-        /// Gets the <see cref="ResponseStatus"/> for the response.
+        /// Gets the <see cref="ModelResponseStatus"/> for the response.
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        protected virtual ResponseStatus ReadRequestStatus(WebResponse response)
+        protected virtual ModelResponseStatus ReadRequestStatus(IOResponse response)
         {
-            return ResponseStatus.Error;
+            return ModelResponseStatus.Error;
         }
 
         /// <summary>
-        /// Deserializes the <see cref="WebResponse"/> into a <see cref="Response"/>.
+        /// Deserializes the <see cref="WebResponse"/> into a <see cref="ModelResponse"/>.
         /// </summary>
         /// <param name="webResponse"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected virtual Response ReadWebResponse(WebResponse webResponse, Request request)
+        protected virtual ModelResponse ReadIOResponse(IOResponse webResponse, ModelRequest request)
         {
             Contract.Requires<ArgumentNullException>(webResponse != null);
             Contract.Requires<ArgumentNullException>(request != null);
@@ -194,16 +193,15 @@ namespace NXKit.XForms.IO
                 throw new UnsupportedMediaTypeException();
 
             // generate new response
-            var response = new Response(
+            var response = new ModelResponse(
                 request,
                 ReadRequestStatus(webResponse),
                 deserializer.Deserialize(
-                    new StreamReader(webResponse.GetResponseStream()),
+                    new StreamReader(webResponse.Content),
                     webResponse.ContentType));
 
             // populate headers
-            foreach (var name in webResponse.Headers.AllKeys)
-                response.Headers.Add(name, webResponse.Headers[name]);
+            response.Headers.Add(webResponse.Headers);
 
             return response;
         }
@@ -213,20 +211,20 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public override Response Submit(Request request)
+        public override ModelResponse Submit(ModelRequest request)
         {
             // write request
-            var webRequest = WriteWebRequest(request);
-            if (webRequest == null)
+            var ioRequest = WriteIORequest(request);
+            if (ioRequest == null)
                 throw new InvalidOperationException();
 
             // submit request and retrieve response
-            var webResponse = webRequest.GetResponse();
-            if (webResponse == null)
+            var ioResponse = ioService.Send(ioRequest);
+            if (ioResponse == null)
                 throw new InvalidOperationException();
 
             // read response
-            var response = ReadWebResponse(webResponse, request);
+            var response = ReadIOResponse(ioResponse, request);
             if (response == null)
                 throw new InvalidOperationException();
 

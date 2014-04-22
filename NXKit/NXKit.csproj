@@ -110,6 +110,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\packages\Microsoft.Bcl.Immutable.1.0.30\lib\portable-net45+win8+wp8\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -121,6 +124,18 @@
   <ItemGroup>
     <Compile Include="IdRef.cs" />
     <Compile Include="IOnInit.cs" />
+    <Compile Include="IO\FileTransport.cs" />
+    <Compile Include="IO\Headers.cs" />
+    <Compile Include="IO\HttpTransport.cs" />
+    <Compile Include="IO\IIOTransport.cs" />
+    <Compile Include="IO\IIOService.cs" />
+    <Compile Include="IO\IOStatus.cs" />
+    <Compile Include="IO\IORequest.cs" />
+    <Compile Include="IO\IOTransport.cs" />
+    <Compile Include="IO\IOMethod.cs" />
+    <Compile Include="IO\IOService.cs" />
+    <Compile Include="IO\IOResponse.cs" />
+    <Compile Include="IO\WebTransport.cs" />
     <Compile Include="ObjectAnnotation.cs" />
     <Compile Include="DocumentAnnotation.cs" />
     <Compile Include="IInterfacePredicate.cs" />
@@ -155,6 +170,7 @@
     <Compile Include="Util\DynamicDictionaryValue.cs" />
     <Compile Include="Util\EnumerableExtensions.cs" />
     <Compile Include="Util\LinkedListExtensions.cs" />
+    <Compile Include="Util\MediaRangeList.cs" />
     <Compile Include="Util\MediaRangeParameters.cs" />
     <Compile Include="Util\MediaType.cs" />
     <Compile Include="Util\MediaRange.cs" />
@@ -163,6 +179,7 @@
     <Compile Include="CompositionUtil.cs" />
     <Compile Include="InterfaceProviderBase.cs" />
     <Compile Include="Xml\BaseUriAnnotation.cs" />
+    <Compile Include="Xml\IOXmlReader.cs" />
     <Compile Include="Xml\XContainerExtensions.cs" />
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="Xml\XDocumentExtensions.cs" />

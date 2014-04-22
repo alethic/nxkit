@@ -9,19 +9,19 @@ using NXKit.Util;
 namespace NXKit.XForms.Serialization
 {
 
-    [Export(typeof(INodeSerializer))]
-    public class UrlEncodedNodeSerializer :
-        INodeSerializer
+    [Export(typeof(IModelSerializer))]
+    public class UrlEncodedModelSerializer :
+        IModelSerializer
     {
 
-        static readonly MediaRange[] MEDIA_RANGE = new MediaRange[]
+        static readonly MediaRange[] ACCEPT = new MediaRange[]
         {
             "application/x-www-form-urlencoded",
         };
 
         public Priority CanSerialize(XNode node, MediaRange mediaType)
         {
-            return MEDIA_RANGE.Any(i => i.Matches(mediaType)) && (node is XDocument || node is XElement) ? Priority.Default : Priority.Ignore;
+            return ACCEPT.Any(i => i.Matches(mediaType)) && (node is XDocument || node is XElement) ? Priority.Default : Priority.Ignore;
         }
 
         public void Serialize(TextWriter writer, XNode node, MediaRange mediaType)

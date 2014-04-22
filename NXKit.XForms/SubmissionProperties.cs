@@ -100,9 +100,9 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the 'method' attribute value.
         /// </summary>
-        public RequestMethod Method
+        public ModelMethod Method
         {
-            get { return RequestMethodHelper.Parse(attributes.Method); }
+            get { return attributes.Method; }
         }
 
         /// <summary>

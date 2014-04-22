@@ -9,9 +9,9 @@ using NXKit.Util;
 namespace NXKit.XForms.Serialization
 {
 
-    [Export(typeof(INodeDeserializer))]
-    public class XmlNodeDeserializer :
-        INodeDeserializer
+    [Export(typeof(IModelDeserializer))]
+    public class XmlModelDeserializer :
+        IModelDeserializer
     {
 
         static readonly MediaRange[] MEDIA_RANGE = new MediaRange[]
