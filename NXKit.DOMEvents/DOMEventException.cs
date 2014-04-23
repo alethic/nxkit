@@ -18,6 +18,7 @@ namespace NXKit.DOMEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="type"></param>
+        /// <param name="contextInfo"></param>
         public DOMEventException(string type, object contextInfo)
             : this(type)
         {
@@ -41,8 +42,22 @@ namespace NXKit.DOMEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="type"></param>
+        /// <param name="message"></param>
         public DOMEventException(string type, string message)
             : base(message)
+        {
+            Contract.Requires<ArgumentNullException>(type != null);
+
+            this.type = type;
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="innerException"></param>
+        public DOMEventException(string type, Exception innerException)
+            : base(innerException.Message, innerException)
         {
             Contract.Requires<ArgumentNullException>(type != null);
 
