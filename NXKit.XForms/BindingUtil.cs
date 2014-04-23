@@ -31,11 +31,13 @@ namespace NXKit.XForms
 
             var resolver = element.InterfaceOrDefault<EvaluationContextResolver>();
             if (resolver == null)
-                throw new DOMTargetEventException(element, Events.BindingException);
+                throw new DOMTargetEventException(element, Events.BindingException,
+                    "Missing EvaluationContextResolver interface.");
 
             var context = resolver.Context;
             if (context == null)
-                throw new DOMTargetEventException(element, Events.BindingException);
+                throw new DOMTargetEventException(element, Events.BindingException,
+                    "Missing EvaluationContextResolver Context.");
 
             return new Binding(element, context, xpath);
         }
@@ -55,11 +57,13 @@ namespace NXKit.XForms
 
             var resolver = attribute.InterfaceOrDefault<EvaluationContextResolver>();
             if (resolver == null)
-                throw new DOMTargetEventException(attribute.Parent, Events.BindingException);
+                throw new DOMTargetEventException(attribute.Parent, Events.BindingException,
+                    "Missing EvaluationContextResolver interface.");
 
             var context = resolver.Context;
             if (context == null)
-                throw new DOMTargetEventException(attribute.Parent, Events.BindingException);
+                throw new DOMTargetEventException(attribute.Parent, Events.BindingException,
+                    "Missing EvaluationContextResolver Context.");
 
             return new Binding(attribute.Parent, context, attribute.Value);
         }

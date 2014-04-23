@@ -60,6 +60,7 @@ namespace NXKit.DOMEvents
             : base(innerException.Message, innerException)
         {
             Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(innerException != null);
 
             this.type = type;
         }

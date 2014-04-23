@@ -61,7 +61,8 @@ namespace NXKit.XForms
             {
                 var model = Element.ResolveId(Attributes.Model);
                 if (model == null)
-                    throw new DOMTargetEventException(Element, Events.BindingException);
+                    throw new DOMTargetEventException(Element, Events.BindingException,
+                        string.Format("Could not resolve model IDREF '{0}'", Attributes.Model));
 
                 return model.Interface<Model>();
             }
@@ -106,7 +107,8 @@ namespace NXKit.XForms
             {
                 var context = GetContextForSpecifiedContext();
                 if (context == null)
-                    throw new DOMTargetEventException(Element, Events.BindingException);
+                    throw new DOMTargetEventException(Element, Events.BindingException,
+                        "Null Context for specified Context.");
 
                 var binding = new Binding(Element, context, Attributes.Context);
                 if (binding.ModelItem == null)

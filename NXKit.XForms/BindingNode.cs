@@ -26,7 +26,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public BindingNode(XElement element)
-            :base(element)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -75,7 +75,8 @@ namespace NXKit.XForms
             // obtain evaluation context
             var context = resolver.Value.Context;
             if (context == null)
-                throw new DOMTargetEventException(Element, Events.BindingException);
+                throw new DOMTargetEventException(Element, Events.BindingException,
+                    "Could not resolve binding context.");
 
             return new Binding(attribute, context, expression);
         }
@@ -89,7 +90,8 @@ namespace NXKit.XForms
             // resolve bind element
             var bind = Element.ResolveId(bindIdRef);
             if (bind == null)
-                throw new DOMTargetEventException(Element, Events.BindingException);
+                throw new DOMTargetEventException(Element, Events.BindingException,
+                    string.Format("Could not resolve IDREF '{0}'", bindIdRef));
 
             var binding = bind.InterfaceOrDefault<IBindingNode>();
             if (binding != null)
