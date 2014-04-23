@@ -49,17 +49,6 @@ namespace NXKit.XForms.IO
                 return Priority.Ignore;
         }
 
-        protected override ModelResponseStatus ReadRequestStatus(IOResponse response)
-        {
-            switch (response.Status)
-            {
-                case IOStatus.Success:
-                    return ModelResponseStatus.Success;
-                default:
-                    return ModelResponseStatus.Error;
-            }
-        }
-
     }
 
 }
