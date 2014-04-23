@@ -28,13 +28,10 @@
                 id="NXKit.DOMEvents"
                 version="$version$" />
             <dependency
-                id="NXKit.Events"
-                version="$version$" />
-            <dependency
-                id="NXKit.Scripting"
+                id="NXKit.XMLEvents"
                 version="$version$"/>
             <dependency
-                id="NXKit.XMLEvents"
+                id="NXKit.Scripting"
                 version="$version$"/>
             <dependency
                 id="NXKit.XPath"
