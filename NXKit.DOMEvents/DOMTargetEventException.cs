@@ -43,6 +43,21 @@ namespace NXKit.DOMEvents
         }
 
         /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="type"></param>
+        /// <param name="message"></param>
+        public DOMTargetEventException(XElement target, string type, string message)
+            : base(type, message)
+        {
+            Contract.Requires<ArgumentNullException>(target != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+
+            this.target = target;
+        }
+
+        /// <summary>
         /// Gets the target of the event to be raised.
         /// </summary>
         public XElement Target

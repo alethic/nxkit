@@ -38,6 +38,18 @@ namespace NXKit.DOMEvents
         }
 
         /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="type"></param>
+        public DOMEventException(string type, string message)
+            : base(message)
+        {
+            Contract.Requires<ArgumentNullException>(type != null);
+
+            this.type = type;
+        }
+
+        /// <summary>
         /// Gets the type of event to be raised.
         /// </summary>
         public string EventType
