@@ -80,6 +80,8 @@ namespace NXKit.XForms
         /// <param name="resourceUri"></param>
         internal void Load(string resourceUri)
         {
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(resourceUri));
+
             try
             {
                 Load(new Uri(resourceUri, UriKind.RelativeOrAbsolute));
@@ -96,25 +98,25 @@ namespace NXKit.XForms
         /// <param name="resourceUri"></param>
         internal void Load(Uri resourceUri)
         {
+            Contract.Requires<ArgumentNullException>(resourceUri != null);
+
             try
             {
                 // normalize uri with base
                 if (Element.GetBaseUri() != null && !resourceUri.IsAbsoluteUri)
                     resourceUri = new Uri(Element.GetBaseUri(), resourceUri);
             }
-            catch (UriFormatException)
+            catch (UriFormatException e)
             {
-                throw new DOMTargetEventException(Element, Events.LinkException);
+                throw new DOMTargetEventException(Element, Events.LinkException, e);
             }
-
-            if (resourceUri == null)
-                throw new DOMTargetEventException(Element, Events.LinkException);
 
             // return resource as a stream
             var response = requestService.Submit(new ModelRequest(resourceUri, ModelMethod.Get));
             if (response == null ||
                 response.Status == ModelResponseStatus.Error)
-                throw new DOMTargetEventException(Element, Events.LinkException);
+                throw new DOMTargetEventException(Element, Events.LinkException, 
+                    string.Format("Error retrieving resource '{0}'.", resourceUri));
 
             // load instance
             Load(response.Body);
@@ -126,6 +128,8 @@ namespace NXKit.XForms
         /// <param name="document"></param>
         internal void Load(XDocument document)
         {
+            Contract.Requires<ArgumentNullException>(document != null);
+
             State.Initialize(Model, Element, document);
         }
 

@@ -100,7 +100,8 @@ namespace NXKit.XForms
             else if (binding.Result is string && !string.IsNullOrWhiteSpace((string)binding.Result))
                 return bool.Parse((string)binding.Result);
             else
-                throw new DOMTargetEventException(Element, Events.BindingException);
+                throw new DOMTargetEventException(Element, Events.BindingException,
+                    string.Format("{0}", binding.Result));
         }
 
         /// <summary>
