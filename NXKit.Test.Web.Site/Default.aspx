@@ -50,11 +50,18 @@
         </div>
 
         <div class="main container" style="padding-top: 64px;">
+            <asp:MultiView runat="server" ID="MultiView">
+                <asp:View runat="server" ID="ViewPage">
+                    <xforms:View ID="View" runat="server"
+                        CssClass="FormView"
+                        OnLoad="View_Load" />
+                </asp:View>
+                <asp:View runat="server" ID="NoViewPage">
+                    <p>No View</p>
+                </asp:View>
+            </asp:MultiView>
 
-            <xforms:View ID="View" runat="server"
-                CssClass="FormView"
-                OnLoad="View_Load" />
-
+            <asp:Button runat="server" ID="SwitchViewButton" OnClick="SwitchViewButton_Click" />
         </div>
     </form>
 </body>
