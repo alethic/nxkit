@@ -31,6 +31,14 @@ namespace NXKit.Test.Web.Site
                 View.Open(UriTextBox.Text);
         }
 
+        protected void SwitchViewButton_Click(object sender, EventArgs e)
+        {
+            if (MultiView.GetActiveView() == ViewPage)
+                MultiView.SetActiveView(NoViewPage);
+            else
+                MultiView.SetActiveView(ViewPage);
+        }
+
     }
 
 }

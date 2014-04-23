@@ -29,7 +29,7 @@ namespace NXKit.Web.UI
         string cssClass;
         string validationGroup;
         CompositionContainer container;
-        NXKit.NXDocumentHost document;
+        NXDocumentHost document;
 
         /// <summary>
         /// Initializes a new instance.
@@ -37,15 +37,6 @@ namespace NXKit.Web.UI
         public View()
         {
 
-        }
-
-        /// <summary>
-        /// Gets or sets the <see cref="CompositionContainer"/> to use when hosting documents.
-        /// </summary>
-        public CompositionContainer Container
-        {
-            get { return container; }
-            set { container = value; }
         }
 
         /// <summary>
@@ -69,11 +60,32 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
+        /// Gets or sets the <see cref="CompositionContainer"/> to use when hosting documents.
+        /// </summary>
+        public CompositionContainer Container
+        {
+            get { return container; }
+            set { container = value; }
+        }
+
+        /// <summary>
         /// Gets a reference to the <see cref="Document"/>.
         /// </summary>
-        public NXKit.NXDocumentHost Document
+        public NXDocumentHost Document
         {
             get { return document; }
+        }
+
+        /// <summary>
+        /// Loads the document host from whatever saved state is available.
+        /// </summary>
+        /// <returns></returns>
+        NXDocumentHost LoadDocumentHost(string save)
+        {
+            // load document
+            var host = NXDocumentHost.Load(new StringReader(save));
+            host.Invoke();
+            return host;
         }
 
         /// <summary>
@@ -103,12 +115,8 @@ namespace NXKit.Web.UI
         /// Gets the client-side save state as a string.
         /// </summary>
         /// <returns></returns>
-        string GetSaveString()
+        string CreateSaveString()
         {
-            // serialize document state to save field
-            //using (var stm = new MemoryStream())
-            //using (var zip = new GZipStream(stm, CompressionMode.Compress))
-            //{
             using (var wrt = new StringWriter())
             {
                 document.Save(wrt);
@@ -120,7 +128,7 @@ namespace NXKit.Web.UI
         /// Gets the client-side data as a <see cref="JObject"/>
         /// </summary>
         /// <returns></returns>
-        JObject GetDataJObject()
+        JObject CreateDataJObject()
         {
             // serialize document state to data field
             using (var str = new JTokenWriter())
@@ -134,7 +142,7 @@ namespace NXKit.Web.UI
         /// Gets the client-side data as a <see cref="string"/>.
         /// </summary>
         /// <returns></returns>
-        string GetDataString()
+        string CreateDataString()
         {
             // serialize document state to data field
             using (var str = new StringWriter())
@@ -144,6 +152,16 @@ namespace NXKit.Web.UI
                 wrt.Close();
                 return str.ToString();
             }
+        }
+
+        /// <summary>
+        /// Raises the Init event.
+        /// </summary>
+        /// <param name="args"></param>
+        protected override void OnInit(EventArgs args)
+        {
+            Page.RegisterRequiresControlState(this);
+            base.OnInit(args);
         }
 
         /// <summary>
@@ -162,6 +180,32 @@ namespace NXKit.Web.UI
                         if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
                             using (var rdr = new StreamReader(template.Open()))
                                 Page.ClientScript.RegisterClientScriptBlock(typeof(View), template.Name, rdr.ReadToEnd(), false);
+        }
+
+        /// <summary>
+        /// Loads view state information.
+        /// </summary>
+        /// <param name="savedState"></param>
+        protected override void LoadViewState(object savedState)
+        {
+            var o = (object[])savedState;
+            document = (string)o[0] != null ? LoadDocumentHost((string)o[0]) : null;
+            cssClass = (string)o[1];
+            validationGroup = (string)o[2];
+        }
+
+        /// <summary>
+        /// Saves view state information.
+        /// </summary>
+        /// <returns></returns>
+        protected override object SaveViewState()
+        {
+            return new object[] 
+            {
+                !Visible ? CreateSaveString() : null,
+                cssClass,
+                validationGroup,
+            };
         }
 
         /// <summary>
@@ -193,7 +237,7 @@ namespace NXKit.Web.UI
                 writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_data");
                 writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID + "_data");
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
-                writer.AddAttribute(HtmlTextWriterAttribute.Value, GetDataString());
+                writer.AddAttribute(HtmlTextWriterAttribute.Value, CreateDataString());
                 writer.RenderBeginTag(HtmlTextWriterTag.Input);
                 writer.RenderEndTag();
                 writer.WriteLine();
@@ -202,7 +246,7 @@ namespace NXKit.Web.UI
                 writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_save");
                 writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID + "_save");
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
-                writer.AddAttribute(HtmlTextWriterAttribute.Value, GetSaveString());
+                writer.AddAttribute(HtmlTextWriterAttribute.Value, CreateSaveString());
                 writer.RenderBeginTag(HtmlTextWriterTag.Input);
                 writer.RenderEndTag();
                 writer.WriteLine();
@@ -230,34 +274,15 @@ namespace NXKit.Web.UI
             yield return new ScriptReference("NXKit.Web.UI.View.js", typeof(View).Assembly.FullName);
         }
 
-        /// <summary>
-        /// Loads the <see cref="NXDocumentWebService"/> from the given saved state.
-        /// </summary>
-        /// <param name="save"></param>
-        void LoadDocumentFromSave(string save)
-        {
-            Contract.Requires<ArgumentNullException>(save != null);
-
-            //using (var stm = new MemoryStream(Convert.FromBase64String(save)))
-            //using (var zip = new GZipStream(stm, CompressionMode.Decompress))
-            //{
-            document = NXKit.NXDocumentHost.Load(new StringReader(save));
-            document.Invoke();
-            //}
-        }
-
         bool IPostBackDataHandler.LoadPostData(string postDataKey, NameValueCollection postCollection)
         {
             if (Page.IsCallback)
                 return false;
 
+            // load saved data
             var save = postCollection[postDataKey + "_save"];
             if (save != null)
-                LoadDocumentFromSave(save);
-
-            var data = postCollection[postDataKey + "_data"];
-            if (data != null)
-                ClientPush(JObject.Parse(data));
+                document = LoadDocumentHost(save);
 
             return true;
         }
@@ -271,25 +296,24 @@ namespace NXKit.Web.UI
         {
             return JsonConvert.SerializeObject(new
             {
-                Save = GetSaveString(),
-                Data = GetDataJObject(),
+                Save = CreateSaveString(),
+                Data = CreateDataJObject(),
             });
         }
 
         void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
         {
-            dynamic args = JObject.Parse(eventArgument);
+            var args = JObject.Parse(eventArgument);
 
-            // attempt to load our document instance
-            var save = (string)args.Save;
+            var save = (string)args["Save"];
             if (save != null)
-                LoadDocumentFromSave(save);
+                document = LoadDocumentHost(save);
 
             // dispatch action
-            switch ((string)args.Action)
+            switch ((string)args["Action"])
             {
                 case "Push":
-                    ClientPush((JToken)args.Args);
+                    ClientPush((JToken)args["Args"]);
                     break;
             }
         }
