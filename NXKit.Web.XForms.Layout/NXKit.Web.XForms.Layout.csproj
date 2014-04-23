@@ -154,6 +154,8 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptOutFile>NXKit.XForms.Layout.js</TypeScriptOutFile>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
+    <DocumentationFile>bin\Release\NXKit.Web.XForms.Layout.xml</DocumentationFile>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
