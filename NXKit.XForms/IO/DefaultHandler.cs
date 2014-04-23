@@ -25,6 +25,7 @@ namespace NXKit.XForms.IO
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="ioService"></param>
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
         [ImportingConstructor]
@@ -173,7 +174,7 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected virtual ModelResponseStatus ReadRequestStatus(IOResponse response)
         {
-            return ModelResponseStatus.Error;
+            return response.Status == IOStatus.Success;
         }
 
         /// <summary>
