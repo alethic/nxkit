@@ -47,7 +47,8 @@ namespace NXKit.XForms.XPath.Functions
                 // resolve instance based on id
                 var instance = context.Xml.ResolveId(id);
                 if (instance == null)
-                    throw new DOMTargetEventException(context.Xml.Parent, Events.BindingException);
+                    throw new DOMTargetEventException(context.Xml.Parent, Events.BindingException,
+                        string.Format("Unresolved instance IDREF '{0}'.", id));
 
                 return instance
                     .Interfaces<Instance>()

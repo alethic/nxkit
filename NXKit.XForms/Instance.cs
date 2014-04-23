@@ -66,7 +66,8 @@ namespace NXKit.XForms
 
                 // invalid number of elements
                 if (instanceChildElements.Length >= 2)
-                    throw new DOMTargetEventException(Element, Events.LinkException);
+                    throw new DOMTargetEventException(Element, Events.LinkException,
+                        "Instance can only have single child element.");
 
                 // proper number of elements
                 if (instanceChildElements.Length == 1)
@@ -86,9 +87,9 @@ namespace NXKit.XForms
             {
                 Load(new Uri(resourceUri, UriKind.RelativeOrAbsolute));
             }
-            catch (UriFormatException)
+            catch (UriFormatException e)
             {
-                throw new DOMTargetEventException(Element, Events.LinkException);
+                throw new DOMTargetEventException(Element, Events.LinkException, e);
             }
         }
 
@@ -115,7 +116,7 @@ namespace NXKit.XForms
             var response = requestService.Submit(new ModelRequest(resourceUri, ModelMethod.Get));
             if (response == null ||
                 response.Status == ModelResponseStatus.Error)
-                throw new DOMTargetEventException(Element, Events.LinkException, 
+                throw new DOMTargetEventException(Element, Events.LinkException,
                     string.Format("Error retrieving resource '{0}'.", resourceUri));
 
             // load instance

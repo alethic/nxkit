@@ -203,7 +203,7 @@ namespace NXKit.XForms
             // However, one of the two is mandatory as there is no default submission method.
             var method = GetMethod();
             if (method == ModelMethod.None)
-                throw new DOMTargetEventException(Element, Events.SubmitError);
+                throw new DOMTargetEventException(Element, Events.SubmitError, "Unknown ModelMethd.");
 
             // The resource element provides the submission URI, overriding the resource attribute and the action 
             // attribute. If a submission has more than one resource child element, the first resource element child 
@@ -394,7 +394,8 @@ namespace NXKit.XForms
 
             if (instance == null ||
                 instance.Element.Parent != Element.Parent)
-                throw new DOMTargetEventException(Element, Events.BindingException);
+                throw new DOMTargetEventException(Element, Events.BindingException,
+                    "Submission cannot specify foreign model instance.");
 
             var target = instance.State.Document.Root.Annotation<ModelItem>();
             if (target == null)
@@ -420,7 +421,8 @@ namespace NXKit.XForms
 
             // final check
             if (target == null)
-                throw new DOMTargetEventException(Element, Events.BindingException);
+                throw new DOMTargetEventException(Element, Events.BindingException,
+                    "Null submission replacement target.");
 
             // Otherwise, those processing instructions and comments replace any processing instructions and comments
             // that previously appeared outside of the document element of the instance being replaced.

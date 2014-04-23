@@ -19,6 +19,7 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="target"></param>
         /// <param name="type"></param>
+        /// <param name="contextInfo"></param>
         public DOMTargetEventException(XElement target, string type, object contextInfo)
             : base(type, contextInfo)
         {
@@ -68,6 +69,7 @@ namespace NXKit.DOMEvents
         {
             Contract.Requires<ArgumentNullException>(target != null);
             Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(innerException != null);
 
             this.target = target;
         }
