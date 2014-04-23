@@ -174,7 +174,7 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected virtual ModelResponseStatus ReadRequestStatus(IOResponse response)
         {
-            return response.Status == IOStatus.Success;
+            return response.Status == IOStatus.Success ? ModelResponseStatus.Success : ModelResponseStatus.Error;
         }
 
         /// <summary>
