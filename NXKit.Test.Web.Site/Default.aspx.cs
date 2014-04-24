@@ -11,16 +11,11 @@ namespace NXKit.Test.Web.Site
         IPostBackEventHandler
     {
 
-        protected override void OnLoad(EventArgs args)
-        {
-            base.OnLoad(args);
-        }
-
         protected void View_Load(object sender, EventArgs args)
         {
             if (!IsPostBack)
             {
-                UriTextBox.Text = new Uri(Request.Url, "../Resources/include.xml").ToString();
+                UriTextBox.Text = new Uri(Request.Url, "../Examples/include.xml").ToString();
                 View.Open(UriTextBox.Text);
             }
         }

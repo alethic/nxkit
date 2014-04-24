@@ -205,31 +205,8 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="Default.aspx" />
-    <Content Include="Resources\form.xml" />
-    <Content Include="Resources\elections.xml" />
-    <Content Include="Resources\basic.xml" />
-    <Content Include="Resources\include2.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Resources\persons.xml" />
-    <Content Include="Resources\relationships.xml" />
     <Content Include="Content\styles.less" />
     <Content Include="Global.asax" />
-    <Content Include="Resources\beneficiaries.xml" />
-    <Content Include="Resources\primaryelections.xml" />
-    <Content Include="Resources\primaryperson.xml" />
-    <Content Include="Resources\primaryquestions.xml" />
-    <Content Include="Resources\include.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Resources\submit.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Resources\repeat.xml" />
-    <Content Include="Resources\secondaryelections.xml" />
-    <Content Include="Resources\secondaryperson.xml" />
-    <Content Include="Resources\secondaryquestions.xml" />
-    <Content Include="Resources\questions.xml" />
     <Content Include="Content\semantic\less\fonts\basic.icons.svg" />
     <Content Include="Content\semantic\less\fonts\icons.svg" />
     <Content Include="Content\semantic\less\images\loader-large-inverted.gif" />
@@ -275,14 +252,8 @@
     <Content Include="Content\semantic\packaged\javascript\semantic.min.js" />
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\asd.pubxml" />
-    <Content Include="Resources\Post.ashx" />
+    <Content Include="Examples\Post.ashx" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
-    <Content Include="Resources\script.xml" />
-    <Content Include="Resources\relevant.xml" />
-    <Content Include="Resources\group.xml" />
-    <Content Include="Resources\section.xml" />
-    <Content Include="Resources\trigger.xml" />
-    <Content Include="Resources\select1.xml" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
     <Content Include="Scripts\jquery-ui-1.10.4.js" />
@@ -294,6 +265,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExampleHttpHandler.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -305,7 +277,7 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\Post.ashx.cs">
+    <Compile Include="Examples\Post.ashx.cs">
       <DependentUpon>Post.ashx</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -406,6 +378,10 @@
     <ProjectReference Include="..\NXKit.Web.UI\NXKit.Web.UI.csproj">
       <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
       <Name>NXKit.Web.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Examples\NXKit.XForms.Examples.csproj">
+      <Project>{564c13be-ab20-49fd-9bc4-44fe701e3ac2}</Project>
+      <Name>NXKit.XForms.Examples</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
       <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
