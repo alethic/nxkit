@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
 
@@ -11,6 +11,7 @@ namespace NXKit.IO
     /// <summary>
     /// Describes an IO request to be dispatched towards a resource in order to obtain a response.
     /// </summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public class IORequest
     {
 
@@ -98,6 +99,11 @@ namespace NXKit.IO
         public dynamic Context
         {
             get { return context; }
+        }
+
+        string DebuggerDisplay
+        {
+            get { return string.Format("{0} {1}", method, resourceUri); }
         }
 
     }

@@ -10,7 +10,6 @@ namespace NXKit.XForms.IO
     public struct ModelMethod
     {
 
-        public static readonly ModelMethod None = "";
         public static readonly ModelMethod Get = "get";
         public static readonly ModelMethod Put = "put";
         public static readonly ModelMethod Post = "post";
