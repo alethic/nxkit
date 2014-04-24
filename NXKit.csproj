@@ -122,7 +122,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Diagnostics\ITypeProxyProvider.cs" />
+    <Compile Include="Diagnostics\DiagnosticsTraceSink.cs" />
+    <Compile Include="Diagnostics\DefaultTrace.cs" />
+    <Compile Include="Diagnostics\ITypeProxyProviderMetadata.cs" />
+    <Compile Include="Diagnostics\TypeProxyProviderAttribute.cs" />
+    <Compile Include="Diagnostics\TypeProxyProviderBase.cs" />
+    <Compile Include="Diagnostics\XNodeTypeProxyProvider.cs" />
     <Compile Include="IdRef.cs" />
+    <Compile Include="IExceptionHandler.cs" />
+    <Compile Include="Diagnostics\ITrace.cs" />
+    <Compile Include="Diagnostics\ITraceSink.cs" />
     <Compile Include="IOnInit.cs" />
     <Compile Include="IO\FileTransport.cs" />
     <Compile Include="IO\Headers.cs" />
