@@ -8,6 +8,7 @@ _NXKit.Web.UI.View = function (element, foo) {
     self._data = null;
     self._save = null;
     self._body = null;
+    self._logs = null;
     self._push = null;
 };
 
@@ -36,6 +37,14 @@ _NXKit.Web.UI.View.prototype = {
         this._init();
     },
 
+    get_logs: function () {
+        return JSON.stringify(this._logs);
+    },
+
+    set_logs: function (value) {
+        this._logs = JSON.parse(value);
+    },
+
     get_save: function () {
         return this._save;
     },
@@ -62,8 +71,27 @@ _NXKit.Web.UI.View.prototype = {
         this._push = value;
     },
 
+    writeLogs: function (logs) {
+        for (var i = 0; i < logs.length; i++) {
+            var log = logs[i];
+            if (log.Level === 'Verbose' ||
+                log.Level === 'Information')
+                console.debug(log.Message);
+            if (log.Level === 'Warning')
+                console.warn(log.Message);
+            if (log.Level === 'Error')
+                console.error(log.Message);
+        }
+    },
+
     _init: function () {
         var self = this;
+
+        // process received logs
+        if (self._logs != null) {
+            self.writeLogs(self._logs);
+            self._logs = null;
+        }
 
         if (self._body != null &&
             self._data != null &&
@@ -116,6 +144,12 @@ _NXKit.Web.UI.View.prototype = {
         var args = JSON.parse(result);
         $(self._save).val(args.Save);
         $(self._data).val(JSON.stringify(args.Data));
+
+        // write any received logs
+        var logs = args.Logs;
+        if (logs != null) {
+            self.writeLogs(logs);
+        }
 
         self._view.Data = $(self._data).val();
 

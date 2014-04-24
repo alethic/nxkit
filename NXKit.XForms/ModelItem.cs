@@ -213,7 +213,7 @@ namespace NXKit.XForms
                 // simpleContent (i.e., a node that has element children).
                 var target = (XElement)Xml;
                 if (target.HasElements)
-                    throw new DOMEventException(Events.BindingException);
+                    throw new DOMTargetEventException(target, Events.BindingException);
 
                 ((XElement)Xml).SetValue(newValue);
 

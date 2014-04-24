@@ -142,7 +142,7 @@ module NXKit.Web {
                 // data has no properties
                 if (opts != null &&
                     Object.getOwnPropertyNames(opts).length == 0) {
-                    console.debug('opts: empty');
+                    Log.Debug('opts: empty');
                     return false;
                 }
 
@@ -151,11 +151,11 @@ module NXKit.Web {
 
                 // template has no properties, should not correspond with anything
                 if (Object.getOwnPropertyNames(tmpl).length == 0) {
-                    console.debug('tmpl: empty');
+                    Log.Debug('tmpl: empty');
                     return false;
                 }
 
-                console.dir({
+                Log.Object({
                     tmpl: tmpl,
                     opts: opts,
                 });
@@ -194,7 +194,7 @@ module NXKit.Web {
                     node.id = 'NXKit.Web__' + Util.GenerateGuid().replace(/-/g, '');
 
                 // log result
-                console.dir({
+                Log.Object({
                     id: node.id,
                     data: LayoutManager.GetTemplateNodeData(node)
                 });

@@ -9,8 +9,10 @@ using System.Web.UI;
 using System.Xml.Linq;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
+using NXKit.Diagnostics;
 using NXKit.Web.Serialization;
 using NXKit.Xml;
 
@@ -26,17 +28,149 @@ namespace NXKit.Web.UI
         IScriptControl
     {
 
+        enum LogLevel
+        {
+
+            Verbose,
+            Information,
+            Warning,
+            Error,
+
+        }
+
+        /// <summary>
+        /// Log item to be output to the client.
+        /// </summary>
+        [Serializable]
+        class Log
+        {
+
+            DateTime timestamp;
+            LogLevel level;
+            string message;
+
+            /// <summary>
+            /// Initializes a new instance.
+            /// </summary>
+            public Log()
+            {
+                this.timestamp = DateTime.UtcNow;
+                this.level = LogLevel.Information;
+                this.message = null;
+            }
+
+            /// <summary>
+            /// Initializes a new instance.
+            /// </summary>
+            /// <param name="level"></param>
+            /// <param name="message"></param>
+            public Log(LogLevel level, string message)
+            {
+                this.timestamp = DateTime.UtcNow;
+                this.level = level;
+                this.message = message;
+            }
+
+            public DateTime Timestamp
+            {
+                get { return timestamp; }
+                set { timestamp = value; }
+            }
+
+            [JsonConverter(typeof(StringEnumConverter))]
+            public LogLevel Level
+            {
+                get { return level; }
+                set { level = value; }
+            }
+
+            public string Message
+            {
+                get { return message; }
+                set { message = value; }
+            }
+
+        }
+
+        /// <summary>
+        /// Captures trace messages from the <see cref="NXDocumentHost"/> to be output to the client.
+        /// </summary>
+        class LogSink :
+            ITraceSink
+        {
+
+            readonly LinkedList<Log> logs;
+
+            /// <summary>
+            /// Initializes a new instance.
+            /// </summary>
+            /// <param name="logs"></param>
+            public LogSink(LinkedList<Log> logs)
+            {
+                Contract.Requires<ArgumentNullException>(logs != null);
+
+                this.logs = logs;
+            }
+
+            public void Debug(object data)
+            {
+                logs.AddLast(new Log(LogLevel.Verbose, data.ToString()));
+            }
+
+            public void Debug(string message)
+            {
+                logs.AddLast(new Log(LogLevel.Verbose, message));
+            }
+
+            public void Debug(string format, params object[] args)
+            {
+                logs.AddLast(new Log(LogLevel.Verbose, string.Format(format, args)));
+            }
+
+            public void Information(object data)
+            {
+                logs.AddLast(new Log(LogLevel.Information, data.ToString()));
+            }
+
+            public void Information(string message)
+            {
+                logs.AddLast(new Log(LogLevel.Information, message));
+            }
+
+            public void Information(string format, params object[] args)
+            {
+                logs.AddLast(new Log(LogLevel.Information, string.Format(format, args)));
+            }
+
+            public void Warning(object data)
+            {
+                logs.AddLast(new Log(LogLevel.Warning, data.ToString()));
+            }
+
+            public void Warning(string message)
+            {
+                logs.AddLast(new Log(LogLevel.Warning, message));
+            }
+
+            public void Warning(string format, params object[] args)
+            {
+                logs.AddLast(new Log(LogLevel.Warning, string.Format(format, args)));
+            }
+
+        }
+
         string cssClass;
         string validationGroup;
         CompositionContainer container;
         NXDocumentHost document;
+        LinkedList<Log> logs;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public View()
         {
-
+            this.logs = new LinkedList<Log>();
         }
 
         /// <summary>
@@ -96,7 +230,15 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            document = container != null ? NXKit.NXDocumentHost.Load(container, uri) : NXKit.NXDocumentHost.Load(uri);
+            // generate default container if not yet created
+            if (container == null)
+                container = CompositionUtil.CreateContainer();
+
+            // intercept trace messages from document for client
+            container.WithExport<ITraceSink>(new LogSink(logs));
+
+            // load new document instance
+            document = NXDocumentHost.Load(container, uri);
             document.Invoke();
         }
 
@@ -128,13 +270,13 @@ namespace NXKit.Web.UI
         /// Gets the client-side data as a <see cref="JObject"/>
         /// </summary>
         /// <returns></returns>
-        JObject CreateDataJObject()
+        JToken CreateDataJObject()
         {
             // serialize document state to data field
-            using (var str = new JTokenWriter())
+            using (var wrt = new JTokenWriter())
             {
-                RemoteJson.GetJson(str, document.Root);
-                return (JObject)str.Token;
+                RemoteJson.GetJson(wrt, document.Root);
+                return wrt.Token;
             }
         }
 
@@ -148,8 +290,31 @@ namespace NXKit.Web.UI
             using (var str = new StringWriter())
             using (var wrt = new JsonTextWriter(str))
             {
-                RemoteJson.GetJson(wrt, document.Root);
-                wrt.Close();
+                CreateDataJObject().WriteTo(wrt);
+                return str.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Gets the client-side logs data as a <see cref="JObject"/>.
+        /// </summary>
+        /// <returns></returns>
+        JToken CreateLogsJObject()
+        {
+            return JArray.FromObject(logs);
+        }
+
+        /// <summary>
+        /// Gets the client-side data as a <see cref="string"/>.
+        /// </summary>
+        /// <returns></returns>
+        string CreateLogsString()
+        {
+            // serialize document state to data field
+            using (var str = new StringWriter())
+            using (var wrt = new JsonTextWriter(str))
+            {
+                CreateLogsJObject().WriteTo(wrt);
                 return str.ToString();
             }
         }
@@ -192,6 +357,7 @@ namespace NXKit.Web.UI
             document = (string)o[0] != null ? LoadDocumentHost((string)o[0]) : null;
             cssClass = (string)o[1];
             validationGroup = (string)o[2];
+            logs = (LinkedList<Log>)o[3];
         }
 
         /// <summary>
@@ -205,6 +371,7 @@ namespace NXKit.Web.UI
                 !Visible ? CreateSaveString() : null,
                 cssClass,
                 validationGroup,
+                logs,
             };
         }
 
@@ -262,8 +429,12 @@ namespace NXKit.Web.UI
             d.AddElementProperty("body", ClientID + "_body");
             d.AddElementProperty("data", ClientID + "_data");
             d.AddElementProperty("save", ClientID + "_save");
+            d.AddProperty("logs", CreateLogsString());
             d.AddProperty("push", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self"));
             yield return d;
+
+            // clear log messages
+            logs = null;
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
@@ -298,6 +469,7 @@ namespace NXKit.Web.UI
             {
                 Save = CreateSaveString(),
                 Data = CreateDataJObject(),
+                Logs = CreateLogsJObject(),
             });
         }
 
