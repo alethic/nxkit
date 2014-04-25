@@ -3,8 +3,8 @@
 :: required for GitFlowVersionTask
 git remote update 1>&2
 git remote -v show 1>&2
-git fetch -v origin 1>&2
-git branch -f master origin/master 1>&2
+git fetch -v external 1>&2
+git branch -f master external/master 1>&2
 
 :: ----------------------
 :: KUDU Deployment Script
