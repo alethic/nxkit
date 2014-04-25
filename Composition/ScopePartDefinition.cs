@@ -16,6 +16,7 @@ namespace NXKit.Composition
 
         readonly ComposablePartDefinition parent;
         readonly Scope scope;
+        readonly IEnumerable<ExportDefinition> exportDefinitions;
 
         /// <summary>
         /// Initializes a new instance.
@@ -27,6 +28,7 @@ namespace NXKit.Composition
 
             this.parent = parent;
             this.scope = scope;
+            this.exportDefinitions = GetExportDefinitions().ToArray();
         }
 
         public override ComposablePart CreatePart()
@@ -36,7 +38,7 @@ namespace NXKit.Composition
 
         public override IEnumerable<ExportDefinition> ExportDefinitions
         {
-            get { return GetExportDefinitions(); }
+            get { return exportDefinitions; }
         }
 
         IEnumerable<ExportDefinition> GetExportDefinitions()
