@@ -4,7 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-
+using NXKit.Diagnostics;
 using NXKit.Util;
 using NXKit.Xml;
 
@@ -21,22 +21,22 @@ namespace NXKit.DOMEvents
         IEventTarget
     {
 
+        readonly ITraceService trace;
         readonly XNode node;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="node"></param>
-        public EventTarget(XNode node)
+        public EventTarget(
+            ITraceService trace,
+            XNode node)
         {
+            Contract.Requires<ArgumentNullException>(trace != null);
             Contract.Requires<ArgumentNullException>(node != null);
 
+            this.trace = trace;
             this.node = node;
-        }
-
-        public XNode Node
-        {
-            get { return node; }
         }
 
         public void AddEventListener(string type, IEventListener listener, bool useCapture)
@@ -78,6 +78,8 @@ namespace NXKit.DOMEvents
 
         public void DispatchEvent(Event evt)
         {
+            trace.Information("EventTarget.DispatchEvent: {0} to {1}", evt.Type, node);
+
             var target = node.Interface<IEventTarget>();
             if (target == null)
                 throw new Exception();

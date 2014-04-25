@@ -16,34 +16,32 @@ namespace NXKit.DOMEvents
         INXDocumentEvent
     {
 
-        readonly XDocument element;
-        IEventFactory factory;
+        readonly XDocument document;
+        readonly IEventFactory factory;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="document"></param>
-        public NXDocumentEvent(XDocument document)
+        /// <param name="factory"></param>
+        public NXDocumentEvent(XDocument document, IEventFactory factory)
         {
             Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(factory != null);
 
-            this.element = document;
-        }
-
-        IEventFactory Factory
-        {
-            get { return factory ?? (factory = element.Host().Container.GetExportedValue<IEventFactory>()); }
+            this.document = document;
+            this.factory = factory;
         }
 
         public T CreateEvent<T>(string type)
             where T : Event
         {
-            return Factory.CreateEvent<T>(type);
+            return factory.CreateEvent<T>(type);
         }
 
         public Event CreateEvent(string type)
         {
-            return Factory.CreateEvent(type);
+            return factory.CreateEvent(type);
         }
 
     }

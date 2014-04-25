@@ -19,20 +19,21 @@ namespace NXKit.DOMEvents
     {
 
         readonly XNode node;
-        readonly IEventFactory provider;
+        readonly IEventFactory events;
         readonly Lazy<IEventTarget> target;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public NXEventTarget(XNode element)
+        /// <param name="events"></param>
+        public NXEventTarget(XNode element, IEventFactory events)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Ensures(provider != null);
+            Contract.Requires<ArgumentNullException>(events != null);
 
             this.node = element;
-            this.provider = element.Host().Container.GetExportedValue<IEventFactory>();
+            this.events = events;
             this.target = new Lazy<IEventTarget>(() => element.Interface<IEventTarget>());
         }
 
@@ -48,7 +49,7 @@ namespace NXKit.DOMEvents
 
         public Event DispatchEvent(string type)
         {
-            var evt = provider.CreateEvent(type);
+            var evt = events.CreateEvent(type);
             if (evt == null)
                 throw new NullReferenceException();
 
@@ -59,7 +60,7 @@ namespace NXKit.DOMEvents
 
         public Event DispatchEvent(string type, object context)
         {
-            var evt = provider.CreateEvent(type);
+            var evt = events.CreateEvent(type);
             if (evt == null)
                 throw new NullReferenceException();
 
