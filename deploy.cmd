@@ -3,7 +3,7 @@
 :: required for GitFlowVersionTask
 git remote update
 git fetch --all
-git branch -f master master
+git branch -f master origin/master
 
 :: ----------------------
 :: KUDU Deployment Script
