@@ -13,6 +13,19 @@ namespace NXKit.Xml
     {
 
         /// <summary>
+        /// Resolves the <see cref="NXDocumentHost"/> for the given <see cref="XDocument"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static NXDocumentHost Host(this XDocument self)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Ensures(Contract.Result<NXDocumentHost>() != null);
+
+            return self.Annotation<NXDocumentHost>();
+        }
+
+        /// <summary>
         /// Resolves a <see cref="XElement"/> by IDREF from the vantage point of this <see cref="XDocument"/>.
         /// </summary>
         /// <param name="self"></param>
