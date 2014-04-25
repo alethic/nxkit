@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 
-using NXKit.Xml;
+using NXKit.Composition;
 
 namespace NXKit
 {
@@ -18,7 +18,7 @@ namespace NXKit
     /// <summary>
     /// Provides interfaces decorated with the <see cref="InterfaceAttribute"/>.
     /// </summary>
-    [Export(typeof(IInterfaceProvider))]
+    [ScopeExport(typeof(IInterfaceProvider), Scope.Host)]
     public class DefaultInterfaceProvider :
         InterfaceProviderBase
     {

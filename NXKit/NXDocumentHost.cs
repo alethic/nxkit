@@ -178,7 +178,8 @@ namespace NXKit
         }
 
         readonly ComposablePartCatalog catalog;
-        readonly CompositionContainer container;
+        readonly CompositionContainer global;
+        readonly CompositionContainer host;
         readonly ITraceService trace;
         XDocument xml;
 
@@ -197,8 +198,19 @@ namespace NXKit
             exports = exports ?? CompositionUtil.CreateContainer(catalog);
 
             this.catalog = catalog;
-            this.container = new CompositionContainer(catalog, exports);
-            this.trace = container.GetExportedValue<ITraceService>();
+
+            // global container, contains all exports that are global in nature
+            this.global = new CompositionContainer(
+                new ScopeExportProvider(exports, Scope.Global));
+
+            // host container, contains all exports that are host scoped, and catalog of host scoped parts
+            this.host = new CompositionContainer(
+                new ScopeCatalog(this.catalog, Scope.Host), 
+                new AggregateExportProvider(
+                    new ScopeExportProvider(exports, Scope.Host), 
+                    this.global));
+
+            this.trace = host.GetExportedValue<ITraceService>();
             this.xml = xml;
 
             Initialize();
@@ -210,12 +222,12 @@ namespace NXKit
         void Initialize()
         {
             // ensures the document is in the container
-            container.WithExport<NXDocumentHost>(this);
-            container.WithExport<ExportProvider>(container);
+            host.WithExport<NXDocumentHost>(this);
+            host.WithExport<ExportProvider>(host);
 
             // ensure XML document has access to document host
             xml.AddAnnotation(this);
-            xml.AddAnnotation(container);
+            xml.AddAnnotation(host);
 
             // start up document
             InvokeInit();
@@ -327,7 +339,7 @@ namespace NXKit
         /// </summary>
         public CompositionContainer Container
         {
-            get { return container; }
+            get { return host; }
         }
 
         /// <summary>
