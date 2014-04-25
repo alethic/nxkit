@@ -2,6 +2,7 @@
 
 :: required for GitFlowVersionTask
 git remote update
+git remote -v show
 git fetch -v origin
 git branch -f master origin/master
 
