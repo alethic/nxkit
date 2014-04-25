@@ -42,9 +42,18 @@ namespace NXKit
         /// Creates a new <see cref="CompositionContainer"/>.
         /// </summary>
         /// <returns></returns>
+        public static CompositionContainer CreateContainer(ComposablePartCatalog catalog)
+        {
+            return new CompositionContainer(catalog);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="CompositionContainer"/> using the default catalog.
+        /// </summary>
+        /// <returns></returns>
         public static CompositionContainer CreateContainer()
         {
-            return new CompositionContainer(DefaultCatalog);
+            return CreateContainer(defaultCatalog);
         }
 
         /// <summary>

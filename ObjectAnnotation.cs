@@ -3,12 +3,15 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
+using NXKit.Serialization;
+
 namespace NXKit
 {
 
     /// <summary>
     /// Stores various NXKit information on the <see cref="XObject"/>.
     /// </summary>
+    [SerializableAnnotation]
     [XmlRoot("object")]
     public class ObjectAnnotation :
         IXmlSerializable

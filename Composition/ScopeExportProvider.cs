@@ -1,7 +1,8 @@
 ﻿using System;
-using NXKit.Util;
 using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.Contracts;
+
+using NXKit.Util;
 
 namespace NXKit.Composition
 {

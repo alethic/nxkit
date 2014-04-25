@@ -2,12 +2,15 @@
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
+using NXKit.Serialization;
+
 namespace NXKit
 {
 
     /// <summary>
     /// Stores various information on a <see cref="XDocument"/>.
     /// </summary>
+    [SerializableAnnotation]
     [XmlRoot("document")]
     public class DocumentAnnotation :
         IXmlSerializable
