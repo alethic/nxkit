@@ -126,8 +126,10 @@
     <Compile Include="Composition\ExportProviderExtensions.cs" />
     <Compile Include="Composition\FilteredExportProvider.cs" />
     <Compile Include="Composition\Scope.cs" />
+    <Compile Include="Composition\ScopeCatalog.cs" />
     <Compile Include="Composition\ScopeExportAttribute.cs" />
     <Compile Include="Composition\ScopeExportProvider.cs" />
+    <Compile Include="Composition\ScopePartDefinition.cs" />
     <Compile Include="Diagnostics\ITypeProxyProvider.cs" />
     <Compile Include="Diagnostics\DiagnosticsTraceSink.cs" />
     <Compile Include="Diagnostics\DefaultTraceService.cs" />
