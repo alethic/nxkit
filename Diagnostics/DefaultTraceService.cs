@@ -7,9 +7,9 @@ using System.Linq;
 namespace NXKit.Diagnostics
 {
 
-    [Export(typeof(ITrace))]
-    public class DefaultTrace :
-        ITrace
+    [Export(typeof(ITraceService))]
+    public class DefaultTraceService :
+        ITraceService
     {
 
         readonly IEnumerable<ITraceSink> sinks;
@@ -20,7 +20,7 @@ namespace NXKit.Diagnostics
         /// </summary>
         /// <param name="sinks"></param>
         [ImportingConstructor]
-        public DefaultTrace(
+        public DefaultTraceService(
             [ImportMany] IEnumerable<ITraceSink> sinks,
             [ImportMany] IEnumerable<Lazy<ITypeProxyProvider, ITypeProxyProviderMetadata>> proxies)
         {

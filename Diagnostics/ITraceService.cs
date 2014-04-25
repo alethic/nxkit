@@ -4,7 +4,7 @@
     /// <summary>
     /// Describes a class that provides a mechanism for NXKit to send log messages.
     /// </summary>
-    public interface ITrace
+    public interface ITraceService
     {
 
         /// <summary>
