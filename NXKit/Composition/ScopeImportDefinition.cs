@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace NXKit.Composition
 {
@@ -13,6 +14,9 @@ namespace NXKit.Composition
     class ScopeImportDefinition :
         ImportDefinition
     {
+
+        static readonly MethodInfo IsConstraintAppliedMethodInfo = typeof(ScopeImportDefinition)
+            .GetMethod("IsConstraintApplied", BindingFlags.Static | BindingFlags.NonPublic);
 
         readonly ImportDefinition parent;
         readonly Scope scope;
@@ -30,9 +34,7 @@ namespace NXKit.Composition
                 Expression.AndAlso(
                     parent.Body,
                     Expression.Call(
-                        typeof(ScopeImportDefinition),
-                        "IsConstraintApplied",
-                        null,
+                        IsConstraintAppliedMethodInfo,
                         par,
                         Expression.Constant(scope))),
                 par);
