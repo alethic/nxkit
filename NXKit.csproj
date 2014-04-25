@@ -124,12 +124,12 @@
   <ItemGroup>
     <Compile Include="Composition\EmptyExportProvider.cs" />
     <Compile Include="Composition\ExportProviderExtensions.cs" />
-    <Compile Include="Composition\FilteredExportProvider.cs" />
     <Compile Include="Composition\IScopeMetadata.cs" />
     <Compile Include="Composition\Scope.cs" />
     <Compile Include="Composition\ScopeCatalog.cs" />
     <Compile Include="Composition\ScopeExportAttribute.cs" />
     <Compile Include="Composition\ScopeExportProvider.cs" />
+    <Compile Include="Composition\ScopeHelper.cs" />
     <Compile Include="Composition\ScopeImportDefinition.cs" />
     <Compile Include="Composition\ScopePartDefinition.cs" />
     <Compile Include="Diagnostics\ITypeProxyProvider.cs" />

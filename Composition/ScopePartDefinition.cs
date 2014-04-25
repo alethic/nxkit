@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using NXKit.Util;
 
 namespace NXKit.Composition
 {
@@ -44,27 +42,7 @@ namespace NXKit.Composition
         IEnumerable<ExportDefinition> GetExportDefinitions()
         {
             return parent.ExportDefinitions
-                .Where(i => GetScopeFromMetadata(i.Metadata) == scope);
-        }
-
-        Scope GetScopeFromMetadata(IDictionary<string, object> metadata)
-        {
-            var data = metadata.GetOrDefault("Scope");
-            if (data == null)
-                return Scope.Global;
-
-            if (data is Scope)
-                return (Scope)data;
-
-            var array = data as IEnumerable;
-            if (array != null)
-            {
-                var scope = ((IEnumerable)data).Cast<object>().FirstOrDefault();
-                if (scope != null)
-                    return (Scope)scope;
-            }
-
-            return Scope.Global;
+                .Where(i => ScopeHelper.IsScoped(i.Metadata, scope));
         }
 
         public override IEnumerable<ImportDefinition> ImportDefinitions
