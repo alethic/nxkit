@@ -1,5 +1,7 @@
 @if "%SCM_TRACE_LEVEL%" NEQ "4" @echo off
 
+git fetch --all
+
 :: ----------------------
 :: KUDU Deployment Script
 :: Version: 0.1.7
