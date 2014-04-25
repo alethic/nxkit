@@ -161,7 +161,7 @@ namespace NXKit
         }
 
         readonly CompositionContainer container;
-        readonly ITrace trace;
+        readonly ITraceService trace;
         XDocument xml;
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(xml != null);
 
             this.container = container;
-            this.trace = container.GetExportedValue<ITrace>();
+            this.trace = container.GetExportedValue<ITraceService>();
             this.xml = xml;
 
             Initialize();

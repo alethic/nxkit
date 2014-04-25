@@ -119,7 +119,7 @@ module NXKit.Web {
                     if (self._value() != null &&
                         self._value() instanceof Node) {
                         (<Node>self._value()).Update(source);
-                        console.log(self.Name + ': ' + 'Node' + '=>' + 'Node');
+                        Log.Debug(self.Name + ': ' + 'Node' + '=>' + 'Node');
                     } else {
                         var node = new Node(source);
                         node.PropertyChanged.add((n, intf, property, value) => {
@@ -129,7 +129,7 @@ module NXKit.Web {
                             self.MethodInvoked.trigger(n, intf, method, params);
                         });
                         self._value(node);
-                        console.log(self.Name + ': ' + 'Node' + '+>' + 'Node');
+                        Log.Debug(self.Name + ': ' + 'Node' + '+>' + 'Node');
                     }
                     self._suspend = false;
 
@@ -140,7 +140,7 @@ module NXKit.Web {
                 if (old !== source) {
                     self._suspend = true;
                     self._value(source);
-                    console.log(self.Name + ': ' + old + '=>' + source);
+                    Log.Debug(self.Name + ': ' + old + '=>' + source);
                     self._suspend = false;
                 }
             } catch (ex) {

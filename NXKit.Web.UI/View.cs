@@ -170,7 +170,7 @@ namespace NXKit.Web.UI
         /// </summary>
         public View()
         {
-            this.logs = new LinkedList<Log>();
+
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace NXKit.Web.UI
                 container = CompositionUtil.CreateContainer();
 
             // intercept trace messages from document for client
-            container.WithExport<ITraceSink>(new LogSink(logs));
+            container.WithExport<ITraceSink>(new LogSink(logs = new LinkedList<Log>()));
 
             // load new document instance
             document = NXDocumentHost.Load(container, uri);
@@ -335,8 +335,8 @@ namespace NXKit.Web.UI
         /// <param name="args"></param>
         protected override void OnPreRender(EventArgs args)
         {
-            base.OnPreRender(args);
             ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
+            base.OnPreRender(args);
 
             // write all available knockout templates
             if (Document != null)
@@ -432,9 +432,6 @@ namespace NXKit.Web.UI
             d.AddProperty("logs", CreateLogsString());
             d.AddProperty("push", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self"));
             yield return d;
-
-            // clear log messages
-            logs = null;
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
