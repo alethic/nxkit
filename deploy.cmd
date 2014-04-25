@@ -1,10 +1,10 @@
 @if "%SCM_TRACE_LEVEL%" NEQ "4" @echo off
 
 :: required for GitFlowVersionTask
-git remote update
-git remote -v show
-git fetch -v origin
-git branch -f master origin/master
+git remote update 1>&2
+git remote -v show 1>&2
+git fetch -v origin 1>&2
+git branch -f master origin/master 1>&2
 
 :: ----------------------
 :: KUDU Deployment Script
