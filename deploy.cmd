@@ -1,6 +1,7 @@
 @if "%SCM_TRACE_LEVEL%" NEQ "4" @echo off
 
 :: required for GitFlowVersionTask
+git remote update
 git fetch --all
 git branch -f master master
 
