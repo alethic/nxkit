@@ -164,6 +164,7 @@ namespace NXKit.Web.UI
         CompositionContainer container;
         NXDocumentHost document;
         LinkedList<Log> logs;
+        LinkedList<Log> logs_;
 
         /// <summary>
         /// Initializes a new instance.
@@ -194,15 +195,6 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="CompositionContainer"/> to use when hosting documents.
-        /// </summary>
-        public CompositionContainer Container
-        {
-            get { return container; }
-            set { container = value; }
-        }
-
-        /// <summary>
         /// Gets a reference to the <see cref="Document"/>.
         /// </summary>
         public NXDocumentHost Document
@@ -216,10 +208,14 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         NXDocumentHost LoadDocumentHost(string save)
         {
+            Contract.Requires<ArgumentNullException>(save != null);
+
+            // create private container
+            var c = new CompositionContainer(container ?? CompositionUtil.CreateContainer())
+                .WithExport<ITraceSink>(new LogSink(logs ?? (logs = new LinkedList<Log>())));
+
             // load document
-            var host = NXDocumentHost.Load(new StringReader(save));
-            host.Invoke();
-            return host;
+            return NXDocumentHost.Load(c, new StringReader(save));
         }
 
         /// <summary>
@@ -230,16 +226,12 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            // generate default container if not yet created
-            if (container == null)
-                container = CompositionUtil.CreateContainer();
-
-            // intercept trace messages from document for client
-            container.WithExport<ITraceSink>(new LogSink(logs = new LinkedList<Log>()));
+            // create private container
+            var c = new CompositionContainer(container ?? CompositionUtil.CreateContainer())
+                .WithExport<ITraceSink>(new LogSink(logs ?? (logs = new LinkedList<Log>())));
 
             // load new document instance
-            document = NXDocumentHost.Load(container, uri);
-            document.Invoke();
+            document = NXDocumentHost.Load(c, uri);
         }
 
         /// <summary>
@@ -301,7 +293,7 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         JToken CreateLogsJObject()
         {
-            return JArray.FromObject(logs);
+            return logs_ != null ? JArray.FromObject(logs_) : new JArray();
         }
 
         /// <summary>
@@ -340,11 +332,15 @@ namespace NXKit.Web.UI
 
             // write all available knockout templates
             if (Document != null)
-                foreach (var provider in Document.Container.GetExportedValues<IHtmlTemplateProvider>())
+                foreach (var provider in container.GetExportedValues<IHtmlTemplateProvider>())
                     foreach (var template in provider.GetTemplates())
                         if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
                             using (var rdr = new StreamReader(template.Open()))
                                 Page.ClientScript.RegisterClientScriptBlock(typeof(View), template.Name, rdr.ReadToEnd(), false);
+
+            // logs_ to be sent
+            logs_ = logs;
+            logs = null;
         }
 
         /// <summary>
@@ -462,6 +458,10 @@ namespace NXKit.Web.UI
 
         string ICallbackEventHandler.GetCallbackResult()
         {
+            // dump logs
+            logs_ = logs;
+            logs = null;
+
             return JsonConvert.SerializeObject(new
             {
                 Save = CreateSaveString(),
