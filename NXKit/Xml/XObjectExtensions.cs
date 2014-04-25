@@ -413,7 +413,7 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentNullException>(self != null);
             Contract.Ensures(Contract.Result<NXDocumentHost>() != null);
 
-            return self.AnnotationOrCreate<NXDocumentHost>(() => self.Document != null ? self.Document.Host() : null);
+            return self.AnnotationOrCreate<NXDocumentHost>(() => self is XDocument ? ((XDocument)self).Host() : self.Document.Host());
         }
 
         #endregion

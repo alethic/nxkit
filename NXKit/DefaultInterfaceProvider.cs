@@ -117,7 +117,7 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Creates hte specified instance type.
+        /// Creates the specified instance type.
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="type"></param>
@@ -127,7 +127,11 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(type != null);
 
-            var func = GetConstructor(obj, type, obj.Host().Container);
+            var host = obj.Host();
+            if (host == null)
+                throw new InvalidOperationException("Element has no NXDocumentHost, possibly removed from document.");
+
+            var func = GetConstructor(obj, type, host.Container);
             if (func == null)
                 throw new InvalidOperationException("Could not find ctor for interface type.");
 
