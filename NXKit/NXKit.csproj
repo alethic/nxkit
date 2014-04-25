@@ -134,6 +134,7 @@
     <Compile Include="IExceptionHandler.cs" />
     <Compile Include="Diagnostics\ITraceService.cs" />
     <Compile Include="Diagnostics\ITraceSink.cs" />
+    <Compile Include="IExportService.cs" />
     <Compile Include="IOnInit.cs" />
     <Compile Include="IO\FileTransport.cs" />
     <Compile Include="IO\Headers.cs" />

@@ -189,7 +189,8 @@ namespace NXKit
         void Initialize()
         {
             // ensures the document is in the container
-            Container.WithExport<NXDocumentHost>(this);
+            container.WithExport<NXDocumentHost>(this);
+            container.WithExport<ExportProvider>(container);
 
             // ensure XML document has access to document host
             xml.AddAnnotation(this);
