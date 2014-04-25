@@ -6,7 +6,7 @@ namespace NXKit.Composition
 {
 
     /// <summary>
-    /// Marks a part as requiring a container supporting the specified scope.
+    /// Marks an export as requiring a container supporting the specified scope.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     [MetadataAttribute]

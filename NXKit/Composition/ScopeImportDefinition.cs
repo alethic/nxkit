@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Linq.Expressions;
-
-using NXKit.Util;
 
 namespace NXKit.Composition
 {
 
+    /// <summary>
+    /// Modifies the given <see cref="ImportDefinition"/> to only import exports that are marked with the provided
+    /// <see cref="Scope"/>.
+    /// </summary>
     class ScopeImportDefinition :
         ImportDefinition
     {
@@ -18,15 +17,12 @@ namespace NXKit.Composition
         readonly ImportDefinition parent;
         readonly Scope scope;
 
-        static IDictionary<string, object> GetMetadata(IDictionary<string, object> metadata, Scope scope)
-        {
-            metadata = new Dictionary<string, object>(metadata)
-            {
-                { "Scope", scope }
-            };
-            return metadata;
-        }
-
+        /// <summary>
+        /// Appends an invocation to the IsConstraintApplied method.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="scope"></param>
+        /// <returns></returns>
         static Expression<Func<ExportDefinition, bool>> GetConstraint(Expression<Func<ExportDefinition, bool>> parent, Scope scope)
         {
             var par = parent.Parameters[0];
@@ -44,20 +40,15 @@ namespace NXKit.Composition
             return exp;
         }
 
+        /// <summary>
+        /// Returns <c>true</c> if the constraint is applied.
+        /// </summary>
+        /// <param name="exportDefinition"></param>
+        /// <param name="scope"></param>
+        /// <returns></returns>
         static bool IsConstraintApplied(ExportDefinition exportDefinition, Scope scope)
         {
-            var data = exportDefinition.Metadata.GetOrDefault("Scope");
-            if (data == null)
-                return scope == Scope.Global;
-
-            if (data is Scope)
-                return (Scope)data == scope;
-
-            var array = data as IEnumerable<Scope>;
-            if (array != null)
-                return array.Any(i => i == scope);
-
-            return false;
+            return ScopeHelper.IsScoped(exportDefinition.Metadata, scope);
         }
 
         /// <summary>
@@ -78,11 +69,6 @@ namespace NXKit.Composition
 
             this.parent = parent;
             this.scope = scope;
-        }
-
-        public override bool IsConstraintSatisfiedBy(ExportDefinition exportDefinition)
-        {
-            return base.IsConstraintSatisfiedBy(exportDefinition);
         }
 
     }

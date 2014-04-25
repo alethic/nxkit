@@ -6,6 +6,9 @@ using System.Linq;
 namespace NXKit.Composition
 {
 
+    /// <summary>
+    /// Filters a parenet catalog for exports marked for the given <see cref="Scope"/>.
+    /// </summary>
     class ScopeCatalog :
         ComposablePartCatalog
     {
