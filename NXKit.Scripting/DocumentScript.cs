@@ -17,26 +17,25 @@ namespace NXKit.Scripting
     {
 
         readonly XDocument document;
+        readonly IScriptDispatcher dispatcher;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="document"></param>
-        public DocumentScript(XDocument document)
+        /// <param name="dispatcher"></param>
+        public DocumentScript(XDocument document, IScriptDispatcher dispatcher)
         {
             Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(dispatcher != null);
 
             this.document = document;
-        }
-
-        IScriptDispatcher ScriptDispatcher
-        {
-            get { return document.Host().Container.GetExportedValue<IScriptDispatcher>(); }
+            this.dispatcher = dispatcher;
         }
 
         public object Execute(string type, string code)
         {
-            return ScriptDispatcher.Execute(type, code);
+            return dispatcher.Execute(type, code);
         }
 
     }
