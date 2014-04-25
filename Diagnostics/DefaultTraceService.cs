@@ -4,10 +4,12 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
+using NXKit.Composition;
+
 namespace NXKit.Diagnostics
 {
 
-    [Export(typeof(ITraceService))]
+    [ScopeExport(typeof(ITraceService), Scope.Global)]
     public class DefaultTraceService :
         ITraceService
     {
