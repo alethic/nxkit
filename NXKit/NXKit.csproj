@@ -122,6 +122,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Composition\EmptyExportProvider.cs" />
     <Compile Include="Composition\ExportProviderExtensions.cs" />
     <Compile Include="Composition\FilteredExportProvider.cs" />
     <Compile Include="Composition\Scope.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="NodeExtension.cs" />
     <Compile Include="Priority.cs" />
     <Compile Include="RemoteAttribute.cs" />
+    <Compile Include="Serialization\SerializableAnnotationAttribute.cs" />
     <Compile Include="Serialization\XmlAttributeOverrides.cs" />
     <Compile Include="Serialization\XNodeAnnotationSerializer.cs" />
     <Compile Include="Util\DictionaryExtensions.cs" />

@@ -326,21 +326,21 @@ namespace NXKit.Xml
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            return Interfaces(node, node.Host().Container);
+            return Interfaces(node, node.Exports());
         }
 
         /// <summary>
-        /// Implements Interfaces, allowing the specification of a container.
+        /// Implements Interfaces, allowing the specification of an export provider.
         /// </summary>
         /// <param name="node"></param>
-        /// <param name="container"></param>
+        /// <param name="exports"></param>
         /// <returns></returns>
-        internal static IEnumerable<object> Interfaces(this XObject node, CompositionContainer container)
+        internal static IEnumerable<object> Interfaces(this XObject node, ExportProvider exports)
         {
             Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(exports != null);
 
-            return container
+            return exports
                 .GetExportedValues<IInterfaceProvider>()
                 .SelectMany(i => i.GetInterfaces(node));
         }
@@ -408,12 +408,12 @@ namespace NXKit.Xml
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static NXDocumentHost Host(this XObject self)
+        public static ExportProvider Exports(this XObject self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Ensures(Contract.Result<NXDocumentHost>() != null);
+            Contract.Ensures(Contract.Result<ExportProvider>() != null);
 
-            return self.AnnotationOrCreate<NXDocumentHost>(() => self is XDocument ? ((XDocument)self).Host() : self.Document.Host());
+            return self.AnnotationOrCreate<ExportProvider>(() => self is XDocument ? ((XDocument)self).Exports() : self.Document.Exports());
         }
 
         #endregion

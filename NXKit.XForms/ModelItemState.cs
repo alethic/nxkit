@@ -1,8 +1,9 @@
-﻿using System;
-using System.Xml;
+﻿using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+
+using NXKit.Serialization;
 
 namespace NXKit.XForms
 {
@@ -10,6 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Records additional information associated with a model item.
     /// </summary>
+    [SerializableAnnotation]
     [XmlRoot("model-item")]
     public class ModelItemState :
         IXmlSerializable

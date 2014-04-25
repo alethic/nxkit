@@ -1,8 +1,11 @@
 ﻿using System.Xml.Serialization;
 
+using NXKit.Serialization;
+
 namespace NXKit.XForms
 {
 
+    [SerializableAnnotation]
     [XmlRoot("document")]
     public class DocumentAnnotation
     {

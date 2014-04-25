@@ -1,6 +1,6 @@
-﻿using System.Xml;
+﻿using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
-using System.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
@@ -9,6 +9,7 @@ using NXKit.Serialization;
 namespace NXKit.XForms
 {
 
+    [SerializableAnnotation]
     [XmlRoot("repeat")]
     public class RepeatState :
         IXmlSerializable

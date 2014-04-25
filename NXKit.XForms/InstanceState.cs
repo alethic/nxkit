@@ -15,6 +15,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Serialable storage for an instance visual's state.
     /// </summary>
+    [SerializableAnnotation]
     [XmlRoot("instance")]
     public class InstanceState :
         IXmlSerializable

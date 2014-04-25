@@ -23,7 +23,7 @@ namespace NXKit.Xml
         public static XElement ResolveId(this XElement self, string id)
         {
             Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self.Host() != null);
+            Contract.Requires<ArgumentNullException>(self.Exports() != null);
 
             // search referencable elements for matching id
             foreach (var element in RefElements(self))

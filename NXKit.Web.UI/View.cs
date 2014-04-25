@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
@@ -161,6 +162,7 @@ namespace NXKit.Web.UI
 
         string cssClass;
         string validationGroup;
+        ComposablePartCatalog catalog;
         CompositionContainer container;
         NXDocumentHost document;
         LinkedList<Log> logs;
@@ -210,12 +212,12 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(save != null);
 
-            // create private container
-            var c = new CompositionContainer(container ?? CompositionUtil.CreateContainer())
+            catalog = CompositionUtil.DefaultCatalog;
+            container = CompositionUtil.CreateContainer(catalog)
                 .WithExport<ITraceSink>(new LogSink(logs ?? (logs = new LinkedList<Log>())));
 
             // load document
-            return NXDocumentHost.Load(c, new StringReader(save));
+            return NXDocumentHost.Load(new StringReader(save), catalog, container);
         }
 
         /// <summary>
@@ -226,12 +228,11 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            // create private container
-            var c = new CompositionContainer(container ?? CompositionUtil.CreateContainer())
+            catalog = CompositionUtil.DefaultCatalog;
+            container = CompositionUtil.CreateContainer(catalog)
                 .WithExport<ITraceSink>(new LogSink(logs ?? (logs = new LinkedList<Log>())));
 
-            // load new document instance
-            document = NXDocumentHost.Load(c, uri);
+            document = NXDocumentHost.Load(uri, catalog, container);
         }
 
         /// <summary>

@@ -47,7 +47,7 @@ namespace NXKit.XForms
         internal Binding(XObject xml, EvaluationContext context, string xpath)
         {
             Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentNullException>(xml.Host() != null);
+            Contract.Requires<ArgumentNullException>(xml.Exports() != null);
             Contract.Requires<ArgumentNullException>(context != null);
             Contract.Requires<ArgumentNullException>(xpath != null);
 

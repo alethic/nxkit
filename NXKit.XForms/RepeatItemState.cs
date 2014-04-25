@@ -2,9 +2,12 @@
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
+using NXKit.Serialization;
+
 namespace NXKit.XForms
 {
 
+    [SerializableAnnotation]
     [XmlRoot("repeat-item")]
     public class RepeatItemState :
         IXmlSerializable

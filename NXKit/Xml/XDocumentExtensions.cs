@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
@@ -13,16 +14,16 @@ namespace NXKit.Xml
     {
 
         /// <summary>
-        /// Resolves the <see cref="NXDocumentHost"/> for the given <see cref="XDocument"/>.
+        /// Resolves the <see cref="ExportProvider"/> for the given <see cref="XDocument"/>.
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static NXDocumentHost Host(this XDocument self)
+        public static ExportProvider Exports(this XDocument self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Ensures(Contract.Result<NXDocumentHost>() != null);
+            Contract.Ensures(Contract.Result<ExportProvider>() != null);
 
-            return self.Annotation<NXDocumentHost>();
+            return self.Annotation<ExportProvider>();
         }
 
         /// <summary>

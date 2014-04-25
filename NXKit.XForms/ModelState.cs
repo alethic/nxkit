@@ -1,9 +1,12 @@
 ﻿using System.Xml;
 using System.Xml.Serialization;
 
+using NXKit.Serialization;
+
 namespace NXKit.XForms
 {
 
+    [SerializableAnnotation]
     [XmlRoot("model")]
     public class ModelState
     {

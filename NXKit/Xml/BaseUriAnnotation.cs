@@ -3,12 +3,15 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
+using NXKit.Serialization;
+
 namespace NXKit.Xml
 {
 
     /// <summary>
     /// Custom implementation of BaseUri since the built implementation is internal.
     /// </summary>
+    [SerializableAnnotation]
     [XmlRoot("base-uri")]
     public class BaseUriAnnotation :
         IXmlSerializable

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+using System.Reflection;
 using System.Xml.Serialization;
 
 using NXKit.Xml;
@@ -268,7 +269,11 @@ namespace NXKit.Serialization
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(annotation != null);
 
+            // check for supported attribution
             var type = annotation.GetType();
+            var attr = type.GetCustomAttribute<SerializableAnnotationAttribute>();
+            if (attr == null)
+                return null;
 
             // unsupported types
             if (!type.IsPublic || type.IsAbstract)
