@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+using NXKit.Diagnostics;
 using NXKit.IO;
 using NXKit.Xml;
 
@@ -13,20 +14,23 @@ namespace NXKit.XInclude
         IOnInit
     {
 
-        readonly IIOService ioService;
+        readonly ITraceService trace;
+        readonly IIOService io;
         readonly IncludeAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Include(XElement element, IIOService ioService)
+        public Include(XElement element, ITraceService trace, IIOService io)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(ioService != null);
+            Contract.Requires<ArgumentNullException>(trace != null);
+            Contract.Requires<ArgumentNullException>(io != null);
 
-            this.ioService = ioService;
+            this.trace = trace;
+            this.io = io;
             this.attributes = new IncludeAttributes(element);
         }
 
@@ -36,7 +40,9 @@ namespace NXKit.XInclude
             if (Element.GetBaseUri() != null && !uri.IsAbsoluteUri)
                 uri = new Uri(Element.GetBaseUri(), uri);
 
-            var xml = XDocument.Load(IOXmlReader.Create(ioService, uri));
+            trace.Information("XInclude: {0}", uri);
+
+            var xml = XDocument.Load(IOXmlReader.Create(io, uri));
             if (xml != null)
             {
                 // annotate element and replace self in graph
@@ -44,6 +50,8 @@ namespace NXKit.XInclude
                 element.SetBaseUri(xml.BaseUri);
                 Element.AddBeforeSelf(element);
                 Element.Remove();
+
+                trace.Information("XInclude: {0} replaced node {1}", element, Element);
             }
         }
 

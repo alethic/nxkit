@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Json.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XInclude", "NXKit.XInclude\NXKit.XInclude.csproj", "{9742529E-8881-4AA3-91EF-1A474CB38AC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Examples", "NXKit.XForms.Examples\NXKit.XForms.Examples.csproj", "{564C13BE-AB20-49FD-9BC4-44FE701E3AC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -145,6 +147,10 @@ Global
 		{9742529E-8881-4AA3-91EF-1A474CB38AC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9742529E-8881-4AA3-91EF-1A474CB38AC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9742529E-8881-4AA3-91EF-1A474CB38AC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{564C13BE-AB20-49FD-9BC4-44FE701E3AC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564C13BE-AB20-49FD-9BC4-44FE701E3AC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{564C13BE-AB20-49FD-9BC4-44FE701E3AC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{564C13BE-AB20-49FD-9BC4-44FE701E3AC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

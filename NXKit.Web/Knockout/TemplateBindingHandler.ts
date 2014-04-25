@@ -28,7 +28,7 @@ module NXKit.Web.Knockout {
           */
         static ConvertValueAccessor(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): () => any {
             return () => Log.Group('TemplateBindingHandler.ConvertValueAccessor', () => {
-                console.dir({
+                Log.Object({
                     value: valueAccessor(),
                     viewModel: viewModel,
                 });
@@ -53,7 +53,7 @@ module NXKit.Web.Knockout {
                     throw new Error('unknown template');
                 }
 
-                console.dir({
+                Log.Object({
                     data: data,
                     opts: opts,
                     name: name,

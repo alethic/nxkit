@@ -3,10 +3,12 @@ using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.Diagnostics;
 using NXKit.IO;
 using NXKit.Serialization;
 using NXKit.Xml;
@@ -159,6 +161,7 @@ namespace NXKit
         }
 
         readonly CompositionContainer container;
+        readonly ITraceService trace;
         XDocument xml;
 
         /// <summary>
@@ -174,6 +177,7 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(xml != null);
 
             this.container = container;
+            this.trace = container.GetExportedValue<ITraceService>();
             this.xml = xml;
 
             Initialize();
@@ -185,7 +189,8 @@ namespace NXKit
         void Initialize()
         {
             // ensures the document is in the container
-            Container.WithExport<NXDocumentHost>(this);
+            container.WithExport<NXDocumentHost>(this);
+            container.WithExport<ExportProvider>(container);
 
             // ensure XML document has access to document host
             xml.AddAnnotation(this);
@@ -197,10 +202,67 @@ namespace NXKit
         }
 
         /// <summary>
+        /// Handles an exception by dispatching it to the root <see cref="IExceptionHandler"/>.
+        /// </summary>
+        /// <param name="exception"></param>
+        void HandleException(Exception exception)
+        {
+            Contract.Requires<ArgumentNullException>(exception != null);
+            trace.Warning(exception);
+
+            bool rethrow = true;
+
+            // search for exception handlers
+            foreach (var handler in Xml.Interfaces<IExceptionHandler>())
+                rethrow |= !handler.HandleException(exception);
+
+            // should we rethrow the exception?
+            if (rethrow)
+                ExceptionDispatchInfo.Capture(exception).Throw();
+        }
+
+        /// <summary>
+        /// Invokes the given <see cref="Action"/>, protecting the caller against exceptions.
+        /// </summary>
+        /// <param name="action"></param>
+        void Invoke(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
+        }
+
+        /// <summary>
+        /// Invokes the given <see cref="Func`1"/>, protecting the caller against exception.s
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="func"></param>
+        T Invoke<T>(Func<T> func)
+        {
+            try
+            {
+                return func();
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
+
+            return default(T);
+        }
+
+        /// <summary>
         /// Invokes any <see cref="IOnInit"/> interfaces the first time the document is loaded.
         /// </summary>
         void InvokeInit()
         {
+            trace.Debug("InvokeInit");
+
             while (true)
             {
                 var inits = xml
@@ -214,10 +276,12 @@ namespace NXKit
 
                 foreach (var init in inits)
                     if (init.Document != null)
-                    {
-                        init.Interface<IOnInit>().Init();
-                        init.AnnotationOrCreate<ObjectAnnotation>().Init = true;
-                    }
+                        Invoke(() =>
+                        {
+                            trace.Debug("InvokeInit: {0}", init);
+                            init.Interface<IOnInit>().Init();
+                            init.AnnotationOrCreate<ObjectAnnotation>().Init = true;
+                        });
             }
         }
 
@@ -226,6 +290,8 @@ namespace NXKit
         /// </summary>
         void InvokeLoad()
         {
+            trace.Debug("InvokeLoad");
+
             var loads = xml
                 .DescendantNodesAndSelf()
                 .Where(i => i.InterfaceOrDefault<IOnLoad>() != null)
@@ -233,7 +299,11 @@ namespace NXKit
 
             foreach (var load in loads)
                 if (load.Document != null)
-                    load.Interface<IOnLoad>().Load();
+                    Invoke(() =>
+                    {
+                        trace.Debug("InvokeLoad: {0}", load);
+                        load.Interface<IOnLoad>().Load();
+                    });
         }
 
         /// <summary>
@@ -266,7 +336,7 @@ namespace NXKit
 
                 run = false;
                 foreach (var invoke in invokes)
-                    run |= invoke.Invoke();
+                    run |= Invoke(() => invoke.Invoke());
             }
             while (run);
         }

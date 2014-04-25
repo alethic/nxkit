@@ -25,7 +25,7 @@
     <RestorePackages>true</RestorePackages>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
-    <NuGetPackageImportStamp>31bf02d1</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>b160e666</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -205,31 +205,8 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="Default.aspx" />
-    <Content Include="Resources\form.xml" />
-    <Content Include="Resources\elections.xml" />
-    <Content Include="Resources\basic.xml" />
-    <Content Include="Resources\include2.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Resources\persons.xml" />
-    <Content Include="Resources\relationships.xml" />
     <Content Include="Content\styles.less" />
     <Content Include="Global.asax" />
-    <Content Include="Resources\beneficiaries.xml" />
-    <Content Include="Resources\primaryelections.xml" />
-    <Content Include="Resources\primaryperson.xml" />
-    <Content Include="Resources\primaryquestions.xml" />
-    <Content Include="Resources\include.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Resources\submit.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Resources\repeat.xml" />
-    <Content Include="Resources\secondaryelections.xml" />
-    <Content Include="Resources\secondaryperson.xml" />
-    <Content Include="Resources\secondaryquestions.xml" />
-    <Content Include="Resources\questions.xml" />
     <Content Include="Content\semantic\less\fonts\basic.icons.svg" />
     <Content Include="Content\semantic\less\fonts\icons.svg" />
     <Content Include="Content\semantic\less\images\loader-large-inverted.gif" />
@@ -275,14 +252,8 @@
     <Content Include="Content\semantic\packaged\javascript\semantic.min.js" />
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\asd.pubxml" />
-    <Content Include="Resources\Post.ashx" />
+    <Content Include="Examples\Post.ashx" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
-    <Content Include="Resources\script.xml" />
-    <Content Include="Resources\relevant.xml" />
-    <Content Include="Resources\group.xml" />
-    <Content Include="Resources\section.xml" />
-    <Content Include="Resources\trigger.xml" />
-    <Content Include="Resources\select1.xml" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
     <Content Include="Scripts\jquery-ui-1.10.4.js" />
@@ -294,6 +265,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExampleHttpHandler.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -305,7 +277,7 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\Post.ashx.cs">
+    <Compile Include="Examples\Post.ashx.cs">
       <DependentUpon>Post.ashx</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -407,6 +379,10 @@
       <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
       <Name>NXKit.Web.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Examples\NXKit.XForms.Examples.csproj">
+      <Project>{564c13be-ab20-49fd-9bc4-44fe701e3ac2}</Project>
+      <Name>NXKit.XForms.Examples</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
       <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
       <Name>NXKit.XForms.Layout</Name>
@@ -466,16 +442,16 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\GitVersionTask.0.20.0\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.0.20.0\Build\GitVersionTask.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets'))" />
+    <Error Condition="!Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets'))" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent>xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\x86\*.*" "$(ProjectDir)"
 xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\amd64\*.*" "$(ProjectDir)"</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\GitVersionTask.0.20.0\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.0.20.0\Build\GitVersionTask.targets')" />
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
+  <Import Project="..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

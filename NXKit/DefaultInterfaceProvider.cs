@@ -52,31 +52,41 @@ namespace NXKit
             defaultDescriptors = descriptors;
         }
 
+        readonly ExportProvider exportProvider;
         readonly IEnumerable<IInterfacePredicate> predicates;
         readonly List<InterfaceDescriptor> descriptors;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="exportProvider"></param>
+        /// <param name="predicates"></param>
         [ImportingConstructor]
         public DefaultInterfaceProvider(
+            ExportProvider exportProvider,
             [ImportMany] IEnumerable<IInterfacePredicate> predicates)
-            : this(predicates, defaultDescriptors)
+            : this(exportProvider, predicates, defaultDescriptors)
         {
+            Contract.Requires<ArgumentNullException>(exportProvider != null);
             Contract.Requires<ArgumentNullException>(predicates != null);
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="exportProvider"></param>
+        /// <param name="predicates"></param>
         /// <param name="descriptors"></param>
         public DefaultInterfaceProvider(
+            ExportProvider exportProvider,
             IEnumerable<IInterfacePredicate> predicates,
             List<InterfaceDescriptor> descriptors)
         {
+            Contract.Requires<ArgumentNullException>(exportProvider != null);
             Contract.Requires<ArgumentNullException>(predicates != null);
             Contract.Requires<ArgumentNullException>(descriptors != null);
 
+            this.exportProvider = exportProvider;
             this.predicates = predicates;
             this.descriptors = descriptors;
         }
@@ -117,7 +127,7 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Creates hte specified instance type.
+        /// Creates the specified instance type.
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="type"></param>
@@ -127,7 +137,7 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(type != null);
 
-            var func = GetConstructor(obj, type, obj.Host().Container);
+            var func = GetConstructor(obj, type, exportProvider);
             if (func == null)
                 throw new InvalidOperationException("Could not find ctor for interface type.");
 
@@ -139,12 +149,12 @@ namespace NXKit
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="type"></param>
-        /// <param name="container"></param>
+        /// <param name="exportProvider"></param>
         /// <returns></returns>
-        Func<object> GetConstructor(XObject obj, Type type, CompositionContainer container)
+        Func<object> GetConstructor(XObject obj, Type type, ExportProvider exportProvider)
         {
             return type.GetConstructors()
-                .Select(i => GetConstructorFunc(obj, type, i, container))
+                .Select(i => GetConstructorFunc(obj, type, i, exportProvider))
                 .Where(i => i != null)
                 .OrderByDescending(i => i.Item2)
                 .Select(i => i.Item1)
@@ -159,9 +169,9 @@ namespace NXKit
         /// <param name="obj"></param>
         /// <param name="type"></param>
         /// <param name="ctor"></param>
-        /// <param name="container"></param>
+        /// <param name="exportProvider"></param>
         /// <returns></returns>
-        Tuple<Func<object>, int> GetConstructorFunc(XObject obj, Type type, ConstructorInfo ctor, CompositionContainer container)
+        Tuple<Func<object>, int> GetConstructorFunc(XObject obj, Type type, ConstructorInfo ctor, ExportProvider exportProvider)
         {
             var p = ctor.GetParameters();
             var l = new object[p.Length];
@@ -178,7 +188,7 @@ namespace NXKit
                 }
                 else
                 {
-                    l[i] = GetConstructorParameterValue(obj, type, ctor, p[i], container);
+                    l[i] = GetConstructorParameterValue(obj, type, ctor, p[i], exportProvider);
 
                     // increment filled parameter count
                     if (l[i] != null)
@@ -196,15 +206,15 @@ namespace NXKit
         /// <param name="type"></param>
         /// <param name="ctor"></param>
         /// <param name="param"></param>
-        /// <param name="container"></param>
+        /// <param name="exportProvider"></param>
         /// <returns></returns>
-        object GetConstructorParameterValue(XObject obj, Type type, ConstructorInfo ctor, ParameterInfo param, CompositionContainer container)
+        object GetConstructorParameterValue(XObject obj, Type type, ConstructorInfo ctor, ParameterInfo param, ExportProvider exportProvider)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentNullException>(ctor != null);
             Contract.Requires<ArgumentNullException>(param != null);
-            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(exportProvider != null);
 
             var paramContractType = GetContractType(param.ParameterType);
             var paramContractName = GetContractName(paramContractType);
@@ -213,7 +223,7 @@ namespace NXKit
             // ImportAttribute present
             var attr1 = param.GetCustomAttribute<ImportAttribute>();
             if (attr1 != null)
-                return container.GetExports(ReflectionModelServices.CreateImportDefinition(
+                return exportProvider.GetExports(ReflectionModelServices.CreateImportDefinition(
                         new Lazy<ParameterInfo>(() => param),
                         attr1.ContractName ?? paramContractName,
                         attr1.ContractType != null ? AttributedModelServices.GetTypeIdentity(attr1.ContractType) : paramTypeIdentity,
@@ -227,7 +237,7 @@ namespace NXKit
             // ImportManyAttribute present
             var attr2 = param.GetCustomAttribute<ImportManyAttribute>();
             if (attr2 != null)
-                return container.GetExports(ReflectionModelServices.CreateImportDefinition(
+                return exportProvider.GetExports(ReflectionModelServices.CreateImportDefinition(
                     new Lazy<ParameterInfo>(() => param),
                         attr2.ContractName ?? paramContractName,
                         attr2.ContractType != null ? AttributedModelServices.GetTypeIdentity(attr2.ContractType) : paramTypeIdentity,
@@ -239,7 +249,7 @@ namespace NXKit
 
             // no attribute present
             if (typeof(IEnumerable).IsAssignableFrom(param.ParameterType))
-                return container.GetExports(ReflectionModelServices.CreateImportDefinition(
+                return exportProvider.GetExports(ReflectionModelServices.CreateImportDefinition(
                     new Lazy<ParameterInfo>(() => param),
                         paramContractName,
                         paramTypeIdentity,
@@ -249,7 +259,7 @@ namespace NXKit
                         null))
                     .Select(i => i.Value);
 
-            return container.GetExports(ReflectionModelServices.CreateImportDefinition(
+            return exportProvider.GetExports(ReflectionModelServices.CreateImportDefinition(
                 new Lazy<ParameterInfo>(() => param),
                     paramContractName,
                     paramTypeIdentity,

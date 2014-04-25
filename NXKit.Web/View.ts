@@ -115,10 +115,10 @@ module NXKit.Web {
          */
         Push(node: Node) {
             var self = this;
-            console.debug('View.Push');
+            Log.Debug('View.Push');
 
             this.Queue((cb: ICallbackComplete) => {
-                console.debug('View.Push: queue');
+                Log.Debug('View.Push: queue');
                 self.CallbackRequest.trigger({
                     Action: 'Push',
                     Args: {

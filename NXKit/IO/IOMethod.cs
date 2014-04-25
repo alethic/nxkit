@@ -1,9 +1,12 @@
-﻿namespace NXKit.IO
+﻿using System.Diagnostics;
+
+namespace NXKit.IO
 {
 
     /// <summary>
     /// Describes the type of request being issued.
     /// </summary>
+    [DebuggerDisplay("{name}")]
     public struct IOMethod
     {
 

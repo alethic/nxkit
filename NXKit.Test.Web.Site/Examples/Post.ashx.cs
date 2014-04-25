@@ -2,7 +2,7 @@
 using System.Web;
 using System.Xml.Linq;
 
-namespace NXKit.Test.Web.Site.Resources
+namespace NXKit.Test.Web.Site.Examples
 {
 
     public class Post : 

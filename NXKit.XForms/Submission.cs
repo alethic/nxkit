@@ -202,7 +202,7 @@ namespace NXKit.XForms
             // must be selected for use. Individually, the method element and the method attribute are not required.
             // However, one of the two is mandatory as there is no default submission method.
             var method = GetMethod();
-            if (method == ModelMethod.None)
+            if (method == null)
                 throw new DOMTargetEventException(Element, Events.SubmitError, "Unknown ModelMethd.");
 
             // The resource element provides the submission URI, overriding the resource attribute and the action 
@@ -236,7 +236,7 @@ namespace NXKit.XForms
             // The submission is performed based on the submission headers, submission method, submission resource, and
             // submission data serialization. The exact rules of submission are based on the URI scheme and the 
             // submission method, as defined in Submission Options.
-            var request = new ModelRequest(resource, method);
+            var request = new ModelRequest(resource, (ModelMethod)method);
             request.MediaType = properties.MediaType;
             request.Body = node;
             request.Encoding = properties.Encoding;
@@ -303,7 +303,7 @@ namespace NXKit.XForms
         /// one of the two is mandatory as there is no default submission method.
         /// </summary>
         /// <returns></returns>
-        ModelMethod GetMethod()
+        ModelMethod? GetMethod()
         {
             var method = Element.Element(Constants.XForms_1_0 + "method");
             if (method != null)
