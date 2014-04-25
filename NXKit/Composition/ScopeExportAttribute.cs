@@ -11,7 +11,8 @@ namespace NXKit.Composition
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     [MetadataAttribute]
     public class ScopeExportAttribute :
-        ExportAttribute
+        ExportAttribute,
+        IScopeMetadata
     {
 
         readonly Scope scope;

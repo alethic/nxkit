@@ -206,12 +206,19 @@ namespace NXKit
             // host container, contains all exports that are host scoped, and catalog of host scoped parts
             this.host = new CompositionContainer(
                 new ScopeCatalog(this.catalog, Scope.Host), 
-                new AggregateExportProvider(
-                    new ScopeExportProvider(exports, Scope.Host), 
-                    this.global));
+                this.global);
 
+            // ensures the document is in the container
+            this.host.WithExport<NXDocumentHost>(this);
+            this.host.WithExport<ExportProvider>(host);
+
+            // initialize document configuration
             this.trace = host.GetExportedValue<ITraceService>();
             this.xml = xml;
+
+            // ensure XML document has access to document host
+            this.xml.AddAnnotation(this);
+            this.xml.AddAnnotation(host);
 
             Initialize();
         }
@@ -221,14 +228,6 @@ namespace NXKit
         /// </summary>
         void Initialize()
         {
-            // ensures the document is in the container
-            host.WithExport<NXDocumentHost>(this);
-            host.WithExport<ExportProvider>(host);
-
-            // ensure XML document has access to document host
-            xml.AddAnnotation(this);
-            xml.AddAnnotation(host);
-
             // start up document
             InvokeInit();
             InvokeLoad();
@@ -261,6 +260,8 @@ namespace NXKit
         /// <param name="action"></param>
         void Invoke(Action action)
         {
+            Contract.Requires<ArgumentNullException>(action != null);
+
             try
             {
                 action();
@@ -278,6 +279,8 @@ namespace NXKit
         /// <param name="func"></param>
         T Invoke<T>(Func<T> func)
         {
+            Contract.Requires<ArgumentNullException>(func != null);
+
             try
             {
                 return func();

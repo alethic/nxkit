@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
-
 using NXKit.Util;
 
 namespace NXKit.Composition
@@ -56,9 +56,13 @@ namespace NXKit.Composition
             if (data is Scope)
                 return (Scope)data;
 
-            var array = data as object[];
+            var array = data as IEnumerable;
             if (array != null)
-                return (Scope)((object[])data)[0];
+            {
+                var scope = ((IEnumerable)data).Cast<object>().FirstOrDefault();
+                if (scope != null)
+                    return (Scope)scope;
+            }
 
             return Scope.Global;
         }

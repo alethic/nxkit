@@ -4,13 +4,15 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
+using NXKit.Composition;
+
 namespace NXKit.DOMEvents
 {
 
     /// <summary>
     /// Implements the <see cref="IEventFactory"/> interface.
     /// </summary>
-    [Export(typeof(IEventFactory))]
+    [ScopeExport(typeof(IEventFactory), Scope.Host)]
     public class DefaultEventFactory :
         IEventFactory
     {

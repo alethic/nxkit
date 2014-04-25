@@ -404,7 +404,7 @@ namespace NXKit.Xml
         }
 
         /// <summary>
-        /// Resolves the <see cref="NXDocumentHost"/> for the given <see cref="XObject"/>.
+        /// Resolves the <see cref="ExportProvider"/> for the given <see cref="XObject"/>.
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
@@ -413,7 +413,13 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentNullException>(self != null);
             Contract.Ensures(Contract.Result<ExportProvider>() != null);
 
-            return self.AnnotationOrCreate<ExportProvider>(() => self is XDocument ? ((XDocument)self).Exports() : self.Document.Exports());
+            return self.AnnotationOrCreate<ExportProvider>(() =>
+            {
+                if (self is XDocument)
+                    return ((XDocument)self).Exports();
+                else
+                    return self.Document.Exports();
+            });
         }
 
         #endregion

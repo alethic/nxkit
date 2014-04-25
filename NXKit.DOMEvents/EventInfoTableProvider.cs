@@ -4,12 +4,13 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.DOMEvents
 {
 
-    [Export(typeof(IEventProvider))]
+    [ScopeExport(typeof(IEventProvider), Scope.Host)]
     public class EventInfoTableProvider :
         IEventProvider
     {
