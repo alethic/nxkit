@@ -15,6 +15,7 @@ namespace NXKit.Composition
 
         readonly ComposablePartCatalog parent;
         readonly Scope scope;
+        readonly IQueryable<ComposablePartDefinition> parts;
 
         /// <summary>
         /// Initializes a new instance.
@@ -27,18 +28,21 @@ namespace NXKit.Composition
 
             this.parent = parent;
             this.scope = scope;
+            this.parts = GetParts();
         }
 
         public override IQueryable<ComposablePartDefinition> Parts
         {
-            get { return GetParts(); }
+            get { return parts; }
         }
 
         IQueryable<ComposablePartDefinition> GetParts()
         {
             return parent.Parts
                 .Select(i => new ScopePartDefinition(i, scope))
-                .Where(i => i.ExportDefinitions.Any());
+                .Where(i => i.ExportDefinitions.Any())
+                .ToArray()
+                .AsQueryable();
         }
 
     }
