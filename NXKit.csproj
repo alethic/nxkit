@@ -135,6 +135,7 @@
     <Compile Include="Diagnostics\TypeProxyProviderBase.cs" />
     <Compile Include="Diagnostics\XDocumentTypeProxyProvider.cs" />
     <Compile Include="Diagnostics\XElementTypeProxyProvider.cs" />
+    <Compile Include="Diagnostics\XTextTypeProxyProvider.cs" />
     <Compile Include="IdRef.cs" />
     <Compile Include="IExceptionHandler.cs" />
     <Compile Include="Diagnostics\ITraceService.cs" />

@@ -261,8 +261,6 @@ namespace NXKit
         /// </summary>
         void InvokeInit()
         {
-            trace.Debug("InvokeInit");
-
             while (true)
             {
                 var inits = xml
@@ -278,7 +276,6 @@ namespace NXKit
                     if (init.Document != null)
                         Invoke(() =>
                         {
-                            trace.Debug("InvokeInit: {0}", init);
                             init.Interface<IOnInit>().Init();
                             init.AnnotationOrCreate<ObjectAnnotation>().Init = true;
                         });
@@ -290,8 +287,6 @@ namespace NXKit
         /// </summary>
         void InvokeLoad()
         {
-            trace.Debug("InvokeLoad");
-
             var loads = xml
                 .DescendantNodesAndSelf()
                 .Where(i => i.InterfaceOrDefault<IOnLoad>() != null)
@@ -301,7 +296,6 @@ namespace NXKit
                 if (load.Document != null)
                     Invoke(() =>
                     {
-                        trace.Debug("InvokeLoad: {0}", load);
                         load.Interface<IOnLoad>().Load();
                     });
         }
