@@ -20,25 +20,25 @@
         <dependencies>
             <dependency
                 id="NXKit"
-                version="$version$" />
+                version="[$version$]" />
             <dependency
                 id="NXKit.DOM"
-                version="$version$" />
+                version="[$version$]" />
             <dependency
                 id="NXKit.DOMEvents"
-                version="$version$" />
+                version="[$version$]" />
             <dependency
                 id="NXKit.XMLEvents"
-                version="$version$"/>
+                version="[$version$]"/>
             <dependency
                 id="NXKit.Scripting"
-                version="$version$"/>
+                version="[$version$]"/>
             <dependency
                 id="NXKit.XPath"
-                version="$version$"/>
+                version="[$version$]"/>
             <dependency
                 id="NXKit.XPath2"
-                version="$version$"/>
+                version="[$version$]"/>
         </dependencies>
     </metadata>
 </package>

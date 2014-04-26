@@ -20,7 +20,7 @@
         <dependencies>
             <dependency
                 id="NXKit"
-                version="$version$"/>
+                version="[$version$]"/>
         </dependencies>
     </metadata>
 </package>

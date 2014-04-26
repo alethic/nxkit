@@ -20,10 +20,10 @@
         <dependencies>
             <dependency
                 id="NXKit"
-                version="$version$" />
+                version="[$version$]" />
             <dependency
                 id="NXKit.Web"
-                version="$version$"/>
+                version="[$version$]"/>
         </dependencies>
         <frameworkAssemblies>
             <frameworkAssembly

@@ -163,6 +163,7 @@ namespace NXKit.Web.UI
         string cssClass;
         string validationGroup;
         ComposablePartCatalog catalog;
+        ExportProvider exports;
         CompositionContainer container;
         NXDocumentHost document;
         LinkedList<Log> logs;
@@ -205,6 +206,24 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
+        /// Gets or sets the <see cref="ComposablePartCatalog"/> used to resolve exports.
+        /// </summary>
+        public ComposablePartCatalog Catalog
+        {
+            get { return catalog; }
+            set { catalog = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a <see cref="ExportProvider"/> used to resolve exports.
+        /// </summary>
+        public ExportProvider Exports
+        {
+            get { return exports; }
+            set { exports = value; }
+        }
+
+        /// <summary>
         /// Loads the document host from whatever saved state is available.
         /// </summary>
         /// <returns></returns>
@@ -212,8 +231,12 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(save != null);
 
-            catalog = CompositionUtil.DefaultCatalog;
-            container = CompositionUtil.CreateContainer(catalog)
+            // configure default composition
+            var catalog = Catalog ?? CompositionUtil.DefaultCatalog;
+            var exports = Exports ?? CompositionUtil.CreateContainer(catalog);
+
+            // extend provided container
+            container = new CompositionContainer(exports)
                 .WithExport<ITraceSink>(new LogSink(logs ?? (logs = new LinkedList<Log>())));
 
             // load document
@@ -228,8 +251,12 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            catalog = CompositionUtil.DefaultCatalog;
-            container = CompositionUtil.CreateContainer(catalog)
+            // configure default composition
+            var catalog = Catalog ?? CompositionUtil.DefaultCatalog;
+            var exports = Exports ?? CompositionUtil.CreateContainer(catalog);
+
+            // extend provided container
+            container = new CompositionContainer(exports)
                 .WithExport<ITraceSink>(new LogSink(logs ?? (logs = new LinkedList<Log>())));
 
             document = NXDocumentHost.Load(uri, catalog, container);

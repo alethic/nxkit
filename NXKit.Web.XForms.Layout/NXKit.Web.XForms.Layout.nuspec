@@ -20,16 +20,16 @@
         <dependencies>
             <dependency
                 id="NXKit.XForms"
-                version="$version$"/>
+                version="[$version$]"/>
             <dependency
                 id="NXKit.XForms.Layout"
-                version="$version$"/>
+                version="[$version$]"/>
             <dependency
                 id="NXKit.Web"
-                version="$version$"/>
+                version="[$version$]"/>
             <dependency
                 id="NXKit.Web.XForms"
-                version="$version$"/>
+                version="[$version$]"/>
         </dependencies>
     </metadata>
 </package>
