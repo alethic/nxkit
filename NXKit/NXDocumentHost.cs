@@ -35,16 +35,17 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
-
-            return new NXDocumentHost(
-                XNodeAnnotationSerializer.Deserialize(
-                    XDocument.Load(
-                        reader,
-                        LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
-                catalog,
-                exports);
+            return Compose(catalog, exports, (catalog_, global, host) =>
+            {
+                return new NXDocumentHost(
+                    XNodeAnnotationSerializer.Deserialize(
+                        XDocument.Load(
+                            reader,
+                            LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
+                    catalog_,
+                    global,
+                    host);
+            });
         }
 
         /// <summary>
@@ -68,9 +69,6 @@ namespace NXKit
         public static NXDocumentHost Load(TextReader reader, ComposablePartCatalog catalog = null, ExportProvider exports = null)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
-
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
 
             using (var rdr = XmlReader.Create(reader))
                 return Load(rdr, catalog, exports);
@@ -98,9 +96,6 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(stream != null);
 
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
-
             using (var rdr = new StreamReader(stream))
                 return Load(rdr, catalog, exports);
         }
@@ -127,13 +122,19 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
-
-            return Load(
-                NXKit.Xml.IOXmlReader.Create(
-                    exports.GetExportedValue<IIOService>(),
-                    uri));
+            return Compose(catalog, exports, (catalog_, global, host) =>
+            {
+                return new NXDocumentHost(
+                    XNodeAnnotationSerializer.Deserialize(
+                        XDocument.Load(
+                            NXKit.Xml.IOXmlReader.Create(
+                                host.GetExportedValue<IIOService>(),
+                                uri),
+                            LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
+                    catalog_,
+                    global,
+                    host);
+            });
         }
 
         /// <summary>
@@ -159,9 +160,6 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
-
             return Load(document.CreateReader(), catalog, exports);
         }
 
@@ -177,42 +175,74 @@ namespace NXKit
             return Load(document, null, null);
         }
 
+        /// <summary>
+        /// Invokes a method, passing it the appropriate composition containers.
+        /// </summary>
+        /// <param name="catalog"></param>
+        /// <param name="exports"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        static NXDocumentHost Compose(
+            ComposablePartCatalog catalog,
+            ExportProvider exports,
+            Func<ComposablePartCatalog, CompositionContainer, CompositionContainer, NXDocumentHost> func)
+        {
+            Contract.Requires<ArgumentNullException>(func != null);
+
+            catalog = catalog ?? CompositionUtil.DefaultCatalog;
+            exports = exports ?? CompositionUtil.CreateContainer(catalog);
+
+            // global container, contains all exports that are global in nature
+            var global = new CompositionContainer(
+                new ScopeExportProvider(exports, Scope.Global));
+
+            // host container, contains all exports that are host scoped, and catalog of host scoped parts
+            var host = new CompositionContainer(
+                new ScopeCatalog(catalog, Scope.Host),
+                new ScopeExportProvider(exports, Scope.Host),
+                global);
+
+            host.WithExport<ExportProvider>(host);
+            var tmp1 = host.GetExport<ExportProvider>();
+            var tmp2 = host.GetExports<IInterfaceProvider>();
+
+            var _ = func(catalog, global, host);
+            if (_ == null)
+                throw new NullReferenceException();
+
+            return _;
+        }
+
         readonly ComposablePartCatalog catalog;
         readonly CompositionContainer global;
         readonly CompositionContainer host;
         readonly ITraceService trace;
-        XDocument xml;
+        readonly XDocument xml;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
         /// <param name="catalog"></param>
-        /// <param name="exports"></param>
-        NXDocumentHost(XDocument xml, ComposablePartCatalog catalog = null, ExportProvider exports = null)
-            : base()
+        /// <param name="global"></param>
+        /// <param name="host"></param>
+        NXDocumentHost(
+            XDocument xml,
+            ComposablePartCatalog catalog,
+            CompositionContainer global,
+            CompositionContainer host)
         {
             Contract.Requires<ArgumentNullException>(xml != null);
-
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
-
-            this.catalog = catalog;
-
-            // global container, contains all exports that are global in nature
-            this.global = new CompositionContainer(
-                new ScopeExportProvider(exports, Scope.Global));
-
-            // host container, contains all exports that are host scoped, and catalog of host scoped parts
-            this.host = new CompositionContainer(
-                new ScopeCatalog(this.catalog, Scope.Host), 
-                this.global);
+            Contract.Requires<ArgumentNullException>(catalog != null);
+            Contract.Requires<ArgumentNullException>(global != null);
+            Contract.Requires<ArgumentNullException>(host != null);
 
             // ensures the document is in the container
-            this.host.WithExport<NXDocumentHost>(this);
-            this.host.WithExport<ExportProvider>(host);
+            host.WithExport<NXDocumentHost>(this);
 
-            // initialize document configuration
+            this.catalog = catalog;
+            this.global = global;
+            this.host = host;
             this.trace = host.GetExportedValue<ITraceService>();
             this.xml = xml;
 
