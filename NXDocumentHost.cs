@@ -277,8 +277,8 @@ namespace NXKit
 
             // search for exception handlers
             foreach (var handler in Xml.Interfaces<IExceptionHandler>())
-                if (!handler.HandleException(exception))
-                    rethrow = true;
+                if (handler.HandleException(exception))
+                    rethrow = false;
 
             // should we rethrow the exception?
             if (rethrow)
