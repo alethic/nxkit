@@ -14,7 +14,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <NuGetPackageImportStamp>a71b1096</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>0436164d</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
     <RootNamespace>NXKit.Web.XForms.Layout</RootNamespace>
@@ -103,10 +103,6 @@
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NXKit.Web.XForms\NXKit.Web.XForms.csproj">
-      <Project>{f106499b-42cc-41cf-9824-39755e25993f}</Project>
-      <Name>NXKit.Web.XForms</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NXKit.Web\NXKit.Web.csproj">
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
       <Name>NXKit.Web</Name>
@@ -167,9 +163,7 @@
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets'))" />
   </Target>
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
   <Import Project="..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets" Condition="Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets')" />
-  <Import Project="..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" />
 </Project>

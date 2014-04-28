@@ -15,7 +15,7 @@
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>1afddfcc</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>45177f6e</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -118,14 +118,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="NXKit.XPath2.nuspec" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\NXKit.XPath\NXKit.XPath.csproj">
       <Project>{a91bc0e8-18cc-41f6-b00d-07e91b1593be}</Project>
       <Name>NXKit.XPath</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="NXKit.XPath2.nuspec" />
-    <None Include="packages.config" />
+    <ProjectReference Include="..\NXKit\NXKit.csproj">
+      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
+      <Name>NXKit</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
@@ -136,10 +140,8 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets'))" />
   </Target>
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
-  <Import Project="..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -27,7 +27,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <RootNamespace>NXKit.Web</RootNamespace>
-    <NuGetPackageImportStamp>dbd962be</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>30ff908f</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -245,7 +245,6 @@
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets'))" />
   </Target>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptOutFile>NXKit.js</TypeScriptOutFile>
@@ -260,5 +259,4 @@
   </PropertyGroup>
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
   <Import Project="..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets" Condition="Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets')" />
-  <Import Project="..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" />
 </Project>
