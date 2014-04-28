@@ -174,6 +174,8 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected virtual ModelResponseStatus ReadRequestStatus(IOResponse response)
         {
+            Contract.Requires<ArgumentNullException>(response != null);
+
             return response.Status == IOStatus.Success ? ModelResponseStatus.Success : ModelResponseStatus.Error;
         }
 
@@ -185,6 +187,9 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         ModelResponse ReadIOResponseFromContent(IOResponse ioResponse, ModelRequest request)
         {
+            Contract.Requires<ArgumentNullException>(ioResponse != null);
+            Contract.Requires<ArgumentNullException>(request != null);
+
             var content = ioResponse.Content;
             if (content != null)
             {
@@ -202,7 +207,7 @@ namespace NXKit.XForms.IO
                     request,
                     ReadRequestStatus(ioResponse),
                     deserializer.Deserialize(
-                        new StreamReader(ioResponse.Content),
+                        new StreamReader(content),
                         mediaType));
             }
             else
