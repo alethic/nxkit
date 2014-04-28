@@ -190,16 +190,16 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(func != null);
 
             catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
+            exports = exports ?? new CompositionContainer();
 
             // global container, contains all exports that are global in nature
             var global = new CompositionContainer(
-                new ScopeExportProvider(exports, Scope.Global));
+                new ScopeCatalog(catalog, Scope.Global),
+                exports);
 
             // host container, contains all exports that are host scoped, and catalog of host scoped parts
             var host = new CompositionContainer(
                 new ScopeCatalog(catalog, Scope.Host),
-                new ScopeExportProvider(exports, Scope.Host),
                 global);
 
             host.WithExport<ExportProvider>(host);
@@ -277,7 +277,8 @@ namespace NXKit
 
             // search for exception handlers
             foreach (var handler in Xml.Interfaces<IExceptionHandler>())
-                rethrow |= !handler.HandleException(exception);
+                if (!handler.HandleException(exception))
+                    rethrow = true;
 
             // should we rethrow the exception?
             if (rethrow)
