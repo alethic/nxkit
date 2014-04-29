@@ -11,6 +11,7 @@ module NXKit.Web {
         private _body: HTMLElement;
         private _root: Node;
         private _bind: boolean;
+        private _messages: Message[];
 
         private _onNodePropertyChanged: (node: Node, $interface: Interface, property: Property, value: any) => void;
         private _onNodeMethodInvoked: (node: Node, $interface: Interface, method: Method, params: any) => void;
@@ -31,6 +32,7 @@ module NXKit.Web {
             self._body = body;
             self._root = null;
             self._bind = true;
+            self._messages = new Array<Message>();
 
             self._queue = new Array<any>();
             self._queueRunning = false;
@@ -70,6 +72,31 @@ module NXKit.Web {
 
         public get Root(): Node {
             return this._root;
+        }
+
+        public get Messages(): Message[] {
+            return this._messages;
+        }
+        
+        /**
+         * Updates the messages of the view with the specified items.
+         */
+        public UpdateMessages(messages: any[]) {
+            var self = this;
+
+            self._messages = new Array<Message>();
+            for (var i = 0; i < messages.length; i++) {
+
+                var severity = messages[i].Severity;
+                if (severity == null)
+                    continue;
+
+                var text = messages[i].Text;
+                if (text == null)
+                    continue;
+
+                self._messages.push(new Message(severity, text));
+            }
         }
 
         /**

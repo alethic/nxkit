@@ -165,6 +165,7 @@
     <TypeScriptCompile Include="LayoutManager.ts" />
     <TypeScriptCompile Include="Interface.ts" />
     <TypeScriptCompile Include="Log.ts" />
+    <TypeScriptCompile Include="Message.ts" />
     <TypeScriptCompile Include="Method.ts" />
     <TypeScriptCompile Include="InterfaceMap.ts" />
     <TypeScriptCompile Include="MethodMap.ts" />
