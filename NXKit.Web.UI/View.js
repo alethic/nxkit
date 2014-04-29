@@ -101,7 +101,7 @@ _NXKit.Web.UI.View.prototype = {
 
             // update view with data
             self._view.Data = $(self._data).val();
-            self._view.Messages = self._messages;
+            self._view.PushMessages(self._messages);
 
             // when the form is submitted, ensure the data field is updated
             $(self.get_element()).parents('form').submit(function (event) {
@@ -146,7 +146,7 @@ _NXKit.Web.UI.View.prototype = {
 
         // update view
         self._view.Data = $(self._data).val();
-        self._view.UpdateMessages(messages);
+        self._view.PushMessages(messages);
 
         wh();
     },

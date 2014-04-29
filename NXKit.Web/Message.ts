@@ -4,17 +4,17 @@ module NXKit.Web {
 
     export class Message {
 
-        private _severity: string;
+        private _severity: Severity;
         private _text: string;
 
-        constructor(severity: string, text: string) {
+        constructor(severity: Severity, text: string) {
             var self = this;
 
             this._severity = severity;
             this._text = text;
         }
 
-        public get Severity(): string {
+        public get Severity(): Severity {
             return this._severity;
         }
 
