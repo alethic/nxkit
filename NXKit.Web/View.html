@@ -1,6 +1,15 @@
 ﻿<script type="text/html"
         id="NXKit.View">
 
+    <!-- ko foreach: Messages -->
+    <div class="ui message">
+        <i class="close icon"></i>
+        <div class="header">
+            <span data-bind="text: Text" />
+        </div>
+    </div>
+    <!-- /ko -->
+
     <!-- ko nxkit_layout_manager_export -->
     <!-- ko nxkit_template: $data.Root -->
     <!-- /ko -->
