@@ -222,7 +222,7 @@ namespace NXKit.Web.UI
             Contract.Requires<ArgumentNullException>(save != null);
 
             // extend provided container
-            container = new CompositionContainer(exports)
+            container = (exports != null ? new CompositionContainer(exports) : new CompositionContainer())
                 .WithExport<ITraceSink>(new TraceSink(messages ?? (messages = new LinkedList<Message>())));
 
             // load document
@@ -238,7 +238,7 @@ namespace NXKit.Web.UI
             Contract.Requires<ArgumentNullException>(uri != null);
 
             // extend provided container
-            container = new CompositionContainer(exports)
+            container = (exports != null ? new CompositionContainer(exports) : new CompositionContainer())
                 .WithExport<ITraceSink>(new TraceSink(messages ?? (messages = new LinkedList<Message>())));
 
             document = NXDocumentHost.Load(uri, catalog, container);
