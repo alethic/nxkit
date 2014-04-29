@@ -221,12 +221,8 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(save != null);
 
-            // configure default composition
-            var catalog = Catalog ?? CompositionUtil.DefaultCatalog;
-            var exports = Exports ?? CompositionUtil.CreateContainer(catalog);
-
             // extend provided container
-            container = new CompositionContainer(exports)
+            container = (exports != null ? new CompositionContainer(exports) : new CompositionContainer())
                 .WithExport<ITraceSink>(new TraceSink(messages ?? (messages = new LinkedList<Message>())));
 
             // load document
@@ -241,12 +237,8 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            // configure default composition
-            var catalog = Catalog ?? CompositionUtil.DefaultCatalog;
-            var exports = Exports ?? CompositionUtil.CreateContainer(catalog);
-
             // extend provided container
-            container = new CompositionContainer(exports)
+            container = (exports != null ? new CompositionContainer(exports) : new CompositionContainer())
                 .WithExport<ITraceSink>(new TraceSink(messages ?? (messages = new LinkedList<Message>())));
 
             document = NXDocumentHost.Load(uri, catalog, container);
@@ -349,7 +341,7 @@ namespace NXKit.Web.UI
 
             // write all available knockout templates
             if (Document != null)
-                foreach (var provider in container.GetExportedValues<IHtmlTemplateProvider>())
+                foreach (var provider in Document.Container.GetExportedValues<IHtmlTemplateProvider>())
                     foreach (var template in provider.GetTemplates())
                         if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
                             using (var rdr = new StreamReader(template.Open()))

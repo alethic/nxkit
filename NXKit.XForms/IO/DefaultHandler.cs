@@ -174,36 +174,64 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected virtual ModelResponseStatus ReadRequestStatus(IOResponse response)
         {
+            Contract.Requires<ArgumentNullException>(response != null);
+
             return response.Status == IOStatus.Success ? ModelResponseStatus.Success : ModelResponseStatus.Error;
+        }
+
+        /// <summary>
+        /// Extracts an <see cref="ModelResponse"/> from the given <see cref="IOResponse"/> content.
+        /// </summary>
+        /// <param name="ioResponse"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        ModelResponse ReadIOResponseFromContent(IOResponse ioResponse, ModelRequest request)
+        {
+            Contract.Requires<ArgumentNullException>(ioResponse != null);
+            Contract.Requires<ArgumentNullException>(request != null);
+
+            var content = ioResponse.Content;
+            if (content != null)
+            {
+                var mediaType = ioResponse.ContentType;
+                if (mediaType == null)
+                    throw new UnsupportedMediaTypeException();
+
+                // obtain serializer
+                var deserializer = GetDeserializer(mediaType);
+                if (deserializer == null)
+                    throw new UnsupportedMediaTypeException();
+
+                // generate new response
+                return new ModelResponse(
+                    request,
+                    ReadRequestStatus(ioResponse),
+                    deserializer.Deserialize(
+                        new StreamReader(content),
+                        mediaType));
+            }
+            else
+            {
+                return new ModelResponse(
+                    request,
+                    ReadRequestStatus(ioResponse),
+                    null);
+            }
         }
 
         /// <summary>
         /// Deserializes the <see cref="WebResponse"/> into a <see cref="ModelResponse"/>.
         /// </summary>
-        /// <param name="webResponse"></param>
+        /// <param name="ioResponse"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected virtual ModelResponse ReadIOResponse(IOResponse webResponse, ModelRequest request)
+        protected virtual ModelResponse ReadIOResponse(IOResponse ioResponse, ModelRequest request)
         {
-            Contract.Requires<ArgumentNullException>(webResponse != null);
+            Contract.Requires<ArgumentNullException>(ioResponse != null);
             Contract.Requires<ArgumentNullException>(request != null);
 
-            // obtain serializer
-            var deserializer = GetDeserializer(webResponse.ContentType);
-            if (deserializer == null)
-                throw new UnsupportedMediaTypeException();
-
-            // generate new response
-            var response = new ModelResponse(
-                request,
-                ReadRequestStatus(webResponse),
-                deserializer.Deserialize(
-                    new StreamReader(webResponse.Content),
-                    webResponse.ContentType));
-
-            // populate headers
-            response.Headers.Add(webResponse.Headers);
-
+            var response = ReadIOResponseFromContent(ioResponse, request);
+            response.Headers.Add(ioResponse.Headers);
             return response;
         }
 
