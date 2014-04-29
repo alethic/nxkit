@@ -44,7 +44,8 @@ namespace NXKit.IO
             webRequest.ContentType = request.ContentType;
 
             if (request.Content != null &&
-                request.Content.CanRead)
+                request.Content.CanRead &&
+                request.Content.Length > 0)
                 request.Content.CopyTo(webRequest.GetRequestStream());
 
             // populate headers
