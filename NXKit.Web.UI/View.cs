@@ -29,47 +29,37 @@ namespace NXKit.Web.UI
         IScriptControl
     {
 
-        enum LogLevel
-        {
-
-            Verbose,
-            Information,
-            Warning,
-            Error,
-
-        }
-
         /// <summary>
         /// Log item to be output to the client.
         /// </summary>
         [Serializable]
-        class Log
+        class Message
         {
 
             DateTime timestamp;
-            LogLevel level;
-            string message;
+            Severity severity;
+            string text;
 
             /// <summary>
             /// Initializes a new instance.
             /// </summary>
-            public Log()
+            public Message()
             {
                 this.timestamp = DateTime.UtcNow;
-                this.level = LogLevel.Information;
-                this.message = null;
+                this.severity = Severity.Information;
+                this.text = null;
             }
 
             /// <summary>
             /// Initializes a new instance.
             /// </summary>
-            /// <param name="level"></param>
-            /// <param name="message"></param>
-            public Log(LogLevel level, string message)
+            /// <param name="severity"></param>
+            /// <param name="text"></param>
+            public Message(Severity severity, string text)
             {
                 this.timestamp = DateTime.UtcNow;
-                this.level = level;
-                this.message = message;
+                this.severity = severity;
+                this.text = text;
             }
 
             public DateTime Timestamp
@@ -79,16 +69,16 @@ namespace NXKit.Web.UI
             }
 
             [JsonConverter(typeof(StringEnumConverter))]
-            public LogLevel Level
+            public Severity Severity
             {
-                get { return level; }
-                set { level = value; }
+                get { return severity; }
+                set { severity = value; }
             }
 
-            public string Message
+            public string Text
             {
-                get { return message; }
-                set { message = value; }
+                get { return text; }
+                set { text = value; }
             }
 
         }
@@ -96,66 +86,66 @@ namespace NXKit.Web.UI
         /// <summary>
         /// Captures trace messages from the <see cref="NXDocumentHost"/> to be output to the client.
         /// </summary>
-        class LogSink :
+        class TraceSink :
             ITraceSink
         {
 
-            readonly LinkedList<Log> logs;
+            readonly LinkedList<Message> messages;
 
             /// <summary>
             /// Initializes a new instance.
             /// </summary>
-            /// <param name="logs"></param>
-            public LogSink(LinkedList<Log> logs)
+            /// <param name="messages"></param>
+            public TraceSink(LinkedList<Message> messages)
             {
-                Contract.Requires<ArgumentNullException>(logs != null);
+                Contract.Requires<ArgumentNullException>(messages != null);
 
-                this.logs = logs;
+                this.messages = messages;
             }
 
             public void Debug(object data)
             {
-                logs.AddLast(new Log(LogLevel.Verbose, data.ToString()));
+                messages.AddLast(new Message(Severity.Verbose, data.ToString()));
             }
 
             public void Debug(string message)
             {
-                logs.AddLast(new Log(LogLevel.Verbose, message));
+                messages.AddLast(new Message(Severity.Verbose, message));
             }
 
             public void Debug(string format, params object[] args)
             {
-                logs.AddLast(new Log(LogLevel.Verbose, string.Format(format, args)));
+                messages.AddLast(new Message(Severity.Verbose, string.Format(format, args)));
             }
 
             public void Information(object data)
             {
-                logs.AddLast(new Log(LogLevel.Information, data.ToString()));
+                messages.AddLast(new Message(Severity.Information, data.ToString()));
             }
 
             public void Information(string message)
             {
-                logs.AddLast(new Log(LogLevel.Information, message));
+                messages.AddLast(new Message(Severity.Information, message));
             }
 
             public void Information(string format, params object[] args)
             {
-                logs.AddLast(new Log(LogLevel.Information, string.Format(format, args)));
+                messages.AddLast(new Message(Severity.Information, string.Format(format, args)));
             }
 
             public void Warning(object data)
             {
-                logs.AddLast(new Log(LogLevel.Warning, data.ToString()));
+                messages.AddLast(new Message(Severity.Warning, data.ToString()));
             }
 
             public void Warning(string message)
             {
-                logs.AddLast(new Log(LogLevel.Warning, message));
+                messages.AddLast(new Message(Severity.Warning, message));
             }
 
             public void Warning(string format, params object[] args)
             {
-                logs.AddLast(new Log(LogLevel.Warning, string.Format(format, args)));
+                messages.AddLast(new Message(Severity.Warning, string.Format(format, args)));
             }
 
         }
@@ -166,8 +156,8 @@ namespace NXKit.Web.UI
         ExportProvider exports;
         CompositionContainer container;
         NXDocumentHost document;
-        LinkedList<Log> logs;
-        LinkedList<Log> logs_;
+        LinkedList<Message> messages;
+        LinkedList<Message> messages_;
 
         /// <summary>
         /// Initializes a new instance.
@@ -232,8 +222,8 @@ namespace NXKit.Web.UI
             Contract.Requires<ArgumentNullException>(save != null);
 
             // extend provided container
-            container = new CompositionContainer(exports)
-                .WithExport<ITraceSink>(new LogSink(logs ?? (logs = new LinkedList<Log>())));
+            container = (exports != null ? new CompositionContainer(exports) : new CompositionContainer())
+                .WithExport<ITraceSink>(new TraceSink(messages ?? (messages = new LinkedList<Message>())));
 
             // load document
             return NXDocumentHost.Load(new StringReader(save), catalog, container);
@@ -248,8 +238,8 @@ namespace NXKit.Web.UI
             Contract.Requires<ArgumentNullException>(uri != null);
 
             // extend provided container
-            container = new CompositionContainer(exports)
-                .WithExport<ITraceSink>(new LogSink(logs ?? (logs = new LinkedList<Log>())));
+            container = (exports != null ? new CompositionContainer(exports) : new CompositionContainer())
+                .WithExport<ITraceSink>(new TraceSink(messages ?? (messages = new LinkedList<Message>())));
 
             document = NXDocumentHost.Load(uri, catalog, container);
         }
@@ -308,25 +298,24 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets the client-side logs data as a <see cref="JObject"/>.
+        /// Gets the client-side message data as a <see cref="JObject"/>.
         /// </summary>
         /// <returns></returns>
-        JToken CreateLogsJObject()
+        JToken CreateMessagesJObject()
         {
-            return logs_ != null ? JArray.FromObject(logs_) : new JArray();
+            return messages_ != null ? JArray.FromObject(messages_) : new JArray();
         }
 
         /// <summary>
         /// Gets the client-side data as a <see cref="string"/>.
         /// </summary>
         /// <returns></returns>
-        string CreateLogsString()
+        string CreateMessagesString()
         {
-            // serialize document state to data field
             using (var str = new StringWriter())
             using (var wrt = new JsonTextWriter(str))
             {
-                CreateLogsJObject().WriteTo(wrt);
+                CreateMessagesJObject().WriteTo(wrt);
                 return str.ToString();
             }
         }
@@ -358,9 +347,9 @@ namespace NXKit.Web.UI
                             using (var rdr = new StreamReader(template.Open()))
                                 Page.ClientScript.RegisterClientScriptBlock(typeof(View), template.Name, rdr.ReadToEnd(), false);
 
-            // logs_ to be sent
-            logs_ = logs;
-            logs = null;
+            // messages to be sent
+            messages_ = messages;
+            messages = null;
         }
 
         /// <summary>
@@ -373,7 +362,7 @@ namespace NXKit.Web.UI
             document = (string)o[0] != null ? LoadDocumentHost((string)o[0]) : null;
             cssClass = (string)o[1];
             validationGroup = (string)o[2];
-            logs = (LinkedList<Log>)o[3];
+            messages = (LinkedList<Message>)o[3];
         }
 
         /// <summary>
@@ -387,7 +376,7 @@ namespace NXKit.Web.UI
                 !Visible ? CreateSaveString() : null,
                 cssClass,
                 validationGroup,
-                logs,
+                messages,
             };
         }
 
@@ -445,7 +434,7 @@ namespace NXKit.Web.UI
             d.AddElementProperty("body", ClientID + "_body");
             d.AddElementProperty("data", ClientID + "_data");
             d.AddElementProperty("save", ClientID + "_save");
-            d.AddProperty("logs", CreateLogsString());
+            d.AddProperty("messages", CreateMessagesString());
             d.AddProperty("push", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self"));
             yield return d;
         }
@@ -478,15 +467,15 @@ namespace NXKit.Web.UI
 
         string ICallbackEventHandler.GetCallbackResult()
         {
-            // dump logs
-            logs_ = logs;
-            logs = null;
+            // dump messages
+            messages_ = messages;
+            messages = null;
 
             return JsonConvert.SerializeObject(new
             {
                 Save = CreateSaveString(),
                 Data = CreateDataJObject(),
-                Logs = CreateLogsJObject(),
+                Traces = CreateMessagesJObject(),
             });
         }
 
