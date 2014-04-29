@@ -11,7 +11,8 @@ module NXKit.Web {
         private _body: HTMLElement;
         private _root: Node;
         private _bind: boolean;
-        private _messages: Message[];
+        private _messages: KnockoutObservableArray<Message>;
+        private _threshold: Severity;
 
         private _onNodePropertyChanged: (node: Node, $interface: Interface, property: Property, value: any) => void;
         private _onNodeMethodInvoked: (node: Node, $interface: Interface, method: Method, params: any) => void;
@@ -32,7 +33,8 @@ module NXKit.Web {
             self._body = body;
             self._root = null;
             self._bind = true;
-            self._messages = new Array<Message>();
+            self._messages = ko.observableArray<Message>([]);
+            self._threshold = Severity.Warning;
 
             self._queue = new Array<any>();
             self._queueRunning = false;
@@ -74,29 +76,38 @@ module NXKit.Web {
             return this._root;
         }
 
-        public get Messages(): Message[] {
+        public get Messages(): KnockoutObservableArray<Message> {
             return this._messages;
         }
-        
+
+        public get Threshold(): Severity {
+            return this._threshold;
+        }
+
+        public set Threshold(threshold: Severity) {
+            this._threshold = threshold;
+        }
+
         /**
          * Updates the messages of the view with the specified items.
          */
-        public UpdateMessages(messages: any[]) {
+        public PushMessages(messages: any[]) {
             var self = this;
 
-            self._messages = new Array<Message>();
             for (var i = 0; i < messages.length; i++) {
 
-                var severity = messages[i].Severity;
-                if (severity == null)
-                    continue;
-
-                var text = messages[i].Text;
-                if (text == null)
-                    continue;
-
-                self._messages.push(new Message(severity, text));
+                var severity = <Severity>Severity[<string>messages[i].Severity];
+                var text = messages[i].Text || '';
+                if (severity >= this._threshold)
+                    self._messages.push(new Message(severity, text));
             }
+        }
+
+        /**
+         * Removes the current message from the set of messages.
+         */
+        public RemoveMessage(message: Message) {
+            this._messages.remove(message);
         }
 
         /**

@@ -237,7 +237,7 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            // extend provided container
+            // extend provided containeraven
             container = (exports != null ? new CompositionContainer(exports) : new CompositionContainer())
                 .WithExport<ITraceSink>(new TraceSink(messages ?? (messages = new LinkedList<Message>())));
 
@@ -475,7 +475,7 @@ namespace NXKit.Web.UI
             {
                 Save = CreateSaveString(),
                 Data = CreateDataJObject(),
-                Traces = CreateMessagesJObject(),
+                Messages = CreateMessagesJObject(),
             });
         }
 
