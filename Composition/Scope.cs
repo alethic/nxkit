@@ -18,9 +18,9 @@
         Host,
 
         /// <summary>
-        /// Export is allocated within the node container. These exports are not available to Host or Global exports.
+        /// Export is allocated within the pbject container. These exports are not available to Host or Global exports.
         /// </summary>
-        Node,
+        Object,
 
     }
 

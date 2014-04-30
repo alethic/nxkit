@@ -122,8 +122,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Composition\Container.cs" />
     <Compile Include="Composition\EmptyExportProvider.cs" />
     <Compile Include="Composition\ExportProviderExtensions.cs" />
+    <Compile Include="Composition\ObjectContainer.cs" />
+    <Compile Include="Composition\HostContainer.cs" />
+    <Compile Include="Composition\GlobalContainer.cs" />
+    <Compile Include="Composition\IContainer.cs" />
+    <Compile Include="Composition\IGlobalContainer.cs" />
+    <Compile Include="Composition\IObjectContainer.cs" />
+    <Compile Include="Composition\IHostContainer.cs" />
     <Compile Include="Composition\IScopeMetadata.cs" />
     <Compile Include="Composition\Scope.cs" />
     <Compile Include="Composition\ScopeCatalog.cs" />
@@ -159,6 +167,7 @@
     <Compile Include="IO\IOService.cs" />
     <Compile Include="IO\IOResponse.cs" />
     <Compile Include="IO\WebTransport.cs" />
+    <Compile Include="ObjectContainerAnnotation.cs" />
     <Compile Include="ObjectAnnotation.cs" />
     <Compile Include="DocumentAnnotation.cs" />
     <Compile Include="IInterfacePredicate.cs" />
@@ -177,6 +186,7 @@
     <Compile Include="ElementExtension.cs" />
     <Compile Include="NodeExtension.cs" />
     <Compile Include="Priority.cs" />
+    <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="RemoteAttribute.cs" />
     <Compile Include="Serialization\SerializableAnnotationAttribute.cs" />
     <Compile Include="Serialization\XmlAttributeOverrides.cs" />
