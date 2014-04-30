@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.DOMEvents
@@ -14,6 +16,8 @@ namespace NXKit.DOMEvents
     [Interface(XmlNodeType.Document)]
     [Interface(XmlNodeType.Element)]
     [Interface(XmlNodeType.Text)]
+    [ScopeExport(typeof(NXEventTarget), Scope.Object)]
+    [ScopeExport(typeof(INXEventTarget), Scope.Object)]
     public class NXEventTarget :
         INXEventTarget
     {
@@ -27,6 +31,7 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="element"></param>
         /// <param name="events"></param>
+        [ImportingConstructor]
         public NXEventTarget(XNode element, IEventFactory events)
         {
             Contract.Requires<ArgumentNullException>(element != null);

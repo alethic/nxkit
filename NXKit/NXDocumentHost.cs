@@ -202,10 +202,6 @@ namespace NXKit
                 new ScopeCatalog(catalog, Scope.Host),
                 global);
 
-            host.WithExport<ExportProvider>(host);
-            var tmp1 = host.GetExport<ExportProvider>();
-            var tmp2 = host.GetExports<IInterfaceProvider>();
-
             var _ = func(catalog, global, host);
             if (_ == null)
                 throw new NullReferenceException();
@@ -213,9 +209,8 @@ namespace NXKit
             return _;
         }
 
-        readonly ComposablePartCatalog catalog;
-        readonly CompositionContainer global;
-        readonly CompositionContainer host;
+        readonly GlobalContainer global;
+        readonly HostContainer host;
         readonly ITraceService trace;
         readonly XDocument xml;
 
@@ -237,18 +232,14 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(global != null);
             Contract.Requires<ArgumentNullException>(host != null);
 
-            // ensures the document is in the container
-            host.WithExport<NXDocumentHost>(this);
-
-            this.catalog = catalog;
-            this.global = global;
-            this.host = host;
+            this.global = new GlobalContainer(global, catalog);
+            this.host = new HostContainer(host, catalog);
             this.trace = host.GetExportedValue<ITraceService>();
             this.xml = xml;
 
             // ensure XML document has access to document host
             this.xml.AddAnnotation(this);
-            this.xml.AddAnnotation(host);
+            this.xml.AddAnnotation(this.host);
 
             Initialize();
         }
@@ -373,7 +364,7 @@ namespace NXKit
         /// </summary>
         public CompositionContainer Container
         {
-            get { return host; }
+            get { return host.Exports; }
         }
 
         /// <summary>

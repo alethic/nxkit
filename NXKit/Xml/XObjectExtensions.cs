@@ -4,7 +4,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-
+using NXKit.Composition;
 using NXKit.Util;
 
 namespace NXKit.Xml
@@ -326,21 +326,21 @@ namespace NXKit.Xml
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            return Interfaces(node, node.Exports());
+            return Interfaces(node, node.Container());
         }
 
         /// <summary>
         /// Implements Interfaces, allowing the specification of an export provider.
         /// </summary>
         /// <param name="node"></param>
-        /// <param name="exports"></param>
+        /// <param name="container"></param>
         /// <returns></returns>
-        internal static IEnumerable<object> Interfaces(this XObject node, ExportProvider exports)
+        internal static IEnumerable<object> Interfaces(this XObject node, IContainer container)
         {
             Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(exports != null);
+            Contract.Requires<ArgumentNullException>(container != null);
 
-            return exports
+            return container
                 .GetExportedValues<IInterfaceProvider>()
                 .SelectMany(i => i.GetInterfaces(node));
         }
@@ -419,6 +419,32 @@ namespace NXKit.Xml
                     return ((XDocument)self).Exports();
                 else
                     return self.Document.Exports();
+            });
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IObjectContainer"/> for the given <see cref="XObject"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static IContainer Container(this XObject self)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Ensures(Contract.Result<IContainer>() != null);
+
+            // get or create the new object container annotation
+            return self.AnnotationOrCreate<ObjectContainer>(() =>
+            {
+                var host = self.Document.Annotation<HostContainer>();
+                if (host == null)
+                    throw new InvalidOperationException();
+
+                return new ObjectContainer(
+                    self,
+                    new CompositionContainer(
+                        new ScopeCatalog(host.Catalog, Scope.Object),
+                        host.Exports),
+                    host.Catalog);
             });
         }
 

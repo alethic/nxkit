@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+
+using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.Util;
 using NXKit.Xml;
@@ -17,6 +20,8 @@ namespace NXKit.DOMEvents
     [Interface(XmlNodeType.Document)]
     [Interface(XmlNodeType.Element)]
     [Interface(XmlNodeType.Text)]
+    [ScopeExport(typeof(EventTarget), Scope.Object)]
+    [ScopeExport(typeof(IEventTarget), Scope.Object)]
     public class EventTarget :
         IEventTarget
     {
@@ -28,6 +33,7 @@ namespace NXKit.DOMEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="node"></param>
+        [ImportingConstructor]
         public EventTarget(
             ITraceService trace,
             XNode node)
