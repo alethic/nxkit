@@ -241,6 +241,9 @@ namespace NXKit
             this.xml.AddAnnotation(this);
             this.xml.AddAnnotation(this.host);
 
+            // ensure document host is available to exports
+            this.host.WithExport<NXDocumentHost>(this);
+
             Initialize();
         }
 

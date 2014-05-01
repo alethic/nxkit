@@ -8,7 +8,7 @@ namespace NXKit
 
     [MetadataAttribute]
     public class ElementExtensionAttribute :
-        ObjectExtensionAttribute<XElement>
+        ObjectExtensionAttribute
     {
 
         readonly string namespaceName;
@@ -18,7 +18,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         public ElementExtensionAttribute()
-            : base()
+            : base(typeof(XElement))
         {
 
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
@@ -10,7 +9,7 @@ using NXKit.Composition;
 namespace NXKit
 {
 
-    [ScopeExport(typeof(IInterfaceProvider), Scope.Host)]
+    [ScopeExport(typeof(IInterfaceProvider), Scope.Object)]
     public class ContainerInterfaceProvider :
         IInterfaceProvider
     {
@@ -46,16 +45,18 @@ namespace NXKit
         public IEnumerable<object> GetInterfaces(XObject obj)
         {
             if (obj is XDocument)
-                return documentExtensions
-                    .Select(i => i.Value);
+                foreach (var i in documentExtensions)
+                    if (i.Value != null)
+                        yield return i.Value;
             if (obj is XElement)
-                return elementExtensions
-                    .Where(i => ElementPredicate(i.Metadata))
-                    .Select(i => i.Value);
+                foreach (var i in elementExtensions)
+                    if (ElementPredicate(i.Metadata))
+                        if (i.Value != null)
+                            yield return i.Value;
             if (obj is XText)
-                return textExtensions
-                    .Select(i => i.Value);
-
+                foreach (var i in textExtensions)
+                    if (i.Value != null)
+                        yield return i.Value;
         }
 
         bool ElementPredicate(IDictionary<string, object> metadata)

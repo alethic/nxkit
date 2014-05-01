@@ -4,14 +4,14 @@ namespace NXKit
 {
 
     public class DocumentExtensionAttribute :
-        ObjectExtensionAttribute<XDocument>
+        ObjectExtensionAttribute
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public DocumentExtensionAttribute()
-            : base()
+            : base(typeof(XDocument))
         {
 
         }
