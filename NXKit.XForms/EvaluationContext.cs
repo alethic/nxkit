@@ -93,7 +93,6 @@ namespace NXKit.XForms
         internal object EvaluateXPath(XObject xml, string expression, XPathResultType resultType)
         {
             Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentNullException>(xml.Exports() != null);
             Contract.Requires<ArgumentNullException>(expression != null);
 
             var nc = new EvaluationXsltContext(xml, this);

@@ -87,6 +87,16 @@ namespace NXKit.Composition
             return this;
         }
 
+        public T GetExportedValue<T>()
+        {
+            return container.GetExportedValue<T>();
+        }
+
+        public T GetExportedValue<T>(Type contractType)
+        {
+            return container.GetExportedValue<T>(AttributedModelServices.GetContractName(contractType));
+        }
+
     }
 
 }

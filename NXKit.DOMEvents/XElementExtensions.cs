@@ -21,9 +21,7 @@ namespace NXKit.DOMEvents
         public static void DispatchEvent(this XElement element, string type)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(element.Exports() != null);
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(type.Length > 0);
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(type));
 
             var target = element.InterfaceOrDefault<INXEventTarget>();
             if (target == null)
@@ -41,9 +39,7 @@ namespace NXKit.DOMEvents
         public static void DispatchEvent(this XElement element, string type, object context)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(element.Exports() != null);
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(type.Length > 0);
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(type));
 
             var target = element.InterfaceOrDefault<INXEventTarget>();
             if (target == null)
@@ -60,7 +56,6 @@ namespace NXKit.DOMEvents
         public static void DispatchEvent(this XElement element, Event evt)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(element.Exports() != null);
             Contract.Requires<ArgumentNullException>(evt != null);
 
             var target = element.InterfaceOrDefault<IEventTarget>();

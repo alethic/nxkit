@@ -3,7 +3,6 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms
@@ -14,7 +13,6 @@ namespace NXKit.XForms
     /// bound node.
     /// </summary>
     [Interface("{http://www.w3.org/2002/xforms}input")]
-    [ScopeExport(typeof(Input), Scope.Object)]
     public class Input :
         ElementExtension
     {
@@ -23,6 +21,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="eventTarget"></param>
         [ImportingConstructor]
         public Input(XElement element, INXEventTarget eventTarget)
             : base(element)

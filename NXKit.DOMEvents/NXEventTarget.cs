@@ -16,8 +16,6 @@ namespace NXKit.DOMEvents
     [Interface(XmlNodeType.Document)]
     [Interface(XmlNodeType.Element)]
     [Interface(XmlNodeType.Text)]
-    [ScopeExport(typeof(NXEventTarget), Scope.Object)]
-    [ScopeExport(typeof(INXEventTarget), Scope.Object)]
     public class NXEventTarget :
         INXEventTarget
     {

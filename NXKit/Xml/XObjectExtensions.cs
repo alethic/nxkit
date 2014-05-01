@@ -4,6 +4,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+
 using NXKit.Composition;
 using NXKit.Util;
 
@@ -401,25 +402,6 @@ namespace NXKit.Xml
                 throw new NullReferenceException();
 
             return i;
-        }
-
-        /// <summary>
-        /// Resolves the <see cref="ExportProvider"/> for the given <see cref="XObject"/>.
-        /// </summary>
-        /// <param name="self"></param>
-        /// <returns></returns>
-        public static ExportProvider Exports(this XObject self)
-        {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Ensures(Contract.Result<ExportProvider>() != null);
-
-            return self.AnnotationOrCreate<ExportProvider>(() =>
-            {
-                if (self is XDocument)
-                    return ((XDocument)self).Exports();
-                else
-                    return self.Document.Exports();
-            });
         }
 
         /// <summary>
