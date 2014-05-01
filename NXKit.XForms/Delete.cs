@@ -6,6 +6,7 @@ using System.Xml.Linq;
 
 using NXKit.DOMEvents;
 using NXKit.Xml;
+using NXKit.XMLEvents;
 
 namespace NXKit.XForms
 {
@@ -13,7 +14,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}delete")]
     public class Delete :
         ElementExtension,
-        IAction
+        IEventHandler
     {
 
         readonly DeleteAttributes attributes;

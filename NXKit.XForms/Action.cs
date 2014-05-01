@@ -5,6 +5,7 @@ using System.Xml.Linq;
 
 using NXKit.DOMEvents;
 using NXKit.Xml;
+using NXKit.XMLEvents;
 
 namespace NXKit.XForms
 {
@@ -12,7 +13,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}action")]
     public class Action :
         ElementExtension,
-        IAction
+        IEventHandler
     {
 
         /// <summary>
@@ -27,17 +28,12 @@ namespace NXKit.XForms
 
         public void Handle(Event ev)
         {
-            Invoke();
-        }
-
-        public void Invoke()
-        {
-            var actions = Element
+            var handlers = Element
                 .Elements()
-                .SelectMany(i => i.Interfaces<IAction>());
+                .SelectMany(i => i.Interfaces<IEventHandler>());
 
-            foreach (var action in actions)
-                action.Invoke();
+            foreach (var handler in handlers)
+                handler.Handle(ev);
         }
 
     }

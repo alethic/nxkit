@@ -18,6 +18,7 @@ namespace NXKit.XMLEvents
     {
 
         readonly XElement element;
+        readonly EventListenerAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
@@ -28,33 +29,7 @@ namespace NXKit.XMLEvents
             Contract.Requires<ArgumentNullException>(element != null);
 
             this.element = element;
-        }
-
-        /// <summary>
-        /// Gets the value of the 'event' attribute.
-        /// </summary>
-        /// <returns></returns>
-        string GetEvent()
-        {
-            return (string)element.Attribute(SchemaConstants.Events_1_0 + "event");
-        }
-
-        /// <summary>
-        /// Gets the value of the 'handler' attribute.
-        /// </summary>
-        /// <returns></returns>
-        string GetHandlerAttribute()
-        {
-            return (string)element.Attribute(SchemaConstants.Events_1_0 + "handler");
-        }
-
-        /// <summary>
-        /// Gets the value of the 'observer' attribute.
-        /// </summary>
-        /// <returns></returns>
-        string GetObserverAttribute()
-        {
-            return (string)element.Attribute(SchemaConstants.Events_1_0 + "observer");
+            this.attributes = new EventListenerAttributes(element);
         }
 
         /// <summary>
@@ -63,14 +38,11 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         XElement GetHandlerElement()
         {
-            var handlerAttr = GetHandlerAttribute();
-            var observerAttr = GetObserverAttribute();
-
-            if (handlerAttr != null)
-                return element.ResolveId(handlerAttr);
-            else if (observerAttr != null)
+            if (attributes.Handler != null)
+                return element.ResolveId(attributes.Handler);
+            else if (attributes.Observer != null)
                 return element;
-            else if (observerAttr == null)
+            else if (attributes.Observer == null)
                 return element;
             else
                 throw new InvalidOperationException();
@@ -95,14 +67,11 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         XElement GetObserverElement()
         {
-            var handlerAttr = GetHandlerAttribute();
-            var observerAttr = GetObserverAttribute();
-
-            if (observerAttr != null)
-                return element.ResolveId(observerAttr);
-            else if (handlerAttr != null)
+            if (attributes.Observer != null)
+                return element.ResolveId(attributes.Observer);
+            else if (attributes.Handler != null)
                 return element;
-            else if (handlerAttr == null)
+            else if (attributes.Handler == null)
                 return (XElement)element.Parent;
             else
                 throw new InvalidOperationException();
@@ -127,9 +96,8 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         XElement GetTargetElement()
         {
-            var targetAttr = (string)element.Attribute(SchemaConstants.Events_1_0 + "target");
-            if (targetAttr != null)
-                return element.ResolveId(targetAttr);
+            if (attributes.Target != null)
+                return element.ResolveId(attributes.Target);
 
             return null;
         }
@@ -140,7 +108,7 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         public bool GetCapture()
         {
-            return (string)element.Attribute(SchemaConstants.Events_1_0 + "phase") == "capture";
+            return attributes.Phase == "capture";
         }
 
         /// <summary>
@@ -149,16 +117,16 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         public bool GetPropagate()
         {
-            return (string)element.Attribute(SchemaConstants.Events_1_0 + "propagate") != "stop";
+            return attributes.Propagate != "stop";
         }
 
         /// <summary>
         /// Gets whether the default action should execute.
         /// </summary>
         /// <returns></returns>
-        public bool GetDefaultAction()
+        public bool InvokeDefaultAction()
         {
-            return (string)element.Attribute(SchemaConstants.Events_1_0 + "defaultAction") != "cancel";
+            return attributes.DefaultAction != "cancel";
         }
 
         /// <summary>
@@ -166,7 +134,7 @@ namespace NXKit.XMLEvents
         /// </summary>
         void Attach()
         {
-            var evt = GetEvent();
+            var evt = attributes.Event;
             if (evt == null)
                 return;
 

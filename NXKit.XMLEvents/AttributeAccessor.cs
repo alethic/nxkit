@@ -2,7 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
-namespace NXKit.XForms
+namespace NXKit.XMLEvents
 {
 
     /// <summary>
@@ -29,7 +29,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public AttributeAccessor(XElement element)
-            : this(element, Constants.XForms_1_0)
+            : this(element, SchemaConstants.Events_1_0)
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }

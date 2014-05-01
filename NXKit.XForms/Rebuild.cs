@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
+using NXKit.XMLEvents;
 
 namespace NXKit.XForms
 {
@@ -10,7 +11,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}rebuild")]
     public class Rebuild :
         ElementExtension,
-        IAction
+        IEventHandler
     {
 
         /// <summary>

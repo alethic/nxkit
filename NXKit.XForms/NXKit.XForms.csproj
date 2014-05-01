@@ -119,6 +119,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DispatchAttributes.cs" />
     <Compile Include="IO\FileHandler.cs" />
     <Compile Include="IO\IModelRequestService.cs" />
     <Compile Include="IO\ModelRequest.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="IO\DefaultHandler.cs" />
     <Compile Include="Serialization\UrlEncodedModelSerializer.cs" />
     <Compile Include="IO\ModelRequestHandler.cs" />
+    <Compile Include="SendAttributes.cs" />
     <Compile Include="SubmitAttributes.cs" />
     <Compile Include="AttributeEvaluationContextResolver.cs" />
     <Compile Include="HeaderAttributes.cs" />
@@ -185,7 +187,6 @@
     </Compile>
     <Compile Include="IBindingNode.cs" />
     <Compile Include="BindingAttributes.cs" />
-    <Compile Include="IAction.cs" />
     <Compile Include="IEvaluationContextScope.cs" />
     <Compile Include="ISelectable.cs" />
     <Compile Include="IUIBindingNode.cs" />

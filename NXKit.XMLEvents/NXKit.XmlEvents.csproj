@@ -114,7 +114,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action.cs" />
+    <Compile Include="AttributeAccessor.cs" />
     <Compile Include="ElementEventListener.cs" />
+    <Compile Include="EventListenerAttributes.cs" />
+    <Compile Include="IEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaConstants.cs" />
   </ItemGroup>

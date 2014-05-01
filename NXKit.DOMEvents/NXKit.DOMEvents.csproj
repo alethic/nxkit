@@ -144,7 +144,6 @@
     <Compile Include="NXEventTarget.cs" />
     <Compile Include="EventTarget.cs" />
     <Compile Include="IEventDefaultActionHandler.cs" />
-    <Compile Include="IEventHandler.cs" />
     <Compile Include="INXEventTarget.cs" />
     <Compile Include="UIEvent.cs" />
     <Compile Include="Event.cs" />
