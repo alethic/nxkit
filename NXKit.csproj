@@ -122,6 +122,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributeAccessor.cs" />
     <Compile Include="Composition\Container.cs" />
     <Compile Include="Composition\EmptyExportProvider.cs" />
     <Compile Include="Composition\ExportProviderExtensions.cs" />
