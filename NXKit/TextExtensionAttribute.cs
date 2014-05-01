@@ -4,14 +4,14 @@ namespace NXKit
 {
 
     public class TextExtensionAttribute :
-        ObjectExtensionAttribute<XText>
+        ObjectExtensionAttribute
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public TextExtensionAttribute()
-            : base()
+            : base(typeof(XText))
         {
 
         }

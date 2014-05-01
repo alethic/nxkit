@@ -9,9 +9,8 @@ namespace NXKit
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     [MetadataAttribute]
-    public abstract class ObjectExtensionAttribute<T> :
+    public abstract class ObjectExtensionAttribute :
         ScopeExportAttribute
-        where T : XObject
     {
 
         Type predicateType;
@@ -19,9 +18,9 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="contractType"></param>
-        public ObjectExtensionAttribute()
-            : base(typeof(IExtension<T>))
+        /// <param name="objectType"></param>
+        public ObjectExtensionAttribute(Type objectType)
+            : base(typeof(IExtension<>).MakeGenericType(objectType))
         {
 
         }
