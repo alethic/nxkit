@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.ComponentModel.Composition.ReflectionModel;
 using System.Diagnostics.Contracts;
@@ -10,8 +9,8 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 
-using NXKit.Xml;
 using NXKit.Composition;
+using NXKit.Xml;
 
 namespace NXKit
 {
@@ -53,42 +52,42 @@ namespace NXKit
             defaultDescriptors = descriptors;
         }
 
-        readonly IHostContainer host;
+        readonly IHostContainer container;
         readonly IEnumerable<IInterfacePredicate> predicates;
         readonly List<InterfaceDescriptor> descriptors;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="host"></param>
+        /// <param name="container"></param>
         /// <param name="predicates"></param>
         [ImportingConstructor]
         public DefaultInterfaceProvider(
-            IHostContainer host,
+            IHostContainer container,
             [ImportMany] IEnumerable<IInterfacePredicate> predicates)
-            : this(host, predicates, defaultDescriptors)
+            : this(container, predicates, defaultDescriptors)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
+            Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(predicates != null);
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="host"></param>
+        /// <param name="container"></param>
         /// <param name="catalog"></param>
         /// <param name="predicates"></param>
         /// <param name="descriptors"></param>
         public DefaultInterfaceProvider(
-            IHostContainer host,
+            IHostContainer container,
             IEnumerable<IInterfacePredicate> predicates,
             List<InterfaceDescriptor> descriptors)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
+            Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(predicates != null);
             Contract.Requires<ArgumentNullException>(descriptors != null);
 
-            this.host = host;
+            this.container = container;
             this.predicates = predicates;
             this.descriptors = descriptors;
         }
@@ -121,28 +120,11 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(types != null);
 
             var objects = types
-                .Select(i => GetOrCreate(obj, i, () => GetExport(obj, i) ?? CreateInstance(obj, i)))
+                .Select(i => GetOrCreate(obj, i, () => CreateInstance(obj, i)))
                 .Where(i => i != null)
                 .ToList();
 
             return objects;
-        }
-
-        /// <summary>
-        /// Gets the export given by the type <paramref name="type"/> for the given <see cref="XObject"/>.
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        object GetExport(XObject obj, Type type)
-        {
-            Contract.Requires<ArgumentNullException>(obj != null);
-            Contract.Requires<ArgumentNullException>(type != null);
-
-            return obj.Container()
-                .GetExportedValues(type)
-                .FirstOrDefault();
         }
 
         /// <summary>

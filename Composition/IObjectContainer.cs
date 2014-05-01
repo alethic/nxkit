@@ -1,7 +1,7 @@
 ﻿namespace NXKit.Composition
 {
 
-    interface IObjectContainer :
+    public interface IObjectContainer :
         IContainer
     {
 

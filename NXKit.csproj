@@ -140,6 +140,7 @@
     <Compile Include="Composition\ScopeHelper.cs" />
     <Compile Include="Composition\ScopeImportDefinition.cs" />
     <Compile Include="Composition\ScopePartDefinition.cs" />
+    <Compile Include="ContainerInterfaceProvider.cs" />
     <Compile Include="Diagnostics\ITypeProxyProvider.cs" />
     <Compile Include="Diagnostics\DiagnosticsTraceSink.cs" />
     <Compile Include="Diagnostics\DefaultTraceService.cs" />
@@ -149,7 +150,14 @@
     <Compile Include="Diagnostics\XDocumentTypeProxyProvider.cs" />
     <Compile Include="Diagnostics\XElementTypeProxyProvider.cs" />
     <Compile Include="Diagnostics\XTextTypeProxyProvider.cs" />
+    <Compile Include="IExtension.cs" />
+    <Compile Include="ITextExtension.cs" />
+    <Compile Include="IDocumentExtension.cs" />
+    <Compile Include="TextExtensionAttribute.cs" />
+    <Compile Include="DocumentExtensionAttribute.cs" />
+    <Compile Include="ElementExtensionAttribute.cs" />
     <Compile Include="IdRef.cs" />
+    <Compile Include="IElementExtension.cs" />
     <Compile Include="IExceptionHandler.cs" />
     <Compile Include="Diagnostics\ITraceService.cs" />
     <Compile Include="Diagnostics\ITraceSink.cs" />
@@ -185,6 +193,7 @@
     <Compile Include="Net\ResourceWebResponse.cs" />
     <Compile Include="ElementExtension.cs" />
     <Compile Include="NodeExtension.cs" />
+    <Compile Include="ObjectExtensionAttribute.cs" />
     <Compile Include="Priority.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="RemoteAttribute.cs" />
