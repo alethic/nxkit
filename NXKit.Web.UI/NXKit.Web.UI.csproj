@@ -124,6 +124,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HostEventArgs.cs" />
+    <Compile Include="HostUnloadedEventHandler.cs" />
+    <Compile Include="HostLoadedEventHandler.cs" />
     <Compile Include="Severity.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

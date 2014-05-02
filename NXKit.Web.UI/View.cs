@@ -155,7 +155,7 @@ namespace NXKit.Web.UI
         ComposablePartCatalog catalog;
         ExportProvider exports;
         CompositionContainer container;
-        NXDocumentHost document;
+        NXDocumentHost host;
         LinkedList<Message> messages;
         LinkedList<Message> messages_;
 
@@ -188,11 +188,41 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets a reference to the <see cref="Document"/>.
+        /// Gets a reference to the <see cref="Host"/>.
         /// </summary>
-        public NXDocumentHost Document
+        public NXDocumentHost Host
         {
-            get { return document; }
+            get { return host; }
+        }
+
+        /// <summary>
+        /// Raised when the <see cref="NXDocumentHost"/> is loaded.
+        /// </summary>
+        public event HostLoadedEventHandler HostLoaded;
+
+        /// <summary>
+        /// Raises the HostLoaded event.
+        /// </summary>
+        /// <param name="args"></param>
+        void OnHostLoaded(HostEventArgs args)
+        {
+            if (HostLoaded != null)
+                HostLoaded(this, args);
+        }
+
+        /// <summary>
+        /// Raised when the <see cref="NXDocumentHost"/> is unloaded.
+        /// </summary>
+        public event HostLoadedEventHandler HostUnloaded;
+
+        /// <summary>
+        /// Raises the HostUnloaded event.
+        /// </summary>
+        /// <param name="args"></param>
+        void OnHostUnloaded(HostEventArgs args)
+        {
+            if (HostUnloaded != null)
+                HostUnloaded(this, args);
         }
 
         /// <summary>
@@ -241,7 +271,8 @@ namespace NXKit.Web.UI
             container = (exports != null ? new CompositionContainer(exports) : new CompositionContainer())
                 .WithExport<ITraceSink>(new TraceSink(messages ?? (messages = new LinkedList<Message>())));
 
-            document = NXDocumentHost.Load(uri, catalog, container);
+            host = NXDocumentHost.Load(uri, catalog, container);
+            OnHostLoaded(HostEventArgs.Empty);
         }
 
         /// <summary>
@@ -263,7 +294,7 @@ namespace NXKit.Web.UI
         {
             using (var wrt = new StringWriter())
             {
-                document.Save(wrt);
+                host.Save(wrt);
                 return wrt.ToString();
             }
         }
@@ -277,7 +308,7 @@ namespace NXKit.Web.UI
             // serialize document state to data field
             using (var wrt = new JTokenWriter())
             {
-                RemoteJson.GetJson(wrt, document.Root);
+                RemoteJson.GetJson(wrt, host.Root);
                 return wrt.Token;
             }
         }
@@ -340,8 +371,8 @@ namespace NXKit.Web.UI
             base.OnPreRender(args);
 
             // write all available knockout templates
-            if (Document != null)
-                foreach (var provider in Document.Container.GetExportedValues<IHtmlTemplateProvider>())
+            if (Host != null)
+                foreach (var provider in Host.Container.GetExportedValues<IHtmlTemplateProvider>())
                     foreach (var template in provider.GetTemplates())
                         if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
                             using (var rdr = new StreamReader(template.Open()))
@@ -359,7 +390,7 @@ namespace NXKit.Web.UI
         protected override void LoadViewState(object savedState)
         {
             var o = (object[])savedState;
-            document = (string)o[0] != null ? LoadDocumentHost((string)o[0]) : null;
+            host = (string)o[0] != null ? LoadDocumentHost((string)o[0]) : null;
             cssClass = (string)o[1];
             validationGroup = (string)o[2];
             messages = (LinkedList<Message>)o[3];
@@ -403,7 +434,7 @@ namespace NXKit.Web.UI
             writer.RenderEndTag();
             writer.WriteLine();
 
-            if (document != null)
+            if (host != null)
             {
                 // serialize visual state to data field
                 writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_data");
@@ -455,7 +486,10 @@ namespace NXKit.Web.UI
             // load saved data
             var save = postCollection[postDataKey + "_save"];
             if (save != null)
-                document = LoadDocumentHost(save);
+            {
+                host = LoadDocumentHost(save);
+                OnHostLoaded(HostEventArgs.Empty);
+            }
 
             return true;
         }
@@ -485,7 +519,10 @@ namespace NXKit.Web.UI
 
             var save = (string)args["Save"];
             if (save != null)
-                document = LoadDocumentHost(save);
+            {
+                host = LoadDocumentHost(save);
+                OnHostLoaded(HostEventArgs.Empty);
+            }
 
             // dispatch action
             switch ((string)args["Action"])
@@ -511,7 +548,7 @@ namespace NXKit.Web.UI
             foreach (JObject node in nodes)
                 ClientPushNode(node);
 
-            document.Invoke();
+            host.Invoke();
         }
 
         /// <summary>
@@ -526,7 +563,7 @@ namespace NXKit.Web.UI
             if (id < 0)
                 throw new InvalidOperationException("Client Push sent invalid Node ID.");
 
-            var node = document.Root.DescendantsAndSelf()
+            var node = host.Root.DescendantsAndSelf()
                 .FirstOrDefault(i => i.GetObjectId() == id);
             if (node == null)
                 throw new InvalidOperationException("Client Push sent unknown Node ID.");

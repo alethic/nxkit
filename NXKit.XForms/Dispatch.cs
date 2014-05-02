@@ -54,7 +54,11 @@ namespace NXKit.XForms
             if (nxDocumentEvent == null)
                 throw new InvalidOperationException();
 
-            var evt = nxDocumentEvent.CreateEvent(name);
+            var documentEvent = Element.Document.Interface<IDocumentEvent>();
+            if (documentEvent == null)
+                throw new InvalidOperationException();
+
+            var evt = nxDocumentEvent.CreateEvent(name) ?? documentEvent.CreateEvent("Event");
             if (evt != null)
                 evt.InitEvent(name, canBubble, cancelable);
 
