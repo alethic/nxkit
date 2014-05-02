@@ -45,7 +45,7 @@ namespace NXKit.XForms
             DocumentScript.Execute(Type, Element.Value);
         }
 
-        public void Handle(Event evt)
+        public void HandleEvent(Event evt)
         {
             Invoke();
         }

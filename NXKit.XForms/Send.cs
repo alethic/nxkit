@@ -32,7 +32,7 @@ namespace NXKit.XForms
             this.context = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
         }
 
-        public void Handle(Event ev)
+        public void HandleEvent(Event ev)
         {
             Invoke();
         }

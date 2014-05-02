@@ -25,14 +25,14 @@ namespace NXKit.XMLEvents
             Contract.Requires<ArgumentNullException>(element != null);
         }
 
-        public void Handle(Event evt)
+        public void HandleEvent(Event evt)
         {
             var handlers = Element
                 .Elements()
                 .SelectMany(i => i.Interfaces<IEventHandler>());
 
             foreach (var handler in handlers)
-                handler.Handle(evt);
+                handler.HandleEvent(evt);
         }
 
     }

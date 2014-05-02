@@ -9,7 +9,11 @@ namespace NXKit.XMLEvents
     public interface IEventHandler
     {
 
-        void Handle(Event evt);
+        /// <summary>
+        /// Handles the received event.
+        /// </summary>
+        /// <param name="evt"></param>
+        void HandleEvent(Event evt);
 
     }
 

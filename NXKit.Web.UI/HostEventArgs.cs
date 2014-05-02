@@ -7,7 +7,7 @@ namespace NXKit.Web.UI
         EventArgs
     {
 
-        public static readonly HostEventArgs Empty = new HostEventArgs();
+        public static new readonly HostEventArgs Empty = new HostEventArgs();
 
     }
 

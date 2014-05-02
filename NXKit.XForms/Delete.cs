@@ -47,7 +47,7 @@ namespace NXKit.XForms
             get { return bindingNode.Value != null ? bindingNode.Value.Binding : null; }
         }
 
-        public void Handle(Event ev)
+        public void HandleEvent(Event ev)
         {
             Invoke();
         }

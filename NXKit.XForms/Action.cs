@@ -26,14 +26,14 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
         }
 
-        public void Handle(Event ev)
+        public void HandleEvent(Event ev)
         {
             var handlers = Element
                 .Elements()
                 .SelectMany(i => i.Interfaces<IEventHandler>());
 
             foreach (var handler in handlers)
-                handler.Handle(ev);
+                handler.HandleEvent(ev);
         }
 
     }

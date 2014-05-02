@@ -27,7 +27,7 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
         }
 
-        public void Handle(Event ev)
+        public void HandleEvent(Event ev)
         {
             var modelAttr = attributes.GetAttributeValue("model");
             if (modelAttr != null)
