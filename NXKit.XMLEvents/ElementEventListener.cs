@@ -17,20 +17,22 @@ namespace NXKit.XMLEvents
         IOnLoad
     {
 
-        readonly NXDocumentHost host;
         readonly XElement element;
+        readonly IInvoker invoker;
         readonly EventListenerAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="host"></param>
         /// <param name="element"></param>
-        public ElementEventListener(NXDocumentHost host, XElement element)
+        /// <param name="invoker"></param>
+        public ElementEventListener(XElement element, IInvoker invoker)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(invoker != null);
 
             this.element = element;
+            this.invoker = invoker;
             this.attributes = new EventListenerAttributes(element);
         }
 
@@ -151,8 +153,16 @@ namespace NXKit.XMLEvents
             if (handler != null)
                 observer.AddEventListener(
                     evt,
-                    new EventListener(_ => handler.HandleEvent(_)),
+                    new EventListener(_ => InvokeHandleEvent(handler, _)),
                     GetCapture());
+        }
+
+        void InvokeHandleEvent(IEventHandler handler, Event evt)
+        {
+            Contract.Requires<ArgumentNullException>(handler != null);
+            Contract.Requires<ArgumentNullException>(evt != null);
+
+            invoker.Invoke(() => handler.HandleEvent(evt));
         }
 
         void IOnLoad.Load()
