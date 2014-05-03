@@ -116,7 +116,7 @@
     <Compile Include="DefaultEventFactory.cs" />
     <Compile Include="DocumentEvent.cs" />
     <Compile Include="DocumentEventDispatcher.cs" />
-    <Compile Include="DocumentExceptionHandler.cs" />
+    <Compile Include="DOMEventExceptionHandler.cs" />
     <Compile Include="DOMTargetEventException.cs" />
     <Compile Include="DOMEventException.cs" />
     <Compile Include="EventHandlerDelegate.cs" />

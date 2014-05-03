@@ -17,17 +17,21 @@ namespace NXKit.XForms
         IOnRefresh
     {
 
+        readonly IInvoker invoker;
         readonly Lazy<UIBinding> uiBinding;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public UIBindingNode(XElement element)
+        /// <param name="invoker"></param>
+        public UIBindingNode(XElement element, IInvoker invoker)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(invoker != null);
 
+            this.invoker = invoker;
             this.uiBinding = new Lazy<UIBinding>(() => CreateUIBinding());
         }
 
@@ -48,11 +52,11 @@ namespace NXKit.XForms
             var b = Element.InterfaceOrDefault<IBindingNode>();
             if (b != null &&
                 b.Binding != null)
-                return new UIBinding(Element, b.Binding);
+                return new UIBinding(Element, invoker, b.Binding);
 
             return null;
         }
-        
+
         void IOnRefresh.RefreshBinding()
         {
             if (UIBinding != null)
@@ -61,7 +65,7 @@ namespace NXKit.XForms
 
         void IOnRefresh.Refresh()
         {
-            
+
         }
 
         void IOnRefresh.DispatchEvents()

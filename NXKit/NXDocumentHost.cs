@@ -4,7 +4,6 @@ using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
-using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -211,6 +210,7 @@ namespace NXKit
 
         readonly GlobalContainer global;
         readonly HostContainer host;
+        readonly IInvoker invoker;
         readonly ITraceService trace;
         readonly XDocument xml;
 
@@ -234,6 +234,7 @@ namespace NXKit
 
             this.global = new GlobalContainer(global, catalog);
             this.host = new HostContainer(host, catalog);
+            this.invoker = host.GetExportedValue<IInvoker>();
             this.trace = host.GetExportedValue<ITraceService>();
             this.xml = xml;
 
@@ -259,66 +260,6 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Handles an exception by dispatching it to the root <see cref="IExceptionHandler"/>.
-        /// </summary>
-        /// <param name="exception"></param>
-        void HandleException(Exception exception)
-        {
-            Contract.Requires<ArgumentNullException>(exception != null);
-            trace.Warning(exception);
-
-            bool rethrow = true;
-
-            // search for exception handlers
-            foreach (var handler in Xml.Interfaces<IExceptionHandler>())
-                if (handler.HandleException(exception))
-                    rethrow = false;
-
-            // should we rethrow the exception?
-            if (rethrow)
-                ExceptionDispatchInfo.Capture(exception).Throw();
-        }
-
-        /// <summary>
-        /// Invokes the given <see cref="Action"/>, protecting the caller against exceptions.
-        /// </summary>
-        /// <param name="action"></param>
-        void Invoke(Action action)
-        {
-            Contract.Requires<ArgumentNullException>(action != null);
-
-            try
-            {
-                action();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-            }
-        }
-
-        /// <summary>
-        /// Invokes the given <see cref="Func`1"/>, protecting the caller against exception.s
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="func"></param>
-        T Invoke<T>(Func<T> func)
-        {
-            Contract.Requires<ArgumentNullException>(func != null);
-
-            try
-            {
-                return func();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-            }
-
-            return default(T);
-        }
-
-        /// <summary>
         /// Invokes any <see cref="IOnInit"/> interfaces the first time the document is loaded.
         /// </summary>
         void InvokeInit()
@@ -336,7 +277,7 @@ namespace NXKit
 
                 foreach (var init in inits)
                     if (init.Document != null)
-                        Invoke(() =>
+                        invoker.Invoke(() =>
                         {
                             init.Interface<IOnInit>().Init();
                             init.AnnotationOrCreate<ObjectAnnotation>().Init = true;
@@ -356,7 +297,7 @@ namespace NXKit
 
             foreach (var load in loads)
                 if (load.Document != null)
-                    Invoke(() =>
+                    invoker.Invoke(() =>
                     {
                         load.Interface<IOnLoad>().Load();
                     });
@@ -392,7 +333,7 @@ namespace NXKit
 
                 run = false;
                 foreach (var invoke in invokes)
-                    run |= Invoke(() => invoke.Invoke());
+                    run |= invoker.Invoke(() => invoke.Invoke());
             }
             while (run);
         }
