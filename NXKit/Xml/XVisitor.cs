@@ -80,7 +80,7 @@ namespace NXKit.Xml
             if (document.Declaration != null)
                 Visit(document.Declaration);
 
-            foreach (var node in document.Nodes())
+            foreach (XObject node in document.Nodes())
                 Visit(node);
         }
 
@@ -146,10 +146,10 @@ namespace NXKit.Xml
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            foreach (var attr in element.Attributes())
+            foreach (XObject attr in element.Attributes())
                 Visit(attr);
 
-            foreach (var node in element.Nodes())
+            foreach (XObject node in element.Nodes())
                 Visit(node);
         }
 

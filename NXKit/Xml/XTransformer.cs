@@ -82,7 +82,7 @@ namespace NXKit.Xml
 
             return new XDocument(
                 document.Declaration != null ? Visit(document.Declaration) : null,
-                document.Nodes().Select(i => Visit((XNode)i)));
+                document.Nodes().Select(i => Visit((XObject)i)));
         }
 
         /// <summary>

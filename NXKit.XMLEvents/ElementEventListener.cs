@@ -17,14 +17,16 @@ namespace NXKit.XMLEvents
         IOnLoad
     {
 
+        readonly NXDocumentHost host;
         readonly XElement element;
         readonly EventListenerAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="host"></param>
         /// <param name="element"></param>
-        public ElementEventListener(XElement element)
+        public ElementEventListener(NXDocumentHost host, XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 

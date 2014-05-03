@@ -1,8 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
-using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.DOMEvents
@@ -11,8 +12,8 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Handles exceptions capable of raising events.
     /// </summary>
-    [Interface(XmlNodeType.Document)]
-    public class DocumentExceptionHandler :
+    [ScopeExport(typeof(IExceptionHandler), Scope.Host)]
+    public class DOMEventExceptionHandler :
         IExceptionHandler
     {
 
@@ -22,7 +23,8 @@ namespace NXKit.DOMEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="document"></param>
-        public DocumentExceptionHandler(XDocument document)
+        [ImportingConstructor]
+        public DOMEventExceptionHandler(XDocument document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
