@@ -123,6 +123,7 @@ namespace NXKit.XForms
         readonly IModelRequestService requestService;
         readonly SubmissionProperties properties;
         readonly Lazy<EvaluationContextResolver> context;
+        bool submissionInProgress = false;
 
         /// <summary>
         /// Initializes a new instance.
@@ -150,6 +151,24 @@ namespace NXKit.XForms
         }
 
         void OnSubmit()
+        {
+            if (submissionInProgress)
+                throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
+                    SubmitErrorErrorType.SubmissionInProgress
+                ));
+
+            try
+            {
+                submissionInProgress = true;
+                OnSubmitImpl();
+            }
+            finally
+            {
+                submissionInProgress = false;
+            }
+        }
+
+        void OnSubmitImpl()
         {
             // The data model is updated based on some of the flags defined for deferred updates. Specifically, if the
             // deferred update rebuild flag is set for the model containing this submission, then the rebuild operation 
@@ -179,7 +198,7 @@ namespace NXKit.XForms
             // relevant Property is deselected (pruned). If all instance nodes are deselected, then submission fails
             // with no-data.
             var node = (XNode)new SubmitTransformer(!properties.Relevant)
-                .Visit((XNode)modelItems[0].Xml);
+                .Visit(modelItems[0].Xml);
             if (node == null)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
                     SubmitErrorErrorType.NoData
