@@ -20,7 +20,8 @@ namespace NXKit
     /// <summary>
     /// Hosts an NXKit document. Provides access to the visual tree for a renderer or other processor.
     /// </summary>
-    public class NXDocumentHost
+    public class NXDocumentHost :
+        IDisposable
     {
 
         /// <summary>
@@ -208,6 +209,7 @@ namespace NXKit
             return _;
         }
 
+        bool disposed;
         readonly GlobalContainer global;
         readonly HostContainer host;
         readonly IInvoker invoker;
@@ -387,6 +389,29 @@ namespace NXKit
 
             using (var wrt = new StreamWriter(stream, Encoding.UTF8))
                 Save(wrt);
+        }
+
+        /// <summary>
+        /// Gets whether or not the <see cref="NXDocumentHost"/> has been disposed.
+        /// </summary>
+        public bool Disposed
+        {
+            get { return disposed; }
+        }
+
+        /// <summary>
+        /// Disposes of the <see cref="NXDocumentHost"/>.
+        /// </summary>
+        public void Dispose()
+        {
+            Contract.Requires<InvalidOperationException>(!Disposed);
+
+            GC.SuppressFinalize(this);
+        }
+
+        ~NXDocumentHost()
+        {
+            Dispose();
         }
 
     }
