@@ -158,6 +158,7 @@ namespace NXKit.Web.UI
         NXDocumentHost host;
         LinkedList<Message> messages;
         LinkedList<Message> messages_;
+        LinkedList<string> scripts;
 
         /// <summary>
         /// Initializes a new instance.
@@ -211,18 +212,18 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Raised when the <see cref="NXDocumentHost"/> is unloaded.
+        /// Raised when the <see cref="NXDocumentHost"/> is unloading.
         /// </summary>
-        public event HostLoadedEventHandler HostUnloaded;
+        public event HostLoadedEventHandler HostUnloading;
 
         /// <summary>
-        /// Raises the HostUnloaded event.
+        /// Raises the HostUnloading event.
         /// </summary>
         /// <param name="args"></param>
-        void OnHostUnloaded(HostEventArgs args)
+        void OnHostUnloading(HostEventArgs args)
         {
-            if (HostUnloaded != null)
-                HostUnloaded(this, args);
+            if (HostUnloading != null)
+                HostUnloading(this, args);
         }
 
         /// <summary>
@@ -241,6 +242,16 @@ namespace NXKit.Web.UI
         {
             get { return exports; }
             set { exports = value; }
+        }
+
+        /// <summary>
+        /// Registers the given script snippet for execution upon completion of the current page request or client
+        /// callback.
+        /// </summary>
+        /// <param name="script"></param>
+        public void RegisterScript(string script)
+        {
+            (scripts ?? (scripts = new LinkedList<string>())).AddLast(script);
         }
 
         /// <summary>
@@ -300,7 +311,7 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets the client-side data as a <see cref="JObject"/>
+        /// Gets the client-side data as a <see cref="JToken"/>
         /// </summary>
         /// <returns></returns>
         JToken CreateDataJObject()
@@ -329,7 +340,7 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets the client-side message data as a <see cref="JObject"/>.
+        /// Gets the client-side message data as a <see cref="JToken"/>.
         /// </summary>
         /// <returns></returns>
         JToken CreateMessagesJObject()
@@ -347,6 +358,29 @@ namespace NXKit.Web.UI
             using (var wrt = new JsonTextWriter(str))
             {
                 CreateMessagesJObject().WriteTo(wrt);
+                return str.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Gets the client-side script data as a <see cref="JToken"/>.
+        /// </summary>
+        /// <returns></returns>
+        JToken CreateScriptsJObject()
+        {
+            return new JArray(scripts);
+        }
+
+        /// <summary>
+        /// Gets the client-side script data as a <see cref="string"/>.
+        /// </summary>
+        /// <returns></returns>
+        string CreateScriptsString()
+        {
+            using (var str = new StringWriter())
+            using (var wrt = new JsonTextWriter(str))
+            {
+                CreateScriptsJObject().WriteTo(wrt);
                 return str.ToString();
             }
         }
@@ -459,6 +493,22 @@ namespace NXKit.Web.UI
             writer.WriteLine();
         }
 
+        /// <summary>
+        /// Raises the Unload event.
+        /// </summary>
+        /// <param name="args"></param>
+        protected override void OnUnload(EventArgs args)
+        {
+            base.OnUnload(args);
+
+            if (host != null)
+            {
+                OnHostUnloading(HostEventArgs.Empty);
+                host.Dispose();
+                host = null;
+            }
+        }
+
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
             var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
@@ -466,6 +516,7 @@ namespace NXKit.Web.UI
             d.AddElementProperty("data", ClientID + "_data");
             d.AddElementProperty("save", ClientID + "_save");
             d.AddProperty("messages", CreateMessagesString());
+            d.AddProperty("scripts", CreateScriptsString());
             d.AddProperty("push", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self"));
             yield return d;
         }
@@ -505,12 +556,22 @@ namespace NXKit.Web.UI
             messages_ = messages;
             messages = null;
 
-            return JsonConvert.SerializeObject(new
+            // allow final shut down
+            OnHostUnloading(HostEventArgs.Empty);
+
+            var str = JsonConvert.SerializeObject(new
             {
                 Save = CreateSaveString(),
                 Data = CreateDataJObject(),
                 Messages = CreateMessagesJObject(),
+                Scripts = CreateScriptsJObject(),
             });
+
+            // dispose of the host
+            host.Dispose();
+            host = null;
+
+            return str;
         }
 
         void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)

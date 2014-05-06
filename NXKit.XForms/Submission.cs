@@ -197,7 +197,7 @@ namespace NXKit.XForms
             // true, whether by default or declaration, then any selected node which is not relevant as defined in The
             // relevant Property is deselected (pruned). If all instance nodes are deselected, then submission fails
             // with no-data.
-            var node = (XNode)new SubmitTransformer(!properties.Relevant)
+            var node = (XNode)new SubmitTransformer(properties.Relevant)
                 .Visit(modelItems[0].Xml);
             if (node == null)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(

@@ -10,6 +10,7 @@ _NXKit.Web.UI.View = function (element, foo) {
     self._body = null;
     self._push = null;
     self._messages = null;
+    self._scripts = null;
 };
 
 _NXKit.Web.UI.View.prototype = {
@@ -43,6 +44,14 @@ _NXKit.Web.UI.View.prototype = {
 
     set_messages: function (value) {
         this._messages = JSON.parse(value);
+    },
+
+    get_scripts: function () {
+        return JSON.stringify(this._scripts);
+    },
+
+    set_scripts: function (value) {
+        this._scripts = JSON.parse(value);
     },
 
     get_save: function () {
@@ -81,6 +90,14 @@ _NXKit.Web.UI.View.prototype = {
                 console.warn(message.Text);
             if (message.Severity === 'Error')
                 console.error(message.Text);
+        }
+    },
+
+    runScripts: function (scripts) {
+        for (var i = 0; i < scripts.length; i++) {
+            var script = scripts[i];
+            if (script != null)
+                eval(script);
         }
     },
 
@@ -143,6 +160,10 @@ _NXKit.Web.UI.View.prototype = {
         // extract received messages
         var messages = args.Messages || [];
         self.logMessages(messages);
+
+        // run received scripts
+        var scripts = args.Scripts || [];
+        self.runScripts(scripts);
 
         // update view
         self._view.Data = $(self._data).val();
