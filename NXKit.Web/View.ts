@@ -96,7 +96,7 @@ module NXKit.Web {
 
             for (var i = 0; i < messages.length; i++) {
 
-                var severity = <Severity>Severity[<string>messages[i].Severity];
+                var severity = <Severity>((<any>Severity)[<string>(messages[i])]);
                 var text = messages[i].Text || '';
                 if (severity >= this._threshold)
                     self._messages.push(new Message(severity, text));
