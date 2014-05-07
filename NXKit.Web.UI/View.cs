@@ -314,28 +314,13 @@ namespace NXKit.Web.UI
         /// Gets the client-side data as a <see cref="JToken"/>
         /// </summary>
         /// <returns></returns>
-        JToken CreateDataJObject()
+        JToken CreateNodesJObject()
         {
             // serialize document state to data field
             using (var wrt = new JTokenWriter())
             {
                 RemoteJson.GetJson(wrt, host.Root);
                 return wrt.Token;
-            }
-        }
-
-        /// <summary>
-        /// Gets the client-side data as a <see cref="string"/>.
-        /// </summary>
-        /// <returns></returns>
-        string CreateDataString()
-        {
-            // serialize document state to data field
-            using (var str = new StringWriter())
-            using (var wrt = new JsonTextWriter(str))
-            {
-                CreateDataJObject().WriteTo(wrt);
-                return str.ToString();
             }
         }
 
@@ -349,20 +334,6 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets the client-side data as a <see cref="string"/>.
-        /// </summary>
-        /// <returns></returns>
-        string CreateMessagesString()
-        {
-            using (var str = new StringWriter())
-            using (var wrt = new JsonTextWriter(str))
-            {
-                CreateMessagesJObject().WriteTo(wrt);
-                return str.ToString();
-            }
-        }
-
-        /// <summary>
         /// Gets the client-side script data as a <see cref="JToken"/>.
         /// </summary>
         /// <returns></returns>
@@ -372,17 +343,24 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets the client-side script data as a <see cref="string"/>.
+        /// Gets the client-side data as a <see cref="JToken"/>.
         /// </summary>
         /// <returns></returns>
-        string CreateScriptsString()
+        JToken CreateDataJObject()
         {
-            using (var str = new StringWriter())
-            using (var wrt = new JsonTextWriter(str))
-            {
-                CreateScriptsJObject().WriteTo(wrt);
-                return str.ToString();
-            }
+            return new JObject(
+                new JProperty("Data", CreateDataJObject()),
+                new JProperty("Messages", CreateMessagesJObject()),
+                new JProperty("Scripts", CreateScriptsJObject()));
+        }
+
+        /// <summary>
+        /// Gets the client-side data as a <see cref="String"/>.
+        /// </summary>
+        /// <returns></returns>
+        string CreateDataString()
+        {
+            return JsonConvert.SerializeObject(CreateDataJObject());
         }
 
         /// <summary>
@@ -513,11 +491,9 @@ namespace NXKit.Web.UI
         {
             var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
             d.AddElementProperty("body", ClientID + "_body");
-            d.AddElementProperty("data", ClientID + "_data");
             d.AddElementProperty("save", ClientID + "_save");
-            d.AddProperty("messages", CreateMessagesString());
-            d.AddProperty("scripts", CreateScriptsString());
-            d.AddProperty("push", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self"));
+            d.AddElementProperty("data", ClientID + "_data");
+            d.AddProperty("push", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self") + ";");
             yield return d;
         }
 
@@ -563,8 +539,6 @@ namespace NXKit.Web.UI
             {
                 Save = CreateSaveString(),
                 Data = CreateDataJObject(),
-                Messages = CreateMessagesJObject(),
-                Scripts = CreateScriptsJObject(),
             });
 
             // dispose of the host
@@ -585,12 +559,16 @@ namespace NXKit.Web.UI
                 OnHostLoaded(HostEventArgs.Empty);
             }
 
-            // dispatch action
-            switch ((string)args["Action"])
+            var data = (JObject)args["Data"];
+            if (data != null)
             {
-                case "Push":
-                    ClientPush((JToken)args["Args"]);
-                    break;
+                // dispatch action
+                switch ((string)data["Action"])
+                {
+                    case "Push":
+                        ClientPush((JToken)data["Args"]);
+                        break;
+                }
             }
         }
 

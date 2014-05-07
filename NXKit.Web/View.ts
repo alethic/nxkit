@@ -9,6 +9,7 @@ module NXKit.Web {
     export class View {
 
         private _body: HTMLElement;
+        private _exec: IServerDelegate;
         private _root: Node;
         private _bind: boolean;
         private _messages: KnockoutObservableArray<Message>;
@@ -22,17 +23,14 @@ module NXKit.Web {
 
         private _busy: KnockoutObservable<boolean>;
 
-        /**
-         * Raised when the Node has changes to be pushed to the server.
-         */
-        public CallbackRequest: ICallbackRequestEvent = new TypedEvent();
-
-        constructor(body: HTMLElement) {
+        constructor(body: HTMLElement, exec: IServerDelegate) {
             var self = this;
 
+            self._exec = exec;
             self._body = body;
             self._root = null;
             self._bind = true;
+
             self._messages = ko.observableArray<Message>([]);
             self._threshold = Severity.Warning;
 
@@ -55,21 +53,6 @@ module NXKit.Web {
 
         public get Body(): HTMLElement {
             return this._body;
-        }
-
-        public get Data(): any {
-            return this._root.ToData();
-        }
-
-        public set Data(value: any) {
-            var self = this;
-
-            if (typeof (value) === 'string')
-                // update the form with the parsed data
-                self.Update(JSON.parse(<string>value));
-            else
-                // update the form with the data itself
-                self.Update(value);
         }
 
         public get Root(): Node {
@@ -157,12 +140,17 @@ module NXKit.Web {
 
             this.Queue((cb: ICallbackComplete) => {
                 Log.Debug('View.Push: queue');
-                self.CallbackRequest.trigger({
+
+                var data = {
                     Action: 'Push',
                     Args: {
                         Nodes: [node.ToData()],
                     }
-                }, cb);
+                };
+
+                self._exec(data, function (r) {
+                    cb(null);
+                });
             });
         }
 

@@ -44,7 +44,8 @@ namespace NXKit.Composition
         IEnumerable<ExportDefinition> GetExportDefinitions()
         {
             return parent.ExportDefinitions
-                .Where(i => ScopeHelper.IsScoped(i.Metadata, scope));
+                .Where(i => ScopeHelper.IsScoped(i.Metadata, scope))
+                .ToArray();
         }
 
         public override IEnumerable<ImportDefinition> ImportDefinitions

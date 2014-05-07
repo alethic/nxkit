@@ -12,6 +12,7 @@ using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.IO;
 using NXKit.Serialization;
+using NXKit.Util;
 using NXKit.Xml;
 
 namespace NXKit
@@ -270,9 +271,9 @@ namespace NXKit
             {
                 var inits = xml
                     .DescendantNodesAndSelf()
-                    .Where(i => i.InterfaceOrDefault<IOnInit>() != null)
                     .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Init == false)
-                    .ToList();
+                    .Where(i => i.InterfaceOrDefault<IOnInit>() != null)
+                    .ToLinkedList();
 
                 if (inits.Count == 0)
                     break;
@@ -295,7 +296,7 @@ namespace NXKit
             var loads = xml
                 .DescendantNodesAndSelf()
                 .Where(i => i.InterfaceOrDefault<IOnLoad>() != null)
-                .ToList();
+                .ToLinkedList();
 
             foreach (var load in loads)
                 if (load.Document != null)
@@ -407,8 +408,12 @@ namespace NXKit
             Contract.Requires<InvalidOperationException>(!Disposed);
 
             GC.SuppressFinalize(this);
+            disposed = true;
         }
 
+        /// <summary>
+        /// Finalizes the instance.
+        /// </summary>
         ~NXDocumentHost()
         {
             Dispose();

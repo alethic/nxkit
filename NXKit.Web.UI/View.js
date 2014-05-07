@@ -9,8 +9,6 @@ _NXKit.Web.UI.View = function (element, foo) {
     self._save = null;
     self._body = null;
     self._push = null;
-    self._messages = null;
-    self._scripts = null;
 };
 
 _NXKit.Web.UI.View.prototype = {
@@ -110,14 +108,11 @@ _NXKit.Web.UI.View.prototype = {
 
             // generate new view
             if (self._view == null) {
-                self._view = new NXKit.Web.View(self._body);
-                self._view.CallbackRequest.add(function (data, wh) {
-                    self.onCallbackRequest(data, wh);
-                });
+                self._view = new NXKit.Web.View(self._body, self.onServerInvoke);
             }
 
             // update view with data
-            self._view.Data = $(self._data).val();
+            self._view.Update(JSON.parse($(self._data).val()));
             self._view.PushMessages(self._messages);
 
             // when the form is submitted, ensure the data field is updated
@@ -127,49 +122,32 @@ _NXKit.Web.UI.View.prototype = {
         }
     },
 
-    onBeginRequest: function () {
-
-    },
-
-    onCallbackRequest: function (data, wh) {
+    onServerInvoke: function (data, wh) {
         var self = this;
 
         // generate event argument to pass to server
         var args = JSON.stringify({
-            Action: data.Action,
             Save: $(self._save).val(),
-            Args: data.Args,
+            Data: data,
         });
 
         // initiate server request
         var cb = function (args) {
-            self.onCallbackRequestEnd(args, wh);
+            self.onServerInvokeEnd(args, wh);
         };
 
         eval(self._push);
     },
 
-    onCallbackRequestEnd: function (result, wh) {
+    onServerInvokeEnd: function (result, cb) {
         var self = this;
 
         // result contains new save and data values
         var args = JSON.parse(result);
         $(self._save).val(args.Save);
-        $(self._data).val(JSON.stringify(args.Data));
 
-        // extract received messages
-        var messages = args.Messages || [];
-        self.logMessages(messages);
-
-        // run received scripts
-        var scripts = args.Scripts || [];
-        self.runScripts(scripts);
-
-        // update view
-        self._view.Data = $(self._data).val();
-        self._view.PushMessages(messages);
-
-        wh();
+        // send results to caller
+        cb(args.Data);
     },
 
 };

@@ -13,7 +13,7 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Relays mutation events from XLinq to DOM events.
     /// </summary>
-    [Interface(XmlNodeType.Document)]
+    //[Interface(XmlNodeType.Document)]  // disabled because it's slow, need better solution, with deferred execution
     public class DocumentEventDispatcher :
         IOnLoad,
         IOnInvoke
