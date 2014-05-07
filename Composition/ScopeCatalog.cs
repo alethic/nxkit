@@ -3,6 +3,8 @@ using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
+using NXKit.Util;
+
 namespace NXKit.Composition
 {
 
@@ -41,7 +43,7 @@ namespace NXKit.Composition
             return parent.Parts
                 .Select(i => new ScopePartDefinition(i, scope))
                 .Where(i => i.ExportDefinitions.Any())
-                .ToArray()
+                .Buffer()
                 .AsQueryable();
         }
 

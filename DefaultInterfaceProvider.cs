@@ -23,6 +23,22 @@ namespace NXKit
         InterfaceProviderBase
     {
 
+        class DescriptorTypeList :
+            List<Type>
+        {
+
+            /// <summary>
+            /// Initializes a new instance.
+            /// </summary>
+            /// <param name="types"></param>
+            public DescriptorTypeList(IEnumerable<Type> types)
+                : base(types)
+            {
+
+            }
+
+        }
+
         static readonly List<InterfaceDescriptor> defaultDescriptors;
 
         /// <summary>
@@ -100,9 +116,10 @@ namespace NXKit
         public override IEnumerable<object> GetInterfaces(XObject obj)
         {
             // available interface types for the object
-            var types = descriptors
-                .Where(i => i.IsMatch(predicates, obj))
-                .Select(i => i.Type);
+            var types = obj.AnnotationOrCreate<DescriptorTypeList>(() =>
+                new DescriptorTypeList(descriptors
+                    .Where(i => i.IsMatch(predicates, obj))
+                    .Select(i => i.Type)));
 
             foreach (var instance in GetInstances(obj, types))
                 yield return instance;

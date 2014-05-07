@@ -68,7 +68,7 @@ namespace NXKit.Composition
         {
             return container.GetExportedValues<object>(AttributedModelServices.GetContractName(contractType));
         }
-        
+
         public IEnumerable<Export> GetExports(ImportDefinition importDefinition)
         {
             return container.GetExports(importDefinition);
@@ -77,12 +77,17 @@ namespace NXKit.Composition
         public IContainer WithExport<T>(T value)
             where T : class
         {
+            Contract.Requires<ArgumentNullException>(value != null);
+
             container.WithExport<T>(value);
             return this;
         }
 
         public IContainer WithExport(Type contractType, object value)
         {
+            Contract.Requires<ArgumentNullException>(contractType != null);
+            Contract.Requires<ArgumentNullException>(value != null);
+
             container.WithExport(contractType, value);
             return this;
         }
@@ -94,6 +99,8 @@ namespace NXKit.Composition
 
         public T GetExportedValue<T>(Type contractType)
         {
+            Contract.Requires<ArgumentNullException>(contractType != null);
+
             return container.GetExportedValue<T>(AttributedModelServices.GetContractName(contractType));
         }
 

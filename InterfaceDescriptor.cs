@@ -96,7 +96,7 @@ namespace NXKit
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        internal bool IsMatch(XElement element)
+        bool IsMatch(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
