@@ -167,7 +167,7 @@ namespace NXKit.XForms
             invoker.Invoke(() =>
             {
                 if (modelItem != null)
-                    modelItem.Value = value;
+                    modelItem.Value = value ?? "";
             });
         }
 

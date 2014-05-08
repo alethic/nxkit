@@ -14,10 +14,10 @@ namespace NXKit.XMLEvents
     /// </summary>
     [Interface(XmlNodeType.Element)]
     public class ElementEventListener :
+        ElementExtension,
         IOnLoad
     {
 
-        readonly XElement element;
         readonly IInvoker invoker;
         readonly EventListenerAttributes attributes;
 
@@ -27,11 +27,11 @@ namespace NXKit.XMLEvents
         /// <param name="element"></param>
         /// <param name="invoker"></param>
         public ElementEventListener(XElement element, IInvoker invoker)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(invoker != null);
 
-            this.element = element;
             this.invoker = invoker;
             this.attributes = new EventListenerAttributes(element);
         }
@@ -43,13 +43,13 @@ namespace NXKit.XMLEvents
         XElement GetHandlerElement()
         {
             if (attributes.Handler != null)
-                return element.ResolveId(attributes.Handler);
+                return Element.ResolveId(attributes.Handler);
             else if (attributes.Observer != null)
-                return element;
+                return Element;
             else if (attributes.Observer == null)
-                return element;
+                return Element;
             else
-                throw new InvalidOperationException();
+                throw new DOMTargetEventException(Element, Events.Error);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace NXKit.XMLEvents
         {
             var element = GetHandlerElement();
             if (element != null)
-                return element.Interface<IEventHandler>();
+                return element.InterfaceOrDefault<IEventHandler>();
 
             return null;
         }
@@ -72,13 +72,13 @@ namespace NXKit.XMLEvents
         XElement GetObserverElement()
         {
             if (attributes.Observer != null)
-                return element.ResolveId(attributes.Observer);
+                return Element.ResolveId(attributes.Observer);
             else if (attributes.Handler != null)
-                return element;
+                return Element;
             else if (attributes.Handler == null)
-                return (XElement)element.Parent;
+                return (XElement)Element.Parent;
             else
-                throw new InvalidOperationException();
+                throw new DOMTargetEventException(Element, Events.Error);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace NXKit.XMLEvents
         {
             var element = GetObserverElement();
             if (element != null)
-                return element.Interface<IEventTarget>();
+                return element.InterfaceOrDefault<IEventTarget>();
 
             return null;
         }
@@ -101,7 +101,7 @@ namespace NXKit.XMLEvents
         XElement GetTargetElement()
         {
             if (attributes.Target != null)
-                return element.ResolveId(attributes.Target);
+                return Element.ResolveId(attributes.Target);
 
             return null;
         }
@@ -144,17 +144,16 @@ namespace NXKit.XMLEvents
 
             var handler = GetHandler();
             if (handler == null)
-                throw new InvalidOperationException();
+                throw new DOMTargetEventException(Element, Events.Error);
 
             var observer = GetObserver();
             if (observer == null)
-                throw new InvalidOperationException();
+                throw new DOMTargetEventException(Element, Events.Error);
 
-            if (handler != null)
-                observer.AddEventListener(
-                    evt,
-                    new EventListener(_ => InvokeHandleEvent(handler, _)),
-                    GetCapture());
+            observer.AddEventListener(
+                evt,
+                new EventListener(_ => InvokeHandleEvent(handler, _)),
+                GetCapture());
         }
 
         void InvokeHandleEvent(IEventHandler handler, Event evt)
