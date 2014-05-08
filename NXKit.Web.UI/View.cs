@@ -559,15 +559,18 @@ namespace NXKit.Web.UI
                 OnHostLoaded(HostEventArgs.Empty);
             }
 
-            var data = (JObject)args["Data"];
-            if (data != null)
+            var commands = (JArray)args["Commands"];
+            if (commands != null)
             {
-                // dispatch action
-                switch ((string)data["Action"])
+                foreach (var command in commands)
                 {
-                    case "Push":
-                        ClientPush((JToken)data["Args"]);
-                        break;
+                    // dispatch action
+                    switch ((string)command["Action"])
+                    {
+                        case "Push":
+                            ClientPush((JToken)command["Args"]);
+                            break;
+                    }
                 }
             }
         }

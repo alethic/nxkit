@@ -9,7 +9,7 @@ module NXKit.Web {
     export class View {
 
         private _body: HTMLElement;
-        private _exec: IServerDelegate;
+        private _exec: ICommandDelegate;
         private _root: Node;
         private _bind: boolean;
         private _messages: KnockoutObservableArray<Message>;
@@ -18,12 +18,12 @@ module NXKit.Web {
         private _onNodePropertyChanged: (node: Node, $interface: Interface, property: Property, value: any) => void;
         private _onNodeMethodInvoked: (node: Node, $interface: Interface, method: Method, params: any) => void;
 
-        private _queue: Array<(cb: ICallbackComplete) => void>;
+        private _queue: any[];
         private _queueRunning: boolean;
 
         private _busy: KnockoutObservable<boolean>;
 
-        constructor(body: HTMLElement, exec: IServerDelegate) {
+        constructor(body: HTMLElement, exec: ICommandDelegate) {
             var self = this;
 
             self._exec = exec;
@@ -70,7 +70,7 @@ module NXKit.Web {
         public set Threshold(threshold: Severity) {
             this._threshold = threshold;
         }
-        
+
         /**
          * Updates the view in response to some received data.
          */
@@ -94,7 +94,7 @@ module NXKit.Web {
                     self._messages.push(new Message(severity, text));
             }
         }
-        
+
         /**
          * Executes the given scripts.
          */
@@ -166,23 +166,17 @@ module NXKit.Web {
                 }
             };
 
-            // queue server execution
-            self.Queue((cb: ICallbackComplete) => {
-                self._exec(data, function (r) {
-                    self.Receive(r);
-                    cb(null);
-                });
-            });
+            self.Queue(data);
         }
 
         /**
-         * Runs any available items in the queue.
+         * Queues the given data to be sent to the server.
          */
-        Queue(func: (cb: ICallbackComplete) => void) {
+        Queue(command: any) {
             var self = this;
 
-            // pushes a new event to trigger a callback onto the queue
-            self._queue.push(func);
+            // pushes a new action onto the queue
+            self._queue.push(command);
 
             // only one runner at a time
             if (self._queueRunning) {
@@ -193,10 +187,14 @@ module NXKit.Web {
 
                 // recursive call to work queue
                 var l = () => {
-                    var f = self._queue.shift();
-                    if (f) {
-                        f((result: any) => {
-                            l(); // recurse
+                    var commands = self._queue.splice(0);
+                    if (commands.length > 0) {
+                        self._exec(commands, (result: any) => {
+                            // process received data
+                            self.Receive(result);
+
+                            // recurse
+                            l();
                         });
                     } else {
                         self._queueRunning = false;

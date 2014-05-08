@@ -71,8 +71,8 @@ _NXKit.Web.UI.View.prototype = {
 
             // generate new view
             if (self._view == null) {
-                self._view = new NXKit.Web.View(self._body, function (data, cb) {
-                    self.onServerInvoke(data, cb);
+                self._view = new NXKit.Web.View(self._body, function (commands, cb) {
+                    self.sendCommands(commands, cb);
                 });
             }
 
@@ -81,24 +81,24 @@ _NXKit.Web.UI.View.prototype = {
         }
     },
 
-    onServerInvoke: function (data, wh) {
+    sendCommands: function (commands, wh) {
         var self = this;
 
         // generate event argument to pass to server
         var args = JSON.stringify({
             Save: $(self._save).val(),
-            Data: data,
+            Commands: commands,
         });
 
         // initiate server request
         var cb = function (args) {
-            self.onServerInvokeEnd(args, wh);
+            self.sendCommandsEnd(args, wh);
         };
 
         eval(self._push);
     },
 
-    onServerInvokeEnd: function (result, cb) {
+    sendCommandsEnd: function (result, cb) {
         var self = this;
 
         // result contains new save and data values

@@ -151,7 +151,7 @@
     <TypeScriptCompile Include="IPropertyMap.ts" />
     <TypeScriptCompile Include="INodePropertyChangedEvent.ts" />
     <TypeScriptCompile Include="IMethodInvokedEvent.ts" />
-    <TypeScriptCompile Include="IServerDelegate.ts" />
+    <TypeScriptCompile Include="ICommandDelegate.ts" />
     <TypeScriptCompile Include="Knockout\InputBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\HorizontalVisibleBindingHandler.ts" />
