@@ -314,7 +314,7 @@ namespace NXKit.Web.UI
         /// Gets the client-side data as a <see cref="JToken"/>
         /// </summary>
         /// <returns></returns>
-        JToken CreateNodesJObject()
+        JToken CreateNodeJObject()
         {
             // serialize document state to data field
             using (var wrt = new JTokenWriter())
@@ -338,9 +338,9 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <returns></returns>
         JToken CreateScriptsJObject()
-        {
+            {
             return new JArray(scripts);
-        }
+            }
 
         /// <summary>
         /// Gets the client-side data as a <see cref="JToken"/>.
@@ -349,7 +349,7 @@ namespace NXKit.Web.UI
         JToken CreateDataJObject()
         {
             return new JObject(
-                new JProperty("Nodes", CreateNodesJObject()),
+                new JProperty("Node", CreateNodeJObject()),
                 new JProperty("Messages", CreateMessagesJObject()),
                 new JProperty("Scripts", CreateScriptsJObject()));
         }
@@ -359,7 +359,7 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <returns></returns>
         string CreateDataString()
-        {
+            {
             return JsonConvert.SerializeObject(CreateDataJObject());
         }
 
@@ -559,16 +559,19 @@ namespace NXKit.Web.UI
                 OnHostLoaded(HostEventArgs.Empty);
             }
 
-            var data = (JObject)args["Data"];
-            if (data != null)
+            var commands = (JArray)args["Commands"];
+            if (commands != null)
             {
-                // dispatch action
-                switch ((string)data["Action"])
+                foreach (var command in commands)
                 {
-                    case "Push":
-                        ClientPush((JToken)data["Args"]);
-                        break;
-                }
+            // dispatch action
+                    switch ((string)command["Action"])
+            {
+                case "Push":
+                            ClientPush((JToken)command["Args"]);
+                    break;
+            }
+        }
             }
         }
 

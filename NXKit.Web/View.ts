@@ -9,7 +9,8 @@ module NXKit.Web {
     export class View {
 
         private _body: HTMLElement;
-        private _exec: IServerDelegate;
+        private _server: IServerInvoke;
+
         private _root: Node;
         private _bind: boolean;
         private _messages: KnockoutObservableArray<Message>;
@@ -18,15 +19,15 @@ module NXKit.Web {
         private _onNodePropertyChanged: (node: Node, $interface: Interface, property: Property, value: any) => void;
         private _onNodeMethodInvoked: (node: Node, $interface: Interface, method: Method, params: any) => void;
 
-        private _queue: Array<(cb: ICallbackComplete) => void>;
+        private _queue: any[];
         private _queueRunning: boolean;
 
         private _busy: KnockoutObservable<boolean>;
 
-        constructor(body: HTMLElement, exec: IServerDelegate) {
+        constructor(body: HTMLElement, server: IServerInvoke) {
             var self = this;
 
-            self._exec = exec;
+            self._server = server;
             self._body = body;
             self._root = null;
             self._bind = true;
@@ -72,9 +73,18 @@ module NXKit.Web {
         }
 
         /**
+         * Updates the view in response to some received data.
+         */
+        public Receive(data: any[]) {
+            this.ApplyNode(data['Node'] || null);
+            this.DisplayMessages(data['Messages'] || []);
+            this.ExecuteScripts(data['Scripts'] || []);
+        }
+
+        /**
          * Updates the messages of the view with the specified items.
          */
-        public PushMessages(messages: any[]) {
+        private DisplayMessages(messages: any[]) {
             var self = this;
 
             for (var i = 0; i < messages.length; i++) {
@@ -83,6 +93,17 @@ module NXKit.Web {
                 var text = messages[i].Text || '';
                 if (severity >= this._threshold)
                     self._messages.push(new Message(severity, text));
+            }
+        }
+
+        /**
+         * Executes the given scripts.
+         */
+        private ExecuteScripts(scripts: string[]) {
+            for (var i = 0; i < scripts.length; i++) {
+                var script = scripts[i];
+                if (script != null)
+                    eval(script);
             }
         }
 
@@ -96,12 +117,12 @@ module NXKit.Web {
         /**
          * Initiates a refresh of the view model.
          */
-        private Update(data: any) {
+        private ApplyNode(node: any) {
             var self = this;
 
             if (self._root == null) {
                 // generate new node tree
-                self._root = new Node(data);
+                self._root = new Node(node);
                 self._root.PropertyChanged.add(self._onNodePropertyChanged);
                 self._root.MethodInvoked.add(self._onNodeMethodInvoked);
             }
@@ -109,7 +130,7 @@ module NXKit.Web {
                 // update existing node tree
                 self._root.PropertyChanged.remove(self._onNodePropertyChanged);
                 self._root.MethodInvoked.remove(self._onNodeMethodInvoked);
-                self._root.Update(data);
+                self._root.Update(node);
                 self._root.PropertyChanged.add(self._onNodePropertyChanged);
                 self._root.MethodInvoked.add(self._onNodeMethodInvoked);
             }
@@ -138,30 +159,25 @@ module NXKit.Web {
             var self = this;
             Log.Debug('View.Push');
 
-            this.Queue((cb: ICallbackComplete) => {
-                Log.Debug('View.Push: queue');
-
-                var data = {
+            // generate push action
+            var data = {
                     Action: 'Push',
                     Args: {
                         Nodes: [node.ToData()],
                     }
-                };
+            };
 
-                self._exec(data, function (r) {
-                    cb(null);
-                });
-            });
+            self.Queue(data);
         }
 
         /**
-         * Runs any available items in the queue.
+         * Queues the given data to be sent to the server.
          */
-        Queue(func: (cb: ICallbackComplete) => void) {
+        Queue(command: any) {
             var self = this;
 
-            // pushes a new event to trigger a callback onto the queue
-            self._queue.push(func);
+            // pushes a new action onto the queue
+            self._queue.push(command);
 
             // only one runner at a time
             if (self._queueRunning) {
@@ -172,10 +188,21 @@ module NXKit.Web {
 
                 // recursive call to work queue
                 var l = () => {
-                    var f = self._queue.shift();
-                    if (f) {
-                        f((result: any) => {
-                            l(); // recurse
+                    var commands = self._queue.splice(0);
+                    if (commands.length > 0) {
+                        self._server(commands, (data: any) => {
+                            
+                            // only update node data if no outstanding commands
+                            if (self._queue.length == 0) {
+                                self.ApplyNode(data['Node'] || null);
+                            }
+
+                            // display messages and execute scripts
+                            self.DisplayMessages(data['Messages'] || []);
+                            self.ExecuteScripts(data['Scripts'] || []);
+
+                            // recurse
+                            l();
                         });
                     } else {
                         self._queueRunning = false;
