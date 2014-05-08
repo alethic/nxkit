@@ -314,7 +314,7 @@ namespace NXKit.Web.UI
         /// Gets the client-side data as a <see cref="JToken"/>
         /// </summary>
         /// <returns></returns>
-        JToken CreateNodesJObject()
+        JToken CreateNodeJObject()
         {
             // serialize document state to data field
             using (var wrt = new JTokenWriter())
@@ -349,7 +349,7 @@ namespace NXKit.Web.UI
         JToken CreateDataJObject()
         {
             return new JObject(
-                new JProperty("Data", CreateDataJObject()),
+                new JProperty("Node", CreateNodeJObject()),
                 new JProperty("Messages", CreateMessagesJObject()),
                 new JProperty("Scripts", CreateScriptsJObject()));
         }

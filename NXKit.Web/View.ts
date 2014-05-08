@@ -70,11 +70,20 @@ module NXKit.Web {
         public set Threshold(threshold: Severity) {
             this._threshold = threshold;
         }
+        
+        /**
+         * Updates the view in response to some received data.
+         */
+        public Receive(data: any[]) {
+            this.ApplyNode(data['Node'] || null);
+            this.DisplayMessages(data['Messages'] || []);
+            this.ExecuteScripts(data['Scripts'] || []);
+        }
 
         /**
          * Updates the messages of the view with the specified items.
          */
-        public PushMessages(messages: any[]) {
+        private DisplayMessages(messages: any[]) {
             var self = this;
 
             for (var i = 0; i < messages.length; i++) {
@@ -83,6 +92,17 @@ module NXKit.Web {
                 var text = messages[i].Text || '';
                 if (severity >= this._threshold)
                     self._messages.push(new Message(severity, text));
+            }
+        }
+        
+        /**
+         * Executes the given scripts.
+         */
+        private ExecuteScripts(scripts: string[]) {
+            for (var i = 0; i < scripts.length; i++) {
+                var script = scripts[i];
+                if (script != null)
+                    eval(script);
             }
         }
 
@@ -96,12 +116,12 @@ module NXKit.Web {
         /**
          * Initiates a refresh of the view model.
          */
-        private Update(data: any) {
+        private ApplyNode(node: any) {
             var self = this;
 
             if (self._root == null) {
                 // generate new node tree
-                self._root = new Node(data);
+                self._root = new Node(node);
                 self._root.PropertyChanged.add(self._onNodePropertyChanged);
                 self._root.MethodInvoked.add(self._onNodeMethodInvoked);
             }
@@ -109,7 +129,7 @@ module NXKit.Web {
                 // update existing node tree
                 self._root.PropertyChanged.remove(self._onNodePropertyChanged);
                 self._root.MethodInvoked.remove(self._onNodeMethodInvoked);
-                self._root.Update(data);
+                self._root.Update(node);
                 self._root.PropertyChanged.add(self._onNodePropertyChanged);
                 self._root.MethodInvoked.add(self._onNodeMethodInvoked);
             }
@@ -138,17 +158,18 @@ module NXKit.Web {
             var self = this;
             Log.Debug('View.Push');
 
-            this.Queue((cb: ICallbackComplete) => {
-                Log.Debug('View.Push: queue');
+            // generate push action
+            var data = {
+                Action: 'Push',
+                Args: {
+                    Nodes: [node.ToData()],
+                }
+            };
 
-                var data = {
-                    Action: 'Push',
-                    Args: {
-                        Nodes: [node.ToData()],
-                    }
-                };
-
+            // queue server execution
+            self.Queue((cb: ICallbackComplete) => {
                 self._exec(data, function (r) {
+                    self.Receive(r);
                     cb(null);
                 });
             });

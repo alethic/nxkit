@@ -1,6 +1,6 @@
 ﻿Type.registerNamespace('_NXKit.Web.UI');
 
-_NXKit.Web.UI.View = function (element, foo) {
+_NXKit.Web.UI.View = function (element) {
     var self = this;
     _NXKit.Web.UI.View.initializeBase(self, [element]);
 
@@ -36,22 +36,6 @@ _NXKit.Web.UI.View.prototype = {
         this._init();
     },
 
-    get_messages: function () {
-        return JSON.stringify(this._messages);
-    },
-
-    set_messages: function (value) {
-        this._messages = JSON.parse(value);
-    },
-
-    get_scripts: function () {
-        return JSON.stringify(this._scripts);
-    },
-
-    set_scripts: function (value) {
-        this._scripts = JSON.parse(value);
-    },
-
     get_save: function () {
         return this._save;
     },
@@ -78,27 +62,6 @@ _NXKit.Web.UI.View.prototype = {
         this._push = value;
     },
 
-    logMessages: function (messages) {
-        for (var i = 0; i < messages.length; i++) {
-            var message = messages[i];
-            if (message.Severity === 'Verbose' ||
-                message.Severity === 'Information')
-                console.debug(message.Text);
-            if (message.Severity === 'Warning')
-                console.warn(message.Text);
-            if (message.Severity === 'Error')
-                console.error(message.Text);
-        }
-    },
-
-    runScripts: function (scripts) {
-        for (var i = 0; i < scripts.length; i++) {
-            var script = scripts[i];
-            if (script != null)
-                eval(script);
-        }
-    },
-
     _init: function () {
         var self = this;
 
@@ -108,17 +71,13 @@ _NXKit.Web.UI.View.prototype = {
 
             // generate new view
             if (self._view == null) {
-                self._view = new NXKit.Web.View(self._body, self.onServerInvoke);
+                self._view = new NXKit.Web.View(self._body, function (data, cb) {
+                    self.onServerInvoke(data, cb);
+                });
             }
 
             // update view with data
-            self._view.Update(JSON.parse($(self._data).val()));
-            self._view.PushMessages(self._messages);
-
-            // when the form is submitted, ensure the data field is updated
-            $(self.get_element()).parents('form').submit(function (event) {
-                $(self._data).val(JSON.stringify(self._view.Data));
-            });
+            self._view.Receive(JSON.parse($(self._data).val()));
         }
     },
 
