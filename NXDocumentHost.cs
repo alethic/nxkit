@@ -269,10 +269,13 @@ namespace NXKit
         {
             while (true)
             {
+                xml.DescendantNodesAndSelf()
+                    .Select(i => i.GetObjectId())
+                    .ToList();
+
                 var inits = xml
                     .DescendantNodesAndSelf()
                     .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Init == false)
-                    .Where(i => i.InterfaceOrDefault<IOnInit>() != null)
                     .ToLinkedList();
 
                 if (inits.Count == 0)
