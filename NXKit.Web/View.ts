@@ -190,9 +190,16 @@ module NXKit.Web {
                 var l = () => {
                     var commands = self._queue.splice(0);
                     if (commands.length > 0) {
-                        self._server(commands, (result: any) => {
-                            // process received data
-                            self.Receive(result);
+                        self._server(commands, (data: any) => {
+                            
+                            // only update node data if no outstanding commands
+                            if (self._queue.length == 0) {
+                                self.ApplyNode(data['Node'] || null);
+                            }
+
+                            // display messages and execute scripts
+                            self.DisplayMessages(data['Messages'] || []);
+                            self.ExecuteScripts(data['Scripts'] || []);
 
                             // recurse
                             l();
