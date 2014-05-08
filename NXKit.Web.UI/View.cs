@@ -349,7 +349,7 @@ namespace NXKit.Web.UI
         JToken CreateDataJObject()
         {
             return new JObject(
-                new JProperty("Data", CreateDataJObject()),
+                new JProperty("Nodes", CreateNodesJObject()),
                 new JProperty("Messages", CreateMessagesJObject()),
                 new JProperty("Scripts", CreateScriptsJObject()));
         }
