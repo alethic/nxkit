@@ -1,6 +1,6 @@
 ﻿module NXKit.Web {
 
-    export interface ICallbackComplete {
+    export interface ICallback {
         (result: any): void;
     }
 

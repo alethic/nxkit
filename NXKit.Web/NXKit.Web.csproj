@@ -130,6 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyHtmlTemplateProvider.cs" />
+    <Compile Include="HostEventArgs.cs" />
+    <Compile Include="HostLoadedEventHandler.cs" />
+    <Compile Include="HostUnloadingEventHandler.cs" />
     <Compile Include="HtmlTemplateInfo.cs" />
     <Compile Include="Serialization\RemoteDescriptor.cs" />
     <Compile Include="Serialization\RemoteJsonSerializer.cs" />
@@ -139,10 +142,10 @@
     <Compile Include="Serialization\RemoteJson.cs" />
     <Compile Include="Serialization\RemoteObjectJsonConverter.cs" />
     <Compile Include="Serialization\RemoteXNodeJsonConverter.cs" />
-    <TypeScriptCompile Include="ICallbackRequestEvent.ts" />
     <Compile Include="IHtmlTemplateProvider.cs" />
     <Compile Include="Serialization\XNameJsonConverter.cs" />
-    <TypeScriptCompile Include="ICallbackComplete.ts" />
+    <Compile Include="Severity.cs" />
+    <TypeScriptCompile Include="ICallback.ts" />
     <TypeScriptCompile Include="IEvent.ts" />
     <TypeScriptCompile Include="IPropertyChangedEvent.ts" />
     <TypeScriptCompile Include="INodeMethodInvokedEvent.ts" />
@@ -151,7 +154,7 @@
     <TypeScriptCompile Include="IPropertyMap.ts" />
     <TypeScriptCompile Include="INodePropertyChangedEvent.ts" />
     <TypeScriptCompile Include="IMethodInvokedEvent.ts" />
-    <TypeScriptCompile Include="ICommandDelegate.ts" />
+    <TypeScriptCompile Include="IServerInvoke.ts" />
     <TypeScriptCompile Include="Knockout\InputBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\HorizontalVisibleBindingHandler.ts" />

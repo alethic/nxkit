@@ -9,7 +9,8 @@ module NXKit.Web {
     export class View {
 
         private _body: HTMLElement;
-        private _exec: ICommandDelegate;
+        private _server: IServerInvoke;
+
         private _root: Node;
         private _bind: boolean;
         private _messages: KnockoutObservableArray<Message>;
@@ -23,10 +24,10 @@ module NXKit.Web {
 
         private _busy: KnockoutObservable<boolean>;
 
-        constructor(body: HTMLElement, exec: ICommandDelegate) {
+        constructor(body: HTMLElement, server: IServerInvoke) {
             var self = this;
 
-            self._exec = exec;
+            self._server = server;
             self._body = body;
             self._root = null;
             self._bind = true;
@@ -189,7 +190,7 @@ module NXKit.Web {
                 var l = () => {
                     var commands = self._queue.splice(0);
                     if (commands.length > 0) {
-                        self._exec(commands, (result: any) => {
+                        self._server(commands, (result: any) => {
                             // process received data
                             self.Receive(result);
 
