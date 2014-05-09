@@ -74,6 +74,10 @@
             throw new Error('GetLayout not implemented');
         }
 
+        public SetFocus() {
+            console.log('Item: SetFocus');
+        }
+
     }
 
     /**
@@ -259,6 +263,10 @@
                 layout: 'group',
                 level: this.Level,
             };
+        }
+
+        public SetFocus() {
+            console.log('GroupItem: SetFocus');
         }
 
     }

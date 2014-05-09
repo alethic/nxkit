@@ -131,7 +131,7 @@ namespace NXKit.XForms
             var insertContext = contextResolver.Value.GetInScopeEvaluationContext();
             if (commonProperties.Value.Context != null)
             {
-                var item = new Binding(Element, insertContext, commonProperties.Value.Context).ModelItems.First();
+                var item = new Binding(Element, insertContext, commonProperties.Value.Context).ModelItems.FirstOrDefault();
                 if (item == null)
                     return null;
 

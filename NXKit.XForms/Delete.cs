@@ -135,7 +135,8 @@ namespace NXKit.XForms
 
             // Otherwise, the Sequence Binding is not expressed, so the Sequence Binding node-sequence is set equal to
             // the delete context node with a position and size of 1.
-            sequenceBindingNodeSequence = new XObject[] { deleteContext.ModelItem.Xml };
+            if (sequenceBindingNodeSequence == null)
+                sequenceBindingNodeSequence = new XObject[] { deleteContext.ModelItem.Xml };
 
             // The delete location is determined. If the at attribute is not specified, there is no delete location.
             // Otherwise, the delete location is determined by evaluating the expression specified by the at attribute

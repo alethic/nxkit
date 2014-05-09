@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonProperties.cs" />
+    <Compile Include="DeferredUpdateInvokerLayer.cs" />
     <Compile Include="DispatchAttributes.cs" />
     <Compile Include="InsertPosition.cs" />
     <Compile Include="BindingProperties.cs" />

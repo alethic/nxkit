@@ -16,9 +16,6 @@ module NXKit.Web {
         private _messages: KnockoutObservableArray<Message>;
         private _threshold: Severity;
 
-        private _onNodePropertyChanged: (node: Node, $interface: Interface, property: Property, value: any) => void;
-        private _onNodeMethodInvoked: (node: Node, $interface: Interface, method: Method, params: any) => void;
-
         private _queue: any[];
         private _queueRunning: boolean;
 
@@ -38,14 +35,6 @@ module NXKit.Web {
             self._queue = new Array<any>();
             self._queueRunning = false;
             self._busy = ko.observable(false);
-
-            self._onNodePropertyChanged = (node: Node, $interface: Interface, property: Property, value: any) => {
-                self.OnRootNodePropertyChanged(node, $interface, property, value);
-            };
-
-            self._onNodeMethodInvoked = (node: Node, $interface: Interface, method: Method, params: any) => {
-                self.OnRootNodeMethodInvoked(node, $interface, method, params);
-            };
         }
 
         public get Busy(): KnockoutObservable<boolean> {
@@ -76,7 +65,7 @@ module NXKit.Web {
          * Updates the view in response to some received data.
          */
         public Receive(data: any[]) {
-            this.ApplyNode(data['Node'] || null);
+            this.Apply(data['Node'] || null);
             this.AppendMessages(data['Messages'] || []);
             this.ExecuteScripts(data['Scripts'] || []);
         }
@@ -117,53 +106,54 @@ module NXKit.Web {
         /**
          * Initiates a refresh of the view model.
          */
-        private ApplyNode(node: any) {
+        private Apply(data: any) {
             var self = this;
 
             if (self._root == null) {
                 // generate new node tree
-                self._root = new Node(node);
-                self._root.PropertyChanged.add(self._onNodePropertyChanged);
-                self._root.MethodInvoked.add(self._onNodeMethodInvoked);
+                self._root = new Node(self, data);
             }
             else {
                 // update existing node tree
-                self._root.PropertyChanged.remove(self._onNodePropertyChanged);
-                self._root.MethodInvoked.remove(self._onNodeMethodInvoked);
-                self._root.Update(node);
-                self._root.PropertyChanged.add(self._onNodePropertyChanged);
-                self._root.MethodInvoked.add(self._onNodeMethodInvoked);
+                self._root.Apply(data);
             }
 
             self.ApplyBindings();
         }
 
         /**
-         * Invoked to handle root node value change events.
-         */
-        OnRootNodePropertyChanged(node: Node, $interface: Interface, property: Property, value: any) {
-            this.Push(node);
-        }
-
-        /**
-         * Invoked to handle root node method invocations.
-         */
-        OnRootNodeMethodInvoked(node: Node, $interface: Interface, method: Method, params: any) {
-            this.Push(node);
-        }
-
-        /**
          * Invoked when the view model initiates a request to push an update to a node.
          */
-        Push(node: Node) {
+        PushUpdate(node: Node, $interface: Interface, property: Property, value: any) {
             var self = this;
-            Log.Debug('View.Push');
+            Log.Debug('View.PushUpdate');
 
             // generate push action
             var data = {
-                Action: 'Push',
+                Action: 'Update',
                 Args: {
-                    Nodes: [node.ToData()],
+                    NodeId: node.Id,
+                    Interface: $interface.Name,
+                    Property: property.Name,
+                    Value: value,
+                }
+            };
+
+            self.Queue(data);
+        }
+
+        PushInvoke(node: Node, interfaceName: string, methodName: string, params: any) {
+            var self = this;
+            Log.Debug('View.PushInvoke');
+
+            // generate push action
+            var data = {
+                Action: 'Invoke',
+                Args: {
+                    NodeId: node.Id,
+                    Interface: interfaceName,
+                    Method: methodName,
+                    Params: params,
                 }
             };
 
@@ -184,34 +174,38 @@ module NXKit.Web {
                 return;
             } else {
                 self._queueRunning = true;
-                self._busy(true);
 
-                // recursive call to work queue
-                var l = () => {
-                    var commands = self._queue.splice(0);
-                    if (commands.length > 0) {
-                        self._server(commands, (data: any) => {
-                            
-                            // only update node data if no outstanding commands
-                            if (self._queue.length == 0) {
-                                self.ApplyNode(data['Node'] || null);
-                            }
+                // delay processing in case of new commands
+                setTimeout(() => {
+                    self._busy(true);
 
-                            // display messages and execute scripts
-                            self.AppendMessages(data['Messages'] || []);
-                            self.ExecuteScripts(data['Scripts'] || []);
+                    // recursive call to work queue
+                    var l = () => {
+                        var commands = self._queue.splice(0);
+                        if (commands.length > 0) {
+                            self._server(commands, (data: any) => {
 
-                            // recurse
-                            l();
-                        });
-                    } else {
-                        self._queueRunning = false;
-                        self._busy(false);
-                    }
-                };
+                                // only update node data if no outstanding commands
+                                if (self._queue.length == 0) {
+                                    self.Apply(data['Node'] || null);
+                                }
 
-                // initiate queue run
-                l();
+                                // display messages and execute scripts
+                                self.AppendMessages(data['Messages'] || []);
+                                self.ExecuteScripts(data['Scripts'] || []);
+
+                                // recurse
+                                l();
+                            });
+                        } else {
+                            self._queueRunning = false;
+                            self._busy(false);
+                        }
+                    };
+
+                    // initiate queue run
+                    l();
+                }, 500);
             }
         }
 

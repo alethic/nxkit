@@ -20,7 +20,7 @@ namespace NXKit.Web.Tests.Serialization
             var obj = new JObject(
                 new JProperty("Test", 1));
 
-            RemoteJson.SetJson(obj.CreateReader(), new XElement("Element"));
+            RemoteHelper.SetJson(obj.CreateReader(), new XElement("Element"));
         }
 
     }

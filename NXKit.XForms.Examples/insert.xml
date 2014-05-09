@@ -31,11 +31,11 @@
         </xf:repeat>
         <xf:trigger>
             <xf:label>Insert</xf:label>
-            <xf:insert ev:event="DOMActivate" ref="item" at="xf:index('repeat')" postion="after" origin="xf:instance('template')/item" />
+            <xf:insert ev:event="DOMActivate" context="." ref="item" at="xf:index('repeat')" postion="after" origin="xf:instance('template')/item" />
         </xf:trigger>
         <xf:trigger>
             <xf:label>Delete</xf:label>
-            <xf:insert ev:event="DOMActivate" ref="item" at="xf:index('repeat')" />
+            <xf:delete ev:event="DOMActivate" context="." ref="item" at="xf:index('repeat')" />
         </xf:trigger>
     </f:section>
 </f:form>
