@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Primitives;
-using System.ComponentModel.Composition.ReflectionModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
@@ -227,7 +226,29 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Gets a value for the given constructor parameter from the container.
+        /// Builds a typed <see cref="Delegate"/> for obtaining the given interface type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        Func<T> BuildDelegate<T>(XObject obj, IContainer container)
+        {
+            return () => (T)GetConstructorParameterValue(obj, typeof(T), container);
+        }
+
+        /// <summary>
+        /// The <see cref="MethodInfo"/> for the generic BuildDelegate method.
+        /// </summary>
+        MethodInfo BuildDelegateMethodInfo = typeof(DefaultInterfaceProvider).GetMethod(
+            "BuildDelegate",
+            BindingFlags.NonPublic | BindingFlags.Instance,
+            null,
+            new[] { typeof(XObject), typeof(IContainer) },
+            null);
+
+        /// <summary>
+        /// Gets a value for the given constructor parameter.
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="type"></param>
@@ -243,55 +264,108 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(param != null);
             Contract.Requires<ArgumentNullException>(container != null);
 
-            var paramContractType = GetContractType(param.ParameterType);
+            // handle Lazy<T> references
+            if (param.ParameterType.IsGenericType &&
+                param.ParameterType.GetGenericTypeDefinition() == typeof(Lazy<>))
+            {
+                var interfaceType = param.ParameterType.GetGenericArguments()[0];
+                if (interfaceType == null)
+                    return null;
+
+                // generate function that will query interfaces on demand
+                var func = BuildDelegateMethodInfo.MakeGenericMethod(interfaceType)
+                    .Invoke(this, new object[] { obj, container });
+
+                // generate new Lazy<T>
+                return Activator.CreateInstance(param.ParameterType, new object[] { func });
+            }
+
+            if (param.ParameterType.IsGenericType &&
+                param.ParameterType.GetGenericTypeDefinition() == typeof(Func<>))
+            {
+                var interfaceType = param.ParameterType.GetGenericArguments()[0];
+                if (interfaceType == null)
+                    return null;
+
+                // generate function that will query interfaces on demand
+                return BuildDelegateMethodInfo.MakeGenericMethod(interfaceType)
+                    .Invoke(this, new object[] { obj, container });
+            }
+
+            // by default support only the container
+            return GetConstructorParameterValueFromContainer(obj, param, container);
+        }
+
+        /// <summary>
+        /// Helper method for lazy constructor parameter.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="interfaceType"></param>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        object GetConstructorParameterValue(XObject obj, Type interfaceType, IContainer container)
+        {
+            return
+                GetConstructorParameterValueFromInterface(obj, interfaceType, container) ??
+                GetConstructorParameterValueFromContainer(obj, interfaceType, container);
+        }
+
+        /// <summary>
+        /// Helper method for lazy constructor parameter from interface.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="interfaceType"></param>
+        /// <returns></returns>
+        object GetConstructorParameterValueFromInterface(XObject obj, Type interfaceType, IContainer container)
+        {
+            return obj
+                .Interfaces(interfaceType)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets a value for the given constructor parameter from the container.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="param"></param>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        object GetConstructorParameterValueFromContainer(XObject obj, ParameterInfo param, IContainer container)
+        {
+            Contract.Requires<ArgumentNullException>(obj != null);
+            Contract.Requires<ArgumentNullException>(param != null);
+            Contract.Requires<ArgumentNullException>(container != null);
+
+            return GetConstructorParameterValueFromContainer(
+                obj,
+                GetContractType(param.ParameterType),
+                container);
+        }
+
+        /// <summary>
+        /// Gets a value for the given constructor parameter from the container.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="interfaceType"></param>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        object GetConstructorParameterValueFromContainer(XObject obj, Type interfaceType, IContainer container)
+        {
+            Contract.Requires<ArgumentNullException>(obj != null);
+            Contract.Requires<ArgumentNullException>(container != null);
+
+            var paramContractType = GetContractType(interfaceType);
             var paramContractName = GetContractName(paramContractType);
             var paramTypeIdentity = AttributedModelServices.GetTypeIdentity(paramContractType);
 
             // ImportAttribute present
-            var attr1 = param.GetCustomAttribute<ImportAttribute>();
-            if (attr1 != null)
-                return container.GetExports(ReflectionModelServices.CreateImportDefinition(
-                        new Lazy<ParameterInfo>(() => param),
-                        attr1.ContractName ?? paramContractName,
-                        attr1.ContractType != null ? AttributedModelServices.GetTypeIdentity(attr1.ContractType) : paramTypeIdentity,
-                        Enumerable.Empty<KeyValuePair<string, Type>>(),
-                        ImportCardinality.ZeroOrMore,
-                        CreationPolicy.Any,
-                        null))
-                    .Select(i => i.Value)
-                    .FirstOrDefault();
-
-            // ImportManyAttribute present
-            var attr2 = param.GetCustomAttribute<ImportManyAttribute>();
-            if (attr2 != null)
-                return container.GetExports(ReflectionModelServices.CreateImportDefinition(
-                    new Lazy<ParameterInfo>(() => param),
-                        attr2.ContractName ?? paramContractName,
-                        attr2.ContractType != null ? AttributedModelServices.GetTypeIdentity(attr2.ContractType) : paramTypeIdentity,
-                        Enumerable.Empty<KeyValuePair<string, Type>>(),
-                        ImportCardinality.ZeroOrMore,
-                        CreationPolicy.Any,
-                        null))
-                    .Select(i => i.Value);
-
-            // no attribute present
-            if (typeof(IEnumerable).IsAssignableFrom(param.ParameterType))
-                return container.GetExports(ReflectionModelServices.CreateImportDefinition(
-                    new Lazy<ParameterInfo>(() => param),
-                        paramContractName,
-                        paramTypeIdentity,
-                        Enumerable.Empty<KeyValuePair<string, Type>>(),
-                        ImportCardinality.ZeroOrMore,
-                        CreationPolicy.Any,
-                        null))
-                    .Select(i => i.Value);
-
-            return container.GetExports(ReflectionModelServices.CreateImportDefinition(
-                new Lazy<ParameterInfo>(() => param),
+            return container.GetExports(new ContractBasedImportDefinition(
                     paramContractName,
                     paramTypeIdentity,
                     Enumerable.Empty<KeyValuePair<string, Type>>(),
                     ImportCardinality.ZeroOrMore,
+                    false,
+                    false,
                     CreationPolicy.Any,
                     null))
                 .Select(i => i.Value)
