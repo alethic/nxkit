@@ -432,6 +432,18 @@ namespace NXKit.Xml
 
         #endregion
 
+        /// <summary>
+        /// Clones the specified <see cref="XObject"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static XObject Clone(this XObject self)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+
+            return XCloneTransformer.Default.Visit(self);
+        }
+
     }
 
 }

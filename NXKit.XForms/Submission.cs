@@ -63,7 +63,7 @@ namespace NXKit.XForms
 
             public override XObject Visit(XObject obj)
             {
-                var modelItem = obj.AnnotationOrCreate<ModelItem>(() => new ModelItem(obj));
+                var modelItem = ModelItem.Get(obj);
                 if (modelItem == null || modelItem.Relevant || !excludeRelevant)
                 {
                     // visit node
@@ -136,7 +136,7 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(requestService != null);
 
             this.requestService = requestService;
-            this.properties = new SubmissionProperties(element);
+            this.properties = new SubmissionProperties(element, new SubmissionAttributes(element));
             this.context = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
         }
 
@@ -427,9 +427,7 @@ namespace NXKit.XForms
                 // element, except the context node is modified to be the document element of the instance identified
                 // by the instance attribute if present.
                 var ec = new EvaluationContext(
-                    context.Value.Context.Model,
-                    context.Value.Context.Instance,
-                    context.Value.Context.Instance.State.Document.Root.Annotation<ModelItem>(),
+                    ModelItem.Get(context.Value.Context.Instance.State.Document.Root),
                     1,
                     1);
 

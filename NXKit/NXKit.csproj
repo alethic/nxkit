@@ -229,6 +229,7 @@
     <Compile Include="InterfaceProviderBase.cs" />
     <Compile Include="Xml\BaseUriAnnotation.cs" />
     <Compile Include="Xml\IOXmlReader.cs" />
+    <Compile Include="Xml\XCloneTransformer.cs" />
     <Compile Include="Xml\XContainerExtensions.cs" />
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="Xml\XDocumentExtensions.cs" />

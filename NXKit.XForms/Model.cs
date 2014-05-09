@@ -17,6 +17,7 @@ namespace NXKit.XForms
         IEventDefaultActionHandler
     {
 
+
         readonly ModelAttributes attributes;
         readonly Lazy<ModelState> state;
         readonly Lazy<DocumentAnnotation> documentAnnotation;
@@ -82,10 +83,7 @@ namespace NXKit.XForms
                 if (defaultInstance.State.Document == null)
                     return null;
 
-                var modelItem = defaultInstance.State.Document.Root.AnnotationOrCreate<ModelItem>(() =>
-                    new ModelItem(defaultInstance.State.Document.Root));
-
-                return new EvaluationContext(this, defaultInstance, modelItem, 1, 1);
+                return new EvaluationContext(this, defaultInstance, ModelItem.Get(defaultInstance.State.Document.Root), 1, 1);
             }
         }
 

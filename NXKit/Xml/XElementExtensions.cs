@@ -108,6 +108,18 @@ namespace NXKit.Xml
                 .Select(i => i.First())
                 .Select(i => new XAttribute(i));
         }
+        
+        /// <summary>
+        /// Clones the specified <see cref="XElement"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static XElement Clone(this XElement self)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+
+            return XCloneTransformer.Default.Visit(self);
+        }
 
     }
 

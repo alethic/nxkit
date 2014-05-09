@@ -1,0 +1,37 @@
+﻿<f:form xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
+        xmlns:xf="http://www.w3.org/2002/xforms"
+        xmlns:ev="http://www.w3.org/2001/xml-events">
+    <xf:model>
+        <xf:instance id="data">
+            <data xmlns="">
+                <item>
+                    <text>New Item</text>
+                </item>
+            </data>
+        </xf:instance>
+
+        <xf:instance id="template">
+            <data xmlns="">
+                <item>
+                    <text>New Item</text>
+                </item>
+            </data>
+        </xf:instance>
+
+    </xf:model>
+        
+    <f:section>
+        <xf:repeat
+            ref="item"
+            id="repeat">
+            <xf:input ref="text" >
+                <xf:label>Value</xf:label>
+            </xf:input>
+        </xf:repeat>
+        <xf:trigger>
+            <xf:label>Insert</xf:label>
+            <xf:insert ev:event="DOMActivate" ref="item" origin="instance('template')/item" at="xf:index('repeat')" postion="after" />
+        </xf:trigger>
+    </f:section>
+</f:form>

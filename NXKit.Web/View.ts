@@ -32,7 +32,7 @@ module NXKit.Web {
             self._root = null;
             self._bind = true;
 
-            self._messages = ko.observableArray<Message>([]);
+            self._messages = ko.observableArray<Message>();
             self._threshold = Severity.Warning;
 
             self._queue = new Array<any>();
@@ -77,21 +77,21 @@ module NXKit.Web {
          */
         public Receive(data: any[]) {
             this.ApplyNode(data['Node'] || null);
-            this.DisplayMessages(data['Messages'] || []);
+            this.AppendMessages(data['Messages'] || []);
             this.ExecuteScripts(data['Scripts'] || []);
         }
 
         /**
          * Updates the messages of the view with the specified items.
          */
-        private DisplayMessages(messages: any[]) {
+        private AppendMessages(messages: any[]) {
             var self = this;
 
             for (var i = 0; i < messages.length; i++) {
 
-                var severity = <Severity>((<any>Severity)[<string>(messages[i])]);
+                var severity = <Severity>((<any>Severity)[<string>(messages[i].Severity)]);
                 var text = messages[i].Text || '';
-                if (severity >= this._threshold)
+                if (severity >= self._threshold)
                     self._messages.push(new Message(severity, text));
             }
         }
@@ -198,7 +198,7 @@ module NXKit.Web {
                             }
 
                             // display messages and execute scripts
-                            self.DisplayMessages(data['Messages'] || []);
+                            self.AppendMessages(data['Messages'] || []);
                             self.ExecuteScripts(data['Scripts'] || []);
 
                             // recurse

@@ -17,6 +17,17 @@ namespace NXKit.XForms
     public class ModelItem
     {
 
+        /// <summary>
+        /// Gets the model item for the given <see cref="XObject"/>.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static ModelItem Get(XObject obj)
+        {
+            return obj.AnnotationOrCreate<ModelItem>(() => new ModelItem(obj));
+        }
+
+
         readonly XObject xml;
         readonly Lazy<Model> model;
         readonly Lazy<Instance> instance;
