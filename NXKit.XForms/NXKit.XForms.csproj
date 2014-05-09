@@ -123,6 +123,7 @@
     <Compile Include="DispatchAttributes.cs" />
     <Compile Include="InsertPosition.cs" />
     <Compile Include="BindingProperties.cs" />
+    <Compile Include="DeleteProperties.cs" />
     <Compile Include="IO\FileHandler.cs" />
     <Compile Include="IO\IModelRequestService.cs" />
     <Compile Include="IO\ModelRequest.cs" />
