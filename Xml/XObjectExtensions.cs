@@ -57,6 +57,21 @@ namespace NXKit.Xml
                         .GetNextNodeId())).Id;
         }
 
+        /// <summary>
+        /// Locates the object with the given unique identifier.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="objectId"></param>
+        /// <returns></returns>
+        public static XNode ResolveObjectId(this XObject self, int objectId)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(self.Document != null);
+
+            return self.Document.DescendantNodesAndSelf()
+                .FirstOrDefault(i => i.GetObjectId() == objectId);
+        }
+
         #region Naming
 
         /// <summary>

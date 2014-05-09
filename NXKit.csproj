@@ -204,7 +204,6 @@
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="RemoteAttribute.cs" />
     <Compile Include="Serialization\SerializableAnnotationAttribute.cs" />
-    <Compile Include="Serialization\XmlAttributeOverrides.cs" />
     <Compile Include="Serialization\XNodeAnnotationSerializer.cs" />
     <Compile Include="Util\DictionaryExtensions.cs" />
     <Compile Include="Net\DynamicUriAuthority.cs" />
