@@ -97,63 +97,79 @@ namespace NXKit.XForms
                 .FirstOrDefault(i => i.AnnotationOrCreate<RepeatItemState>().Index == Index);
 
             // build new list of properly ordered nodes
-            var items = new LinkedList<XElement>();
-            if (Binding != null &&
-                Binding.ModelItems.Length > 0)
-                for (int index = 1; index <= Binding.ModelItems.Length; index++)
+            var items = Binding != null ? Binding.ModelItems.Select(i => i.Xml).ToArray() : new XObject[0];
+            var nodes = Element.Elements().ToArray();
+            var sorts = new XElement[items.Length];
+            for (int index = 0; index < items.Length; index++)
+            {
+                // model item at current index
+                var item = items[index];
+
+                // get existing item or create new
+                var indx = Array.FindIndex(nodes, i => i != null && i.Annotation<RepeatItemState>().ModelItemId == item.GetObjectId());
+                var node = indx >= 0 ? nodes[indx] :
+                    new XElement(
+                        Constants.XForms_1_0 + "group",
+                        Template.GetNamespacePrefixAttributes(),
+                        Template.Nodes());
+
+                // remove node from source list
+                if (indx >= 0) nodes[indx] = null;
+
+                // set node into output list
+                sorts[index] = node;
+
+                // configure item state
+                var anno = node.AnnotationOrCreate<RepeatItemState>();
+                anno.ModelItemId = item.GetObjectId();
+                anno.Index = index + 1;
+                anno.Size = items.Length;
+            }
+
+            // remove nodes which are no longer present
+            nodes.Where(i => i != null).Remove();
+            nodes = Element.Elements().ToArray();
+
+            for (int i = 0; i < sorts.Length; i++)
+            {
+                // node is currently in the correct position
+                if (nodes.Length > i &&
+                    nodes[i] == sorts[i])
+                    continue;
+
+                // current position is occupied by a different node
+                else if (nodes.Length > i &&
+                    nodes[i] != sorts[i])
                 {
-                    var modelItem = Binding.ModelItems[index - 1];
-                    if (modelItem == null)
-                        continue;
-
-                    // get existing item or create new
-                    var node = Element.Elements()
-                        .FirstOrDefault(i => i.AnnotationOrCreate<RepeatItemState>().ModelItemId == modelItem.Xml.GetObjectId());
-                    if (node == null)
-                        node = new XElement(
-                            Constants.XForms_1_0 + "group",
-                            Template.GetNamespacePrefixAttributes(),
-                            Template.Nodes());
-
-                    // configure item state
-                    var anno = node.AnnotationOrCreate<RepeatItemState>();
-                    var swap = anno.Index != index;
-                    anno.Index = index;
-                    anno.ModelItemId = modelItem.Xml.GetObjectId();
-                    items.AddLast(node);
+                    nodes[i].AddBeforeSelf(sorts[i]);
+                    nodes = Element.Elements().ToArray();
                 }
 
-            // items which have been added
-            var additions = items
-                .Except(Element.Nodes())
-                .OfType<XElement>()
-                .ToList();
-
-            // replace the element's content
-            Element.RemoveNodes(); // remove first to prevent cloning
-            Element.Add(items);
+                // new item is at the end of the node set
+                else
+                    Element.Add(sorts[i]);
+            }
 
             // model-construct-done sequence applied to new children
-            foreach (var addition in additions)
-            {
-                // refresh bindings
-                foreach (var i in GetAllExtensions<IOnRefresh>(addition))
+            foreach (var node in Element.Elements())
+                foreach (var i in GetAllExtensions<IOnRefresh>(node))
                     i.RefreshBinding();
 
-                // discard refresh events
-                foreach (var i in GetAllExtensions<IOnRefresh>(addition))
+            // discard refresh events
+            foreach (var node in Element.Elements())
+                foreach (var i in GetAllExtensions<IOnRefresh>(node))
                     i.DiscardEvents();
 
-                // final refresh
-                foreach (var i in GetAllExtensions<IOnRefresh>(addition))
+            // final refresh
+            foreach (var node in Element.Elements())
+                foreach (var i in GetAllExtensions<IOnRefresh>(node))
                     i.Refresh();
-            }
 
             // restore or reset index
             if (lastIndexItem != null &&
                 lastIndexItem.Parent != null)
                 Index = lastIndexItem.AnnotationOrCreate<RepeatItemState>().Index;
-            else if (items.Count > 0)
+            else if (Element.Elements().Count() > 0)
                 Index = 1;
             else
                 Index = 0;
@@ -203,21 +219,22 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal EvaluationContext GetItemContext(XElement element)
         {
-            var index = element.Interface<RepeatItem>().Index;
-            if (index <= 0)
+            var item = element.Annotation<RepeatItemState>();
+            if (item == null)
                 throw new InvalidOperationException();
 
             if (Binding == null ||
-                Binding.ModelItems == null ||
-                Binding.ModelItems.Length < index)
+                Binding.ModelItems == null)
                 return null;
 
+            var xml = Binding.ModelItem.Instance.State.Document.ResolveObjectId(item.ModelItemId);
+            if (xml == null)
+                throw new InvalidOperationException();
+
             return new EvaluationContext(
-                Binding.ModelItems[index - 1].Model,
-                Binding.ModelItems[index - 1].Instance,
-                Binding.ModelItems[index - 1],
-                index,
-                Binding.ModelItems.Length);
+                ModelItem.Get(xml),
+                item.Index,
+                item.Size);
         }
 
         void IOnInit.Init()

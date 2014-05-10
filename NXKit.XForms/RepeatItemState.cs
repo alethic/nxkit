@@ -13,8 +13,15 @@ namespace NXKit.XForms
         IXmlSerializable
     {
 
-        int index;
         int modelItemId;
+        int index;
+        int size;
+
+        internal int ModelItemId
+        {
+            get { return modelItemId; }
+            set { modelItemId = value; }
+        }
 
         internal int Index
         {
@@ -22,10 +29,10 @@ namespace NXKit.XForms
             set { index = value; }
         }
 
-        internal int ModelItemId
+        internal int Size
         {
-            get { return modelItemId; }
-            set { modelItemId = value; }
+            get { return size; }
+            set { size = value; }
         }
 
         public XmlSchema GetSchema()
@@ -38,15 +45,17 @@ namespace NXKit.XForms
             if (reader.MoveToContent() == XmlNodeType.Element &&
                 reader.LocalName == "repeat-item")
             {
-                index = int.Parse(reader["index"]);
                 modelItemId = int.Parse(reader["model-item-id"]);
+                index = int.Parse(reader["index"]);
+                size = int.Parse(reader["size"]);
             }
         }
 
         public void WriteXml(XmlWriter writer)
         {
-            writer.WriteAttributeString("index", index.ToString());
             writer.WriteAttributeString("model-item-id", modelItemId.ToString());
+            writer.WriteAttributeString("index", index.ToString());
+            writer.WriteAttributeString("size", size.ToString());
         }
 
     }
