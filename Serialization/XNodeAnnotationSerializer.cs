@@ -119,7 +119,13 @@ namespace NXKit.Serialization
                     // replace original element with annotating element.
                     yield return new XStreamingElement(((XElement)node).Name, SerializeContents((XElement)node));
                 else
+                {
+                    // other node types
                     yield return node;
+
+                    foreach (var save in SerializeObject(node))
+                        yield return save;
+                }
         }
 
         /// <summary>
@@ -172,11 +178,15 @@ namespace NXKit.Serialization
             if (attribute != null)
                 return SerializeAttributes(attribute);
 
+            var node = obj as XNode;
+            if (node != null)
+                return SerializeNodes(node);
+
             return null;
         }
 
         /// <summary>
-        /// Get's the annotation elements for a <see cref="XDocument"/>.
+        /// Gets the annotation elements for a <see cref="XDocument"/>.
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
@@ -196,7 +206,7 @@ namespace NXKit.Serialization
         }
 
         /// <summary>
-        /// Get's the annotation elements for a <see cref="XElement"/>.
+        /// Gets the annotation elements for a <see cref="XElement"/>.
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
@@ -221,7 +231,7 @@ namespace NXKit.Serialization
         }
 
         /// <summary>
-        /// Gets's the annotation elements for a <see cref="XAttribute"/>.
+        /// Gets the annotation elements for a <see cref="XAttribute"/>.
         /// </summary>
         /// <param name="attribute"></param>
         /// <returns></returns>
@@ -236,9 +246,28 @@ namespace NXKit.Serialization
             // emit annotations on the attribute
             foreach (var annotation in attribute.Annotations<object>())
             {
-                var obj = SerializeAnnotation(attribute, attribute);
+                var obj = SerializeAnnotation(attribute, annotation);
                 if (obj != null)
                     obj.SetAttributeValue(NX_FOR, NX_FOR_ATTRIBUTE);
+
+                yield return obj;
+            }
+        }
+
+        /// <summary>
+        /// Gets the annotation elements for a <see cref="XNode"/>.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        static IEnumerable<XElement> SerializeNodes(XNode node)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+
+            foreach (var annotation in node.Annotations<object>())
+            {
+                var obj = SerializeAnnotation(node, annotation);
+                if (obj != null)
+                    obj.SetAttributeValue(NX_FOR, NX_FOR_NODE);
 
                 yield return obj;
             }
@@ -420,12 +449,12 @@ namespace NXKit.Serialization
                 .Elements(NX_ANNOTATION)
                 .ToList();
 
-            // detach annotations from hierarchy (so indexed nodes operate)
-            annotations.Remove();
-
             // deserialize each annotation element
             foreach (var annotation in annotations)
                 DeserializeAnnotationElement(element, annotation);
+
+            // remove annotations from element
+            annotations.Remove();
         }
 
         /// <summary>
@@ -552,7 +581,11 @@ namespace NXKit.Serialization
             Contract.Requires<ArgumentNullException>(annotation != null);
             Contract.Requires<ArgumentNullException>(obj != null);
 
-            throw new NotImplementedException();
+            var node = annotation.PreviousNode;
+            if (node == null)
+                throw new InvalidOperationException();
+
+            node.AddAnnotation(obj);
         }
 
         #endregion
