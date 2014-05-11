@@ -64,7 +64,7 @@ module NXKit.Web {
         /**
          * Updates the view in response to some received data.
          */
-        public Receive(data: any[]) {
+        public Receive(data: any) {
             this.Apply(data['Node'] || null);
             this.AppendMessages(data['Messages'] || []);
             this.ExecuteScripts(data['Scripts'] || []);
