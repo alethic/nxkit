@@ -54,7 +54,7 @@ namespace NXKit.Xml
             return self.AnnotationOrCreate<ObjectAnnotation>(() =>
                 new ObjectAnnotation(
                     self.Document.AnnotationOrCreate<DocumentAnnotation>()
-                        .GetNextNodeId())).Id;
+                        .GetNextObjectId())).Id;
         }
 
         /// <summary>

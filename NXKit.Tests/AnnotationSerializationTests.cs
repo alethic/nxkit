@@ -1,6 +1,7 @@
 ﻿using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NXKit.Serialization;
+using System.Linq;
 
 using NXKit.Xml;
 
@@ -43,6 +44,24 @@ namespace NXKit.Tests
             var d2 = XNodeAnnotationSerializer.Serialize(d1);
             var d3 = XNodeAnnotationSerializer.Deserialize(d2);
             Assert.IsTrue(d3.Root.FirstNode.GetObjectId() == ti);
+        }
+
+        [TestMethod]
+        public void Test_formatted_text()
+        {
+            var d1 = XDocument.Parse(new XDocument(
+                new XElement("root",
+                    new XElement("data",
+                        new XElement("item", "text")))).ToString());
+            var l1 = d1.DescendantNodesAndSelf()
+                .Select(i => i.GetObjectId())
+                .ToArray();
+            var d2 = XNodeAnnotationSerializer.Serialize(d1);
+            var d3 = XNodeAnnotationSerializer.Deserialize(d2);
+            var l2 = d3.DescendantNodesAndSelf()
+                .Select(i => i.GetObjectId())
+                .ToArray();
+            Assert.IsTrue(l1.SequenceEqual(l2));
         }
 
     }

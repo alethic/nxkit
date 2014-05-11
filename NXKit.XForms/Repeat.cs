@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+using NXKit.DOMEvents;
 using NXKit.Xml;
 
 
@@ -13,6 +14,7 @@ namespace NXKit.XForms
     public class Repeat :
         ElementExtension,
         IOnInit,
+        IOnLoad,
         IOnRefresh
     {
 
@@ -23,6 +25,8 @@ namespace NXKit.XForms
         readonly Lazy<UIBinding> uiBinding;
         readonly Lazy<RepeatState> state;
         readonly Lazy<XElement> template;
+
+        IEventListener listener;
 
         /// <summary>
         /// Initializes a new instance.
@@ -75,7 +79,7 @@ namespace NXKit.XForms
             set { State.Template = value; }
         }
 
-        void Initialize()
+        public void Init()
         {
             // acquire template
             Template = new XElement(
@@ -83,17 +87,29 @@ namespace NXKit.XForms
                 Element.GetNamespacePrefixAttributes(),
                 Element.Nodes());
             Element.RemoveNodes();
+
         }
 
         /// <summary>
         /// Dynamically generate repeat items, reusing existing instances if available.
         /// </summary>
         /// <returns></returns>
-        void RefreshNodes()
+        void Update()
         {
+            // configure listener for instance alterations
+            if (Binding != null &&
+                Binding.Context != null)
+                if (listener == null)
+                {
+                    listener = new EventListener(evt => Update());
+                    Binding.Context.Instance.Element.Parent.Interface<IEventTarget>().AddEventListener(Events.Insert, listener, true);
+                    Binding.Context.Instance.Element.Parent.Interface<IEventTarget>().AddEventListener(Events.Delete, listener, true);
+                }
+
             // store current index item
-            var lastIndexItem = Element
-                .Nodes()
+            var indexPrev = Index;
+            var indexItem = Element
+                .Elements()
                 .FirstOrDefault(i => i.AnnotationOrCreate<RepeatItemState>().Index == Index);
 
             // build new list of properly ordered nodes
@@ -106,70 +122,61 @@ namespace NXKit.XForms
                 var item = items[index];
 
                 // get existing item or create new
-                var indx = Array.FindIndex(nodes, i => i != null && i.Annotation<RepeatItemState>().ModelItemId == item.GetObjectId());
+                var indx = Array.FindIndex(nodes, i => i.AnnotationOrCreate<RepeatItemState>().ModelObjectId == item.GetObjectId());
                 var node = indx >= 0 ? nodes[indx] :
                     new XElement(
                         Constants.XForms_1_0 + "group",
                         Template.GetNamespacePrefixAttributes(),
                         Template.Nodes());
 
-                // remove node from source list
-                if (indx >= 0) nodes[indx] = null;
-
                 // set node into output list
                 sorts[index] = node;
 
                 // configure item state
                 var anno = node.AnnotationOrCreate<RepeatItemState>();
-                anno.ModelItemId = item.GetObjectId();
+                anno.ModelObjectId = item.GetObjectId();
                 anno.Index = index + 1;
                 anno.Size = items.Length;
             }
 
-            // remove nodes which are no longer present
-            nodes.Where(i => i != null).Remove();
-            nodes = Element.Elements().ToArray();
-
-            for (int i = 0; i < sorts.Length; i++)
+            // new sequence is different from old sequence
+            if (sorts.Length != nodes.Length ||
+                sorts.SequenceEqual(nodes) == false)
             {
-                // node is currently in the correct position
-                if (nodes.Length > i &&
-                    nodes[i] == sorts[i])
-                    continue;
+                // replace all children
+                Element.RemoveNodes();
+                Element.Add(sorts);
 
-                // current position is occupied by a different node
-                else if (nodes.Length > i &&
-                    nodes[i] != sorts[i])
-                {
-                    nodes[i].AddBeforeSelf(sorts[i]);
-                    nodes = Element.Elements().ToArray();
-                }
+                // set of elements that were added
+                var added = sorts
+                    .Except(nodes)
+                    .ToArray();
 
-                // new item is at the end of the node set
-                else
-                    Element.Add(sorts[i]);
+                // model-construct-done sequence applied to new children
+                foreach (var node in added)
+                    foreach (var i in GetAllExtensions<IOnRefresh>(node))
+                        i.RefreshBinding();
+
+                // discard refresh events
+                foreach (var node in added)
+                    foreach (var i in GetAllExtensions<IOnRefresh>(node))
+                        i.DiscardEvents();
+
+                // final refresh
+                foreach (var node in added)
+                    foreach (var i in GetAllExtensions<IOnRefresh>(node))
+                        i.Refresh();
             }
 
-            // model-construct-done sequence applied to new children
-            foreach (var node in Element.Elements())
-                foreach (var i in GetAllExtensions<IOnRefresh>(node))
-                    i.RefreshBinding();
-
-            // discard refresh events
-            foreach (var node in Element.Elements())
-                foreach (var i in GetAllExtensions<IOnRefresh>(node))
-                    i.DiscardEvents();
-
-            // final refresh
-            foreach (var node in Element.Elements())
-                foreach (var i in GetAllExtensions<IOnRefresh>(node))
-                    i.Refresh();
 
             // restore or reset index
-            if (lastIndexItem != null &&
-                lastIndexItem.Parent != null)
-                Index = lastIndexItem.AnnotationOrCreate<RepeatItemState>().Index;
-            else if (Element.Elements().Count() > 0)
+            var length = Element.Elements().Count();
+            if (indexItem != null &&
+                indexItem.Parent != null)
+                Index = indexItem.AnnotationOrCreate<RepeatItemState>().Index;
+            else if (indexPrev > 0)
+                Index = indexPrev <= length ? indexPrev : length;
+            else if (length > 0)
                 Index = 1;
             else
                 Index = 0;
@@ -190,29 +197,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Refreshes the interface of this element.
-        /// </summary>
-        void Refresh()
-        {
-            // ensure index value is within range
-            if (Index < 0)
-                if (Binding == null ||
-                    Binding.ModelItems == null ||
-                    Binding.ModelItems.Length == 0)
-                    Index = 0;
-                else
-                    Index = attributes.StartIndex;
-
-            if (Binding != null &&
-                Binding.ModelItems != null)
-                if (Index > Binding.ModelItems.Length)
-                    Index = Binding.ModelItems.Length;
-
-            // rebuild node tree
-            RefreshNodes();
-        }
-
-        /// <summary>
         /// Gets the <see cref="EvaluationContext"/> for a specific item.
         /// </summary>
         /// <param name="element"></param>
@@ -224,22 +208,22 @@ namespace NXKit.XForms
                 throw new InvalidOperationException();
 
             if (Binding == null ||
-                Binding.ModelItems == null)
+                Binding.ModelItems.Length == 0)
                 return null;
 
-            var xml = Binding.ModelItem.Instance.State.Document.ResolveObjectId(item.ModelItemId);
+            var xml = Binding.ModelItem.Instance.State.Document.ResolveObjectId(item.ModelObjectId);
             if (xml == null)
+            {
+                var d = NXKit.Serialization.XNodeAnnotationSerializer.Serialize(Binding.ModelItem.Instance.State.Document);
+                var s = d.ToString();
+                var l = Binding.ModelItem.Instance.State.Document.ToString();
                 throw new InvalidOperationException();
+            }
 
             return new EvaluationContext(
                 ModelItem.Get(xml),
                 item.Index,
                 item.Size);
-        }
-
-        void IOnInit.Init()
-        {
-            Initialize();
         }
 
         void IOnRefresh.RefreshBinding()
@@ -249,7 +233,7 @@ namespace NXKit.XForms
 
         void IOnRefresh.Refresh()
         {
-            Refresh();
+            Update();
         }
 
         void IOnRefresh.DispatchEvents()

@@ -96,6 +96,7 @@ namespace NXKit.XForms
         {
             return Element.Document.Root
                 .DescendantNodesAndSelf()
+                .Where(i => i.Document != null)
                 .SelectMany(i => i.Interfaces<T>());
         }
 
