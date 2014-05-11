@@ -4,7 +4,6 @@
 git remote add -f origin https://github.com/nxkit/nxkit.git 1>&2
 git remote update 1>&2
 git remote -v show 1>&2
-git fetch -v external 1>&2
 git branch -f master origin/master 1>&2
 
 :: ----------------------
