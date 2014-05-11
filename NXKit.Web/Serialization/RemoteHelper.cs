@@ -40,6 +40,9 @@ namespace NXKit.Web.Serialization
         /// <returns></returns>
         static RemoteDescriptor GetRemoteDescriptor(XNode node, string interfaceName)
         {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(interfaceName));
+
             return RemoteObjectJsonConverter.GetRemotes(node.Interfaces())
                 .FirstOrDefault(i => i.Type.FullName == interfaceName);
         }
@@ -53,6 +56,11 @@ namespace NXKit.Web.Serialization
         /// <param name="jvalue"></param>
         public static void Update(XNode node, string interfaceName, string propertyName, JValue jvalue)
         {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(interfaceName));
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(propertyName));
+            Contract.Requires<ArgumentNullException>(jvalue != null);
+
             var remote = GetRemoteDescriptor(node, interfaceName);
             if (remote == null)
                 throw new InvalidOperationException();
@@ -85,6 +93,11 @@ namespace NXKit.Web.Serialization
         /// <param name="args"></param>
         public static void Invoke(XNode node, string interfaceName, string methodName, JObject args)
         {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(interfaceName));
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(methodName));
+            Contract.Requires<ArgumentNullException>(args != null);
+
             var remote = GetRemoteDescriptor(node, interfaceName);
             if (remote == null)
                 throw new InvalidOperationException();

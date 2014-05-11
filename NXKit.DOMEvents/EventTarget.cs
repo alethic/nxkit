@@ -5,8 +5,6 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.Util;
 using NXKit.Xml;
@@ -26,6 +24,7 @@ namespace NXKit.DOMEvents
 
         readonly ITraceService trace;
         readonly XNode node;
+        readonly EventTargetState state;
 
         /// <summary>
         /// Initializes a new instance.
@@ -41,43 +40,36 @@ namespace NXKit.DOMEvents
 
             this.trace = trace;
             this.node = node;
+            this.state = node.AnnotationOrCreate<EventTargetState>();
+        }
+
+        public IEnumerable<IEventListener> GetEventListeners(string type, bool useCapture)
+        {
+            return state.Listeners
+                .Where(i => i.EventType == type && i.UseCapture == useCapture)
+                .Select(i => i.Listener);
+        }
+
+        public bool HasEventListener(string type, IEventListener listener, bool useCapture)
+        {
+            return GetEventListeners(type, useCapture)
+                .Any(i => object.Equals(i, listener));
         }
 
         public void AddEventListener(string type, IEventListener listener, bool useCapture)
         {
-            // initialize listener map
-            var listenerMap = node.Annotation<EventListenerMap>();
-            if (listenerMap == null)
-                node.AddAnnotation(listenerMap = new EventListenerMap());
-
-            // initialize listeners list
-            var listeners = listenerMap.GetOrDefault(type);
-            if (listeners == null)
-                listeners = listenerMap[type] = new List<EventListenerData>();
-
-            // check for existing registration
-            if (listeners.Any(i => i.Listener == listener && i.UseCapture == useCapture))
-                return;
-
-            // add listener to set
-            listeners.Add(new EventListenerData(listener, useCapture));
+            state.Listeners.Add(new EventTargetListenerItem(type, useCapture, listener));
         }
 
         public void RemoveEventListener(string type, IEventListener listener, bool useCapture)
         {
-            var listenerMap = node.Annotation<EventListenerMap>();
-            if (listenerMap == null)
-                return;
+            var items = state.Listeners
+                .Where(i => i.EventType == type)
+                .Where(i => i.UseCapture == useCapture)
+                .Where(i => i.Listener == listener);
 
-            // initialize listeners list
-            var listeners = listenerMap.GetOrDefault(type);
-            if (listeners == null)
-                return;
-
-            // check for existing registration
-            var data = listeners.FirstOrDefault(i => i.Listener == listener && i.UseCapture == useCapture);
-            if (data != null)
-                listeners.Remove(data);
+            foreach (var item in items)
+                state.Listeners.Remove(item);
         }
 
         public void DispatchEvent(Event evt)
@@ -157,15 +149,12 @@ namespace NXKit.DOMEvents
 
             evt.CurrentTarget = node.Interface<IEventTarget>();
 
-            var listenerMap = node.Annotation<EventListenerMap>();
-            if (listenerMap != null)
-            {
-                // obtain set of registered listeners
-                var listeners = listenerMap.GetOrDefault(evt.Type);
-                if (listeners != null)
-                    foreach (var listener in listeners.Where(i => i.UseCapture == useCapture))
-                        listener.Listener.HandleEvent(evt);
-            }
+            var items = node.AnnotationOrCreate<EventTargetState>().Listeners
+                .Where(i => i.EventType == evt.Type)
+                .Where(i => i.UseCapture == useCapture);
+
+            foreach (var listener in items)
+                listener.Listener.HandleEvent(evt);
         }
 
     }

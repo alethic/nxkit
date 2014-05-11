@@ -336,18 +336,13 @@ namespace NXKit.Serialization
             // serialize anntation into body
             using (var wrt = element.CreateWriter())
             {
-                wrt.WriteComment(""); // fixes a bug in XmlSerializer that tries to WriteStartDocument
+                wrt.WriteWhitespace(""); // fixes a bug in XmlSerializer that tries to WriteStartDocument
 
                 var srs = new XmlSerializer(annotation.GetType());
                 var ens = new XmlSerializerNamespaces();
                 ens.Add("", "");
                 srs.Serialize(wrt, annotation, ens);
             }
-
-            // remove bug comment
-            element.Nodes()
-                .OfType<XComment>()
-                .Remove();
 
             return element;
         }

@@ -120,7 +120,9 @@
     <Compile Include="DOMTargetEventException.cs" />
     <Compile Include="DOMEventException.cs" />
     <Compile Include="EventHandlerDelegate.cs" />
+    <Compile Include="EventTargetListenerItem.cs" />
     <Compile Include="FocusEventInfo.cs" />
+    <Compile Include="InterfaceEventListener.cs" />
     <Compile Include="MutationEventInfo.cs" />
     <Compile Include="Events.partial.cs">
       <AutoGen>True</AutoGen>
@@ -131,9 +133,8 @@
     <Compile Include="MutationEvent.cs" />
     <Compile Include="UIEventInfo.cs" />
     <Compile Include="EventInfo.cs" />
-    <Compile Include="EventListener.cs" />
-    <Compile Include="EventListenerData.cs" />
-    <Compile Include="EventListenerMap.cs" />
+    <Compile Include="ActionEventListener.cs" />
+    <Compile Include="EventTargetState.cs" />
     <Compile Include="EventInfoTableProvider.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="IEventInfoTable.cs" />

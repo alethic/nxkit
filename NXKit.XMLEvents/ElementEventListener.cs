@@ -152,7 +152,7 @@ namespace NXKit.XMLEvents
 
             observer.AddEventListener(
                 evt,
-                new EventListener(_ => InvokeHandleEvent(handler, _)),
+                new ActionEventListener(_ => InvokeHandleEvent(handler, _)),
                 GetCapture());
         }
 

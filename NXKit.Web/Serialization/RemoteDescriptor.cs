@@ -51,6 +51,8 @@ namespace NXKit
         /// <returns></returns>
         public PropertyInfo GetProperty(string name)
         {
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(name));
+
             return RemoteObjectJsonConverter.GetRemoteProperties(Type)
                 .FirstOrDefault(i => i.Name == name);
         }
@@ -62,6 +64,8 @@ namespace NXKit
         /// <returns></returns>
         public MethodInfo GetMethod(string name)
         {
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(name));
+
             return RemoteObjectJsonConverter.GetRemoteMethods(Type)
                 .FirstOrDefault(i => i.Name == name);
         }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+
 using NXKit.DOMEvents;
 using NXKit.Xml;
-
 
 namespace NXKit.XForms
 {
@@ -14,10 +14,10 @@ namespace NXKit.XForms
     public class Repeat :
         ElementExtension,
         IOnInit,
-        IOnLoad,
         IOnRefresh
     {
 
+        readonly NXDocumentHost host;
         readonly RepeatAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<Binding> binding;
@@ -31,12 +31,15 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="host"></param>
         /// <param name="element"></param>
-        public Repeat(XElement element)
+        public Repeat(NXDocumentHost host, XElement element)
             : base(element)
         {
+            Contract.Requires<ArgumentNullException>(host != null);
             Contract.Requires<ArgumentNullException>(element != null);
 
+            this.host = host;
             this.attributes = new RepeatAttributes(Element);
             this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
             this.binding = new Lazy<Binding>(() => bindingNode.Value.Binding);
@@ -87,23 +90,37 @@ namespace NXKit.XForms
                 Element.GetNamespacePrefixAttributes(),
                 Element.Nodes());
             Element.RemoveNodes();
-
         }
 
         /// <summary>
         /// Dynamically generate repeat items, reusing existing instances if available.
         /// </summary>
         /// <returns></returns>
-        void Update()
+        public void Update()
         {
+            // refresh binding
+            if (Binding != null)
+                Binding.Recalculate();
+
             // configure listener for instance alterations
             if (Binding != null &&
                 Binding.Context != null)
                 if (listener == null)
                 {
-                    listener = new EventListener(evt => Update());
-                    Binding.Context.Instance.Element.Parent.Interface<IEventTarget>().AddEventListener(Events.Insert, listener, true);
-                    Binding.Context.Instance.Element.Parent.Interface<IEventTarget>().AddEventListener(Events.Delete, listener, true);
+                    var target = Binding.Context.Instance.Element.Parent.Interface<IEventTarget>();
+
+                    // find existing listener
+                    listener =
+                        InterfaceEventListener.GetListener(target, Events.Insert, true, Update) ??
+                        InterfaceEventListener.GetListener(target, Events.Delete, true, Update);
+
+                    // register listener
+                    if (listener == null)
+                    {
+                        listener = InterfaceEventListener.Create(Update);
+                        target.AddEventListener(Events.Insert, listener, true);
+                        target.AddEventListener(Events.Delete, listener, true);
+                    }
                 }
 
             // store current index item
@@ -123,8 +140,9 @@ namespace NXKit.XForms
 
                 // get existing item or create new
                 var indx = Array.FindIndex(nodes, i => i.AnnotationOrCreate<RepeatItemState>().ModelObjectId == item.GetObjectId());
-                var node = indx >= 0 ? nodes[indx] :
-                    new XElement(
+                var node = indx >= 0 ? nodes[indx] : null;
+                if (node == null)
+                    node = new XElement(
                         Constants.XForms_1_0 + "group",
                         Template.GetNamespacePrefixAttributes(),
                         Template.Nodes());
@@ -151,6 +169,10 @@ namespace NXKit.XForms
                 var added = sorts
                     .Except(nodes)
                     .ToArray();
+
+                // initialize any object ids (seems to fix a bug that comes up with object IDs being changed)
+                foreach (var node in added.DescendantNodesAndSelf())
+                    node.GetObjectId();
 
                 // model-construct-done sequence applied to new children
                 foreach (var node in added)

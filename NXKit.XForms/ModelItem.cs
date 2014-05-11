@@ -226,7 +226,17 @@ namespace NXKit.XForms
                 if (target.HasElements)
                     throw new DOMTargetEventException(target, Events.BindingException);
 
-                ((XElement)Xml).SetValue(newValue);
+                // find existing text node or create
+                // preserves any existing annotations
+                var text = target.Nodes().OfType<XText>().FirstOrDefault();
+                if (text == null)
+                {
+                    text = new XText(newValue);
+                    target.AddFirst(text);
+                }
+
+                // set new value
+                text.Value = newValue;
 
                 Debug.WriteLine("ModelItem value changed: {0}", Xml);
             }

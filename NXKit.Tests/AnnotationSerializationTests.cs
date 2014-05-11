@@ -64,5 +64,31 @@ namespace NXKit.Tests
             Assert.IsTrue(l1.SequenceEqual(l2));
         }
 
+        [TestMethod]
+        public void Test_formatted_text_manipulation()
+        {
+            var d1 = XDocument.Parse(new XDocument(
+                new XElement("root",
+                    new XElement("data",
+                        new XElement("item", "text")))).ToString());
+            var l1 = d1.DescendantNodesAndSelf()
+                .Select(i => i.GetObjectId())
+                .ToArray();
+            var d2 = XNodeAnnotationSerializer.Serialize(d1);
+            var d3 = XNodeAnnotationSerializer.Deserialize(d2);
+            var l2 = d3.DescendantNodesAndSelf()
+                .Select(i => i.GetObjectId())
+                .ToArray();
+            d3.Element("root").Element("data").AddAfterSelf(d3.Element("root").Element("data"));
+            var l3 = d3.DescendantNodesAndSelf()
+                .Select(i => i.GetObjectId())
+                .ToArray();
+            var d4 = XNodeAnnotationSerializer.Serialize(d3);
+            var d5 = XNodeAnnotationSerializer.Deserialize(d4);
+            var l5 = d5.DescendantNodesAndSelf()
+                .Select(i => i.GetObjectId())
+                .ToArray();
+        }
+
     }
 }

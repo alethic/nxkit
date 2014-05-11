@@ -82,7 +82,7 @@ namespace NXKit.DOMEvents
 
         public void AddEventHandler(string type, bool useCapture, EventHandlerDelegate handler)
         {
-            Target.AddEventListener(type, new EventListener(_ => handler(_)), useCapture);
+            Target.AddEventListener(type, new ActionEventListener(_ => handler(_)), useCapture);
         }
 
     }

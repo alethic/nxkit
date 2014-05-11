@@ -16,16 +16,20 @@ namespace NXKit.DOMEvents
          IDocumentEvent
     {
 
+        readonly NXDocumentHost host;
         readonly XDocument document;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="host"></param>
         /// <param name="document"></param>
-        public DocumentEvent(XDocument document)
+        public DocumentEvent(NXDocumentHost host, XDocument document)
         {
+            Contract.Requires<ArgumentNullException>(host != null);
             Contract.Requires<ArgumentNullException>(document != null);
 
+            this.host = host;
             this.document = document;
         }
 
@@ -34,13 +38,13 @@ namespace NXKit.DOMEvents
             switch (eventInterface)
             {
                 case "Event":
-                    return new Event();
+                    return new Event(host);
                 case "UIEvent":
-                    return new UIEvent();
+                    return new UIEvent(host);
                 case "FocusEvent":
-                    return new FocusEvent();
+                    return new FocusEvent(host);
                 case "MutationEvent":
-                    return new MutationEvent();
+                    return new MutationEvent(host);
                 default:
                     throw new DOMException();
             }

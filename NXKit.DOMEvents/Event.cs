@@ -12,6 +12,7 @@ namespace NXKit.DOMEvents
     public class Event
     {
 
+        NXDocumentHost host;
         string type;
         IEventTarget target;
         IEventTarget currentTarget;
@@ -29,8 +30,11 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public Event()
+        public Event(NXDocumentHost host)
         {
+            Contract.Requires<ArgumentNullException>(host != null);
+
+            this.host = host;
             this.eventPhase = EventPhase.Uninitialized;
             this.timeStamp = (ulong)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
             this.context = new ExpandoObject();
@@ -39,10 +43,12 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="host"></param>
         /// <param name="type"></param>
-        public Event(string type)
-            : this()
+        public Event(NXDocumentHost host, string type)
+            : this(host)
         {
+            Contract.Requires<ArgumentNullException>(host != null);
             Contract.Requires<ArgumentNullException>(type != null);
 
             this.type = type;
@@ -51,12 +57,14 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="host"></param>
         /// <param name="type"></param>
         /// <param name="canBubble"></param>
         /// <param name="cancelable"></param>
-        public Event(string type, bool canBubble, bool cancelable)
-            : this()
+        public Event(NXDocumentHost host, string type, bool canBubble, bool cancelable)
+            : this(host)
         {
+            Contract.Requires<ArgumentNullException>(host != null);
             Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentNullException>(type.Length > 0);
 
@@ -76,6 +84,14 @@ namespace NXKit.DOMEvents
             this.stopPropagationSet = false;
             this.stopImmediatePropagationSet = false;
             this.preventDefaultSet = false;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="NXDocumentHost"/> that owns the event.
+        /// </summary>
+        public NXDocumentHost Host
+        {
+            get { return host; }
         }
 
         public string Type

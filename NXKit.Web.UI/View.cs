@@ -8,9 +8,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web.UI;
+using System.Xml.Linq;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
+
 using NXKit.Diagnostics;
 using NXKit.Web.Serialization;
 using NXKit.Xml;
@@ -585,6 +588,9 @@ namespace NXKit.Web.UI
         /// <param name="args"></param>
         void JsonInvokeMethod(MethodInfo method, JObject args)
         {
+            Contract.Requires<ArgumentNullException>(method != null);
+            Contract.Requires<ArgumentNullException>(args != null);
+
             // assembly invocation parameter list
             var count = 0;
             var parameters = method.GetParameters();
@@ -626,9 +632,9 @@ namespace NXKit.Web.UI
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(@interface));
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(property));
 
-            var node = host.Xml.ResolveObjectId(nodeId);
+            var node = (XNode)host.Xml.ResolveObjectId(nodeId);
             if (node == null)
-                throw new InvalidOperationException("Unknown NodeId.");
+                return;
 
             RemoteHelper.Update(node, @interface, property, value);
         }
@@ -646,9 +652,9 @@ namespace NXKit.Web.UI
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(@interface));
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(method));
 
-            var node = host.Xml.ResolveObjectId(nodeId);
+            var node = (XNode)host.Xml.ResolveObjectId(nodeId);
             if (node == null)
-                throw new InvalidOperationException("Unknown NodeId.");
+                return;
 
             RemoteHelper.Invoke(node, @interface, method, @params);
         }

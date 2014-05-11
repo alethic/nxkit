@@ -4,7 +4,7 @@ using System.Diagnostics.Contracts;
 namespace NXKit.DOMEvents
 {
 
-    public class EventListener :
+    public class ActionEventListener :
         IEventListener
     {
 
@@ -14,7 +14,7 @@ namespace NXKit.DOMEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="action"></param>
-        public EventListener(Action<Event> action)
+        public ActionEventListener(Action<Event> action)
         {
             Contract.Requires<ArgumentNullException>(action != null);
 
