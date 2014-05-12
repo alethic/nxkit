@@ -5,6 +5,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+
 using NXKit.Diagnostics;
 using NXKit.Util;
 using NXKit.Xml;
@@ -31,15 +32,13 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="node"></param>
         [ImportingConstructor]
-        public EventTarget(
-            ITraceService trace,
-            XNode node)
+        public EventTarget(XNode node, ITraceService trace)
         {
-            Contract.Requires<ArgumentNullException>(trace != null);
             Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(trace != null);
 
-            this.trace = trace;
             this.node = node;
+            this.trace = trace;
             this.state = node.AnnotationOrCreate<EventTargetState>();
         }
 
@@ -78,11 +77,11 @@ namespace NXKit.DOMEvents
 
             var target = node.Interface<IEventTarget>();
             if (target == null)
-                throw new Exception();
+                throw new InvalidOperationException();
 
             // event type must be specified
             if (string.IsNullOrEmpty(evt.Type))
-                throw new Exception();
+                throw new InvalidOperationException();
 
             // event phase must be uninitialized
             if (evt.EventPhase != EventPhase.Uninitialized)
@@ -95,13 +94,15 @@ namespace NXKit.DOMEvents
             var path = node.Ancestors()
                 .Cast<XNode>()
                 .Append(node.Document)
-                .ToList();
+                .ToLinkedList();
 
             // capture phase
             evt.EventPhase = EventPhase.Capturing;
-            foreach (var visual_ in path.Reverse<XNode>())
+
+            // capture phase moves from root to target
+            foreach (var n in path.Backwards().Select(i => i.Value))
             {
-                HandleEventOnNode(visual_, evt, true);
+                HandleEventOnNode(n, evt);
 
                 // was told to stop propagation
                 if (evt.StopPropagationSet)
@@ -110,7 +111,7 @@ namespace NXKit.DOMEvents
 
             // at-target phase
             evt.EventPhase = EventPhase.AtTarget;
-            HandleEventOnNode(node, evt, false);
+            HandleEventOnNode(node, evt);
 
             // was told to stop propagation
             if (evt.StopPropagationSet)
@@ -118,43 +119,43 @@ namespace NXKit.DOMEvents
 
             // bubbling phase
             evt.EventPhase = EventPhase.Bubbling;
-            foreach (var visual_ in path)
+
+            // bubbling phase moves from target to root
+            foreach (var n in path)
             {
-                HandleEventOnNode(visual_, evt, false);
+                HandleEventOnNode(n, evt);
 
                 // was told to stop propagation
                 if (evt.StopPropagationSet)
                     return;
             }
 
+            // handle default action
             if (!evt.PreventDefaultSet)
-            {
-                // handle default action
                 foreach (var da in node.Interfaces<IEventDefaultActionHandler>())
                     if (da != null)
                         da.DefaultAction(evt);
-            }
         }
 
         /// <summary>
-        /// Attempts to handle the event at the given <see cref="XElement"/>.
+        /// Attempts to handle the event at the given <see cref="XNode"/>.
         /// </summary>
         /// <param name="node"></param>
         /// <param name="evt"></param>
-        /// <param name="useCapture"></param>
-        void HandleEventOnNode(XNode node, Event evt, bool useCapture)
+        void HandleEventOnNode(XNode node, Event evt)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(evt != null);
 
             evt.CurrentTarget = node.Interface<IEventTarget>();
 
-            var items = node.AnnotationOrCreate<EventTargetState>().Listeners
+            var listeners = node.AnnotationOrCreate<EventTargetState>().Listeners
                 .Where(i => i.EventType == evt.Type)
-                .Where(i => i.UseCapture == useCapture);
+                .Where(i => i.UseCapture == (evt.EventPhase == EventPhase.Capturing))
+                .Select(i => i.Listener);
 
-            foreach (var listener in items)
-                listener.Listener.HandleEvent(evt);
+            foreach (var listener in listeners)
+                listener.HandleEvent(evt);
         }
 
     }

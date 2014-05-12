@@ -1,19 +1,20 @@
 ﻿using System;
-using System.ComponentModel.Composition;
+
+using NXKit.Composition;
 
 namespace NXKit.Scripting
 {
 
     [AttributeUsage(AttributeTargets.Class)]
     public class ScriptEngineAttribute :
-        ExportAttribute
+        ScopeExportAttribute
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public ScriptEngineAttribute()
-            : base(typeof(IScriptEngine))
+            : base(typeof(IScriptEngine), Scope.Host)
         {
 
         }

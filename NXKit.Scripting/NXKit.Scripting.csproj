@@ -120,6 +120,7 @@
     <Compile Include="IScriptEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptEngineAttribute.cs" />
+    <Compile Include="ScriptingException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NXKit.Scripting.nuspec">

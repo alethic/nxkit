@@ -47,6 +47,7 @@ namespace NXKit.DOMEvents
                 .SelectMany(i => i.GetEventInfos())
                 .Where(i => i.Type == type)
                 .Select(i => new { Event = DocumentEvent.CreateEvent(i.EventInterface), EventInfo = i })
+                .Where(i => i.Event != null)
                 .FirstOrDefault();
 
             // initialize and return event

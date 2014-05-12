@@ -73,8 +73,7 @@ namespace NXKit.DOMEvents
 
         public void InitEvent(string type, bool canBubble, bool cancelable)
         {
-            if (EventPhase != EventPhase.Uninitialized)
-                throw new InvalidOperationException();
+            Contract.Requires<InvalidOperationException>(EventPhase == EventPhase.Uninitialized);
 
             this.type = type;
             this.bubbles = canBubble;

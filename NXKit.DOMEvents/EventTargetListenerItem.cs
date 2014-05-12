@@ -4,7 +4,10 @@ using System.Diagnostics.Contracts;
 namespace NXKit.DOMEvents
 {
 
-    public class EventTargetListenerItem
+    /// <summary>
+    /// Describes a <see cref="IEventListener"/>s registration on a <see cref="IEventTarget"/>.
+    /// </summary>
+    class EventTargetListenerItem
     {
 
         readonly string eventType;

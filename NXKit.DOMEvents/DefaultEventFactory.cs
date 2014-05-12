@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
-
 using NXKit.Composition;
 
 namespace NXKit.DOMEvents
@@ -16,6 +16,14 @@ namespace NXKit.DOMEvents
     public class DefaultEventFactory :
         IEventFactory
     {
+
+        [ContractInvariantMethod]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
+        private void ObjectInvariant()
+        {
+            Contract.Invariant(providers != null);
+        }
+
 
         readonly IEnumerable<IEventProvider> providers;
 

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-
 using NXKit.Serialization;
 
 namespace NXKit.DOMEvents
@@ -33,7 +33,7 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Gets the registered listeners.
         /// </summary>
-        public ICollection<EventTargetListenerItem> Listeners
+        internal ICollection<EventTargetListenerItem> Listeners
         {
             get { return listeners; }
         }
@@ -97,6 +97,8 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         XElement SerializeListener(IEventListener listener)
         {
+            Contract.Requires<ArgumentNullException>(listener != null);
+
             // generate listener element
             var element = new XElement("listener",
                 new XAttribute("type", listener.GetType().FullName + ", " + listener.GetType().Assembly.GetName().Name));
