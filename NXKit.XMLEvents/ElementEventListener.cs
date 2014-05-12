@@ -15,11 +15,13 @@ namespace NXKit.XMLEvents
     [Interface(XmlNodeType.Element)]
     public class ElementEventListener :
         ElementExtension,
-        IOnLoad
+        IOnInit
     {
 
         readonly IInvoker invoker;
         readonly EventListenerAttributes attributes;
+        readonly Lazy<IEventHandler> handler;
+        readonly Lazy<EventTarget> observer;
 
         /// <summary>
         /// Initializes a new instance.
@@ -34,6 +36,8 @@ namespace NXKit.XMLEvents
 
             this.invoker = invoker;
             this.attributes = new EventListenerAttributes(element);
+            this.handler = new Lazy<IEventHandler>(() => GetHandler());
+            this.observer = new Lazy<EventTarget>(() => GetObserver());
         }
 
         /// <summary>
@@ -85,11 +89,11 @@ namespace NXKit.XMLEvents
         /// Gets the observer interface.
         /// </summary>
         /// <returns></returns>
-        IEventTarget GetObserver()
+        EventTarget GetObserver()
         {
             var element = GetObserverElement();
             if (element != null)
-                return element.InterfaceOrDefault<IEventTarget>();
+                return element.InterfaceOrDefault<EventTarget>();
 
             return null;
         }
@@ -142,29 +146,27 @@ namespace NXKit.XMLEvents
             if (evt == null)
                 return;
 
-            var handler = GetHandler();
-            if (handler == null)
+            if (handler.Value == null)
                 throw new DOMTargetEventException(Element, Events.Error);
 
-            var observer = GetObserver();
-            if (observer == null)
+            if (observer.Value == null)
                 throw new DOMTargetEventException(Element, Events.Error);
 
-            observer.AddEventListener(
+            observer.Value.Register(
                 evt,
-                new ActionEventListener(_ => InvokeHandleEvent(handler, _)),
+                InterfaceEventListener.Create(InvokeHandleEvent),
                 GetCapture());
         }
 
-        void InvokeHandleEvent(IEventHandler handler, Event evt)
+        public void InvokeHandleEvent(Event evt)
         {
-            Contract.Requires<ArgumentNullException>(handler != null);
             Contract.Requires<ArgumentNullException>(evt != null);
 
-            invoker.Invoke(() => handler.HandleEvent(evt));
+            invoker.Invoke(() => 
+                handler.Value.HandleEvent(evt));
         }
 
-        void IOnLoad.Load()
+        void IOnInit.Init()
         {
             Attach();
         }

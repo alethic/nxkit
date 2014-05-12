@@ -69,9 +69,7 @@ namespace NXKit.Scripting.EcmaScript
 
         public void Save()
         {
-            var n = ((DynamicObject)engine.Value.Script).GetDynamicMemberNames();
-            foreach (var i in n)
-                Console.WriteLine(i);
+
         }
 
         public void Dispose()

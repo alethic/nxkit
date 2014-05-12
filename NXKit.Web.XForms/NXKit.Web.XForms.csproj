@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="OutputViewModel.ts" />
+    <TypeScriptCompile Include="RepeatViewModel.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="SubmitViewModel.ts" />
     <TypeScriptCompile Include="TriggerViewModel.ts" />

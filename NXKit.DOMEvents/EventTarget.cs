@@ -179,7 +179,7 @@ namespace NXKit.DOMEvents
             evt.currentTarget = node;
 
             // invoke registered listeners
-            foreach (var registration in state.registrations)
+            foreach (var registration in node.Interface<EventTarget>().state.registrations)
             {
                 // If event's stop immediate propagation flag is set, terminate the invoke algorithm.
                 if (evt.stopImmediatePropagation)
