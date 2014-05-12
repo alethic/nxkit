@@ -96,6 +96,19 @@ namespace NXKit.Composition
             container.WithExport(contractType, value);
             return this;
         }
+        
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+
+            if (container != null)
+                container.Dispose();
+        }
+
+        ~Container()
+        {
+            Dispose();
+        }
 
     }
 

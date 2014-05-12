@@ -434,7 +434,11 @@ namespace NXKit
         public void Dispose()
         {
             GC.SuppressFinalize(this);
-            disposed = true;
+
+            if (host != null)
+                host.Dispose();
+            if (global != null)
+                global.Dispose();
         }
 
         /// <summary>
