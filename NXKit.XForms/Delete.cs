@@ -212,8 +212,8 @@ namespace NXKit.XForms
 
             // 6. The delete action is successfully completed by dispatching the xforms-delete event with appropriate
             // context information.
-            deleteContext.Instance.Element.Interface<INXEventTarget>()
-                .DispatchEvent(Events.Delete);
+            deleteContext.Instance.Element.Interface<EventTarget>()
+                .Dispatch(Events.Delete);
         }
 
     }

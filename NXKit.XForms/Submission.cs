@@ -16,7 +16,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}submission")]
     public class Submission :
         ElementExtension,
-        IEventDefaultActionHandler
+        IEventDefaultAction
     {
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace NXKit.XForms
             this.context = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
         }
 
-        void IEventDefaultActionHandler.DefaultAction(Event evt)
+        void IEventDefaultAction.DefaultAction(Event evt)
         {
             switch (evt.Type)
             {
@@ -244,7 +244,7 @@ namespace NXKit.XForms
                 node = null;
             else
             {
-                var evt = Element.Interface<INXEventTarget>().DispatchEvent(Events.SubmitSerialize, new SubmitSerializeContextInfo());
+                var evt = Element.Interface<EventTarget>().Dispatch(Events.SubmitSerialize, new SubmitSerializeContextInfo());
                 var ctx = evt.Context as SubmitSerializeContextInfo;
                 if (ctx != null &&
                     ctx.SubmissionBody != "")

@@ -27,15 +27,17 @@ namespace NXKit.DOMEvents
 
         public Event CreateEvent(string eventInterface)
         {
-            switch (eventInterface)
+            switch (eventInterface.ToLowerInvariant())
             {
-                case "Event":
+                case "event":
+                case "events":
                     return new Event(host);
-                case "UIEvent":
+                case "uievent":
+                case "uievents":
                     return new UIEvent(host);
-                case "FocusEvent":
+                case "focusevent":
                     return new FocusEvent(host);
-                case "MutationEvent":
+                case "mutationevent":
                     return new MutationEvent(host);
                 default:
                     return null;

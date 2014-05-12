@@ -256,62 +256,62 @@ namespace NXKit.XForms
         /// </summary>
         public void DispatchEvents()
         {
-            var target = element.Interface<INXEventTarget>();
+            var target = element.Interface<EventTarget>();
             if (target == null)
                 return;
 
             if (State.DispatchValueChanged)
             {
                 State.DispatchValueChanged = false;
-                target.DispatchEvent(Events.ValueChanged);
+                target.Dispatch(Events.ValueChanged);
             }
 
             if (State.DispatchValid)
             {
                 State.DispatchValid = false;
-                target.DispatchEvent(Events.Valid);
+                target.Dispatch(Events.Valid);
             }
 
             if (State.DispatchInvalid)
             {
                 State.DispatchInvalid = false;
-                target.DispatchEvent(Events.Invalid);
+                target.Dispatch(Events.Invalid);
             }
 
             if (State.DispatchEnabled)
             {
                 State.DispatchEnabled = false;
-                target.DispatchEvent(Events.Enabled);
+                target.Dispatch(Events.Enabled);
             }
 
             if (State.DispatchDisabled)
             {
                 State.DispatchDisabled = false;
-                target.DispatchEvent(Events.Disabled);
+                target.Dispatch(Events.Disabled);
             }
 
             if (State.DispatchOptional)
             {
                 State.DispatchOptional = false;
-                target.DispatchEvent(Events.Optional);
+                target.Dispatch(Events.Optional);
             }
 
             if (State.DispatchRequired)
             {
                 State.DispatchRequired = false;
-                target.DispatchEvent(Events.Required);
+                target.Dispatch(Events.Required);
             }
 
             if (State.DispatchReadOnly)
             {
                 State.DispatchReadOnly = false;
-                target.DispatchEvent(Events.ReadOnly);
+                target.Dispatch(Events.ReadOnly);
             }
 
             if (State.DispatchReadWrite)
             {
                 State.DispatchReadWrite = false;
-                target.DispatchEvent(Events.ReadWrite);
+                target.Dispatch(Events.ReadWrite);
             }
         }
 

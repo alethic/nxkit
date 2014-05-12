@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.DOMEvents;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -15,10 +16,9 @@ namespace NXKit.XForms
     [Remote]
     public class RepeatItem :
         ElementExtension,
-        IEvaluationContextProvider
+        IEvaluationContextProvider,
+        IEventListener
     {
-
-        Lazy<RepeatItemState> state;
 
         [Export(typeof(IInterfacePredicate))]
         public class RepeatItemPredicate :
@@ -32,6 +32,8 @@ namespace NXKit.XForms
 
         }
 
+        readonly RepeatItemState state;
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -41,12 +43,7 @@ namespace NXKit.XForms
         {
             Contract.Requires<System.ArgumentNullException>(element != null);
 
-            this.state = new Lazy<RepeatItemState>(() => element.Annotation<RepeatItemState>());
-        }
-
-        RepeatItemState State
-        {
-            get { return state.Value;}
+            this.state = element.AnnotationOrCreate<RepeatItemState>();
         }
 
         [Remote]
@@ -58,11 +55,13 @@ namespace NXKit.XForms
         [Remote]
         public int Index
         {
-            get { return State.Index; }
+            get { return state.Index; }
         }
 
-        [Remote]
-        public void SetFocus()
+        /// <summary>
+        /// Sets the repeat index to this item.
+        /// </summary>
+        public void SetIndex()
         {
             var repeat = Element.Parent;
             if (repeat == null ||
@@ -87,6 +86,12 @@ namespace NXKit.XForms
         EvaluationContext IEvaluationContextProvider.Context
         {
             get { return GetContext(); }
+        }
+
+        void IEventListener.HandleEvent(Event evt)
+        {
+            if (evt.Type == DOMEvents.Events.DOMFocusIn)
+                SetIndex();
         }
 
     }

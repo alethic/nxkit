@@ -17,7 +17,7 @@ namespace NXKit.DOMEvents
 
         readonly NXDocumentHost document;
         readonly IEnumerable<IEventInfoTable> tables;
-        IDocumentEvent documentEvent;
+        readonly Lazy<IDocumentEvent> documentEvent;
 
         /// <summary>
         /// Initializes a new instance.
@@ -34,11 +34,7 @@ namespace NXKit.DOMEvents
 
             this.document = document;
             this.tables = tables;
-        }
-
-        IDocumentEvent DocumentEvent
-        {
-            get { return documentEvent ?? (documentEvent = document.Xml.Interface<IDocumentEvent>()); }
+            this.documentEvent = new Lazy<IDocumentEvent>(() => document.Xml.Interface<IDocumentEvent>());
         }
 
         public Event CreateEvent(string type)
@@ -46,7 +42,7 @@ namespace NXKit.DOMEvents
             var evt = tables
                 .SelectMany(i => i.GetEventInfos())
                 .Where(i => i.Type == type)
-                .Select(i => new { Event = DocumentEvent.CreateEvent(i.EventInterface), EventInfo = i })
+                .Select(i => new { Event = documentEvent.Value.CreateEvent(i.EventInterface), EventInfo = i })
                 .Where(i => i.Event != null)
                 .FirstOrDefault();
 
@@ -54,6 +50,7 @@ namespace NXKit.DOMEvents
             if (evt != null)
             {
                 evt.EventInfo.InitEvent(evt.Event);
+                evt.Event.isTrusted = true;
                 return evt.Event;
             }
 

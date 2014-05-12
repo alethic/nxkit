@@ -507,8 +507,8 @@ namespace NXKit.XForms
 
             // 11. The insert action is successfully completed by dispatching the xforms-insert event with appropriate
             // context information.
-            insertContext.Instance.Element.Interface<INXEventTarget>()
-                .DispatchEvent(Events.Insert, inserts);
+            insertContext.Instance.Element.Interface<EventTarget>()
+                .Dispatch(Events.Insert, inserts);
         }
 
     }

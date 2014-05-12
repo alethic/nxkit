@@ -12,7 +12,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}submit")]
     public class Submit :
         ElementExtension,
-        IEventDefaultActionHandler
+        IEventDefaultAction
     {
 
         readonly SubmitAttributes attributes;
@@ -59,7 +59,7 @@ namespace NXKit.XForms
                 .FirstOrDefault();
         }
 
-        void IEventDefaultActionHandler.DefaultAction(Event evt)
+        void IEventDefaultAction.DefaultAction(Event evt)
         {
             switch (evt.Type)
             {

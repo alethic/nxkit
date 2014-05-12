@@ -107,7 +107,7 @@ namespace NXKit.XForms
                 Binding.Context != null)
                 if (listener == null)
                 {
-                    var target = Binding.Context.Instance.Element.Parent.Interface<IEventTarget>();
+                    var target = Binding.Context.Instance.Element.Parent.Interface<EventTarget>();
 
                     // find existing listener
                     listener =
@@ -118,8 +118,8 @@ namespace NXKit.XForms
                     if (listener == null)
                     {
                         listener = InterfaceEventListener.Create(Update);
-                        target.AddEventListener(Events.Insert, listener, true);
-                        target.AddEventListener(Events.Delete, listener, true);
+                        target.Register(Events.Insert, listener, true);
+                        target.Register(Events.Delete, listener, true);
                     }
                 }
 

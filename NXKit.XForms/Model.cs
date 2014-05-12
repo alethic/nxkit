@@ -14,7 +14,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}model")]
     public class Model :
         ElementExtension,
-        IEventDefaultActionHandler
+        IEventDefaultAction
     {
 
 
@@ -100,7 +100,7 @@ namespace NXKit.XForms
                 .SelectMany(i => i.Interfaces<T>());
         }
 
-        void IEventDefaultActionHandler.DefaultAction(Event evt)
+        void IEventDefaultAction.DefaultAction(Event evt)
         {
             switch (evt.Type)
             {

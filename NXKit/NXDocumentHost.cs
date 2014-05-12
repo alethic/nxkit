@@ -256,10 +256,26 @@ namespace NXKit
         /// </summary>
         void Initialize()
         {
+            xml.Changed += xml_Changed;
+
             // start up document
             InvokeInit();
             InvokeLoad();
             Invoke();
+        }
+
+        /// <summary>
+        /// Invoked when any nodes are changed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        void xml_Changed(object sender, XObjectChangeEventArgs args)
+        {
+            if (args.ObjectChange == XObjectChange.Add)
+            {
+                InvokeInit();
+                InvokeLoad();
+            }
         }
 
         /// <summary>
@@ -269,14 +285,11 @@ namespace NXKit
         {
             while (true)
             {
-                xml.DescendantNodesAndSelf()
-                    .Select(i => i.GetObjectId())
-                    .ToList();
-
                 var inits = xml
                     .DescendantNodesAndSelf()
+                    .Where(i => i.GetObjectId() > 0)
                     .Where(i => i.InterfaceOrDefault<IOnInit>() != null)
-                    .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Init == false)
+                    .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Init == true)
                     .ToLinkedList();
 
                 if (inits.Count == 0)
@@ -287,7 +300,7 @@ namespace NXKit
                         invoker.Invoke(() =>
                         {
                             init.Interface<IOnInit>().Init();
-                            init.AnnotationOrCreate<ObjectAnnotation>().Init = true;
+                            init.AnnotationOrCreate<ObjectAnnotation>().Init = false;
                         });
             }
         }
@@ -299,7 +312,9 @@ namespace NXKit
         {
             var loads = xml
                 .DescendantNodesAndSelf()
+                .Where(i => i.GetObjectId() > 0)
                 .Where(i => i.InterfaceOrDefault<IOnLoad>() != null)
+                .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Load == true)
                 .ToLinkedList();
 
             foreach (var load in loads)
@@ -307,6 +322,7 @@ namespace NXKit
                     invoker.Invoke(() =>
                     {
                         load.Interface<IOnLoad>().Load();
+                        load.AnnotationOrCreate<ObjectAnnotation>().Load = false;
                     });
         }
 

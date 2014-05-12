@@ -4,7 +4,7 @@
     /// <summary>
     /// <see cref="NXNode"/>s implementing this interface provide a default action for the specified event type.
     /// </summary>
-    public interface IEventDefaultActionHandler
+    public interface IEventDefaultAction
     {
 
         /// <summary>

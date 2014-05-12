@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+
 using NXKit.Serialization;
 
 namespace NXKit.DOMEvents
@@ -20,22 +21,14 @@ namespace NXKit.DOMEvents
         IXmlSerializable
     {
 
-        readonly HashSet<EventTargetListenerItem> listeners;
+        internal ImmutableHashSet<EventListenerRegistration> registrations;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public EventTargetState()
         {
-            this.listeners = new HashSet<EventTargetListenerItem>();
-        }
-
-        /// <summary>
-        /// Gets the registered listeners.
-        /// </summary>
-        internal ICollection<EventTargetListenerItem> Listeners
-        {
-            get { return listeners; }
+            this.registrations = ImmutableHashSet<EventListenerRegistration>.Empty;
         }
 
         XmlSchema IXmlSerializable.GetSchema()
@@ -80,10 +73,11 @@ namespace NXKit.DOMEvents
 
                             // register listener with stored events
                             foreach (var registrationXml in itemXml.Elements("registration"))
-                                Listeners.Add(new EventTargetListenerItem(
-                                    (string)registrationXml.Attribute("event"),
-                                    (bool)registrationXml.Attribute("use-capture"),
-                                    listener));
+                                registrations = registrations.Add(
+                                    new EventListenerRegistration(
+                                        (string)registrationXml.Attribute("event"),
+                                        listener,
+                                        (bool)registrationXml.Attribute("capture")));
                         }
                     }
                 }
@@ -117,14 +111,14 @@ namespace NXKit.DOMEvents
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             new XElement("listeners",
-                Listeners
+                registrations
                     .Where(i => i.Listener.GetType().IsPublic)
                     .Where(i => i.Listener.GetType().GetConstructor(new Type[0]) != null)
                     .GroupBy(i => i.Listener).Select(i => new XElement("item",
                         SerializeListener(i.Key),
                         i.Select(j => new XElement("registration",
                             new XAttribute("event", j.EventType),
-                            new XAttribute("use-capture", j.UseCapture))))))
+                            new XAttribute("capture", j.Capture))))))
                 .WriteTo(writer);
         }
 
