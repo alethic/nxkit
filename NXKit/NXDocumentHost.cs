@@ -435,8 +435,23 @@ namespace NXKit
         {
             GC.SuppressFinalize(this);
 
+            if (xml != null)
+            {
+                // dispose of any annotations that support it
+                var disposable = xml
+                    .DescendantNodesAndSelf()
+                    .SelectMany(i => i.Annotations<IDisposable>());
+
+                foreach (var dispose in disposable)
+                    if (dispose != this)
+                        dispose.Dispose();
+            }
+
+            // dispose of host container
             if (host != null)
                 host.Dispose();
+
+            // dispose of global container
             if (global != null)
                 global.Dispose();
         }
