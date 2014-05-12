@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 
@@ -8,7 +7,8 @@ namespace NXKit.Composition
 {
 
     [ContractClass(typeof(IContainer_Contract))]
-    public interface IContainer
+    public interface IContainer :
+        IDisposable
     {
 
         IEnumerable<Lazy<T, TMetadata>> GetExports<T, TMetadata>(Type contractType);
@@ -25,7 +25,7 @@ namespace NXKit.Composition
 
         IEnumerable<Export> GetExports(ImportDefinition importDefinition);
 
-        IContainer WithExport<T>(T value) 
+        IContainer WithExport<T>(T value)
             where T : class;
 
         T GetExportedValue<T>();
@@ -55,8 +55,8 @@ namespace NXKit.Composition
 
         public IEnumerable<Lazy<T>> GetExports<T>()
         {
-            throw new NotImplementedException();
             Contract.Ensures(Contract.Result<IEnumerable<Lazy<T>>>() != null);
+            throw new NotImplementedException();
         }
 
         public IEnumerable<T> GetExportedValues<T>(Type contractType)
@@ -101,6 +101,11 @@ namespace NXKit.Composition
         public T GetExportedValue<T>(Type contractType)
         {
             Contract.Requires<ArgumentNullException>(contractType != null);
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
             throw new NotImplementedException();
         }
 
