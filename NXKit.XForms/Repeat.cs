@@ -11,6 +11,7 @@ namespace NXKit.XForms
 {
 
     [Interface("{http://www.w3.org/2002/xforms}repeat")]
+    [Remote]
     public class Repeat :
         ElementExtension,
         IOnInit,
@@ -67,6 +68,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets or sets the current repeat index.
         /// </summary>
+        [Remote]
         public int Index
         {
             get { return State.Index; }
