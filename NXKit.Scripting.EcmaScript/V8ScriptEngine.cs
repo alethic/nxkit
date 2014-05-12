@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
-using System.Dynamic;
+
 using NXKit.Util;
 
 namespace NXKit.Scripting.EcmaScript
@@ -84,8 +84,6 @@ namespace NXKit.Scripting.EcmaScript
         {
             Dispose();
         }
-
-
 
     }
 
