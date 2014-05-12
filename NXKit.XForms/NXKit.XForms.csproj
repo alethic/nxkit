@@ -125,6 +125,7 @@
     <Compile Include="InsertPosition.cs" />
     <Compile Include="BindingProperties.cs" />
     <Compile Include="DeleteProperties.cs" />
+    <Compile Include="OutputProperties.cs" />
     <Compile Include="IO\FileHandler.cs" />
     <Compile Include="IO\IModelRequestService.cs" />
     <Compile Include="IO\ModelRequest.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="IO\RequestException.cs" />
     <Compile Include="IO\UnsupportedMediaTypeException.cs" />
     <Compile Include="InsertAttributes.cs" />
+    <Compile Include="OutputAttributes.cs" />
     <Compile Include="Serialization\IModelDeserializer.cs" />
     <Compile Include="Serialization\IModelSerializer.cs" />
     <Compile Include="Serialization\XmlModelDeserializer.cs" />

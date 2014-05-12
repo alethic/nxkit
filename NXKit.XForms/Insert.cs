@@ -274,7 +274,7 @@ namespace NXKit.XForms
                 // is the Sequence Binding sequence size.
                 if (location <= 0)
                     location = 1;
-                else if (location == double.NaN || location > sequenceBindingNodeSequence.Length)
+                else if (double.IsNaN(location) || location > sequenceBindingNodeSequence.Length)
                     location = sequenceBindingNodeSequence.Length;
 
                 // 4. The insert location node is the node in the Sequence Binding sequence at the position given by

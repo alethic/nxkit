@@ -172,10 +172,6 @@ namespace NXKit.XForms
                     .Except(nodes)
                     .ToArray();
 
-                // initialize any object ids (seems to fix a bug that comes up with object IDs being changed)
-                foreach (var node in added.DescendantNodesAndSelf())
-                    node.GetObjectId();
-
                 // model-construct-done sequence applied to new children
                 foreach (var node in added)
                     foreach (var i in GetAllExtensions<IOnRefresh>(node))
@@ -191,7 +187,6 @@ namespace NXKit.XForms
                     foreach (var i in GetAllExtensions<IOnRefresh>(node))
                         i.Refresh();
             }
-
 
             // restore or reset index
             var length = Element.Elements().Count();
