@@ -55,8 +55,8 @@ namespace NXKit.Composition
 
         public IEnumerable<Lazy<T>> GetExports<T>()
         {
-            throw new NotImplementedException();
             Contract.Ensures(Contract.Result<IEnumerable<Lazy<T>>>() != null);
+            throw new NotImplementedException();
         }
 
         public IEnumerable<T> GetExportedValues<T>(Type contractType)

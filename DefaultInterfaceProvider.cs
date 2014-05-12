@@ -33,12 +33,41 @@ namespace NXKit
             public DescriptorTypeList(IEnumerable<Type> types)
                 : base(types)
             {
-
+                Contract.Requires<ArgumentNullException>(types != null);
             }
 
         }
 
         static readonly List<InterfaceDescriptor> defaultDescriptors;
+        static readonly MethodInfo castMethodInfo = typeof(DefaultInterfaceProvider).GetMethod("CastEnumerableGeneric", BindingFlags.NonPublic | BindingFlags.Static);
+
+        /// <summary>
+        /// Converts the source enumerable into a generic output.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        static IEnumerable CastEnumerable(IEnumerable source, Type type)
+        {
+            Contract.Requires<ArgumentNullException>(source != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+
+            return (IEnumerable)castMethodInfo.MakeGenericMethod(type)
+                .Invoke(null, new object[] { source });
+        }
+
+        /// <summary>
+        /// Implementation method.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        static IEnumerable<T> CastEnumerableGeneric<T>(IEnumerable source)
+        {
+            Contract.Requires<ArgumentNullException>(source != null);
+
+            return source.Cast<T>();
+        }
 
         /// <summary>
         /// Initializes the static instance.
@@ -280,6 +309,7 @@ namespace NXKit
                 return Activator.CreateInstance(param.ParameterType, new object[] { func });
             }
 
+            // handle Func<T> references
             if (param.ParameterType.IsGenericType &&
                 param.ParameterType.GetGenericTypeDefinition() == typeof(Func<>))
             {
@@ -300,26 +330,26 @@ namespace NXKit
         /// Helper method for lazy constructor parameter.
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="interfaceType"></param>
+        /// <param name="type"></param>
         /// <param name="container"></param>
         /// <returns></returns>
-        object GetConstructorParameterValue(XObject obj, Type interfaceType, IContainer container)
+        object GetConstructorParameterValue(XObject obj, Type type, IContainer container)
         {
             return
-                GetConstructorParameterValueFromInterface(obj, interfaceType, container) ??
-                GetConstructorParameterValueFromContainer(obj, interfaceType, container);
+                GetConstructorParameterValueFromInterface(obj, type, container) ??
+                GetConstructorParameterValueFromContainer(obj, type, container);
         }
 
         /// <summary>
         /// Helper method for lazy constructor parameter from interface.
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="interfaceType"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
-        object GetConstructorParameterValueFromInterface(XObject obj, Type interfaceType, IContainer container)
+        object GetConstructorParameterValueFromInterface(XObject obj, Type type, IContainer container)
         {
             return obj
-                .Interfaces(interfaceType)
+                .Interfaces(type)
                 .FirstOrDefault();
         }
 
@@ -338,7 +368,7 @@ namespace NXKit
 
             return GetConstructorParameterValueFromContainer(
                 obj,
-                GetContractType(param.ParameterType),
+                param.ParameterType,
                 container);
         }
 
@@ -346,20 +376,20 @@ namespace NXKit
         /// Gets a value for the given constructor parameter from the container.
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="interfaceType"></param>
+        /// <param name="type"></param>
         /// <param name="container"></param>
         /// <returns></returns>
-        object GetConstructorParameterValueFromContainer(XObject obj, Type interfaceType, IContainer container)
+        object GetConstructorParameterValueFromContainer(XObject obj, Type type, IContainer container)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(container != null);
 
-            var paramContractType = GetContractType(interfaceType);
+            var paramContractType = GetContractType(type);
             var paramContractName = GetContractName(paramContractType);
             var paramTypeIdentity = AttributedModelServices.GetTypeIdentity(paramContractType);
 
-            // ImportAttribute present
-            return container.GetExports(new ContractBasedImportDefinition(
+            // resolve all available instances
+            var instances = container.GetExports(new ContractBasedImportDefinition(
                     paramContractName,
                     paramTypeIdentity,
                     Enumerable.Empty<KeyValuePair<string, Type>>(),
@@ -368,8 +398,12 @@ namespace NXKit
                     false,
                     CreationPolicy.Any,
                     null))
-                .Select(i => i.Value)
-                .FirstOrDefault();
+                .Select(i => i.Value);
+
+            // return type appropriate for interface
+            return typeof(IEnumerable).IsAssignableFrom(type) ?
+                CastEnumerable(instances, paramContractType) :
+                instances.FirstOrDefault();
         }
 
         /// <summary>

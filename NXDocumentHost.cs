@@ -336,7 +336,7 @@ namespace NXKit
             {
                 var invokes = Xml.DescendantsAndSelf()
                     .SelectMany(i => i.Interfaces<IOnInvoke>())
-                    .ToList();
+                    .ToLinkedList();
 
                 run = false;
                 foreach (var invoke in invokes)
@@ -362,6 +362,14 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(writer != null);
 
+            // instruct any interfaces to save their state
+            var saves = Xml.DescendantsAndSelf()
+                .SelectMany(i => i.Interfaces<IOnSave>())
+                .ToLinkedList();
+            foreach (var save in saves)
+                save.Save();
+
+            // serialize document to writer
             XNodeAnnotationSerializer.Serialize(xml).Save(writer);
         }
 
@@ -409,8 +417,6 @@ namespace NXKit
         /// </summary>
         public void Dispose()
         {
-            Contract.Requires<InvalidOperationException>(!Disposed);
-
             GC.SuppressFinalize(this);
             disposed = true;
         }
