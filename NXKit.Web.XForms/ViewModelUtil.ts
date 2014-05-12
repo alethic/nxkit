@@ -11,14 +11,14 @@ NXKit.Web.ViewModelUtil.MetadataNodes.push(
     '{http://www.w3.org/2002/xforms}hint',
     '{http://www.w3.org/2002/xforms}alert');
 
-NXKit.Web.ViewModelUtil.TransparentNodes.push(
-    '{http://www.w3.org/2002/xforms}repeat');
+//NXKit.Web.ViewModelUtil.TransparentNodes.push(
+//    '{http://www.w3.org/2002/xforms}repeat');
 
-NXKit.Web.ViewModelUtil.TransparentNodePredicates.push(
-    // repeat items are transparent
-    (n: NXKit.Web.Node) =>
-        n.Interfaces['NXKit.XForms.RepeatItem'] != null &&
-        n.Property('NXKit.XForms.RepeatItem', 'IsRepeatItem').ValueAsBoolean() == true);
+//NXKit.Web.ViewModelUtil.TransparentNodePredicates.push(
+//    // repeat items are transparent
+//    (n: NXKit.Web.Node) =>
+//        n.Interfaces['NXKit.XForms.RepeatItem'] != null &&
+//        n.Property('NXKit.XForms.RepeatItem', 'IsRepeatItem').ValueAsBoolean() == true);
 
 NXKit.Web.ViewModelUtil.LayoutManagers.push(
     (c) => new NXKit.Web.XForms.DefaultLayoutManager(c));

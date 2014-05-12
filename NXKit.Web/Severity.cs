@@ -1,4 +1,4 @@
-﻿namespace NXKit.Web.UI
+﻿namespace NXKit.Web
 {
 
     public enum Severity

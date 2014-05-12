@@ -74,24 +74,6 @@ namespace NXKit.Composition
             return container.GetExports(importDefinition);
         }
 
-        public IContainer WithExport<T>(T value)
-            where T : class
-        {
-            Contract.Requires<ArgumentNullException>(value != null);
-
-            container.WithExport<T>(value);
-            return this;
-        }
-
-        public IContainer WithExport(Type contractType, object value)
-        {
-            Contract.Requires<ArgumentNullException>(contractType != null);
-            Contract.Requires<ArgumentNullException>(value != null);
-
-            container.WithExport(contractType, value);
-            return this;
-        }
-
         public T GetExportedValue<T>()
         {
             return container.GetExportedValue<T>();
@@ -99,9 +81,33 @@ namespace NXKit.Composition
 
         public T GetExportedValue<T>(Type contractType)
         {
-            Contract.Requires<ArgumentNullException>(contractType != null);
-
             return container.GetExportedValue<T>(AttributedModelServices.GetContractName(contractType));
+        }
+
+        public IContainer WithExport<T>(T value)
+            where T : class
+        {
+            container.WithExport<T>(value);
+            return this;
+        }
+
+        public IContainer WithExport(Type contractType, object value)
+        {
+            container.WithExport(contractType, value);
+            return this;
+        }
+        
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+
+            if (container != null)
+                container.Dispose();
+        }
+
+        ~Container()
+        {
+            Dispose();
         }
 
     }

@@ -256,10 +256,26 @@ namespace NXKit
         /// </summary>
         void Initialize()
         {
+            xml.Changed += xml_Changed;
+
             // start up document
             InvokeInit();
             InvokeLoad();
             Invoke();
+        }
+
+        /// <summary>
+        /// Invoked when any nodes are changed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        void xml_Changed(object sender, XObjectChangeEventArgs args)
+        {
+            if (args.ObjectChange == XObjectChange.Add)
+            {
+                InvokeInit();
+                InvokeLoad();
+            }
         }
 
         /// <summary>
@@ -271,8 +287,9 @@ namespace NXKit
             {
                 var inits = xml
                     .DescendantNodesAndSelf()
-                    .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Init == false)
+                    .Where(i => i.GetObjectId() > 0)
                     .Where(i => i.InterfaceOrDefault<IOnInit>() != null)
+                    .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Init == true)
                     .ToLinkedList();
 
                 if (inits.Count == 0)
@@ -283,7 +300,7 @@ namespace NXKit
                         invoker.Invoke(() =>
                         {
                             init.Interface<IOnInit>().Init();
-                            init.AnnotationOrCreate<ObjectAnnotation>().Init = true;
+                            init.AnnotationOrCreate<ObjectAnnotation>().Init = false;
                         });
             }
         }
@@ -295,7 +312,9 @@ namespace NXKit
         {
             var loads = xml
                 .DescendantNodesAndSelf()
+                .Where(i => i.GetObjectId() > 0)
                 .Where(i => i.InterfaceOrDefault<IOnLoad>() != null)
+                .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Load == true)
                 .ToLinkedList();
 
             foreach (var load in loads)
@@ -303,6 +322,7 @@ namespace NXKit
                     invoker.Invoke(() =>
                     {
                         load.Interface<IOnLoad>().Load();
+                        load.AnnotationOrCreate<ObjectAnnotation>().Load = false;
                     });
         }
 
@@ -332,7 +352,7 @@ namespace NXKit
             {
                 var invokes = Xml.DescendantsAndSelf()
                     .SelectMany(i => i.Interfaces<IOnInvoke>())
-                    .ToList();
+                    .ToLinkedList();
 
                 run = false;
                 foreach (var invoke in invokes)
@@ -358,6 +378,14 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(writer != null);
 
+            // instruct any interfaces to save their state
+            var saves = Xml.DescendantsAndSelf()
+                .SelectMany(i => i.Interfaces<IOnSave>())
+                .ToLinkedList();
+            foreach (var save in saves)
+                save.Save();
+
+            // serialize document to writer
             XNodeAnnotationSerializer.Serialize(xml).Save(writer);
         }
 
@@ -405,10 +433,27 @@ namespace NXKit
         /// </summary>
         public void Dispose()
         {
-            Contract.Requires<InvalidOperationException>(!Disposed);
-
             GC.SuppressFinalize(this);
-            disposed = true;
+
+            if (xml != null)
+            {
+                // dispose of any annotations that support it
+                var disposable = xml
+                    .DescendantNodesAndSelf()
+                    .SelectMany(i => i.Annotations<IDisposable>());
+
+                foreach (var dispose in disposable)
+                    if (dispose != this)
+                        dispose.Dispose();
+            }
+
+            // dispose of host container
+            if (host != null)
+                host.Dispose();
+
+            // dispose of global container
+            if (global != null)
+                global.Dispose();
         }
 
         /// <summary>

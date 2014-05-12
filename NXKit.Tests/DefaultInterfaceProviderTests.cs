@@ -48,22 +48,25 @@ namespace NXKit.Tests
         [TestMethod]
         public void Test_full_element_predicate()
         {
-            var i = descriptors[0].IsMatch(new XElement(NS + "element1"));
-            Assert.IsTrue(i);
+            Assert.Fail();
+            //var i = descriptors[0].IsMatch(new XElement(NS + "element1"));
+            //Assert.IsTrue(i);
         }
 
         [TestMethod]
         public void Test_local_only_element_predicate()
         {
-            var i = descriptors[1].IsMatch(new XElement(NS + "element2"));
-            Assert.IsTrue(i);
+            Assert.Fail();
+            //var i = descriptors[1].IsMatch(new XElement(NS + "element2"));
+            //Assert.IsTrue(i);
         }
 
         [TestMethod]
         public void Test_ns_only_element_predicate()
         {
-            var i = descriptors[2].IsMatch(new XElement(NS + "element3"));
-            Assert.IsTrue(i);
+            Assert.Fail();
+            //var i = descriptors[2].IsMatch(new XElement(NS + "element3"));
+            //Assert.IsTrue(i);
         }
 
         [TestMethod]

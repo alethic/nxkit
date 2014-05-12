@@ -23,11 +23,11 @@ namespace NXKit.DOMEvents
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(type));
 
-            var target = element.InterfaceOrDefault<INXEventTarget>();
+            var target = element.InterfaceOrDefault<EventTarget>();
             if (target == null)
                 throw new NullReferenceException();
 
-            target.DispatchEvent(type);
+            target.Dispatch(type);
         }
 
         /// <summary>
@@ -41,11 +41,11 @@ namespace NXKit.DOMEvents
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(type));
 
-            var target = element.InterfaceOrDefault<INXEventTarget>();
+            var target = element.InterfaceOrDefault<EventTarget>();
             if (target == null)
                 throw new NullReferenceException();
 
-            target.DispatchEvent(type, context);
+            target.Dispatch(type, context);
         }
 
         /// <summary>
@@ -58,11 +58,11 @@ namespace NXKit.DOMEvents
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(evt != null);
 
-            var target = element.InterfaceOrDefault<IEventTarget>();
+            var target = element.InterfaceOrDefault<EventTarget>();
             if (target == null)
                 throw new NullReferenceException();
 
-            target.DispatchEvent(evt);
+            target.Dispatch(evt);
         }
 
     }

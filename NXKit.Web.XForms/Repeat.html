@@ -1,9 +1,16 @@
 ﻿<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}repeat">
+        data-nxkit-name="{http://www.w3.org/2002/xforms}repeat"
+        data-nxkit-data-type="*">
+    <!-- ko with: new NXKit.Web.XForms.RangeViewModel($context, $data) -->
     <div class="xforms-repeat">
-        <!-- ko foreach: Nodes -->
-        <!-- ko nxkit_template: $data -->
-        <!-- /ko -->
+        <!-- ko foreach: Node.Nodes -->
+        <div class="xforms-repeat-item">
+            <!-- ko foreach: NXKit.Web.ViewModelUtil.GetContents($data) -->
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+            <!-- /ko -->
+        </div>
         <!-- /ko -->
     </div>
+    <!-- /ko -->
 </script>

@@ -17,7 +17,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
-    <NuGetPackageImportStamp>821ea827</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>52690462</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,8 +41,8 @@
     <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
     <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
     <CodeContractsInferRequires>True</CodeContractsInferRequires>
-    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsInferEnsures>True</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>True</CodeContractsInferObjectInvariants>
     <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
     <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
     <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
@@ -119,7 +119,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonProperties.cs" />
+    <Compile Include="DeferredUpdateInvokerLayer.cs" />
     <Compile Include="DispatchAttributes.cs" />
+    <Compile Include="InsertPosition.cs" />
+    <Compile Include="BindingProperties.cs" />
+    <Compile Include="DeleteProperties.cs" />
     <Compile Include="IO\FileHandler.cs" />
     <Compile Include="IO\IModelRequestService.cs" />
     <Compile Include="IO\ModelRequest.cs" />
@@ -129,6 +134,7 @@
     <Compile Include="IO\ModelResponseStatus.cs" />
     <Compile Include="IO\RequestException.cs" />
     <Compile Include="IO\UnsupportedMediaTypeException.cs" />
+    <Compile Include="InsertAttributes.cs" />
     <Compile Include="Serialization\IModelDeserializer.cs" />
     <Compile Include="Serialization\IModelSerializer.cs" />
     <Compile Include="Serialization\XmlModelDeserializer.cs" />
@@ -137,6 +143,7 @@
     <Compile Include="Serialization\UrlEncodedModelSerializer.cs" />
     <Compile Include="IO\ModelRequestHandler.cs" />
     <Compile Include="SendAttributes.cs" />
+    <Compile Include="InsertProperties.cs" />
     <Compile Include="SubmitAttributes.cs" />
     <Compile Include="AttributeEvaluationContextResolver.cs" />
     <Compile Include="HeaderAttributes.cs" />
@@ -315,8 +322,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets'))" />
+    <Error Condition="!Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets'))" />
   </Target>
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
+  <Import Project="..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

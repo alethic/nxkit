@@ -1,0 +1,7 @@
+﻿<events>
+    <Event
+        name="Error"
+        type="xmlevent-error"
+        bubbles="true"
+        cancelable="true" />
+</events>

@@ -13,22 +13,24 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'submission' properties.
     /// </summary>
-    public class SubmissionProperties :
-        ElementExtension
+    public class SubmissionProperties
     {
 
+        readonly XElement element;
         readonly SubmissionAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public SubmissionProperties(XElement element)
-            : base(element)
+        /// <param name="attributes"></param>
+        public SubmissionProperties(XElement element, SubmissionAttributes attributes)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
 
-            this.attributes = new SubmissionAttributes(element);
+            this.element = element;
+            this.attributes = attributes;
         }
 
         /// <summary>
@@ -67,7 +69,7 @@ namespace NXKit.XForms
         {
             var uri = attributes.Resource != null ? new Uri(attributes.Resource, UriKind.RelativeOrAbsolute) : null;
             if (uri != null)
-                return uri.IsAbsoluteUri ? uri : new Uri(Element.GetBaseUri(), uri);
+                return uri.IsAbsoluteUri ? uri : new Uri(element.GetBaseUri(), uri);
 
             return null;
         }
@@ -84,7 +86,7 @@ namespace NXKit.XForms
         {
             var uri = attributes.Action != null ? new Uri(attributes.Action, UriKind.RelativeOrAbsolute) : null;
             if (uri != null)
-                return uri.IsAbsoluteUri ? uri : new Uri(Element.GetBaseUri(), uri);
+                return uri.IsAbsoluteUri ? uri : new Uri(element.GetBaseUri(), uri);
 
             return null;
         }

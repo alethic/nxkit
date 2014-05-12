@@ -2,10 +2,10 @@
 
     export enum Severity {
 
-        Verbose,
-        Information,
-        Warning,
-        Error,
+        Verbose = 1,
+        Information = 2,
+        Warning = 3,
+        Error = 4,
 
     }
 

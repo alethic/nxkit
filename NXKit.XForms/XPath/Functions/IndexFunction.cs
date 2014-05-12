@@ -8,6 +8,7 @@ namespace NXKit.XForms.XPath.Functions
 {
 
     [XsltContextFunction("{http://www.w3.org/2002/xforms}index")]
+    [XsltContextFunction("index")]
     public class IndexFunction : 
         XPathFunction
     {
@@ -34,15 +35,19 @@ namespace NXKit.XForms.XPath.Functions
 
         protected override object Invoke(EvaluationXsltContext context, XPathNavigator navigator, params object[] args)
         {
-            var repeatId = (string)args[0];
-            if (repeatId == null)
+            var idRef = (IdRef)(string)args[0];
+            if (idRef == null)
                 return double.NaN;
 
-            var repeat = context.Xml.ResolveId(repeatId);
+            var element = context.Xml.ResolveId(idRef);
+            if (element == null)
+                return double.NaN;
+
+            var repeat = element.InterfaceOrDefault<Repeat>();
             if (repeat == null)
                 return double.NaN;
 
-            throw new NotImplementedException();
+            return (double)repeat.Index;
         }
 
     }

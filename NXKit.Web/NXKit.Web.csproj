@@ -27,7 +27,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <RootNamespace>NXKit.Web</RootNamespace>
-    <NuGetPackageImportStamp>30ff908f</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>e419b473</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -136,22 +136,17 @@
     <Compile Include="Serialization\RemoteXCommentJsonConverter.cs" />
     <Compile Include="Serialization\RemoteXTextJsonConverter.cs" />
     <Compile Include="Serialization\RemoteXElementJsonConverter.cs" />
-    <Compile Include="Serialization\RemoteJson.cs" />
+    <Compile Include="Serialization\RemoteHelper.cs" />
     <Compile Include="Serialization\RemoteObjectJsonConverter.cs" />
     <Compile Include="Serialization\RemoteXNodeJsonConverter.cs" />
-    <TypeScriptCompile Include="ICallbackRequestEvent.ts" />
     <Compile Include="IHtmlTemplateProvider.cs" />
     <Compile Include="Serialization\XNameJsonConverter.cs" />
-    <TypeScriptCompile Include="ICallbackComplete.ts" />
+    <Compile Include="Severity.cs" />
+    <TypeScriptCompile Include="ICallback.ts" />
     <TypeScriptCompile Include="IEvent.ts" />
-    <TypeScriptCompile Include="IPropertyChangedEvent.ts" />
-    <TypeScriptCompile Include="INodeMethodInvokedEvent.ts" />
-    <TypeScriptCompile Include="IMethodMap.ts" />
     <TypeScriptCompile Include="IInterfaceMap.ts" />
     <TypeScriptCompile Include="IPropertyMap.ts" />
-    <TypeScriptCompile Include="INodePropertyChangedEvent.ts" />
-    <TypeScriptCompile Include="IMethodInvokedEvent.ts" />
-    <TypeScriptCompile Include="IServerDelegate.ts" />
+    <TypeScriptCompile Include="IServerInvoke.ts" />
     <TypeScriptCompile Include="Knockout\InputBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\HorizontalVisibleBindingHandler.ts" />
@@ -167,9 +162,7 @@
     <TypeScriptCompile Include="Interface.ts" />
     <TypeScriptCompile Include="Log.ts" />
     <TypeScriptCompile Include="Message.ts" />
-    <TypeScriptCompile Include="Method.ts" />
     <TypeScriptCompile Include="InterfaceMap.ts" />
-    <TypeScriptCompile Include="MethodMap.ts" />
     <TypeScriptCompile Include="NodeType.ts" />
     <TypeScriptCompile Include="PropertyMap.ts" />
     <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
@@ -216,7 +209,7 @@
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
-    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptModuleKind>amd</TypeScriptModuleKind>
@@ -248,6 +241,7 @@
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets'))" />
+    <Error Condition="!Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets'))" />
   </Target>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptOutFile>NXKit.js</TypeScriptOutFile>
@@ -262,4 +256,5 @@
   </PropertyGroup>
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
   <Import Project="..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets" Condition="Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets')" />
+  <Import Project="..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" />
 </Project>

@@ -23,14 +23,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the 'at' attribute.
-        /// </summary>
-        public XAttribute AtAttribute
-        {
-            get { return GetAttribute("at"); }
-        }
-
-        /// <summary>
         /// Gets the 'at' attribute value.
         /// </summary>
         public string At

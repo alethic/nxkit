@@ -37,7 +37,7 @@ namespace NXKit.XForms
                     model.Interface<Model>().OnRefresh();
                 else
                 {
-                    Element.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
+                    Element.Interface<EventTarget>().Dispatch(Events.BindingException);
                     return;
                 }
             }

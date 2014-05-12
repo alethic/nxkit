@@ -16,7 +16,6 @@ namespace NXKit.Net
         string contentType;
         readonly WebHeaderCollection headers;
         readonly Stream stream;
-        ResourceWebResponse response;
 
         /// <summary>
         /// Initializes a new instance.
