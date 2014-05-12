@@ -17,10 +17,11 @@ namespace NXKit.Web.Tests.Serialization
         [TestMethod]
         public void Test_ReadFrom()
         {
-            var obj = new JObject(
-                new JProperty("Test", 1));
+            Assert.Fail();
+            //var obj = new JObject(
+            //    new JProperty("Test", 1));
 
-            RemoteJson.SetJson(obj.CreateReader(), new XElement("Element"));
+            //RemoteHelper.SetJson(obj.CreateReader(), new XElement("Element"));
         }
 
     }

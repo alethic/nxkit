@@ -10,7 +10,7 @@ module NXKit.Web.XForms {
         }
 
         public Activate() {
-            this.Node.Invoke('NXKit.DOMEvents.INXEventTarget', 'DispatchEvent', {
+            this.Node.Invoke('NXKit.DOMEvents.EventTarget', 'Dispatch', {
                 type: 'DOMActivate'
             });
         }

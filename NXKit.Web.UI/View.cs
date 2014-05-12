@@ -6,6 +6,7 @@ using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web.UI;
 using System.Xml.Linq;
 
@@ -319,7 +320,7 @@ namespace NXKit.Web.UI
             // serialize document state to data field
             using (var wrt = new JTokenWriter())
             {
-                RemoteJson.GetJson(wrt, host.Root);
+                RemoteHelper.GetJson(wrt, host.Root);
                 return wrt.Token;
             }
         }
@@ -338,9 +339,9 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <returns></returns>
         JToken CreateScriptsJObject()
-            {
+        {
             return new JArray(scripts);
-            }
+        }
 
         /// <summary>
         /// Gets the client-side data as a <see cref="JToken"/>.
@@ -359,7 +360,7 @@ namespace NXKit.Web.UI
         /// </summary>
         /// <returns></returns>
         string CreateDataString()
-            {
+        {
             return JsonConvert.SerializeObject(CreateDataJObject());
         }
 
@@ -528,6 +529,8 @@ namespace NXKit.Web.UI
 
         string ICallbackEventHandler.GetCallbackResult()
         {
+            host.Invoke();
+
             // dump messages
             messages_ = messages;
             messages = null;
@@ -564,60 +567,96 @@ namespace NXKit.Web.UI
             {
                 foreach (var command in commands)
                 {
-            // dispatch action
+                    // dispatch action
                     switch ((string)command["Action"])
-            {
-                case "Push":
-                            ClientPush((JToken)command["Args"]);
-                    break;
-            }
-        }
+                    {
+                        case "Update":
+                            JsonInvokeMethod(typeof(View).GetMethod("ClientUpdate", BindingFlags.NonPublic | BindingFlags.Instance), (JObject)command["Args"]);
+                            break;
+                        case "Invoke":
+                            JsonInvokeMethod(typeof(View).GetMethod("ClientInvoke", BindingFlags.NonPublic | BindingFlags.Instance), (JObject)command["Args"]);
+                            break;
+                    }
+                }
             }
         }
 
         /// <summary>
-        /// Client has sent us a "Push" request, consisting of a single argument "Nodes" which contains an array of node data.
+        /// Invokes the given method with the specified parameter values.
         /// </summary>
-        /// <param name="data"></param>
-        void ClientPush(JToken args)
+        /// <param name="method"></param>
+        /// <param name="args"></param>
+        void JsonInvokeMethod(MethodInfo method, JObject args)
         {
+            Contract.Requires<ArgumentNullException>(method != null);
             Contract.Requires<ArgumentNullException>(args != null);
 
-            var nodes = args["Nodes"] as JArray;
-            if (nodes == null)
-                throw new InvalidOperationException("Push requires JSON array of node data.");
+            // assembly invocation parameter list
+            var count = 0;
+            var parameters = method.GetParameters();
+            var invoke = new object[parameters.Length];
+            for (int i = 0; i < invoke.Length; i++)
+            {
+                // submitted JSON parameter value
+                var j = args.Properties()
+                    .FirstOrDefault(k => string.Equals(parameters[i].Name, k.Name, StringComparison.InvariantCultureIgnoreCase));
+                if (j == null)
+                    break;
 
-            foreach (JObject node in nodes)
-                ClientPushNode(node);
+                // convert JObject to appropriate type
+                var t = parameters[i].ParameterType;
+                var o = j != null && j.Value != null ? j.Value.ToObject(t) : null;
 
-            host.Invoke();
+                // successful conversion
+                invoke[i] = o;
+                count = i + 1;
+            }
+
+            // unsuccessful parameter count
+            if (count != parameters.Length)
+                throw new MissingMethodException();
+
+            method.Invoke(this, invoke);
         }
 
         /// <summary>
-        /// Client 
+        /// Updates the given property.
         /// </summary>
-        /// <param name="data"></param>
-        void ClientPushNode(JObject data)
+        /// <param name="nodeId"></param>
+        /// <param name="interface"></param>
+        /// <param name="property"></param>
+        /// <param name="value"></param>
+        void ClientUpdate(int nodeId, string @interface, string property, JValue value)
         {
-            Contract.Requires<ArgumentNullException>(data != null);
+            Contract.Requires<ArgumentOutOfRangeException>(nodeId > 0);
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(@interface));
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(property));
 
-            var id = (int)data["Id"];
-            if (id < 0)
-                throw new InvalidOperationException("Client Push sent invalid Node ID.");
-
-            var node = host.Root.DescendantsAndSelf()
-                .FirstOrDefault(i => i.GetObjectId() == id);
+            var node = (XNode)host.Xml.ResolveObjectId(nodeId);
             if (node == null)
-                throw new InvalidOperationException("Client Push sent unknown Node ID.");
+                return;
 
-            ApplyToNode(node, data);
+            RemoteHelper.Update(node, @interface, property, value);
         }
 
-        void ApplyToNode(XElement node, JObject data)
+        /// <summary>
+        /// Invokes the given method.
+        /// </summary>
+        /// <param name="nodeId"></param>
+        /// <param name="interface"></param>
+        /// <param name="method"></param>
+        /// <param name="params"></param>
+        void ClientInvoke(int nodeId, string @interface, string method, JObject @params)
         {
-            Contract.Requires<ArgumentNullException>(data != null);
+            Contract.Requires<ArgumentOutOfRangeException>(nodeId > 0);
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(@interface));
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(method));
 
-            RemoteJson.SetJson(data.CreateReader(), node);
+            var node = (XNode)host.Xml.ResolveObjectId(nodeId);
+            if (node == null)
+                return;
+
+            RemoteHelper.Invoke(node, @interface, method, @params);
         }
 
     }

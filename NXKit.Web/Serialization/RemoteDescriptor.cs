@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Reflection;
+
+using NXKit.Web.Serialization;
 
 namespace NXKit
 {
@@ -38,6 +42,32 @@ namespace NXKit
         public Type Type
         {
             get { return type; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="MethodInfo"/> of the given name for this <see cref="RemoteDescriptor"/>.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public PropertyInfo GetProperty(string name)
+        {
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(name));
+
+            return RemoteObjectJsonConverter.GetRemoteProperties(Type)
+                .FirstOrDefault(i => i.Name == name);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="MethodInfo"/> of the given name for this <see cref="RemoteDescriptor"/>.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public MethodInfo GetMethod(string name)
+        {
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(name));
+
+            return RemoteObjectJsonConverter.GetRemoteMethods(Type)
+                .FirstOrDefault(i => i.Name == name);
         }
 
     }

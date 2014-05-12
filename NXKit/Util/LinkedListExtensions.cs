@@ -14,7 +14,7 @@ namespace NXKit.Util
         /// <typeparam name="T"></typeparam>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static IEnumerable<LinkedListNode<T>> Forwards<T>(this LinkedList<T> self)
+        public static IEnumerable<T> Forwards<T>(this LinkedList<T> self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
             Contract.Requires<ArgumentNullException>(self.First != null);
@@ -28,14 +28,14 @@ namespace NXKit.Util
         /// <typeparam name="T"></typeparam>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static IEnumerable<LinkedListNode<T>> Forwards<T>(this LinkedListNode<T> self)
+        public static IEnumerable<T> Forwards<T>(this LinkedListNode<T> self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
 
-            yield return self;
+            yield return self.Value;
 
             while (self.Next != null)
-                yield return self = self.Next;
+                yield return (self = self.Next).Value;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace NXKit.Util
         /// <typeparam name="T"></typeparam>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static IEnumerable<LinkedListNode<T>> Backwards<T>(this LinkedList<T> self)
+        public static IEnumerable<T> Backwards<T>(this LinkedList<T> self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
             Contract.Requires<ArgumentNullException>(self.First != null);
@@ -58,14 +58,14 @@ namespace NXKit.Util
         /// <typeparam name="T"></typeparam>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static IEnumerable<LinkedListNode<T>> Backwards<T>(this LinkedListNode<T> self)
+        public static IEnumerable<T> Backwards<T>(this LinkedListNode<T> self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
 
-            yield return self;
+            yield return self.Value;
 
             while (self.Previous != null)
-                yield return self = self.Previous;
+                yield return (self = self.Previous).Value;
         }
 
     }

@@ -121,7 +121,7 @@ namespace NXKit.DOMEvents
             Contract.Requires<ArgumentNullException>(node.Document != null);
             Contract.Requires<ArgumentNullException>(eventType != null);
 
-            node.Interface<IEventTarget>().DispatchEvent(CreateEvent(node, eventType));
+            node.Interface<EventTarget>().Dispatch(CreateEvent(node, eventType));
         }
 
         /// <summary>

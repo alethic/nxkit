@@ -54,7 +54,31 @@ namespace NXKit.Xml
             return self.AnnotationOrCreate<ObjectAnnotation>(() =>
                 new ObjectAnnotation(
                     self.Document.AnnotationOrCreate<DocumentAnnotation>()
-                        .GetNextNodeId())).Id;
+                        .GetNextObjectId())).Id;
+        }
+
+        class ObjectIdCache
+        {
+
+            public Dictionary<int, XObject> cache = new Dictionary<int, XObject>();
+
+        }
+
+        /// <summary>
+        /// Locates the object with the given unique identifier.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="objectId"></param>
+        /// <returns></returns>
+        public static XObject ResolveObjectId(this XObject self, int objectId)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(self.Document != null);
+
+            return self.Document.AnnotationOrCreate<ObjectIdCache>()
+                .cache.GetOrAdd(objectId, () => 
+                    self.Document.DescendantNodesAndSelf()
+                        .FirstOrDefault(i => i.GetObjectId() == objectId));
         }
 
         #region Naming
@@ -431,6 +455,18 @@ namespace NXKit.Xml
         }
 
         #endregion
+
+        /// <summary>
+        /// Clones the specified <see cref="XObject"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static XObject Clone(this XObject self)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+
+            return XCloneTransformer.Default.Visit(self);
+        }
 
     }
 

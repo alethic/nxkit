@@ -15,7 +15,7 @@ namespace NXKit.Test.Web.Site
         {
             if (!IsPostBack)
             {
-                UriTextBox.Text = new Uri(Request.Url, "../Examples/form.xml").ToString();
+                UriTextBox.Text = new Uri(Request.Url, "../Examples/insert.xml").ToString();
                 View.Open(UriTextBox.Text);
             }
         }
@@ -24,14 +24,6 @@ namespace NXKit.Test.Web.Site
         {
             if (eventArgument == "Load")
                 View.Open(UriTextBox.Text);
-        }
-
-        protected void SwitchViewButton_Click(object sender, EventArgs e)
-        {
-            if (MultiView.GetActiveView() == ViewPage)
-                MultiView.SetActiveView(NoViewPage);
-            else
-                MultiView.SetActiveView(ViewPage);
         }
 
     }

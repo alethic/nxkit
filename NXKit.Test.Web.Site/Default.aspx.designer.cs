@@ -31,24 +31,6 @@ namespace NXKit.Test.Web.Site {
         protected global::System.Web.UI.WebControls.TextBox UriTextBox;
         
         /// <summary>
-        /// MultiView control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.MultiView MultiView;
-        
-        /// <summary>
-        /// ViewPage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.View ViewPage;
-        
-        /// <summary>
         /// View control.
         /// </summary>
         /// <remarks>
@@ -56,23 +38,5 @@ namespace NXKit.Test.Web.Site {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::NXKit.Web.UI.View View;
-        
-        /// <summary>
-        /// NoViewPage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.View NoViewPage;
-        
-        /// <summary>
-        /// SwitchViewButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button SwitchViewButton;
     }
 }

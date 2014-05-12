@@ -3,7 +3,6 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
-using NXKit.Xml;
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms
@@ -16,28 +15,30 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}input")]
     public class Input :
         ElementExtension,
-        IOnLoad
+        IEventDefaultAction
     {
+
+        readonly Lazy<EventTarget> eventTarget;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="eventTarget"></param>
         [ImportingConstructor]
-        public Input(XElement element)
+        public Input(XElement element, Lazy<EventTarget> eventTarget)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(eventTarget != null);
+
+            this.eventTarget = eventTarget;
         }
 
-        public void Load()
+        void IEventDefaultAction.DefaultAction(Event evt)
         {
-            var eventTarget = Element.Interface<INXEventTarget>();
-            if (eventTarget == null)
-                throw new NullReferenceException();
-
-            eventTarget.AddEventHandler(DOMEvents.Events.DOMFocusIn, evt =>
-                eventTarget.DispatchEvent(Events.Focus));
+            if (evt.Type == DOMEvents.Events.DOMFocusIn)
+                eventTarget.Value.Dispatch(Events.Focus);
         }
 
     }

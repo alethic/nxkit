@@ -21,7 +21,7 @@ namespace NXKit.XForms
 
         readonly XObject xml;
         readonly EvaluationContext context;
-        readonly string xpath;
+        readonly XPathExpression xpath;
 
         Lazy<object> result;
         Lazy<ModelItem[]> modelItems;
@@ -44,7 +44,7 @@ namespace NXKit.XForms
         /// <param name="xml"></param>
         /// <param name="context"></param>
         /// <param name="xpath"></param>
-        internal Binding(XObject xml, EvaluationContext context, string xpath)
+        internal Binding(XObject xml, EvaluationContext context, XPathExpression xpath)
         {
             Contract.Requires<ArgumentNullException>(xml != null);
             Contract.Requires<ArgumentNullException>(context != null);
@@ -56,6 +56,20 @@ namespace NXKit.XForms
 
             // initial load of values
             Recalculate();
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <param name="context"></param>
+        /// <param name="xpath"></param>
+        internal Binding(XObject xml, EvaluationContext context, string xpath)
+            : this(xml, context, context.CompileXPath(xml, xpath))
+        {
+            Contract.Requires<ArgumentNullException>(xml != null);
+            Contract.Requires<ArgumentNullException>(context != null);
+            Contract.Requires<ArgumentNullException>(xpath != null);
         }
 
         /// <summary>
@@ -77,7 +91,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the XPath expression that describes this binding.
         /// </summary>
-        public string XPathExpression
+        public XPathExpression XPathExpression
         {
             get { return xpath; }
         }
@@ -109,7 +123,7 @@ namespace NXKit.XForms
                 return ((XPathNodeIterator)Result)
                     .Cast<XPathNavigator>()
                     .Select(i => (XObject)i.UnderlyingObject)
-                    .Select(i => i.AnnotationOrCreate<ModelItem>(() => new ModelItem(i)))
+                    .Select(i => ModelItem.Get(i))
                     .ToArray();
             else
                 return EmptyModelItemSequence;

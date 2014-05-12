@@ -17,7 +17,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
-    <NuGetPackageImportStamp>821ea827</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>ee024015</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,8 +41,8 @@
     <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
     <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
     <CodeContractsInferRequires>True</CodeContractsInferRequires>
-    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsInferEnsures>True</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>True</CodeContractsInferObjectInvariants>
     <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
     <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
     <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
@@ -119,7 +119,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonProperties.cs" />
+    <Compile Include="DeferredUpdateInvokerLayer.cs" />
     <Compile Include="DispatchAttributes.cs" />
+    <Compile Include="InsertPosition.cs" />
+    <Compile Include="BindingProperties.cs" />
+    <Compile Include="DeleteProperties.cs" />
     <Compile Include="IO\FileHandler.cs" />
     <Compile Include="IO\IModelRequestService.cs" />
     <Compile Include="IO\ModelRequest.cs" />
@@ -129,6 +134,7 @@
     <Compile Include="IO\ModelResponseStatus.cs" />
     <Compile Include="IO\RequestException.cs" />
     <Compile Include="IO\UnsupportedMediaTypeException.cs" />
+    <Compile Include="InsertAttributes.cs" />
     <Compile Include="Serialization\IModelDeserializer.cs" />
     <Compile Include="Serialization\IModelSerializer.cs" />
     <Compile Include="Serialization\XmlModelDeserializer.cs" />
@@ -137,6 +143,7 @@
     <Compile Include="Serialization\UrlEncodedModelSerializer.cs" />
     <Compile Include="IO\ModelRequestHandler.cs" />
     <Compile Include="SendAttributes.cs" />
+    <Compile Include="InsertProperties.cs" />
     <Compile Include="SubmitAttributes.cs" />
     <Compile Include="AttributeEvaluationContextResolver.cs" />
     <Compile Include="HeaderAttributes.cs" />

@@ -20,11 +20,11 @@ namespace NXKit.DOMEvents
             var eventException = exception as DOMTargetEventException;
             if (eventException != null)
             {
-                var target = eventException.Target.InterfaceOrDefault<INXEventTarget>();
+                var target = eventException.Target.InterfaceOrDefault<EventTarget>();
                 if (target == null)
                     return false;
 
-                target.DispatchEvent(eventException.EventType, eventException.ContextInfo);
+                target.Dispatch(eventException.EventType, eventException.ContextInfo);
                 return true;
             }
 

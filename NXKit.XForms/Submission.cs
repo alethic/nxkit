@@ -16,7 +16,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}submission")]
     public class Submission :
         ElementExtension,
-        IEventDefaultActionHandler
+        IEventDefaultAction
     {
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace NXKit.XForms
 
             public override XObject Visit(XObject obj)
             {
-                var modelItem = obj.AnnotationOrCreate<ModelItem>(() => new ModelItem(obj));
+                var modelItem = ModelItem.Get(obj);
                 if (modelItem == null || modelItem.Relevant || !excludeRelevant)
                 {
                     // visit node
@@ -136,11 +136,11 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(requestService != null);
 
             this.requestService = requestService;
-            this.properties = new SubmissionProperties(element);
+            this.properties = new SubmissionProperties(element, new SubmissionAttributes(element));
             this.context = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
         }
 
-        void IEventDefaultActionHandler.DefaultAction(Event evt)
+        void IEventDefaultAction.DefaultAction(Event evt)
         {
             switch (evt.Type)
             {
@@ -244,7 +244,7 @@ namespace NXKit.XForms
                 node = null;
             else
             {
-                var evt = Element.Interface<INXEventTarget>().DispatchEvent(Events.SubmitSerialize, new SubmitSerializeContextInfo());
+                var evt = Element.Interface<EventTarget>().Dispatch(Events.SubmitSerialize, new SubmitSerializeContextInfo());
                 var ctx = evt.Context as SubmitSerializeContextInfo;
                 if (ctx != null &&
                     ctx.SubmissionBody != "")
@@ -427,9 +427,7 @@ namespace NXKit.XForms
                 // element, except the context node is modified to be the document element of the instance identified
                 // by the instance attribute if present.
                 var ec = new EvaluationContext(
-                    context.Value.Context.Model,
-                    context.Value.Context.Instance,
-                    context.Value.Context.Instance.State.Document.Root.Annotation<ModelItem>(),
+                    ModelItem.Get(context.Value.Context.Instance.State.Document.Root),
                     1,
                     1);
 

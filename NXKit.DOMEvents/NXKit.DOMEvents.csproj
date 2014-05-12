@@ -15,7 +15,7 @@
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>2dedd0fa</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>c33b1192</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,13 +33,13 @@
     <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
     <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
     <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
-    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
-    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>True</CodeContractsEnumObligations>
     <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
     <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
     <CodeContractsInferRequires>True</CodeContractsInferRequires>
-    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsInferEnsures>True</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>True</CodeContractsInferObjectInvariants>
     <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
     <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
     <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
@@ -106,6 +106,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.0.34.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Bcl.Immutable.1.0.34\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -120,7 +124,12 @@
     <Compile Include="DOMTargetEventException.cs" />
     <Compile Include="DOMEventException.cs" />
     <Compile Include="EventHandlerDelegate.cs" />
+    <Compile Include="EventInstanceProvider.cs" />
+    <Compile Include="EventTarget.cs" />
+    <Compile Include="EventListenerRegistration.cs" />
     <Compile Include="FocusEventInfo.cs" />
+    <Compile Include="IEventInstanceProvider.cs" />
+    <Compile Include="InterfaceEventListener.cs" />
     <Compile Include="MutationEventInfo.cs" />
     <Compile Include="Events.partial.cs">
       <AutoGen>True</AutoGen>
@@ -131,9 +140,8 @@
     <Compile Include="MutationEvent.cs" />
     <Compile Include="UIEventInfo.cs" />
     <Compile Include="EventInfo.cs" />
-    <Compile Include="EventListener.cs" />
-    <Compile Include="EventListenerData.cs" />
-    <Compile Include="EventListenerMap.cs" />
+    <Compile Include="ActionEventListener.cs" />
+    <Compile Include="EventTargetState.cs" />
     <Compile Include="EventInfoTableProvider.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="IEventInfoTable.cs" />
@@ -141,10 +149,7 @@
     <Compile Include="IEventFactory.cs" />
     <Compile Include="IEventProvider.cs" />
     <Compile Include="NXDocumentEvent.cs" />
-    <Compile Include="NXEventTarget.cs" />
-    <Compile Include="EventTarget.cs" />
-    <Compile Include="IEventDefaultActionHandler.cs" />
-    <Compile Include="INXEventTarget.cs" />
+    <Compile Include="IEventDefaultAction.cs" />
     <Compile Include="UIEvent.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventPhase.cs" />

@@ -14,8 +14,9 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}model")]
     public class Model :
         ElementExtension,
-        IEventDefaultActionHandler
+        IEventDefaultAction
     {
+
 
         readonly ModelAttributes attributes;
         readonly Lazy<ModelState> state;
@@ -82,10 +83,7 @@ namespace NXKit.XForms
                 if (defaultInstance.State.Document == null)
                     return null;
 
-                var modelItem = defaultInstance.State.Document.Root.AnnotationOrCreate<ModelItem>(() =>
-                    new ModelItem(defaultInstance.State.Document.Root));
-
-                return new EvaluationContext(this, defaultInstance, modelItem, 1, 1);
+                return new EvaluationContext(this, defaultInstance, ModelItem.Get(defaultInstance.State.Document.Root), 1, 1);
             }
         }
 
@@ -98,10 +96,11 @@ namespace NXKit.XForms
         {
             return Element.Document.Root
                 .DescendantNodesAndSelf()
+                .Where(i => i.Document != null)
                 .SelectMany(i => i.Interfaces<T>());
         }
 
-        void IEventDefaultActionHandler.DefaultAction(Event evt)
+        void IEventDefaultAction.DefaultAction(Event evt)
         {
             switch (evt.Type)
             {

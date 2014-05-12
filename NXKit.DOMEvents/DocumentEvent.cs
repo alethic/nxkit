@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml;
-using System.Xml.Linq;
-
-using NXKit.DOM;
 
 namespace NXKit.DOMEvents
 {
@@ -16,34 +15,26 @@ namespace NXKit.DOMEvents
          IDocumentEvent
     {
 
-        readonly XDocument document;
+        readonly IEnumerable<IEventInstanceProvider> providers;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="document"></param>
-        public DocumentEvent(XDocument document)
+        /// <param name="providers"></param>
+        public DocumentEvent(
+            IEnumerable<IEventInstanceProvider> providers)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(providers != null);
 
-            this.document = document;
+            this.providers = providers;
         }
 
         public Event CreateEvent(string eventInterface)
         {
-            switch (eventInterface)
-            {
-                case "Event":
-                    return new Event();
-                case "UIEvent":
-                    return new UIEvent();
-                case "FocusEvent":
-                    return new FocusEvent();
-                case "MutationEvent":
-                    return new MutationEvent();
-                default:
-                    throw new DOMException();
-            }
+            return providers
+                .Select(i => i.CreateEvent(eventInterface))
+                .Where(i => i != null)
+                .FirstOrDefault();
         }
 
     }

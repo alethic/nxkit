@@ -16,14 +16,14 @@ namespace NXKit
         IXmlSerializable
     {
 
-        int nextNodeId = 1;
+        int nextObjectId = 1;
 
         /// <summary>
-        /// Gets the next available node ID.
+        /// Gets the next available object ID.
         /// </summary>
-        public int GetNextNodeId()
+        public int GetNextObjectId()
         {
-            return nextNodeId++;
+            return nextObjectId++;
         }
 
         XmlSchema IXmlSerializable.GetSchema()
@@ -36,13 +36,13 @@ namespace NXKit
             if (reader.MoveToContent() == XmlNodeType.Element &&
                 reader.LocalName == "document")
             {
-                nextNodeId = int.Parse(reader["next-node-id"]);
+                nextObjectId = int.Parse(reader["next-object-id"]);
             }
         }
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteAttributeString("next-node-id", nextNodeId.ToString());
+            writer.WriteAttributeString("next-object-id", nextObjectId.ToString());
         }
 
     }

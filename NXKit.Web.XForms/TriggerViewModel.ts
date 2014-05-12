@@ -10,9 +10,13 @@ module NXKit.Web.XForms {
         }
 
         public Activate() {
-            this.Node.Invoke('NXKit.DOMEvents.INXEventTarget', 'DispatchEvent', {
-                type: 'DOMActivate'
-            });
+            var self = this;
+
+            // ensure property changes or non-focus events flush first
+            setTimeout(() =>
+                self.Node.Invoke('NXKit.DOMEvents.EventTarget', 'Dispatch', {
+                    type: 'DOMActivate'
+                }), 50);
         }
 
     }

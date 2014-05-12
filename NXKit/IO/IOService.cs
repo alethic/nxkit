@@ -51,8 +51,6 @@ namespace NXKit.IO
         /// <returns></returns>
         public IOResponse Send(IORequest request)
         {
-            Contract.Requires<ArgumentNullException>(request != null);
-
             var transport = GetTransport(request);
             if (transport == null)
                 return new IOResponse(request, IOStatus.NoTransport);

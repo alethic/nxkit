@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Xml;
-using System.Xml.Linq;
-
-using NXKit.Xml;
 
 namespace NXKit.Scripting
 {
@@ -13,29 +10,37 @@ namespace NXKit.Scripting
     /// </summary>
     [Interface(XmlNodeType.Document)]
     public class DocumentScript :
-        IDocumentScript
+        IDocumentScript,
+        IOnSave,
+        IOnLoad
     {
 
-        readonly XDocument document;
         readonly IScriptDispatcher dispatcher;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="document"></param>
         /// <param name="dispatcher"></param>
-        public DocumentScript(XDocument document, IScriptDispatcher dispatcher)
+        public DocumentScript(IScriptDispatcher dispatcher)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
             Contract.Requires<ArgumentNullException>(dispatcher != null);
 
-            this.document = document;
             this.dispatcher = dispatcher;
         }
 
         public object Execute(string type, string code)
         {
-            return dispatcher.Execute(type, code);
+            return dispatcher.Evaluate(type, code);
+        }
+
+        public void Load()
+        {
+            dispatcher.Load();
+        }
+
+        public void Save()
+        {
+            dispatcher.Save();
         }
 
     }
