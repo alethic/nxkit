@@ -22,6 +22,12 @@ namespace NXKit.Test.Web.Site
                 Path = "~/Content/semantic/packaged/javascript/semantic.js",
             });
 
+            ScriptManager.ScriptResourceMapping.AddDefinition("bootstrap", new ScriptResourceDefinition
+            {
+                Path = "~/Content/bootstrap/dist/js/bootstrap.min.js",
+                DebugPath = "~/Content/bootstrap/dist/js/bootstrap.js",
+            });
+
             ScriptManager.ScriptResourceMapping.AddDefinition("knockout", new ScriptResourceDefinition
             {
                 Path = "~/Scripts/knockout-3.1.0.js",

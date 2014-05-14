@@ -1,14 +1,15 @@
-﻿module NXKit.Web.Knockout {
+﻿module NXKit.Web.XForms.Knockout {
 
-    export class DropdownBindingHandler
+    export class Select1BindingHandler
         implements KnockoutBindingHandler {
 
         static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
+            var body = $(element).find('.body');
             setTimeout(function () {
-                $(element).dropdown();
-                $(element).dropdown({
+                $(body).dropdown();
+                $(body).dropdown({
                     onChange: function (value: any) {
-                        var v1 = $(element).dropdown('get value');
+                        var v1 = $(body).dropdown('get value');
                         var v2 = ko.unwrap(valueAccessor());
                         if (typeof v1 === 'string') {
                             if (v1 != v2)
@@ -16,27 +17,28 @@
                         }
                     },
                 });
-                DropdownBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                Select1BindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
             }, 1000);
         }
 
         static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
+            var body = $(element).find('.body');
             setTimeout(function () {
                 var v1 = ko.unwrap(valueAccessor());
-                $(element).dropdown('set value', v1);
+                $(body).dropdown('set value', v1);
             }, 2000);
         }
 
         public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
-            DropdownBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
+            Select1BindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
         }
 
         public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
-            DropdownBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+            Select1BindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
         }
 
     }
 
-    ko.bindingHandlers['nxkit_dropdown'] = new DropdownBindingHandler();
+    ko.bindingHandlers['nxkit_xforms_select1'] = new Select1BindingHandler();
 
 }

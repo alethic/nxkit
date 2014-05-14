@@ -76,8 +76,9 @@ _NXKit.Web.UI.View.prototype = {
                 });
             }
 
-            // update view with data
+            // update view with data, and remove data from resubmission
             self._view.Receive(JSON.parse($(self._data).val()));
+            $(self._data).val('');
         }
     },
 

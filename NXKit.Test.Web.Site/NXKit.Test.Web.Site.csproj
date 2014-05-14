@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props" Condition="Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props')" />
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -25,7 +26,8 @@
     <RestorePackages>true</RestorePackages>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
-    <NuGetPackageImportStamp>8b8a24af</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>69dd5eab</NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -251,6 +253,7 @@
     <Content Include="Content\semantic\packaged\javascript\semantic.js" />
     <Content Include="Content\semantic\packaged\javascript\semantic.min.js" />
     <Content Include="packages.config" />
+    <Content Include="Content\semantic.less" />
     <None Include="Properties\PublishProfiles\asd.pubxml" />
     <Content Include="Examples\Post.ashx" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
@@ -281,7 +284,11 @@
       <DependentUpon>Post.ashx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Content\semantic\less\collections\breadcrumb.less" />
     <Content Include="Content\semantic\less\collections\form.less" />
@@ -412,11 +419,19 @@
       <Name>NXKit</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Knockout\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
+    <TypeScriptOutFile>NXKit.Test.Web.Site.js</TypeScriptOutFile>
+  </PropertyGroup>
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
@@ -444,12 +459,15 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets'))" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent>xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\x86\*.*" "$(ProjectDir)"
 xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\amd64\*.*" "$(ProjectDir)"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
+  <Import Project="..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets" Condition="Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

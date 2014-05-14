@@ -1,14 +1,31 @@
 ﻿<script type="text/html"
         data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}section">
     <!-- ko with: new NXKit.Web.XForms.Layout.SectionViewModel($context, $data) -->
-    <!-- ko with: Label -->
-    <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-    <header class="ui header" data-bind="nxkit_template: $data" />
-    <!-- /ko -->
-    <!-- /ko -->
-    <!-- ko foreach: Contents -->
-    <!-- ko nxkit_template -->
-    <!-- /ko -->
-    <!-- /ko -->
+    <div class="xforms-layout-section">
+        <!-- ko with: Label -->
+        <label class="label">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <div class="contents">
+            <!-- ko foreach: Contents -->
+            <!-- ko nxkit_template -->
+            <!-- /ko -->
+            <!-- /ko -->
+        </div>
+    </div>
     <!-- /ko -->
 </script>

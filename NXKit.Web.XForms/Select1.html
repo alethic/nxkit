@@ -11,16 +11,25 @@
         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}string">
     <!-- ko with: new NXKit.Web.XForms.Select1ViewModel($context, $data) -->
 
-    <div class="ui fluid selection dropdown" data-bind="nxkit_dropdown: SelectedId">
-        <input type="hidden" />
-        <div class="text">Select</div>
-        <i class="dropdown icon"></i>
-        <div class="ui menu" data-bind="foreach: Selectables">
-            <div class="item" data-bind="attr: { 'data-value': Id }">
-                <!-- ko with: Label -->
-                <!-- ko nxkit_template -->
-                <!-- /ko -->
-                <!-- /ko -->
+    <div class="xforms-select1" data-bind="nxkit_xforms_select1: $data">
+        <!-- ko with: Label -->
+        <label class="label">
+            <!-- ko nxkit_template -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+
+        <div class="body">
+            <input type="hidden" />
+            <div class="text">Select</div>
+            <i class="icon"></i>
+            <div class="menu" data-bind="foreach: Selectables">
+                <div class="item" data-bind="attr: { 'data-value': Id }">
+                    <!-- ko with: Label -->
+                    <!-- ko nxkit_template -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
             </div>
         </div>
     </div>

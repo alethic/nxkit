@@ -187,7 +187,6 @@
     <TypeScriptCompile Include="NodeViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Knockout\DropdownBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\VisibleBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\TemplateBindingHandler.ts" />
   </ItemGroup>

@@ -1,4 +1,175 @@
-﻿.xforms-repeat-item-current
-{
-    background-color: gray;
+﻿@import 'semantic.less';
+
+.xforms-layout-section {
+
+    > .label {
+        &:extend(.ui.header all);
+    }
+
+    > .contents {
+
+    }
+
+}
+
+.xforms-layout-section 
+    > .contents 
+    > .xforms-group {
+    &:extend(.ui.segment all);
+    &:extend(.ui.blue.segment all);
+
+    > .help {
+        display: none;
+    }
+
+    > .label {
+        &:extend(.ui.header all);
+
+        > .xforms-label {
+
+        }
+
+    }
+
+    > .contents {
+        &:extend(.ui.form all);
+    }
+
+}
+
+.xforms-layout-section 
+    > .contents 
+    > .xforms-group 
+    > .contents 
+    > .xforms-group {
+    &:extend(.ui.segment all);
+    &:extend(.ui.purple.segment all);
+    &:extend(.ui.secondary.segment all);
+
+    > .label {
+        &:extend(.ui.header all);
+        &:extend(.ui.small.header all);
+
+        > .xforms-label {
+
+        }
+
+    }
+
+    > .contents {
+
+    }
+
+}
+
+.xforms-group {
+
+    > .contents {
+
+        > .xforms-input {
+            &:extend(.ui.form .field all);
+        
+            > .label {
+                &:extend(.ui.form .field>label all);
+            }
+        }
+
+        > .xforms-range {
+            &:extend(.ui.form .field all);
+
+            > .label {
+                &:extend(.ui.form .field>label all);
+            }
+        } 
+    
+        > .xforms-select1 {
+            &:extend(.ui.form .field all);
+        
+            > .label {
+                &:extend(.ui.form .field>label all);
+            }
+        }
+
+    }
+
+}
+
+.xforms-input {
+
+    > .label {
+
+    }
+
+    > .hint {
+        display: none;
+    }
+
+    > .help {
+        display: none;
+    }
+
+}
+
+.xforms-range {
+
+    > .label {
+
+    }
+
+    > .hint {
+        display: none;
+    }
+
+    > .help {
+        display: none;
+    }
+
+}
+
+.xforms-select1 {
+
+    > .label {
+
+    }
+
+    > .hint {
+        display: none;
+    }
+
+    > .help {
+        display: none;
+    }
+
+    > .body {
+        &:extend(.ui.dropdown all);
+        &:extend(.ui.fluid.dropdown all);
+        &:extend(.ui.selection.dropdown all);
+
+        > .menu {
+            &:extend(.menu all);
+
+            > .item {
+                &:extend(.item all);
+            }
+
+        }
+
+    }
+
+}
+
+.xforms-repeat {
+
+    > .item {
+        border-left: 0.2em;
+        margin-left: 0.2em;
+    }
+
+    > .item.current {
+
+        .xforms-group {
+            border-left: 0.2em solid #564F8A;
+        }
+    }
+
 }
