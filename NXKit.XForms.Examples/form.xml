@@ -323,7 +323,7 @@
           <xf:label>Relationship</xf:label>
         </xf:input>
         <xf:range ref="d:percentage" start="0" step="5" end="100">
-          <xf:label>Relationship</xf:label>
+          <xf:label>Percentage</xf:label>
         </xf:range>
       </xf:group>
     </xf:repeat>

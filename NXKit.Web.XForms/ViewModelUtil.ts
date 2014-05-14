@@ -92,6 +92,17 @@ module NXKit.Web.XForms.ViewModelUtil {
         return node.Property(Constants.UINode, 'Appearance').ValueAsString;
     }
 
+    export function GetDataItem(node: Node): KnockoutObservable<any> {
+        return ko.computed<any>(() => { 
+            return [
+                GetValid(node)() ? 'valid' : 'invalid',
+                GetRelevant(node)() ? 'enabled' : 'disabled',
+                GetReadOnly(node)() ? 'readonly' : 'readwrite',
+                GetRequired(node)() ? 'required' : 'optional',
+            ].join(' ');
+        });
+    }
+
     export function GetLabelNode(node: Node): Node {
         return ko.utils.arrayFirst(node.Nodes(), (_: Node) =>
             _.Name == '{http://www.w3.org/2002/xforms}label');

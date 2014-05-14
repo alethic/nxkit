@@ -19,40 +19,6 @@
         }
     </style>
 
-    <script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*">
-        <!-- ko with: new NXKit.Web.XForms.GroupViewModel($context, $parent) -->
-        <div class="xforms-group"
-            data-bind="nxkit_visible: Relevant">
-            <!-- ko with: Label -->
-            <div class="label">
-                <!-- ko nxkit_template: $data -->
-                <!-- /ko -->
-            </div>
-            <!-- /ko -->
-            <!-- ko with: Hint -->
-            <div class="hint">
-                <!-- ko nxkit_template: $data -->
-                <!-- /ko -->
-            </div>
-            <!-- /ko -->
-            <!-- ko with: Help -->
-            <div class="help">
-                <!-- ko nxkit_template: $data -->
-                <!-- /ko -->
-            </div>
-            <!-- /ko -->
-            <div class="contents">
-                <!-- ko foreach: Contents -->
-                <!-- ko nxkit_template -->
-                <!-- /ko -->
-                <!-- /ko -->
-            </div>
-        </div>
-        <!-- /ko -->
-    </script>
-
 </head>
 
 <body>

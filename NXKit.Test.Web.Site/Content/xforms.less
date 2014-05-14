@@ -1,6 +1,72 @@
 ﻿@import 'semantic.less';
 
+.xforms-group-field() {
+    &:extend(.ui.form .field all);
+    &:extend(.ui.form .fields > .field all);
+    &:extend(.field all);
+    &:extend(.wide.field all);
+    &:extend(.ui.form .fields .wide.field all);
+    padding-left: 1% !important;
+    padding-right: 1% !important;
+}
+
+.xforms-group-field-eight-wide() {
+    .xforms-group-field();
+    &:extend(.eight.wide.field all);
+    &:extend(.ui.form .fields > .eight.wide.field all);
+}
+
+.xforms-group-field-sixteen-wide() {
+    .xforms-group-field();
+    &:extend(.sixteen.wide.field all);
+    &:extend(.ui.form .fields > .sixteen.wide.field all);
+}
+
+.xforms-group-field-label() {
+    &:extend(.ui.form .field > label all);
+}
+
+.xforms-group-field-invalid() {
+    &:extend(.ui.form .field.error all);
+    &:extend(.field.error all);
+}
+
+.xforms-group-field-invalid-input {
+
+    > .label {
+        &:extend(.ui.form .field.error label all);
+    }
+
+    input {
+        &:extend(.ui.form .field.error input all);
+    }
+}
+
+.xforms-group-field-invalid-range {
+
+    > .label {
+        &:extend(.ui.form .field.error label all);
+    }
+
+    input {
+        &:extend(.ui.form .field.error input all);
+    }
+}
+
+.xforms-group-field-invalid-select1() {
+
+    > .label {
+        &:extend(.ui.form .field.error label all);
+    }
+
+    > .body {
+        &:extend(.ui.form .field.error .ui.dropdown all);
+    }
+}
+
 .xforms-group {
+    &:extend(.ui.form all);
+    &:extend(.ui.fluid.form all);
 
     > .help {
         display: none;
@@ -11,33 +77,67 @@
     }
 
     > .contents {
+        &:extend(.fields all);
+        &:extend(.ui.form .fields all);
 
-        .xforms-input {
-            &:extend(.ui.form .field all);
-        
-            > .label {
-                &:extend(.ui.form .field>label all);
+        > .item:not([data-nx-name='{http://www.w3.org/2002/xforms}group']) {
+            .xforms-group-field-eight-wide();
+        }
+
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}group'] {
+            .xforms-group-field-sixteen-wide();
+        }
+
+        > .item:only-child {
+            .xforms-group-field-sixteen-wide();
+        }
+
+        > .item[data-nx-xforms~='invalid'] {
+            .xforms-group-field-invalid();
+
+            > .xforms-input {
+                .xforms-group-field-invalid-input();
+            }
+
+            > .xforms-range {
+                .xforms-group-field-invalid-range();
+            }
+
+            > .xforms-select1 {
+                .xforms-group-field-invalid-select1();
             }
         }
 
-        .xforms-range {
-            &:extend(.ui.form .field all);
+        > .item > .xforms-group {
+        }
+
+        > .item > .xforms-group:first-child {
+        }
+
+        > .item > .xforms-input {
 
             > .label {
-                &:extend(.ui.form .field>label all);
-            }
-        } 
-    
-        .xforms-select1 {
-            &:extend(.ui.form .field all);
-        
-            > .label {
-                &:extend(.ui.form .field>label all);
+                .xforms-group-field-label();
             }
         }
 
+        > .item > .xforms-range {
+
+            > .label {
+                .xforms-group-field-label();
+            }
+        }
+
+        > .item > .xforms-select1 {
+
+            > .label {
+                .xforms-group-field-label();
+            }
+        }
+
+        > .item > .xforms-input:nth-child(odd) {
+        }
     }
-
 }
 
 .xforms-group-primary {
@@ -48,15 +148,14 @@
         &:extend(.ui.header all);
 
         > .xforms-label {
-
         }
-
     }
 
     > .contents {
-        &:extend(.ui.form all);
-    }
 
+        > .item {
+        }
+    }
 }
 
 .xforms-group-secondary {
@@ -69,21 +168,16 @@
         &:extend(.ui.small.header all);
 
         > .xforms-label {
-
         }
-
     }
 
     > .contents {
-        &:extend(.ui.form all);
     }
-
 }
 
 .xforms-input {
 
     > .label {
-
     }
 
     > .hint {
@@ -93,12 +187,10 @@
     > .help {
         display: none;
     }
-
 }
 
 .xforms-input[data-nxkit-data-type='{http://www.w3.org/2001/XMLSchema}boolean'] {
     &:extend(.ui.checkbox all);
-
     line-height: 1.3em;
 
     > .checkbox {
@@ -108,13 +200,11 @@
         > input {
         }
     }
-
 }
 
 .xforms-range {
 
     > .label {
-
     }
 
     > .hint {
@@ -124,13 +214,11 @@
     > .help {
         display: none;
     }
-
 }
 
 .xforms-select1 {
 
     > .label {
-
     }
 
     > .hint {
@@ -146,18 +234,20 @@
         &:extend(.ui.fluid.dropdown all);
         &:extend(.ui.selection.dropdown all);
     }
-
 }
 
 .xforms-repeat {
 
-    > .item {
+    > .item > .xforms-group {
+        margin-top: 2em !important;
+        margin-bottom: 2em !important;
         border-left: 0.2em;
-        margin-left: 0.2em;
+        border-left-style: solid;
+        border-left-color: transparent;
     }
 
-    > .item.current {
-        
+    > .item.current > .xforms-group {
+        border-left-color: purple;
     }
 
 }
@@ -174,71 +264,35 @@
         margin-top: 2em;
         margin-bottom: 2em;
 
-        .xforms-input {
-            &:extend(.ui.segment all);
-        }
-
-        .xforms-input:gt(0) {
+        > .item {
             margin-top: 2em;
-        }
-
-        .xforms-input:lt(-1) {
             margin-bottom: 2em;
         }
+
+        > .item:first-child {
+            margin-top: initial;
+        }
+
+        > .item:last-child {
+            margin-bottom: initial;
+        }
+
+        > .item > .xforms-input {
+        }
+
     }
 
 }
 
-.xforms-layout-section 
-    > .contents 
-    > .xforms-group {
+.xforms-layout-section > .contents > .item > .xforms-group {
     &:extend(.xforms-group-primary all);
 }
 
-.xforms-layout-section 
-    > .contents 
-    > .xforms-repeat 
-    > .item 
-    > .xforms-group {
+.xforms-layout-section > .contents > .item > .xforms-repeat > .item > .xforms-group {
     &:extend(.xforms-group-primary all);
 }
 
-.xforms-layout-section 
-    > .contents 
-    > .xforms-repeat 
-    > .item 
-    > .xforms-group {
-    margin-top: 1em !important;
-    margin-bottom: 1em !important;
-}
-
-.xforms-layout-section
-    > .contents
-    > .xforms-repeat
-    > .item:first-child 
-    > .xforms-group {
-    margin-top: 0em !important;
-}
-
-.xforms-layout-section
-    > .contents
-    > .xforms-repeat
-    > .item:last-child
-    > .xforms-group {
-    margin-bottom: 0em !important;
-}
-
-.xforms-repeat 
-    > .item.current 
-    .xforms-group {
-    border-left: 0.2em solid purple;
-}
-
-.xforms-layout-section 
-    > .contents 
-    > .xforms-group 
-    > .contents 
-    > .xforms-group {
+.xforms-layout-section > .contents > .item > .xforms-group > .contents > .item > .xforms-group {
     &:extend(.xforms-group-secondary all);
 }
 
