@@ -47,22 +47,34 @@ event: {
         data-nxkit-name="{http://www.w3.org/2002/xforms}input"
         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean">
     <!-- ko with: new NXKit.Web.XForms.InputViewModel($context, $data) -->
-
-    <div class="ui checkbox"
-         data-bind="nxkit_checkbox: ValueAsBoolean">
-
-        <input type="checkbox" />
-
-        <!-- ko if: ShowLabel -->
+    <div class="xforms-input"
+         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean"
+         data-bind="css: {
+    'xforms-invalid': !$data.Valid(),
+}">
         <!-- ko with: Label -->
-        <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <label data-bind="nxkit_template: {
-node: $data,
-    }" />
+        <label class="label">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </label>
         <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
         <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
         <!-- /ko -->
 
+        <div class="checkbox"
+             data-bind="nxkit_checkbox: ValueAsBoolean">
+            <input type="checkbox" />
+        </div>
     </div>
 
     <!-- /ko -->

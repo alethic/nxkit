@@ -3,10 +3,10 @@
     <!-- ko with: new NXKit.Web.XForms.TriggerViewModel($context, $data) -->
     <div class="xforms-trigger" data-bind="event: { click: Activate }">
         <!-- ko with: Label -->
-        <label class="label">
+        <div class="label">
             <!-- ko nxkit_template: $data -->
             <!-- /ko -->
-        </label>
+        </div>
         <!-- /ko -->
         <!-- ko with: Hint -->
         <div class="hint">
@@ -20,12 +20,6 @@
             <!-- /ko -->
         </div>
         <!-- /ko -->
-        <div class="contents">
-            <!-- ko foreach: Contents -->
-            <!-- ko nxkit_template -->
-            <!-- /ko -->
-            <!-- /ko -->
-        </div>
     </div>
     <!-- /ko -->
 </script>

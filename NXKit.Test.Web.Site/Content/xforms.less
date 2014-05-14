@@ -1,26 +1,48 @@
 ﻿@import 'semantic.less';
 
-.xforms-layout-section {
+.xforms-group {
 
-    > .label {
-        &:extend(.ui.header all);
+    > .help {
+        display: none;
+    }
+
+    > .hint {
+        display: none;
     }
 
     > .contents {
+
+        .xforms-input {
+            &:extend(.ui.form .field all);
+        
+            > .label {
+                &:extend(.ui.form .field>label all);
+            }
+        }
+
+        .xforms-range {
+            &:extend(.ui.form .field all);
+
+            > .label {
+                &:extend(.ui.form .field>label all);
+            }
+        } 
+    
+        .xforms-select1 {
+            &:extend(.ui.form .field all);
+        
+            > .label {
+                &:extend(.ui.form .field>label all);
+            }
+        }
 
     }
 
 }
 
-.xforms-layout-section 
-    > .contents 
-    > .xforms-group {
+.xforms-group-primary {
     &:extend(.ui.segment all);
     &:extend(.ui.blue.segment all);
-
-    > .help {
-        display: none;
-    }
 
     > .label {
         &:extend(.ui.header all);
@@ -37,11 +59,7 @@
 
 }
 
-.xforms-layout-section 
-    > .contents 
-    > .xforms-group 
-    > .contents 
-    > .xforms-group {
+.xforms-group-secondary {
     &:extend(.ui.segment all);
     &:extend(.ui.purple.segment all);
     &:extend(.ui.secondary.segment all);
@@ -57,39 +75,7 @@
     }
 
     > .contents {
-
-    }
-
-}
-
-.xforms-group {
-
-    > .contents {
-
-        > .xforms-input {
-            &:extend(.ui.form .field all);
-        
-            > .label {
-                &:extend(.ui.form .field>label all);
-            }
-        }
-
-        > .xforms-range {
-            &:extend(.ui.form .field all);
-
-            > .label {
-                &:extend(.ui.form .field>label all);
-            }
-        } 
-    
-        > .xforms-select1 {
-            &:extend(.ui.form .field all);
-        
-            > .label {
-                &:extend(.ui.form .field>label all);
-            }
-        }
-
+        &:extend(.ui.form all);
     }
 
 }
@@ -106,6 +92,21 @@
 
     > .help {
         display: none;
+    }
+
+}
+
+.xforms-input[data-nxkit-data-type='{http://www.w3.org/2001/XMLSchema}boolean'] {
+    &:extend(.ui.checkbox all);
+
+    line-height: 1.3em;
+
+    > .checkbox {
+        position: relative;
+        margin-left: -25px;
+
+        > input {
+        }
     }
 
 }
@@ -144,16 +145,6 @@
         &:extend(.ui.dropdown all);
         &:extend(.ui.fluid.dropdown all);
         &:extend(.ui.selection.dropdown all);
-
-        > .menu {
-            &:extend(.menu all);
-
-            > .item {
-                &:extend(.item all);
-            }
-
-        }
-
     }
 
 }
@@ -166,10 +157,91 @@
     }
 
     > .item.current {
+        
+    }
 
-        .xforms-group {
-            border-left: 0.2em solid #564F8A;
+}
+
+.xforms-layout-section {
+
+    > .label {
+        &:extend(.ui.header all);
+        &:extend(.ui.large.header all);
+        &:extend(.ui.dividing.header all);
+    }
+
+    > .contents {
+        margin-top: 2em;
+        margin-bottom: 2em;
+
+        .xforms-input {
+            &:extend(.ui.segment all);
+        }
+
+        .xforms-input:gt(0) {
+            margin-top: 2em;
+        }
+
+        .xforms-input:lt(-1) {
+            margin-bottom: 2em;
         }
     }
 
+}
+
+.xforms-layout-section 
+    > .contents 
+    > .xforms-group {
+    &:extend(.xforms-group-primary all);
+}
+
+.xforms-layout-section 
+    > .contents 
+    > .xforms-repeat 
+    > .item 
+    > .xforms-group {
+    &:extend(.xforms-group-primary all);
+}
+
+.xforms-layout-section 
+    > .contents 
+    > .xforms-repeat 
+    > .item 
+    > .xforms-group {
+    margin-top: 1em !important;
+    margin-bottom: 1em !important;
+}
+
+.xforms-layout-section
+    > .contents
+    > .xforms-repeat
+    > .item:first-child 
+    > .xforms-group {
+    margin-top: 0em !important;
+}
+
+.xforms-layout-section
+    > .contents
+    > .xforms-repeat
+    > .item:last-child
+    > .xforms-group {
+    margin-bottom: 0em !important;
+}
+
+.xforms-repeat 
+    > .item.current 
+    .xforms-group {
+    border-left: 0.2em solid purple;
+}
+
+.xforms-layout-section 
+    > .contents 
+    > .xforms-group 
+    > .contents 
+    > .xforms-group {
+    &:extend(.xforms-group-secondary all);
+}
+
+.xforms-trigger {
+    &:extend(.ui.button all);
 }
