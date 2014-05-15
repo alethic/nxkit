@@ -153,6 +153,7 @@
     <Compile Include="Diagnostics\XDocumentTypeProxyProvider.cs" />
     <Compile Include="Diagnostics\XElementTypeProxyProvider.cs" />
     <Compile Include="Diagnostics\XTextTypeProxyProvider.cs" />
+    <Compile Include="DocumentEnvironment.cs" />
     <Compile Include="ExceptionInvokerLayer.cs" />
     <Compile Include="IExtension.cs" />
     <Compile Include="IInvokerLayer.cs" />
