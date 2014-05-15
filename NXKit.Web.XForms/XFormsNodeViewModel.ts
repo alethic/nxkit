@@ -56,6 +56,10 @@
             }
         }
 
+        public get LabelAppearance(): KnockoutObservable<string> {
+            return this.Label != null ? ViewModelUtil.GetAppearance(this.Label) : null;
+        }
+
         public get Help(): Node {
             return ViewModelUtil.GetHelpNode(this.Node);
         }
@@ -66,6 +70,10 @@
 
         public get Alert(): Node {
             return ViewModelUtil.GetAlertNode(this.Node);
+        }
+
+        public get CountEnabled(): number {
+            return ko.utils.arrayFilter(this.Contents, _ => ViewModelUtil.GetRelevant(_)()).length;
         }
 
     }

@@ -76,18 +76,24 @@
       <Link>Scripts\typings\nxkit\NXKit.d.ts</Link>
     </TypeScriptCompile>
     <TypeScriptCompile Include="FormViewModel.ts" />
+    <TypeScriptCompile Include="ItemViewModel.ts" />
+    <TypeScriptCompile Include="ListViewModel.ts" />
     <TypeScriptCompile Include="ParagraphViewModel.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
+    <TypeScriptCompile Include="SegmentViewModel.ts" />
     <TypeScriptCompile Include="TableViewModel.ts" />
     <TypeScriptCompile Include="SectionViewModel.ts" />
     <TypeScriptCompile Include="LayoutNodeViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Segment.html" />
+    <EmbeddedResource Include="List.html" />
     <EmbeddedResource Include="Section.html" />
     <EmbeddedResource Include="Paragraph.html" />
     <EmbeddedResource Include="Form.html" />
     <EmbeddedResource Include="Table.html" />
+    <EmbeddedResource Include="Item.html" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

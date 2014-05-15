@@ -11,14 +11,14 @@ namespace NXKit.DOMEvents
         IEventInstanceProvider
     {
 
-        readonly NXDocumentHost host;
+        readonly Func<NXDocumentHost> host;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="host"></param>
         [ImportingConstructor]
-        public EventInstanceProvider(NXDocumentHost host)
+        public EventInstanceProvider(Func<NXDocumentHost> host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
 
@@ -27,6 +27,10 @@ namespace NXKit.DOMEvents
 
         public Event CreateEvent(string eventInterface)
         {
+            var host = this.host();
+            if (host == null)
+                throw new NullReferenceException();
+
             switch (eventInterface.ToLowerInvariant())
             {
                 case "event":

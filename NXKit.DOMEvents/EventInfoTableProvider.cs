@@ -15,26 +15,24 @@ namespace NXKit.DOMEvents
         IEventProvider
     {
 
-        readonly NXDocumentHost document;
         readonly IEnumerable<IEventInfoTable> tables;
         readonly Lazy<IDocumentEvent> documentEvent;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="document"></param>
+        /// <param name="host"></param>
         /// <param name="tables"></param>
         [ImportingConstructor]
         public EventInfoTableProvider(
-            NXDocumentHost document,
+            Func<NXDocumentHost> host,
             [ImportMany] IEnumerable<IEventInfoTable> tables)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(host != null);
             Contract.Requires<ArgumentNullException>(tables != null);
 
-            this.document = document;
             this.tables = tables;
-            this.documentEvent = new Lazy<IDocumentEvent>(() => document.Xml.Interface<IDocumentEvent>());
+            this.documentEvent = new Lazy<IDocumentEvent>(() => host().Xml.Interface<IDocumentEvent>());
         }
 
         public Event CreateEvent(string type)

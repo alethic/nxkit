@@ -134,7 +134,7 @@ namespace NXKit.DOMEvents
             Contract.Requires<ArgumentNullException>(methodInfo != null);
             Contract.Requires<ArgumentException>(IsValidMethodInfo(methodInfo));
 
-            var host = handler.Container().GetExportedValue<NXDocumentHost>();
+            var host = handler.Container().GetExportedValue<Func<NXDocumentHost>>()();
             if (host == null)
                 throw new InvalidOperationException();
 

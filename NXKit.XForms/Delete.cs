@@ -107,9 +107,9 @@ namespace NXKit.XForms
                     .Select(i => i.Xml)
                     .ToArray();
 
-            // If the Sequence Binding attributes are not present, then the Sequence Binding node-sequence is the
-            // empty sequence.
-            return null;
+            // Otherwise, the Sequence Binding is not expressed, so the Sequence Binding node-sequence is set equal to 
+            // the delete context node with a position and size of 1.
+            return deleteContext.ModelItem != null ? new XObject[] { deleteContext.ModelItem.Xml } : new XObject[0];
         }
 
         public void Invoke()

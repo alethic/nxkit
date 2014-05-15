@@ -24,7 +24,7 @@ namespace NXKit.Scripting.EcmaScript
         };
 
 
-        NXDocumentHost host;
+        Func<NXDocumentHost> host;
         Lazy<Microsoft.ClearScript.V8.V8ScriptEngine> engine;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace NXKit.Scripting.EcmaScript
         /// </summary>
         /// <param name="host"></param>
         [ImportingConstructor]
-        public V8ScriptEngine(NXDocumentHost host)
+        public V8ScriptEngine(Func<NXDocumentHost> host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
 

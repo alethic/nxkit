@@ -1,9 +1,8 @@
 ﻿<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}p">
-    <!-- ko with: new NXKit.Web.XForms.Layout.ParagraphViewModel($context, $data) -->
-    <p class="xforms-layout-paragraph"
-       data-bind="
-nxkit_visible: Relevant,
+        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}item">
+    <!-- ko with: new NXKit.Web.XForms.Layout.ItemViewModel($context, $data) -->
+    <div class="xforms-layout-item"
+         data-bind="
 attr : {
     'data-nx-name': $data.Node.Name,
     'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
@@ -14,6 +13,6 @@ attr : {
         <!-- ko nxkit_template -->
         <!-- /ko -->
         <!-- /ko -->
-    </p>
+    </div>
     <!-- /ko -->
 </script>

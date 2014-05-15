@@ -13,6 +13,11 @@
 
     <div class="xforms-select1" tabindex="0" data-bind="
 nxkit_xforms_select1: $data.SelectedId,
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+},
 event: {
     focusin: FocusIn,
     focusout: FocusOut,

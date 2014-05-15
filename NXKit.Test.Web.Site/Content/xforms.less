@@ -1,5 +1,23 @@
 ﻿@import 'semantic.less';
 
+.flex-container(@width) {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+    -webkit-justify-content: end;
+    justify-content: flex-end;
+    /* You can set flex-wrap and flex-direction individually */
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    /* tweak the where items line up on the row */
+    /* valid values are: flex-start, flex-end, space-between, space-around, stretch */
+    -webkit-align-content: flex-start;
+    align-content: flex-start;
+}
+
 .xforms-group-field() {
     &:extend(.ui.form .field all);
     &:extend(.ui.form .fields > .field all);
@@ -8,6 +26,42 @@
     &:extend(.ui.form .fields .wide.field all);
     padding-left: 1% !important;
     padding-right: 1% !important;
+}
+
+.xforms-group-field-two-wide() {
+    .xforms-group-field();
+    &:extend(.two.wide.field all);
+    &:extend(.ui.form .fields > .two.wide.field all);
+}
+
+.xforms-group-field-three-wide() {
+    .xforms-group-field();
+    &:extend(.three.wide.field all);
+    &:extend(.ui.form .fields > .three.wide.field all);
+}
+
+.xforms-group-field-four-wide() {
+    .xforms-group-field();
+    &:extend(.four.wide.field all);
+    &:extend(.ui.form .fields > .four.wide.field all);
+}
+
+.xforms-group-field-five-wide() {
+    .xforms-group-field();
+    &:extend(.five.wide.field all);
+    &:extend(.ui.form .fields > .five.wide.field all);
+}
+
+.xforms-group-field-six-wide() {
+    .xforms-group-field();
+    &:extend(.six.wide.field all);
+    &:extend(.ui.form .fields > .six.wide.field all);
+}
+
+.xforms-group-field-seven-wide() {
+    .xforms-group-field();
+    &:extend(.seven.wide.field all);
+    &:extend(.ui.form .fields > .seven.wide.field all);
 }
 
 .xforms-group-field-eight-wide() {
@@ -80,7 +134,7 @@
         &:extend(.fields all);
         &:extend(.ui.form .fields all);
 
-        > .item:not([data-nx-name='{http://www.w3.org/2002/xforms}group']) {
+        > .item {
             .xforms-group-field-eight-wide();
         }
 
@@ -88,12 +142,32 @@
             .xforms-group-field-sixteen-wide();
         }
 
-        > .item:only-child {
+        > .item[data-nx-xforms-appearance='{http://www.w3.org/2002/xforms}full'] {
             .xforms-group-field-sixteen-wide();
         }
 
-        > .item[data-nx-name='{http://www.w3.org/2002/xforms}group']+.item[data-nx-name='{http://www.w3.org/2002/xforms}select1']:last-child {
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}group'][data-nx-xforms-appearance='{http://www.w3.org/2002/xforms}minimal'] {
+            .xforms-group-field-eight-wide();
+        }
+
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}group'][data-nx-xforms-appearance='{http://www.w3.org/2002/xforms}compact'] {
+            .xforms-group-field-eight-wide();
+        }
+
+        > .item:only-child {
             .xforms-group-field-sixteen-wide();
+        }
+    
+        [data-nx-xforms-count-enabled='3'] {
+
+            > .item[data-nx-xforms-appearance='{http://www.w3.org/2002/xforms}compact'] {
+                .xforms-group-field-four-wide();
+            }
+
+            > .item[data-nx-xforms-appearance='{http://www.w3.org/2002/xforms}minimal'] {
+                .xforms-group-field-six-wide();
+            }
+
         }
 
         > .item[data-nx-xforms~='invalid'] {
@@ -145,12 +219,11 @@
             }
         }
 
-        > .item > .xforms-input:nth-child(odd) {
-        }
     }
+
 }
 
-.xforms-group-primary {
+.xforms-group-primary() {
     &:extend(.ui.segment all);
     &:extend(.ui.blue.segment all);
 
@@ -168,21 +241,44 @@
     }
 }
 
-.xforms-group-secondary {
-    &:extend(.ui.segment all);
-    &:extend(.ui.purple.segment all);
-    &:extend(.ui.secondary.segment all);
+.xforms-group-secondary() {
+    
+    &[data-nx-xforms-label-appearance=''],
+    &[data-nx-xforms-label-appearance='{http://www.w3.org/2002/xforms}full'],
+    &:not([data-nx-xforms-label-appearance]) {
+        &:extend(.ui.segment all);
+        &:extend(.ui.purple.segment all);
+        &:extend(.ui.secondary.segment all);
 
-    > .label {
-        &:extend(.ui.header all);
-        &:extend(.ui.small.header all);
+        > .label {
+            &:extend(.ui.header all);
+            &:extend(.ui.small.header all);
 
-        > .xforms-label {
+            > .xforms-label {
+
+            }
+
+        }
+
+        > .contents {
+
+
+
+        }
+
+    }
+
+    &[data-nx-xforms-label-appearance='{http://www.w3.org/2002/xforms}compact'] {
+        &:extend(.ui.segment all);
+        &:extend(.ui.secondary.segment all);
+        &:extend(.ui.block.segment all);
+
+        > .label {
+            &:extend(.ui.header all);
+            &:extend(.ui.tiny.header all);
         }
     }
 
-    > .contents {
-    }
 }
 
 .xforms-input {
@@ -243,14 +339,19 @@
         &:extend(.ui.dropdown all);
         &:extend(.ui.fluid.dropdown all);
         &:extend(.ui.selection.dropdown all);
+        margin-top: .3em;
     }
+}
+
+.xforms-trigger {
+    &:extend(.ui.button all);
 }
 
 .xforms-repeat {
 
     > .item > .xforms-group {
-        margin-top: 2em !important;
-        margin-bottom: 2em !important;
+        margin-top: .5em !important;
+        margin-bottom: .5em !important;
         border-left: 0.2em;
         border-left-style: solid;
         border-left-color: transparent;
@@ -258,6 +359,35 @@
 
     > .item.current > .xforms-group {
         border-left-color: purple;
+    }
+
+}
+
+.xforms-layout-form {
+
+    > .contents {
+
+        clear: both;
+
+        > .item {
+            clear: both;
+        }
+        
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}trigger'] {
+            display: inline-block;
+            margin-top: 3em;
+            margin-left: 3em;
+        }
+        
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}trigger']~.item[data-nx-name='{http://www.w3.org/2002/xforms}trigger'] {
+            clear: none;
+        }
+
+        > .item > .xforms-trigger {
+            &:extend(.ui.huge.button all);
+            margin: 0 auto;
+        }
+
     }
 
 }
@@ -273,6 +403,22 @@
     > .contents {
         margin-top: 2em;
         margin-bottom: 2em;
+        
+        @media only screen and (min-width: 767px) {
+            .flex-container(767px);
+            
+            > .item[data-nx-name='{http://www.w3.org/2002/xforms}group'] {
+                flex: 767px 1;
+            }
+        
+            > .item[data-nx-name='{http://www.w3.org/2002/xforms}trigger'],
+            > .item[data-nx-name='{http://www.w3.org/2002/xforms}submit'] {
+
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+                padding-left: 1em;
+            }
+        }
 
         > .item {
             margin-top: 2em;
@@ -287,25 +433,39 @@
             margin-bottom: initial;
         }
 
-        > .item > .xforms-input {
-        }
-
     }
 
 }
 
 .xforms-layout-section > .contents > .item > .xforms-group {
-    &:extend(.xforms-group-primary all);
+    .xforms-group-primary();
 }
 
 .xforms-layout-section > .contents > .item > .xforms-repeat > .item > .xforms-group {
-    &:extend(.xforms-group-primary all);
+    .xforms-group-primary();
 }
 
 .xforms-layout-section > .contents > .item > .xforms-group > .contents > .item > .xforms-group {
-    &:extend(.xforms-group-secondary all);
+    .xforms-group-secondary();
 }
 
-.xforms-trigger {
-    &:extend(.ui.button all);
+.xforms-layout-section > .contents > .item > .xforms-repeat > .item > .xforms-group > .contents > .item > .xforms-group {
+    .xforms-group-secondary();
+}
+
+.xforms-layout-segment {
+    &:extend(.ui.segment all);
+}
+
+.xforms-layout-list {
+
+    > .contents {
+        
+        ul {
+            &:extend(.ui.list all);
+            &:extend(.ui.bulleted.list all);
+        }
+
+    }
+
 }

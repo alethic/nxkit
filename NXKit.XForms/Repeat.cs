@@ -18,7 +18,6 @@ namespace NXKit.XForms
         IOnRefresh
     {
 
-        readonly NXDocumentHost host;
         readonly RepeatAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<Binding> binding;
@@ -32,15 +31,12 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="host"></param>
         /// <param name="element"></param>
-        public Repeat(NXDocumentHost host, XElement element)
+        public Repeat(XElement element)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.host = host;
             this.attributes = new RepeatAttributes(Element);
             this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
             this.binding = new Lazy<Binding>(() => bindingNode.Value.Binding);

@@ -9,21 +9,16 @@ module NXKit.Web.XForms {
             super(context, node);
         }
 
-        public get Items(): GroupUtil.Item[] {
-            return this.GetItems();
+        public get LabelAppearance(): KnockoutObservable<string> {
+            return this.Label != null ? ViewModelUtil.GetAppearance(this.Label) : null;
         }
 
-        GetItems(): GroupUtil.Item[] {
-            try {
-                return GroupUtil.GetItems(this, this.Node, 1);
-            } catch (ex) {
-                ex.message = 'GroupViewModel.GetItems()' + '"\nMessage: ' + ex.message;
-                throw ex;
-            }
+        public get Count(): number {
+            return this.Contents.length;
         }
 
-        public SetFocus() {
-            this.Node.Invoke('NXKit.XForms.RepeatItem', 'SetFocus', {});
+        public get CountEnabled(): number {
+            return ko.utils.arrayFilter(this.Contents, _ => ViewModelUtil.GetRelevant(_)()).length;
         }
 
     }

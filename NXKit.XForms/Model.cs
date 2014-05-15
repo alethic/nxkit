@@ -281,6 +281,24 @@ namespace NXKit.XForms
 
         }
 
+        /// <summary>
+        /// Invokes any outstanding deferred updates.
+        /// </summary>
+        internal void InvokeDeferredUpdates()
+        {
+            if (state.Value.Rebuild)
+                OnRebuild();
+
+            if (state.Value.Recalculate)
+                OnRecalculate();
+
+            if (state.Value.Revalidate)
+                OnRevalidate();
+
+            if (state.Value.Refresh)
+                OnRefresh();
+        }
+
     }
 
 }

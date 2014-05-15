@@ -8,7 +8,7 @@ namespace NXKit.Composition
     /// <summary>
     /// Marks an export as requiring a container supporting the specified scope.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
     [MetadataAttribute]
     public class ScopeExportAttribute :
         ExportAttribute,
