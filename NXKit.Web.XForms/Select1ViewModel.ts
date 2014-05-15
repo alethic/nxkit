@@ -5,23 +5,6 @@ module NXKit.Web.XForms {
     export class Select1ViewModel
         extends NXKit.Web.XForms.XFormsNodeViewModel {
 
-        public static GetSelectedId(node: Node): KnockoutComputed<string> {
-            return ko.computed<string>({
-                read: () => {
-                    if (node != null &&
-                        node.Property('NXKit.XForms.Select1', 'SelectedId') != null)
-                        return node.Property('NXKit.XForms.Select1', 'SelectedId').ValueAsString();
-                    else
-                        return null;
-                },
-                write: _ => {
-                    if (node != null &&
-                        node.Property('NXKit.XForms.Select1', 'SelectedId') != null)
-                        node.Property('NXKit.XForms.Select1', 'SelectedId').ValueAsString(_);
-                },
-            });
-        }
-
         constructor(context: KnockoutBindingContext, node: Node) {
             super(context, node);
         }
@@ -30,12 +13,48 @@ module NXKit.Web.XForms {
             return SelectUtil.GetSelectables(this, this.Node, 1);
         }
 
-        public get SelectedValue(): KnockoutComputed<string> {
-            throw new Error('NotImplemented');
+        public get SelectedId(): KnockoutComputed<string> {
+            var self = this;
+
+            return ko.computed<string>({
+                read: () => {
+                    if (self.Node != null &&
+                        self.Node.Property('NXKit.XForms.Select1', 'SelectedId') != null) {
+                        var id = self.Node.Property('NXKit.XForms.Select1', 'SelectedId').ValueAsString();
+                        var ls = self.Selectables;
+                        for (var i = 0; i < ls.length; i++)
+                            if (ls[i].Id == id)
+                                return ls[i].Id;
+                    }
+                    else
+                        return null;
+                },
+                write: id => {
+                    var ls = self.Selectables;
+                    for (var i = 0; i < ls.length; i++)
+                        if (ls[i].Id == id)
+                            self.Node.Property('NXKit.XForms.Select1', 'SelectedId').ValueAsString(id);
+                },
+            });
         }
 
-        public get SelectedId(): KnockoutComputed<string> {
-            return Select1ViewModel.GetSelectedId(this.Node);
+        public get Selected(): KnockoutComputed<SelectUtil.Selectable> {
+            var self = this;
+
+            return ko.computed<SelectUtil.Selectable>({
+                read: () => {
+                    var id = self.SelectedId();
+                    var ls = self.Selectables;
+                    for (var i = 0; i < ls.length; i++)
+                        if (ls[i].Id == id)
+                            return ls[i];
+
+                    return null;
+                },
+                write: _ => {
+                    self.SelectedId(_.Id);
+                },
+            });
         }
 
     }

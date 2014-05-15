@@ -13,7 +13,7 @@
                         var v2 = ko.unwrap(valueAccessor());
                         if (typeof v1 === 'string') {
                             if (v1 != v2)
-                                valueAccessor()(v1);
+                                valueAccessor().SelectedId = v1;
                         }
                     },
                 });
