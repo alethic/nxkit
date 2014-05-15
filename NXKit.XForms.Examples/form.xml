@@ -168,7 +168,6 @@
               <xf:value>true</xf:value>
             </xf:item>
           </xf:select1>
-        </xf:group>
         <xf:group ref="d:healthinfo">
           <xf:input ref="d:condition">
             <xf:label>Condition</xf:label>
@@ -188,6 +187,7 @@
           <xf:input ref="d:physicianphonenumber">
             <xf:label>Physician Phone Number</xf:label>
           </xf:input>
+        </xf:group>
         </xf:group>
       </xf:repeat>
     </xf:group>

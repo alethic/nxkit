@@ -1,15 +1,15 @@
 ﻿interface JQuery {
 
-    dropdown(): JQuery;
-    dropdown(args: any): JQuery;
-    dropdown(arg: string, opts: any): JQuery;
+    dropdown(): any;
+    dropdown(args: any): any;
+    dropdown(arg: string, opts: any): any;
 
-    checkbox(): JQuery;
-    checkbox(args: any): JQuery;
-    checkbox(arg: string, opts: any): JQuery;
+    checkbox(): any;
+    checkbox(args: any): any;
+    checkbox(arg: string, opts: any): any;
 
-    modal(): JQuery;
-    modal(args: any): JQuery;
-    modal(arg: string, opts: any): JQuery;
+    modal(): any;
+    modal(args: any): any;
+    modal(arg: string, opts: any): any;
 
 }
