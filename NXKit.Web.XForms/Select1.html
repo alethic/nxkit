@@ -31,7 +31,23 @@ event: {
 
         <div class="body">
             <input type="hidden" />
-            <div class="text">Select</div>
+            <div class="text">
+                <!-- ko if: Selected -->
+                <!-- ko with: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nxkit_template -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko ifnot: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nxkit_template -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </div>
+            <i class="dropdown icon"></i>
             <div class="menu" data-bind="foreach: Selectables">
                 <div class="item" data-bind="attr: { 'data-value': Id }">
                     <!-- ko with: Label -->

@@ -20,7 +20,7 @@
             <xf:bind ref="d:secondary_relevant"
                      relevant="../d:secondary='true'" />
             <xf:bind ref="d:premium"
-                     calculate="(number(instance('misc')/d:rate) * number(instance('primaryelections')/d:term-life/d:coverage-amount)) div 10000" />
+                     calculate="round((number(instance('misc')/d:rate) * number(instance('primaryelections')/d:term-life/d:coverage-amount)) div 10000)" />
         </xf:bind>
         <xf:instance id="primaryperson"
                      src="primaryperson.xml" />
@@ -349,7 +349,22 @@
             </f:table>
             <f:p>* Renewal rates only</f:p>
             <f:p>
-                <xf:output value="d:coverage-amount"/> X <xf:output value="instance('misc')/d:rate"/> ÷ 10,000 = <xf:output value="instance('misc')/d:premium" />
+            <xf:select1 ref="d:coverage-amount"
+                        appearance="compact">
+                <xf:label>Coverage Amount</xf:label>
+                <xf:item>
+                    <xf:label>$75,000</xf:label>
+                    <xf:value>75000</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>$100,000</xf:label>
+                    <xf:value>100000</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>$150,000</xf:label>
+                    <xf:value>150000</xf:value>
+                </xf:item>
+            </xf:select1> X $<xf:output value="instance('misc')/d:rate"/> ÷ $10,000 = $<xf:output value="format-number(instance('misc')/d:premium, '#,###.00')" /> / month
             </f:p>
         </xf:group>
         <xf:group ref="instance('primaryquestions')">

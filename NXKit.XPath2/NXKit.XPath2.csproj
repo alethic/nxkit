@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Functions\Flags.cs" />
+    <Compile Include="Functions\FormatNumber.cs" />
     <Compile Include="Functions\Matches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

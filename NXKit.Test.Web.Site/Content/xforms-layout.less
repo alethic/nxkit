@@ -1,0 +1,139 @@
+﻿@import 'semantic.less';
+@import 'xforms.less';
+
+.xforms-layout-form {
+
+    > .contents {
+        
+        .flex-container(767px);
+
+        > .item > * {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+
+        > .item:first-child > * ,
+        > .item:last-child > *  {
+            margin-top: initial;
+        }
+            
+        > .item[data-nx-name='{http://schemas.nxkit.org/2014/xforms-layout}section'] {
+            flex: 767px 1;
+        }
+        
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}trigger'],
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}submit'] {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            padding-left: 1em;
+        }
+
+    }
+
+}
+
+.xforms-layout-section {
+
+    > .label {
+        &:extend(.ui.header all);
+        &:extend(.ui.large.header all);
+        &:extend(.ui.dividing.header all);
+    }
+
+    > .contents {
+        
+        .flex-container(767px);
+
+        > .item > *  {
+            margin-top: 1em !important;
+            margin-bottom: 1em !important;
+        }
+
+        > .item:first-child > * ,
+        > .item:last-child > *  {
+            margin-top: initial;
+        }
+            
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}group'] {
+            flex: 767px 1;
+        }
+        
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}trigger'],
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}submit'] {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            padding-left: 1em;
+        }
+
+    }
+
+}
+
+.xforms-layout-section > .contents > .item > .xforms-group {
+    .xforms-group-primary();
+}
+
+.xforms-layout-section > .contents > .item > .xforms-repeat > .item > .xforms-group {
+    .xforms-group-primary();
+}
+
+.xforms-layout-section > .contents > .item > .xforms-group > .contents > .item > .xforms-group {
+    .xforms-group-secondary();
+}
+
+.xforms-layout-section > .contents > .item > .xforms-repeat > .item > .xforms-group > .contents > .item > .xforms-group {
+    .xforms-group-secondary();
+}
+
+.xforms-layout-paragraph {
+    
+    .xforms-select1 {
+        &:extend(.ui.inline.dropdown all);
+
+        > .label {
+            display: none;
+        }
+
+    }
+
+}
+
+.xforms-layout-segment {
+
+    > .contents {
+        &:extend(.ui.segment all);
+    }
+}
+
+.xforms-layout-list {
+
+    > .contents {
+        
+        ul {
+            &:extend(.ui.list all);
+            &:extend(.ui.bulleted.list all);
+        }
+
+    }
+
+}
+
+.xforms-layout-table {
+    &:extend(.ui.table all);
+    &:extend(.ui.table.segment all);
+    &:extend(.ui.celled.table all);
+
+    td {
+        -webkit-transition: all 0.1s ease-out;
+        -moz-transition: all 0.1s ease-out;
+        transition: all 0.1s ease-out;
+    }
+
+    td:hover,
+    th:hover {
+        cursor: pointer;
+        background-color: #E0E0E0;
+        color: rgba(50, 50, 50, 0.9);
+    }
+
+}

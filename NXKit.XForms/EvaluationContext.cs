@@ -126,19 +126,22 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(expression != null);
 
             var nv = modelItem.CreateNavigator();
-            var nd = nv.Evaluate(expression, new iter3(position, size, nv));
+            var nd = nv.Evaluate(expression, new Iterator(position, size, nv));
 
             return ConvertXPath(nd, resultType);
         }
 
-        class iter3 : XPathNodeIterator
+        /// <summary>
+        /// Private <see cref="XPathNodeIterator"/> implementation that exposes the position and size context instances.
+        /// </summary>
+        class Iterator : XPathNodeIterator
         {
 
             readonly int position;
             readonly int size;
             readonly XPathNavigator n;
 
-            public iter3(int position, int size, XPathNavigator n)
+            public Iterator(int position, int size, XPathNavigator n)
             {
                 this.position = position;
                 this.size = size;
@@ -160,16 +163,16 @@ namespace NXKit.XForms
                 get { return size; }
             }
 
-
             public override XPathNodeIterator Clone()
             {
-                return new iter3(position, size, n);
+                return new Iterator(position, size, n);
             }
 
             public override bool MoveNext()
             {
                 throw new InvalidOperationException();
             }
+
         }
 
         /// <summary>

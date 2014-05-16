@@ -270,6 +270,7 @@
     <Content Include="packages.config" />
     <Content Include="Content\semantic.less" />
     <Content Include="Examples\Post.ashx" />
+    <Content Include="Content\xforms-layout.less" />
     <None Include="Properties\PublishProfiles\nxkit.pubxml" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
