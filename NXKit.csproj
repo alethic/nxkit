@@ -124,23 +124,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeAccessor.cs" />
-    <Compile Include="Composition\Container.cs" />
-    <Compile Include="Composition\EmptyExportProvider.cs" />
-    <Compile Include="Composition\ExportProviderExtensions.cs" />
-    <Compile Include="Composition\ObjectContainer.cs" />
-    <Compile Include="Composition\HostContainer.cs" />
-    <Compile Include="Composition\GlobalContainer.cs" />
-    <Compile Include="Composition\IContainer.cs" />
-    <Compile Include="Composition\IGlobalContainer.cs" />
-    <Compile Include="Composition\IObjectContainer.cs" />
-    <Compile Include="Composition\IHostContainer.cs" />
-    <Compile Include="Composition\IScopeMetadata.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Composition\Scope.cs" />
     <Compile Include="Composition\ScopeCatalog.cs" />
-    <Compile Include="Composition\ScopeExportProvider.cs" />
-    <Compile Include="Composition\ScopeHelper.cs" />
-    <Compile Include="Composition\ScopeImportDefinition.cs" />
-    <Compile Include="Composition\ScopePartDefinition.cs" />
     <Compile Include="ContainerInterfaceProvider.cs" />
     <Compile Include="DefaultInvoker.cs" />
     <Compile Include="Diagnostics\ITypeProxyProvider.cs" />
@@ -160,7 +146,6 @@
     <Compile Include="IOnSave.cs" />
     <Compile Include="ITextExtension.cs" />
     <Compile Include="IDocumentExtension.cs" />
-    <Compile Include="InvokerLayerAttribute.cs" />
     <Compile Include="TextExtensionAttribute.cs" />
     <Compile Include="DocumentExtensionAttribute.cs" />
     <Compile Include="ElementExtensionAttribute.cs" />
@@ -183,7 +168,6 @@
     <Compile Include="IO\IOService.cs" />
     <Compile Include="IO\IOResponse.cs" />
     <Compile Include="IO\WebTransport.cs" />
-    <Compile Include="ObjectContainerAnnotation.cs" />
     <Compile Include="ObjectAnnotation.cs" />
     <Compile Include="DocumentAnnotation.cs" />
     <Compile Include="IInterfacePredicate.cs" />
@@ -226,7 +210,7 @@
     <Compile Include="Util\MediaRange.cs" />
     <Compile Include="Util\ObjectExtensions.cs" />
     <Compile Include="Util\StringExtensions.cs" />
-    <Compile Include="CompositionUtil.cs" />
+    <Compile Include="Composition\CompositionUtil.cs" />
     <Compile Include="InterfaceProviderBase.cs" />
     <Compile Include="Xml\BaseUriAnnotation.cs" />
     <Compile Include="Xml\IOXmlReader.cs" />

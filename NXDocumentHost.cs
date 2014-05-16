@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-
 using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.IO;
@@ -36,17 +35,13 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
-            return Compose(catalog, exports, (catalog_, global, host) =>
-            {
-                return new NXDocumentHost(
-                    XNodeAnnotationSerializer.Deserialize(
-                        XDocument.Load(
-                            reader,
-                            LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
-                    catalog_,
-                    global,
-                    host);
-            });
+            return new NXDocumentHost(host =>
+                XNodeAnnotationSerializer.Deserialize(
+                    XDocument.Load(
+                        reader,
+                        LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
+                catalog,
+                exports);
         }
 
         /// <summary>
@@ -123,19 +118,15 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            return Compose(catalog, exports, (catalog_, global, host) =>
-            {
-                return new NXDocumentHost(
-                    XNodeAnnotationSerializer.Deserialize(
-                        XDocument.Load(
-                            NXKit.Xml.IOXmlReader.Create(
-                                host.GetExportedValue<IIOService>(),
-                                uri),
-                            LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
-                    catalog_,
-                    global,
-                    host);
-            });
+            return new NXDocumentHost(host =>
+                XNodeAnnotationSerializer.Deserialize(
+                    XDocument.Load(
+                        NXKit.Xml.IOXmlReader.Create(
+                            host.Container.GetExportedValue<IIOService>(),
+                            uri),
+                        LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
+                catalog,
+                exports);
         }
 
         /// <summary>
@@ -177,78 +168,83 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Invokes a method, passing it the appropriate composition containers.
+        /// Gets the <see cref="CompositionConfiguration"/> for the given input.
         /// </summary>
         /// <param name="catalog"></param>
         /// <param name="exports"></param>
-        /// <param name="func"></param>
         /// <returns></returns>
-        static NXDocumentHost Compose(
-            ComposablePartCatalog catalog,
-            ExportProvider exports,
-            Func<ComposablePartCatalog, CompositionContainer, CompositionContainer, NXDocumentHost> func)
+        static CompositionConfiguration GetConfiguration(ComposablePartCatalog catalog, ExportProvider exports)
         {
-            Contract.Requires<ArgumentNullException>(func != null);
+            // default configuration
+            if (catalog == null &&
+                exports == null)
+                return CompositionConfiguration.Default;
 
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? new CompositionContainer();
+            // default catalogs
+            if (catalog == null)
+                return new CompositionConfiguration(
+                    CompositionUtil.DefaultGlobalCatalog,
+                    CompositionUtil.DefaultHostCatalog,
+                    CompositionUtil.DefaultObjectCatalog,
+                    exports ?? new CompositionContainer());
 
-            // global container, contains all exports that are global in nature
-            var global = new CompositionContainer(
-                new ScopeCatalog(catalog, Scope.Global),
-                exports);
-
-            // host container, contains all exports that are host scoped, and catalog of host scoped parts
-            var host = new CompositionContainer(
-                new ScopeCatalog(catalog, Scope.Host),
-                global);
-
-            var _ = func(catalog, global, host);
-            if (_ == null)
-                throw new NullReferenceException();
-
-            return _;
+            // otherwise, generate new
+            return new CompositionConfiguration(
+                catalog,
+                exports ?? new CompositionContainer());
         }
 
-        bool disposed;
-        readonly GlobalContainer global;
-        readonly HostContainer host;
+
+        readonly CompositionConfiguration configuration;
+        readonly CompositionContainer container;
         readonly IInvoker invoker;
         readonly ITraceService trace;
         readonly XDocument xml;
+
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
         /// <param name="catalog"></param>
-        /// <param name="global"></param>
-        /// <param name="host"></param>
+        /// <param name="exports"></param>
         NXDocumentHost(
-            XDocument xml,
+            Func<NXDocumentHost, XDocument> xml,
             ComposablePartCatalog catalog,
-            CompositionContainer global,
-            CompositionContainer host)
+            ExportProvider exports)
         {
             Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentNullException>(catalog != null);
-            Contract.Requires<ArgumentNullException>(global != null);
-            Contract.Requires<ArgumentNullException>(host != null);
 
-            this.global = new GlobalContainer(global, catalog);
-            this.host = new HostContainer(host, catalog);
-            this.invoker = host.GetExportedValue<IInvoker>();
-            this.trace = host.GetExportedValue<ITraceService>();
-            this.xml = xml;
+            // configure composition
+            this.configuration = GetConfiguration(catalog, exports);
+            this.container = new CompositionContainer(configuration.HostCatalog, new CompositionContainer(configuration.GlobalCatalog, configuration.Exports));
+            this.container.GetExportedValue<DocumentEnvironment>().SetHost(this);
 
-            // ensure XML document has access to document host
+            // required services
+            this.invoker = container.GetExportedValue<IInvoker>();
+            this.trace = container.GetExportedValue<ITraceService>();
+
+            // initialize xml
+            this.xml = xml(this);
             this.xml.AddAnnotation(this);
-            this.xml.AddAnnotation(this.host);
-
-            // ensure document host is available to exports
-            this.host.GetExportedValue<DocumentEnvironment>().SetHost(this);
 
             Initialize();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="CompositionConfiguration"/> for the host.
+        /// </summary>
+        public CompositionConfiguration Configuration
+        {
+            get { return configuration; }
+        }
+
+        /// <summary>
+        /// Gets the host configured <see cref="CompositionContainer"/>.
+        /// </summary>
+        public CompositionContainer Container
+        {
+            get { return container; }
         }
 
         /// <summary>
@@ -322,14 +318,6 @@ namespace NXKit
                     invoker.Invoke(() => load.Interface<IOnLoad>().Load());
                     load.AnnotationOrCreate<ObjectAnnotation>().Load = false;
                 }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IServiceProvider"/> used to resolve services.
-        /// </summary>
-        public CompositionContainer Container
-        {
-            get { return host.Exports; }
         }
 
         /// <summary>
@@ -419,14 +407,6 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Gets whether or not the <see cref="NXDocumentHost"/> has been disposed.
-        /// </summary>
-        public bool Disposed
-        {
-            get { return disposed; }
-        }
-
-        /// <summary>
         /// Disposes of the <see cref="NXDocumentHost"/>.
         /// </summary>
         public void Dispose()
@@ -446,12 +426,8 @@ namespace NXKit
             }
 
             // dispose of host container
-            if (host != null)
-                host.Dispose();
-
-            // dispose of global container
-            if (global != null)
-                global.Dispose();
+            if (container != null)
+                container.Dispose();
         }
 
         /// <summary>
