@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
@@ -39,12 +41,25 @@ namespace NXKit.Web.UI
 
             public void ReadXml(XmlReader reader)
             {
-
+                if (reader.MoveToContent() == XmlNodeType.Element &&
+                    reader.LocalName == "trace-sink" &&
+                    reader.ReadToDescendant("messages"))
+                    foreach (var messageXml in XElement.Load(reader.ReadSubtree()).Elements("message"))
+                        messages.Enqueue(new TraceMessage(
+                            (DateTime)messageXml.Attribute("timestamp"),
+                            (Severity)Enum.Parse(typeof(Severity), (string)messageXml.Attribute("severity")),
+                            (string)messageXml.Attribute("text")));
             }
 
             public void WriteXml(XmlWriter writer)
             {
-
+                new XElement("messages",
+                    messages
+                        .Select(j => new XElement("message",
+                            new XAttribute("timestamp", j.Timestamp),
+                            new XAttribute("severity", j.Severity),
+                            new XAttribute("text", j.Text))))
+                    .WriteTo(writer);
             }
 
         }

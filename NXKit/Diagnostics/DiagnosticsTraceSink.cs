@@ -1,15 +1,18 @@
 ﻿using System.ComponentModel.Composition;
 using System.Diagnostics;
 
+using NXKit.Composition;
+
 namespace NXKit.Diagnostics
 {
 
     [Export(typeof(ITraceSink))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Global)]
     public class DiagnosticsTraceSink :
         ITraceSink
     {
 
-        TraceSource trace = new TraceSource("NXKit");
+        static readonly TraceSource trace = new TraceSource("NXKit");
 
         public void Debug(object data)
         {

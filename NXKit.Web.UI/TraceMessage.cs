@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -28,8 +29,20 @@ namespace NXKit.Web.UI
         /// <param name="severity"></param>
         /// <param name="text"></param>
         public TraceMessage(Severity severity, string text)
+            : this(DateTime.UtcNow, severity, text)
         {
-            this.timestamp = DateTime.UtcNow;
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="timestamp"></param>
+        /// <param name="severity"></param>
+        /// <param name="text"></param>
+        public TraceMessage(DateTime timestamp, Severity severity, string text)
+        {
+            this.timestamp = timestamp;
             this.severity = severity;
             this.text = text;
         }

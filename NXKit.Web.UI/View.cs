@@ -11,8 +11,10 @@ using System.Text;
 using System.Web.UI;
 using System.Xml;
 using System.Xml.Linq;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using NXKit.Web.Serialization;
 using NXKit.Xml;
 
@@ -391,8 +393,8 @@ namespace NXKit.Web.UI
 
             var str = JsonConvert.SerializeObject(new
             {
-                Save = CreateSaveString(),
                 Data = CreateDataJObject(),
+                Save = CreateSaveString(),
             });
 
             // dispose of the host
