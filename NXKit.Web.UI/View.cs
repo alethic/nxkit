@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web.UI;
+using System.Xml;
 using System.Xml.Linq;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
-using NXKit.Composition;
-using NXKit.Diagnostics;
 using NXKit.Web.Serialization;
 using NXKit.Xml;
 
@@ -120,7 +118,13 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(save != null);
 
-            return NXDocumentHost.Load(new StringReader(save));
+            using (var stm = new MemoryStream(Encoding.ASCII.GetBytes(save)))
+            using (var b64 = new CryptoStream(stm, new FromBase64Transform(), CryptoStreamMode.Read))
+            using (var cmp = new DeflateStream(b64, CompressionMode.Decompress))
+            using (var rdr = XmlDictionaryReader.CreateBinaryReader(cmp, new XmlDictionaryReaderQuotas()))
+            {
+                return NXDocumentHost.Load(rdr);
+            }
         }
 
         /// <summary>
@@ -152,10 +156,19 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         string CreateSaveString()
         {
-            using (var wrt = new StringWriter())
+            using (var stm = new MemoryStream())
+            using (var b64 = new CryptoStream(stm, new ToBase64Transform(), CryptoStreamMode.Write))
+            using (var cmp = new DeflateStream(b64, CompressionMode.Compress))
+            using (var xml = XmlDictionaryWriter.CreateBinaryWriter(cmp))
             {
-                host.Save(wrt);
-                return wrt.ToString();
+                host.Save(xml);
+
+                // flush output
+                xml.Dispose();
+                cmp.Dispose();
+                b64.Dispose();
+
+                return Encoding.ASCII.GetString(stm.ToArray());
             }
         }
 
