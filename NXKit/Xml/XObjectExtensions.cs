@@ -76,7 +76,7 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentNullException>(self.Document != null);
 
             return self.Document.AnnotationOrCreate<ObjectIdCache>()
-                .cache.GetOrAdd(objectId, () => 
+                .cache.GetOrAdd(objectId, () =>
                     self.Document.DescendantNodesAndSelf()
                         .FirstOrDefault(i => i.GetObjectId() == objectId));
         }
@@ -351,21 +351,21 @@ namespace NXKit.Xml
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            return Interfaces(node, node.Container());
+            return Interfaces(node, node.Exports());
         }
 
         /// <summary>
         /// Implements Interfaces, allowing the specification of an export provider.
         /// </summary>
         /// <param name="node"></param>
-        /// <param name="container"></param>
+        /// <param name="exports"></param>
         /// <returns></returns>
-        internal static IEnumerable<object> Interfaces(this XObject node, IContainer container)
+        static IEnumerable<object> Interfaces(this XObject node, ExportProvider exports)
         {
             Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(exports != null);
 
-            return container
+            return exports
                 .GetExportedValues<IInterfaceProvider>()
                 .SelectMany(i => i.GetInterfaces(node));
         }
@@ -433,24 +433,32 @@ namespace NXKit.Xml
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static IContainer Container(this XObject self)
+        public static ExportProvider Exports(this XObject self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Ensures(Contract.Result<IContainer>() != null);
+            Contract.Ensures(Contract.Result<ExportProvider>() != null);
 
             // get or create the new object container annotation
-            return self.AnnotationOrCreate<ObjectContainer>(() =>
+            return self.AnnotationOrCreate<ExportProvider>(() =>
             {
-                var host = self.Document.Annotation<HostContainer>();
+                var host = self.Document.Annotation<NXDocumentHost>();
                 if (host == null)
                     throw new InvalidOperationException();
 
-                return new ObjectContainer(
-                    self,
-                    new CompositionContainer(
-                        new ScopeCatalog(host.Catalog, Scope.Object),
-                        host.Exports),
-                    host.Catalog);
+                var cont = new CompositionContainer(host.Configuration.ObjectCatalog, host.Container);
+
+                cont.WithExport<XObject>(self);
+
+                if (self is XDocument)
+                    cont.WithExport<XDocument>((XDocument)self);
+                if (self is XElement)
+                    cont.WithExport<XElement>((XElement)self);
+                if (self is XNode)
+                    cont.WithExport<XNode>((XNode)self);
+                if (self is XAttribute)
+                    cont.WithExport<XAttribute>((XAttribute)self);
+
+                return cont;
             });
         }
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -97,42 +98,34 @@ namespace NXKit
             defaultDescriptors = descriptors;
         }
 
-        readonly IHostContainer container;
         readonly IEnumerable<IInterfacePredicate> predicates;
         readonly List<InterfaceDescriptor> descriptors;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="container"></param>
         /// <param name="predicates"></param>
         [ImportingConstructor]
         public DefaultInterfaceProvider(
-            IHostContainer container,
             [ImportMany] IEnumerable<IInterfacePredicate> predicates)
-            : this(container, predicates, defaultDescriptors)
+            : this(predicates, defaultDescriptors)
         {
-            Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(predicates != null);
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="container"></param>
         /// <param name="catalog"></param>
         /// <param name="predicates"></param>
         /// <param name="descriptors"></param>
         public DefaultInterfaceProvider(
-            IHostContainer container,
             IEnumerable<IInterfacePredicate> predicates,
             List<InterfaceDescriptor> descriptors)
         {
-            Contract.Requires<ArgumentNullException>(container != null);
             Contract.Requires<ArgumentNullException>(predicates != null);
             Contract.Requires<ArgumentNullException>(descriptors != null);
 
-            this.container = container;
             this.predicates = predicates;
             this.descriptors = descriptors;
         }
@@ -184,7 +177,7 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(type != null);
 
-            var func = GetConstructor(obj, type, obj.Container());
+            var func = GetConstructor(obj, type, obj.Exports());
             if (func == null)
                 throw new InvalidOperationException("Could not find ctor for interface type.");
 
@@ -196,16 +189,16 @@ namespace NXKit
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="type"></param>
-        /// <param name="container"></param>
+        /// <param name="exports"></param>
         /// <returns></returns>
-        Func<object> GetConstructor(XObject obj, Type type, IContainer container)
+        Func<object> GetConstructor(XObject obj, Type type, ExportProvider exports)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(exports != null);
 
             return type.GetConstructors()
-                .Select(i => GetConstructorFunc(obj, type, i, container))
+                .Select(i => GetConstructorFunc(obj, type, i, exports))
                 .Where(i => i != null)
                 .OrderByDescending(i => i.Item2)
                 .Select(i => i.Item1)
@@ -220,14 +213,14 @@ namespace NXKit
         /// <param name="obj"></param>
         /// <param name="type"></param>
         /// <param name="ctor"></param>
-        /// <param name="container"></param>
+        /// <param name="exports"></param>
         /// <returns></returns>
-        Tuple<Func<object>, int> GetConstructorFunc(XObject obj, Type type, ConstructorInfo ctor, IContainer container)
+        Tuple<Func<object>, int> GetConstructorFunc(XObject obj, Type type, ConstructorInfo ctor, ExportProvider exports)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentNullException>(ctor != null);
-            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(exports != null);
 
             var p = ctor.GetParameters();
             var l = new object[p.Length];
@@ -244,7 +237,7 @@ namespace NXKit
                 }
                 else
                 {
-                    l[i] = GetConstructorParameterValue(obj, type, ctor, p[i], container);
+                    l[i] = GetConstructorParameterValue(obj, type, ctor, p[i], exports);
 
                     // increment filled parameter count
                     if (l[i] != null)
@@ -260,11 +253,11 @@ namespace NXKit
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
-        /// <param name="container"></param>
+        /// <param name="exports"></param>
         /// <returns></returns>
-        Func<T> BuildDelegate<T>(XObject obj, IContainer container)
+        Func<T> BuildDelegate<T>(XObject obj, ExportProvider exports)
         {
-            return () => (T)GetConstructorParameterValue(obj, typeof(T), container);
+            return () => (T)GetConstructorParameterValue(obj, typeof(T), exports);
         }
 
         /// <summary>
@@ -274,7 +267,7 @@ namespace NXKit
             "BuildDelegate",
             BindingFlags.NonPublic | BindingFlags.Instance,
             null,
-            new[] { typeof(XObject), typeof(IContainer) },
+            new[] { typeof(XObject), typeof(ExportProvider) },
             null);
 
         /// <summary>
@@ -284,15 +277,15 @@ namespace NXKit
         /// <param name="type"></param>
         /// <param name="ctor"></param>
         /// <param name="param"></param>
-        /// <param name="container"></param>
+        /// <param name="exports"></param>
         /// <returns></returns>
-        object GetConstructorParameterValue(XObject obj, Type type, ConstructorInfo ctor, ParameterInfo param, IContainer container)
+        object GetConstructorParameterValue(XObject obj, Type type, ConstructorInfo ctor, ParameterInfo param, ExportProvider exports)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentNullException>(ctor != null);
             Contract.Requires<ArgumentNullException>(param != null);
-            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(exports != null);
 
             // handle Lazy<T> references
             if (param.ParameterType.IsGenericType &&
@@ -304,7 +297,7 @@ namespace NXKit
 
                 // generate function that will query interfaces on demand
                 var func = BuildDelegateMethodInfo.MakeGenericMethod(interfaceType)
-                    .Invoke(this, new object[] { obj, container });
+                    .Invoke(this, new object[] { obj, exports });
 
                 // generate new Lazy<T>
                 return Activator.CreateInstance(param.ParameterType, new object[] { func });
@@ -320,11 +313,11 @@ namespace NXKit
 
                 // generate function that will query interfaces on demand
                 return BuildDelegateMethodInfo.MakeGenericMethod(interfaceType)
-                    .Invoke(this, new object[] { obj, container });
+                    .Invoke(this, new object[] { obj, exports });
             }
 
             // by default support only the container
-            return GetConstructorParameterValueFromContainer(obj, param, container);
+            return GetConstructorParameterValueFromContainer(obj, param, exports);
         }
 
         /// <summary>
@@ -332,13 +325,13 @@ namespace NXKit
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="type"></param>
-        /// <param name="container"></param>
+        /// <param name="exports"></param>
         /// <returns></returns>
-        object GetConstructorParameterValue(XObject obj, Type type, IContainer container)
+        object GetConstructorParameterValue(XObject obj, Type type, ExportProvider exports)
         {
             return
-                GetConstructorParameterValueFromInterface(obj, type, container) ??
-                GetConstructorParameterValueFromContainer(obj, type, container);
+                GetConstructorParameterValueFromInterface(obj, type, exports) ??
+                GetConstructorParameterValueFromContainer(obj, type, exports);
         }
 
         /// <summary>
@@ -347,7 +340,7 @@ namespace NXKit
         /// <param name="obj"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        object GetConstructorParameterValueFromInterface(XObject obj, Type type, IContainer container)
+        object GetConstructorParameterValueFromInterface(XObject obj, Type type, ExportProvider exports)
         {
             return obj
                 .Interfaces(type)
@@ -359,18 +352,18 @@ namespace NXKit
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="param"></param>
-        /// <param name="container"></param>
+        /// <param name="exports"></param>
         /// <returns></returns>
-        object GetConstructorParameterValueFromContainer(XObject obj, ParameterInfo param, IContainer container)
+        object GetConstructorParameterValueFromContainer(XObject obj, ParameterInfo param, ExportProvider exports)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(param != null);
-            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(exports != null);
 
             return GetConstructorParameterValueFromContainer(
                 obj,
                 param.ParameterType,
-                container);
+                exports);
         }
 
         /// <summary>
@@ -378,19 +371,19 @@ namespace NXKit
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="type"></param>
-        /// <param name="container"></param>
+        /// <param name="exports"></param>
         /// <returns></returns>
-        object GetConstructorParameterValueFromContainer(XObject obj, Type type, IContainer container)
+        object GetConstructorParameterValueFromContainer(XObject obj, Type type, ExportProvider exports)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
-            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(exports != null);
 
             var paramContractType = GetContractType(type);
             var paramContractName = GetContractName(paramContractType);
             var paramTypeIdentity = AttributedModelServices.GetTypeIdentity(paramContractType);
 
             // resolve all available instances
-            var instances = container.GetExports(new ContractBasedImportDefinition(
+            var instances = exports.GetExports(new ContractBasedImportDefinition(
                     paramContractName,
                     paramTypeIdentity,
                     Enumerable.Empty<KeyValuePair<string, Type>>(),

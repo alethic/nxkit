@@ -12,7 +12,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Captures invocations to handle unwrapping and invoking the deferred update behavior.
     /// </summary>
-    [InvokerLayer]
+    [Export(typeof(IInvokerLayer))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class DeferredUpdateInvokerLayer :
         IInvokerLayer
     {

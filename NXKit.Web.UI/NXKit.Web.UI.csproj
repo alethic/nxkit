@@ -127,6 +127,8 @@
     <Compile Include="HostEventArgs.cs" />
     <Compile Include="HostUnloadingEventHandler.cs" />
     <Compile Include="HostLoadedEventHandler.cs" />
+    <Compile Include="TraceMessage.cs" />
+    <Compile Include="TraceSink.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\WebResources.cs" />

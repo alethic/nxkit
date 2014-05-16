@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
@@ -9,11 +10,10 @@ using System.Linq;
 using System.Reflection;
 using System.Web.UI;
 using System.Xml.Linq;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
-
+using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.Web.Serialization;
 using NXKit.Xml;
@@ -30,135 +30,10 @@ namespace NXKit.Web.UI
         IScriptControl
     {
 
-        /// <summary>
-        /// Log item to be output to the client.
-        /// </summary>
-        [Serializable]
-        class Message
-        {
-
-            DateTime timestamp;
-            Severity severity;
-            string text;
-
-            /// <summary>
-            /// Initializes a new instance.
-            /// </summary>
-            public Message()
-            {
-                this.timestamp = DateTime.UtcNow;
-                this.severity = Severity.Information;
-                this.text = null;
-            }
-
-            /// <summary>
-            /// Initializes a new instance.
-            /// </summary>
-            /// <param name="severity"></param>
-            /// <param name="text"></param>
-            public Message(Severity severity, string text)
-            {
-                this.timestamp = DateTime.UtcNow;
-                this.severity = severity;
-                this.text = text;
-            }
-
-            public DateTime Timestamp
-            {
-                get { return timestamp; }
-                set { timestamp = value; }
-            }
-
-            [JsonConverter(typeof(StringEnumConverter))]
-            public Severity Severity
-            {
-                get { return severity; }
-                set { severity = value; }
-            }
-
-            public string Text
-            {
-                get { return text; }
-                set { text = value; }
-            }
-
-        }
-
-        /// <summary>
-        /// Captures trace messages from the <see cref="NXDocumentHost"/> to be output to the client.
-        /// </summary>
-        class TraceSink :
-            ITraceSink
-        {
-
-            readonly LinkedList<Message> messages;
-
-            /// <summary>
-            /// Initializes a new instance.
-            /// </summary>
-            /// <param name="messages"></param>
-            public TraceSink(LinkedList<Message> messages)
-            {
-                Contract.Requires<ArgumentNullException>(messages != null);
-
-                this.messages = messages;
-            }
-
-            public void Debug(object data)
-            {
-                messages.AddLast(new Message(Severity.Verbose, data.ToString()));
-            }
-
-            public void Debug(string message)
-            {
-                messages.AddLast(new Message(Severity.Verbose, message));
-            }
-
-            public void Debug(string format, params object[] args)
-            {
-                messages.AddLast(new Message(Severity.Verbose, string.Format(format, args)));
-            }
-
-            public void Information(object data)
-            {
-                messages.AddLast(new Message(Severity.Information, data.ToString()));
-            }
-
-            public void Information(string message)
-            {
-                messages.AddLast(new Message(Severity.Information, message));
-            }
-
-            public void Information(string format, params object[] args)
-            {
-                messages.AddLast(new Message(Severity.Information, string.Format(format, args)));
-            }
-
-            public void Warning(object data)
-            {
-                messages.AddLast(new Message(Severity.Warning, data.ToString()));
-            }
-
-            public void Warning(string message)
-            {
-                messages.AddLast(new Message(Severity.Warning, message));
-            }
-
-            public void Warning(string format, params object[] args)
-            {
-                messages.AddLast(new Message(Severity.Warning, string.Format(format, args)));
-            }
-
-        }
 
         string cssClass;
         string validationGroup;
-        ComposablePartCatalog catalog;
-        ExportProvider exports;
-        CompositionContainer container;
         NXDocumentHost host;
-        LinkedList<Message> messages;
-        LinkedList<Message> messages_;
         LinkedList<string> scripts;
 
         /// <summary>
@@ -228,24 +103,6 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="ComposablePartCatalog"/> used to resolve exports.
-        /// </summary>
-        public ComposablePartCatalog Catalog
-        {
-            get { return catalog; }
-            set { catalog = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a <see cref="ExportProvider"/> used to resolve exports.
-        /// </summary>
-        public ExportProvider Exports
-        {
-            get { return exports; }
-            set { exports = value; }
-        }
-
-        /// <summary>
         /// Registers the given script snippet for execution upon completion of the current page request or client
         /// callback.
         /// </summary>
@@ -263,12 +120,7 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(save != null);
 
-            // extend provided container
-            container = (exports != null ? new CompositionContainer(exports) : new CompositionContainer())
-                .WithExport<ITraceSink>(new TraceSink(messages ?? (messages = new LinkedList<Message>())));
-
-            // load document
-            return NXDocumentHost.Load(new StringReader(save), catalog, container);
+            return NXDocumentHost.Load(new StringReader(save));
         }
 
         /// <summary>
@@ -279,11 +131,7 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            // extend provided containeraven
-            container = (exports != null ? new CompositionContainer(exports) : new CompositionContainer())
-                .WithExport<ITraceSink>(new TraceSink(messages ?? (messages = new LinkedList<Message>())));
-
-            host = NXDocumentHost.Load(uri, catalog, container);
+            host = NXDocumentHost.Load(uri);
             OnHostLoaded(HostEventArgs.Empty);
         }
 
@@ -331,7 +179,7 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         JToken CreateMessagesJObject()
         {
-            return messages_ != null ? JArray.FromObject(messages_) : new JArray();
+            return JArray.FromObject(host.Container.GetExportedValue<TraceSink>().Messages);
         }
 
         /// <summary>
@@ -390,10 +238,6 @@ namespace NXKit.Web.UI
                         if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
                             using (var rdr = new StreamReader(template.Open()))
                                 Page.ClientScript.RegisterClientScriptBlock(typeof(View), template.Name, rdr.ReadToEnd(), false);
-
-            // messages to be sent
-            messages_ = messages;
-            messages = null;
         }
 
         /// <summary>
@@ -406,7 +250,6 @@ namespace NXKit.Web.UI
             host = (string)o[0] != null ? LoadDocumentHost((string)o[0]) : null;
             cssClass = (string)o[1];
             validationGroup = (string)o[2];
-            messages = (LinkedList<Message>)o[3];
         }
 
         /// <summary>
@@ -420,7 +263,6 @@ namespace NXKit.Web.UI
                 !Visible ? CreateSaveString() : null,
                 cssClass,
                 validationGroup,
-                messages,
             };
         }
 
@@ -530,10 +372,6 @@ namespace NXKit.Web.UI
         string ICallbackEventHandler.GetCallbackResult()
         {
             host.Invoke();
-
-            // dump messages
-            messages_ = messages;
-            messages = null;
 
             // allow final shut down
             OnHostUnloading(HostEventArgs.Empty);

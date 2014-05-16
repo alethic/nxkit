@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using NXKit.Util;
 
 namespace NXKit.Composition
 {
@@ -20,8 +19,8 @@ namespace NXKit.Composition
         /// </summary>
         public const string ScopeMetadataKey = "NXKit.Scope";
 
-        readonly ComposablePartCatalog parent;
         readonly Scope scope;
+        readonly IQueryable<ComposablePartDefinition> parts;
 
         /// <summary>
         /// Initializes a new instance.
@@ -32,26 +31,25 @@ namespace NXKit.Composition
         {
             Contract.Requires<ArgumentNullException>(parent != null);
 
-            this.parent = parent;
             this.scope = scope;
+            this.parts = parent.Where(i => Filter(i)).ToList().AsQueryable();
+        }
+
+        /// <summary>
+        /// Returns <c>true</c> if the given <see cref="ComposablePartDefinition"/> describes a part for the given
+        /// <see cref="Scope"/>.
+        /// </summary>
+        /// <param name="definition"></param>
+        /// <param name="scope"></param>
+        /// <returns></returns>
+        bool Filter(ComposablePartDefinition definition)
+        {
+            return !definition.ContainsPartMetadataWithKey(ScopeMetadataKey) || definition.ContainsPartMetadata(ScopeMetadataKey, scope);
         }
 
         public override IQueryable<ComposablePartDefinition> Parts
         {
-            get { return GetParts(); }
-        }
-
-        IQueryable<ComposablePartDefinition> GetParts()
-        {
-            return parent.Parts
-                .Where(i => GetScope(i.Metadata) == scope)
-                .Buffer()
-                .AsQueryable();
-        }
-
-        Scope GetScope(IDictionary<string, object> metadata)
-        {
-            return (Scope)metadata.GetOrValue(ScopeMetadataKey, Scope.Global);
+            get { return parts; }
         }
 
     }

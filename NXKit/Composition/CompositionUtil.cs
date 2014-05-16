@@ -4,7 +4,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 
-namespace NXKit
+namespace NXKit.Composition
 {
 
     /// <summary>
@@ -15,6 +15,9 @@ namespace NXKit
 
         readonly static object sync = new object();
         static ComposablePartCatalog defaultCatalog;
+        static ScopeCatalog defaultGlobalCatalog;
+        static ScopeCatalog defaultHostCatalog;
+        static ScopeCatalog defaultObjectCatalog;
 
         /// <summary>
         /// Gets the default catalog.
@@ -36,6 +39,63 @@ namespace NXKit
                         defaultCatalog = new ApplicationCatalog();
 
             return defaultCatalog;
+        }
+
+        public static ScopeCatalog DefaultGlobalCatalog
+        {
+            get { return GetDefaultGlobalCatalog(); }
+        }
+
+        /// <summary>
+        /// Implements the getter for DefaultGlobalCatalog
+        /// </summary>
+        /// <returns></returns>
+        static ScopeCatalog GetDefaultGlobalCatalog()
+        {
+            if (defaultGlobalCatalog == null)
+                lock (sync)
+                    if (defaultGlobalCatalog == null)
+                        defaultGlobalCatalog = new ScopeCatalog(DefaultCatalog, Scope.Global);
+
+            return defaultGlobalCatalog;
+        }
+
+        public static ScopeCatalog DefaultHostCatalog
+        {
+            get { return GetDefaultHostCatalog(); }
+        }
+
+        /// <summary>
+        /// Implements the getter for DefaultHostCatalog
+        /// </summary>
+        /// <returns></returns>
+        static ScopeCatalog GetDefaultHostCatalog()
+        {
+            if (defaultHostCatalog == null)
+                lock (sync)
+                    if (defaultHostCatalog == null)
+                        defaultHostCatalog = new ScopeCatalog(DefaultCatalog, Scope.Host);
+
+            return defaultHostCatalog;
+        }
+
+        public static ScopeCatalog DefaultObjectCatalog
+        {
+            get { return GetDefaultObjectCatalog(); }
+        }
+
+        /// <summary>
+        /// Implements the getter for DefaultObjectCatalog
+        /// </summary>
+        /// <returns></returns>
+        static ScopeCatalog GetDefaultObjectCatalog()
+        {
+            if (defaultObjectCatalog == null)
+                lock (sync)
+                    if (defaultObjectCatalog == null)
+                        defaultObjectCatalog = new ScopeCatalog(DefaultCatalog, Scope.Object);
+
+            return defaultObjectCatalog;
         }
 
         /// <summary>
