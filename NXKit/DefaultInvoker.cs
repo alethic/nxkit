@@ -8,7 +8,8 @@ using NXKit.Composition;
 namespace NXKit
 {
 
-    [ScopeExport(typeof(IInvoker), Scope.Host)]
+    [Export(typeof(IInvoker))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class DefaultInvoker :
         IInvoker
     {

@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
-
 using NXKit.Util;
 
 namespace NXKit.Composition
@@ -11,13 +11,17 @@ namespace NXKit.Composition
     /// <summary>
     /// Filters a parenet catalog for exports marked for the given <see cref="Scope"/>.
     /// </summary>
-    class ScopeCatalog :
+    public class ScopeCatalog :
         ComposablePartCatalog
     {
 
+        /// <summary>
+        /// Gets the part metadata key to describe the scope.
+        /// </summary>
+        public const string ScopeMetadataKey = "NXKit.Scope";
+
         readonly ComposablePartCatalog parent;
         readonly Scope scope;
-        readonly IQueryable<ComposablePartDefinition> parts;
 
         /// <summary>
         /// Initializes a new instance.
@@ -30,21 +34,24 @@ namespace NXKit.Composition
 
             this.parent = parent;
             this.scope = scope;
-            this.parts = GetParts();
         }
 
         public override IQueryable<ComposablePartDefinition> Parts
         {
-            get { return parts; }
+            get { return GetParts(); }
         }
 
         IQueryable<ComposablePartDefinition> GetParts()
         {
             return parent.Parts
-                .Select(i => new ScopePartDefinition(i, scope))
-                .Where(i => i.ExportDefinitions.Any())
+                .Where(i => GetScope(i.Metadata) == scope)
                 .Buffer()
                 .AsQueryable();
+        }
+
+        Scope GetScope(IDictionary<string, object> metadata)
+        {
+            return (Scope)metadata.GetOrValue(ScopeMetadataKey, Scope.Global);
         }
 
     }

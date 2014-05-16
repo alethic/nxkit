@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
+
 using NXKit.Composition;
 
 namespace NXKit.DOMEvents
 {
 
-    [ScopeExport(typeof(IEventInstanceProvider), Scope.Host)]
+    [Export(typeof(IEventInstanceProvider))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class EventInstanceProvider :
         IEventInstanceProvider
     {

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 
-using NXKit.Composition;
-
 namespace NXKit
 {
 
@@ -12,7 +10,7 @@ namespace NXKit
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     [MetadataAttribute]
     public class InvokerLayerAttribute :
-        ScopeExportAttribute
+        ExportAttribute
     {
 
 
@@ -20,7 +18,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         public InvokerLayerAttribute()
-            : base(typeof(IInvokerLayer), Scope.Host)
+            : base(typeof(IInvokerLayer))
         {
 
         }

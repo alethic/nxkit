@@ -137,7 +137,6 @@
     <Compile Include="Composition\IScopeMetadata.cs" />
     <Compile Include="Composition\Scope.cs" />
     <Compile Include="Composition\ScopeCatalog.cs" />
-    <Compile Include="Composition\ScopeExportAttribute.cs" />
     <Compile Include="Composition\ScopeExportProvider.cs" />
     <Compile Include="Composition\ScopeHelper.cs" />
     <Compile Include="Composition\ScopeImportDefinition.cs" />

@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 
+using NXKit.Composition;
 using NXKit.Util;
 
 namespace NXKit.Scripting.EcmaScript
@@ -10,7 +11,8 @@ namespace NXKit.Scripting.EcmaScript
     /// <summary>
     /// Provides a ECMAScript implementation using the Google V8 engine.
     /// </summary>
-    [ScriptEngine]
+    [Export(typeof(IScriptEngine))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class V8ScriptEngine :
         IScriptEngine,
         IDisposable
@@ -24,8 +26,8 @@ namespace NXKit.Scripting.EcmaScript
         };
 
 
-        Func<NXDocumentHost> host;
-        Lazy<Microsoft.ClearScript.V8.V8ScriptEngine> engine;
+        readonly Func<NXDocumentHost> host;
+        readonly Lazy<Microsoft.ClearScript.V8.V8ScriptEngine> engine;
 
         /// <summary>
         /// Initializes a new instance.

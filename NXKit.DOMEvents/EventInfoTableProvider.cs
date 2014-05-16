@@ -10,7 +10,8 @@ using NXKit.Xml;
 namespace NXKit.DOMEvents
 {
 
-    [ScopeExport(typeof(IEventProvider), Scope.Host)]
+    [Export(typeof(IEventProvider))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class EventInfoTableProvider :
         IEventProvider
     {

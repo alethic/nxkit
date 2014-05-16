@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
+
 using NXKit.Composition;
 
 namespace NXKit.DOMEvents
@@ -12,7 +12,8 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Implements the <see cref="IEventFactory"/> interface.
     /// </summary>
-    [ScopeExport(typeof(IEventFactory), Scope.Host)]
+    [Export(typeof(IEventFactory))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class DefaultEventFactory :
         IEventFactory
     {

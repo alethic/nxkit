@@ -9,7 +9,8 @@ using NXKit.Composition;
 namespace NXKit
 {
 
-    [ScopeExport(typeof(IInterfaceProvider), Scope.Object)]
+    [Export(typeof(IInterfaceProvider))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ContainerInterfaceProvider :
         IInterfaceProvider
     {

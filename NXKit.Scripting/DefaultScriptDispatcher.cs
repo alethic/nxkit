@@ -9,7 +9,8 @@ using NXKit.Composition;
 namespace NXKit.Scripting
 {
 
-    [ScopeExport(typeof(IScriptDispatcher), Scope.Host)]
+    [Export(typeof(IScriptDispatcher))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class DefaultScriptDispatcher :
         IScriptDispatcher
     {

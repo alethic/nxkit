@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 
 using NXKit.Composition;
 using NXKit.Xml;
@@ -9,7 +10,8 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Handles exceptions capable of raising events.
     /// </summary>
-    [ScopeExport(typeof(IExceptionHandler), Scope.Global)]
+    [Export(typeof(IExceptionHandler))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Global)]
     public class DOMEventExceptionHandler :
         IExceptionHandler
     {
