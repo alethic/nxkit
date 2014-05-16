@@ -297,11 +297,10 @@ namespace NXKit
 
                 foreach (var init in inits)
                     if (init.Document != null)
-                        invoker.Invoke(() =>
-                        {
-                            init.Interface<IOnInit>().Init();
-                            init.AnnotationOrCreate<ObjectAnnotation>().Init = false;
-                        });
+                    {
+                        invoker.Invoke(() => init.Interface<IOnInit>().Init());
+                        init.AnnotationOrCreate<ObjectAnnotation>().Init = false;
+                    }
             }
         }
 
@@ -319,11 +318,10 @@ namespace NXKit
 
             foreach (var load in loads)
                 if (load.Document != null)
-                    invoker.Invoke(() =>
-                    {
-                        load.Interface<IOnLoad>().Load();
-                        load.AnnotationOrCreate<ObjectAnnotation>().Load = false;
-                    });
+                {
+                    invoker.Invoke(() => load.Interface<IOnLoad>().Load());
+                    load.AnnotationOrCreate<ObjectAnnotation>().Load = false;
+                }
         }
 
         /// <summary>
