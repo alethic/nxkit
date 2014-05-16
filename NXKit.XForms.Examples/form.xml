@@ -349,7 +349,7 @@
             </f:table>
             <f:p>* Renewal rates only</f:p>
             <f:p>
-                <xf:output value="d:coverage-amount"/> ÷ 10,000 = <xf:output value="instance('misc')/d:premium" />
+                <xf:output value="d:coverage-amount"/> X <xf:output value="instance('misc')/d:rate"/> ÷ 10,000 = <xf:output value="instance('misc')/d:premium" />
             </f:p>
         </xf:group>
         <xf:group ref="instance('primaryquestions')">

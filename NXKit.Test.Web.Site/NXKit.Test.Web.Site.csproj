@@ -254,8 +254,8 @@
     <Content Include="Content\semantic\packaged\javascript\semantic.min.js" />
     <Content Include="packages.config" />
     <Content Include="Content\semantic.less" />
-    <None Include="Properties\PublishProfiles\asd.pubxml" />
     <Content Include="Examples\Post.ashx" />
+    <None Include="Properties\PublishProfiles\nxkit.pubxml" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
