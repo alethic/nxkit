@@ -98,35 +98,27 @@ namespace NXKit
             defaultDescriptors = descriptors;
         }
 
-        readonly IEnumerable<IInterfacePredicate> predicates;
         readonly List<InterfaceDescriptor> descriptors;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="predicates"></param>
         [ImportingConstructor]
-        public DefaultInterfaceProvider(
-            [ImportMany] IEnumerable<IInterfacePredicate> predicates)
-            : this(predicates, defaultDescriptors)
+        public DefaultInterfaceProvider()
+            : this(defaultDescriptors)
         {
-            Contract.Requires<ArgumentNullException>(predicates != null);
+
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="catalog"></param>
-        /// <param name="predicates"></param>
         /// <param name="descriptors"></param>
         public DefaultInterfaceProvider(
-            IEnumerable<IInterfacePredicate> predicates,
             List<InterfaceDescriptor> descriptors)
         {
-            Contract.Requires<ArgumentNullException>(predicates != null);
             Contract.Requires<ArgumentNullException>(descriptors != null);
 
-            this.predicates = predicates;
             this.descriptors = descriptors;
         }
 
@@ -140,7 +132,7 @@ namespace NXKit
             // available interface types for the object
             var types = obj.AnnotationOrCreate<DescriptorTypeList>(() =>
                 new DescriptorTypeList(descriptors
-                    .Where(i => i.IsMatch(predicates, obj))
+                    .Where(i => i.IsMatch(obj))
                     .Select(i => i.Type)));
 
             foreach (var instance in GetInstances(obj, types))

@@ -66,11 +66,8 @@ namespace NXKit
         /// Tests whether the given <see cref="XObject"/> matches the interface.
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="nodeType"></param>
-        /// <param name="namespaceName"></param>
-        /// <param name="localName"></param>
         /// <returns></returns>
-        internal bool IsMatch(IEnumerable<IInterfacePredicate> predicates, XObject obj)
+        internal bool IsMatch(XObject obj)
         {
             var self = this;
 
@@ -79,7 +76,7 @@ namespace NXKit
                 return false;
 
             // test against specified predicate type
-            var predicate = predicateType != null ? predicates.FirstOrDefault(i => self.predicateType.IsInstanceOfType(i)) : null;
+            var predicate = predicateType != null ? (IInterfacePredicate)Activator.CreateInstance(predicateType) : null;
             if (predicate != null)
                 if (!predicate.IsMatch(obj, type))
                     return false;

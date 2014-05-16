@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
@@ -12,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Describes the implicit 'repeat item' group element.
     /// </summary>
-    [Interface(typeof(RepeatItemPredicate))]
+    [Interface(typeof(RepeatItemPredicate), PredicateType = typeof(RepeatItemPredicate))]
     [Remote]
     public class RepeatItem :
         ElementExtension,
@@ -20,7 +19,6 @@ namespace NXKit.XForms
         IEventListener
     {
 
-        [Export(typeof(IInterfacePredicate))]
         public class RepeatItemPredicate :
             InterfacePredicateBase
         {
