@@ -2,15 +2,13 @@
 using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-using NXKit.Composition;
-
 namespace NXKit
 {
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     [MetadataAttribute]
     public abstract class ObjectExtensionAttribute :
-        ScopeExportAttribute
+        ExportAttribute
     {
 
         Type predicateType;

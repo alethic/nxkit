@@ -17,7 +17,8 @@ namespace NXKit
     /// <summary>
     /// Provides interfaces decorated with the <see cref="InterfaceAttribute"/>.
     /// </summary>
-    [ScopeExport(typeof(IInterfaceProvider), Scope.Host)]
+    [Export(typeof(IInterfaceProvider))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class DefaultInterfaceProvider :
         InterfaceProviderBase
     {

@@ -10,7 +10,8 @@ namespace NXKit
     /// <summary>
     /// Provides access to document scope variables.
     /// </summary>
-    [ScopeExport(typeof(DocumentEnvironment), Scope.Host)]
+    [Export(typeof(DocumentEnvironment))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class DocumentEnvironment
     {
 
@@ -20,7 +21,7 @@ namespace NXKit
         /// Gets the configured host.
         /// </summary>
         /// <returns></returns>
-        [ScopeExport(typeof(Func<NXDocumentHost>), Scope.Host)]
+        [Export(typeof(Func<NXDocumentHost>))]
         public NXDocumentHost GetHost()
         {
             return host;
