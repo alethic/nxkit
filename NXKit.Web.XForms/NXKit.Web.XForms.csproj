@@ -132,6 +132,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="OutputViewModel.ts" />
     <TypeScriptCompile Include="RepeatViewModel.ts" />
+    <TypeScriptCompile Include="Scripts\InputBooleanBindingHandler.ts" />
     <TypeScriptCompile Include="Scripts\Select1BindingHandler.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
@@ -185,6 +186,7 @@
     <EmbeddedResource Include="Alert.html" />
     <EmbeddedResource Include="Trigger.html" />
     <EmbeddedResource Include="Output.html" />
+    <EmbeddedResource Include="Action.html" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

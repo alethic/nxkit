@@ -33,7 +33,7 @@ namespace NXKit.XForms
 
             this.properties = properties;
             this.context = context;
-            this.value = new Lazy<Binding>(() => new Binding(Element, context.Value.Context, properties.Value.Value));
+            this.value = new Lazy<Binding>(() => properties.Value.Value != null ? new Binding(Element, context.Value.Context, properties.Value.Value) : null);
         }
 
         [Remote]

@@ -10,6 +10,8 @@
             <data xmlns="urn::data">
                 <secondary>false</secondary>
                 <secondary_relevant />
+                <rate />
+                <premium />
             </data>
         </xf:instance>
         <xf:bind ref="instance('misc')">
@@ -17,6 +19,8 @@
                      type="xsd:boolean" />
             <xf:bind ref="d:secondary_relevant"
                      relevant="../d:secondary='true'" />
+            <xf:bind ref="d:premium"
+                     calculate="(number(instance('misc')/d:rate) * number(instance('primaryelections')/d:term-life/d:coverage-amount)) div 10000" />
         </xf:bind>
         <xf:instance id="primaryperson"
                      src="primaryperson.xml" />
@@ -101,72 +105,65 @@
                        ref="instance('primaryperson')"
                        method="put"
                        action="primaryperson.xml">
-            <xf:action ev:event="xforms-submit-done">
-                <xf:send submission="secondaryperson_submission" />
-            </xf:action>
+            <xf:send ev:event="xforms-submit-done"
+                     submission="secondaryperson_submission" />
         </xf:submission>
         <xf:submission id="secondaryperson_submission"
                        ref="instance('secondaryperson')"
                        method="put"
                        action="secondaryperson.xml">
-            <xf:action ev:event="xforms-submit-done">
-                <xf:send submission="primaryelections_submission" />
-            </xf:action>
+            <xf:send ev:event="xforms-submit-done"
+                     submission="primaryelections_submission" />
         </xf:submission>
         <xf:submission id="primaryelections_submission"
                        ref="instance('primaryelections')"
                        method="put"
                        action="primaryelections.xml">
-            <xf:action ev:event="xforms-submit-done">
-                <xf:send submission="secondaryelections_submission" />
-            </xf:action>
+            <xf:send ev:event="xforms-submit-done"
+                     submission="secondaryelections_submission" />
         </xf:submission>
         <xf:submission id="secondaryelections_submission"
                        ref="instance('secondaryelections')"
                        method="put"
                        action="secondaryelections.xml">
-            <xf:action ev:event="xforms-submit-done">
-                <xf:send submission="primaryquestions_submission" />
-            </xf:action>
+            <xf:send ev:event="xforms-submit-done"
+                     submission="primaryquestions_submission" />
         </xf:submission>
         <xf:submission id="primaryquestions_submission"
                        ref="instance('primaryquestions')"
                        method="put"
                        action="primaryquestions.xml">
-            <xf:action ev:event="xforms-submit-done">
-                <xf:send submission="secondaryquestions_submission" />
-            </xf:action>
+            <xf:send  ev:event="xforms-submit-done"
+                      submission="secondaryquestions_submission" />
         </xf:submission>
         <xf:submission id="secondaryquestions_submission"
                        ref="instance('secondaryquestions')"
                        method="put"
                        action="secondaryquestions.xml">
-            <xf:action ev:event="xforms-submit-done">
-                <xf:send submission="beneficiaries_submission" />
-            </xf:action>
+            <xf:send ev:event="xforms-submit-done"
+                     submission="beneficiaries_submission" />
         </xf:submission>
         <xf:submission id="beneficiaries_submission"
                        ref="instance('beneficiaries')"
                        method="put"
                        action="beneficiaries.xml">
-            <xf:action ev:event="xforms-submit-done">
-                <xf:dispatch name="isis-form-next"
-                             targetid="form" />
-            </xf:action>
+            <xf:dispatch ev:event="xforms-submit-done"
+                         name="isis-form-next"
+                         targetid="form" />
         </xf:submission>
     </xf:model>
     <f:section>
         <xf:label>Apply Online for Term Life Coverage, TODAY!</xf:label>
         <f:segment>
-        <f:p>Ready to take the next step in securing your family's financial future? Your credit union has made it easy by offering group term life insurance at competitive rates through The Prudential Insurance Company of America.  </f:p>
-        <f:list>
-            <xf:label>The online application process is quick and easy. Through this site, you may:</xf:label>
-            <f:item>Review all the features of your plan</f:item>
-            <f:item>Calculate premium for various amounts of coverage</f:item>
-        </f:list>
-        <f:p>Before beginning, please take a few minutes to gather personal health information like your doctor's name and address, details of current or past medical conditions and personal information about those you wish to name as a beneficiary.</f:p>
-        <f:p>At Prudential, we know this is a big life decision and we look forward to providing you the best coverage with the least amount of effort.</f:p>
-            </f:segment>
+            <f:p>Ready to take the next step in securing your family's financial future? Your credit union has made it easy by offering group term life insurance at competitive rates through The Prudential Insurance Company of America.  </f:p>
+            <f:list>
+                <xf:label>The online application process is quick and easy. Through this site, you may:</xf:label>
+                <f:item>Review all the features of your plan</f:item>
+                <f:item>Calculate premium for various amounts of coverage</f:item>
+            </f:list>
+            <f:p>Before beginning, please take a few minutes to gather personal health information like your doctor's name and address, details of current or past medical conditions and personal information about those you wish to name as a beneficiary.</f:p>
+            <f:p>At Prudential, we know this is a big life decision and we look forward to providing you the best coverage with the least amount of effort.</f:p>
+        </f:segment>
     </f:section>
     <f:section>
         <xf:label>Primary Enrollment</xf:label>
@@ -229,8 +226,14 @@
         <xf:group ref="instance('primaryelections')/d:term-life">
             <xf:label>Coverage Election</xf:label>
             <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
+            <f:p>
+                The rates shown are available to eligible accountholders and spouses under age 70, subject to evidence of insurability acceptable to the insurer.
+                Rates increase at age 30 and as you enter each 5-year age band thereafter. Coverage reduces at age 65 to 50% of the previous amount and again by 50% at age 70.
+                Insurance coverage terminates at age 75. Male rates apply for both accountholders and spouses in MT.
+            </f:p>
             <xf:select1 ref="d:coverage-amount"
                         appearance="full">
+                <xf:label>Coverage Amount</xf:label>
                 <xf:item>
                     <xf:label>$75,000</xf:label>
                     <xf:value>75000</xf:value>
@@ -244,10 +247,115 @@
                     <xf:value>150000</xf:value>
                 </xf:item>
             </xf:select1>
+            <f:table >
+                <xf:label>Monthly Rates per $10,000 of coverage</xf:label>
+                <f:table-row>
+                    <f:table-cell>Age</f:table-cell>
+                    <f:table-cell>Non-Tobacco</f:table-cell>
+                    <f:table-cell>Tobacco</f:table-cell>
+                    <f:table-cell>Non-Tobacco</f:table-cell>
+                    <f:table-cell>Tobacco</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>Under 30</f:table-cell>
+                    <f:table-cell>
+                        $ 1.17
+                        <xf:setvalue ev:event="DOMActivate"
+                                     context="instance('misc')/d:rate"
+                                     ref=".">1.17</xf:setvalue>
+                    </f:table-cell>
+                    <f:table-cell>
+                        $ 2.05
+                        <xf:setvalue ev:event="DOMActivate"
+                                     context="instance('misc')/d:rate"
+                                     ref=".">2.05</xf:setvalue>
+                    </f:table-cell>
+                    <f:table-cell>
+                        $ 0.72
+                        <xf:setvalue ev:event="DOMActivate"
+                                     context="instance('misc')/d:rate"
+                                     ref=".">0.72</xf:setvalue>
+                    </f:table-cell>
+                    <f:table-cell>
+                        $ 1.23
+                        <xf:setvalue ev:event="DOMActivate"
+                                     context="instance('misc')/d:rate"
+                                     ref=".">1.23</xf:setvalue>
+                    </f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>30-34</f:table-cell>
+                    <f:table-cell>$ 1.14</f:table-cell>
+                    <f:table-cell>$ 2.00</f:table-cell>
+                    <f:table-cell>$ 0.89</f:table-cell>
+                    <f:table-cell>$ 1.56</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>35-39</f:table-cell>
+                    <f:table-cell>$ 1.41</f:table-cell>
+                    <f:table-cell>$ 2.47</f:table-cell>
+                    <f:table-cell>$ 1.16</f:table-cell>
+                    <f:table-cell>$ 2.03</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>40-44</f:table-cell>
+                    <f:table-cell>$ 2.12</f:table-cell>
+                    <f:table-cell>$ 3.71</f:table-cell>
+                    <f:table-cell>$ 1.54</f:table-cell>
+                    <f:table-cell>$ 2.70</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>45-49</f:table-cell>
+                    <f:table-cell>$ 3.06</f:table-cell>
+                    <f:table-cell>$ 5.36</f:table-cell>
+                    <f:table-cell>$ 2.49</f:table-cell>
+                    <f:table-cell>$ 4.36</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>50-54</f:table-cell>
+                    <f:table-cell>$ 4.83</f:table-cell>
+                    <f:table-cell>$ 8.45</f:table-cell>
+                    <f:table-cell>$ 4.23</f:table-cell>
+                    <f:table-cell>$ 7.40</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>55-59</f:table-cell>
+                    <f:table-cell>$ 8.11</f:table-cell>
+                    <f:table-cell>$ 14.19</f:table-cell>
+                    <f:table-cell>$ 5.77</f:table-cell>
+                    <f:table-cell>$ 10.97</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>60-64</f:table-cell>
+                    <f:table-cell>$ 14.20</f:table-cell>
+                    <f:table-cell>$ 24.85</f:table-cell>
+                    <f:table-cell>$ 9.44</f:table-cell>
+                    <f:table-cell>$ 16.74</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>65-69</f:table-cell>
+                    <f:table-cell>$ 24.85</f:table-cell>
+                    <f:table-cell>$ 43.49</f:table-cell>
+                    <f:table-cell>$ 13.62</f:table-cell>
+                    <f:table-cell>$ 23.56</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>70-74*</f:table-cell>
+                    <f:table-cell>$ 39.80</f:table-cell>
+                    <f:table-cell>$ 62.78</f:table-cell>
+                    <f:table-cell>$ 19.28</f:table-cell>
+                    <f:table-cell>$ 29.93</f:table-cell>
+                </f:table-row>
+            </f:table>
+            <f:p>* Renewal rates only</f:p>
+            <f:p>
+                <xf:output value="d:coverage-amount"/> ÷ 10,000 = <xf:output value="instance('misc')/d:premium" />
+            </f:p>
         </xf:group>
         <xf:group ref="instance('primaryquestions')">
             <xf:label>Health Questions</xf:label>
-            <xf:hint>Please answer the following questions by checking “Yes” or “No.”</xf:hint>
+            <f:p>Please answer the following questions by checking “Yes” or “No.”</f:p>
+            <f:p>If you answer “Yes” to any questions 2-4, you will be asked to provide full details just below the question.</f:p>
             <xf:repeat ref="d:question">
                 <xf:group>
                     <xf:select1 ref="d:answer"
@@ -352,6 +460,85 @@
         <xf:group ref="instance('misc')/d:secondary_relevant">
             <xf:label>Coverage Selection</xf:label>
             <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
+            <f:table>
+                <f:table-row>
+                    <f:table-cell>Age</f:table-cell>
+                    <f:table-cell>Non-Tobacco</f:table-cell>
+                    <f:table-cell>Tobacco</f:table-cell>
+                    <f:table-cell>Non-Tobacco</f:table-cell>
+                    <f:table-cell>Tobacco</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>Under 30</f:table-cell>
+                    <f:table-cell>$ 1.17</f:table-cell>
+                    <f:table-cell>$ 2.05</f:table-cell>
+                    <f:table-cell>$ 0.72</f:table-cell>
+                    <f:table-cell>$ 1.23</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>30-34</f:table-cell>
+                    <f:table-cell>$ 1.14</f:table-cell>
+                    <f:table-cell>$ 2.00</f:table-cell>
+                    <f:table-cell>$ 0.89</f:table-cell>
+                    <f:table-cell>$ 1.56</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>35-39</f:table-cell>
+                    <f:table-cell>$ 1.41</f:table-cell>
+                    <f:table-cell> $2.47</f:table-cell>
+                    <f:table-cell> $1.16</f:table-cell>
+                    <f:table-cell> $2.03</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>40-44</f:table-cell>
+                    <f:table-cell>$ 2.12</f:table-cell>
+                    <f:table-cell> $3.71</f:table-cell>
+                    <f:table-cell> $1.54</f:table-cell>
+                    <f:table-cell> $2.70</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>45-49</f:table-cell>
+                    <f:table-cell>$ 3.06</f:table-cell>
+                    <f:table-cell> $5.36</f:table-cell>
+                    <f:table-cell> $2.49</f:table-cell>
+                    <f:table-cell> $4.36</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>50-54</f:table-cell>
+                    <f:table-cell>$ 4.83</f:table-cell>
+                    <f:table-cell> $8.45</f:table-cell>
+                    <f:table-cell> $4.23</f:table-cell>
+                    <f:table-cell> $7.40</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>55-59</f:table-cell>
+                    <f:table-cell>$ 8.11</f:table-cell>
+                    <f:table-cell> $14.19</f:table-cell>
+                    <f:table-cell> $5.77</f:table-cell>
+                    <f:table-cell> $10.97</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>60-64</f:table-cell>
+                    <f:table-cell>$ 14.20</f:table-cell>
+                    <f:table-cell> $24.85</f:table-cell>
+                    <f:table-cell> $9.44</f:table-cell>
+                    <f:table-cell> $16.74</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>65-69</f:table-cell>
+                    <f:table-cell>$ 24.85</f:table-cell>
+                    <f:table-cell> $43.49</f:table-cell>
+                    <f:table-cell> $13.62</f:table-cell>
+                    <f:table-cell> $23.56</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>70-74*</f:table-cell>
+                    <f:table-cell>$ 39.80</f:table-cell>
+                    <f:table-cell>$ 62.78</f:table-cell>
+                    <f:table-cell>$ 19.28</f:table-cell>
+                    <f:table-cell>$ 29.93</f:table-cell>
+                </f:table-row>
+            </f:table>
             <xf:select1 context="instance('secondaryelections')/d:term-life"
                         ref="d:coverage-amount">
                 <xf:item>
@@ -412,16 +599,9 @@
     <f:section>
         <xf:label>Beneficiaries</xf:label>
         <xf:trigger>
-            <xf:label>Add</xf:label>
-            <xf:insert context="instance('beneficiaries')"
-                       ref="d:beneficiary"
-                       origin="d:template/d:beneficiary"
-                       at="index('repeatBeneficiaries')"
-                       position="after"
-                       ev:event="DOMActivate" />
-        </xf:trigger>
-        <xf:trigger>
-            <xf:label>Add2</xf:label>
+            <xf:label>
+                <f:icon name="add"/> Add New Benericiary
+            </xf:label>
             <xf:insert context="instance('beneficiaries')"
                        ref="d:beneficiary"
                        origin="d:template/d:beneficiary"
@@ -466,18 +646,27 @@
                     <xf:label>Percentage</xf:label>
                 </xf:range>
                 <xf:trigger>
-                    <xf:label>Delete</xf:label>
+                    <xf:label>
+                        <f:icon name="remove"/> Delete
+                    </xf:label>
                     <xf:delete ev:event="DOMActivate" />
                 </xf:trigger>
             </xf:group>
         </xf:repeat>
     </f:section>
     <xf:trigger>
-        <xf:label>Next</xf:label>
-        <xf:send ev:event="DOMActivate"
-                 submission="primaryperson_submission" />
+        <xf:label>
+            <f:icon name="left"/> Back
+        </xf:label>
+        <xf:dispatch  ev:event="DOMActivate"
+                      name="isis-form-previous"
+                      targetid="form" />
     </xf:trigger>
     <xf:trigger>
-        <xf:label>Back</xf:label>
+        <xf:label>
+            Next <f:icon name="right"/>
+        </xf:label>
+        <xf:send ev:event="DOMActivate"
+                 submission="primaryperson_submission" />
     </xf:trigger>
 </f:form>

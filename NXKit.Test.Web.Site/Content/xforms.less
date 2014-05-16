@@ -138,7 +138,9 @@
             .xforms-group-field-eight-wide();
         }
 
-        > .item[data-nx-name='{http://www.w3.org/2002/xforms}group'] {
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}group'],
+        > .item[data-nx-name='{http://schemas.nxkit.org/2014/xforms-layout}table'],
+        > .item[data-nx-name='{http://schemas.nxkit.org/2014/xforms-layout}p'] {
             .xforms-group-field-sixteen-wide();
         }
 
@@ -298,14 +300,6 @@
 .xforms-input[data-nxkit-data-type='{http://www.w3.org/2001/XMLSchema}boolean'] {
     &:extend(.ui.checkbox all);
     line-height: 1.3em;
-
-    > .checkbox {
-        position: relative;
-        margin-left: -25px;
-
-        > input {
-        }
-    }
 }
 
 .xforms-range {
@@ -366,26 +360,28 @@
 .xforms-layout-form {
 
     > .contents {
+        
+        .flex-container(767px);
 
-        clear: both;
+        > .item > * {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
 
-        > .item {
-            clear: both;
+        > .item:first-child > * ,
+        > .item:last-child > *  {
+            margin-top: initial;
+        }
+            
+        > .item[data-nx-name='{http://schemas.nxkit.org/2014/xforms-layout}section'] {
+            flex: 767px 1;
         }
         
-        > .item[data-nx-name='{http://www.w3.org/2002/xforms}trigger'] {
-            display: inline-block;
-            margin-top: 3em;
-            margin-left: 3em;
-        }
-        
-        > .item[data-nx-name='{http://www.w3.org/2002/xforms}trigger']~.item[data-nx-name='{http://www.w3.org/2002/xforms}trigger'] {
-            clear: none;
-        }
-
-        > .item > .xforms-trigger {
-            &:extend(.ui.huge.button all);
-            margin: 0 auto;
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}trigger'],
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}submit'] {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            padding-left: 1em;
         }
 
     }
@@ -401,36 +397,28 @@
     }
 
     > .contents {
-        margin-top: 2em;
-        margin-bottom: 2em;
         
-        @media only screen and (min-width: 767px) {
-            .flex-container(767px);
-            
-            > .item[data-nx-name='{http://www.w3.org/2002/xforms}group'] {
-                flex: 767px 1;
-            }
-        
-            > .item[data-nx-name='{http://www.w3.org/2002/xforms}trigger'],
-            > .item[data-nx-name='{http://www.w3.org/2002/xforms}submit'] {
+        .flex-container(767px);
 
-                margin-top: 0 !important;
-                margin-bottom: 0 !important;
-                padding-left: 1em;
-            }
+        > .item > *  {
+            margin-top: 1em !important;
+            margin-bottom: 1em !important;
         }
 
-        > .item {
-            margin-top: 2em;
-            margin-bottom: 2em;
-        }
-
-        > .item:first-child {
+        > .item:first-child > * ,
+        > .item:last-child > *  {
             margin-top: initial;
         }
-
-        > .item:last-child {
-            margin-bottom: initial;
+            
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}group'] {
+            flex: 767px 1;
+        }
+        
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}trigger'],
+        > .item[data-nx-name='{http://www.w3.org/2002/xforms}submit'] {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            padding-left: 1em;
         }
 
     }
@@ -466,6 +454,26 @@
             &:extend(.ui.bulleted.list all);
         }
 
+    }
+
+}
+
+.xforms-layout-table {
+    &:extend(.ui.table all);
+    &:extend(.ui.table.segment all);
+    &:extend(.ui.celled.table all);
+
+    td {
+        -webkit-transition: all 0.1s ease-out;
+        -moz-transition: all 0.1s ease-out;
+        transition: all 0.1s ease-out;
+    }
+
+    td:hover,
+    th:hover {
+        cursor: pointer;
+        background-color: #E0E0E0;
+        color: rgba(50, 50, 50, 0.9);
     }
 
 }

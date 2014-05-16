@@ -53,11 +53,15 @@ event: {
     <div class="xforms-input"
          data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean"
          data-bind="
+nxkit_xforms_input_boolean: ValueAsBoolean,
 attr : {
     'data-nx-name': $data.Node.Name,
     'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
     'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
 }">
+
+        <input type="checkbox" />
+
         <!-- ko with: Label -->
         <label class="label">
             <!-- ko nxkit_template: $data -->
@@ -76,10 +80,6 @@ attr : {
             <!-- /ko -->
         </div>
         <!-- /ko -->
-
-        <div class="checkbox"             data-bind="nxkit_checkbox: ValueAsBoolean">
-            <input type="checkbox" />
-        </div>
     </div>
 
     <!-- /ko -->
