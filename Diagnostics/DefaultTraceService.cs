@@ -10,7 +10,7 @@ namespace NXKit.Diagnostics
 {
 
     [Export(typeof(ITraceService))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Global)]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class DefaultTraceService :
         ITraceService
     {

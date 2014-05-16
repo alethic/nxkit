@@ -304,12 +304,16 @@ namespace NXKit.Serialization
             if (attr == null)
                 return null;
 
-            // unsupported types
-            if (!type.IsPublic || type.IsAbstract)
+            // require public type
+            if (!(type.IsPublic || type.IsNestedPublic))
+                return null;
+
+            // disallow abstract
+            if (type.IsAbstract)
                 return null;
 
             // find default constructor
-            var ctor = type.GetConstructor(new Type[] { });
+            var ctor = type.GetConstructor(Type.EmptyTypes);
             if (ctor == null)
                 return null;
 
