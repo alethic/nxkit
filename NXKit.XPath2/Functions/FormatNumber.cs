@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 using NXKit.XPath;
@@ -49,7 +50,7 @@ namespace NXKit.XPath2.Functions
             if (item is XPathItem)
                 return ((XPathItem)item).Value;
             if (item is XPathNodeIterator)
-                return ((XPathNodeIterator)item).Current != null ? ((XPathNodeIterator)item).Current.Value : "";
+                return GetXPathValue(((XPathNodeIterator)item).OfType<XPathItem>().FirstOrDefault());
 
             throw new XPathException("Could not extract string value from node.");
         }
@@ -69,4 +70,5 @@ namespace NXKit.XPath2.Functions
         }
 
     }
+
 }

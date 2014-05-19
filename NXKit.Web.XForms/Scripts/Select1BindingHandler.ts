@@ -9,8 +9,8 @@
                 $(body).dropdown();
                 $(body).dropdown({
                     onChange: function (value: any) {
-                        var v1 = <string>$(body).dropdown('get value');
-                        var v2 = <string>ko.unwrap(valueAccessor());
+                        var v1 = <string>$(body).dropdown('get value') || null;
+                        var v2 = <string>ko.unwrap(valueAccessor()) || null;
                         if (v1 != v2) {
                             valueAccessor()(v1);
                         }
@@ -23,7 +23,7 @@
         static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
             var body = $(element).find('.body');
             setTimeout(function () {
-                var v1 = <string>ko.unwrap(valueAccessor());
+                var v1 = <string>ko.unwrap(valueAccessor()) || null;
                 $(body).dropdown('set value', v1);
             }, 2000);
         }

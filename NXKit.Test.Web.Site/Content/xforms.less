@@ -83,39 +83,15 @@
 .xforms-group-field-invalid() {
     &:extend(.ui.form .field.error all);
     &:extend(.field.error all);
-}
 
-.xforms-group-field-invalid-input {
-
-    > .label {
+    label {
         &:extend(.ui.form .field.error label all);
     }
 
-    input {
-        &:extend(.ui.form .field.error input all);
-    }
-}
-
-.xforms-group-field-invalid-range {
-
-    > .label {
+    .label {
         &:extend(.ui.form .field.error label all);
     }
 
-    input {
-        &:extend(.ui.form .field.error input all);
-    }
-}
-
-.xforms-group-field-invalid-select1() {
-
-    > .label {
-        &:extend(.ui.form .field.error label all);
-    }
-
-    > .body {
-        &:extend(.ui.form .field.error .ui.dropdown all);
-    }
 }
 
 .xforms-group {
@@ -173,20 +149,8 @@
 
         }
 
-        > .item[data-nx-xforms~='invalid'] {
+        > .item[data-nx-xforms-data~="invalid"] {
             .xforms-group-field-invalid();
-
-            > .xforms-input {
-                .xforms-group-field-invalid-input();
-            }
-
-            > .xforms-range {
-                .xforms-group-field-invalid-range();
-            }
-
-            > .xforms-select1 {
-                .xforms-group-field-invalid-select1();
-            }
         }
 
         > .item > .xforms-group {
@@ -206,6 +170,7 @@
             > .label {
                 .xforms-group-field-label();
             }
+
         }
 
         > .item > .xforms-range {
@@ -213,20 +178,28 @@
             > .label {
                 .xforms-group-field-label();
             }
+
         }
 
         > .item > .xforms-select1 {
-
-            margin-bottom: 2px;
 
             > .label {
                 .xforms-group-field-label();
             }
 
             > .body {
-                &:extend(.ui.dropdown all);
                 &:extend(.ui.selection.dropdown all);
                 &:extend(.ui.fluid.dropdown all);
+            }
+
+        }
+
+        > .item[data-nx-xforms-data~="invalid"] > .xforms-select1 {
+
+            > .body {
+                &:extend(.ui.dropdown.error all);
+                &:extend(.ui.selection.dropdown.error all);
+                &:extend(.ui.fluid.dropdown.error all);
             }
 
         }
@@ -243,14 +216,19 @@
         &:extend(.ui.header all);
 
         > .xforms-label {
+
         }
+
     }
 
     > .contents {
 
         > .item {
+
         }
+
     }
+
 }
 
 .xforms-group-secondary() {
@@ -274,8 +252,6 @@
 
         > .contents {
 
-
-
         }
 
     }
@@ -289,6 +265,7 @@
             &:extend(.ui.header all);
             &:extend(.ui.tiny.header all);
         }
+
     }
 
 }
@@ -305,6 +282,7 @@
     > .help {
         display: none;
     }
+
 }
 
 .xforms-input[data-nxkit-data-type='{http://www.w3.org/2001/XMLSchema}boolean'] {
@@ -315,6 +293,7 @@
 .xforms-range {
 
     > .label {
+
     }
 
     > .hint {
@@ -324,11 +303,13 @@
     > .help {
         display: none;
     }
+
 }
 
 .xforms-select1 {
 
     > .label {
+
     }
 
     > .hint {
@@ -341,8 +322,21 @@
 
     > .body {
         &:extend(.ui.dropdown all);
-        margin-top: .3em;
+
+        &.active {
+            &:extend(.ui.active.dropdown all);
+        }
+
+        &.visible {
+            &:extend(.ui.visible.dropdown all);
+        }
+
+        &:hover {
+            &:extend(.ui.dropdown:hover all);
+        }
+
     }
+
 }
 
 .xforms-trigger {
@@ -361,37 +355,6 @@
 
     > .item.current > .xforms-group {
         border-left-color: purple;
-    }
-
-}
-
-.xforms-layout-form {
-
-    > .contents {
-        
-        .flex-container(767px);
-
-        > .item > * {
-            margin-top: 1em;
-            margin-bottom: 1em;
-        }
-
-        > .item:first-child > * ,
-        > .item:last-child > *  {
-            margin-top: initial;
-        }
-            
-        > .item[data-nx-name='{http://schemas.nxkit.org/2014/xforms-layout}section'] {
-            flex: 767px 1;
-        }
-        
-        > .item[data-nx-name='{http://www.w3.org/2002/xforms}trigger'],
-        > .item[data-nx-name='{http://www.w3.org/2002/xforms}submit'] {
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-            padding-left: 1em;
-        }
-
     }
 
 }

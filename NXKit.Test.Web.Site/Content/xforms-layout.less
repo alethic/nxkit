@@ -88,10 +88,18 @@
 .xforms-layout-paragraph {
     
     .xforms-select1 {
-        &:extend(.ui.inline.dropdown all);
+        display: inline;
 
         > .label {
             display: none;
+        }
+
+        > .body {
+            &:extend(.ui.inline.dropdown all);
+
+            > .text {
+
+            }
         }
 
     }
@@ -103,6 +111,7 @@
     > .contents {
         &:extend(.ui.segment all);
     }
+
 }
 
 .xforms-layout-list {

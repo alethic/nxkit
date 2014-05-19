@@ -354,6 +354,8 @@ namespace NXKit.Xml
             return Interfaces(node, node.Exports());
         }
 
+        static TimeSpan time = TimeSpan.Zero;
+
         /// <summary>
         /// Implements Interfaces, allowing the specification of an export provider.
         /// </summary>

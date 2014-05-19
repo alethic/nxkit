@@ -18,6 +18,7 @@ namespace NXKit.XForms
     {
 
         readonly BindingAttributes attributes;
+        readonly Lazy<BindingProperties> properties;
         readonly Lazy<EvaluationContextResolver> resolver;
         readonly Lazy<Binding> binding;
 
@@ -30,17 +31,10 @@ namespace NXKit.XForms
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.attributes = new BindingAttributes(Element);
-            this.resolver = new Lazy<EvaluationContextResolver>(() => Element.Interface<EvaluationContextResolver>());
+            this.attributes = new BindingAttributes(element);
+            this.resolver = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
             this.binding = new Lazy<Binding>(() => GetOrCreateBinding());
-        }
-
-        /// <summary>
-        /// Gets the node binding attributes of the element.
-        /// </summary>
-        public BindingAttributes Attributes
-        {
-            get { return attributes; }
+            this.properties = new Lazy<BindingProperties>(() => new BindingProperties(element, resolver));
         }
 
         /// <summary>
@@ -58,17 +52,12 @@ namespace NXKit.XForms
         Binding GetOrCreateBinding()
         {
             // bind attribute overrides
-            var bindIdRef = Attributes.Bind;
+            var bindIdRef = properties.Value.Bind;
             if (bindIdRef != null)
                 return GetBindBinding(bindIdRef);
 
             // determine 'ref' or 'nodeset' attribute
-            var attribute = Attributes.RefAttribute ?? Attributes.NodeSetAttribute;
-            if (attribute == null)
-                return null;
-
-            // obtain expression
-            var expression = attribute.Value;
+            var expression = properties.Value.Ref ?? properties.Value.NodeSet;
             if (expression == null)
                 return null;
 
@@ -78,7 +67,7 @@ namespace NXKit.XForms
                 throw new DOMTargetEventException(Element, Events.BindingException,
                     "Could not resolve binding context.");
 
-            return new Binding(attribute, context, expression);
+            return new Binding(Element, context, expression);
         }
 
         /// <summary>
