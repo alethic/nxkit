@@ -81,37 +81,28 @@ namespace NXKit.XForms
         }
 
 
-        readonly Lazy<CommonProperties> commonProperties;
-        readonly Lazy<BindingProperties> bindingProperties;
-        readonly Lazy<InsertProperties> insertProperties;
-        readonly Lazy<EvaluationContextResolver> contextResolver;
+        readonly Lazy<EvaluationContextResolver> context;
+        readonly CommonProperties commonProperties;
+        readonly BindingProperties bindingProperties;
+        readonly InsertProperties insertProperties;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        /// <param name="commonProperties"></param>
-        /// <param name="bindingProperties"></param>
-        /// <param name="insertProperties"></param>
-        /// <param name="contextResolver"></param>
+        /// <param name="context"></param>
         public Insert(
             XElement element,
-            Lazy<CommonProperties> commonProperties,
-            Lazy<BindingProperties> bindingProperties,
-            Lazy<InsertProperties> insertProperties,
-            Lazy<EvaluationContextResolver> contextResolver)
+            Lazy<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(commonProperties != null);
-            Contract.Requires<ArgumentNullException>(bindingProperties != null);
-            Contract.Requires<ArgumentNullException>(insertProperties != null);
-            Contract.Requires<ArgumentNullException>(contextResolver != null);
+            Contract.Requires<ArgumentNullException>(context != null);
 
-            this.commonProperties = commonProperties;
-            this.bindingProperties = bindingProperties;
-            this.insertProperties = insertProperties;
-            this.contextResolver = contextResolver;
+            this.context = context;
+            this.commonProperties = element.AnnotationOrCreate(() => new CommonProperties(element, context));
+            this.bindingProperties = element.AnnotationOrCreate(() => new BindingProperties(element, context));
+            this.insertProperties = element.AnnotationOrCreate(() => new InsertProperties(element, context));
         }
 
         public void HandleEvent(Event ev)
@@ -128,10 +119,10 @@ namespace NXKit.XForms
         /// <returns></returns>
         EvaluationContext GetInsertContext()
         {
-            var insertContext = contextResolver.Value.GetInScopeEvaluationContext();
-            if (commonProperties.Value.Context != null)
+            var insertContext = context.Value.GetInScopeEvaluationContext();
+            if (commonProperties.Context != null)
             {
-                var item = new Binding(Element, insertContext, commonProperties.Value.Context).ModelItems.FirstOrDefault();
+                var item = new Binding(Element, insertContext, commonProperties.Context).ModelItems.FirstOrDefault();
                 if (item == null)
                     return null;
 
@@ -152,7 +143,7 @@ namespace NXKit.XForms
             Contract.Ensures(Contract.Result<XObject[]>() != null);
 
             // If a bind attribute is present, it directly determines the Sequence Binding node-sequence.
-            var bindId = bindingProperties.Value.Bind;
+            var bindId = bindingProperties.Bind;
             if (bindId != null)
             {
                 var element = Element.ResolveId(bindId);
@@ -170,7 +161,7 @@ namespace NXKit.XForms
 
             // If a ref (or deprecated nodeset) attribute is present, it is evaluated within the insert context to
             // determine the Sequence Binding node-sequence.
-            var ref_ = bindingProperties.Value.Ref ?? bindingProperties.Value.NodeSet;
+            var ref_ = bindingProperties.Ref ?? bindingProperties.NodeSet;
             if (ref_ != null)
                 return new Binding(Element, insertContext, ref_).ModelItems
                     .Select(i => i.Xml)
@@ -197,19 +188,19 @@ namespace NXKit.XForms
 
             // If the origin attribute is not given and the Sequence Binding sequence is empty, then the origin
             // node-sequence is the empty sequence.
-            if (insertProperties.Value.Origin == null &&
+            if (insertProperties.Origin == null &&
                 sequenceBindingNodeSequence.Length == 0)
                 result = new XObject[0];
 
             // Otherwise, if the origin attribute is not given, then the origin node-sequence consists of the last
             // node of the Sequence Binding node-sequence.
-            else if (insertProperties.Value.Origin == null)
+            else if (insertProperties.Origin == null)
                 result = new[] { sequenceBindingNodeSequence[sequenceBindingNodeSequence.Length - 1] };
 
             // If the origin attribute is given, the origin node-sequence is the result of the evaluation of the origin
             // attribute in the insert context.
-            else if (insertProperties.Value.Origin != null)
-                result = new Binding(Element, insertContext, insertProperties.Value.Origin).ModelItems
+            else if (insertProperties.Origin != null)
+                result = new Binding(Element, insertContext, insertProperties.Origin).ModelItems
                     .Select(i => i.Xml)
                     .ToArray();
 
@@ -246,7 +237,7 @@ namespace NXKit.XForms
 
             // Otherwise, if the at attribute is not given, then the insert location node is the last node of the
             // Sequence Binding sequence.
-            else if (insertProperties.Value.At == null)
+            else if (insertProperties.At == null)
                 return sequenceBindingNodeSequence[sequenceBindingNodeSequence.Length - 1];
 
             // Otherwise, an insert location node is determined from the at attribute as follows:
@@ -258,7 +249,7 @@ namespace NXKit.XForms
                 var at = new Binding(
                     Element,
                     new EvaluationContext(ModelItem.Get(sequenceBindingNodeSequence[0]), 1, sequenceBindingNodeSequence.Length),
-                    insertProperties.Value.At).Value;
+                    insertProperties.At).Value;
 
                 // 2. The return value is processed according to the rules of the XPath function round(). For example,
                 // the literal 1.5 becomes 2, and the literal 'string' becomes NaN.
@@ -364,9 +355,9 @@ namespace NXKit.XForms
                 // If the insert location node is not an attribute or root node, then the
                 // target location is immediately before or after the insert location node, based on the position
                 // attribute setting or its default.
-                else if (insertProperties.Value.Position == InsertPosition.After)
+                else if (insertProperties.Position == InsertPosition.After)
                     return new TargetLocation(insertNode, TargetPosition.After, insertLocationNode);
-                else if (insertProperties.Value.Position == InsertPosition.Before)
+                else if (insertProperties.Position == InsertPosition.Before)
                     return new TargetLocation(insertNode, TargetPosition.Before, insertLocationNode);
             }
 
@@ -460,13 +451,13 @@ namespace NXKit.XForms
             var sequenceBindingNodeSequence = GetSequenceBindingNodeSequence(insertContext);
 
             // 1. The context attribute is not given and the Sequence Binding node-sequence is the empty sequence.
-            if (commonProperties.Value.Context == null &&
+            if (commonProperties.Context == null &&
                 sequenceBindingNodeSequence.Length == 0)
                 return;
 
             // 2. The context attribute is given, the insert context does not evaluate to an element node and the
             //    Sequence Binding node-sequence is the empty sequence.
-            if (commonProperties.Value.Context != null &&
+            if (commonProperties.Context != null &&
                 sequenceBindingNodeSequence.Length == 0 &&
                 insertContext.ModelItem.Xml.NodeType != XmlNodeType.Element)
                 return;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Compression;
@@ -33,6 +35,8 @@ namespace NXKit.Web.UI
 
         string cssClass;
         string validationGroup;
+        ComposablePartCatalog catalog;
+        ExportProvider exports;
         NXDocumentHost host;
         LinkedList<string> scripts;
 
@@ -62,6 +66,24 @@ namespace NXKit.Web.UI
         {
             get { return validationGroup; }
             set { validationGroup = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the additional set of exports to introduce to the document.
+        /// </summary>
+        public ExportProvider Exports
+        {
+            get { return exports; }
+            set { exports = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the additional set of parts to introduce to the document.
+        /// </summary>
+        public ComposablePartCatalog Catalog
+        {
+            get { return catalog; }
+            set { catalog = value; }
         }
 
         /// <summary>
@@ -113,8 +135,9 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Loads the document host from whatever saved state is available.
+        /// Loads the document host from the given saved state.
         /// </summary>
+        /// <param name="save"></param>
         /// <returns></returns>
         NXDocumentHost LoadDocumentHost(string save)
         {
@@ -125,7 +148,7 @@ namespace NXKit.Web.UI
             using (var cmp = new DeflateStream(b64, CompressionMode.Decompress))
             using (var rdr = XmlDictionaryReader.CreateBinaryReader(cmp, new XmlDictionaryReaderQuotas()))
             {
-                return NXDocumentHost.Load(rdr);
+                return NXDocumentHost.Load(rdr, catalog, exports);
             }
         }
 
@@ -137,7 +160,7 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            host = NXDocumentHost.Load(uri);
+            host = NXDocumentHost.Load(uri, catalog, exports);
             OnHostLoaded(HostEventArgs.Empty);
         }
 

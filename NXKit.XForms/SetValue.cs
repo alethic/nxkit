@@ -15,10 +15,11 @@ namespace NXKit.XForms
         ElementExtension,
         IEventHandler
     {
+
+        readonly Lazy<EvaluationContextResolver> context;
         readonly Lazy<CommonProperties> commonProperties;
         readonly Lazy<BindingProperties> bindingProperties;
-        readonly Lazy<SetValueProperties> insertProperties;
-        readonly Lazy<EvaluationContextResolver> contextResolver;
+        readonly Lazy<SetValueProperties> setValueProperties;
 
         /// <summary>
         /// Initializes a new instance.
@@ -26,37 +27,30 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         public SetValue(
             XElement element,
-            Lazy<CommonProperties> commonProperties,
-            Lazy<BindingProperties> bindingProperties,
-            Lazy<SetValueProperties> setValueProperties,
-            Lazy<EvaluationContextResolver> contextResolver)
+            Lazy<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(commonProperties != null);
-            Contract.Requires<ArgumentNullException>(bindingProperties != null);
-            Contract.Requires<ArgumentNullException>(setValueProperties != null);
-            Contract.Requires<ArgumentNullException>(contextResolver != null);
+            Contract.Requires<ArgumentNullException>(context != null);
 
-            this.commonProperties = commonProperties;
-            this.bindingProperties = bindingProperties;
-            this.insertProperties = setValueProperties;
-            this.contextResolver = contextResolver;
+            this.context = context;
+            this.commonProperties = new Lazy<CommonProperties>(() => new CommonProperties(element, context));
+            this.bindingProperties = new Lazy<BindingProperties>(() => new BindingProperties(element, context));
+            this.setValueProperties = new Lazy<SetValueProperties>(() => new SetValueProperties(element, context));
         }
 
         EvaluationContext GetContext()
         {
-            var context = contextResolver.Value.GetInScopeEvaluationContext();
             if (commonProperties.Value.Context != null)
             {
-                var item = new Binding(Element, context, commonProperties.Value.Context).ModelItems.FirstOrDefault();
+                var item = new Binding(Element, context.Value.GetInScopeEvaluationContext(), commonProperties.Value.Context).ModelItems.FirstOrDefault();
                 if (item == null)
                     return null;
 
-                context = new EvaluationContext(item.Model, item.Instance, item, 1, 1);
+                return new EvaluationContext(item.Model, item.Instance, item, 1, 1);
             }
 
-            return context;
+            return null;
         }
 
         XObject[] GetSequenceBindingNodeSequence(EvaluationContext insertContext)
