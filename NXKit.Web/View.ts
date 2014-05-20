@@ -136,7 +136,7 @@ module NXKit.Web {
                     Interface: $interface.Name,
                     Property: property.Name,
                     Value: value,
-        }
+                }
             };
 
             self.Queue(data);
@@ -175,36 +175,45 @@ module NXKit.Web {
             } else {
                 self._queueRunning = true;
 
+                // compile buffers of incoming data
+                var node = {};
+                var scripts = new Array<any>();
+                var messages = new Array<any>();
+
                 // delay processing in case of new commands
                 setTimeout(() => {
-                self._busy(true);
+                    self._busy(true);
 
-                // recursive call to work queue
-                var l = () => {
-                    var commands = self._queue.splice(0);
-                    if (commands.length > 0) {
-                        self._server(commands, (data: any) => {
-                            
-                            // only update node data if no outstanding commands
-                            if (self._queue.length == 0) {
-                                    self.Apply(data['Node'] || null);
-                            }
+                    // recursive call to work queue
+                    var l = () => {
+                        var commands = self._queue.splice(0);
+                        if (commands.length > 0) {
+                            self._server(commands, (data: any) => {
+                                // push new items into receive queue
+                                node = data['Node'] || null;
+                                ko.utils.arrayPushAll(scripts, <any[]>data['Scripts']);
+                                ko.utils.arrayPushAll(messages, <any[]>data['Messages']);
 
-                            // display messages and execute scripts
-                                self.AppendMessages(data['Messages'] || []);
-                            self.ExecuteScripts(data['Scripts'] || []);
+                                // only update node data if no outstanding commands
+                                if (self._queue.length == 0) {
+                                    self.Receive({
+                                        Node: node,
+                                        Scripts: scripts,
+                                        Messages: messages,
+                                    });
+                                }
 
-                            // recurse
-                            l();
-                        });
-                    } else {
-                        self._queueRunning = false;
-                        self._busy(false);
-                    }
-                };
+                                // recurse
+                                l();
+                            });
+                        } else {
+                            self._queueRunning = false;
+                            self._busy(false);
+                        }
+                    };
 
-                // initiate queue run
-                l();
+                    // initiate queue run
+                    l();
                 }, 500);
             }
         }

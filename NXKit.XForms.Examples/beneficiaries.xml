@@ -1,22 +1,22 @@
 <beneficiaries xmlns="urn::data">
     <template>
-  <beneficiary>
-    <firstname />
-    <middlename />
-    <lastname />
-    <percentage />
-    <socialsecuritynumber />
-    <telephone />
-    <relationship />
-  </beneficiary>
-        </template>
-  <beneficiary>
-    <firstname />
-    <middlename />
-    <lastname />
-    <percentage />
-    <socialsecuritynumber />
-    <telephone />
-    <relationship />
-  </beneficiary>
+        <beneficiary>
+            <firstname />
+            <middlename />
+            <lastname />
+            <percentage />
+            <socialsecuritynumber />
+            <telephone />
+            <relationship />
+        </beneficiary>
+    </template>
+    <beneficiary>
+        <firstname />
+        <middlename />
+        <lastname />
+        <percentage />
+        <socialsecuritynumber />
+        <telephone />
+        <relationship />
+    </beneficiary>
 </beneficiaries>
