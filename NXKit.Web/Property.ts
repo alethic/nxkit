@@ -6,9 +6,9 @@ module NXKit.Web {
 
         private _intf: Interface;
         private _name: string;
-        private _value: KnockoutObservable<any>;
         private _suspend: boolean = false;
 
+        private _value: KnockoutObservable<any>;
         private _valueAsString: KnockoutComputed<string>;
         private _valueAsBoolean: KnockoutComputed<boolean>;
         private _valueAsNumber: KnockoutComputed<number>;
@@ -27,7 +27,7 @@ module NXKit.Web {
                 }
             });
 
-            self._valueAsString = ko.computed({
+            self._valueAsString = Util.Computed({
                 read: () => {
                     var s = self._value() != null ? String(self._value()).trim() : null;
                     return s ? s : null;
@@ -38,7 +38,7 @@ module NXKit.Web {
                 },
             });
 
-            self._valueAsBoolean = ko.computed({
+            self._valueAsBoolean = Util.Computed({
                 read: () => {
                     return self._value() === true || self._value() === 'true' || self._value() === 'True';
                 },
@@ -47,7 +47,7 @@ module NXKit.Web {
                 },
             });
 
-            self._valueAsNumber = ko.computed({
+            self._valueAsNumber = Util.Computed({
                 read: () => {
                     return self._value() != '' ? parseFloat(self._value()) : null;
                 },
@@ -56,7 +56,7 @@ module NXKit.Web {
                 },
             });
 
-            self._valueAsDate = ko.computed({
+            self._valueAsDate = Util.Computed({
                 read: () => {
                     return self._value() != null ? new Date(self._value()) : null;
                 },
@@ -88,10 +88,6 @@ module NXKit.Web {
 
         public get Name(): string {
             return this._name;
-        }
-
-        public get Value(): KnockoutObservable<any> {
-            return this._value;
         }
 
         public get ValueAsString(): KnockoutComputed<string> {
@@ -150,7 +146,7 @@ module NXKit.Web {
         }
 
         public OnUpdate() {
-            this.View.PushUpdate(this.Node, this.Interface, this, this.Value());
+            this.View.PushUpdate(this.Node, this.Interface, this, this._value());
         }
 
     }

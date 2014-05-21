@@ -29,7 +29,7 @@ module NXKit.Web {
             self._root = null;
             self._bind = true;
 
-            self._messages = ko.observableArray<Message>();
+            self._messages = Util.ObservableArray<Message>();
             self._threshold = Severity.Warning;
 
             self._queue = new Array<any>();
