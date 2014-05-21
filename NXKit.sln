@@ -59,8 +59,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Examples", "NX
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.DOMEvents.Tests", "NXKit.DOMEvents.Tests\NXKit.DOMEvents.Tests.csproj", "{C0FC2477-6735-4962-9E7C-5E8ACCE9B3DF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vendor", "vendor", "{C12ACA77-93C3-4389-9124-B402D951B9A8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
