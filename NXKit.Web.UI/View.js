@@ -7,6 +7,7 @@ _NXKit.Web.UI.View = function (element) {
     self._view = null;
     self._data = null;
     self._save = null;
+    self._hash = null;
     self._body = null;
     self._push = null;
 };
@@ -43,6 +44,14 @@ _NXKit.Web.UI.View.prototype = {
     set_save: function (value) {
         this._save = value;
         this._init();
+    },
+
+    get_hash: function () {
+        return this._hash;
+    },
+
+    set_hash: function (value) {
+        this._hash = value;
     },
 
     get_body: function () {
@@ -85,29 +94,44 @@ _NXKit.Web.UI.View.prototype = {
     sendCommands: function (commands, wh) {
         var self = this;
 
-        // generate event argument to pass to server
-        var args = JSON.stringify({
-            Save: $(self._save).val(),
-            Commands: commands,
-        });
-
         // initiate server request
-        var cb = function (args) {
-            self.sendCommandsEnd(args, wh);
+        var cb = function (response) {
+            if (response.Code == 200) {
+
+                // store new save data if available
+                if (response.Save != null)
+                    $(self._save).val(response.Save);
+
+                // store new hash data if available
+                if (response.Hash != null)
+                    $(self._hash).val(response.Hash);
+
+                // send results to caller
+                wh(response.Data);
+            } else if (response.Code == 500) {
+                // resend with save data
+                self.sendCommandsEval({
+                    Save: $(self._save).val(),
+                    Hash: $(self._hash).val(),
+                    Commands: commands,
+                }, cb);
+            } else {
+                throw new Error('unexpected response code');
+            }
         };
 
-        eval(self._push);
+        self.sendCommandsEval({
+            Hash: $(self._hash).val(),
+            Commands: commands,
+        }, cb);
     },
 
-    sendCommandsEnd: function (result, cb) {
-        var self = this;
+    sendCommandsEval: function (args, cb) {
+        this.sendCommandsEvalFunc(JSON.stringify(args), function (_) { cb(JSON.parse(_)); });
+    },
 
-        // result contains new save and data values
-        var args = JSON.parse(result);
-        $(self._save).val(args.Save);
-
-        // send results to caller
-        cb(args.Data);
+    sendCommandsEvalFunc: function (args, cb) {
+        eval(this._push);
     },
 
 };

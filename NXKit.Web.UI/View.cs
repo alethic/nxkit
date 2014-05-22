@@ -10,13 +10,12 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web.Caching;
 using System.Web.UI;
 using System.Xml;
 using System.Xml.Linq;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
 using NXKit.Web.Serialization;
 using NXKit.Xml;
 
@@ -32,6 +31,20 @@ namespace NXKit.Web.UI
         IScriptControl
     {
 
+        /// <summary>
+        /// Gets the MD5 hash of the given data string in text format.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        static string GetMD5HashText(string data)
+        {
+            var hash = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(data));
+            var text = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+                text.Append(hash[i].ToString("x2"));
+            return text.ToString();
+        }
+
 
         string cssClass;
         string validationGroup;
@@ -39,6 +52,7 @@ namespace NXKit.Web.UI
         ExportProvider exports;
         NXDocumentHost host;
         LinkedList<string> scripts;
+        Func<string> responseFunc;
 
         /// <summary>
         /// Initializes a new instance.
@@ -332,11 +346,15 @@ namespace NXKit.Web.UI
 
             if (host != null)
             {
+                var data = CreateDataString();
+                var save = CreateSaveString();
+                var hash = GetMD5HashText(save);
+
                 // serialize visual state to data field
                 writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_data");
                 writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID + "_data");
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
-                writer.AddAttribute(HtmlTextWriterAttribute.Value, CreateDataString());
+                writer.AddAttribute(HtmlTextWriterAttribute.Value, data);
                 writer.RenderBeginTag(HtmlTextWriterTag.Input);
                 writer.RenderEndTag();
                 writer.WriteLine();
@@ -345,7 +363,16 @@ namespace NXKit.Web.UI
                 writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_save");
                 writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID + "_save");
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
-                writer.AddAttribute(HtmlTextWriterAttribute.Value, CreateSaveString());
+                writer.AddAttribute(HtmlTextWriterAttribute.Value, save);
+                writer.RenderBeginTag(HtmlTextWriterTag.Input);
+                writer.RenderEndTag();
+                writer.WriteLine();
+
+                // serialize document state to save field
+                writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_hash");
+                writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID + "_hash");
+                writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
+                writer.AddAttribute(HtmlTextWriterAttribute.Value, hash);
                 writer.RenderBeginTag(HtmlTextWriterTag.Input);
                 writer.RenderEndTag();
                 writer.WriteLine();
@@ -376,6 +403,7 @@ namespace NXKit.Web.UI
             var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
             d.AddElementProperty("body", ClientID + "_body");
             d.AddElementProperty("save", ClientID + "_save");
+            d.AddElementProperty("hash", ClientID + "_hash");
             d.AddElementProperty("data", ClientID + "_data");
             d.AddProperty("push", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self") + ";");
             yield return d;
@@ -389,6 +417,46 @@ namespace NXKit.Web.UI
             yield return new ScriptReference("NXKit.Web.UI.View.js", typeof(View).Assembly.FullName);
         }
 
+        /// <summary>
+        /// Loads the given <see cref="NXDocumentHost"/> from the given hash.
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <returns></returns>
+        bool LoadFromHash(string hash)
+        {
+            if (hash != null)
+            {
+                var save = (string)Context.Cache.Get(hash);
+                if (save != null)
+                    return LoadFromSave(save);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Loads the <see cref="NXDocumentHost"/> from the given save data.
+        /// </summary>
+        /// <param name="save"></param>
+        /// <returns></returns>
+        bool LoadFromSave(string save)
+        {
+            if (save != null)
+            {
+                host = LoadDocumentHost(save);
+                OnHostLoaded(HostEventArgs.Empty);
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Loads any view state from custom fields.
+        /// </summary>
+        /// <param name="postDataKey"></param>
+        /// <param name="postCollection"></param>
+        /// <returns></returns>
         bool IPostBackDataHandler.LoadPostData(string postDataKey, NameValueCollection postCollection)
         {
             if (Page.IsCallback)
@@ -397,49 +465,130 @@ namespace NXKit.Web.UI
             // load saved data
             var save = postCollection[postDataKey + "_save"];
             if (save != null)
-            {
-                host = LoadDocumentHost(save);
-                OnHostLoaded(HostEventArgs.Empty);
-            }
+                if (LoadFromSave(save))
+                    return true;
 
-            return true;
+            var hash = postCollection[postDataKey + "_hash"];
+            if (hash != null)
+                if (LoadFromHash(hash))
+                    return true;
+
+            return false;
         }
 
+        /// <summary>
+        /// Raised when the post data has changed.
+        /// </summary>
         void IPostBackDataHandler.RaisePostDataChangedEvent()
         {
 
         }
 
-        string ICallbackEventHandler.GetCallbackResult()
-        {
-            host.Invoke();
-
-            // allow final shut down
-            OnHostUnloading(HostEventArgs.Empty);
-
-            var str = JsonConvert.SerializeObject(new
-            {
-                Data = CreateDataJObject(),
-                Save = CreateSaveString(),
-            });
-
-            // dispose of the host
-            host.Dispose();
-            host = null;
-
-            return str;
-        }
-
+        /// <summary>
+        /// Raised when a client callback is invoked.
+        /// </summary>
+        /// <param name="eventArgument"></param>
         void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
         {
-            var args = JObject.Parse(eventArgument);
+            responseFunc = Execute(JObject.Parse(eventArgument));
+        }
+
+        /// <summary>
+        /// Loads the <see cref="NXDocumentHost"/> from the given argument data.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        Func<string> Execute(JObject args)
+        {
+            Contract.Requires<ArgumentNullException>(args != null);
+            Contract.Ensures(Contract.Result<Func<string>>() != null);
 
             var save = (string)args["Save"];
             if (save != null)
+                if (LoadFromSave(save))
+                    return Execute(args, GetMD5HashText(save));
+
+            var hash = (string)args["Hash"];
+            if (hash != null)
+                if (LoadFromHash(hash))
+                    return Execute(args, hash);
+
+            // could not retrieve saved document
+            // respond by asking for full save data
+            return () => JsonConvert.SerializeObject(new
             {
-                host = LoadDocumentHost(save);
-                OnHostLoaded(HostEventArgs.Empty);
-            }
+                Code = ViewResponseCode.NeedSave,
+            });
+        }
+
+        /// <summary>
+        /// Executes the incoming argument structure.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <param name="hash"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        Func<string> Execute(JObject args, string saveHash)
+        {
+            // execute any passed commands
+            ExecuteCommands(args);
+
+            // return function to generate result
+            return () =>
+            {
+                // allow final shut down
+                OnHostUnloading(HostEventArgs.Empty);
+
+                try
+                {
+                    // extract data from document
+                    var data = CreateDataJObject();
+                    var save = CreateSaveString();
+                    var hash = GetMD5HashText(save);
+
+                    // document has changed
+                    if (hash != saveHash)
+                    {
+                        // cache save data
+                        Context.Cache.Insert(hash, save, null, DateTime.UtcNow.AddMinutes(5), Cache.NoSlidingExpiration);
+
+                        // respond with object containing new save and JSON tree
+                        return JsonConvert.SerializeObject(new
+                        {
+                            Code = ViewResponseCode.Good,
+                            Save = save,
+                            Hash = hash,
+                            Data = data,
+                        });
+                    }
+                    else
+                    {
+                        // respond with object without new save data
+                        return JsonConvert.SerializeObject(new
+                        {
+                            Code = ViewResponseCode.Good,
+                            Hash = hash,
+                            Data = data,
+                        });
+                    }
+                }
+                finally
+                {
+                    // dispose of the host
+                    host.Dispose();
+                    host = null;
+                }
+            };
+        }
+
+        /// <summary>
+        /// Executes the commands packed in the arguments.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        void ExecuteCommands(JObject args)
+        {
+            Contract.Requires<ArgumentNullException>(args != null);
 
             var commands = (JArray)args["Commands"];
             if (commands != null)
@@ -458,6 +607,15 @@ namespace NXKit.Web.UI
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the result of a client callback.
+        /// </summary>
+        /// <returns></returns>
+        string ICallbackEventHandler.GetCallbackResult()
+        {
+            return responseFunc != null ? responseFunc() : null;
         }
 
         /// <summary>

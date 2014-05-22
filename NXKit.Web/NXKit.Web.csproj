@@ -167,6 +167,7 @@
     <TypeScriptCompile Include="PropertyMap.ts" />
     <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
     <TypeScriptCompile Include="Severity.ts" />
     <TypeScriptCompile Include="Util.ts" />
@@ -181,7 +182,6 @@
   <ItemGroup>
     <TypeScriptCompile Include="TypedEvent.ts" />
     <TypeScriptCompile Include="Property.ts" />
-    <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="View.ts" />
     <TypeScriptCompile Include="Node.ts" />
     <TypeScriptCompile Include="NodeViewModel.ts" />
