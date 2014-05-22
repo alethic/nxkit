@@ -181,6 +181,9 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         string CreateSaveString()
         {
+            if (host == null)
+                return null;
+
             using (var stm = new MemoryStream())
             using (var b64 = new CryptoStream(stm, new ToBase64Transform(), CryptoStreamMode.Write))
             using (var cmp = new DeflateStream(b64, CompressionMode.Compress))
