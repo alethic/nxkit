@@ -1,6 +1,6 @@
 ﻿namespace NXKit.Web
 {
 
-    public delegate void HostUnloadingEventHandler(object sender, DocumentEventArgs args);
+    public delegate void DocumentUnloadingEventHandler(object sender, DocumentEventArgs args);
 
 }

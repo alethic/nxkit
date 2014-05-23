@@ -32,7 +32,7 @@ namespace NXKit.Web.UI
         public View()
         {
             this.server = new ViewServer();
-            this.server.HostLoaded += (s, a) => OnHostLoaded(a);
+            this.server.HostLoaded += (s, a) => OnDocumentLoaded(a);
             this.server.HostUnloading += (s, a) => OnHostUnloading(a);
         }
 
@@ -77,7 +77,7 @@ namespace NXKit.Web.UI
         /// <summary>
         /// Gets a reference to the <see cref="NXDocumentHost"/>.
         /// </summary>
-        public NXDocumentHost Host
+        public NXDocumentHost Document
         {
             get { return server.Document; }
         }
@@ -85,31 +85,31 @@ namespace NXKit.Web.UI
         /// <summary>
         /// Raised when the <see cref="NXDocumentHost"/> is loaded.
         /// </summary>
-        public event HostLoadedEventHandler HostLoaded;
+        public event DocumentLoadedEventHandler DocumentLoaded;
 
         /// <summary>
-        /// Raises the HostLoaded event.
+        /// Raises the DocumentLoaded event.
         /// </summary>
         /// <param name="args"></param>
-        void OnHostLoaded(DocumentEventArgs args)
+        void OnDocumentLoaded(DocumentEventArgs args)
         {
-            if (HostLoaded != null)
-                HostLoaded(this, args);
+            if (DocumentLoaded != null)
+                DocumentLoaded(this, args);
         }
 
         /// <summary>
         /// Raised when the <see cref="NXDocumentHost"/> is unloading.
         /// </summary>
-        public event HostLoadedEventHandler HostUnloading;
+        public event DocumentUnloadingEventHandler DocumentUnloading;
 
         /// <summary>
-        /// Raises the HostUnloading event.
+        /// Raises the DocumentUnloading event.
         /// </summary>
         /// <param name="args"></param>
         void OnHostUnloading(DocumentEventArgs args)
         {
-            if (HostUnloading != null)
-                HostUnloading(this, args);
+            if (DocumentUnloading != null)
+                DocumentUnloading(this, args);
         }
 
         /// <summary>
@@ -164,8 +164,8 @@ namespace NXKit.Web.UI
             base.OnPreRender(args);
 
             // write all available knockout templates
-            if (Host != null)
-                foreach (var provider in Host.Container.GetExportedValues<IHtmlTemplateProvider>())
+            if (Document != null)
+                foreach (var provider in Document.Container.GetExportedValues<IHtmlTemplateProvider>())
                     foreach (var template in provider.GetTemplates())
                         if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
                             using (var rdr = new StreamReader(template.Open()))

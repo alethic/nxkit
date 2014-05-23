@@ -72,7 +72,7 @@ namespace NXKit.Web
         /// <summary>
         /// Raised when the <see cref="NXDocumentHost"/> is loaded.
         /// </summary>
-        public event HostLoadedEventHandler HostLoaded;
+        public event DocumentLoadedEventHandler HostLoaded;
 
         /// <summary>
         /// Raises the HostLoaded event.
@@ -87,7 +87,7 @@ namespace NXKit.Web
         /// <summary>
         /// Raised when the <see cref="NXDocumentHost"/> is unloading.
         /// </summary>
-        public event HostLoadedEventHandler HostUnloading;
+        public event DocumentLoadedEventHandler HostUnloading;
 
         /// <summary>
         /// Raises the HostUnloading event.
