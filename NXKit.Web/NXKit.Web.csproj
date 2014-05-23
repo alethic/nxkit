@@ -125,11 +125,15 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyHtmlTemplateProvider.cs" />
+    <Compile Include="HostEventArgs.cs" />
+    <Compile Include="HostLoadedEventHandler.cs" />
+    <Compile Include="HostUnloadingEventHandler.cs" />
     <Compile Include="HtmlTemplateInfo.cs" />
     <Compile Include="Serialization\RemoteDescriptor.cs" />
     <Compile Include="Serialization\RemoteJsonSerializer.cs" />
@@ -152,7 +156,9 @@
     <TypeScriptCompile Include="Knockout\HorizontalVisibleBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\LayoutManagerExportBindingHandler.ts" />
     <TypeScriptCompile Include="LayoutOptions.ts" />
-    <Compile Include="NXDocumentWebService.cs" />
+    <Compile Include="TraceMessage.cs" />
+    <Compile Include="TraceSink.cs" />
+    <Compile Include="ViewServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Ref.cs" />
     <TypeScriptCompile Include="DefaultLayoutManager.ts" />
