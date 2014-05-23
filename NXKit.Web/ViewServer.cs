@@ -71,7 +71,7 @@ namespace NXKit.Web
         /// <param name="catalog"></param>
         /// <param name="exports"></param>
         /// <param name="document"></param>
-        public ViewServer(ComposablePartCatalog catalog, ExportProvider exports, NXDocumentHost document)
+        ViewServer(ComposablePartCatalog catalog, ExportProvider exports, NXDocumentHost document)
             : this(catalog, exports)
         {
             Contract.Requires<ArgumentNullException>(document != null);
@@ -108,6 +108,18 @@ namespace NXKit.Web
         }
 
         /// <summary>
+        /// Releases the current document.
+        /// </summary>
+        void Release()
+        {
+            if (document != null)
+            {
+                OnDocumentUnloading(DocumentEventArgs.Empty);
+                document = null;
+            }
+        }
+
+        /// <summary>
         /// Raised when the <see cref="NXDocumentHost"/> is loaded.
         /// </summary>
         public event DocumentLoadedEventHandler DocumentLoaded;
@@ -118,6 +130,9 @@ namespace NXKit.Web
         /// <param name="args"></param>
         void OnDocumentLoaded(DocumentEventArgs args)
         {
+            Contract.Requires<ArgumentNullException>(args != null);
+            Contract.Requires<InvalidOperationException>(Document != null);
+
             if (DocumentLoaded != null)
                 DocumentLoaded(this, args);
         }
@@ -133,8 +148,25 @@ namespace NXKit.Web
         /// <param name="args"></param>
         void OnDocumentUnloading(DocumentEventArgs args)
         {
+            Contract.Requires<ArgumentNullException>(args != null);
+            Contract.Requires<InvalidOperationException>(Document != null);
+
             if (DocumentUnloading != null)
                 DocumentUnloading(this, args);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<HtmlTemplateInfo> GetHtmlTemplates()
+        {
+            if (document != null)
+                return document.Container
+                    .GetExportedValues<IHtmlTemplateProvider>()
+                    .SelectMany(i => i.GetTemplates());
+            else
+                return Enumerable.Empty<HtmlTemplateInfo>();
         }
 
         /// <summary>
@@ -144,6 +176,7 @@ namespace NXKit.Web
         public void RegisterScript(string script)
         {
             Contract.Requires<ArgumentNullException>(script != null);
+            Contract.Requires<InvalidOperationException>(Document != null);
 
             (scripts ?? (scripts = new LinkedList<string>())).AddLast(script);
         }
@@ -156,6 +189,10 @@ namespace NXKit.Web
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
+            // release any existing document
+            Release();
+
+            // load new document
             document = NXDocumentHost.Load(uri, catalog, exports);
             OnDocumentLoaded(DocumentEventArgs.Empty);
         }
@@ -179,6 +216,10 @@ namespace NXKit.Web
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
+            // release any existing document
+            Release();
+
+            // load new document
             document = NXDocumentHost.Load(reader, catalog, exports);
             OnDocumentLoaded(DocumentEventArgs.Empty);
         }
@@ -191,6 +232,10 @@ namespace NXKit.Web
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
+            // release any existing document
+            Release();
+
+            // load new document
             document = NXDocumentHost.Load(reader, catalog, exports);
             OnDocumentLoaded(DocumentEventArgs.Empty);
         }
@@ -200,7 +245,7 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="save"></param>
         /// <returns></returns>
-        public void LoadSave(string save)
+        void LoadSave(string save)
         {
             Contract.Requires<ArgumentNullException>(save != null);
 
@@ -218,7 +263,7 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public string GetMD5HashText(string data)
+        string GetMD5HashText(string data)
         {
             Contract.Requires<ArgumentNullException>(data != null);
 
@@ -233,8 +278,10 @@ namespace NXKit.Web
         /// Gets the client-side save state as a string.
         /// </summary>
         /// <returns></returns>
-        public string GetSaveString()
+        string GetSaveString()
         {
+            Contract.Requires<InvalidOperationException>(Document != null);
+
             using (var stream = new MemoryStream())
             using (var encode = new CryptoStream(stream, new ToBase64Transform(), CryptoStreamMode.Write))
             using (var deflate = new DeflateStream(encode, CompressionMode.Compress))
@@ -257,6 +304,8 @@ namespace NXKit.Web
         /// <returns></returns>
         JToken CreateNodeJObject()
         {
+            Contract.Requires<InvalidOperationException>(Document != null);
+
             // serialize document state to data field
             using (var wrt = new JTokenWriter())
             {
@@ -271,6 +320,8 @@ namespace NXKit.Web
         /// <returns></returns>
         JToken GetMessagesObject()
         {
+            Contract.Requires<InvalidOperationException>(Document != null);
+
             return JArray.FromObject(document.Container.GetExportedValue<TraceSink>().Messages);
         }
 
@@ -280,6 +331,8 @@ namespace NXKit.Web
         /// <returns></returns>
         JToken GetScriptsObject()
         {
+            Contract.Requires<InvalidOperationException>(Document != null);
+
             return new JArray(scripts);
         }
 
@@ -287,14 +340,16 @@ namespace NXKit.Web
         /// Gets the client-side data as a <see cref="JToken"/>.
         /// </summary>
         /// <returns></returns>
-        public JToken GetDataObject()
+        JToken GetDataObject()
         {
+            Contract.Requires<InvalidOperationException>(Document != null);
+
             return new JObject(
-                new JProperty("Node", 
+                new JProperty("Node",
                     CreateNodeJObject()),
-                new JProperty("Messages", 
+                new JProperty("Messages",
                     GetMessagesObject()),
-                new JProperty("Scripts", 
+                new JProperty("Scripts",
                     GetScriptsObject()));
         }
 
@@ -302,8 +357,10 @@ namespace NXKit.Web
         /// Gets the client-side data as a <see cref="String"/>.
         /// </summary>
         /// <returns></returns>
-        public string GetDataString()
+        string GetDataString()
         {
+            Contract.Requires<InvalidOperationException>(Document != null);
+
             return JsonConvert.SerializeObject(GetDataObject());
         }
 
@@ -313,6 +370,8 @@ namespace NXKit.Web
         /// <returns></returns>
         public JObject Save()
         {
+            Contract.Requires<InvalidOperationException>(Document != null);
+
             // extract data from document
             var data = GetDataObject();
             var save = GetSaveString();
@@ -336,7 +395,7 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
-        public bool LoadFromHash(string hash)
+        bool LoadFromHash(string hash)
         {
             if (hash != null)
             {
@@ -353,7 +412,7 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="save"></param>
         /// <returns></returns>
-        public bool LoadFromSave(string save)
+        bool LoadFromSave(string save)
         {
             if (save != null)
             {
@@ -362,6 +421,41 @@ namespace NXKit.Web
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Loads and executes the object.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        Func<JObject> LoadAndExecute(JObject args)
+        {
+            Contract.Requires<ArgumentNullException>(args != null);
+
+            // load save data
+            var save = (string)args["Save"];
+            if (save != null)
+                if (LoadFromSave(save))
+                    return Execute(args, null);
+
+            // load hash data
+            var hash = (string)args["Hash"];
+            if (hash != null)
+                if (LoadFromHash(hash))
+                    return Execute(args, hash);
+
+            return null;
+        }
+
+        /// <summary>
+        /// Loads a saved version of the document.
+        /// </summary>
+        /// <param name="args"></param>
+        public void Load(JObject args)
+        {
+            Contract.Requires<ArgumentNullException>(args != null);
+
+            LoadAndExecute(args);
         }
 
         /// <summary>
@@ -374,17 +468,10 @@ namespace NXKit.Web
             Contract.Requires<ArgumentNullException>(args != null);
             Contract.Ensures(Contract.Result<Func<JObject>>() != null);
 
-            // load save data
-            var save = (string)args["Save"];
-            if (save != null)
-                if (LoadFromSave(save))
-                    return Execute(args, GetMD5HashText(save));
-
-            // load hash data
-            var hash = (string)args["Hash"];
-            if (hash != null)
-                if (LoadFromHash(hash))
-                    return Execute(args, hash);
+            // loads and executes the document
+            var func = LoadAndExecute(args);
+            if (func != null)
+                return func;
 
             // could not retrieve saved document
             // respond by asking for full save data
@@ -402,15 +489,15 @@ namespace NXKit.Web
         /// <returns></returns>
         Func<JObject> Execute(JObject args, string saveHash)
         {
+            Contract.Requires<ArgumentNullException>(args != null);
+            Contract.Requires<InvalidOperationException>(Document != null);
+
             // execute any passed commands
             ExecuteCommands(args);
 
             // return function to generate result
             return () =>
             {
-                // allow final shut down
-                OnDocumentUnloading(DocumentEventArgs.Empty);
-
                 try
                 {
                     // extract data from document
@@ -446,9 +533,7 @@ namespace NXKit.Web
                 }
                 finally
                 {
-                    // dispose of the host
-                    document.Dispose();
-                    document = null;
+                    Release();
                 }
             };
         }
@@ -461,6 +546,7 @@ namespace NXKit.Web
         void ExecuteCommands(JObject args)
         {
             Contract.Requires<ArgumentNullException>(args != null);
+            Contract.Requires<InvalidOperationException>(Document != null);
 
             var commands = (JArray)args["Commands"];
             if (commands != null)
@@ -494,6 +580,7 @@ namespace NXKit.Web
         {
             Contract.Requires<ArgumentNullException>(method != null);
             Contract.Requires<ArgumentNullException>(args != null);
+            Contract.Requires<InvalidOperationException>(Document != null);
 
             // assembly invocation parameter list
             var count = 0;

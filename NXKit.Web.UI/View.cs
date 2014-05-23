@@ -152,6 +152,7 @@ namespace NXKit.Web.UI
         protected override void OnInit(EventArgs args)
         {
             Page.RegisterRequiresControlState(this);
+            Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"')._onsubmit();");
             base.OnInit(args);
         }
 
@@ -165,12 +166,11 @@ namespace NXKit.Web.UI
             base.OnPreRender(args);
 
             // write all available knockout templates
-            if (Document != null)
-                foreach (var provider in Document.Container.GetExportedValues<IHtmlTemplateProvider>())
-                    foreach (var template in provider.GetTemplates())
-                        if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
-                            using (var rdr = new StreamReader(template.Open()))
-                                Page.ClientScript.RegisterClientScriptBlock(typeof(View), template.Name, rdr.ReadToEnd(), false);
+            if (server != null)
+                foreach (var template in server.GetHtmlTemplates())
+                    if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
+                        using (var rdr = new StreamReader(template.Open()))
+                            Page.ClientScript.RegisterClientScriptBlock(typeof(View), template.Name, rdr.ReadToEnd(), false);
         }
 
         /// <summary>
@@ -180,7 +180,8 @@ namespace NXKit.Web.UI
         protected override void LoadViewState(object savedState)
         {
             var o = (object[])savedState;
-            if ((string)o[0] != null) server.LoadSave((string)o[0]);
+            if ((string)o[0] != null)
+                server.Load(JObject.Parse((string)o[0]));
             cssClass = (string)o[1];
             validationGroup = (string)o[2];
         }
@@ -193,7 +194,7 @@ namespace NXKit.Web.UI
         {
             return new object[] 
             {
-                !Visible ? server.GetSaveString() : null,
+                !Visible ? server.Save().ToString(Formatting.None) : null,
                 cssClass,
                 validationGroup,
             };
@@ -221,7 +222,7 @@ namespace NXKit.Web.UI
                 writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID);
                 writer.AddAttribute(HtmlTextWriterAttribute.Class, "data");
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
-                writer.AddAttribute(HtmlTextWriterAttribute.Value, JsonConvert.SerializeObject(server.Save(), Formatting.None));
+                writer.AddAttribute(HtmlTextWriterAttribute.Value, server.Save().ToString(Formatting.None));
                 writer.RenderBeginTag(HtmlTextWriterTag.Input);
                 writer.RenderEndTag();
                 writer.WriteLine();
@@ -273,24 +274,8 @@ namespace NXKit.Web.UI
                 return false;
 
             var text = postCollection[postDataKey];
-            if (text != null)
-            {
-                var data = JObject.Parse(text);
-                if (data != null)
-                {
-                    // load saved data
-                    var save = data["Save"].Value<string>();
-                    if (save != null)
-                        if (server.LoadFromSave(save))
-                            return true;
-
-                    var hash = data["Hash"].Value<string>();
-                    if (hash != null)
-                        if (server.LoadFromHash(hash))
-                            return true;
-                }
-            }
-
+            if (!string.IsNullOrWhiteSpace(text))
+                server.Execute(JObject.Parse(text))();
 
             return false;
         }

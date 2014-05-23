@@ -49,12 +49,11 @@ module NXKit.Web {
             return this._body;
         }
 
-        public get Save(): string {
-            return this._save;
-        }
-
-        public get Hash(): string {
-            return this._hash;
+        public get Data(): any {
+            return {
+                Save: this._save,
+                Hash: this._hash,
+            };
         }
 
         public get Root(): Node {

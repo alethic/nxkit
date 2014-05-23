@@ -33,8 +33,25 @@ _NXKit.Web.UI.View.prototype = {
         this._push = value;
     },
 
+    _onsubmit: function () {
+        var self = this;
+
+        var data = $(self.get_element()).find('>.data');
+        if (data.length == 0)
+            throw new Error("cannot find data element");
+
+        // update the hidden data field value before submit
+        if (self._view != null) {
+            $(data).val(JSON.stringify(self._view.Data));
+        }
+    },
+
     _init: function () {
         var self = this;
+
+        var form = $(self.get_element()).closest('form');
+        if (form.length == 0)
+            throw new Error('cannot find form element');
 
         var data = $(self.get_element()).find('>.data');
         if (data.length == 0)
@@ -43,6 +60,10 @@ _NXKit.Web.UI.View.prototype = {
         var body = $(self.get_element()).find('>.body');
         if (body.length == 0)
             throw new Error("cannot find body element");
+
+        Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(function (s, a) {
+            self._onsubmit();
+        });
 
         // generate new view
         if (self._view == null) {
