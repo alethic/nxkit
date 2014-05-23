@@ -346,9 +346,20 @@ namespace NXKit.Web.UI
 
             if (host != null)
             {
+                // allow final shut down
+                OnHostUnloading(HostEventArgs.Empty);
+
+                // generate host data
                 var data = CreateDataString();
                 var save = CreateSaveString();
                 var hash = GetMD5HashText(save);
+
+                // dispose of host
+                host.Dispose();
+                host = null;
+
+                // cache save data
+                Context.Cache.Insert(hash, save, null, DateTime.UtcNow.AddMinutes(5), Cache.NoSlidingExpiration);
 
                 // serialize visual state to data field
                 writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_data");
