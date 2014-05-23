@@ -13,7 +13,7 @@ using NXKit.Diagnostics;
 using NXKit.Serialization;
 using NXKit.Xml;
 
-namespace NXKit.Web.UI
+namespace NXKit.Web
 {
 
     /// <summary>

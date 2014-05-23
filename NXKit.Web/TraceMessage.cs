@@ -3,7 +3,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace NXKit.Web.UI
+namespace NXKit.Web
 {
 
     public class TraceMessage
