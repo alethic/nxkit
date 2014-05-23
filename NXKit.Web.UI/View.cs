@@ -7,6 +7,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Web.UI;
 
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace NXKit.Web.UI
@@ -24,7 +25,7 @@ namespace NXKit.Web.UI
         string cssClass;
         string validationGroup;
         ViewServer server;
-        Func<string> responseFunc;
+        Func<JObject> responseFunc;
 
         /// <summary>
         /// Initializes a new instance.
@@ -32,8 +33,8 @@ namespace NXKit.Web.UI
         public View()
         {
             this.server = new ViewServer();
-            this.server.HostLoaded += (s, a) => OnDocumentLoaded(a);
-            this.server.HostUnloading += (s, a) => OnHostUnloading(a);
+            this.server.DocumentLoaded += (s, a) => OnDocumentLoaded(a);
+            this.server.DocumentUnloading += (s, a) => OnHostUnloading(a);
         }
 
         /// <summary>
@@ -192,7 +193,7 @@ namespace NXKit.Web.UI
         {
             return new object[] 
             {
-                !Visible ? server.CreateSaveString() : null,
+                !Visible ? server.GetSaveString() : null,
                 cssClass,
                 validationGroup,
             };
@@ -209,51 +210,18 @@ namespace NXKit.Web.UI
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
 
-            writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_body");
+            writer.AddAttribute(HtmlTextWriterAttribute.Class, "body");
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
-            writer.RenderEndTag();
-            writer.WriteLine();
-
-            // serialize visual state to data field
-            writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID);
-            writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
-            writer.RenderBeginTag(HtmlTextWriterTag.Input);
             writer.RenderEndTag();
             writer.WriteLine();
 
             if (server.Document != null)
             {
-                // allow final shut down
-                OnHostUnloading(DocumentEventArgs.Empty);
-
-                // generate host data
-                var data = server.CreateDataString();
-                var save = server.CreateSaveString();
-                var hash = server.GetMD5HashText(save);
-
                 // serialize visual state to data field
-                writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_data");
-                writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID + "_data");
+                writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID);
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "data");
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
-                writer.AddAttribute(HtmlTextWriterAttribute.Value, data);
-                writer.RenderBeginTag(HtmlTextWriterTag.Input);
-                writer.RenderEndTag();
-                writer.WriteLine();
-
-                // serialize document state to save field
-                writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_save");
-                writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID + "_save");
-                writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
-                writer.AddAttribute(HtmlTextWriterAttribute.Value, save);
-                writer.RenderBeginTag(HtmlTextWriterTag.Input);
-                writer.RenderEndTag();
-                writer.WriteLine();
-
-                // serialize document state to save field
-                writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_hash");
-                writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID + "_hash");
-                writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
-                writer.AddAttribute(HtmlTextWriterAttribute.Value, hash);
+                writer.AddAttribute(HtmlTextWriterAttribute.Value, JsonConvert.SerializeObject(server.Save(), Formatting.None));
                 writer.RenderBeginTag(HtmlTextWriterTag.Input);
                 writer.RenderEndTag();
                 writer.WriteLine();
@@ -281,10 +249,6 @@ namespace NXKit.Web.UI
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
             var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
-            d.AddElementProperty("body", ClientID + "_body");
-            d.AddElementProperty("save", ClientID + "_save");
-            d.AddElementProperty("hash", ClientID + "_hash");
-            d.AddElementProperty("data", ClientID + "_data");
             d.AddProperty("push", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self") + ";");
             yield return d;
         }
@@ -308,16 +272,25 @@ namespace NXKit.Web.UI
             if (Page.IsCallback)
                 return false;
 
-            // load saved data
-            var save = postCollection[postDataKey + "_save"];
-            if (save != null)
-                if (server.LoadFromSave(save))
-                    return true;
+            var text = postCollection[postDataKey];
+            if (text != null)
+            {
+                var data = JObject.Parse(text);
+                if (data != null)
+                {
+                    // load saved data
+                    var save = data["Save"].Value<string>();
+                    if (save != null)
+                        if (server.LoadFromSave(save))
+                            return true;
 
-            var hash = postCollection[postDataKey + "_hash"];
-            if (hash != null)
-                if (server.LoadFromHash(hash))
-                    return true;
+                    var hash = data["Hash"].Value<string>();
+                    if (hash != null)
+                        if (server.LoadFromHash(hash))
+                            return true;
+                }
+            }
+
 
             return false;
         }
@@ -345,7 +318,7 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         string ICallbackEventHandler.GetCallbackResult()
         {
-            return responseFunc != null ? responseFunc() : null;
+            return responseFunc != null ? responseFunc().ToString(Formatting.None) : null;
         }
 
     }

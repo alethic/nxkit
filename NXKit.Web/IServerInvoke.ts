@@ -1,7 +1,7 @@
 ﻿module NXKit.Web {
 
     export interface IServerInvoke {
-        (commands: any[], cb: ICallback): void;
+        (args: any, cb: ICallback): void;
     }
 
 }

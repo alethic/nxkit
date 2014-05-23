@@ -5,10 +5,6 @@ _NXKit.Web.UI.View = function (element) {
     _NXKit.Web.UI.View.initializeBase(self, [element]);
 
     self._view = null;
-    self._data = null;
-    self._save = null;
-    self._hash = null;
-    self._body = null;
     self._push = null;
 };
 
@@ -17,50 +13,16 @@ _NXKit.Web.UI.View.prototype = {
     initialize: function () {
         var self = this;
         _NXKit.Web.UI.View.callBaseMethod(self, 'initialize');
+
+        self._init();
     },
 
     dispose: function () {
         var self = this;
         _NXKit.Web.UI.View.callBaseMethod(self, 'dispose');
-    },
 
-    get_view: function () {
-        return this._view;
-    },
-
-    get_data: function () {
-        return this._data;
-    },
-
-    set_data: function (value) {
-        this._data = value;
-        this._init();
-    },
-
-    get_save: function () {
-        return this._save;
-    },
-
-    set_save: function (value) {
-        this._save = value;
-        this._init();
-    },
-
-    get_hash: function () {
-        return this._hash;
-    },
-
-    set_hash: function (value) {
-        this._hash = value;
-    },
-
-    get_body: function () {
-        return this._body;
-    },
-
-    set_body: function (value) {
-        this._body = value;
-        this._init();
+        self._view = null;
+        self._push = null;
     },
 
     get_push: function () {
@@ -74,63 +36,42 @@ _NXKit.Web.UI.View.prototype = {
     _init: function () {
         var self = this;
 
-        if (self._body != null &&
-            self._data != null &&
-            self._save != null) {
+        var data = $(self.get_element()).find('>.data');
+        if (data.length == 0)
+            throw new Error("cannot find data element");
 
-            // generate new view
-            if (self._view == null) {
-                self._view = new NXKit.Web.View(self._body, function (commands, cb) {
-                    self.sendCommands(commands, cb);
-                });
-            }
+        var body = $(self.get_element()).find('>.body');
+        if (body.length == 0)
+            throw new Error("cannot find body element");
 
-            // update view with data, and remove data from resubmission
-            self._view.Receive(JSON.parse($(self._data).val()));
-            $(self._data).val('');
+        // generate new view
+        if (self._view == null) {
+            self._view = new NXKit.Web.View(body[0], function (data, cb) {
+                self.send(data, cb);
+            });
         }
+
+        // update view with data, and remove data from resubmission
+        self._view.Receive(JSON.parse($(data).val()));
+        $(data).val('');
     },
 
-    sendCommands: function (commands, wh) {
+    send: function (data, wh) {
         var self = this;
 
         // initiate server request
         var cb = function (response) {
-            if (response.Code == 200) {
-
-                // store new save data if available
-                if (response.Save != null)
-                    $(self._save).val(response.Save);
-
-                // store new hash data if available
-                if (response.Hash != null)
-                    $(self._hash).val(response.Hash);
-
-                // send results to caller
-                wh(response.Data);
-            } else if (response.Code == 500) {
-                // resend with save data
-                self.sendCommandsEval({
-                    Save: $(self._save).val(),
-                    Hash: $(self._hash).val(),
-                    Commands: commands,
-                }, cb);
-            } else {
-                throw new Error('unexpected response code');
-            }
+            wh(response);
         };
 
-        self.sendCommandsEval({
-            Hash: $(self._hash).val(),
-            Commands: commands,
-        }, cb);
+        self.sendEval(data, cb);
     },
 
-    sendCommandsEval: function (args, cb) {
-        this.sendCommandsEvalFunc(JSON.stringify(args), function (_) { cb(JSON.parse(_)); });
+    sendEval: function (args, cb) {
+        this.sendEvalExec(JSON.stringify(args), function (_) { cb(JSON.parse(_)); });
     },
 
-    sendCommandsEvalFunc: function (args, cb) {
+    sendEvalExec: function (args, cb) {
         eval(this._push);
     },
 

@@ -44,6 +44,44 @@ namespace NXKit.Web
         }
 
         /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
+        public ViewServer(NXDocumentHost document)
+            : this(null, null, document)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="catalog"></param>
+        /// <param name="exports"></param>
+        public ViewServer(ComposablePartCatalog catalog, ExportProvider exports)
+            : this()
+        {
+            this.catalog = catalog;
+            this.exports = exports;
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="catalog"></param>
+        /// <param name="exports"></param>
+        /// <param name="document"></param>
+        public ViewServer(ComposablePartCatalog catalog, ExportProvider exports, NXDocumentHost document)
+            : this(catalog, exports)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+
+            this.catalog = catalog;
+            this.exports = exports;
+            this.document = document;
+        }
+
+        /// <summary>
         /// Gets or sets the additional set of exports to introduce to the document.
         /// </summary>
         public ExportProvider Exports
@@ -72,55 +110,42 @@ namespace NXKit.Web
         /// <summary>
         /// Raised when the <see cref="NXDocumentHost"/> is loaded.
         /// </summary>
-        public event DocumentLoadedEventHandler HostLoaded;
+        public event DocumentLoadedEventHandler DocumentLoaded;
 
         /// <summary>
-        /// Raises the HostLoaded event.
+        /// Raises the DocumentLoaded event.
         /// </summary>
         /// <param name="args"></param>
-        void OnHostLoaded(DocumentEventArgs args)
+        void OnDocumentLoaded(DocumentEventArgs args)
         {
-            if (HostLoaded != null)
-                HostLoaded(this, args);
+            if (DocumentLoaded != null)
+                DocumentLoaded(this, args);
         }
 
         /// <summary>
         /// Raised when the <see cref="NXDocumentHost"/> is unloading.
         /// </summary>
-        public event DocumentLoadedEventHandler HostUnloading;
+        public event DocumentLoadedEventHandler DocumentUnloading;
 
         /// <summary>
-        /// Raises the HostUnloading event.
+        /// Raises the DocumentUnloading event.
         /// </summary>
         /// <param name="args"></param>
-        void OnHostUnloading(DocumentEventArgs args)
+        void OnDocumentUnloading(DocumentEventArgs args)
         {
-            if (HostUnloading != null)
-                HostUnloading(this, args);
+            if (DocumentUnloading != null)
+                DocumentUnloading(this, args);
         }
 
         /// <summary>
-        /// Registers the given script snippet for execution upon completion of the current page request or client
-        /// callback.
+        /// Registers the given script snippet for execution upon return to the client.
         /// </summary>
         /// <param name="script"></param>
         public void RegisterScript(string script)
         {
-            (scripts ?? (scripts = new LinkedList<string>())).AddLast(script);
-        }
+            Contract.Requires<ArgumentNullException>(script != null);
 
-        /// <summary>
-        /// Gets the MD5 hash of the given data string in text format.
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public string GetMD5HashText(string data)
-        {
-            var hash = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(data));
-            var text = new StringBuilder();
-            for (int i = 0; i < hash.Length; i++)
-                text.Append(hash[i].ToString("x2"));
-            return text.ToString();
+            (scripts ?? (scripts = new LinkedList<string>())).AddLast(script);
         }
 
         /// <summary>
@@ -132,7 +157,7 @@ namespace NXKit.Web
             Contract.Requires<ArgumentNullException>(uri != null);
 
             document = NXDocumentHost.Load(uri, catalog, exports);
-            OnHostLoaded(DocumentEventArgs.Empty);
+            OnDocumentLoaded(DocumentEventArgs.Empty);
         }
 
         /// <summary>
@@ -155,7 +180,7 @@ namespace NXKit.Web
             Contract.Requires<ArgumentNullException>(reader != null);
 
             document = NXDocumentHost.Load(reader, catalog, exports);
-            OnHostLoaded(DocumentEventArgs.Empty);
+            OnDocumentLoaded(DocumentEventArgs.Empty);
         }
 
         /// <summary>
@@ -167,11 +192,11 @@ namespace NXKit.Web
             Contract.Requires<ArgumentNullException>(reader != null);
 
             document = NXDocumentHost.Load(reader, catalog, exports);
-            OnHostLoaded(DocumentEventArgs.Empty);
+            OnDocumentLoaded(DocumentEventArgs.Empty);
         }
 
         /// <summary>
-        /// Loads the document host from the given saved state.
+        /// Loads the document from the given saved state string.
         /// </summary>
         /// <param name="save"></param>
         /// <returns></returns>
@@ -189,24 +214,40 @@ namespace NXKit.Web
         }
 
         /// <summary>
+        /// Gets the MD5 hash of the given data string in text format.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public string GetMD5HashText(string data)
+        {
+            Contract.Requires<ArgumentNullException>(data != null);
+
+            var hash = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(data));
+            var text = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+                text.Append(hash[i].ToString("x2"));
+            return text.ToString();
+        }
+
+        /// <summary>
         /// Gets the client-side save state as a string.
         /// </summary>
         /// <returns></returns>
-        public string CreateSaveString()
+        public string GetSaveString()
         {
-            using (var stm = new MemoryStream())
-            using (var b64 = new CryptoStream(stm, new ToBase64Transform(), CryptoStreamMode.Write))
-            using (var cmp = new DeflateStream(b64, CompressionMode.Compress))
-            using (var xml = XmlDictionaryWriter.CreateBinaryWriter(cmp))
+            using (var stream = new MemoryStream())
+            using (var encode = new CryptoStream(stream, new ToBase64Transform(), CryptoStreamMode.Write))
+            using (var deflate = new DeflateStream(encode, CompressionMode.Compress))
+            using (var writer = XmlDictionaryWriter.CreateBinaryWriter(deflate))
             {
-                document.Save(xml);
+                document.Save(writer);
 
                 // flush output
-                xml.Dispose();
-                cmp.Dispose();
-                b64.Dispose();
+                writer.Dispose();
+                deflate.Dispose();
+                encode.Dispose();
 
-                return Encoding.ASCII.GetString(stm.ToArray());
+                return Encoding.ASCII.GetString(stream.ToArray());
             }
         }
 
@@ -228,7 +269,7 @@ namespace NXKit.Web
         /// Gets the client-side message data as a <see cref="JToken"/>.
         /// </summary>
         /// <returns></returns>
-        JToken CreateMessagesJObject()
+        JToken GetMessagesObject()
         {
             return JArray.FromObject(document.Container.GetExportedValue<TraceSink>().Messages);
         }
@@ -237,7 +278,7 @@ namespace NXKit.Web
         /// Gets the client-side script data as a <see cref="JToken"/>.
         /// </summary>
         /// <returns></returns>
-        JToken CreateScriptsJObject()
+        JToken GetScriptsObject()
         {
             return new JArray(scripts);
         }
@@ -246,21 +287,48 @@ namespace NXKit.Web
         /// Gets the client-side data as a <see cref="JToken"/>.
         /// </summary>
         /// <returns></returns>
-        JToken CreateDataJObject()
+        public JToken GetDataObject()
         {
             return new JObject(
-                new JProperty("Node", CreateNodeJObject()),
-                new JProperty("Messages", CreateMessagesJObject()),
-                new JProperty("Scripts", CreateScriptsJObject()));
+                new JProperty("Node", 
+                    CreateNodeJObject()),
+                new JProperty("Messages", 
+                    GetMessagesObject()),
+                new JProperty("Scripts", 
+                    GetScriptsObject()));
         }
 
         /// <summary>
         /// Gets the client-side data as a <see cref="String"/>.
         /// </summary>
         /// <returns></returns>
-        public string CreateDataString()
+        public string GetDataString()
         {
-            return JsonConvert.SerializeObject(CreateDataJObject());
+            return JsonConvert.SerializeObject(GetDataObject());
+        }
+
+        /// <summary>
+        /// Returns a saved version of the currently loaded document.
+        /// </summary>
+        /// <returns></returns>
+        public JObject Save()
+        {
+            // extract data from document
+            var data = GetDataObject();
+            var save = GetSaveString();
+            var hash = GetMD5HashText(save);
+
+            // cache save data
+            MemoryCache.Default.Add(hash, save, DateTime.UtcNow.AddMinutes(5));
+
+            // respond with object containing new save and JSON tree
+            return JObject.FromObject(new
+            {
+                Code = ViewResponseCode.Good,
+                Save = save,
+                Hash = hash,
+                Data = data,
+            });
         }
 
         /// <summary>
@@ -297,20 +365,22 @@ namespace NXKit.Web
         }
 
         /// <summary>
-        /// Loads the <see cref="NXDocumentHost"/> from the given argument data.
+        /// Executes the incoming argument set.
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public Func<string> Execute(JObject args)
+        public Func<JObject> Execute(JObject args)
         {
             Contract.Requires<ArgumentNullException>(args != null);
-            Contract.Ensures(Contract.Result<Func<string>>() != null);
+            Contract.Ensures(Contract.Result<Func<JObject>>() != null);
 
+            // load save data
             var save = (string)args["Save"];
             if (save != null)
                 if (LoadFromSave(save))
                     return Execute(args, GetMD5HashText(save));
 
+            // load hash data
             var hash = (string)args["Hash"];
             if (hash != null)
                 if (LoadFromHash(hash))
@@ -318,7 +388,7 @@ namespace NXKit.Web
 
             // could not retrieve saved document
             // respond by asking for full save data
-            return () => JsonConvert.SerializeObject(new
+            return () => JObject.FromObject(new
             {
                 Code = ViewResponseCode.NeedSave,
             });
@@ -328,10 +398,9 @@ namespace NXKit.Web
         /// Executes the incoming argument structure.
         /// </summary>
         /// <param name="args"></param>
-        /// <param name="hash"></param>
-        /// <param name="action"></param>
+        /// <param name="saveHash"></param>
         /// <returns></returns>
-        Func<string> Execute(JObject args, string saveHash)
+        Func<JObject> Execute(JObject args, string saveHash)
         {
             // execute any passed commands
             ExecuteCommands(args);
@@ -340,13 +409,13 @@ namespace NXKit.Web
             return () =>
             {
                 // allow final shut down
-                OnHostUnloading(DocumentEventArgs.Empty);
+                OnDocumentUnloading(DocumentEventArgs.Empty);
 
                 try
                 {
                     // extract data from document
-                    var data = CreateDataJObject();
-                    var save = CreateSaveString();
+                    var data = GetDataObject();
+                    var save = GetSaveString();
                     var hash = GetMD5HashText(save);
 
                     // document has changed
@@ -356,7 +425,7 @@ namespace NXKit.Web
                         MemoryCache.Default.Add(hash, save, DateTime.UtcNow.AddMinutes(5));
 
                         // respond with object containing new save and JSON tree
-                        return JsonConvert.SerializeObject(new
+                        return JObject.FromObject(new
                         {
                             Code = ViewResponseCode.Good,
                             Save = save,
@@ -367,7 +436,7 @@ namespace NXKit.Web
                     else
                     {
                         // respond with object without new save data
-                        return JsonConvert.SerializeObject(new
+                        return JObject.FromObject(new
                         {
                             Code = ViewResponseCode.Good,
                             Hash = hash,
@@ -402,10 +471,14 @@ namespace NXKit.Web
                     switch ((string)command["Action"])
                     {
                         case "Update":
-                            JsonInvokeMethod(typeof(ViewServer).GetMethod("ClientUpdate", BindingFlags.NonPublic | BindingFlags.Instance), (JObject)command["Args"]);
+                            JsonInvokeMethod(
+                                typeof(ViewServer).GetMethod("ClientUpdate", BindingFlags.NonPublic | BindingFlags.Instance),
+                                (JObject)command["Args"]);
                             break;
                         case "Invoke":
-                            JsonInvokeMethod(typeof(ViewServer).GetMethod("ClientInvoke", BindingFlags.NonPublic | BindingFlags.Instance), (JObject)command["Args"]);
+                            JsonInvokeMethod(
+                                typeof(ViewServer).GetMethod("ClientInvoke", BindingFlags.NonPublic | BindingFlags.Instance),
+                                (JObject)command["Args"]);
                             break;
                     }
                 }

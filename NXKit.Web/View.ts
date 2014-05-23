@@ -11,6 +11,8 @@ module NXKit.Web {
         private _body: HTMLElement;
         private _server: IServerInvoke;
 
+        private _save: string;
+        private _hash: string;
         private _root: Node;
         private _bind: boolean;
         private _messages: KnockoutObservableArray<Message>;
@@ -26,6 +28,8 @@ module NXKit.Web {
 
             self._server = server;
             self._body = body;
+            self._save = null;
+            self._hash = null;
             self._root = null;
             self._bind = true;
 
@@ -45,6 +49,14 @@ module NXKit.Web {
             return this._body;
         }
 
+        public get Save(): string {
+            return this._save;
+        }
+
+        public get Hash(): string {
+            return this._hash;
+        }
+
         public get Root(): Node {
             return this._root;
         }
@@ -62,12 +74,27 @@ module NXKit.Web {
         }
 
         /**
-         * Updates the view in response to some received data.
+         * Updates the view in response to a received message.
          */
-        public Receive(data: any) {
-            this.Apply(data['Node'] || null);
-            this.AppendMessages(data['Messages'] || []);
-            this.ExecuteScripts(data['Scripts'] || []);
+        public Receive(args: any) {
+            this._save = args['Save'] || this._save;
+            this._hash = args['Hash'] || this._hash;
+
+            var data = args['Data'] || null;
+            if (data != null) {
+                this.ReceiveData(data);
+            }
+        }
+
+        /**
+         * Updates the view in response to a received data package.
+         */
+        public ReceiveData(data: any) {
+            if (data != null) {
+                this.Apply(data['Node'] || null);
+                this.AppendMessages(data['Messages'] || []);
+                this.ExecuteScripts(data['Scripts'] || []);
+            }
         }
 
         /**
@@ -185,36 +212,73 @@ module NXKit.Web {
                     self._busy(true);
 
                     // recursive call to work queue
-                    var l = () => {
+                    var push = () => {
                         var commands = self._queue.splice(0);
-                        if (commands.length > 0) {
-                            self._server(commands, (data: any) => {
-                                // push new items into receive queue
-                                node = data['Node'] || null;
-                                ko.utils.arrayPushAll(scripts, <any[]>data['Scripts']);
-                                ko.utils.arrayPushAll(messages, <any[]>data['Messages']);
 
-                                // only update node data if no outstanding commands
-                                if (self._queue.length == 0) {
-                                    self.Receive({
-                                        Node: node,
-                                        Scripts: scripts,
-                                        Messages: messages,
-                                    });
+                        // callback for server response
+                        var cb = (args: any) => {
+                            if (args.Code == 200) {
+
+                                // receive saved state
+                                var save = args.Save || null;
+                                if (save != null) {
+                                    this._save = save;
+                                }
+
+                                // receive saved state hash
+                                var hash = args.Hash || null;
+                                if (hash != null) {
+                                    this._hash = hash;
+                                }
+
+                                // receive data response
+                                var data = args.Data || null;
+                                if (data != null) {
+                                    // push new items into receive queue
+                                    node = data['Node'] || null;
+                                    ko.utils.arrayPushAll(scripts, <any[]>data['Scripts']);
+                                    ko.utils.arrayPushAll(messages, <any[]>data['Messages']);
+
+                                    // only update node data if no outstanding commands
+                                    if (self._queue.length == 0) {
+                                        self.ReceiveData({
+                                            Node: node,
+                                            Scripts: scripts,
+                                            Messages: messages,
+                                        });
+                                    }
                                 }
 
                                 // recurse
-                                l();
-                            });
+                                push();
+                            } else if (args.Code == 500) {
+                                // resend with save data
+                                self._server({
+                                    Save: self._save,
+                                    Hash: self._hash,
+                                    Commands: commands,
+                                }, cb);
+                            } else {
+                                throw new Error('unexpected response code');
+                            }
+                        };
+
+                        if (commands.length > 0) {
+                            // send commands
+                            self._server({
+                                Hash: self._hash,
+                                Commands: commands,
+                            }, cb);
                         } else {
+                            // no commands, exit
                             self._queueRunning = false;
                             self._busy(false);
                         }
                     };
 
-                    // initiate queue run
-                    l();
-                }, 500);
+                    // begin processing queue
+                    push();
+                }, 50);
             }
         }
 
