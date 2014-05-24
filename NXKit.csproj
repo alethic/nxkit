@@ -227,7 +227,7 @@
     <Compile Include="SchemaPackage.cs" />
     <Compile Include="SchemaContainer.cs" />
     <Compile Include="IRefScope.cs" />
-    <Compile Include="NXDocumentHost.cs" />
+    <Compile Include="Document.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Xml\XTransformer.cs" />
     <Compile Include="Xml\XVisitor.cs" />

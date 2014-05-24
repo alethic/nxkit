@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+
 using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.IO;
@@ -20,22 +21,22 @@ namespace NXKit
     /// <summary>
     /// Hosts an NXKit document. Provides access to the visual tree for a renderer or other processor.
     /// </summary>
-    public class NXDocumentHost :
+    public class Document :
         IDisposable
     {
 
         /// <summary>
-        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="XmlReader"/>.
+        /// Loads a <see cref="Document"/> from the given <see cref="XmlReader"/>.
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="catalog"></param>
         /// <param name="exports"></param>
         /// <returns></returns>
-        public static NXDocumentHost Load(XmlReader reader, ComposablePartCatalog catalog = null, ExportProvider exports = null)
+        public static Document Load(XmlReader reader, ComposablePartCatalog catalog = null, ExportProvider exports = null)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
-            return new NXDocumentHost(host =>
+            return new Document(host =>
                 XNodeAnnotationSerializer.Deserialize(
                     XDocument.Load(
                         reader,
@@ -45,11 +46,11 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="XmlReader"/>.
+        /// Loads a <see cref="Document"/> from the given <see cref="XmlReader"/>.
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public static NXDocumentHost Load(XmlReader reader)
+        public static Document Load(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
@@ -57,12 +58,12 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="TextReader"/>.
+        /// Loads a <see cref="Document"/> from the given <see cref="TextReader"/>.
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="catalog"></param>
         /// <param name="exports"></param>
-        public static NXDocumentHost Load(TextReader reader, ComposablePartCatalog catalog = null, ExportProvider exports = null)
+        public static Document Load(TextReader reader, ComposablePartCatalog catalog = null, ExportProvider exports = null)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
@@ -71,10 +72,10 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="TextReader"/>.
+        /// Loads a <see cref="Document"/> from the given <see cref="TextReader"/>.
         /// </summary>
         /// <param name="reader"></param>
-        public static NXDocumentHost Load(TextReader reader)
+        public static Document Load(TextReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
@@ -82,13 +83,13 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="Stream"/>.
+        /// Loads a <see cref="Document"/> from the given <see cref="Stream"/>.
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="catalog"></param>
         /// <param name="exports"></param>
         /// <returns></returns>
-        public static NXDocumentHost Load(Stream stream, ComposablePartCatalog catalog = null, ExportProvider exports = null)
+        public static Document Load(Stream stream, ComposablePartCatalog catalog = null, ExportProvider exports = null)
         {
             Contract.Requires<ArgumentNullException>(stream != null);
 
@@ -97,10 +98,10 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="Stream"/>.
+        /// Loads a <see cref="Document"/> from the given <see cref="Stream"/>.
         /// </summary>
         /// <param name="stream"></param>
-        public static NXDocumentHost Load(Stream stream)
+        public static Document Load(Stream stream)
         {
             Contract.Requires<ArgumentNullException>(stream != null);
 
@@ -108,17 +109,17 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="Uri"/>.
+        /// Loads a <see cref="Document"/> from the given <see cref="Uri"/>.
         /// </summary>
         /// <param name="uri"></param>
         /// <param name="catalog"></param>
         /// <param name="exports"></param>
         /// <returns></returns>
-        public static NXDocumentHost Load(Uri uri, ComposablePartCatalog catalog = null, ExportProvider exports = null)
+        public static Document Load(Uri uri, ComposablePartCatalog catalog = null, ExportProvider exports = null)
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            return new NXDocumentHost(host =>
+            return new Document(host =>
                 XNodeAnnotationSerializer.Deserialize(
                     XDocument.Load(
                         NXKit.Xml.IOXmlReader.Create(
@@ -130,11 +131,11 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="Uri"/>.
+        /// Loads a <see cref="Document"/> from the given <see cref="Uri"/>.
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        public static NXDocumentHost Load(Uri uri)
+        public static Document Load(Uri uri)
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
@@ -142,13 +143,13 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="XDocument"/>.
+        /// Loads a <see cref="Document"/> from the given <see cref="XDocument"/>.
         /// </summary>
         /// <param name="document"></param>
         /// <param name="catalog"></param>
         /// <param name="exports"></param>
         /// <returns></returns>
-        public static NXDocumentHost Load(XDocument document, ComposablePartCatalog catalog = null, ExportProvider exports = null)
+        public static Document Load(XDocument document, ComposablePartCatalog catalog = null, ExportProvider exports = null)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
@@ -156,11 +157,11 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Loads a <see cref="NXDocumentHost"/> from the given <see cref="XDocument"/>.
+        /// Loads a <see cref="Document"/> from the given <see cref="XDocument"/>.
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
-        public static NXDocumentHost Load(XDocument document)
+        public static Document Load(XDocument document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
@@ -208,8 +209,8 @@ namespace NXKit
         /// <param name="xml"></param>
         /// <param name="catalog"></param>
         /// <param name="exports"></param>
-        NXDocumentHost(
-            Func<NXDocumentHost, XDocument> xml,
+        Document(
+            Func<Document, XDocument> xml,
             ComposablePartCatalog catalog,
             ExportProvider exports)
         {
@@ -356,7 +357,7 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Saves the current state of the <see cref="NXDocumentHost"/> to the specified <see cref="XmlWriter"/>.
+        /// Saves the current state of the <see cref="Document"/> to the specified <see cref="XmlWriter"/>.
         /// </summary>
         /// <param name="writer"></param>
         /// <returns></returns>
@@ -376,7 +377,7 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Saves the current state of the <see cref="NXDocumentHost"/> to the specified <see cref="TextWriter"/>.
+        /// Saves the current state of the <see cref="Document"/> to the specified <see cref="TextWriter"/>.
         /// </summary>
         /// <param name="writer"></param>
         public void Save(TextWriter writer)
@@ -395,7 +396,7 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Saves the current state of the <see cref="NXDocumentHost"/> to the specified <see cref="Stream"/>.
+        /// Saves the current state of the <see cref="Document"/> to the specified <see cref="Stream"/>.
         /// </summary>
         /// <param name="stream"></param>
         public void Save(Stream stream)
@@ -407,7 +408,7 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Disposes of the <see cref="NXDocumentHost"/>.
+        /// Disposes of the <see cref="Document"/>.
         /// </summary>
         public void Dispose()
         {
@@ -433,7 +434,7 @@ namespace NXKit
         /// <summary>
         /// Finalizes the instance.
         /// </summary>
-        ~NXDocumentHost()
+        ~Document()
         {
             Dispose();
         }
