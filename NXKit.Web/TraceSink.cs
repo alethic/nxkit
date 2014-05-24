@@ -17,7 +17,7 @@ namespace NXKit.Web
 {
 
     /// <summary>
-    /// Captures trace messages from the <see cref="NXDocumentHost"/> to be output to the client.
+    /// Captures trace messages from the <see cref="Document"/> to be output to the client.
     /// </summary>
     [Export(typeof(TraceSink))]
     [Export(typeof(ITraceSink))]
@@ -71,7 +71,7 @@ namespace NXKit.Web
         /// </summary>
         [ImportingConstructor]
         public TraceSink(
-            Func<NXDocumentHost> host)
+            Func<Document> host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
 

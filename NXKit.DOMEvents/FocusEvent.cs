@@ -12,7 +12,7 @@ namespace NXKit.DOMEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="host"></param>
-        public FocusEvent(NXDocumentHost host)
+        public FocusEvent(Document host)
             : base(host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
@@ -23,7 +23,7 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="host"></param>
         /// <param name="type"></param>
-        public FocusEvent(NXDocumentHost host, string type)
+        public FocusEvent(Document host, string type)
             : base(host, type)
         {
             Contract.Requires<ArgumentNullException>(host != null);
@@ -37,7 +37,7 @@ namespace NXKit.DOMEvents
         /// <param name="type"></param>
         /// <param name="canBubble"></param>
         /// <param name="cancelable"></param>
-        public FocusEvent(NXDocumentHost host, string type, bool canBubble, bool cancelable)
+        public FocusEvent(Document host, string type, bool canBubble, bool cancelable)
             : base(host, type, canBubble, cancelable)
         {
             Contract.Requires<ArgumentNullException>(host != null);

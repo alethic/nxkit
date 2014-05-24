@@ -18,7 +18,7 @@ namespace NXKit.XForms
         IInvokerLayer
     {
 
-        readonly Func<NXDocumentHost> host;
+        readonly Func<Document> host;
         int count = 0;
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace NXKit.XForms
         /// <param name="host"></param>
         [ImportingConstructor]
         public DeferredUpdateInvokerLayer(
-            [Import] Func<NXDocumentHost> host)
+            [Import] Func<Document> host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
 

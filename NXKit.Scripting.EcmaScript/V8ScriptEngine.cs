@@ -26,7 +26,7 @@ namespace NXKit.Scripting.EcmaScript
         };
 
 
-        readonly Func<NXDocumentHost> host;
+        readonly Func<Document> host;
         readonly Lazy<Microsoft.ClearScript.V8.V8ScriptEngine> engine;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace NXKit.Scripting.EcmaScript
         /// </summary>
         /// <param name="host"></param>
         [ImportingConstructor]
-        public V8ScriptEngine(Func<NXDocumentHost> host)
+        public V8ScriptEngine(Func<Document> host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
 

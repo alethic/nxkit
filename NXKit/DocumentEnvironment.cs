@@ -16,23 +16,23 @@ namespace NXKit
     public class DocumentEnvironment
     {
 
-        NXDocumentHost host;
+        Document host;
 
         /// <summary>
         /// Gets the configured host.
         /// </summary>
         /// <returns></returns>
-        [Export(typeof(Func<NXDocumentHost>))]
-        public NXDocumentHost GetHost()
+        [Export(typeof(Func<Document>))]
+        public Document GetHost()
         {
             return host;
         }
 
         /// <summary>
-        /// Sets the current <see cref="NXDocumentHost"/>.
+        /// Sets the current <see cref="Document"/>.
         /// </summary>
         /// <param name="host"></param>
-        internal void SetHost(NXDocumentHost host)
+        internal void SetHost(Document host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
 

@@ -31,9 +31,9 @@ namespace NXKit.XForms.Tests
     </xf:group>
 </unknown>");
 
-        NXDocumentHost GetSampleDocument()
+        Document GetSampleDocument()
         {
-            return NXDocumentHost.Load(Sample);
+            return Document.Load(Sample);
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace NXKit.XForms.Tests
             {
                 doc.Save(str);
                 var xml = str.ToString();
-                NXDocumentHost.Load(new StringReader(xml));
+                Document.Load(new StringReader(xml));
             }
         }
 

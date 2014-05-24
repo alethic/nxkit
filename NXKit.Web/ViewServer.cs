@@ -7,7 +7,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Caching;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
@@ -24,7 +23,7 @@ namespace NXKit.Web
 {
 
     /// <summary>
-    /// Hosts a <see cref="NXDocumentHost"/> instance and provides interaction services for the client Web UI.
+    /// Hosts a <see cref="Document"/> instance and provides interaction services for the client Web UI.
     /// </summary>
     public class ViewServer :
         IDisposable
@@ -32,25 +31,17 @@ namespace NXKit.Web
 
         ComposablePartCatalog catalog;
         ExportProvider exports;
-        NXDocumentHost document;
+        ICache cache;
+        Document document;
         LinkedList<string> scripts;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public ViewServer()
+            : this(null, null, null)
         {
 
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="document"></param>
-        public ViewServer(NXDocumentHost document)
-            : this(null, null, document)
-        {
-            Contract.Requires<ArgumentNullException>(document != null);
         }
 
         /// <summary>
@@ -58,27 +49,12 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="catalog"></param>
         /// <param name="exports"></param>
-        public ViewServer(ComposablePartCatalog catalog, ExportProvider exports)
-            : this()
+        /// <param name="cache"></param>
+        ViewServer(ComposablePartCatalog catalog = null, ExportProvider exports = null, ICache cache = null)
         {
             this.catalog = catalog;
             this.exports = exports;
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="catalog"></param>
-        /// <param name="exports"></param>
-        /// <param name="document"></param>
-        ViewServer(ComposablePartCatalog catalog, ExportProvider exports, NXDocumentHost document)
-            : this(catalog, exports)
-        {
-            Contract.Requires<ArgumentNullException>(document != null);
-
-            this.catalog = catalog;
-            this.exports = exports;
-            this.document = document;
+            this.cache = cache ?? new DefaultMemoryCache();
         }
 
         /// <summary>
@@ -100,9 +76,9 @@ namespace NXKit.Web
         }
 
         /// <summary>
-        /// Gets the currently hosted <see cref="NXDocumentHost"/>.
+        /// Gets the currently hosted <see cref="Document"/>.
         /// </summary>
-        public NXDocumentHost Document
+        public Document Document
         {
             get { return document; }
         }
@@ -120,7 +96,7 @@ namespace NXKit.Web
         }
 
         /// <summary>
-        /// Raised when the <see cref="NXDocumentHost"/> is loaded.
+        /// Raised when the <see cref="Document"/> is loaded.
         /// </summary>
         public event DocumentLoadedEventHandler DocumentLoaded;
 
@@ -138,7 +114,7 @@ namespace NXKit.Web
         }
 
         /// <summary>
-        /// Raised when the <see cref="NXDocumentHost"/> is unloading.
+        /// Raised when the <see cref="Document"/> is unloading.
         /// </summary>
         public event DocumentLoadedEventHandler DocumentUnloading;
 
@@ -193,7 +169,7 @@ namespace NXKit.Web
             Release();
 
             // load new document
-            document = NXDocumentHost.Load(uri, catalog, exports);
+            document = Document.Load(uri, catalog, exports);
             OnDocumentLoaded(DocumentEventArgs.Empty);
         }
 
@@ -220,7 +196,7 @@ namespace NXKit.Web
             Release();
 
             // load new document
-            document = NXDocumentHost.Load(reader, catalog, exports);
+            document = Document.Load(reader, catalog, exports);
             OnDocumentLoaded(DocumentEventArgs.Empty);
         }
 
@@ -236,7 +212,7 @@ namespace NXKit.Web
             Release();
 
             // load new document
-            document = NXDocumentHost.Load(reader, catalog, exports);
+            document = Document.Load(reader, catalog, exports);
             OnDocumentLoaded(DocumentEventArgs.Empty);
         }
 
@@ -378,7 +354,7 @@ namespace NXKit.Web
             var hash = GetMD5HashText(save);
 
             // cache save data
-            MemoryCache.Default.Add(hash, save, DateTime.UtcNow.AddMinutes(5));
+            cache.Add(hash, save);
 
             // respond with object containing new save and JSON tree
             return JObject.FromObject(new
@@ -391,7 +367,7 @@ namespace NXKit.Web
         }
 
         /// <summary>
-        /// Loads the given <see cref="NXDocumentHost"/> from the given hash.
+        /// Loads the given <see cref="Document"/> from the given hash.
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
@@ -399,7 +375,7 @@ namespace NXKit.Web
         {
             if (hash != null)
             {
-                var save = (string)MemoryCache.Default.Get(hash);
+                var save = (string)cache.Get(hash);
                 if (save != null)
                     return LoadFromSave(save);
             }
@@ -408,7 +384,7 @@ namespace NXKit.Web
         }
 
         /// <summary>
-        /// Loads the <see cref="NXDocumentHost"/> from the given save data.
+        /// Loads the <see cref="Document"/> from the given save data.
         /// </summary>
         /// <param name="save"></param>
         /// <returns></returns>
@@ -509,7 +485,7 @@ namespace NXKit.Web
                     if (hash != saveHash)
                     {
                         // cache save data
-                        MemoryCache.Default.Add(hash, save, DateTime.UtcNow.AddMinutes(5));
+                        cache.Add(hash, save);
 
                         // respond with object containing new save and JSON tree
                         return JObject.FromObject(new

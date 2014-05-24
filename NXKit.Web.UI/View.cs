@@ -76,15 +76,15 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets a reference to the <see cref="NXDocumentHost"/>.
+        /// Gets a reference to the <see cref="Document"/>.
         /// </summary>
-        public NXDocumentHost Document
+        public Document Document
         {
             get { return server.Document; }
         }
 
         /// <summary>
-        /// Raised when the <see cref="NXDocumentHost"/> is loaded.
+        /// Raised when the <see cref="Document"/> is loaded.
         /// </summary>
         public event DocumentLoadedEventHandler DocumentLoaded;
 
@@ -99,7 +99,7 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Raised when the <see cref="NXDocumentHost"/> is unloading.
+        /// Raised when the <see cref="Document"/> is unloading.
         /// </summary>
         public event DocumentUnloadingEventHandler DocumentUnloading;
 

@@ -26,7 +26,7 @@ namespace NXKit.DOMEvents
         /// <param name="tables"></param>
         [ImportingConstructor]
         public EventInfoTableProvider(
-            Func<NXDocumentHost> host,
+            Func<Document> host,
             [ImportMany] IEnumerable<IEventInfoTable> tables)
         {
             Contract.Requires<ArgumentNullException>(host != null);

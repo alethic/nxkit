@@ -12,25 +12,25 @@ namespace NXKit.XForms.Tests
         [TestMethod]
         public void Test_form()
         {
-            var host = NXDocumentHost.Load(new Uri("nx-example:///form.xml"));
+            var host = Document.Load(new Uri("nx-example:///form.xml"));
         }
 
         [TestMethod]
         public void Test_include()
         {
-            var host = NXDocumentHost.Load(new Uri("nx-example:///include.xml"));
+            var host = Document.Load(new Uri("nx-example:///include.xml"));
         }
 
         [TestMethod]
         public void Test_script()
         {
-            var host = NXDocumentHost.Load(new Uri("nx-example:///script.xml"));
+            var host = Document.Load(new Uri("nx-example:///script.xml"));
         }
 
         [TestMethod]
         public void Test_select1()
         {
-            var host = NXDocumentHost.Load(new Uri("nx-example:///select1.xml"));
+            var host = Document.Load(new Uri("nx-example:///select1.xml"));
         }
 
     }

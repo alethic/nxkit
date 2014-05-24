@@ -443,7 +443,7 @@ namespace NXKit.Xml
             // get or create the new object container annotation
             return self.AnnotationOrCreate<ExportProvider>(() =>
             {
-                var host = self.Document.Annotation<NXDocumentHost>();
+                var host = self.Document.Annotation<Document>();
                 if (host == null)
                     throw new InvalidOperationException();
 

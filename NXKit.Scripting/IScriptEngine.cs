@@ -35,13 +35,13 @@ namespace NXKit.Scripting
 
         /// <summary>
         /// Initiates a load operation. Engine implementations can load any state they would like to from the 
-        /// <see cref="NXDocumentHost"/> instance.
+        /// <see cref="Document"/> instance.
         /// </summary>
         void Load();
 
         /// <summary>
         /// Initiates a save operation. Engine implementations should save any state they would like to keep to the
-        /// <see cref="NXDocumentHost"/> instance in the form of a serializable annotation.
+        /// <see cref="Document"/> instance in the form of a serializable annotation.
         /// </summary>
         void Save();
 

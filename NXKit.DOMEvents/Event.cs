@@ -13,7 +13,7 @@ namespace NXKit.DOMEvents
     public class Event
     {
 
-        readonly NXDocumentHost host;
+        readonly Document host;
         internal string type;
         internal bool bubbles;
         internal bool cancelable;
@@ -32,7 +32,7 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public Event(NXDocumentHost host)
+        public Event(Document host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
 
@@ -49,7 +49,7 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="host"></param>
         /// <param name="type"></param>
-        public Event(NXDocumentHost host, string type)
+        public Event(Document host, string type)
             : this(host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
@@ -65,7 +65,7 @@ namespace NXKit.DOMEvents
         /// <param name="type"></param>
         /// <param name="canBubble"></param>
         /// <param name="cancelable"></param>
-        public Event(NXDocumentHost host, string type, bool canBubble, bool cancelable)
+        public Event(Document host, string type, bool canBubble, bool cancelable)
             : this(host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
@@ -92,9 +92,9 @@ namespace NXKit.DOMEvents
         }
 
         /// <summary>
-        /// Gets the <see cref="NXDocumentHost"/> that owns the event.
+        /// Gets the <see cref="Document"/> that owns the event.
         /// </summary>
-        public NXDocumentHost Host
+        public Document Host
         {
             get { return host; }
         }

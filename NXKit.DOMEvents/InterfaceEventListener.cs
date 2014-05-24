@@ -134,7 +134,7 @@ namespace NXKit.DOMEvents
             Contract.Requires<ArgumentNullException>(methodInfo != null);
             Contract.Requires<ArgumentException>(IsValidMethodInfo(methodInfo));
 
-            var host = handler.Exports().GetExportedValue<Func<NXDocumentHost>>()();
+            var host = handler.Exports().GetExportedValue<Func<Document>>()();
             if (host == null)
                 throw new InvalidOperationException();
 
@@ -233,7 +233,7 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="host"></param>
         /// <returns></returns>
-        public XObject GetHandler(NXDocumentHost host)
+        public XObject GetHandler(Document host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
 

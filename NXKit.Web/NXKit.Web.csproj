@@ -136,6 +136,8 @@
     <Compile Include="DocumentLoadedEventHandler.cs" />
     <Compile Include="DocumentUnloadingEventHandler.cs" />
     <Compile Include="HtmlTemplateInfo.cs" />
+    <Compile Include="ICache.cs" />
+    <Compile Include="DefaultMemoryCache.cs" />
     <Compile Include="Serialization\RemoteDescriptor.cs" />
     <Compile Include="Serialization\RemoteJsonSerializer.cs" />
     <Compile Include="Serialization\RemoteXCommentJsonConverter.cs" />
