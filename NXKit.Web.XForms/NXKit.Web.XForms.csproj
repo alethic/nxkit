@@ -135,6 +135,7 @@
     <TypeScriptCompile Include="Scripts\InputBooleanBindingHandler.ts" />
     <TypeScriptCompile Include="Scripts\Select1BindingHandler.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
     <TypeScriptCompile Include="SubmitViewModel.ts" />
     <TypeScriptCompile Include="TriggerViewModel.ts" />
@@ -167,9 +168,6 @@
   <ItemGroup>
     <TypeScriptCompile Include="ViewModelUtil.ts" />
     <TypeScriptCompile Include="XFormsNodeViewModel.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Submit.html" />
