@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props" Condition="Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props')" />
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -27,7 +25,7 @@
     <RestorePackages>true</RestorePackages>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
-    <NuGetPackageImportStamp>7b633bb0</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>ac9cf281</NuGetPackageImportStamp>
     <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -443,7 +441,6 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
     <TypeScriptModuleKind>amd</TypeScriptModuleKind>
@@ -471,12 +468,11 @@
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\x86\*.*" "$(ProjectDir)"
-xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\amd64\*.*" "$(ProjectDir)"
+    <PostBuildEvent>
 if not exist "$(TargetDir)" md "$(TargetDir)"
-xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\x86\*.*" "$(TargetDir)"
+xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\x86\*.*" "$(ProjectDir)"
 if not exist "$(TargetDir)" md "$(TargetDir)"
-xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\amd64\*.*" "$(TargetDir)"</PostBuildEvent>
+xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\amd64\*.*" "$(ProjectDir)"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -484,11 +480,8 @@ xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\amd64\*
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets'))" />
   </Target>
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
-  <Import Project="..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets" Condition="Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
