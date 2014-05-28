@@ -27,7 +27,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <RootNamespace>NXKit.Web</RootNamespace>
-    <NuGetPackageImportStamp>30459d86</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>a4178cca</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -185,9 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="NXKit.Web.nuspec" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="TypedEvent.ts" />

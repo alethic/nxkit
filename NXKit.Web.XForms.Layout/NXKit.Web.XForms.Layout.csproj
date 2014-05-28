@@ -14,7 +14,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <NuGetPackageImportStamp>b1cac62e</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>d7af2388</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
     <RootNamespace>NXKit.Web.XForms.Layout</RootNamespace>
@@ -97,7 +97,6 @@
     <EmbeddedResource Include="Table.html" />
     <EmbeddedResource Include="Item.html" />
     <EmbeddedResource Include="Icon.html" />
-    <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyHtmlTemplateProvider.cs" />
@@ -107,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="NXKit.Web.XForms.Layout.nuspec" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.Composition" />
@@ -173,9 +173,9 @@
     <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets'))" />
   </Target>
-  <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
   </PropertyGroup>
+  <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
   <Import Project="..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets" Condition="Exists('..\packages\Microsoft.TypeScript.1.0.30324.2\build\Microsoft.TypeScript.targets')" />
 </Project>
