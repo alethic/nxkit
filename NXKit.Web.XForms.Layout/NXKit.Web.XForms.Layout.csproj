@@ -79,6 +79,7 @@
     <TypeScriptCompile Include="IconViewModel.ts" />
     <TypeScriptCompile Include="ItemViewModel.ts" />
     <TypeScriptCompile Include="ListViewModel.ts" />
+    <TypeScriptCompile Include="StrongViewModel.ts" />
     <TypeScriptCompile Include="ParagraphViewModel.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
@@ -116,6 +117,9 @@
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
       <Name>NXKit.Web</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Strong.html" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptOutFile>NXKit.XForms.Layout.js</TypeScriptOutFile>

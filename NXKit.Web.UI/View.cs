@@ -152,7 +152,6 @@ namespace NXKit.Web.UI
         protected override void OnInit(EventArgs args)
         {
             Page.RegisterRequiresControlState(this);
-            Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"')._onsubmit();");
             base.OnInit(args);
         }
 
@@ -163,6 +162,7 @@ namespace NXKit.Web.UI
         protected override void OnPreRender(EventArgs args)
         {
             ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
+            Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"')._onsubmit();");
             base.OnPreRender(args);
 
             // write all available knockout templates
