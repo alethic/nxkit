@@ -33,6 +33,7 @@ namespace NXKit.Web
         ExportProvider exports;
         ICache cache;
         Document document;
+        ViewResponseCode code;
         LinkedList<string> scripts;
 
         /// <summary>
@@ -55,6 +56,8 @@ namespace NXKit.Web
             this.catalog = catalog;
             this.exports = exports;
             this.cache = cache ?? new DefaultMemoryCache();
+            this.code = ViewResponseCode.Unknown;
+            this.scripts = new LinkedList<string>();
         }
 
         /// <summary>
@@ -92,6 +95,7 @@ namespace NXKit.Web
             {
                 OnDocumentUnloading(DocumentEventArgs.Empty);
                 document = null;
+                code = ViewResponseCode.Unknown;
             }
         }
 
@@ -348,22 +352,33 @@ namespace NXKit.Web
         {
             Contract.Requires<InvalidOperationException>(Document != null);
 
-            // extract data from document
-            var data = GetDataObject();
-            var save = GetSaveString();
-            var hash = GetMD5HashText(save);
-
-            // cache save data
-            cache.Add(hash, save);
-
-            // respond with object containing new save and JSON tree
-            return JObject.FromObject(new
+            try
             {
-                Code = ViewResponseCode.Good,
-                Save = save,
-                Hash = hash,
-                Data = data,
-            });
+                // notify any subscribers to conduct final operations
+                OnDocumentUnloading(DocumentEventArgs.Empty);
+
+                // extract data from document
+                var data = GetDataObject();
+                var save = GetSaveString();
+                var hash = GetMD5HashText(save);
+
+                // cache save data
+                cache.Add(hash, save);
+
+                // respond with object containing new save and JSON tree
+                return JObject.FromObject(new
+                {
+                    Code = code,
+                    Save = save,
+                    Hash = hash,
+                    Data = data,
+                });
+            }
+            finally
+            {
+                document = null;
+                code = ViewResponseCode.Unknown;
+            }
         }
 
         /// <summary>
@@ -404,7 +419,7 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        Func<JObject> LoadAndExecute(JObject args)
+        ViewResponseCode LoadAndExecute(JObject args)
         {
             Contract.Requires<ArgumentNullException>(args != null);
 
@@ -420,18 +435,18 @@ namespace NXKit.Web
                 if (LoadFromHash(hash))
                     return Execute(args, hash);
 
-            return null;
+            return ViewResponseCode.NeedSave;
         }
 
         /// <summary>
         /// Loads a saved version of the document.
         /// </summary>
         /// <param name="args"></param>
-        public void Load(JObject args)
+        public ViewResponseCode Load(JObject args)
         {
             Contract.Requires<ArgumentNullException>(args != null);
 
-            LoadAndExecute(args);
+            return LoadAndExecute(args);
         }
 
         /// <summary>
@@ -439,22 +454,12 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public Func<JObject> Execute(JObject args)
+        public ViewResponseCode Execute(JObject args)
         {
             Contract.Requires<ArgumentNullException>(args != null);
-            Contract.Ensures(Contract.Result<Func<JObject>>() != null);
 
             // loads and executes the document
-            var func = LoadAndExecute(args);
-            if (func != null)
-                return func;
-
-            // could not retrieve saved document
-            // respond by asking for full save data
-            return () => JObject.FromObject(new
-            {
-                Code = ViewResponseCode.NeedSave,
-            });
+            return LoadAndExecute(args);
         }
 
         /// <summary>
@@ -463,55 +468,13 @@ namespace NXKit.Web
         /// <param name="args"></param>
         /// <param name="saveHash"></param>
         /// <returns></returns>
-        Func<JObject> Execute(JObject args, string saveHash)
+        ViewResponseCode Execute(JObject args, string saveHash)
         {
             Contract.Requires<ArgumentNullException>(args != null);
             Contract.Requires<InvalidOperationException>(Document != null);
 
             // execute any passed commands
-            ExecuteCommands(args);
-
-            // return function to generate result
-            return () =>
-            {
-                try
-                {
-                    // extract data from document
-                    var data = GetDataObject();
-                    var save = GetSaveString();
-                    var hash = GetMD5HashText(save);
-
-                    // document has changed
-                    if (hash != saveHash)
-                    {
-                        // cache save data
-                        cache.Add(hash, save);
-
-                        // respond with object containing new save and JSON tree
-                        return JObject.FromObject(new
-                        {
-                            Code = ViewResponseCode.Good,
-                            Save = save,
-                            Hash = hash,
-                            Data = data,
-                        });
-                    }
-                    else
-                    {
-                        // respond with object without new save data
-                        return JObject.FromObject(new
-                        {
-                            Code = ViewResponseCode.Good,
-                            Hash = hash,
-                            Data = data,
-                        });
-                    }
-                }
-                finally
-                {
-                    Release();
-                }
-            };
+            return code = ExecuteCommands(args);
         }
 
         /// <summary>
@@ -519,7 +482,7 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        void ExecuteCommands(JObject args)
+        ViewResponseCode ExecuteCommands(JObject args)
         {
             Contract.Requires<ArgumentNullException>(args != null);
             Contract.Requires<InvalidOperationException>(Document != null);
@@ -545,6 +508,8 @@ namespace NXKit.Web
                     }
                 }
             }
+
+            return ViewResponseCode.Good;
         }
 
         /// <summary>
