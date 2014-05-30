@@ -1,4 +1,6 @@
-﻿namespace NXKit.Web
+﻿using System;
+
+namespace NXKit.Web
 {
 
     /// <summary>

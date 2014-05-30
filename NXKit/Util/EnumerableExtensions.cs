@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Linq;
 
 namespace NXKit.Util
 {
@@ -12,6 +11,13 @@ namespace NXKit.Util
     public static class EnumerableExtensions
     {
 
+        /// <summary>
+        /// Appends <paramref name="item"/> to <paramref name="source"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T item)
         {
             Contract.Requires<ArgumentNullException>(source != null);
@@ -21,6 +27,13 @@ namespace NXKit.Util
             yield return item;
         }
 
+        /// <summary>
+        /// Prepends <paramref name="item"/> to <paramref name="source"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public static IEnumerable<T> Prepend<T>(this IEnumerable<T> source, T item)
         {
             Contract.Requires<ArgumentNullException>(source != null);
@@ -42,16 +55,8 @@ namespace NXKit.Util
             }
         }
 
-        public static IEnumerable<T> DistinctByReference<T>(this IEnumerable<T> source)
-            where T : class
-        {
-            Contract.Requires<ArgumentNullException>(source != null);
-
-            return source.Distinct<T>(EqualityComparer<object>.Default);
-        }
-
         /// <summary>
-        /// Creates a <see cref="LinkedList`1"/> from a <see cref="IEnumerable`1"/>.
+        /// Creates a <see cref="LinkedList{T}"/> from a <see cref="IEnumerable{T}"/>.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>

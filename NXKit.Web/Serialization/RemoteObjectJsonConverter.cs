@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
-using System.Xml.Linq;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -36,7 +35,7 @@ namespace NXKit.Web.Serialization
         /// <summary>
         /// Gets the combined supported remote interface types of the given objects.
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="objects"></param>
         internal static IEnumerable<RemoteDescriptor> GetRemotes(IEnumerable<object> objects)
         {
             Contract.Requires<ArgumentNullException>(objects != null);
@@ -136,7 +135,7 @@ namespace NXKit.Web.Serialization
         }
 
         /// <summary>
-        /// Returns all of the properties for a given <see cref="Interface"/>.
+        /// Returns all of the properties for a given <see cref="RemoteDescriptor"/>.
         /// </summary>
         /// <param name="remote"></param>
         /// <param name="serializer"></param>

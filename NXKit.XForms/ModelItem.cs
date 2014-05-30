@@ -100,8 +100,6 @@ namespace NXKit.XForms
         /// <summary>
         /// Sets the type of the given model item.
         /// </summary>
-        /// <param name="module"></param>
-        /// <param name="item"></param>
         /// <param name="type"></param>
         public void SetItemType(XName type)
         {
@@ -262,7 +260,6 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the element value of the given model item.
         /// </summary>
-        /// <param name="newElement"></param>
         public XElement Contents
         {
             get { return GetContents(); }
@@ -400,7 +397,6 @@ namespace NXKit.XForms
         /// <summary>
         /// Creates a <see cref="XPathNavigator"/> for the given model item.
         /// </summary>
-        /// <param name="item"></param>
         /// <returns></returns>
         internal XPathNavigator CreateNavigator()
         {

@@ -129,7 +129,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Implements the setter for SelectedItemVisual.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="selected"></param>
         void SetSelected(ISelectable selected)
         {
             // deselect existing item

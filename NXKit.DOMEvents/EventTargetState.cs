@@ -13,7 +13,7 @@ namespace NXKit.DOMEvents
 {
 
     /// <summary>
-    /// List of event listeners registered with a particular <see cref="NXNode"/>.
+    /// List of event listeners registered with a particular <see cref="EventTarget"/>.
     /// </summary>
     [SerializableAnnotation]
     [XmlRoot("event-target")]

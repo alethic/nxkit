@@ -8,7 +8,7 @@ namespace NXKit.IO
 {
 
     /// <summary>
-    //  Contains protocol headers associated with a request or response.
+    ///  Contains protocol headers associated with a request or response.
     /// </summary>
     public class Headers :
         IEnumerable<KeyValuePair<string, string>>

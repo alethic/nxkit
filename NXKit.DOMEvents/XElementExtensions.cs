@@ -52,7 +52,7 @@ namespace NXKit.DOMEvents
         /// Dispatches the event to this <see cref="XElement"/>.
         /// </summary>
         /// <param name="element"></param>
-        /// <param name="type"></param>
+        /// <param name="evt"></param>
         public static void DispatchEvent(this XElement element, Event evt)
         {
             Contract.Requires<ArgumentNullException>(element != null);

@@ -23,6 +23,7 @@ namespace NXKit.Xml
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="ioService"></param>
         /// <param name="uri"></param>
         public static XmlReader Create(IIOService ioService, Uri uri)
         {
