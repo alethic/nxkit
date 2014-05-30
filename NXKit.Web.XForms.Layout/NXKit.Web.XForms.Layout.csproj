@@ -181,5 +181,6 @@
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
   </PropertyGroup>
   <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <Import Project="..\packages\Microsoft.TypeScript.1.0.30501.0\build\Microsoft.TypeScript.targets" Condition="Exists('..\packages\Microsoft.TypeScript.1.0.30501.0\build\Microsoft.TypeScript.targets')" />
 </Project>
