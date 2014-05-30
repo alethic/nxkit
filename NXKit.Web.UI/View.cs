@@ -152,7 +152,6 @@ namespace NXKit.Web.UI
         protected override void OnInit(EventArgs args)
         {
             Page.RegisterRequiresControlState(this);
-            Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"')._onsubmit();");
             base.OnInit(args);
         }
 
@@ -163,6 +162,7 @@ namespace NXKit.Web.UI
         protected override void OnPreRender(EventArgs args)
         {
             ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
+            Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"')._onsubmit();");
             base.OnPreRender(args);
 
             // write all available knockout templates
@@ -194,7 +194,7 @@ namespace NXKit.Web.UI
         {
             return new object[] 
             {
-                !Visible ? server.Save().ToString(Formatting.None) : null,
+                !Visible && server.Document != null ? server.Save().ToString(Formatting.None) : null,
                 cssClass,
                 validationGroup,
             };
@@ -275,7 +275,7 @@ namespace NXKit.Web.UI
 
             var text = postCollection[postDataKey];
             if (!string.IsNullOrWhiteSpace(text))
-                server.Execute(JObject.Parse(text))();
+                server.Execute(JObject.Parse(text));
 
             return false;
         }
@@ -294,7 +294,7 @@ namespace NXKit.Web.UI
         /// <param name="eventArgument"></param>
         void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
         {
-            responseFunc = server.Execute(JObject.Parse(eventArgument));
+            server.Execute(JObject.Parse(eventArgument));
         }
 
         /// <summary>
@@ -303,7 +303,7 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         string ICallbackEventHandler.GetCallbackResult()
         {
-            return responseFunc != null ? responseFunc().ToString(Formatting.None) : null;
+            return server.Save().ToString(Formatting.None);
         }
 
     }
