@@ -144,33 +144,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\NXKit.Web\NXKit.js.map">
-      <Link>TypeScript\NXKit.js.map</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\NXKit.Web.XForms.Layout\NXKit.XForms.Layout.js.map">
-      <Link>TypeScript\NXKit.XForms.Layout.js.map</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\NXKit.Web.XForms\NXKit.XForms.js.map">
-      <Link>TypeScript\NXKit.XForms.js.map</Link>
-    </EmbeddedResource>
     <None Include="NXKit.Web.UI.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="View.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\NXKit.Web\NXKit.js">
-      <Link>TypeScript\NXKit.js</Link>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\NXKit.Web.XForms.Layout\NXKit.XForms.Layout.js">
-      <Link>TypeScript\NXKit.XForms.Layout.js</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\NXKit.Web.XForms\NXKit.XForms.js">
-      <Link>TypeScript\NXKit.XForms.js</Link>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
@@ -179,6 +157,7 @@
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES5</TypeScriptTarget>

@@ -25,7 +25,6 @@ namespace NXKit.Web.UI
         string cssClass;
         string validationGroup;
         ViewServer server;
-        Func<JObject> responseFunc;
 
         /// <summary>
         /// Initializes a new instance.
