@@ -166,7 +166,8 @@ namespace NXKit.Xml
         /// Resolves a sequence of <see cref="XName"/>s from the given prefixed names, given the specified <see cref="XObject"/>'s
         /// naming context.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="self"></param>
+        /// <param name="prefixedNames"></param>
         /// <returns></returns>
         public static IEnumerable<XName> ResolvePrefixedNames(this XObject self, string prefixedNames)
         {
@@ -375,7 +376,6 @@ namespace NXKit.Xml
         /// <summary>
         /// Gets the implemented interfaces of this <see cref="XObject"/> of the given type.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="node"></param>
         /// <param name="type"></param>
         /// <returns></returns>

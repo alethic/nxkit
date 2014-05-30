@@ -53,7 +53,7 @@ namespace NXKit.Xml
                 throw new InvalidOperationException();
         }
 
-        /// 
+        /// <summary>
         /// Invoked for each <see cref="XContainer"/>.
         /// </summary>
         /// <param name="container"></param>
