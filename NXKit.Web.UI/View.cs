@@ -160,16 +160,20 @@ namespace NXKit.Web.UI
         /// <param name="args"></param>
         protected override void OnPreRender(EventArgs args)
         {
-            ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
-            Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"')._onsubmit();");
             base.OnPreRender(args);
 
-            // write all available knockout templates
-            if (server != null)
-                foreach (var template in server.GetHtmlTemplates())
-                    if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
-                        using (var rdr = new StreamReader(template.Open()))
-                            Page.ClientScript.RegisterClientScriptBlock(typeof(View), template.Name, rdr.ReadToEnd(), false);
+            if (server.Document != null)
+            {
+                ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
+                Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"')._onsubmit();");
+
+                // write all available knockout templates
+                if (server != null)
+                    foreach (var template in server.GetHtmlTemplates())
+                        if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
+                            using (var rdr = new StreamReader(template.Open()))
+                                Page.ClientScript.RegisterClientScriptBlock(typeof(View), template.Name, rdr.ReadToEnd(), false);
+            }
         }
 
         /// <summary>
@@ -205,8 +209,6 @@ namespace NXKit.Web.UI
         /// <param name="writer"></param>
         protected override void Render(HtmlTextWriter writer)
         {
-            ScriptManager.GetCurrent(Page).RegisterScriptDescriptors(this);
-
             writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
 
@@ -217,6 +219,8 @@ namespace NXKit.Web.UI
 
             if (server.Document != null)
             {
+                ScriptManager.GetCurrent(Page).RegisterScriptDescriptors(this);
+
                 // serialize visual state to data field
                 writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID);
                 writer.AddAttribute(HtmlTextWriterAttribute.Class, "data");
