@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 
 using NXKit.Xml;
 using NXKit.Util;
+using System.Xml;
 
 namespace NXKit.Serialization
 {
@@ -417,6 +418,12 @@ namespace NXKit.Serialization
                 .SelectMany(i => i.Attributes())
                 .Where(i => i.IsNamespaceDeclaration)
                 .Where(i => i.Value == NX_NS)
+                .Remove();
+
+            // strip out unsupported processing instructions
+            xml.DescendantNodesAndSelf()
+                .OfType<XProcessingInstruction>()
+                .Where(i => i.NodeType != XmlNodeType.XmlDeclaration)
                 .Remove();
 
             return xml;
