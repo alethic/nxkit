@@ -376,7 +376,6 @@ namespace NXKit.Web
             }
             finally
             {
-                document = null;
                 code = ViewResponseCode.Unknown;
             }
         }
