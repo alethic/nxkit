@@ -32,7 +32,7 @@ namespace NXKit.Web
         ComposablePartCatalog catalog;
         ExportProvider exports;
         ICache cache;
-        Document document;
+        Lazy<Document> document;
         ViewResponseCode code;
         LinkedList<string> scripts;
 
@@ -83,7 +83,7 @@ namespace NXKit.Web
         /// </summary>
         public Document Document
         {
-            get { return document; }
+            get { return document != null ? document.Value : null; }
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace NXKit.Web
         public IEnumerable<HtmlTemplateInfo> GetHtmlTemplates()
         {
             if (document != null)
-                return document.Container
+                return document.Value.Container
                     .GetExportedValues<IHtmlTemplateProvider>()
                     .SelectMany(i => i.GetTemplates());
             else
@@ -173,7 +173,7 @@ namespace NXKit.Web
             Release();
 
             // load new document
-            document = Document.Load(uri, catalog, exports);
+            document = new Lazy<Document>(() => Document.Load(uri, catalog, exports));
             OnDocumentLoaded(DocumentEventArgs.Empty);
         }
 
@@ -200,7 +200,7 @@ namespace NXKit.Web
             Release();
 
             // load new document
-            document = Document.Load(reader, catalog, exports);
+            document = new Lazy<NXKit.Document>(() => Document.Load(reader, catalog, exports));
             OnDocumentLoaded(DocumentEventArgs.Empty);
         }
 
@@ -216,7 +216,7 @@ namespace NXKit.Web
             Release();
 
             // load new document
-            document = Document.Load(reader, catalog, exports);
+            document = new Lazy<NXKit.Document>(() => Document.Load(reader, catalog, exports));
             OnDocumentLoaded(DocumentEventArgs.Empty);
         }
 
@@ -267,7 +267,7 @@ namespace NXKit.Web
             using (var deflate = new DeflateStream(encode, CompressionMode.Compress))
             using (var writer = XmlDictionaryWriter.CreateBinaryWriter(deflate))
             {
-                document.Save(writer);
+                document.Value.Save(writer);
 
                 // flush output
                 writer.Dispose();
@@ -289,7 +289,7 @@ namespace NXKit.Web
             // serialize document state to data field
             using (var wrt = new JTokenWriter())
             {
-                RemoteHelper.GetJson(wrt, document.Root);
+                RemoteHelper.GetJson(wrt, document.Value.Root);
                 return wrt.Token;
             }
         }
@@ -302,7 +302,7 @@ namespace NXKit.Web
         {
             Contract.Requires<InvalidOperationException>(Document != null);
 
-            return JArray.FromObject(document.Container.GetExportedValue<TraceSink>().Messages);
+            return JArray.FromObject(document.Value.Container.GetExportedValue<TraceSink>().Messages);
         }
 
         /// <summary>
@@ -470,7 +470,7 @@ namespace NXKit.Web
         ViewResponseCode Execute(JObject args, string saveHash)
         {
             Contract.Requires<ArgumentNullException>(args != null);
-            Contract.Requires<InvalidOperationException>(Document != null);
+            Contract.Requires<InvalidOperationException>(document != null);
 
             // execute any passed commands
             return code = ExecuteCommands(args);
@@ -484,7 +484,7 @@ namespace NXKit.Web
         ViewResponseCode ExecuteCommands(JObject args)
         {
             Contract.Requires<ArgumentNullException>(args != null);
-            Contract.Requires<InvalidOperationException>(Document != null);
+            Contract.Requires<InvalidOperationException>(document != null);
 
             var commands = (JArray)args["Commands"];
             if (commands != null)
@@ -520,7 +520,7 @@ namespace NXKit.Web
         {
             Contract.Requires<ArgumentNullException>(method != null);
             Contract.Requires<ArgumentNullException>(args != null);
-            Contract.Requires<InvalidOperationException>(Document != null);
+            Contract.Requires<InvalidOperationException>(document != null);
 
             // assembly invocation parameter list
             var count = 0;
@@ -562,8 +562,9 @@ namespace NXKit.Web
             Contract.Requires<ArgumentOutOfRangeException>(nodeId > 0);
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(@interface));
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(property));
+            Contract.Requires<InvalidOperationException>(document != null);
 
-            var node = (XNode)document.Xml.ResolveObjectId(nodeId);
+            var node = (XNode)document.Value.Xml.ResolveObjectId(nodeId);
             if (node == null)
                 return;
 
@@ -582,8 +583,9 @@ namespace NXKit.Web
             Contract.Requires<ArgumentOutOfRangeException>(nodeId > 0);
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(@interface));
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(method));
+            Contract.Requires<InvalidOperationException>(document != null);
 
-            var node = (XNode)document.Xml.ResolveObjectId(nodeId);
+            var node = (XNode)document.Value.Xml.ResolveObjectId(nodeId);
             if (node == null)
                 return;
 
@@ -597,7 +599,10 @@ namespace NXKit.Web
         {
             if (document != null)
             {
-                document.Dispose();
+                // only dispose if document loaded
+                if (document.IsValueCreated)
+                    document.Value.Dispose();
+
                 document = null;
             }
         }
