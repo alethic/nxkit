@@ -15,7 +15,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
-    <NuGetPackageImportStamp>d55b0ce9</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>d1db951b</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

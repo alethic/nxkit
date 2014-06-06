@@ -17,7 +17,7 @@
     <TargetFrameworkProfile />
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
-    <NuGetPackageImportStamp>76d0fa33</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>c0424086</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
