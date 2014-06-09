@@ -144,6 +144,9 @@
     <Compile Include="IOnSave.cs" />
     <Compile Include="ITextExtension.cs" />
     <Compile Include="IDocumentExtension.cs" />
+    <Compile Include="Serialization\IAnnotationObjectDeserializer.cs" />
+    <Compile Include="Serialization\IAnnotationObjectSerializer.cs" />
+    <Compile Include="Serialization\ISerializableAnnotation.cs" />
     <Compile Include="TextExtensionAttribute.cs" />
     <Compile Include="DocumentExtensionAttribute.cs" />
     <Compile Include="ElementExtensionAttribute.cs" />
@@ -188,7 +191,7 @@
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="RemoteAttribute.cs" />
     <Compile Include="Serialization\SerializableAnnotationAttribute.cs" />
-    <Compile Include="Serialization\XNodeAnnotationSerializer.cs" />
+    <Compile Include="Serialization\AnnotationSerializer.cs" />
     <Compile Include="Util\DictionaryExtensions.cs" />
     <Compile Include="Net\DynamicUriAuthority.cs" />
     <Compile Include="Net\DynamicUriHelper.cs" />

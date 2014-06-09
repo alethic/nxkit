@@ -37,7 +37,7 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(reader != null);
 
             return new Document(host =>
-                XNodeAnnotationSerializer.Deserialize(
+                host.Container.GetExportedValue<AnnotationSerializer>().Deserialize(
                     XDocument.Load(
                         reader,
                         LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
@@ -120,7 +120,7 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(uri != null);
 
             return new Document(host =>
-                XNodeAnnotationSerializer.Deserialize(
+                host.Container.GetExportedValue<AnnotationSerializer>().Deserialize(
                     XDocument.Load(
                         NXKit.Xml.IOXmlReader.Create(
                             host.Container.GetExportedValue<IIOService>(),
@@ -373,7 +373,7 @@ namespace NXKit
                 save.Save();
 
             // serialize document to writer
-            XNodeAnnotationSerializer.Serialize(xml).Save(writer);
+            container.GetExportedValue<AnnotationSerializer>().Serialize(xml).Save(writer);
         }
 
         /// <summary>

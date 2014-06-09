@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-
 using NXKit.DOMEvents;
+using NXKit.Serialization;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -18,6 +18,7 @@ namespace NXKit.XForms
         IOnRefresh
     {
 
+        readonly AnnotationSerializer serializer;
         readonly RepeatAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<Binding> binding;
@@ -32,11 +33,14 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Repeat(XElement element)
+        /// <param name="serializer"></param>
+        public Repeat(XElement element, AnnotationSerializer serializer)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(serializer != null);
 
+            this.serializer = serializer;
             this.attributes = new RepeatAttributes(Element);
             this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
             this.binding = new Lazy<Binding>(() => bindingNode.Value.Binding);
@@ -229,7 +233,7 @@ namespace NXKit.XForms
             var xml = Binding.ModelItem.Instance.State.Document.ResolveObjectId(item.ModelObjectId);
             if (xml == null)
             {
-                var d = NXKit.Serialization.XNodeAnnotationSerializer.Serialize(Binding.ModelItem.Instance.State.Document);
+                var d = serializer.Serialize(Binding.ModelItem.Instance.State.Document);
                 var s = d.ToString();
                 var l = Binding.ModelItem.Instance.State.Document.ToString();
                 throw new InvalidOperationException();

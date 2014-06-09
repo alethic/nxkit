@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Xml.Linq;
 using System.Reflection;
+using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 using NXKit.Xml;
-using NXKit.Util;
-using System.Xml;
 
 namespace NXKit.Serialization
 {
@@ -16,7 +16,8 @@ namespace NXKit.Serialization
     /// <summary>
     /// Provides methods to serialize or deserialize an XLinq object graph including annotations.
     /// </summary>
-    public static class XNodeAnnotationSerializer
+    [Export(typeof(AnnotationSerializer))]
+    public class AnnotationSerializer
     {
 
         internal static readonly XNamespace NX_NS = "http://schemas.nxkit.org/2014/serialization";
@@ -32,6 +33,31 @@ namespace NXKit.Serialization
         internal const string NX_FORMAT_BINARY = "binary";
         internal static readonly XName NX_TYPE = "type";
 
+        readonly IEnumerable<IAnnotationObjectSerializer> serializers;
+        readonly IEnumerable<IAnnotationObjectDeserializer> deserializers;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        public AnnotationSerializer()
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="serializers"></param>
+        /// <param name="deserializers"></param>
+        [ImportingConstructor]
+        public AnnotationSerializer(
+            [ImportMany] IEnumerable<IAnnotationObjectSerializer> serializers,
+            [ImportMany] IEnumerable<IAnnotationObjectDeserializer> deserializers)
+        {
+            this.serializers = serializers ?? Enumerable.Empty<IAnnotationObjectSerializer>();
+            this.deserializers = deserializers ?? Enumerable.Empty<IAnnotationObjectDeserializer>();
+        }
+
         #region Serialize
 
         /// <summary>
@@ -39,7 +65,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public static XNode Serialize(XNode node)
+        public XNode Serialize(XNode node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
@@ -56,7 +82,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        public static XElement Serialize(XElement element)
+        public XElement Serialize(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -69,7 +95,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
-        public static XDocument Serialize(XDocument document)
+        public XDocument Serialize(XDocument document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
@@ -81,7 +107,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
-        static IEnumerable<object> SerializeContents(XDocument document)
+        IEnumerable<object> SerializeContents(XDocument document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
@@ -101,7 +127,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        static IEnumerable<object> SerializeContents(XElement element)
+        IEnumerable<object> SerializeContents(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -134,7 +160,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        static IEnumerable<object> GetSerializationBody(XElement element)
+        IEnumerable<object> GetSerializationBody(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -161,7 +187,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        static IEnumerable<XElement> SerializeObject(XObject obj)
+        IEnumerable<XElement> SerializeObject(XObject obj)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
 
@@ -191,7 +217,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
-        static IEnumerable<XElement> SerializeDocument(XDocument document)
+        IEnumerable<XElement> SerializeDocument(XDocument document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
@@ -211,7 +237,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        static IEnumerable<XElement> SerializeElements(XElement element)
+        IEnumerable<XElement> SerializeElements(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -236,7 +262,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        static IEnumerable<XElement> SerializeAttributes(XAttribute attribute)
+        IEnumerable<XElement> SerializeAttributes(XAttribute attribute)
         {
             Contract.Requires<ArgumentNullException>(attribute != null);
 
@@ -260,7 +286,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        static IEnumerable<XElement> SerializeNodes(XNode node)
+        IEnumerable<XElement> SerializeNodes(XNode node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
@@ -280,7 +306,7 @@ namespace NXKit.Serialization
         /// <param name="obj"></param>
         /// <param name="annotation"></param>
         /// <returns></returns>
-        static XElement SerializeAnnotation(XObject obj, object annotation)
+        XElement SerializeAnnotation(XObject obj, object annotation)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(annotation != null);
@@ -294,7 +320,7 @@ namespace NXKit.Serialization
         /// <param name="obj"></param>
         /// <param name="annotation"></param>
         /// <returns></returns>
-        static XElement SerializeToXml(XObject obj, object annotation)
+        XElement SerializeToXml(XObject obj, object annotation)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(annotation != null);
@@ -327,7 +353,7 @@ namespace NXKit.Serialization
         /// <param name="obj"></param>
         /// <param name="annotation"></param>
         /// <param name="element"></param>
-        static XElement SerializeToXml(XObject obj, object annotation, XElement element)
+        XElement SerializeToXml(XObject obj, object annotation, XElement element)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(annotation != null);
@@ -343,10 +369,26 @@ namespace NXKit.Serialization
             {
                 wrt.WriteWhitespace(""); // fixes a bug in XmlSerializer that tries to WriteStartDocument
 
-                var srs = new XmlSerializer(annotation.GetType());
-                var ens = new XmlSerializerNamespaces();
-                ens.Add("", "");
-                srs.Serialize(wrt, annotation, ens);
+                if (annotation is ISerializableAnnotation)
+                {
+                    element.Add(((ISerializableAnnotation)annotation).Serialize(this));
+                }
+                else if (annotation is IXmlSerializable)
+                {
+                    var srs = new XmlSerializer(annotation.GetType());
+                    var ens = new XmlSerializerNamespaces();
+                    ens.Add("", "");
+                    srs.Serialize(wrt, annotation, ens);
+                }
+                else if (annotation.GetType().GetCustomAttribute<XmlRootAttribute>() != null)
+                {
+                    var srs = new XmlSerializer(annotation.GetType());
+                    var ens = new XmlSerializerNamespaces();
+                    ens.Add("", "");
+                    srs.Serialize(wrt, annotation, ens);
+                }
+                else
+                    return null;
             }
 
             return element;
@@ -399,7 +441,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
-        public static XDocument Deserialize(XDocument document)
+        public XDocument Deserialize(XDocument document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
@@ -433,7 +475,7 @@ namespace NXKit.Serialization
         /// Deserializes the contents of the <see cref="XDocument"/>.
         /// </summary>
         /// <param name="document"></param>
-        static void DeserializeContents(XDocument document)
+        void DeserializeContents(XDocument document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
@@ -446,7 +488,7 @@ namespace NXKit.Serialization
         /// Deserializes the contents of the <see cref="XElement"/>.
         /// </summary>
         /// <param name="element"></param>
-        static void DeserializeContents(XElement element)
+        void DeserializeContents(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -468,7 +510,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="element">The parent element of the annotation node.</param>
         /// <param name="annotation">The annotation element.</param>
-        static void DeserializeAnnotationElement(XElement element, XElement annotation)
+        void DeserializeAnnotationElement(XElement element, XElement annotation)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(annotation != null);
@@ -503,7 +545,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        static object DeserializeAnnotationElement(XElement element)
+        object DeserializeAnnotationElement(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -521,7 +563,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        static object DeserializeAnnotationFromXml(XElement element)
+        object DeserializeAnnotationFromXml(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -539,7 +581,20 @@ namespace NXKit.Serialization
 
             // serialize anntation into body
             using (var rdr = root.CreateReader())
-                return new XmlSerializer(type).Deserialize(rdr);
+            {
+                if (typeof(ISerializableAnnotation).IsAssignableFrom(type))
+                {
+                    var obj = (ISerializableAnnotation)Activator.CreateInstance(type);
+                    obj.Deserialize(this, (XElement)root);
+                    return obj;
+                }
+                else if (typeof(IXmlSerializable).IsAssignableFrom(type))
+                    return new XmlSerializer(type).Deserialize(rdr);
+                else if (type.GetCustomAttribute<XmlRootAttribute>() != null)
+                    return new XmlSerializer(type).Deserialize(rdr);
+                else
+                    return null;
+            }
         }
 
         static void ApplyAnnotationToDocument(XElement element, XElement annotation, object obj)

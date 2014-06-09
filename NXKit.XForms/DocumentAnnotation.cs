@@ -1,20 +1,43 @@
-﻿using System.Xml.Serialization;
-
+﻿using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using NXKit.Serialization;
 
 namespace NXKit.XForms
 {
 
     [SerializableAnnotation]
-    [XmlRoot("document")]
-    public class DocumentAnnotation
+    public class DocumentAnnotation :
+        ISerializableAnnotation
     {
 
-        [XmlAttribute("construct-done-once")]
-        public bool ConstructDoneOnce { get; set; }
+        bool constructDoneOnce;
+        bool failed;
 
-        [XmlAttribute("failed")]
-        public bool Failed { get; set; }
+        public bool ConstructDoneOnce
+        {
+            get { return constructDoneOnce; }
+            set { constructDoneOnce = value; }
+        }
+
+        public bool Failed
+        {
+            get { return failed; }
+            set { failed = value; }
+        }
+
+        void ISerializableAnnotation.Deserialize(AnnotationSerializer serializer, XElement element)
+        {
+            constructDoneOnce = (bool)element.Attribute("construct-done-once");
+            failed = (bool)element.Attribute("failed");
+        }
+
+        XElement ISerializableAnnotation.Serialize(AnnotationSerializer serializer)
+        {
+            return new XElement("document",
+                new XAttribute("construct-done-once", constructDoneOnce),
+                new XAttribute("failed", failed ? "true" : "false"));
+        }
 
     }
 

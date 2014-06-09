@@ -260,7 +260,8 @@ namespace NXKit.Web
         /// <returns></returns>
         string GetSaveString()
         {
-            Contract.Requires<InvalidOperationException>(Document != null);
+            Contract.Requires<InvalidOperationException>(document != null);
+            Contract.Requires<InvalidOperationException>(document.Value != null);
 
             using (var stream = new MemoryStream())
             using (var encode = new CryptoStream(stream, new ToBase64Transform(), CryptoStreamMode.Write))
@@ -284,7 +285,8 @@ namespace NXKit.Web
         /// <returns></returns>
         JToken CreateNodeJObject()
         {
-            Contract.Requires<InvalidOperationException>(Document != null);
+            Contract.Requires<InvalidOperationException>(document != null);
+            Contract.Requires<InvalidOperationException>(document.Value != null);
 
             // serialize document state to data field
             using (var wrt = new JTokenWriter())
@@ -300,7 +302,8 @@ namespace NXKit.Web
         /// <returns></returns>
         JToken GetMessagesObject()
         {
-            Contract.Requires<InvalidOperationException>(Document != null);
+            Contract.Requires<InvalidOperationException>(document != null);
+            Contract.Requires<InvalidOperationException>(document.Value != null);
 
             return JArray.FromObject(document.Value.Container.GetExportedValue<TraceSink>().Messages);
         }
@@ -311,7 +314,8 @@ namespace NXKit.Web
         /// <returns></returns>
         JToken GetScriptsObject()
         {
-            Contract.Requires<InvalidOperationException>(Document != null);
+            Contract.Requires<InvalidOperationException>(document != null);
+            Contract.Requires<InvalidOperationException>(document.Value != null);
 
             return new JArray(scripts);
         }
@@ -322,7 +326,8 @@ namespace NXKit.Web
         /// <returns></returns>
         JToken GetDataObject()
         {
-            Contract.Requires<InvalidOperationException>(Document != null);
+            Contract.Requires<InvalidOperationException>(document != null);
+            Contract.Requires<InvalidOperationException>(document.Value != null);
 
             return new JObject(
                 new JProperty("Node",
@@ -339,7 +344,8 @@ namespace NXKit.Web
         /// <returns></returns>
         string GetDataString()
         {
-            Contract.Requires<InvalidOperationException>(Document != null);
+            Contract.Requires<InvalidOperationException>(document != null);
+            Contract.Requires<InvalidOperationException>(document.Value != null);
 
             return JsonConvert.SerializeObject(GetDataObject());
         }
@@ -350,29 +356,30 @@ namespace NXKit.Web
         /// <returns></returns>
         public JObject Save()
         {
-            Contract.Requires<InvalidOperationException>(Document != null);
-
             try
             {
                 // notify any subscribers to conduct final operations
-                OnDocumentUnloading(DocumentEventArgs.Empty);
+                if (Document != null)
+                    OnDocumentUnloading(DocumentEventArgs.Empty);
 
                 // extract data from document
-                var data = GetDataObject();
-                var save = GetSaveString();
-                var hash = GetMD5HashText(save);
+                var data = Document != null ? GetDataObject() : null;
+                var save = Document != null ? GetSaveString() : null;
+                var hash = save != null ? GetMD5HashText(save) : null;
 
                 // cache save data
-                cache.Add(hash, save);
+                if (save != null &&
+                    hash != null)
+                    cache.Add(hash, save);
 
                 // respond with object containing new save and JSON tree
-                return JObject.FromObject(new
-                {
-                    Code = code,
-                    Save = save,
-                    Hash = hash,
-                    Data = data,
-                });
+                return new JObject(
+                    new JProperty[] {
+                        new JProperty("Code", code),
+                        save != null ? new JProperty("Save", save) : null,
+                        hash != null ? new JProperty("Hash", hash) : null,
+                        data != null ? new JProperty("Data", data) : null, }
+                        .Where(i => i != null));
             }
             finally
             {

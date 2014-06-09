@@ -18,7 +18,7 @@ namespace NXKit.XForms
     [SerializableAnnotation]
     [XmlRoot("instance")]
     public class InstanceState :
-        IXmlSerializable
+        ISerializableAnnotation
     {
 
         XElement model;
@@ -93,34 +93,18 @@ namespace NXKit.XForms
             return obj.AnnotationOrCreate<ModelItemState>();
         }
 
-        XmlSchema IXmlSerializable.GetSchema()
+        XElement ISerializableAnnotation.Serialize(AnnotationSerializer serializer)
         {
-            return null;
+            return new XElement("instance",
+                new XElement("xml",
+                    serializer.Serialize(document).Root));
         }
 
-        void IXmlSerializable.ReadXml(XmlReader reader)
+        void ISerializableAnnotation.Deserialize(AnnotationSerializer serializer, XElement element)
         {
-            if (reader.MoveToContent() == XmlNodeType.Element &&
-                reader.LocalName == "instance")
-            {
-                if (reader.ReadToDescendant("xml"))
-                    document = XNodeAnnotationSerializer.Deserialize(new XDocument(
-                        XElement.Load(
-                            reader.ReadSubtree(), 
-                            LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)
-                        .Elements()
-                        .FirstOrDefault()));
-            }
-        }
-
-        void IXmlSerializable.WriteXml(XmlWriter writer)
-        {
-            if (document != null)
-            {
-                writer.WriteStartElement("xml");
-                writer.WriteNode(XNodeAnnotationSerializer.Serialize(document).CreateReader(), true);
-                writer.WriteEndElement();
-            }
+            document = serializer.Deserialize(
+                new XDocument(
+                    element.Element("xml").Elements()));
         }
 
     }
