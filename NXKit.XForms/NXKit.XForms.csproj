@@ -265,6 +265,8 @@
     <Compile Include="XPath\Functions\BooleanFromString.cs" />
     <Compile Include="XPath\Functions\IfFunction.cs" />
     <Compile Include="XPath\Functions\IndexFunction.cs" />
+    <Compile Include="XPath\Functions\DaysFromDateFunction.cs" />
+    <Compile Include="XPath\Functions\NowFunction.cs" />
     <Compile Include="XPath\Functions\InstanceFunction.cs" />
     <Compile Include="XPath\Functions\MaxFunction.cs" />
     <Compile Include="XPath\Functions\PositionFunction.cs" />
