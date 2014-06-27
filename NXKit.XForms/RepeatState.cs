@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
 using NXKit.Serialization;
@@ -30,7 +29,7 @@ namespace NXKit.XForms
             set { template = value; }
         }
 
-        public XmlSchema GetSchema()
+        public System.Xml.Schema.XmlSchema GetSchema()
         {
             return null;
         }

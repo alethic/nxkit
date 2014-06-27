@@ -1,6 +1,5 @@
 ﻿using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
 using NXKit.Serialization;
@@ -60,7 +59,7 @@ namespace NXKit.XForms
             set { valid = value; }
         }
 
-        XmlSchema IXmlSerializable.GetSchema()
+        System.Xml.Schema.XmlSchema IXmlSerializable.GetSchema()
         {
             return null;
         }
