@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
@@ -19,6 +20,16 @@ namespace NXKit.Web.Serialization
     public class RemoteObjectJsonConverter :
         JsonConverter
     {
+
+        static readonly ConcurrentDictionary<Type, List<Type>> remoteTypeCache =
+            new ConcurrentDictionary<Type, List<Type>>();
+
+        static readonly ConcurrentDictionary<Type, List<PropertyInfo>> remotePropertyCache =
+            new ConcurrentDictionary<Type, List<PropertyInfo>>();
+
+        static readonly ConcurrentDictionary<Type, List<MethodInfo>> remoteMethodCache =
+            new ConcurrentDictionary<Type, List<MethodInfo>>();
+
 
         /// <summary>
         /// Gets the supported remote interface types of the given <see cref="Object"/>.
@@ -80,11 +91,13 @@ namespace NXKit.Web.Serialization
         {
             Contract.Requires<ArgumentNullException>(type != null);
 
-            return TypeDescriptor.GetReflectionType(type)
-                .GetInterfaces()
-                .Concat(TypeDescriptor.GetReflectionType(type)
-                    .Recurse(j => j.BaseType))
-                .Where(i => i.GetCustomAttribute<RemoteAttribute>(false) != null);
+            return remoteTypeCache.GetOrAdd(type, k =>
+                TypeDescriptor.GetReflectionType(k)
+                    .GetInterfaces()
+                    .Concat(TypeDescriptor.GetReflectionType(k)
+                        .Recurse(i => i.BaseType))
+                    .Where(i => i.GetCustomAttribute<RemoteAttribute>(false) != null)
+                    .ToList());
         }
 
         /// <summary>
@@ -96,12 +109,14 @@ namespace NXKit.Web.Serialization
         {
             Contract.Requires<ArgumentNullException>(type != null);
 
-            return TypeDescriptor.GetReflectionType(type)
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(i => i.DeclaringType == type)
-                .Where(i => i.GetCustomAttribute<RemoteAttribute>(false) != null)
-                .GroupBy(i => i.Name)
-                .Select(i => i.First());
+            return remotePropertyCache.GetOrAdd(type, k =>
+                TypeDescriptor.GetReflectionType(k)
+                    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(i => i.DeclaringType == k)
+                    .Where(i => i.GetCustomAttribute<RemoteAttribute>(false) != null)
+                    .GroupBy(i => i.Name)
+                    .Select(i => i.First())
+                    .ToList());
         }
 
         /// <summary>
@@ -113,12 +128,14 @@ namespace NXKit.Web.Serialization
         {
             Contract.Requires<ArgumentNullException>(type != null);
 
-            return TypeDescriptor.GetReflectionType(type)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(j => j.DeclaringType == type)
-                .Where(j => j.GetCustomAttribute<RemoteAttribute>(false) != null)
-                .GroupBy(j => j.Name)
-                .Select(j => j.First());
+            return remoteMethodCache.GetOrAdd(type, k =>
+                TypeDescriptor.GetReflectionType(k)
+                    .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(j => j.DeclaringType == k)
+                    .Where(j => j.GetCustomAttribute<RemoteAttribute>(false) != null)
+                    .GroupBy(j => j.Name)
+                    .Select(j => j.First())
+                    .ToList());
         }
 
         /// <summary>
