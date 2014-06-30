@@ -19,7 +19,8 @@ namespace NXKit.Util
         /// <returns></returns>
         public static MediaRange Parse(string value)
         {
-            Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(value));
+            if (string.IsNullOrWhiteSpace(value))
+                return null;
 
             if (value.Equals("*"))
                 value = "*/*";
