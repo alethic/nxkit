@@ -222,7 +222,7 @@ namespace NXKit.XForms
             // However, one of the two is mandatory as there is no default submission method.
             var method = GetMethod();
             if (method == null)
-                throw new DOMTargetEventException(Element, Events.SubmitError, "Unknown ModelMethd.");
+                throw new DOMTargetEventException(Element, Events.SubmitError, "Unknown ModelMethod.");
 
             // The resource element provides the submission URI, overriding the resource attribute and the action 
             // attribute. If a submission has more than one resource child element, the first resource element child 

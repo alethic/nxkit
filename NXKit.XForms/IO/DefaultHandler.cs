@@ -190,15 +190,12 @@ namespace NXKit.XForms.IO
             Contract.Requires<ArgumentNullException>(ioResponse != null);
             Contract.Requires<ArgumentNullException>(request != null);
 
-            var content = ioResponse.Content;
-            if (content != null)
+            // deserialize if possible
+            if (ioResponse.Content != null &&
+                ioResponse.ContentType != null)
             {
-                var mediaType = ioResponse.ContentType;
-                if (mediaType == null)
-                    throw new UnsupportedMediaTypeException();
-
                 // obtain serializer
-                var deserializer = GetDeserializer(mediaType);
+                var deserializer = GetDeserializer(ioResponse.ContentType);
                 if (deserializer == null)
                     throw new UnsupportedMediaTypeException();
 
@@ -207,8 +204,8 @@ namespace NXKit.XForms.IO
                     request,
                     ReadRequestStatus(ioResponse),
                     deserializer.Deserialize(
-                        new StreamReader(content),
-                        mediaType));
+                        new StreamReader(ioResponse.Content),
+                        ioResponse.ContentType));
             }
             else
             {

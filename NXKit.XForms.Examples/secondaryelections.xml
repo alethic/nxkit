@@ -3,4 +3,8 @@
         <elected>false</elected>
         <coverage-amount />
     </term-life>
+    <dateofbirth />
+    <gender />
+    <smokerstatus />
+    <age />
 </elections>

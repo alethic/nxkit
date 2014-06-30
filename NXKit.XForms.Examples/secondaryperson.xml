@@ -3,11 +3,12 @@
     <middlename />
     <lastname />
     <heightfeet />
-    <heightinches />
+    <heightinches>0</heightinches>
     <weight />
     <socialsecuritynumber />
     <dateofbirth />
-    <gender />
+    <gender>F</gender>
+    <smokerstatus />
     <telephone1 />
     <telephone2 />
 </person>
