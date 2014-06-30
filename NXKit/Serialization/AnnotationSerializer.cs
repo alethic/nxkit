@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
@@ -32,6 +33,20 @@ namespace NXKit.Serialization
         internal const string NX_FORMAT_XML = "xml";
         internal const string NX_FORMAT_BINARY = "binary";
         internal static readonly XName NX_TYPE = "type";
+
+        static readonly ConcurrentDictionary<Type, XmlSerializer> xmlSerializerCache =
+            new ConcurrentDictionary<Type, XmlSerializer>();
+
+        /// <summary>
+        /// Gets the <see cref="XmlSerializer"/> instance for the given type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        static XmlSerializer GetXmlSerializer(Type type)
+        {
+            return xmlSerializerCache.GetOrAdd(type, i => new XmlSerializer(i));
+        }
+
 
         readonly IEnumerable<IAnnotationObjectSerializer> serializers;
         readonly IEnumerable<IAnnotationObjectDeserializer> deserializers;
@@ -375,14 +390,14 @@ namespace NXKit.Serialization
                 }
                 else if (annotation is IXmlSerializable)
                 {
-                    var srs = new XmlSerializer(annotation.GetType());
+                    var srs = GetXmlSerializer(annotation.GetType());
                     var ens = new XmlSerializerNamespaces();
                     ens.Add("", "");
                     srs.Serialize(wrt, annotation, ens);
                 }
                 else if (annotation.GetType().GetCustomAttribute<XmlRootAttribute>() != null)
                 {
-                    var srs = new XmlSerializer(annotation.GetType());
+                    var srs = GetXmlSerializer(annotation.GetType());
                     var ens = new XmlSerializerNamespaces();
                     ens.Add("", "");
                     srs.Serialize(wrt, annotation, ens);
@@ -589,9 +604,9 @@ namespace NXKit.Serialization
                     return obj;
                 }
                 else if (typeof(IXmlSerializable).IsAssignableFrom(type))
-                    return new XmlSerializer(type).Deserialize(rdr);
+                    return GetXmlSerializer(type).Deserialize(rdr);
                 else if (type.GetCustomAttribute<XmlRootAttribute>() != null)
-                    return new XmlSerializer(type).Deserialize(rdr);
+                    return GetXmlSerializer(type).Deserialize(rdr);
                 else
                     return null;
             }
