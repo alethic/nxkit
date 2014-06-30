@@ -383,7 +383,8 @@ namespace NXKit.Xml
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            return Interfaces(node).Where(i => type.IsInstanceOfType(i));
+            return Interfaces(node)
+                .Where(i => type.IsInstanceOfType(i));
         }
 
         /// <summary>
@@ -396,7 +397,8 @@ namespace NXKit.Xml
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            return Interfaces(node).OfType<T>();
+            return Interfaces(node)
+                .OfType<T>();
         }
 
         /// <summary>
@@ -409,7 +411,8 @@ namespace NXKit.Xml
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            return Interfaces<T>(node).FirstOrDefault();
+            return Interfaces<T>(node)
+                .FirstOrDefault();
         }
 
         /// <summary>
@@ -447,9 +450,8 @@ namespace NXKit.Xml
                 if (host == null)
                     throw new InvalidOperationException();
 
-                var cont = new CompositionContainer(host.Configuration.ObjectCatalog, host.Container);
-
-                cont.WithExport<XObject>(self);
+                var cont = new CompositionContainer(host.Configuration.ObjectCatalog, host.Container)
+                    .WithExport<XObject>(self);
 
                 if (self is XDocument)
                     cont.WithExport<XDocument>((XDocument)self);

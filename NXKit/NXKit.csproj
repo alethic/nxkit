@@ -122,6 +122,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeAccessor.cs" />
+    <Compile Include="Composition\ObjectCatalogExportProvider.cs" />
+    <Compile Include="Composition\ObjectCompositionContainer.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Composition\Scope.cs" />
     <Compile Include="Composition\ScopeCatalog.cs" />

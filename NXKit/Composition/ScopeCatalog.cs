@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace NXKit.Composition
 {
@@ -32,7 +34,7 @@ namespace NXKit.Composition
             Contract.Requires<ArgumentNullException>(parent != null);
 
             this.scope = scope;
-            this.parts = parent.Where(i => Filter(i)).ToList().AsQueryable();
+            this.parts = parent.Parts.Where(i => Filter(i)).ToList().AsQueryable();
         }
 
         /// <summary>
@@ -40,11 +42,15 @@ namespace NXKit.Composition
         /// <see cref="Scope"/>.
         /// </summary>
         /// <param name="definition"></param>
-        /// <param name="scope"></param>
         /// <returns></returns>
         bool Filter(ComposablePartDefinition definition)
         {
-            return !definition.ContainsPartMetadataWithKey(ScopeMetadataKey) || definition.ContainsPartMetadata(ScopeMetadataKey, scope);
+            if (definition.ContainsPartMetadata(ScopeMetadataKey, scope))
+                return true;
+            else if (scope == Scope.Global && !definition.ContainsPartMetadataWithKey(ScopeMetadataKey))
+                return true;
+            else
+                return false;
         }
 
         public override IQueryable<ComposablePartDefinition> Parts
