@@ -4,7 +4,8 @@ using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Linq.Expressions;
+
+using NXKit.Util;
 
 namespace NXKit.Composition
 {
@@ -22,7 +23,8 @@ namespace NXKit.Composition
         public const string ScopeMetadataKey = "NXKit.Scope";
 
         readonly Scope scope;
-        readonly IQueryable<ComposablePartDefinition> parts;
+        readonly IEnumerable<ComposablePartDefinition> parts;
+        readonly Lazy<Dictionary<string, IEnumerable<ComposablePartDefinition>>> cache;
 
         /// <summary>
         /// Initializes a new instance.
@@ -34,7 +36,26 @@ namespace NXKit.Composition
             Contract.Requires<ArgumentNullException>(parent != null);
 
             this.scope = scope;
-            this.parts = parent.Parts.Where(i => Filter(i)).ToList().AsQueryable();
+            this.parts = parent.Parts.Where(i => Filter(i)).ToList();
+            this.cache = new Lazy<Dictionary<string, IEnumerable<ComposablePartDefinition>>>(() => CreateCache());
+        }
+
+        /// <summary>
+        /// Creates the cache dictionary from the available parts.
+        /// </summary>
+        /// <returns></returns>
+        Dictionary<string, IEnumerable<ComposablePartDefinition>> CreateCache()
+        {
+            return this
+                .Select(i => i.ExportDefinitions
+                    .Select(j => new
+                    {
+                        Part = i,
+                        ContractName = j.ContractName,
+                    }))
+                .SelectMany(i => i)
+                .GroupBy(i => i.ContractName)
+                .ToDictionary(i => i.Key, i => (IEnumerable<ComposablePartDefinition>)i.Select(j => j.Part).ToList());
         }
 
         /// <summary>
@@ -53,9 +74,32 @@ namespace NXKit.Composition
                 return false;
         }
 
-        public override IQueryable<ComposablePartDefinition> Parts
+        public override IEnumerator<ComposablePartDefinition> GetEnumerator()
         {
-            get { return parts; }
+            return parts.GetEnumerator();
+        }
+
+        public override IEnumerable<Tuple<ComposablePartDefinition, ExportDefinition>> GetExports(ImportDefinition definition)
+        {
+            return Enumerable.Empty<ComposablePartDefinition>()
+                .Concat(GetFromCache(definition.ContractName))
+                .Concat(GetFromCache((string)definition.Metadata.GetOrDefault(CompositionConstants.GenericContractMetadataName)))
+                .SelectMany(i => i.ExportDefinitions
+                    .Where(j => definition.IsConstraintSatisfiedBy(j))
+                    .Select(j => Tuple.Create(i, j)));
+        }
+
+        /// <summary>
+        /// Gets the parts which export the given contract name.
+        /// </summary>
+        /// <param name="contractName"></param>
+        /// <returns></returns>
+        IEnumerable<ComposablePartDefinition> GetFromCache(string contractName)
+        {
+            if (contractName == null)
+                return Enumerable.Empty<ComposablePartDefinition>();
+            else
+                return cache.Value.GetOrValue(contractName, Enumerable.Empty<ComposablePartDefinition>());
         }
 
     }
