@@ -7,6 +7,7 @@
         Unknown = 0,
         Good = 200,
         NeedSave = 500,
+        Fail = 501,
 
     }
 

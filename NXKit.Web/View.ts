@@ -257,6 +257,10 @@ module NXKit.Web {
                                     Hash: self._hash,
                                     Commands: commands,
                                 }, cb);
+                            } else if (args.Code == 501) {
+                                for (var i = 0; i < args.Errors.length; i++) {
+                                    throw new Error(args.Errors[i].Message || "");
+                                }
                             } else {
                                 throw new Error('unexpected response code');
                             }

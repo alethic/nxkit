@@ -34,6 +34,7 @@ namespace NXKit.Web
         ICache cache;
         Lazy<Document> document;
         ViewResponseCode code;
+        LinkedList<Exception> errors;
         LinkedList<string> scripts;
 
         /// <summary>
@@ -57,6 +58,7 @@ namespace NXKit.Web
             this.exports = exports;
             this.cache = cache ?? new DefaultMemoryCache();
             this.code = ViewResponseCode.Unknown;
+            this.errors = new LinkedList<Exception>();
             this.scripts = new LinkedList<string>();
         }
 
@@ -358,6 +360,10 @@ namespace NXKit.Web
         {
             try
             {
+                // return errors if any
+                if (code == ViewResponseCode.Fail)
+                    return SaveErrors();
+
                 // notify any subscribers to conduct final operations
                 if (Document != null)
                     OnDocumentUnloading(DocumentEventArgs.Empty);
@@ -375,16 +381,41 @@ namespace NXKit.Web
                 // respond with object containing new save and JSON tree
                 return new JObject(
                     new JProperty[] {
-                        new JProperty("Code", code),
-                        save != null ? new JProperty("Save", save) : null,
-                        hash != null ? new JProperty("Hash", hash) : null,
-                        data != null ? new JProperty("Data", data) : null, }
+                            new JProperty("Code", code),
+                            save != null ? new JProperty("Save", save) : null,
+                            hash != null ? new JProperty("Hash", hash) : null,
+                            data != null ? new JProperty("Data", data) : null, }
                         .Where(i => i != null));
             }
             finally
             {
                 code = ViewResponseCode.Unknown;
             }
+        }
+
+        /// <summary>
+        /// Saves any available <see cref="Exception"/>s.
+        /// </summary>
+        /// <returns></returns>
+        JObject SaveErrors()
+        {
+            return new JObject(
+                new JProperty("Code", code),
+                new JProperty("Errors",
+                    new JArray(errors.Select(i => SaveError(i)))));
+        }
+
+        /// <summary>
+        /// Saves an <see cref="Exception"/> to a <see cref="JObject"/>.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        JObject SaveError(Exception e)
+        {
+            return new JObject(
+                new JProperty("Type", e.GetType()),
+                new JProperty("Message", e.Message),
+                new JProperty("StackTrace", e.StackTrace));
         }
 
         /// <summary>
@@ -429,19 +460,31 @@ namespace NXKit.Web
         {
             Contract.Requires<ArgumentNullException>(args != null);
 
-            // load save data
-            var save = (string)args["Save"];
-            if (save != null)
-                if (LoadFromSave(save))
-                    return Execute(args, null);
+            try
+            {
+                // load save data
+                var save = (string)args["Save"];
+                if (save != null)
+                    if (LoadFromSave(save))
+                        return Execute(args, null);
 
-            // load hash data
-            var hash = (string)args["Hash"];
-            if (hash != null)
-                if (LoadFromHash(hash))
-                    return Execute(args, hash);
+                // load hash data
+                var hash = (string)args["Hash"];
+                if (hash != null)
+                    if (LoadFromHash(hash))
+                        return Execute(args, hash);
 
-            return ViewResponseCode.NeedSave;
+                // client must resend save data
+                return ViewResponseCode.NeedSave;
+            }
+            catch (Exception e)
+            {
+                // append error to errors list
+                errors.AddLast(e);
+
+                // return failure code
+                return code = ViewResponseCode.Fail;
+            }
         }
 
         /// <summary>
