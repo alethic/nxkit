@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-
 using NXKit.Composition;
 using NXKit.Util;
 
@@ -355,7 +356,19 @@ namespace NXKit.Xml
             return Interfaces(node, node.Exports());
         }
 
-        static TimeSpan time = TimeSpan.Zero;
+        /// <summary>
+        /// Static <see cref="ContractBasedImportDefinition"/> for the <see cref="IInterfaceProvider"/> interface.
+        /// Prevents recreation.
+        /// </summary>
+        static readonly ContractBasedImportDefinition InterfaceProviderImportDefinition =
+            new ContractBasedImportDefinition(
+                AttributedModelServices.GetContractName(typeof(IInterfaceProvider)),
+                AttributedModelServices.GetTypeIdentity(typeof(IInterfaceProvider)),
+                null,
+                ImportCardinality.ZeroOrMore,
+                false,
+                false,
+                CreationPolicy.Any);
 
         /// <summary>
         /// Implements Interfaces, allowing the specification of an export provider.
@@ -368,8 +381,12 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(exports != null);
 
-            return exports
-                .GetExportedValues<IInterfaceProvider>()
+            return node.AnnotationOrCreate(() =>
+                exports
+                    .GetExports(InterfaceProviderImportDefinition)
+                    .Select(i => i.Value)
+                    .Cast<IInterfaceProvider>()
+                    .ToLinkedList())
                 .SelectMany(i => i.GetInterfaces(node));
         }
 
@@ -434,7 +451,7 @@ namespace NXKit.Xml
         }
 
         /// <summary>
-        /// Gets the <see cref="IObjectContainer"/> for the given <see cref="XObject"/>.
+        /// Gets the <see cref="ExportProvider"/> for the given <see cref="XObject"/>.
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
