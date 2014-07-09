@@ -119,6 +119,9 @@
   <ItemGroup>
     <Compile Include="CommonProperties.cs" />
     <Compile Include="DeferredUpdateInvokerLayer.cs" />
+    <Compile Include="LoadShow.cs" />
+    <Compile Include="LoadAttributes.cs" />
+    <Compile Include="LoadProperties.cs" />
     <Compile Include="RepeatExtensionAttributes.cs" />
     <Compile Include="RepeatExtension.cs" />
     <Compile Include="RepeatExtensionProperties.cs" />
