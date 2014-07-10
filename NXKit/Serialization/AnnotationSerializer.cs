@@ -241,9 +241,10 @@ namespace NXKit.Serialization
             {
                 var obj = SerializeAnnotation(document, annotation);
                 if (obj != null)
+                {
                     obj.SetAttributeValue(NX_FOR, NX_FOR_DOCUMENT);
-
-                yield return obj;
+                    yield return obj;
+                }
             }
         }
 
@@ -261,9 +262,10 @@ namespace NXKit.Serialization
             {
                 var obj = SerializeAnnotation(element, annotation);
                 if (obj != null)
+                {
                     obj.SetAttributeValue(NX_FOR, NX_FOR_ELEMENT);
-
-                yield return obj;
+                    yield return obj;
+                }
             }
 
             // emit annotations on the attributes
@@ -282,7 +284,7 @@ namespace NXKit.Serialization
             Contract.Requires<ArgumentNullException>(attribute != null);
 
             // skip namespace attribute
-            if (attribute.Name.Namespace == XNamespace.Xmlns)
+            if (attribute.IsNamespaceDeclaration)
                 yield break;
 
             // emit annotations on the attribute
@@ -290,9 +292,11 @@ namespace NXKit.Serialization
             {
                 var obj = SerializeAnnotation(attribute, annotation);
                 if (obj != null)
+                {
                     obj.SetAttributeValue(NX_FOR, NX_FOR_ATTRIBUTE);
+                    yield return obj;
+                }
 
-                yield return obj;
             }
         }
 
@@ -309,9 +313,10 @@ namespace NXKit.Serialization
             {
                 var obj = SerializeAnnotation(node, annotation);
                 if (obj != null)
+                {
                     obj.SetAttributeValue(NX_FOR, NX_FOR_NODE);
-
-                yield return obj;
+                    yield return obj;
+                }
             }
         }
 
