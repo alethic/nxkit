@@ -644,6 +644,10 @@ namespace NXKit.Serialization
             if (attributeName == null)
                 throw new InvalidOperationException();
 
+            // ignore xmlns attributes
+            if (attributeName.LocalName == "xmlns")
+                return;
+
             var attribute = element.Attribute(attributeName);
             if (attribute == null)
                 throw new InvalidOperationException();
