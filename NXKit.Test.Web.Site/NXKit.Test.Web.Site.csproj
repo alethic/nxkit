@@ -374,6 +374,10 @@
       <Project>{075ba36b-f95a-4563-bbe9-20d4405e9c9e}</Project>
       <Name>NXKit.DOM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NXKit.NXInclude\NXKit.NXInclude.csproj">
+      <Project>{8d43ba5c-df3f-4ad8-bf28-6dda74a0a2a1}</Project>
+      <Name>NXKit.NXInclude</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.Scripting.EcmaScript\NXKit.Scripting.EcmaScript.csproj">
       <Project>{285cda69-8a75-408c-a3a1-b750ad9b6bd1}</Project>
       <Name>NXKit.Scripting.EcmaScript</Name>

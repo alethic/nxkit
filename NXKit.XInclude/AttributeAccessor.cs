@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Xml.Linq;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace NXKit.XInclude
 {
@@ -10,7 +10,7 @@ namespace NXKit.XInclude
     /// <summary>
     /// Base class for an interface which provides XForms attributes of a specific element.
     /// </summary>
-    abstract class AttributeAccessor
+    public abstract class AttributeAccessor
     {
 
         readonly XElement element;
@@ -35,7 +35,7 @@ namespace NXKit.XInclude
         /// </summary>
         /// <param name="element"></param>
         public AttributeAccessor(XElement element)
-            : this(element, "http://www.w3.org/2001/XInclude")
+            : this(element, "http://schemas.nxkit.org/2014/NXInclude")
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }

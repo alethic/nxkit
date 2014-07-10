@@ -50,19 +50,15 @@ namespace NXKit.XForms.Tests
             Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "false";
-            doc.Invoke();
             Assert.IsFalse(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "true";
-            doc.Invoke();
             Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "false";
-            doc.Invoke();
             Assert.IsFalse(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "true";
-            doc.Invoke();
             Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             using (var str = new StringWriter())
@@ -86,19 +82,15 @@ namespace NXKit.XForms.Tests
             Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "false";
-            doc.Invoke();
             Assert.IsFalse(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "true";
-            doc.Invoke();
             Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "false";
-            doc.Invoke();
             Assert.IsFalse(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "true";
-            doc.Invoke();
             Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             using (var str = new StringWriter())

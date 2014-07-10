@@ -1,0 +1,8 @@
+﻿<xf:group
+    xmlns:xf="http://www.w3.org/2002/xforms"
+    xmlns:xl="http://schemas.nxkit.org/2014/xforms-layout"
+    xmlns:nxi="http://schemas.nxkit.org/2014/NXInclude">
+    <xf:trigger>
+        <xf:label>Click Me</xf:label>
+    </xf:trigger>
+</xf:group>

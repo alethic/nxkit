@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>$id$</id>
+        <version>$version$</version>
+        <title>$id$</title>
+        <authors>Jerome Haltom</authors>
+        <owners>Jerome Haltom</owners>
+        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.txt</licenseUrl>
+        <projectUrl>https://github.com/nxkit</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>
+            NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
+
+            Implements the NXInclude specification. The NXInclude specification is an extension of the XInclude specification.
+        </description>
+        <releaseNotes />
+        <copyright>$copyright$</copyright>
+        <tags>xml xforms xinclude</tags>
+        <dependencies>
+            <dependency
+                id="NXKit"
+                version="[$version$]" />
+        </dependencies>
+    </metadata>
+</package>

@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace NXKit.XInclude
 {
 
-    class IncludeAttributes :
+    public class IncludeAttributes :
         AttributeAccessor
     {
 
@@ -15,6 +15,17 @@ namespace NXKit.XInclude
         /// <param name="element"></param>
         public IncludeAttributes(XElement element)
             : base(element)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="defaultNamespace"></param>
+        public IncludeAttributes(XElement element, XNamespace defaultNamespace)
+            :base(element, defaultNamespace)
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }

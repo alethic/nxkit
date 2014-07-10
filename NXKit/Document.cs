@@ -194,15 +194,13 @@ namespace NXKit
                 catalog,
                 exports ?? new CompositionContainer());
         }
-
-
+        
         readonly CompositionConfiguration configuration;
         readonly CompositionContainer container;
         readonly IInvoker invoker;
         readonly ITraceService trace;
         readonly XDocument xml;
-
-
+        
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -229,7 +227,8 @@ namespace NXKit
             this.xml = xml(this);
             this.xml.AddAnnotation(this);
 
-            Initialize();
+            // initial invocation entry
+            this.invoker.Invoke(() => { });
         }
 
         /// <summary>
@@ -249,103 +248,11 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Initializes modules
-        /// </summary>
-        void Initialize()
-        {
-            xml.Changed += xml_Changed;
-
-            // start up document
-            InvokeInit();
-            InvokeLoad();
-            Invoke();
-        }
-
-        /// <summary>
-        /// Invoked when any nodes are changed.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        void xml_Changed(object sender, XObjectChangeEventArgs args)
-        {
-            if (args.ObjectChange == XObjectChange.Add)
-            {
-                InvokeInit();
-                InvokeLoad();
-            }
-        }
-
-        /// <summary>
-        /// Invokes any <see cref="IOnInit"/> interfaces the first time the document is loaded.
-        /// </summary>
-        void InvokeInit()
-        {
-            while (true)
-            {
-                var inits = xml
-                    .DescendantNodesAndSelf()
-                    .Where(i => i.GetObjectId() > 0)
-                    .Where(i => i.InterfaceOrDefault<IOnInit>() != null)
-                    .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Init == true)
-                    .ToLinkedList();
-
-                if (inits.Count == 0)
-                    break;
-
-                foreach (var init in inits)
-                    if (init.Document != null)
-                    {
-                        invoker.Invoke(() => init.Interface<IOnInit>().Init());
-                        init.AnnotationOrCreate<ObjectAnnotation>().Init = false;
-                    }
-            }
-        }
-
-        /// <summary>
-        /// Invokes any <see cref="IOnLoad"/> interfaces.
-        /// </summary>
-        void InvokeLoad()
-        {
-            var loads = xml
-                .DescendantNodesAndSelf()
-                .Where(i => i.GetObjectId() > 0)
-                .Where(i => i.InterfaceOrDefault<IOnLoad>() != null)
-                .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Load == true)
-                .ToLinkedList();
-
-            foreach (var load in loads)
-                if (load.Document != null)
-                {
-                    invoker.Invoke(() => load.Interface<IOnLoad>().Load());
-                    load.AnnotationOrCreate<ObjectAnnotation>().Load = false;
-                }
-        }
-
-        /// <summary>
         /// Gets a reference to the current <see cref="Xml"/> being handled.
         /// </summary>
         public XDocument Xml
         {
             get { return xml; }
-        }
-
-        /// <summary>
-        /// Invokes any outstanding actions.
-        /// </summary>
-        public void Invoke()
-        {
-            bool run;
-            do
-            {
-                var invokes = Xml.DescendantsAndSelf()
-                    .SelectMany(i => i.Interfaces<IOnInvoke>())
-                    .ToLinkedList();
-
-                run = false;
-                foreach (var invoke in invokes)
-                    run |= invoker.Invoke(() => invoke.Invoke());
-            }
-            while (run);
         }
 
         /// <summary>

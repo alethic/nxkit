@@ -129,6 +129,7 @@
     <Compile Include="Composition\ScopeCatalog.cs" />
     <Compile Include="ContainerInterfaceProvider.cs" />
     <Compile Include="DefaultInvoker.cs" />
+    <Compile Include="DeferredInvokerLayer.cs" />
     <Compile Include="Diagnostics\ITypeProxyProvider.cs" />
     <Compile Include="Diagnostics\DiagnosticsTraceSink.cs" />
     <Compile Include="Diagnostics\DefaultTraceService.cs" />
@@ -144,6 +145,8 @@
     <Compile Include="IInvokerLayer.cs" />
     <Compile Include="IInvoker.cs" />
     <Compile Include="IOnSave.cs" />
+    <Compile Include="IO\IOTextReader.cs" />
+    <Compile Include="IRefRoot.cs" />
     <Compile Include="ITextExtension.cs" />
     <Compile Include="IDocumentExtension.cs" />
     <Compile Include="Serialization\IAnnotationObjectDeserializer.cs" />

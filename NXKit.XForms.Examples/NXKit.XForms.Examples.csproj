@@ -160,6 +160,10 @@
   <ItemGroup>
     <EmbeddedResource Include="insert.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="nxinclude_form1.xml" />
+    <EmbeddedResource Include="nxinclude.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
