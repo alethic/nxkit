@@ -5,7 +5,7 @@
     /// Gets the extension for the given type.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IExtensionService<T>
+    public interface IInterface<T>
     {
 
         /// <summary>

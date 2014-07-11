@@ -371,13 +371,13 @@ namespace NXKit.Xml
         }
 
         /// <summary>
-        /// Static <see cref="ContractBasedImportDefinition"/> for the <see cref="IExtensionProvider"/> interface.
+        /// Static <see cref="ContractBasedImportDefinition"/> for the <see cref="IInterfaceProvider"/> interface.
         /// Prevents recreation.
         /// </summary>
         static readonly ContractBasedImportDefinition InterfaceProviderImportDefinition =
             new ContractBasedImportDefinition(
-                AttributedModelServices.GetContractName(typeof(IExtensionProvider)),
-                AttributedModelServices.GetTypeIdentity(typeof(IExtensionProvider)),
+                AttributedModelServices.GetContractName(typeof(IInterfaceProvider)),
+                AttributedModelServices.GetTypeIdentity(typeof(IInterfaceProvider)),
                 null,
                 ImportCardinality.ZeroOrMore,
                 false,
@@ -400,9 +400,9 @@ namespace NXKit.Xml
                 exports
                     .GetExports(InterfaceProviderImportDefinition)
                     .Select(i => i.Value)
-                    .Cast<IExtensionProvider>()
+                    .Cast<IInterfaceProvider>()
                     .ToLinkedList())
-                .SelectMany(i => i.GetExtensions(node, type));
+                .SelectMany(i => i.GetInterfaces(node, type));
         }
 
         /// <summary>
@@ -420,9 +420,9 @@ namespace NXKit.Xml
                 exports
                     .GetExports(InterfaceProviderImportDefinition)
                     .Select(i => i.Value)
-                    .Cast<IExtensionProvider>()
+                    .Cast<IInterfaceProvider>()
                     .ToLinkedList())
-                .SelectMany(i => i.GetExtensions<T>(node));
+                .SelectMany(i => i.GetInterfaces<T>(node));
         }
 
         /// <summary>
@@ -470,23 +470,27 @@ namespace NXKit.Xml
             // get or create the new object container annotation
             return self.AnnotationOrCreate<ExportProvider>(() =>
             {
-                var host = self.Document.Annotation<Document>();
-                if (host == null)
+                var document = self.Document.Annotation<Document>();
+                if (document == null)
                     throw new InvalidOperationException();
 
-                var cont = new CompositionContainer(host.Configuration.ObjectCatalog, CompositionOptions.DisableSilentRejection, host.Container)
-                    .WithExport<XObject>(self);
+                var container = new CompositionContainer(
+                    document.Configuration.ObjectCatalog,
+                    CompositionOptions.DisableSilentRejection,
+                    document.Container);
 
+                if (self is XObject)
+                    container.WithExport<XObject>(self);
                 if (self is XDocument)
-                    cont.WithExport<XDocument>((XDocument)self);
+                    container.WithExport<XDocument>((XDocument)self);
                 if (self is XElement)
-                    cont.WithExport<XElement>((XElement)self);
+                    container.WithExport<XElement>((XElement)self);
                 if (self is XNode)
-                    cont.WithExport<XNode>((XNode)self);
+                    container.WithExport<XNode>((XNode)self);
                 if (self is XAttribute)
-                    cont.WithExport<XAttribute>((XAttribute)self);
+                    container.WithExport<XAttribute>((XAttribute)self);
 
-                return cont;
+                return container;
             });
         }
 

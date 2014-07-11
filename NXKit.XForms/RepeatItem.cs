@@ -20,7 +20,7 @@ namespace NXKit.XForms
     {
 
         public class RepeatItemPredicate :
-            InterfacePredicateBase
+            ExtensionPredicateBase
         {
 
             public override bool IsMatch(XObject obj, Type type)

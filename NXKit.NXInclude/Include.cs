@@ -29,7 +29,7 @@ namespace NXKit.NXInclude
             XElement element,
             ITraceService trace,
             IIOService io,
-            IExtensionService<IncludeProperties> properties)
+            IInterface<IncludeProperties> properties)
             : this((XElement)element, trace, io, properties.Value)
         {
             Contract.Requires<ArgumentNullException>(element != null);

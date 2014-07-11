@@ -18,7 +18,7 @@ namespace NXKit
     /// <summary>
     /// Provides interfaces decorated with the <see cref="InterfaceAttribute"/>.
     /// </summary>
-    [Export(typeof(IExtensionProvider))]
+    [Export(typeof(IInterfaceProvider))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class DefaultInterfaceProvider :
         InterfaceProviderBase
@@ -127,7 +127,7 @@ namespace NXKit
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override IEnumerable<T> GetExtensions<T>(XObject obj)
+        public override IEnumerable<T> GetInterfaces<T>(XObject obj)
         {
             // available interface types for the object
             var types = obj.AnnotationOrCreate<DescriptorTypeList>(() =>
@@ -139,7 +139,7 @@ namespace NXKit
                 yield return instance;
         }
 
-        public override IEnumerable<object> GetExtensions(XObject obj, Type type)
+        public override IEnumerable<object> GetInterfaces(XObject obj, Type type)
         {
             // available interface types for the object
             var types = obj.AnnotationOrCreate<DescriptorTypeList>(() =>

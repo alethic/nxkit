@@ -71,7 +71,7 @@ namespace NXKit.Tests
         public void Test_full_element()
         {
             var p = new DefaultInterfaceProvider(descriptors);
-            var i = p.GetExtensions(new XElement(NS + "element1")).ToArray();
+            var i = p.GetInterfaces(new XElement(NS + "element1")).ToArray();
             Assert.IsTrue(i.Length == 2);
             Assert.IsInstanceOfType(i[0], typeof(Object1));
         }
@@ -80,7 +80,7 @@ namespace NXKit.Tests
         public void Test_local_only_element()
         {
             var p = new DefaultInterfaceProvider(predicates, descriptors);
-            var i = p.GetExtensions(new XElement(NS + "element2")).ToArray();
+            var i = p.GetInterfaces(new XElement(NS + "element2")).ToArray();
             Assert.IsTrue(i.Length == 2);
             Assert.IsInstanceOfType(i[0], typeof(Object2));
         }
@@ -89,7 +89,7 @@ namespace NXKit.Tests
         public void Test_ns_only_element()
         {
             var p = new DefaultInterfaceProvider(predicates, descriptors);
-            var i = p.GetExtensions(new XElement(NS + "element3")).ToArray();
+            var i = p.GetInterfaces(new XElement(NS + "element3")).ToArray();
             Assert.IsTrue(i.Length == 1);
             Assert.IsInstanceOfType(i[0], typeof(Object3));
         }

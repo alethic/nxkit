@@ -7,11 +7,11 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Provides a base <see cref="IExtensionProvider"/> implementation that supports caching implementations in
+    /// Provides a base <see cref="IInterfaceProvider"/> implementation that supports caching implementations in
     /// the annotations collection.
     /// </summary>
     public abstract class InterfaceProviderBase :
-        IExtensionProvider
+        IInterfaceProvider
     {
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace NXKit
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public abstract IEnumerable<T> GetExtensions<T>(XObject obj);
+        public abstract IEnumerable<T> GetInterfaces<T>(XObject obj);
 
         /// <summary>
         /// Implement this method to handle retrieving interfaces for the specified node.
@@ -127,7 +127,7 @@ namespace NXKit
         /// <param name="obj"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public abstract IEnumerable<object> GetExtensions(XObject obj, Type type);
+        public abstract IEnumerable<object> GetInterfaces(XObject obj, Type type);
 
     }
 

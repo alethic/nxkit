@@ -3,80 +3,22 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Threading;
 using System.Xml.Linq;
+
 using NXKit.Composition;
 using NXKit.Util;
 
 namespace NXKit
 {
 
-    [Export(typeof(IExtensionProvider))]
+    /// <summary>
+    /// Provides interface lookup using the container.
+    /// </summary>
+    [Export(typeof(IInterfaceProvider))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
-    public class ContainerExtensionProvider :
-        IExtensionProvider
+    public class ContainerInterfaceProvider :
+        IInterfaceProvider
     {
-
-        /// <summary>
-        /// Implements <see cref="IExtensionMetadata"/>.
-        /// </summary>
-        class Metadata :
-            IExtensionMetadata
-        {
-
-            /// <summary>
-            /// Creates a <see cref="Metadata"/> instance from the given metadata dictionary.
-            /// </summary>
-            /// <param name="metadata"></param>
-            /// <returns></returns>
-            public static IEnumerable<IExtensionMetadata> Extract(IDictionary<string, object> metadata)
-            {
-                var objectTypes = (ExtensionObjectType[])metadata.GetOrDefault("ObjectType");
-                var localNames = (string[])metadata.GetOrDefault("LocalName");
-                var namespaceNames = (string[])metadata.GetOrDefault("NamespaceName");
-                var predicateTypes = (Type[])metadata.GetOrDefault("PredicateType");
-                var interfaceTypes = (Type[])metadata.GetOrDefault("InterfaceType");
-
-                // find shortest array
-                int length = objectTypes.Length;
-                length = Math.Min(length, localNames.Length);
-                length = Math.Min(length, namespaceNames.Length);
-                length = Math.Min(length, predicateTypes.Length);
-                length = Math.Min(length, interfaceTypes.Length);
-
-                // extract metadata
-                for (int i = 0; i < length; i++)
-                    yield return new Metadata(objectTypes[i], localNames[i], namespaceNames[i], predicateTypes[i], interfaceTypes[i]);
-            }
-
-            /// <summary>
-            /// Initializes a new instance.
-            /// </summary>
-            /// <param name="objectType"></param>
-            /// <param name="localName"></param>
-            /// <param name="namespaceName"></param>
-            /// <param name="predicateType"></param>
-            /// <param name="interfaceType"></param>
-            public Metadata(ExtensionObjectType objectType, string localName, string namespaceName, Type predicateType, Type interfaceType)
-            {
-                ObjectType = objectType;
-                LocalName = localName;
-                NamespaceName = namespaceName;
-                PredicateType = predicateType;
-                InterfaceType = interfaceType;
-            }
-
-            public ExtensionObjectType ObjectType { get; set; }
-
-            public string LocalName { get; set; }
-
-            public string NamespaceName { get; set; }
-
-            public Type PredicateType { get; set; }
-
-            public Type InterfaceType { get; set; }
-
-        }
 
         static Func<T> GetLazyFunc<T>(Lazy<T> inner)
         {
@@ -92,7 +34,7 @@ namespace NXKit
         /// <param name="container"></param>
         /// <param name="predicates"></param>
         [ImportingConstructor]
-        public ContainerExtensionProvider(
+        public ContainerInterfaceProvider(
             XObject obj,
             [ImportMany] IEnumerable<Lazy<IExtension, IDictionary<string, object>>> extensions)
         {
@@ -103,17 +45,17 @@ namespace NXKit
             this.extensions = extensions
                 .Select(i => Tuple.Create(
                     GetLazyFunc(i),
-                    Metadata.Extract(i.Metadata)))
+                    ExtensionMetadata.Extract(i.Metadata)))
                 .ToList()
                 .AsEnumerable();
         }
 
-        public IEnumerable<T> GetExtensions<T>(XObject obj)
+        public IEnumerable<T> GetInterfaces<T>(XObject obj)
         {
             return GetExtensionsInternal(obj, typeof(T)).OfType<T>();
         }
 
-        public IEnumerable<object> GetExtensions(XObject obj, Type type)
+        public IEnumerable<object> GetInterfaces(XObject obj, Type type)
         {
             return GetExtensionsInternal(obj, type);
         }

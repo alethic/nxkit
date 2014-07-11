@@ -9,8 +9,8 @@ namespace NXKit
     /// <summary>
     /// Describes a class that provides interfaces for <see cref="XObject"/>s.
     /// </summary>
-    [ContractClass(typeof(IExtensionProvider_Contract))]
-    public interface IExtensionProvider
+    [ContractClass(typeof(IInterfaceProvider_Contract))]
+    public interface IInterfaceProvider
     {
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace NXKit
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        IEnumerable<T> GetExtensions<T>(XObject obj);
+        IEnumerable<T> GetInterfaces<T>(XObject obj);
 
         /// <summary>
         /// Gets available interfaces for the given <see cref="XObject"/>.
@@ -26,22 +26,22 @@ namespace NXKit
         /// <param name="obj"></param>
         /// <param name="interfaceType"></param>
         /// <returns></returns>
-        IEnumerable<object> GetExtensions(XObject obj, Type interfaceType);
+        IEnumerable<object> GetInterfaces(XObject obj, Type interfaceType);
 
     }
 
-    [ContractClassFor(typeof(IExtensionProvider))]
-    abstract class IExtensionProvider_Contract :
-        IExtensionProvider
+    [ContractClassFor(typeof(IInterfaceProvider))]
+    abstract class IInterfaceProvider_Contract :
+        IInterfaceProvider
     {
 
-        public IEnumerable<T> GetExtensions<T>(XObject obj)
+        public IEnumerable<T> GetInterfaces<T>(XObject obj)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             throw new NotImplementedException();
         }
 
-        public IEnumerable<object> GetExtensions(XObject obj, Type interfaceType)
+        public IEnumerable<object> GetInterfaces(XObject obj, Type interfaceType)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(interfaceType != null);

@@ -13,16 +13,16 @@ namespace NXKit
     /// <summary>
     /// Exports <see cref="XObject"/> extensions.
     /// </summary>
-    /// <typeparam name="TExtension"></typeparam>
-    [Export(typeof(IExtensionService<>))]
+    /// <typeparam name="T"></typeparam>
+    [Export(typeof(IInterface<>))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
-    public class ExtensionService<TExtension> :
-        IExtensionService<TExtension>
-        where TExtension : IExtension
+    public class InterfaceService<T> :
+        IInterface<T>
+        where T : IExtension
     {
 
         readonly XObject obj;
-        readonly IEnumerable<IExtensionProvider> providers;
+        readonly IEnumerable<IInterfaceProvider> providers;
 
         /// <summary>
         /// Initializes a new instance.
@@ -30,9 +30,9 @@ namespace NXKit
         /// <param name="obj"></param>
         /// <param name="providers"></param>
         [ImportingConstructor]
-        public ExtensionService(
+        public InterfaceService(
             XObject obj,
-            [ImportMany] IEnumerable<IExtensionProvider> providers)
+            [ImportMany] IEnumerable<IInterfaceProvider> providers)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(providers != null);
@@ -42,17 +42,21 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Exports the extension value.
+        /// Exports the interface value.
         /// </summary>
-        public TExtension Value
+        public T Value
         {
             get { return GetValue(); }
         }
 
-        TExtension GetValue()
+        /// <summary>
+        /// Implements the getter for Value.
+        /// </summary>
+        /// <returns></returns>
+        T GetValue()
         {
             return providers
-                .SelectMany(i => i.GetExtensions<TExtension>(obj))
+                .SelectMany(i => i.GetInterfaces<T>(obj))
                 .FirstOrDefault();
         }
 

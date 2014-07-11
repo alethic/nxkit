@@ -7,7 +7,7 @@ namespace NXKit
     /// <summary>
     /// Base implementation of <see cref="IExtensionPredicate"/>.
     /// </summary>
-    public abstract class InterfacePredicateBase :
+    public abstract class ExtensionPredicateBase :
         IExtensionPredicate
     {
 
