@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-
 using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.IO;
@@ -24,6 +23,15 @@ namespace NXKit
     public class Document :
         IDisposable
     {
+
+        /// <summary>
+        /// Initializes the static instance.
+        /// </summary>
+        static Document()
+        {
+            if (!FrameworkUtil.IsCompatibleWithFramework())
+                throw new Exception("NXKit is only compatible with Frameworks targeting .NET 4.5 or above.");
+        }
 
         /// <summary>
         /// Loads a <see cref="Document"/> from the given <see cref="XmlReader"/>.
@@ -194,13 +202,13 @@ namespace NXKit
                 catalog,
                 exports ?? new CompositionContainer());
         }
-        
+
         readonly CompositionConfiguration configuration;
         readonly CompositionContainer container;
         readonly IInvoker invoker;
         readonly ITraceService trace;
         readonly XDocument xml;
-        
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -141,7 +141,11 @@
     <Compile Include="Diagnostics\XTextTypeProxyProvider.cs" />
     <Compile Include="DocumentEnvironment.cs" />
     <Compile Include="ExceptionInvokerLayer.cs" />
+    <Compile Include="ExtensionObjectType.cs" />
+    <Compile Include="ExtensionService.cs" />
     <Compile Include="IExtension.cs" />
+    <Compile Include="IExtensionMetadata.cs" />
+    <Compile Include="IExtensionService.cs" />
     <Compile Include="IInvokerLayer.cs" />
     <Compile Include="IInvoker.cs" />
     <Compile Include="IOnSave.cs" />
@@ -176,14 +180,14 @@
     <Compile Include="IO\WebTransport.cs" />
     <Compile Include="ObjectAnnotation.cs" />
     <Compile Include="DocumentAnnotation.cs" />
-    <Compile Include="IInterfacePredicate.cs" />
+    <Compile Include="IExtensionPredicate.cs" />
     <Compile Include="InterfaceDescriptor.cs" />
     <Compile Include="InterfacePredicateBase.cs" />
     <Compile Include="IOnInvoke.cs" />
     <Compile Include="IOnLoad.cs" />
     <Compile Include="InterfaceAttribute.cs" />
     <Compile Include="DefaultInterfaceProvider.cs" />
-    <Compile Include="IInterfaceProvider.cs" />
+    <Compile Include="IExtensionProvider.cs" />
     <Compile Include="Net\ResourceUriHelper.cs" />
     <Compile Include="Net\ResourceUriParser.cs" />
     <Compile Include="Net\ResourceWebRequest.cs" />
@@ -209,6 +213,7 @@
     <Compile Include="Util\DynamicDictionary.cs" />
     <Compile Include="Util\DynamicDictionaryValue.cs" />
     <Compile Include="Util\EnumerableExtensions.cs" />
+    <Compile Include="Util\FrameworkUtil.cs" />
     <Compile Include="Util\LinkedListExtensions.cs" />
     <Compile Include="Util\MediaRangeList.cs" />
     <Compile Include="Util\MediaRangeParameters.cs" />

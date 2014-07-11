@@ -13,7 +13,7 @@ namespace NXKit.XForms
     {
 
         class HeaderValuePredicate :
-            IInterfacePredicate
+            IExtensionPredicate
         {
 
             public bool IsMatch(XObject obj, Type type)

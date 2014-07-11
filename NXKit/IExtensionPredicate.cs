@@ -7,7 +7,7 @@ namespace NXKit
     /// <summary>
     /// Describes a type that provides filtering capabilities to the <see cref="InterfaceAttribute"/> resolver.
     /// </summary>
-    public interface IInterfacePredicate
+    public interface IExtensionPredicate
     {
 
         /// <summary>

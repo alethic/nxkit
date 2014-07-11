@@ -5,10 +5,10 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Base implementation of <see cref="IInterfacePredicate"/>.
+    /// Base implementation of <see cref="IExtensionPredicate"/>.
     /// </summary>
     public abstract class InterfacePredicateBase :
-        IInterfacePredicate
+        IExtensionPredicate
     {
 
         /// <summary>

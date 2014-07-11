@@ -11,7 +11,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         public DocumentExtensionAttribute()
-            : base(typeof(XDocument))
+            : base(ExtensionObjectType.Document)
         {
 
         }

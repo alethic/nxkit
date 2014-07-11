@@ -76,7 +76,7 @@ namespace NXKit
                 return false;
 
             // test against specified predicate type
-            var predicate = predicateType != null ? (IInterfacePredicate)Activator.CreateInstance(predicateType) : null;
+            var predicate = predicateType != null ? (IExtensionPredicate)Activator.CreateInstance(predicateType) : null;
             if (predicate != null)
                 if (!predicate.IsMatch(obj, type))
                     return false;

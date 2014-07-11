@@ -11,7 +11,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         public TextExtensionAttribute()
-            : base(typeof(XText))
+            : base(ExtensionObjectType.Text)
         {
 
         }

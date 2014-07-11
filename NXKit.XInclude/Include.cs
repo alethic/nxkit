@@ -11,16 +11,17 @@ using NXKit.Xml;
 namespace NXKit.XInclude
 {
 
-    [ElementExtension("{http://www.w3.org/2001/XInclude}include")]
+    [ElementExtension("{http://www.w3.org/2001/XInclude}include", typeof(Include))]
+    [ElementExtension("{http://www.w3.org/2001/XInclude}include", typeof(IOnInit))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Include :
         ElementExtension,
         IOnInit
     {
 
-        readonly Lazy<ITraceService> trace;
-        readonly Lazy<IIOService> io;
-        readonly Func<IncludeProperties> properties;
+        readonly ITraceService trace;
+        readonly IIOService io;
+        readonly IncludeProperties properties;
 
         /// <summary>
         /// Initializes a new instance.
@@ -32,9 +33,29 @@ namespace NXKit.XInclude
         [ImportingConstructor]
         public Include(
             XElement element,
-            Lazy<ITraceService> trace,
-            Lazy<IIOService> io,
-            Func<IncludeProperties> properties)
+            ITraceService trace,
+            IIOService io,
+            IExtensionService<IncludeProperties> properties)
+            : this(element, trace, io, properties.Value)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(trace != null);
+            Contract.Requires<ArgumentNullException>(io != null);
+            Contract.Requires<ArgumentNullException>(properties != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="trace"></param>
+        /// <param name="io"></param>
+        /// <param name="properties"></param>
+        public Include(
+            XElement element,
+            ITraceService trace,
+            IIOService io,
+            IncludeProperties properties)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
@@ -49,17 +70,17 @@ namespace NXKit.XInclude
 
         public IncludeProperties Properties
         {
-            get { return properties(); }
+            get { return properties; }
         }
 
         protected ITraceService Trace
         {
-            get { return trace.Value; }
+            get { return trace; }
         }
 
         protected IIOService IO
         {
-            get { return io.Value; }
+            get { return io; }
         }
 
         /// <summary>

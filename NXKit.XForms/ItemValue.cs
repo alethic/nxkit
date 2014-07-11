@@ -14,7 +14,7 @@ namespace NXKit.XForms
     {
 
         class ItemValuePredicate :
-            IInterfacePredicate
+            IExtensionPredicate
         {
 
             public bool IsMatch(XObject obj, Type type)

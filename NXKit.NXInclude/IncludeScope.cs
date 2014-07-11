@@ -12,7 +12,7 @@ namespace NXKit.NXInclude
     {
 
         public class IncludeScopePredicate :
-            IInterfacePredicate
+            IExtensionPredicate
         {
 
             public bool IsMatch(XObject obj, Type type)

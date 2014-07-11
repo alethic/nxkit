@@ -34,7 +34,7 @@ namespace NXKit.Web.Serialization
             Contract.Requires<ArgumentNullException>(serializer != null);
             Contract.Requires<ArgumentNullException>(obj != null);
 
-            RemotesToObject(node.Interfaces(), obj, serializer);
+            RemotesToObject(node.Interfaces<object>(), obj, serializer);
         }
 
     }

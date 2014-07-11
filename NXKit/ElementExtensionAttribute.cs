@@ -6,6 +6,9 @@ using System.Xml.Linq;
 namespace NXKit
 {
 
+    /// <summary>
+    /// Exports an extension instance for a <see cref="XElement"/>.
+    /// </summary>
     [MetadataAttribute]
     public class ElementExtensionAttribute :
         ObjectExtensionAttribute
@@ -18,7 +21,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         public ElementExtensionAttribute()
-            : base(typeof(XElement))
+            : base(ExtensionObjectType.Element)
         {
 
         }
@@ -36,11 +39,39 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="name"></param>
+        /// <param name="interfaceType"></param>
+        public ElementExtensionAttribute(XName name, Type interfaceType)
+            : this(name)
+        {
+            Contract.Requires<ArgumentNullException>(name != null);
+            Contract.Requires<ArgumentNullException>(interfaceType != null);
+
+            InterfaceType = interfaceType;
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
         /// <param name="expandedName"></param>
         public ElementExtensionAttribute(string expandedName)
             : this(XName.Get(expandedName))
         {
             Contract.Requires<ArgumentNullException>(expandedName != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="expandedName"></param>
+        /// <param name="interfaceType"></param>
+        public ElementExtensionAttribute(string expandedName, Type interfaceType)
+            : this(expandedName)
+        {
+            Contract.Requires<ArgumentNullException>(expandedName != null);
+            Contract.Requires<ArgumentNullException>(interfaceType != null);
+
+            InterfaceType = interfaceType;
         }
 
         /// <summary>
@@ -53,6 +84,22 @@ namespace NXKit
         {
             this.namespaceName = namespaceName;
             this.localName = localName;
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="namespaceName"></param>
+        /// <param name="localName"></param>
+        /// <param name="interfaceType"></param>
+        public ElementExtensionAttribute(string namespaceName, string localName, Type interfaceType)
+            : this(namespaceName, localName)
+        {
+            Contract.Requires<ArgumentNullException>(namespaceName != null);
+            Contract.Requires<ArgumentNullException>(localName != null);
+            Contract.Requires<ArgumentNullException>(interfaceType != null);
+
+            InterfaceType = interfaceType;
         }
 
         /// <summary>

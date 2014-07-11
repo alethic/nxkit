@@ -9,13 +9,11 @@ using NXKit.Xml;
 namespace NXKit.NXInclude
 {
 
-    [ElementExtension("{http://schemas.nxkit.org/2014/NXInclude}include")]
+    [ElementExtension("{http://schemas.nxkit.org/2014/NXInclude}include", typeof(IncludeProperties))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IncludeProperties :
         XInclude.IncludeProperties
     {
-
-        readonly IncludeAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
@@ -23,7 +21,7 @@ namespace NXKit.NXInclude
         /// <param name="element"></param>
         [ImportingConstructor]
         public IncludeProperties(XElement element)
-            : base(element, element.AnnotationOrCreate<IncludeAttributes>(() => new IncludeAttributes(element)))
+            : base((XElement)element, element.AnnotationOrCreate<IncludeAttributes>(() => new IncludeAttributes((XElement)element)))
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }

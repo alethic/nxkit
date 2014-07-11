@@ -5,22 +5,33 @@ using System.Xml.Linq;
 namespace NXKit
 {
 
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     [MetadataAttribute]
     public abstract class ObjectExtensionAttribute :
         ExportAttribute
     {
 
+        ExtensionObjectType objectType;
         Type predicateType;
+        Type interfaceType;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="objectType"></param>
-        public ObjectExtensionAttribute(Type objectType)
-            : base(typeof(IExtension<>).MakeGenericType(objectType))
+        public ObjectExtensionAttribute(ExtensionObjectType objectType)
+            : base(typeof(IExtension))
         {
+            this.objectType = objectType;
+        }
 
+        /// <summary>
+        /// Specifies the object type this extension applies to.
+        /// </summary>
+        public ExtensionObjectType ObjectType
+        {
+            get { return objectType; }
+            set { objectType = value; }
         }
 
         /// <summary>
@@ -30,6 +41,15 @@ namespace NXKit
         {
             get { return predicateType; }
             set { predicateType = value; }
+        }
+
+        /// <summary>
+        /// Specifies that this type is available as the given interface type.
+        /// </summary>
+        public Type InterfaceType
+        {
+            get { return interfaceType; }
+            set { interfaceType = value; }
         }
 
     }

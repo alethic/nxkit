@@ -18,7 +18,7 @@ namespace NXKit
     /// <summary>
     /// Provides interfaces decorated with the <see cref="InterfaceAttribute"/>.
     /// </summary>
-    [Export(typeof(IInterfaceProvider))]
+    [Export(typeof(IExtensionProvider))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class DefaultInterfaceProvider :
         InterfaceProviderBase
@@ -127,7 +127,7 @@ namespace NXKit
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override IEnumerable<object> GetInterfaces(XObject obj)
+        public override IEnumerable<T> GetExtensions<T>(XObject obj)
         {
             // available interface types for the object
             var types = obj.AnnotationOrCreate<DescriptorTypeList>(() =>
@@ -135,7 +135,19 @@ namespace NXKit
                     .Where(i => i.IsMatch(obj))
                     .Select(i => i.Type)));
 
-            foreach (var instance in GetInstances(obj, types))
+            foreach (var instance in GetInstances<T>(obj, types))
+                yield return instance;
+        }
+
+        public override IEnumerable<object> GetExtensions(XObject obj, Type type)
+        {
+            // available interface types for the object
+            var types = obj.AnnotationOrCreate<DescriptorTypeList>(() =>
+                new DescriptorTypeList(descriptors
+                    .Where(i => i.IsMatch(obj))
+                    .Select(i => i.Type)));
+
+            foreach (var instance in GetInstances(obj, types, type))
                 yield return instance;
         }
 
@@ -145,12 +157,33 @@ namespace NXKit
         /// <param name="obj"></param>
         /// <param name="types"></param>
         /// <returns></returns>
-        IEnumerable<object> GetInstances(XObject obj, IEnumerable<Type> types)
+        IEnumerable<T> GetInstances<T>(XObject obj, IEnumerable<Type> types)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(types != null);
 
             var objects = types
+                .Select(i => GetOrCreate(obj, i, () => CreateInstance(obj, i)))
+                .Where(i => i != null)
+                .OfType<T>()
+                .ToList();
+
+            return objects;
+        }
+
+        /// <summary>
+        /// Obtains the list of interfaces.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        IEnumerable<object> GetInstances(XObject obj, IEnumerable<Type> types, Type type)
+        {
+            Contract.Requires<ArgumentNullException>(obj != null);
+            Contract.Requires<ArgumentNullException>(types != null);
+
+            var objects = types
+                .Where(i => type.IsAssignableFrom(i))
                 .Select(i => GetOrCreate(obj, i, () => CreateInstance(obj, i)))
                 .Where(i => i != null)
                 .ToList();

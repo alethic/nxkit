@@ -43,7 +43,7 @@ namespace NXKit.Web.Serialization
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(interfaceName));
 
-            return RemoteObjectJsonConverter.GetRemotes(node.Interfaces())
+            return RemoteObjectJsonConverter.GetRemotes(node.Interfaces<object>())
                 .FirstOrDefault(i => i.Type.FullName == interfaceName);
         }
 

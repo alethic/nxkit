@@ -350,21 +350,34 @@ namespace NXKit.Xml
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public static IEnumerable<object> Interfaces(this XObject node)
+        public static IEnumerable<object> Interfaces(this XObject node, Type type)
         {
             Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(type != null);
 
-            return Interfaces(node, node.Exports());
+            return Interfaces(node, type, node.Exports());
         }
 
         /// <summary>
-        /// Static <see cref="ContractBasedImportDefinition"/> for the <see cref="IInterfaceProvider"/> interface.
+        /// Gets all the implemented interfaces of this <see cref="XObject"/>.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> Interfaces<T>(this XObject node)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+
+            return Interfaces<T>(node, node.Exports());
+        }
+
+        /// <summary>
+        /// Static <see cref="ContractBasedImportDefinition"/> for the <see cref="IExtensionProvider"/> interface.
         /// Prevents recreation.
         /// </summary>
         static readonly ContractBasedImportDefinition InterfaceProviderImportDefinition =
             new ContractBasedImportDefinition(
-                AttributedModelServices.GetContractName(typeof(IInterfaceProvider)),
-                AttributedModelServices.GetTypeIdentity(typeof(IInterfaceProvider)),
+                AttributedModelServices.GetContractName(typeof(IExtensionProvider)),
+                AttributedModelServices.GetTypeIdentity(typeof(IExtensionProvider)),
                 null,
                 ImportCardinality.ZeroOrMore,
                 false,
@@ -377,7 +390,28 @@ namespace NXKit.Xml
         /// <param name="node"></param>
         /// <param name="exports"></param>
         /// <returns></returns>
-        static IEnumerable<object> Interfaces(this XObject node, ExportProvider exports)
+        static IEnumerable<object> Interfaces(this XObject node, Type type, ExportProvider exports)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(exports != null);
+
+            return node.AnnotationOrCreate(() =>
+                exports
+                    .GetExports(InterfaceProviderImportDefinition)
+                    .Select(i => i.Value)
+                    .Cast<IExtensionProvider>()
+                    .ToLinkedList())
+                .SelectMany(i => i.GetExtensions(node, type));
+        }
+
+        /// <summary>
+        /// Implements Interfaces, allowing the specification of an export provider.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="exports"></param>
+        /// <returns></returns>
+        static IEnumerable<T> Interfaces<T>(this XObject node, ExportProvider exports)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(exports != null);
@@ -386,37 +420,9 @@ namespace NXKit.Xml
                 exports
                     .GetExports(InterfaceProviderImportDefinition)
                     .Select(i => i.Value)
-                    .Cast<IInterfaceProvider>()
+                    .Cast<IExtensionProvider>()
                     .ToLinkedList())
-                .SelectMany(i => i.GetInterfaces(node));
-        }
-
-        /// <summary>
-        /// Gets the implemented interfaces of this <see cref="XObject"/> of the given type.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static IEnumerable<object> Interfaces(this XObject node, Type type)
-        {
-            Contract.Requires<ArgumentNullException>(node != null);
-
-            return Interfaces(node)
-                .Where(i => type.IsInstanceOfType(i));
-        }
-
-        /// <summary>
-        /// Gets the implemented interfaces of the given <see cref="XNode"/> of the given type.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> Interfaces<T>(this XObject node)
-        {
-            Contract.Requires<ArgumentNullException>(node != null);
-
-            return Interfaces(node)
-                .OfType<T>();
+                .SelectMany(i => i.GetExtensions<T>(node));
         }
 
         /// <summary>

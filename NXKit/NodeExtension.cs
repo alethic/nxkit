@@ -8,7 +8,8 @@ namespace NXKit
     /// <summary>
     /// Base class for an extension on <see cref="XNode"/> instances.
     /// </summary>
-    public abstract class NodeExtension
+    public abstract class NodeExtension :
+        IExtension
     {
 
         readonly XNode node;
@@ -22,6 +23,11 @@ namespace NXKit
             Contract.Requires<ArgumentNullException>(node != null);
 
             this.node = node;
+        }
+
+        public XObject Object
+        {
+            get { return node; }
         }
 
         /// <summary>
