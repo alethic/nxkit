@@ -11,9 +11,21 @@ namespace NXKit
         ExportAttribute
     {
 
-        ExtensionObjectType objectType;
+        readonly ExtensionObjectType objectType;
         Type predicateType;
         Type interfaceType;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="objectType"></param>
+        public ObjectExtensionAttribute(ExtensionObjectType objectType, Type predicateType, Type interfaceType)
+            : base(typeof(IExtension))
+        {
+            this.objectType = objectType;
+            this.predicateType = predicateType;
+            this.interfaceType = interfaceType;
+        }
 
         /// <summary>
         /// Initializes a new instance.
@@ -31,7 +43,6 @@ namespace NXKit
         public ExtensionObjectType ObjectType
         {
             get { return objectType; }
-            set { objectType = value; }
         }
 
         /// <summary>

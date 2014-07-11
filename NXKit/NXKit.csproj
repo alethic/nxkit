@@ -143,7 +143,7 @@
     <Compile Include="ExceptionInvokerLayer.cs" />
     <Compile Include="ExtensionMetadata.cs" />
     <Compile Include="ExtensionObjectType.cs" />
-    <Compile Include="InterfaceService.cs" />
+    <Compile Include="Interface.cs" />
     <Compile Include="IExtension.cs" />
     <Compile Include="IExtensionMetadata.cs" />
     <Compile Include="IInterface.cs" />

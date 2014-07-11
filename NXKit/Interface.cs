@@ -16,9 +16,8 @@ namespace NXKit
     /// <typeparam name="T"></typeparam>
     [Export(typeof(IInterface<>))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
-    public class InterfaceService<T> :
+    public class Interface<T> :
         IInterface<T>
-        where T : IExtension
     {
 
         readonly XObject obj;
@@ -30,7 +29,7 @@ namespace NXKit
         /// <param name="obj"></param>
         /// <param name="providers"></param>
         [ImportingConstructor]
-        public InterfaceService(
+        public Interface(
             XObject obj,
             [ImportMany] IEnumerable<IInterfaceProvider> providers)
         {
