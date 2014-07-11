@@ -123,6 +123,9 @@
     <Compile Include="LoadShow.cs" />
     <Compile Include="LoadAttributes.cs" />
     <Compile Include="LoadProperties.cs" />
+    <Compile Include="VarProperties.cs" />
+    <Compile Include="VarAttributes.cs" />
+    <Compile Include="Var.cs" />
     <Compile Include="RepeatExtensionAttributes.cs" />
     <Compile Include="RepeatExtension.cs" />
     <Compile Include="RepeatExtensionProperties.cs" />
@@ -270,6 +273,7 @@
     <Compile Include="XmlSchema\DateXsdTypeConverter.cs" />
     <Compile Include="XmlSchema\DateTimeXsdTypeConverter.cs" />
     <Compile Include="XmlSchema\IXsdTypeConverter.cs" />
+    <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="XPath\Functions\BooleanFromString.cs" />
     <Compile Include="XPath\Functions\IfFunction.cs" />
     <Compile Include="XPath\Functions\IndexFunction.cs" />
