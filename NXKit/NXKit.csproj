@@ -127,7 +127,7 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Composition\Scope.cs" />
     <Compile Include="Composition\ScopeCatalog.cs" />
-    <Compile Include="ContainerInterfaceProvider.cs" />
+    <Compile Include="ContainerExtensionProvider.cs" />
     <Compile Include="DefaultInvoker.cs" />
     <Compile Include="DeferredInvokerLayer.cs" />
     <Compile Include="Diagnostics\ITypeProxyProvider.cs" />

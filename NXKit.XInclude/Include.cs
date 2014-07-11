@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.IO;
 using NXKit.Xml;
@@ -9,7 +11,8 @@ using NXKit.Xml;
 namespace NXKit.XInclude
 {
 
-    [Interface("{http://www.w3.org/2001/XInclude}include")]
+    [ElementExtension("{http://www.w3.org/2001/XInclude}include")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Include :
         ElementExtension,
         IOnInit
@@ -17,7 +20,7 @@ namespace NXKit.XInclude
 
         readonly Lazy<ITraceService> trace;
         readonly Lazy<IIOService> io;
-        readonly Lazy<IncludeProperties> properties;
+        readonly Func<IncludeProperties> properties;
 
         /// <summary>
         /// Initializes a new instance.
@@ -26,11 +29,12 @@ namespace NXKit.XInclude
         /// <param name="trace"></param>
         /// <param name="io"></param>
         /// <param name="properties"></param>
+        [ImportingConstructor]
         public Include(
             XElement element,
             Lazy<ITraceService> trace,
             Lazy<IIOService> io,
-            Lazy<IncludeProperties> properties)
+            Func<IncludeProperties> properties)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
@@ -45,7 +49,7 @@ namespace NXKit.XInclude
 
         public IncludeProperties Properties
         {
-            get { return properties.Value; }
+            get { return properties(); }
         }
 
         protected ITraceService Trace

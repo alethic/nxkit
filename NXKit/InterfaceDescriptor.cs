@@ -97,8 +97,6 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            var name = element.Name.LocalName;
-
             if (namespaceName != null &&
                 namespaceName != element.Name.NamespaceName)
                 return false;

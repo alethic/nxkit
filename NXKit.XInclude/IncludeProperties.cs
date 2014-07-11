@@ -1,15 +1,18 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Text;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Util;
 using NXKit.Xml;
 
 namespace NXKit.XInclude
 {
 
-    [Interface("{http://www.w3.org/2001/XInclude}include")]
+    [ElementExtension("{http://www.w3.org/2001/XInclude}include")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IncludeProperties :
         ElementExtension
     {
@@ -34,6 +37,7 @@ namespace NXKit.XInclude
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        [ImportingConstructor]
         public IncludeProperties(XElement element)
             : this(element, element.AnnotationOrCreate<IncludeAttributes>(() => new IncludeAttributes(element)))
         {

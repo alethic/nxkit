@@ -16,7 +16,7 @@ namespace NXKit.XForms.Xml
         /// <param name="self"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public object GetVariableValue(this XElement self, string name)
+        public static object GetVariableValue(this XElement self, string name)
         {
             Contract.Requires<ArgumentNullException>(self != null);
             Contract.Requires<ArgumentNullException>(name != null);

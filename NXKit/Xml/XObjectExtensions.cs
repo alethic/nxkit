@@ -6,6 +6,7 @@ using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+
 using NXKit.Composition;
 using NXKit.Util;
 
@@ -467,7 +468,7 @@ namespace NXKit.Xml
                 if (host == null)
                     throw new InvalidOperationException();
 
-                var cont = new CompositionContainer(host.Configuration.ObjectCatalog, host.Container)
+                var cont = new CompositionContainer(host.Configuration.ObjectCatalog, CompositionOptions.DisableSilentRejection, host.Container)
                     .WithExport<XObject>(self);
 
                 if (self is XDocument)

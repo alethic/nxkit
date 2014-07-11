@@ -58,7 +58,7 @@ namespace NXKit
         /// <summary>
         /// Gets the expanded name.
         /// </summary>
-        public XName Name
+        XName Name
         {
             get { return namespaceName != null && localName != null ? XName.Get(localName, namespaceName) : null; }
         }
