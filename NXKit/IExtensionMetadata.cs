@@ -29,11 +29,6 @@ namespace NXKit
         /// </summary>
         Type PredicateType { get; }
 
-        /// <summary>
-        /// Gets the interface type this extension is available as.
-        /// </summary>
-        Type InterfaceType { get; }
-
     }
 
 }

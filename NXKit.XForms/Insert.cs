@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 using NXKit.XMLEvents;
@@ -11,7 +13,8 @@ using NXKit.XMLEvents;
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}insert")]
+    [Extension("{http://www.w3.org/2002/xforms}insert")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Insert :
         ElementExtension,
         IEventHandler

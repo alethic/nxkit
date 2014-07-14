@@ -9,7 +9,7 @@ using NXKit.Xml;
 namespace NXKit.NXInclude
 {
 
-    [ElementExtension("{http://schemas.nxkit.org/2014/NXInclude}include", typeof(IncludeProperties))]
+    [Extension("{http://schemas.nxkit.org/2014/NXInclude}include")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IncludeProperties :
         XInclude.IncludeProperties

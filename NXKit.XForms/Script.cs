@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Scripting;
 using NXKit.Xml;
@@ -13,7 +15,8 @@ namespace NXKit.XForms
     /// <summary>
     /// XForms 2.0 script tag.
     /// </summary>
-    [Interface("{http://www.w3.org/2002/xforms}script")]
+    [Extension("{http://www.w3.org/2002/xforms}script")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class Script :
         ElementExtension,

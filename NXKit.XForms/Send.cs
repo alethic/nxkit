@@ -1,16 +1,20 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 using NXKit.XMLEvents;
 
+
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}send")]
+    [Extension("{http://www.w3.org/2002/xforms}send")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Send :
         ElementExtension,
         IEventHandler

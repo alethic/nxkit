@@ -122,12 +122,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeAccessor.cs" />
+    <Compile Include="Composition\ExportProviderExtensions.cs" />
+    <Compile Include="Composition\ExportProviderProvider.cs" />
+    <Compile Include="Composition\IExportProvider.cs" />
     <Compile Include="Composition\ObjectCatalogExportProvider.cs" />
     <Compile Include="Composition\ObjectCompositionContainer.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Composition\Scope.cs" />
     <Compile Include="Composition\ScopeCatalog.cs" />
-    <Compile Include="ContainerInterfaceProvider.cs" />
+    <Compile Include="DefaultExtensionProvider.cs" />
     <Compile Include="DefaultInvoker.cs" />
     <Compile Include="DeferredInvokerLayer.cs" />
     <Compile Include="Diagnostics\ITypeProxyProvider.cs" />
@@ -141,12 +144,11 @@
     <Compile Include="Diagnostics\XTextTypeProxyProvider.cs" />
     <Compile Include="DocumentEnvironment.cs" />
     <Compile Include="ExceptionInvokerLayer.cs" />
+    <Compile Include="ExtensionExportProvider.cs" />
     <Compile Include="ExtensionMetadata.cs" />
     <Compile Include="ExtensionObjectType.cs" />
-    <Compile Include="Interface.cs" />
     <Compile Include="IExtension.cs" />
     <Compile Include="IExtensionMetadata.cs" />
-    <Compile Include="IInterface.cs" />
     <Compile Include="IInvokerLayer.cs" />
     <Compile Include="IInvoker.cs" />
     <Compile Include="IOnSave.cs" />
@@ -157,9 +159,6 @@
     <Compile Include="Serialization\IAnnotationObjectDeserializer.cs" />
     <Compile Include="Serialization\IAnnotationObjectSerializer.cs" />
     <Compile Include="Serialization\ISerializableAnnotation.cs" />
-    <Compile Include="TextExtensionAttribute.cs" />
-    <Compile Include="DocumentExtensionAttribute.cs" />
-    <Compile Include="ElementExtensionAttribute.cs" />
     <Compile Include="IdRef.cs" />
     <Compile Include="IElementExtension.cs" />
     <Compile Include="IExceptionHandler.cs" />
@@ -182,13 +181,11 @@
     <Compile Include="ObjectAnnotation.cs" />
     <Compile Include="DocumentAnnotation.cs" />
     <Compile Include="IExtensionPredicate.cs" />
-    <Compile Include="InterfaceDescriptor.cs" />
     <Compile Include="ExtensionPredicateBase.cs" />
     <Compile Include="IOnInvoke.cs" />
     <Compile Include="IOnLoad.cs" />
-    <Compile Include="InterfaceAttribute.cs" />
-    <Compile Include="DefaultInterfaceProvider.cs" />
-    <Compile Include="IInterfaceProvider.cs" />
+    <Compile Include="ExtensionAttribute.cs" />
+    <Compile Include="IExtensionProvider.cs" />
     <Compile Include="Net\ResourceUriHelper.cs" />
     <Compile Include="Net\ResourceUriParser.cs" />
     <Compile Include="Net\ResourceWebRequest.cs" />
@@ -223,7 +220,6 @@
     <Compile Include="Util\ObjectExtensions.cs" />
     <Compile Include="Util\StringExtensions.cs" />
     <Compile Include="Composition\CompositionUtil.cs" />
-    <Compile Include="InterfaceProviderBase.cs" />
     <Compile Include="Xml\BaseUriAnnotation.cs" />
     <Compile Include="Xml\IOXmlReader.cs" />
     <Compile Include="Xml\XCloneTransformer.cs" />

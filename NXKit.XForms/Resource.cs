@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -11,7 +13,8 @@ namespace NXKit.XForms
     /// The resource element (deprecated in favor of using an AVT in the resource attribute) allows the URI used for
     /// a submission to be dynamically calculated based on instance data.
     /// </summary>
-    [Interface("{http://www.w3.org/2002/xforms}resource")]
+    [Extension("{http://www.w3.org/2002/xforms}resource")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Resource :
         ElementExtension
     {

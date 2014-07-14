@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -10,7 +12,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'load' properties.
     /// </summary>
-    [Interface("{http://www.w3.org/2002/xforms}load")]
+    [Extension("{http://www.w3.org/2002/xforms}load")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class LoadProperties :
         ElementExtension
     {

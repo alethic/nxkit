@@ -1,9 +1,10 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -13,7 +14,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Resolves various <see cref="EvaluationContext"/> instances with regards to the specified <see cref="XElement"/>.
     /// </summary>
-    [Interface(XmlNodeType.Element)]
+    [Extension]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ElementEvaluationContextResolver :
         EvaluationContextResolver,
         IEvaluationContextScope

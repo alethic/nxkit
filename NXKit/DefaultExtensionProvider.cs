@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
 using NXKit.Composition;
-using NXKit.Util;
 
 namespace NXKit
 {
@@ -14,10 +14,10 @@ namespace NXKit
     /// <summary>
     /// Provides interface lookup using the container.
     /// </summary>
-    [Export(typeof(IInterfaceProvider))]
+    [Export(typeof(IExtensionProvider))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
-    public class ContainerInterfaceProvider :
-        IInterfaceProvider
+    public class DefaultExtensionProvider :
+        IExtensionProvider
     {
 
         static Func<T> GetLazyFunc<T>(Lazy<T> inner)
@@ -26,7 +26,7 @@ namespace NXKit
         }
 
         readonly XObject obj;
-        readonly IEnumerable<Tuple<Func<IExtension>, IEnumerable<IExtensionMetadata>>> extensions;
+        readonly IEnumerable<Lazy<IExtension, IExtensionMetadata>> extensions;
 
         /// <summary>
         /// Initializes a new instance.
@@ -34,37 +34,30 @@ namespace NXKit
         /// <param name="container"></param>
         /// <param name="predicates"></param>
         [ImportingConstructor]
-        public ContainerInterfaceProvider(
+        public DefaultExtensionProvider(
             XObject obj,
-            [ImportMany] IEnumerable<Lazy<IExtension, IDictionary<string, object>>> extensions)
+            [ImportMany] IEnumerable<Lazy<IExtension, IExtensionMetadata>> extensions)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(extensions != null);
 
             this.obj = obj;
-            this.extensions = extensions
-                .Select(i => Tuple.Create(
-                    GetLazyFunc(i),
-                    ExtensionMetadata.Extract(i.Metadata)))
-                .ToList()
-                .AsEnumerable();
+            this.extensions = extensions;
         }
 
-        public IEnumerable<T> GetInterfaces<T>(XObject obj)
+        public IEnumerable<T> GetExtensions<T>(XObject obj)
         {
-            return GetExtensionsInternal(obj, typeof(T)).OfType<T>();
+            return GetExtensions(obj, typeof(T)).OfType<T>();
         }
 
-        public IEnumerable<object> GetInterfaces(XObject obj, Type type)
+        public IEnumerable<object> GetExtensions(XObject obj, Type type)
         {
-            return GetExtensionsInternal(obj, type);
-        }
+            if (obj != this.obj)
+                yield break;
 
-        IEnumerable<object> GetExtensionsInternal(XObject obj, Type type)
-        {
             foreach (var extension in extensions)
-                if (extension.Item2.Any(j => Predicate(obj, j, type)))
-                    yield return extension.Item1();
+                if (Predicate(obj, extension.Metadata, type))
+                    yield return extension.Value;
         }
 
         /// <summary>
@@ -77,10 +70,6 @@ namespace NXKit
         {
             if (metadata.ObjectType != GetObjectType(obj))
                 return false;
-
-            if (metadata.InterfaceType != null)
-                if (!interfaceType.IsAssignableFrom(metadata.InterfaceType))
-                    return false;
 
             if (obj is XElement)
                 return IsMatch((XElement)obj, metadata.NamespaceName, metadata.LocalName);

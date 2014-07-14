@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms
@@ -12,7 +13,8 @@ namespace NXKit.XForms
     /// This form control enables free-form data entry or a user interface component appropriate to the datatype of the
     /// bound node.
     /// </summary>
-    [Interface("{http://www.w3.org/2002/xforms}input")]
+    [Extension("{http://www.w3.org/2002/xforms}input")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Input :
         ElementExtension,
         IEventDefaultAction

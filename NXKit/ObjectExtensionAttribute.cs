@@ -13,18 +13,16 @@ namespace NXKit
 
         readonly ExtensionObjectType objectType;
         Type predicateType;
-        Type interfaceType;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="objectType"></param>
-        public ObjectExtensionAttribute(ExtensionObjectType objectType, Type predicateType, Type interfaceType)
+        public ObjectExtensionAttribute(ExtensionObjectType objectType, Type predicateType)
             : base(typeof(IExtension))
         {
             this.objectType = objectType;
             this.predicateType = predicateType;
-            this.interfaceType = interfaceType;
         }
 
         /// <summary>
@@ -52,15 +50,6 @@ namespace NXKit
         {
             get { return predicateType; }
             set { predicateType = value; }
-        }
-
-        /// <summary>
-        /// Specifies that this type is available as the given interface type.
-        /// </summary>
-        public Type InterfaceType
-        {
-            get { return interfaceType; }
-            set { interfaceType = value; }
         }
 
     }

@@ -1,14 +1,17 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.XMLEvents;
 
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}revalidate")]
+    [Extension("{http://www.w3.org/2002/xforms}revalidate")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Revalidate :
         ElementExtension,
         IEventHandler

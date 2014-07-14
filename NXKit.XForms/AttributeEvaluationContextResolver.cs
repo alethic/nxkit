@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
-using System.Xml;
 using System.Xml.Linq;
+
+using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -9,7 +11,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Resolves various <see cref="EvaluationContext"/> instances with regards to the specified <see cref="XAttribute"/>.
     /// </summary>
-    [Interface(XmlNodeType.Attribute)]
+    [Extension(ExtensionObjectType.Attribute)]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class AttributeEvaluationContextResolver :
         EvaluationContextResolver
     {

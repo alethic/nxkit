@@ -5,7 +5,7 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Describes a type that provides filtering capabilities to the <see cref="InterfaceAttribute"/> resolver.
+    /// Describes a type that provides filtering capabilities to the <see cref="ExtensionAttribute"/> resolver.
     /// </summary>
     public interface IExtensionPredicate
     {

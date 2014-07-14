@@ -16,9 +16,7 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Manages event listener registrations and event dispatching for a given <see cref="XNode"/>.
     /// </summary>
-    [Interface(XmlNodeType.Document)]
-    [Interface(XmlNodeType.Element)]
-    [Interface(XmlNodeType.Text)]
+    [Extension]
     [Remote]
     public class EventTarget :
         IEventTarget

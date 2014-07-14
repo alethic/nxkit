@@ -1,11 +1,15 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
+using NXKit.Composition;
 
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}trigger")]
+    [Extension("{http://www.w3.org/2002/xforms}trigger")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Trigger :
         ElementExtension
     {

@@ -5,6 +5,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.XForms.IO;
 using NXKit.XForms.XmlSchema;
@@ -13,7 +14,8 @@ using NXKit.Xml;
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}instance")]
+    [Extension("{http://www.w3.org/2002/xforms}instance")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Instance :
         ElementExtension,
         IOnLoad

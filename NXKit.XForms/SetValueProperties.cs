@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -11,7 +13,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'setvalue' properties.
     /// </summary>
-    [Interface("{http://www.w3.org/2002/xforms}setvalue")]
+    [Extension("{http://www.w3.org/2002/xforms}setvalue")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class SetValueProperties :
         ElementExtension
     {

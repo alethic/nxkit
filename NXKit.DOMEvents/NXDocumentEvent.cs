@@ -1,9 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
-using System.Xml;
 using System.Xml.Linq;
 
-using NXKit.Xml;
+using NXKit.Composition;
 
 namespace NXKit.DOMEvents
 {
@@ -11,7 +11,8 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// NX-specified document event interface.
     /// </summary>
-    [Interface(XmlNodeType.Document)]
+    [Extension(ExtensionObjectType.Document)]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class NXDocumentEvent :
         INXDocumentEvent
     {

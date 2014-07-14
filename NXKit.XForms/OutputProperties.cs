@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
+using NXKit.Composition;
 using NXKit.Util;
 using NXKit.Xml;
 
@@ -12,7 +14,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'output' properties.
     /// </summary>
-    [Interface("{http://www.w3.org/2002/xforms}output")]
+    [Extension("{http://www.w3.org/2002/xforms}output")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class OutputProperties :
         ElementExtension
     {

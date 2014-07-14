@@ -1,11 +1,15 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
+using NXKit.Composition;
 
 namespace NXKit.XForms.Layout
 {
 
-    [Interface("{http://schemas.nxkit.org/2014/xforms-layout}a")]
+    [Extension("{http://schemas.nxkit.org/2014/xforms-layout}a")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Anchor
     {
 

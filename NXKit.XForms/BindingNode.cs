@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -11,7 +13,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides a <see cref="Binding"/> for an element.
     /// </summary>
-    [Interface]
+    [Extension]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class BindingNode :
         ElementExtension,
         IBindingNode

@@ -371,13 +371,13 @@ namespace NXKit.Xml
         }
 
         /// <summary>
-        /// Static <see cref="ContractBasedImportDefinition"/> for the <see cref="IInterfaceProvider"/> interface.
+        /// Static <see cref="ContractBasedImportDefinition"/> for the <see cref="IExtensionProvider"/> interface.
         /// Prevents recreation.
         /// </summary>
         static readonly ContractBasedImportDefinition InterfaceProviderImportDefinition =
             new ContractBasedImportDefinition(
-                AttributedModelServices.GetContractName(typeof(IInterfaceProvider)),
-                AttributedModelServices.GetTypeIdentity(typeof(IInterfaceProvider)),
+                AttributedModelServices.GetContractName(typeof(IExtensionProvider)),
+                AttributedModelServices.GetTypeIdentity(typeof(IExtensionProvider)),
                 null,
                 ImportCardinality.ZeroOrMore,
                 false,
@@ -396,13 +396,15 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentNullException>(exports != null);
 
-            return node.AnnotationOrCreate(() =>
-                exports
-                    .GetExports(InterfaceProviderImportDefinition)
-                    .Select(i => i.Value)
-                    .Cast<IInterfaceProvider>()
-                    .ToLinkedList())
-                .SelectMany(i => i.GetInterfaces(node, type));
+            //return node.AnnotationOrCreate(() =>
+            //    exports
+            //        .GetExports(InterfaceProviderImportDefinition)
+            //        .Select(i => i.Value)
+            //        .Cast<IInterfaceProvider>()
+            //        .ToLinkedList())
+            //    .SelectMany(i => i.GetInterfaces(node, type));
+
+            return exports.GetExports(type);
         }
 
         /// <summary>
@@ -416,13 +418,15 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(exports != null);
 
-            return node.AnnotationOrCreate(() =>
-                exports
-                    .GetExports(InterfaceProviderImportDefinition)
-                    .Select(i => i.Value)
-                    .Cast<IInterfaceProvider>()
-                    .ToLinkedList())
-                .SelectMany(i => i.GetInterfaces<T>(node));
+            return exports.GetExportedValues<T>();
+
+            //return node.AnnotationOrCreate(() =>
+            //    exports
+            //        .GetExports(InterfaceProviderImportDefinition)
+            //        .Select(i => i.Value)
+            //        .Cast<IInterfaceProvider>()
+            //        .ToLinkedList())
+            //    .SelectMany(i => i.GetInterfaces<T>(node));
         }
 
         /// <summary>
@@ -474,10 +478,18 @@ namespace NXKit.Xml
                 if (document == null)
                     throw new InvalidOperationException();
 
+                // provides additional exports
+                var exports = new ExportProviderProvider();
+
+                // initialize new container
                 var container = new CompositionContainer(
                     document.Configuration.ObjectCatalog,
                     CompositionOptions.DisableSilentRejection,
+                    exports,
                     document.Container);
+
+                // point to container to complete resolution
+                exports.Source = container;
 
                 if (self is XObject)
                     container.WithExport<XObject>(self);

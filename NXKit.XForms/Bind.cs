@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
+
 
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}bind")]
+    [Extension("{http://www.w3.org/2002/xforms}bind")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Bind :
         ElementExtension
     {

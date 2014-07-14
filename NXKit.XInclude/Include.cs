@@ -11,8 +11,7 @@ using NXKit.Xml;
 namespace NXKit.XInclude
 {
 
-    [ElementExtension("{http://www.w3.org/2001/XInclude}include", typeof(Include))]
-    [ElementExtension("{http://www.w3.org/2001/XInclude}include", typeof(IOnInit))]
+    [Extension("{http://www.w3.org/2001/XInclude}include")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Include :
         ElementExtension,
@@ -31,26 +30,6 @@ namespace NXKit.XInclude
         /// <param name="io"></param>
         /// <param name="properties"></param>
         [ImportingConstructor]
-        public Include(
-            XElement element,
-            ITraceService trace,
-            IIOService io,
-            IInterface<IncludeProperties> properties)
-            : this(element, trace, io, properties.Value)
-        {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(trace != null);
-            Contract.Requires<ArgumentNullException>(io != null);
-            Contract.Requires<ArgumentNullException>(properties != null);
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="element"></param>
-        /// <param name="trace"></param>
-        /// <param name="io"></param>
-        /// <param name="properties"></param>
         public Include(
             XElement element,
             ITraceService trace,

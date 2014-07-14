@@ -1,15 +1,18 @@
 ﻿using System;
-using System.Linq;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml.Linq;
 
-using NXKit.Xml;
+using NXKit.Composition;
 using NXKit.DOMEvents;
+using NXKit.Xml;
 
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}submit")]
+    [Extension("{http://www.w3.org/2002/xforms}submit")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Submit :
         ElementExtension,
         IEventDefaultAction

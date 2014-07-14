@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Util;
 using NXKit.Xml;
@@ -11,7 +13,8 @@ using NXKit.Xml;
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}model")]
+    [Extension("{http://www.w3.org/2002/xforms}model")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Model :
         ElementExtension,
         IEventDefaultAction

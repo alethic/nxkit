@@ -1,11 +1,15 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
+using NXKit.Composition;
 
 namespace NXKit.NXInclude
 {
 
-    [Interface(typeof(IncludeScopePredicate))]
+    [Extension(typeof(IncludeScopePredicate))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IncludeScope :
         ElementExtension,
         IRefScope

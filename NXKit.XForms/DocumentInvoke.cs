@@ -1,16 +1,18 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
 namespace NXKit.XForms
 {
 
-    [Interface(XmlNodeType.Document)]
+    [Extension(ExtensionObjectType.Document)]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DocumentInvoke :
         IOnInvoke
     {

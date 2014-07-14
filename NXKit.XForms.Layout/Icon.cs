@@ -1,13 +1,16 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms.Layout
 {
 
-    [Interface("{http://schemas.nxkit.org/2014/xforms-layout}icon")]
+    [Extension("{http://schemas.nxkit.org/2014/xforms-layout}icon")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class Icon :
         ElementExtension

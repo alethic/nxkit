@@ -1,14 +1,17 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
 namespace NXKit.XForms
 {
 
-    [Interface(PredicateType = typeof(Predicate))]
+    [Extension(typeof(Predicate))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class RepeatExtension :
         ElementExtension

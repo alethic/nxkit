@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -11,7 +13,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Describes the implicit 'repeat item' group element.
     /// </summary>
-    [Interface(typeof(RepeatItemPredicate), PredicateType = typeof(RepeatItemPredicate))]
+    [Extension(typeof(RepeatItemPredicate), PredicateType = typeof(RepeatItemPredicate))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class RepeatItem :
         ElementExtension,

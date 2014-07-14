@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -11,7 +13,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms common properties.
     /// </summary>
-    [Interface]
+    [Extension("{http://www.w3.org/2001/xml-events}action")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ActionProperties :
         ElementExtension
     {

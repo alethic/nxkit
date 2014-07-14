@@ -1,6 +1,6 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace NXKit
@@ -10,11 +10,12 @@ namespace NXKit
     /// Marks the interface object as being associated with a given fully qualified element name.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class InterfaceAttribute :
-        Attribute
+    [MetadataAttribute]
+    public class ExtensionAttribute :
+        ExportAttribute
     {
 
-        readonly XmlNodeType nodeType;
+        readonly ExtensionObjectType objectType;
         readonly string namespaceName;
         readonly string localName;
         Type predicateType;
@@ -22,8 +23,8 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public InterfaceAttribute()
-            : this(XmlNodeType.Element)
+        public ExtensionAttribute()
+            : this(ExtensionObjectType.Element)
         {
 
         }
@@ -32,8 +33,8 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         /// <param name="predicateType"></param>
-        public InterfaceAttribute(Type predicateType)
-            : this(XmlNodeType.Element)
+        public ExtensionAttribute(Type predicateType)
+            : this(ExtensionObjectType.Element)
         {
             Contract.Requires<ArgumentNullException>(predicateType != null);
 
@@ -43,17 +44,18 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="nodeType"></param>
-        public InterfaceAttribute(XmlNodeType nodeType)
+        /// <param name="objectType"></param>
+        public ExtensionAttribute(ExtensionObjectType objectType)
+            :base(typeof(IExtension))
         {
-            this.nodeType = nodeType;
+            this.objectType = objectType;
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="name"></param>
-        public InterfaceAttribute(XName name)
+        public ExtensionAttribute(XName name)
             : this(name.NamespaceName, name.LocalName)
         {
             Contract.Requires<ArgumentNullException>(name != null);
@@ -63,7 +65,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         /// <param name="expandedName"></param>
-        public InterfaceAttribute(string expandedName)
+        public ExtensionAttribute(string expandedName)
             : this(XName.Get(expandedName))
         {
             Contract.Requires<ArgumentNullException>(expandedName != null);
@@ -74,8 +76,8 @@ namespace NXKit
         /// </summary>
         /// <param name="namespaceName"></param>
         /// <param name="localName"></param>
-        public InterfaceAttribute(string namespaceName, string localName)
-            : this(XmlNodeType.Element)
+        public ExtensionAttribute(string namespaceName, string localName)
+            : this(ExtensionObjectType.Element)
         {
             this.namespaceName = namespaceName;
             this.localName = localName;
@@ -84,15 +86,15 @@ namespace NXKit
         /// <summary>
         /// Gets the type of node this interface applies to.
         /// </summary>
-        public XmlNodeType NodeType
+        public ExtensionObjectType ObjectType
         {
-            get { return nodeType; }
+            get { return objectType; }
         }
 
         /// <summary>
         /// Gets the expanded name.
         /// </summary>
-        public XName Name
+        XName Name
         {
             get { return namespaceName != null && localName != null ? XName.Get(localName, namespaceName) : null; }
         }

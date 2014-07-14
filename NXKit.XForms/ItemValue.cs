@@ -1,13 +1,16 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}value", PredicateType = typeof(ItemValuePredicate))]
+    [Extension("{http://www.w3.org/2002/xforms}value", PredicateType = typeof(ItemValuePredicate))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ItemValue :
         ElementExtension,
         ISelectableValue

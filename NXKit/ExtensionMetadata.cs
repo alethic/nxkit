@@ -24,18 +24,16 @@ namespace NXKit
             var localNames = (string[])metadata.GetOrDefault("LocalName");
             var namespaceNames = (string[])metadata.GetOrDefault("NamespaceName");
             var predicateTypes = (Type[])metadata.GetOrDefault("PredicateType");
-            var interfaceTypes = (Type[])metadata.GetOrDefault("InterfaceType");
 
             // find shortest array
             int length = objectTypes.Length;
             length = Math.Min(length, localNames.Length);
             length = Math.Min(length, namespaceNames.Length);
             length = Math.Min(length, predicateTypes.Length);
-            length = Math.Min(length, interfaceTypes.Length);
 
             // extract metadata
             for (int i = 0; i < length; i++)
-                yield return new ExtensionMetadata(objectTypes[i], localNames[i], namespaceNames[i], predicateTypes[i], interfaceTypes[i]);
+                yield return new ExtensionMetadata(objectTypes[i], localNames[i], namespaceNames[i], predicateTypes[i]);
         }
 
         /// <summary>
@@ -46,13 +44,12 @@ namespace NXKit
         /// <param name="namespaceName"></param>
         /// <param name="predicateType"></param>
         /// <param name="interfaceType"></param>
-        public ExtensionMetadata(ExtensionObjectType objectType, string localName, string namespaceName, Type predicateType, Type interfaceType)
+        public ExtensionMetadata(ExtensionObjectType objectType, string localName, string namespaceName, Type predicateType)
         {
             ObjectType = objectType;
             LocalName = localName;
             NamespaceName = namespaceName;
             PredicateType = predicateType;
-            InterfaceType = interfaceType;
         }
 
         public ExtensionObjectType ObjectType { get; set; }
@@ -62,8 +59,6 @@ namespace NXKit
         public string NamespaceName { get; set; }
 
         public Type PredicateType { get; set; }
-
-        public Type InterfaceType { get; set; }
 
     }
 

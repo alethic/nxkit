@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
+using NXKit.Composition;
 using NXKit.Util;
 
 namespace NXKit.XForms
@@ -11,7 +13,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'var' properties.
     /// </summary>
-    [Interface("{http://www.w3.org/2002/xforms}var")]
+    [Extension("{http://www.w3.org/2002/xforms}var")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class VarProperties :
         ElementExtension
     {
