@@ -18,10 +18,12 @@ namespace NXKit
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Interface<T> :
         IInterface<T>
+        where T : class
     {
 
         readonly XObject obj;
         readonly IEnumerable<IInterfaceProvider> providers;
+        T value;
 
         /// <summary>
         /// Initializes a new instance.
@@ -45,14 +47,15 @@ namespace NXKit
         /// </summary>
         public T Value
         {
-            get { return GetValue(); }
+            get { return value ?? (value = GetValue()); }
         }
 
         /// <summary>
         /// Implements the getter for Value.
         /// </summary>
         /// <returns></returns>
-        T GetValue()
+        [Export(typeof(Func<>))]
+        public T GetValue()
         {
             return providers
                 .SelectMany(i => i.GetInterfaces<T>(obj))
