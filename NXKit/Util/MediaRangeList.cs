@@ -157,6 +157,30 @@ namespace NXKit.Util
             return mediaRanges != null ? new MediaRangeList((items ?? ImmutableList<MediaRange>.Empty).RemoveRange(mediaRanges)) : this;
         }
 
+        /// <summary>
+        /// Whether or not any media range in this list matches another, taking into account wildcards.
+        /// </summary>
+        /// <param name="other">Other media range.</param>
+        /// <returns>True if matching, false if not.</returns>
+        public bool Matches(MediaRange other)
+        {
+            Contract.Requires<ArgumentNullException>(other != null);
+
+            return items.Any(i => i.Matches(other));
+        }
+
+        /// <summary>
+        /// Whether or not any media range in this list matches another, taking into account wildcards and parameters.
+        /// </summary>
+        /// <param name="other">Other media range.</param>
+        /// <returns>True if matching, false if not.</returns>
+        public bool MatchesWithParameters(MediaRange other)
+        {
+            Contract.Requires<ArgumentNullException>(other != null);
+
+            return items.Any(i => i.MatchesWithParameters(other));
+        }
+
         public IEnumerator<MediaRange> GetEnumerator()
         {
             return items != null ? items.GetEnumerator() : Enumerable.Empty<MediaRange>().GetEnumerator();

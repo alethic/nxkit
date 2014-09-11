@@ -114,7 +114,7 @@ namespace NXKit.XForms
                 nodeBinding.Value.Binding.Recalculate();
         }
 
-        ModelItem[] GetBoundNodes()
+        internal ModelItem[] GetBoundNodes()
         {
             // TODO this is a poor implementation of nested bind elements
             var modelItems = Binding.ModelItems.ToList();

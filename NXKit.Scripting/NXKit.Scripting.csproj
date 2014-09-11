@@ -15,7 +15,7 @@
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>2d93c9de</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>422929f0</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -120,6 +120,7 @@
     <Compile Include="IScriptEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptEngineAttribute.cs" />
+    <Compile Include="ScriptingException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NXKit.Scripting.nuspec">

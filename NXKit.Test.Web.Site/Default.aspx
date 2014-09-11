@@ -41,7 +41,7 @@
             <div class="ui item">
                 <div class="ui fluid action input">
                     <asp:TextBox ID="UriTextBox" runat="server"></asp:TextBox>
-                    <div id="LoadButton" class="ui right icon button" onclick="<%= Page.ClientScript.GetPostBackEventReference(Page, "Load") %>" >
+                    <div id="LoadButton" class="ui right icon button" onclick="<%= Page.ClientScript.GetPostBackEventReference(Page, "Load") %>">
                         <i class="download icon"></i>
                         Load
                     </div>
@@ -50,18 +50,9 @@
         </div>
 
         <div class="main container" style="padding-top: 64px;">
-            <asp:MultiView runat="server" ID="MultiView">
-                <asp:View runat="server" ID="ViewPage">
-                    <xforms:View ID="View" runat="server"
-                        CssClass="FormView"
-                        OnLoad="View_Load" />
-                </asp:View>
-                <asp:View runat="server" ID="NoViewPage">
-                    <p>No View</p>
-                </asp:View>
-            </asp:MultiView>
-
-            <asp:Button runat="server" ID="SwitchViewButton" OnClick="SwitchViewButton_Click" />
+            <xforms:View ID="View" runat="server"
+                CssClass="FormView"
+                OnLoad="View_Load" />
         </div>
     </form>
 </body>

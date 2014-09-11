@@ -15,7 +15,7 @@
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>11b7c134</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>b2087f82</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,13 +33,13 @@
     <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
     <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
     <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
-    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
-    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>True</CodeContractsEnumObligations>
     <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
     <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
     <CodeContractsInferRequires>True</CodeContractsInferRequires>
-    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsInferEnsures>True</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>True</CodeContractsInferObjectInvariants>
     <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
     <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
     <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
@@ -116,11 +116,15 @@
     <Compile Include="DefaultEventFactory.cs" />
     <Compile Include="DocumentEvent.cs" />
     <Compile Include="DocumentEventDispatcher.cs" />
-    <Compile Include="DocumentExceptionHandler.cs" />
+    <Compile Include="DOMEventExceptionHandler.cs" />
     <Compile Include="DOMTargetEventException.cs" />
     <Compile Include="DOMEventException.cs" />
     <Compile Include="EventHandlerDelegate.cs" />
+    <Compile Include="EventInstanceProvider.cs" />
+    <Compile Include="EventTargetListenerItem.cs" />
     <Compile Include="FocusEventInfo.cs" />
+    <Compile Include="IEventInstanceProvider.cs" />
+    <Compile Include="InterfaceEventListener.cs" />
     <Compile Include="MutationEventInfo.cs" />
     <Compile Include="Events.partial.cs">
       <AutoGen>True</AutoGen>
@@ -131,9 +135,8 @@
     <Compile Include="MutationEvent.cs" />
     <Compile Include="UIEventInfo.cs" />
     <Compile Include="EventInfo.cs" />
-    <Compile Include="EventListener.cs" />
-    <Compile Include="EventListenerData.cs" />
-    <Compile Include="EventListenerMap.cs" />
+    <Compile Include="ActionEventListener.cs" />
+    <Compile Include="EventTargetState.cs" />
     <Compile Include="EventInfoTableProvider.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="IEventInfoTable.cs" />
@@ -144,7 +147,6 @@
     <Compile Include="NXEventTarget.cs" />
     <Compile Include="EventTarget.cs" />
     <Compile Include="IEventDefaultActionHandler.cs" />
-    <Compile Include="IEventHandler.cs" />
     <Compile Include="INXEventTarget.cs" />
     <Compile Include="UIEvent.cs" />
     <Compile Include="Event.cs" />

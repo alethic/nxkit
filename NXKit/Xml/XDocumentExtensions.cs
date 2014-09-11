@@ -82,6 +82,18 @@ namespace NXKit.Xml
                 yield return node;
         }
 
+        /// <summary>
+        /// Clones the specified <see cref="XDocument"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static XDocument Clone(this XDocument self)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+
+            return XCloneTransformer.Default.Visit(self);
+        }
+
     }
 
 }

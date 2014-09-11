@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
+using NXKit.XMLEvents;
 
 namespace NXKit.XForms
 {
@@ -10,7 +11,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}load")]
     public class Load :
         ElementExtension,
-        IAction
+        IEventHandler
     {
 
         /// <summary>
@@ -23,12 +24,7 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
         }
 
-        public void Handle(Event ev)
-        {
-            Invoke();
-        }
-
-        public void Invoke()
+        public void HandleEvent(Event ev)
         {
             throw new NotImplementedException();
         }

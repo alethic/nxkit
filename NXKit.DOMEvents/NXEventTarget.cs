@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.DOMEvents
@@ -27,6 +29,7 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="element"></param>
         /// <param name="events"></param>
+        [ImportingConstructor]
         public NXEventTarget(XNode element, IEventFactory events)
         {
             Contract.Requires<ArgumentNullException>(element != null);
@@ -79,7 +82,7 @@ namespace NXKit.DOMEvents
 
         public void AddEventHandler(string type, bool useCapture, EventHandlerDelegate handler)
         {
-            Target.AddEventListener(type, new EventListener(_ => handler(_)), useCapture);
+            Target.AddEventListener(type, new ActionEventListener(_ => handler(_)), useCapture);
         }
 
     }

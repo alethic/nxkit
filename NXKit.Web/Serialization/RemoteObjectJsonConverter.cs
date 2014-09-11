@@ -148,10 +148,6 @@ namespace NXKit.Web.Serialization
             foreach (var property in GetRemoteProperties(remote.Type))
                 yield return new JProperty(property.Name,
                     JTokenFromObject(property.GetValue(remote.Target), serializer));
-
-            foreach (var method in GetRemoteMethods(remote.Type))
-                yield return new JProperty("@" + method.Name,
-                    new JArray());
         }
 
         /// <summary>

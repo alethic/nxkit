@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using NXKit.DOMEvents;
 using NXKit.Scripting;
 using NXKit.Xml;
+using NXKit.XMLEvents;
 
 namespace NXKit.XForms
 {
@@ -16,7 +17,7 @@ namespace NXKit.XForms
     [Remote]
     public class Script :
         ElementExtension,
-        IAction
+        IEventHandler
     {
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace NXKit.XForms
             DocumentScript.Execute(Type, Element.Value);
         }
 
-        public void Handle(Event evt)
+        public void HandleEvent(Event evt)
         {
             Invoke();
         }

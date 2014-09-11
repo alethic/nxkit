@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -55,6 +56,8 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         XDocument ToDocument(JToken token)
         {
+            Contract.Requires<ArgumentNullException>(token != null);
+
             return new XDocument(
                 ToRootElement(token));
         }
@@ -66,6 +69,8 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         XElement ToRootElement(JToken token)
         {
+            Contract.Requires<ArgumentNullException>(token != null);
+
             return new XElement("json",
                 ToContents(token));
         }
@@ -78,6 +83,8 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         IEnumerable<object> ToContents(JToken token)
         {
+            Contract.Requires<ArgumentNullException>(token != null);
+
             if (token is JObject)
                 return ToContents((JObject)token);
             else if (token is JArray)
@@ -96,6 +103,8 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         IEnumerable<XNode> ToContents(JObject jobject)
         {
+            Contract.Requires<ArgumentNullException>(jobject != null);
+
             foreach (var property in jobject.Properties())
                 if (property.Value is JArray)
                     foreach (var item in ToContents(ToName(property), (JArray)property.Value))
@@ -113,6 +122,9 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         IEnumerable<XNode> ToContents(XName name, JArray jarray)
         {
+            Contract.Requires<ArgumentNullException>(name != null);
+            Contract.Requires<ArgumentNullException>(jarray != null);
+
             for (int i = 0; i < jarray.Count; i++)
                 yield return new XElement(
                     name,
@@ -127,6 +139,8 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         IEnumerable<object> ToContents(JValue value)
         {
+            Contract.Requires<ArgumentNullException>(value != null);
+
             if (value.Type == JTokenType.Integer ||
                 value.Type == JTokenType.Float)
                 yield return new XAttribute("type", "number");
@@ -146,6 +160,8 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         XName ToName(JProperty property)
         {
+            Contract.Requires<ArgumentNullException>(property != null);
+
             return property.Name;
         }
 

@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
+using NXKit.XMLEvents;
 
 namespace NXKit.XForms
 {
@@ -10,7 +11,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}revalidate")]
     public class Revalidate :
         ElementExtension,
-        IAction
+        IEventHandler
     {
 
         /// <summary>
@@ -23,7 +24,7 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
         }
 
-        public void Handle(Event ev)
+        public void HandleEvent(Event ev)
         {
             Invoke();
         }
@@ -31,19 +32,6 @@ namespace NXKit.XForms
         public void Invoke()
         {
             throw new NotImplementedException();
-
-            //var modelAttr = Module.GetAttributeValue(Xml, "model");
-            //if (modelAttr != null)
-            //{
-            //    var element = (NXElement)ResolveId(modelAttr);
-            //    if (element != null)
-            //        element.Interface<Model>().OnRevalidate();
-            //    else
-            //    {
-            //        this.Interface<INXEventTarget>().DispatchEvent(Events.BindingException);
-            //        return;
-            //    }
-            //}
         }
 
     }

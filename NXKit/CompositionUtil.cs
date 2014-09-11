@@ -61,14 +61,32 @@ namespace NXKit
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="container"></param>
-        /// <param name="export"></param>
-        public static CompositionContainer WithExport<T>(this CompositionContainer container, T export)
+        /// <param name="value"></param>
+        public static CompositionContainer WithExport<T>(this CompositionContainer container, T value)
             where T : class
         {
             Contract.Requires<ArgumentNullException>(container != null);
-            Contract.Requires<ArgumentNullException>(export != null);
+            Contract.Requires<ArgumentNullException>(value != null);
 
-            container.ComposeExportedValue(export);
+            container.ComposeExportedValue(value);
+
+            return container;
+        }
+
+        /// <summary>
+        /// Adds the specified value to the container.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="container"></param>
+        /// <param name="contractType"></param>
+        /// <param name="value"></param>
+        public static CompositionContainer WithExport(this CompositionContainer container, Type contractType, object value)
+        {
+            Contract.Requires<ArgumentNullException>(container != null);
+            Contract.Requires<ArgumentNullException>(contractType != null);
+            Contract.Requires<ArgumentNullException>(value != null);
+
+            container.ComposeExportedValue(AttributedModelServices.GetContractName(contractType), value);
 
             return container;
         }

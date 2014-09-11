@@ -107,8 +107,7 @@ namespace NXKit.XForms.XPath.Functions
             Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
             Contract.Ensures(Contract.Result<Instance>() != null);
 
-            return ((XObject)navigator.UnderlyingObject).AnnotationOrCreate<ModelItem>(() =>
-                new ModelItem((XObject)navigator.UnderlyingObject)).Instance;
+            return ModelItem.Get((XObject)navigator.UnderlyingObject).Instance;
         }
 
     }

@@ -80,6 +80,18 @@ namespace NXKit.Xml
             throw new InvalidOperationException();
         }
 
+        /// <summary>
+        /// Clones the specified <see cref="XNode"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static XNode Clone(this XNode self)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+
+            return XCloneTransformer.Default.Visit(self);
+        }
+
     }
 
 }

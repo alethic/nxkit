@@ -61,6 +61,18 @@ namespace NXKit.XForms
             get { return State.Index; }
         }
 
+        [Remote]
+        public void SetFocus()
+        {
+            var repeat = Element.Parent;
+            if (repeat == null ||
+                repeat.Name != Constants.XForms_1_0 + "repeat")
+                throw new InvalidOperationException();
+
+            // set the repeat index to ourselves
+            repeat.Interface<Repeat>().Index = Index;
+        }
+
         EvaluationContext GetContext()
         {
             var repeat = Element.Parent;

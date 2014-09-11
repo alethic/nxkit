@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
+using System.Linq;
 
 namespace NXKit.Composition
 {
@@ -14,7 +15,7 @@ namespace NXKit.Composition
 
         protected override IEnumerable<Export> GetExportsCore(ImportDefinition definition, AtomicComposition atomicComposition)
         {
-            yield break;
+            return Enumerable.Empty<Export>();
         }
 
     }

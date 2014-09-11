@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
+using NXKit.XMLEvents;
 
 namespace NXKit.XForms
 {
@@ -10,7 +11,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}message")]
     public class Message :
         ElementExtension,
-        IAction
+        IEventHandler
     {
 
         /// <summary>
@@ -23,21 +24,9 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
         }
 
-        public void Handle(Event ev)
+        public void HandleEvent(Event ev)
         {
-            Invoke();
-        }
 
-        public void Invoke()
-        {
-            //// ensure values are up to date
-            //Refresh();
-
-            //if (!(Binding is Node))
-            //    return;
-
-            //// set node value
-            //Module.RaiseMessage(this);
         }
 
     }

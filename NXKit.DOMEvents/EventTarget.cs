@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+
 using NXKit.Diagnostics;
 using NXKit.Util;
 using NXKit.Xml;
@@ -23,57 +25,50 @@ namespace NXKit.DOMEvents
 
         readonly ITraceService trace;
         readonly XNode node;
+        readonly EventTargetState state;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="node"></param>
-        public EventTarget(
-            ITraceService trace,
-            XNode node)
+        [ImportingConstructor]
+        public EventTarget(XNode node, ITraceService trace)
         {
-            Contract.Requires<ArgumentNullException>(trace != null);
             Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(trace != null);
 
-            this.trace = trace;
             this.node = node;
+            this.trace = trace;
+            this.state = node.AnnotationOrCreate<EventTargetState>();
+        }
+
+        public IEnumerable<IEventListener> GetEventListeners(string type, bool useCapture)
+        {
+            return state.Listeners
+                .Where(i => i.EventType == type && i.UseCapture == useCapture)
+                .Select(i => i.Listener);
+        }
+
+        public bool HasEventListener(string type, IEventListener listener, bool useCapture)
+        {
+            return GetEventListeners(type, useCapture)
+                .Any(i => object.Equals(i, listener));
         }
 
         public void AddEventListener(string type, IEventListener listener, bool useCapture)
         {
-            // initialize listener map
-            var listenerMap = node.Annotation<EventListenerMap>();
-            if (listenerMap == null)
-                node.AddAnnotation(listenerMap = new EventListenerMap());
-
-            // initialize listeners list
-            var listeners = listenerMap.GetOrDefault(type);
-            if (listeners == null)
-                listeners = listenerMap[type] = new List<EventListenerData>();
-
-            // check for existing registration
-            if (listeners.Any(i => i.Listener == listener && i.UseCapture == useCapture))
-                return;
-
-            // add listener to set
-            listeners.Add(new EventListenerData(listener, useCapture));
+            state.Listeners.Add(new EventTargetListenerItem(type, useCapture, listener));
         }
 
         public void RemoveEventListener(string type, IEventListener listener, bool useCapture)
         {
-            var listenerMap = node.Annotation<EventListenerMap>();
-            if (listenerMap == null)
-                return;
+            var items = state.Listeners
+                .Where(i => i.EventType == type)
+                .Where(i => i.UseCapture == useCapture)
+                .Where(i => i.Listener == listener);
 
-            // initialize listeners list
-            var listeners = listenerMap.GetOrDefault(type);
-            if (listeners == null)
-                return;
-
-            // check for existing registration
-            var data = listeners.FirstOrDefault(i => i.Listener == listener && i.UseCapture == useCapture);
-            if (data != null)
-                listeners.Remove(data);
+            foreach (var item in items)
+                state.Listeners.Remove(item);
         }
 
         public void DispatchEvent(Event evt)
@@ -82,11 +77,11 @@ namespace NXKit.DOMEvents
 
             var target = node.Interface<IEventTarget>();
             if (target == null)
-                throw new Exception();
+                throw new InvalidOperationException();
 
             // event type must be specified
             if (string.IsNullOrEmpty(evt.Type))
-                throw new Exception();
+                throw new InvalidOperationException();
 
             // event phase must be uninitialized
             if (evt.EventPhase != EventPhase.Uninitialized)
@@ -99,13 +94,15 @@ namespace NXKit.DOMEvents
             var path = node.Ancestors()
                 .Cast<XNode>()
                 .Append(node.Document)
-                .ToList();
+                .ToLinkedList();
 
             // capture phase
             evt.EventPhase = EventPhase.Capturing;
-            foreach (var visual_ in path.Reverse<XNode>())
+
+            // capture phase moves from root to target
+            foreach (var n in path.Backwards().Select(i => i.Value))
             {
-                HandleEventOnNode(visual_, evt, true);
+                HandleEventOnNode(n, evt);
 
                 // was told to stop propagation
                 if (evt.StopPropagationSet)
@@ -114,7 +111,7 @@ namespace NXKit.DOMEvents
 
             // at-target phase
             evt.EventPhase = EventPhase.AtTarget;
-            HandleEventOnNode(node, evt, false);
+            HandleEventOnNode(node, evt);
 
             // was told to stop propagation
             if (evt.StopPropagationSet)
@@ -122,46 +119,43 @@ namespace NXKit.DOMEvents
 
             // bubbling phase
             evt.EventPhase = EventPhase.Bubbling;
-            foreach (var visual_ in path)
+
+            // bubbling phase moves from target to root
+            foreach (var n in path)
             {
-                HandleEventOnNode(visual_, evt, false);
+                HandleEventOnNode(n, evt);
 
                 // was told to stop propagation
                 if (evt.StopPropagationSet)
                     return;
             }
 
+            // handle default action
             if (!evt.PreventDefaultSet)
-            {
-                // handle default action
                 foreach (var da in node.Interfaces<IEventDefaultActionHandler>())
                     if (da != null)
                         da.DefaultAction(evt);
-            }
         }
 
         /// <summary>
-        /// Attempts to handle the event at the given <see cref="XElement"/>.
+        /// Attempts to handle the event at the given <see cref="XNode"/>.
         /// </summary>
         /// <param name="node"></param>
         /// <param name="evt"></param>
-        /// <param name="useCapture"></param>
-        void HandleEventOnNode(XNode node, Event evt, bool useCapture)
+        void HandleEventOnNode(XNode node, Event evt)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(evt != null);
 
             evt.CurrentTarget = node.Interface<IEventTarget>();
 
-            var listenerMap = node.Annotation<EventListenerMap>();
-            if (listenerMap != null)
-            {
-                // obtain set of registered listeners
-                var listeners = listenerMap.GetOrDefault(evt.Type);
-                if (listeners != null)
-                    foreach (var listener in listeners.Where(i => i.UseCapture == useCapture))
-                        listener.Listener.HandleEvent(evt);
-            }
+            var listeners = node.AnnotationOrCreate<EventTargetState>().Listeners
+                .Where(i => i.EventType == evt.Type)
+                .Where(i => i.UseCapture == (evt.EventPhase == EventPhase.Capturing))
+                .Select(i => i.Listener);
+
+            foreach (var listener in listeners)
+                listener.HandleEvent(evt);
         }
 
     }

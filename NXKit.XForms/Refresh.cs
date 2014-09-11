@@ -4,6 +4,7 @@ using System.Xml.Linq;
 
 using NXKit.DOMEvents;
 using NXKit.Xml;
+using NXKit.XMLEvents;
 
 namespace NXKit.XForms
 {
@@ -11,7 +12,7 @@ namespace NXKit.XForms
     [Interface("{http://www.w3.org/2002/xforms}refresh")]
     public class Refresh :
         ElementExtension,
-        IAction
+        IEventHandler
     {
 
         readonly AttributeAccessor attributes;
@@ -26,12 +27,7 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
         }
 
-        public void Handle(Event ev)
-        {
-            Invoke();
-        }
-
-        public void Invoke()
+        public void HandleEvent(Event ev)
         {
             var modelAttr = attributes.GetAttributeValue("model");
             if (modelAttr != null)

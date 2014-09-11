@@ -1,6 +1,20 @@
 ﻿<script type="text/html"
         id="NXKit.View">
 
+    <!-- ko foreach: $data.Messages -->
+    <div class="ui message" data-bind="
+css: {
+    green: Severity === 1,
+    blue: Severity === 2,
+    yellow: Severity ===3,
+    red: Severity === 4,
+}">
+        <i class="close icon" data-bind="click: function () { $parent.RemoveMessage($data) }"></i>
+        <div class="header">
+            <span data-bind="text: Text" />
+        </div>
+    </div>
+    <!-- /ko -->
     <!-- ko nxkit_layout_manager_export -->
     <!-- ko nxkit_template: $data.Root -->
     <!-- /ko -->

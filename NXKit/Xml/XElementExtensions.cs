@@ -23,7 +23,6 @@ namespace NXKit.Xml
         public static XElement ResolveId(this XElement self, string id)
         {
             Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self.Exports() != null);
 
             // search referencable elements for matching id
             foreach (var element in RefElements(self))
@@ -108,6 +107,18 @@ namespace NXKit.Xml
                 .GroupBy(i => i.Name.LocalName)
                 .Select(i => i.First())
                 .Select(i => new XAttribute(i));
+        }
+        
+        /// <summary>
+        /// Clones the specified <see cref="XElement"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static XElement Clone(this XElement self)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+
+            return XCloneTransformer.Default.Visit(self);
         }
 
     }

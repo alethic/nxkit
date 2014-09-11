@@ -5,6 +5,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Util;
 
 namespace NXKit.Xml
@@ -53,7 +54,31 @@ namespace NXKit.Xml
             return self.AnnotationOrCreate<ObjectAnnotation>(() =>
                 new ObjectAnnotation(
                     self.Document.AnnotationOrCreate<DocumentAnnotation>()
-                        .GetNextNodeId())).Id;
+                        .GetNextObjectId())).Id;
+        }
+
+        class ObjectIdCache
+        {
+
+            public Dictionary<int, XObject> cache = new Dictionary<int, XObject>();
+
+        }
+
+        /// <summary>
+        /// Locates the object with the given unique identifier.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="objectId"></param>
+        /// <returns></returns>
+        public static XObject ResolveObjectId(this XObject self, int objectId)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(self.Document != null);
+
+            return self.Document.AnnotationOrCreate<ObjectIdCache>()
+                .cache.GetOrAdd(objectId, () => 
+                    self.Document.DescendantNodesAndSelf()
+                        .FirstOrDefault(i => i.GetObjectId() == objectId));
         }
 
         #region Naming
@@ -326,21 +351,21 @@ namespace NXKit.Xml
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            return Interfaces(node, node.Exports());
+            return Interfaces(node, node.Container());
         }
 
         /// <summary>
         /// Implements Interfaces, allowing the specification of an export provider.
         /// </summary>
         /// <param name="node"></param>
-        /// <param name="exports"></param>
+        /// <param name="container"></param>
         /// <returns></returns>
-        internal static IEnumerable<object> Interfaces(this XObject node, ExportProvider exports)
+        internal static IEnumerable<object> Interfaces(this XObject node, IContainer container)
         {
             Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(exports != null);
+            Contract.Requires<ArgumentNullException>(container != null);
 
-            return exports
+            return container
                 .GetExportedValues<IInterfaceProvider>()
                 .SelectMany(i => i.GetInterfaces(node));
         }
@@ -404,25 +429,44 @@ namespace NXKit.Xml
         }
 
         /// <summary>
-        /// Resolves the <see cref="ExportProvider"/> for the given <see cref="XObject"/>.
+        /// Gets the <see cref="IObjectContainer"/> for the given <see cref="XObject"/>.
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static ExportProvider Exports(this XObject self)
+        public static IContainer Container(this XObject self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Ensures(Contract.Result<ExportProvider>() != null);
+            Contract.Ensures(Contract.Result<IContainer>() != null);
 
-            return self.AnnotationOrCreate<ExportProvider>(() =>
+            // get or create the new object container annotation
+            return self.AnnotationOrCreate<ObjectContainer>(() =>
             {
-                if (self is XDocument)
-                    return ((XDocument)self).Exports();
-                else
-                    return self.Document.Exports();
+                var host = self.Document.Annotation<HostContainer>();
+                if (host == null)
+                    throw new InvalidOperationException();
+
+                return new ObjectContainer(
+                    self,
+                    new CompositionContainer(
+                        new ScopeCatalog(host.Catalog, Scope.Object),
+                        host.Exports),
+                    host.Catalog);
             });
         }
 
         #endregion
+
+        /// <summary>
+        /// Clones the specified <see cref="XObject"/>.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static XObject Clone(this XObject self)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+
+            return XCloneTransformer.Default.Visit(self);
+        }
 
     }
 

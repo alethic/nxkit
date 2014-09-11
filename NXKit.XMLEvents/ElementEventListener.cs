@@ -14,47 +14,26 @@ namespace NXKit.XMLEvents
     /// </summary>
     [Interface(XmlNodeType.Element)]
     public class ElementEventListener :
+        ElementExtension,
         IOnLoad
     {
 
-        readonly XElement element;
+        readonly IInvoker invoker;
+        readonly EventListenerAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public ElementEventListener(XElement element)
+        /// <param name="invoker"></param>
+        public ElementEventListener(XElement element, IInvoker invoker)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(invoker != null);
 
-            this.element = element;
-        }
-
-        /// <summary>
-        /// Gets the value of the 'event' attribute.
-        /// </summary>
-        /// <returns></returns>
-        string GetEvent()
-        {
-            return (string)element.Attribute(SchemaConstants.Events_1_0 + "event");
-        }
-
-        /// <summary>
-        /// Gets the value of the 'handler' attribute.
-        /// </summary>
-        /// <returns></returns>
-        string GetHandlerAttribute()
-        {
-            return (string)element.Attribute(SchemaConstants.Events_1_0 + "handler");
-        }
-
-        /// <summary>
-        /// Gets the value of the 'observer' attribute.
-        /// </summary>
-        /// <returns></returns>
-        string GetObserverAttribute()
-        {
-            return (string)element.Attribute(SchemaConstants.Events_1_0 + "observer");
+            this.invoker = invoker;
+            this.attributes = new EventListenerAttributes(element);
         }
 
         /// <summary>
@@ -63,17 +42,14 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         XElement GetHandlerElement()
         {
-            var handlerAttr = GetHandlerAttribute();
-            var observerAttr = GetObserverAttribute();
-
-            if (handlerAttr != null)
-                return element.ResolveId(handlerAttr);
-            else if (observerAttr != null)
-                return element;
-            else if (observerAttr == null)
-                return element;
+            if (attributes.Handler != null)
+                return Element.ResolveId(attributes.Handler);
+            else if (attributes.Observer != null)
+                return Element;
+            else if (attributes.Observer == null)
+                return Element;
             else
-                throw new InvalidOperationException();
+                throw new DOMTargetEventException(Element, Events.Error);
         }
 
         /// <summary>
@@ -84,7 +60,7 @@ namespace NXKit.XMLEvents
         {
             var element = GetHandlerElement();
             if (element != null)
-                return element.Interface<IEventHandler>();
+                return element.InterfaceOrDefault<IEventHandler>();
 
             return null;
         }
@@ -95,17 +71,14 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         XElement GetObserverElement()
         {
-            var handlerAttr = GetHandlerAttribute();
-            var observerAttr = GetObserverAttribute();
-
-            if (observerAttr != null)
-                return element.ResolveId(observerAttr);
-            else if (handlerAttr != null)
-                return element;
-            else if (handlerAttr == null)
-                return (XElement)element.Parent;
+            if (attributes.Observer != null)
+                return Element.ResolveId(attributes.Observer);
+            else if (attributes.Handler != null)
+                return Element;
+            else if (attributes.Handler == null)
+                return (XElement)Element.Parent;
             else
-                throw new InvalidOperationException();
+                throw new DOMTargetEventException(Element, Events.Error);
         }
 
         /// <summary>
@@ -116,7 +89,7 @@ namespace NXKit.XMLEvents
         {
             var element = GetObserverElement();
             if (element != null)
-                return element.Interface<IEventTarget>();
+                return element.InterfaceOrDefault<IEventTarget>();
 
             return null;
         }
@@ -127,9 +100,8 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         XElement GetTargetElement()
         {
-            var targetAttr = (string)element.Attribute(SchemaConstants.Events_1_0 + "target");
-            if (targetAttr != null)
-                return element.ResolveId(targetAttr);
+            if (attributes.Target != null)
+                return Element.ResolveId(attributes.Target);
 
             return null;
         }
@@ -140,7 +112,7 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         public bool GetCapture()
         {
-            return (string)element.Attribute(SchemaConstants.Events_1_0 + "phase") == "capture";
+            return attributes.Phase == "capture";
         }
 
         /// <summary>
@@ -149,16 +121,16 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         public bool GetPropagate()
         {
-            return (string)element.Attribute(SchemaConstants.Events_1_0 + "propagate") != "stop";
+            return attributes.Propagate != "stop";
         }
 
         /// <summary>
         /// Gets whether the default action should execute.
         /// </summary>
         /// <returns></returns>
-        public bool GetDefaultAction()
+        public bool InvokeDefaultAction()
         {
-            return (string)element.Attribute(SchemaConstants.Events_1_0 + "defaultAction") != "cancel";
+            return attributes.DefaultAction != "cancel";
         }
 
         /// <summary>
@@ -166,23 +138,30 @@ namespace NXKit.XMLEvents
         /// </summary>
         void Attach()
         {
-            var evt = GetEvent();
+            var evt = attributes.Event;
             if (evt == null)
                 return;
 
             var handler = GetHandler();
             if (handler == null)
-                throw new InvalidOperationException();
+                throw new DOMTargetEventException(Element, Events.Error);
 
             var observer = GetObserver();
             if (observer == null)
-                throw new InvalidOperationException();
+                throw new DOMTargetEventException(Element, Events.Error);
 
-            if (handler != null)
-                observer.AddEventListener(
-                    evt,
-                    new EventListener(_ => handler.Handle(_)),
-                    GetCapture());
+            observer.AddEventListener(
+                evt,
+                new ActionEventListener(_ => InvokeHandleEvent(handler, _)),
+                GetCapture());
+        }
+
+        void InvokeHandleEvent(IEventHandler handler, Event evt)
+        {
+            Contract.Requires<ArgumentNullException>(handler != null);
+            Contract.Requires<ArgumentNullException>(evt != null);
+
+            invoker.Invoke(() => handler.HandleEvent(evt));
         }
 
         void IOnLoad.Load()

@@ -3,7 +3,6 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -41,6 +40,20 @@ namespace NXKit.XForms
             this.modelItem = modelItem;
             this.position = position;
             this.size = size;
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="position"></param>
+        /// <param name="size"></param>
+        internal EvaluationContext(ModelItem item, int position, int size)
+            : this(item.Model, item.Instance, item, position, size)
+        {
+            Contract.Requires<ArgumentNullException>(item != null);
+            Contract.Requires<ArgumentNullException>(position >= 1);
+            Contract.Requires<ArgumentNullException>(size >= 1);
         }
 
         /// <summary>
@@ -84,6 +97,41 @@ namespace NXKit.XForms
         }
 
         /// <summary>
+        /// Compiles the given XPath expression against the given 
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        public XPathExpression CompileXPath(XObject xml, string expression)
+        {
+            Contract.Requires<ArgumentNullException>(xml != null);
+            Contract.Requires<ArgumentNullException>(expression != null);
+
+            var nc = new EvaluationXsltContext(xml, this);
+            var xp = XPathExpression.Compile(expression, nc);
+
+            return xp;
+        }
+
+        /// <summary>
+        /// Evaluates the given XPath expression.
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <param name="expression"></param>
+        /// <param name="resultType"></param>
+        /// <returns></returns>
+        internal object EvaluateXPath(XObject xml, XPathExpression expression, XPathResultType resultType)
+        {
+            Contract.Requires<ArgumentNullException>(xml != null);
+            Contract.Requires<ArgumentNullException>(expression != null);
+
+            var nv = modelItem.CreateNavigator();
+            var nd = nv.Evaluate(expression);
+
+            return ConvertXPath(nd, resultType);
+        }
+
+        /// <summary>
         /// Evaluates the given XPath expression.
         /// </summary>
         /// <param name="xml"></param>
@@ -93,15 +141,9 @@ namespace NXKit.XForms
         internal object EvaluateXPath(XObject xml, string expression, XPathResultType resultType)
         {
             Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentNullException>(xml.Exports() != null);
             Contract.Requires<ArgumentNullException>(expression != null);
 
-            var nc = new EvaluationXsltContext(xml, this);
-            var nv = modelItem.CreateNavigator();
-            var xp = XPathExpression.Compile(expression, nc);
-            var nd = nv.Evaluate(xp);
-
-            return ConvertXPath(nd, resultType);
+            return EvaluateXPath(xml, CompileXPath(xml, expression), resultType);
         }
 
         /// <summary>

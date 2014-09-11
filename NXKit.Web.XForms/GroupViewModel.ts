@@ -22,6 +22,10 @@ module NXKit.Web.XForms {
             }
         }
 
+        public SetFocus() {
+            this.Node.Invoke('NXKit.XForms.RepeatItem', 'SetFocus', {});
+        }
+
     }
 
 }

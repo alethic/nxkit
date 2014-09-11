@@ -6,6 +6,7 @@ using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web.UI;
 using System.Xml.Linq;
 
@@ -29,47 +30,37 @@ namespace NXKit.Web.UI
         IScriptControl
     {
 
-        enum LogLevel
-        {
-
-            Verbose,
-            Information,
-            Warning,
-            Error,
-
-        }
-
         /// <summary>
         /// Log item to be output to the client.
         /// </summary>
         [Serializable]
-        class Log
+        class Message
         {
 
             DateTime timestamp;
-            LogLevel level;
-            string message;
+            Severity severity;
+            string text;
 
             /// <summary>
             /// Initializes a new instance.
             /// </summary>
-            public Log()
+            public Message()
             {
                 this.timestamp = DateTime.UtcNow;
-                this.level = LogLevel.Information;
-                this.message = null;
+                this.severity = Severity.Information;
+                this.text = null;
             }
 
             /// <summary>
             /// Initializes a new instance.
             /// </summary>
-            /// <param name="level"></param>
-            /// <param name="message"></param>
-            public Log(LogLevel level, string message)
+            /// <param name="severity"></param>
+            /// <param name="text"></param>
+            public Message(Severity severity, string text)
             {
                 this.timestamp = DateTime.UtcNow;
-                this.level = level;
-                this.message = message;
+                this.severity = severity;
+                this.text = text;
             }
 
             public DateTime Timestamp
@@ -79,16 +70,16 @@ namespace NXKit.Web.UI
             }
 
             [JsonConverter(typeof(StringEnumConverter))]
-            public LogLevel Level
+            public Severity Severity
             {
-                get { return level; }
-                set { level = value; }
+                get { return severity; }
+                set { severity = value; }
             }
 
-            public string Message
+            public string Text
             {
-                get { return message; }
-                set { message = value; }
+                get { return text; }
+                set { text = value; }
             }
 
         }
@@ -96,66 +87,66 @@ namespace NXKit.Web.UI
         /// <summary>
         /// Captures trace messages from the <see cref="NXDocumentHost"/> to be output to the client.
         /// </summary>
-        class LogSink :
+        class TraceSink :
             ITraceSink
         {
 
-            readonly LinkedList<Log> logs;
+            readonly LinkedList<Message> messages;
 
             /// <summary>
             /// Initializes a new instance.
             /// </summary>
-            /// <param name="logs"></param>
-            public LogSink(LinkedList<Log> logs)
+            /// <param name="messages"></param>
+            public TraceSink(LinkedList<Message> messages)
             {
-                Contract.Requires<ArgumentNullException>(logs != null);
+                Contract.Requires<ArgumentNullException>(messages != null);
 
-                this.logs = logs;
+                this.messages = messages;
             }
 
             public void Debug(object data)
             {
-                logs.AddLast(new Log(LogLevel.Verbose, data.ToString()));
+                messages.AddLast(new Message(Severity.Verbose, data.ToString()));
             }
 
             public void Debug(string message)
             {
-                logs.AddLast(new Log(LogLevel.Verbose, message));
+                messages.AddLast(new Message(Severity.Verbose, message));
             }
 
             public void Debug(string format, params object[] args)
             {
-                logs.AddLast(new Log(LogLevel.Verbose, string.Format(format, args)));
+                messages.AddLast(new Message(Severity.Verbose, string.Format(format, args)));
             }
 
             public void Information(object data)
             {
-                logs.AddLast(new Log(LogLevel.Information, data.ToString()));
+                messages.AddLast(new Message(Severity.Information, data.ToString()));
             }
 
             public void Information(string message)
             {
-                logs.AddLast(new Log(LogLevel.Information, message));
+                messages.AddLast(new Message(Severity.Information, message));
             }
 
             public void Information(string format, params object[] args)
             {
-                logs.AddLast(new Log(LogLevel.Information, string.Format(format, args)));
+                messages.AddLast(new Message(Severity.Information, string.Format(format, args)));
             }
 
             public void Warning(object data)
             {
-                logs.AddLast(new Log(LogLevel.Warning, data.ToString()));
+                messages.AddLast(new Message(Severity.Warning, data.ToString()));
             }
 
             public void Warning(string message)
             {
-                logs.AddLast(new Log(LogLevel.Warning, message));
+                messages.AddLast(new Message(Severity.Warning, message));
             }
 
             public void Warning(string format, params object[] args)
             {
-                logs.AddLast(new Log(LogLevel.Warning, string.Format(format, args)));
+                messages.AddLast(new Message(Severity.Warning, string.Format(format, args)));
             }
 
         }
@@ -165,9 +156,10 @@ namespace NXKit.Web.UI
         ComposablePartCatalog catalog;
         ExportProvider exports;
         CompositionContainer container;
-        NXDocumentHost document;
-        LinkedList<Log> logs;
-        LinkedList<Log> logs_;
+        NXDocumentHost host;
+        LinkedList<Message> messages;
+        LinkedList<Message> messages_;
+        LinkedList<string> scripts;
 
         /// <summary>
         /// Initializes a new instance.
@@ -198,11 +190,41 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets a reference to the <see cref="Document"/>.
+        /// Gets a reference to the <see cref="Host"/>.
         /// </summary>
-        public NXDocumentHost Document
+        public NXDocumentHost Host
         {
-            get { return document; }
+            get { return host; }
+        }
+
+        /// <summary>
+        /// Raised when the <see cref="NXDocumentHost"/> is loaded.
+        /// </summary>
+        public event HostLoadedEventHandler HostLoaded;
+
+        /// <summary>
+        /// Raises the HostLoaded event.
+        /// </summary>
+        /// <param name="args"></param>
+        void OnHostLoaded(HostEventArgs args)
+        {
+            if (HostLoaded != null)
+                HostLoaded(this, args);
+        }
+
+        /// <summary>
+        /// Raised when the <see cref="NXDocumentHost"/> is unloading.
+        /// </summary>
+        public event HostLoadedEventHandler HostUnloading;
+
+        /// <summary>
+        /// Raises the HostUnloading event.
+        /// </summary>
+        /// <param name="args"></param>
+        void OnHostUnloading(HostEventArgs args)
+        {
+            if (HostUnloading != null)
+                HostUnloading(this, args);
         }
 
         /// <summary>
@@ -224,6 +246,16 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
+        /// Registers the given script snippet for execution upon completion of the current page request or client
+        /// callback.
+        /// </summary>
+        /// <param name="script"></param>
+        public void RegisterScript(string script)
+        {
+            (scripts ?? (scripts = new LinkedList<string>())).AddLast(script);
+        }
+
+        /// <summary>
         /// Loads the document host from whatever saved state is available.
         /// </summary>
         /// <returns></returns>
@@ -231,13 +263,9 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(save != null);
 
-            // configure default composition
-            var catalog = Catalog ?? CompositionUtil.DefaultCatalog;
-            var exports = Exports ?? CompositionUtil.CreateContainer(catalog);
-
             // extend provided container
-            container = new CompositionContainer(exports)
-                .WithExport<ITraceSink>(new LogSink(logs ?? (logs = new LinkedList<Log>())));
+            container = (exports != null ? new CompositionContainer(exports) : new CompositionContainer())
+                .WithExport<ITraceSink>(new TraceSink(messages ?? (messages = new LinkedList<Message>())));
 
             // load document
             return NXDocumentHost.Load(new StringReader(save), catalog, container);
@@ -251,15 +279,12 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            // configure default composition
-            var catalog = Catalog ?? CompositionUtil.DefaultCatalog;
-            var exports = Exports ?? CompositionUtil.CreateContainer(catalog);
+            // extend provided containeraven
+            container = (exports != null ? new CompositionContainer(exports) : new CompositionContainer())
+                .WithExport<ITraceSink>(new TraceSink(messages ?? (messages = new LinkedList<Message>())));
 
-            // extend provided container
-            container = new CompositionContainer(exports)
-                .WithExport<ITraceSink>(new LogSink(logs ?? (logs = new LinkedList<Log>())));
-
-            document = NXDocumentHost.Load(uri, catalog, container);
+            host = NXDocumentHost.Load(uri, catalog, container);
+            OnHostLoaded(HostEventArgs.Empty);
         }
 
         /// <summary>
@@ -281,62 +306,62 @@ namespace NXKit.Web.UI
         {
             using (var wrt = new StringWriter())
             {
-                document.Save(wrt);
+                host.Save(wrt);
                 return wrt.ToString();
             }
         }
 
         /// <summary>
-        /// Gets the client-side data as a <see cref="JObject"/>
+        /// Gets the client-side data as a <see cref="JToken"/>
         /// </summary>
         /// <returns></returns>
-        JToken CreateDataJObject()
+        JToken CreateNodeJObject()
         {
             // serialize document state to data field
             using (var wrt = new JTokenWriter())
             {
-                RemoteJson.GetJson(wrt, document.Root);
+                RemoteHelper.GetJson(wrt, host.Root);
                 return wrt.Token;
             }
         }
 
         /// <summary>
-        /// Gets the client-side data as a <see cref="string"/>.
+        /// Gets the client-side message data as a <see cref="JToken"/>.
+        /// </summary>
+        /// <returns></returns>
+        JToken CreateMessagesJObject()
+        {
+            return messages_ != null ? JArray.FromObject(messages_) : new JArray();
+        }
+
+        /// <summary>
+        /// Gets the client-side script data as a <see cref="JToken"/>.
+        /// </summary>
+        /// <returns></returns>
+        JToken CreateScriptsJObject()
+        {
+            return new JArray(scripts);
+        }
+
+        /// <summary>
+        /// Gets the client-side data as a <see cref="JToken"/>.
+        /// </summary>
+        /// <returns></returns>
+        JToken CreateDataJObject()
+        {
+            return new JObject(
+                new JProperty("Node", CreateNodeJObject()),
+                new JProperty("Messages", CreateMessagesJObject()),
+                new JProperty("Scripts", CreateScriptsJObject()));
+        }
+
+        /// <summary>
+        /// Gets the client-side data as a <see cref="String"/>.
         /// </summary>
         /// <returns></returns>
         string CreateDataString()
         {
-            // serialize document state to data field
-            using (var str = new StringWriter())
-            using (var wrt = new JsonTextWriter(str))
-            {
-                CreateDataJObject().WriteTo(wrt);
-                return str.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Gets the client-side logs data as a <see cref="JObject"/>.
-        /// </summary>
-        /// <returns></returns>
-        JToken CreateLogsJObject()
-        {
-            return logs_ != null ? JArray.FromObject(logs_) : new JArray();
-        }
-
-        /// <summary>
-        /// Gets the client-side data as a <see cref="string"/>.
-        /// </summary>
-        /// <returns></returns>
-        string CreateLogsString()
-        {
-            // serialize document state to data field
-            using (var str = new StringWriter())
-            using (var wrt = new JsonTextWriter(str))
-            {
-                CreateLogsJObject().WriteTo(wrt);
-                return str.ToString();
-            }
+            return JsonConvert.SerializeObject(CreateDataJObject());
         }
 
         /// <summary>
@@ -359,16 +384,16 @@ namespace NXKit.Web.UI
             base.OnPreRender(args);
 
             // write all available knockout templates
-            if (Document != null)
-                foreach (var provider in container.GetExportedValues<IHtmlTemplateProvider>())
+            if (Host != null)
+                foreach (var provider in Host.Container.GetExportedValues<IHtmlTemplateProvider>())
                     foreach (var template in provider.GetTemplates())
                         if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
                             using (var rdr = new StreamReader(template.Open()))
                                 Page.ClientScript.RegisterClientScriptBlock(typeof(View), template.Name, rdr.ReadToEnd(), false);
 
-            // logs_ to be sent
-            logs_ = logs;
-            logs = null;
+            // messages to be sent
+            messages_ = messages;
+            messages = null;
         }
 
         /// <summary>
@@ -378,10 +403,10 @@ namespace NXKit.Web.UI
         protected override void LoadViewState(object savedState)
         {
             var o = (object[])savedState;
-            document = (string)o[0] != null ? LoadDocumentHost((string)o[0]) : null;
+            host = (string)o[0] != null ? LoadDocumentHost((string)o[0]) : null;
             cssClass = (string)o[1];
             validationGroup = (string)o[2];
-            logs = (LinkedList<Log>)o[3];
+            messages = (LinkedList<Message>)o[3];
         }
 
         /// <summary>
@@ -395,7 +420,7 @@ namespace NXKit.Web.UI
                 !Visible ? CreateSaveString() : null,
                 cssClass,
                 validationGroup,
-                logs,
+                messages,
             };
         }
 
@@ -422,7 +447,7 @@ namespace NXKit.Web.UI
             writer.RenderEndTag();
             writer.WriteLine();
 
-            if (document != null)
+            if (host != null)
             {
                 // serialize visual state to data field
                 writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID + "_data");
@@ -447,14 +472,29 @@ namespace NXKit.Web.UI
             writer.WriteLine();
         }
 
+        /// <summary>
+        /// Raises the Unload event.
+        /// </summary>
+        /// <param name="args"></param>
+        protected override void OnUnload(EventArgs args)
+        {
+            base.OnUnload(args);
+
+            if (host != null)
+            {
+                OnHostUnloading(HostEventArgs.Empty);
+                host.Dispose();
+                host = null;
+            }
+        }
+
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
             var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
             d.AddElementProperty("body", ClientID + "_body");
-            d.AddElementProperty("data", ClientID + "_data");
             d.AddElementProperty("save", ClientID + "_save");
-            d.AddProperty("logs", CreateLogsString());
-            d.AddProperty("push", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self"));
+            d.AddElementProperty("data", ClientID + "_data");
+            d.AddProperty("push", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self") + ";");
             yield return d;
         }
 
@@ -474,7 +514,10 @@ namespace NXKit.Web.UI
             // load saved data
             var save = postCollection[postDataKey + "_save"];
             if (save != null)
-                document = LoadDocumentHost(save);
+            {
+                host = LoadDocumentHost(save);
+                OnHostLoaded(HostEventArgs.Empty);
+            }
 
             return true;
         }
@@ -486,16 +529,26 @@ namespace NXKit.Web.UI
 
         string ICallbackEventHandler.GetCallbackResult()
         {
-            // dump logs
-            logs_ = logs;
-            logs = null;
+            host.Invoke();
 
-            return JsonConvert.SerializeObject(new
+            // dump messages
+            messages_ = messages;
+            messages = null;
+
+            // allow final shut down
+            OnHostUnloading(HostEventArgs.Empty);
+
+            var str = JsonConvert.SerializeObject(new
             {
                 Save = CreateSaveString(),
                 Data = CreateDataJObject(),
-                Logs = CreateLogsJObject(),
             });
+
+            // dispose of the host
+            host.Dispose();
+            host = null;
+
+            return str;
         }
 
         void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
@@ -504,60 +557,106 @@ namespace NXKit.Web.UI
 
             var save = (string)args["Save"];
             if (save != null)
-                document = LoadDocumentHost(save);
-
-            // dispatch action
-            switch ((string)args["Action"])
             {
-                case "Push":
-                    ClientPush((JToken)args["Args"]);
-                    break;
+                host = LoadDocumentHost(save);
+                OnHostLoaded(HostEventArgs.Empty);
+            }
+
+            var commands = (JArray)args["Commands"];
+            if (commands != null)
+            {
+                foreach (var command in commands)
+                {
+                    // dispatch action
+                    switch ((string)command["Action"])
+                    {
+                        case "Update":
+                            JsonInvokeMethod(typeof(View).GetMethod("ClientUpdate", BindingFlags.NonPublic | BindingFlags.Instance), (JObject)command["Args"]);
+                            break;
+                        case "Invoke":
+                            JsonInvokeMethod(typeof(View).GetMethod("ClientInvoke", BindingFlags.NonPublic | BindingFlags.Instance), (JObject)command["Args"]);
+                            break;
+                    }
+                }
             }
         }
 
         /// <summary>
-        /// Client has sent us a "Push" request, consisting of a single argument "Nodes" which contains an array of node data.
+        /// Invokes the given method with the specified parameter values.
         /// </summary>
-        /// <param name="data"></param>
-        void ClientPush(JToken args)
+        /// <param name="method"></param>
+        /// <param name="args"></param>
+        void JsonInvokeMethod(MethodInfo method, JObject args)
         {
+            Contract.Requires<ArgumentNullException>(method != null);
             Contract.Requires<ArgumentNullException>(args != null);
 
-            var nodes = args["Nodes"] as JArray;
-            if (nodes == null)
-                throw new InvalidOperationException("Push requires JSON array of node data.");
+            // assembly invocation parameter list
+            var count = 0;
+            var parameters = method.GetParameters();
+            var invoke = new object[parameters.Length];
+            for (int i = 0; i < invoke.Length; i++)
+            {
+                // submitted JSON parameter value
+                var j = args.Properties()
+                    .FirstOrDefault(k => string.Equals(parameters[i].Name, k.Name, StringComparison.InvariantCultureIgnoreCase));
+                if (j == null)
+                    break;
 
-            foreach (JObject node in nodes)
-                ClientPushNode(node);
+                // convert JObject to appropriate type
+                var t = parameters[i].ParameterType;
+                var o = j != null && j.Value != null ? j.Value.ToObject(t) : null;
 
-            document.Invoke();
+                // successful conversion
+                invoke[i] = o;
+                count = i + 1;
+            }
+
+            // unsuccessful parameter count
+            if (count != parameters.Length)
+                throw new MissingMethodException();
+
+            method.Invoke(this, invoke);
         }
 
         /// <summary>
-        /// Client 
+        /// Updates the given property.
         /// </summary>
-        /// <param name="data"></param>
-        void ClientPushNode(JObject data)
+        /// <param name="nodeId"></param>
+        /// <param name="interface"></param>
+        /// <param name="property"></param>
+        /// <param name="value"></param>
+        void ClientUpdate(int nodeId, string @interface, string property, JValue value)
         {
-            Contract.Requires<ArgumentNullException>(data != null);
+            Contract.Requires<ArgumentOutOfRangeException>(nodeId > 0);
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(@interface));
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(property));
 
-            var id = (int)data["Id"];
-            if (id < 0)
-                throw new InvalidOperationException("Client Push sent invalid Node ID.");
-
-            var node = document.Root.DescendantsAndSelf()
-                .FirstOrDefault(i => i.GetObjectId() == id);
+            var node = (XNode)host.Xml.ResolveObjectId(nodeId);
             if (node == null)
-                throw new InvalidOperationException("Client Push sent unknown Node ID.");
+                return;
 
-            ApplyToNode(node, data);
+            RemoteHelper.Update(node, @interface, property, value);
         }
 
-        void ApplyToNode(XElement node, JObject data)
+        /// <summary>
+        /// Invokes the given method.
+        /// </summary>
+        /// <param name="nodeId"></param>
+        /// <param name="interface"></param>
+        /// <param name="method"></param>
+        /// <param name="params"></param>
+        void ClientInvoke(int nodeId, string @interface, string method, JObject @params)
         {
-            Contract.Requires<ArgumentNullException>(data != null);
+            Contract.Requires<ArgumentOutOfRangeException>(nodeId > 0);
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(@interface));
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(method));
 
-            RemoteJson.SetJson(data.CreateReader(), node);
+            var node = (XNode)host.Xml.ResolveObjectId(nodeId);
+            if (node == null)
+                return;
+
+            RemoteHelper.Invoke(node, @interface, method, @params);
         }
 
     }

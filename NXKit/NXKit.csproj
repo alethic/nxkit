@@ -17,7 +17,7 @@
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <NuGetPackageImportStamp>0906aa20</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>ca575762</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,16 +36,16 @@
     <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
     <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
     <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
-    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
-    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
-    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>True</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>True</CodeContractsRedundantAssumptions>
     <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
     <CodeContractsInferRequires>True</CodeContractsInferRequires>
-    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
-    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsInferEnsures>True</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>True</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>True</CodeContractsSuggestAssumptions>
     <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
-    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsSuggestObjectInvariants>True</CodeContractsSuggestObjectInvariants>
     <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
     <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
     <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
@@ -122,8 +122,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributeAccessor.cs" />
+    <Compile Include="Composition\Container.cs" />
     <Compile Include="Composition\EmptyExportProvider.cs" />
     <Compile Include="Composition\ExportProviderExtensions.cs" />
+    <Compile Include="Composition\ObjectContainer.cs" />
+    <Compile Include="Composition\HostContainer.cs" />
+    <Compile Include="Composition\GlobalContainer.cs" />
+    <Compile Include="Composition\IContainer.cs" />
+    <Compile Include="Composition\IGlobalContainer.cs" />
+    <Compile Include="Composition\IObjectContainer.cs" />
+    <Compile Include="Composition\IHostContainer.cs" />
     <Compile Include="Composition\IScopeMetadata.cs" />
     <Compile Include="Composition\Scope.cs" />
     <Compile Include="Composition\ScopeCatalog.cs" />
@@ -132,6 +141,8 @@
     <Compile Include="Composition\ScopeHelper.cs" />
     <Compile Include="Composition\ScopeImportDefinition.cs" />
     <Compile Include="Composition\ScopePartDefinition.cs" />
+    <Compile Include="ContainerInterfaceProvider.cs" />
+    <Compile Include="DefaultInvoker.cs" />
     <Compile Include="Diagnostics\ITypeProxyProvider.cs" />
     <Compile Include="Diagnostics\DiagnosticsTraceSink.cs" />
     <Compile Include="Diagnostics\DefaultTraceService.cs" />
@@ -141,7 +152,19 @@
     <Compile Include="Diagnostics\XDocumentTypeProxyProvider.cs" />
     <Compile Include="Diagnostics\XElementTypeProxyProvider.cs" />
     <Compile Include="Diagnostics\XTextTypeProxyProvider.cs" />
+    <Compile Include="ExceptionInvokerLayer.cs" />
+    <Compile Include="IExtension.cs" />
+    <Compile Include="IInvokerLayer.cs" />
+    <Compile Include="IInvoker.cs" />
+    <Compile Include="IOnSave.cs" />
+    <Compile Include="ITextExtension.cs" />
+    <Compile Include="IDocumentExtension.cs" />
+    <Compile Include="InvokerLayerAttribute.cs" />
+    <Compile Include="TextExtensionAttribute.cs" />
+    <Compile Include="DocumentExtensionAttribute.cs" />
+    <Compile Include="ElementExtensionAttribute.cs" />
     <Compile Include="IdRef.cs" />
+    <Compile Include="IElementExtension.cs" />
     <Compile Include="IExceptionHandler.cs" />
     <Compile Include="Diagnostics\ITraceService.cs" />
     <Compile Include="Diagnostics\ITraceSink.cs" />
@@ -159,6 +182,7 @@
     <Compile Include="IO\IOService.cs" />
     <Compile Include="IO\IOResponse.cs" />
     <Compile Include="IO\WebTransport.cs" />
+    <Compile Include="ObjectContainerAnnotation.cs" />
     <Compile Include="ObjectAnnotation.cs" />
     <Compile Include="DocumentAnnotation.cs" />
     <Compile Include="IInterfacePredicate.cs" />
@@ -176,10 +200,11 @@
     <Compile Include="Net\ResourceWebResponse.cs" />
     <Compile Include="ElementExtension.cs" />
     <Compile Include="NodeExtension.cs" />
+    <Compile Include="ObjectExtensionAttribute.cs" />
     <Compile Include="Priority.cs" />
+    <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="RemoteAttribute.cs" />
     <Compile Include="Serialization\SerializableAnnotationAttribute.cs" />
-    <Compile Include="Serialization\XmlAttributeOverrides.cs" />
     <Compile Include="Serialization\XNodeAnnotationSerializer.cs" />
     <Compile Include="Util\DictionaryExtensions.cs" />
     <Compile Include="Net\DynamicUriAuthority.cs" />
@@ -204,6 +229,7 @@
     <Compile Include="InterfaceProviderBase.cs" />
     <Compile Include="Xml\BaseUriAnnotation.cs" />
     <Compile Include="Xml\IOXmlReader.cs" />
+    <Compile Include="Xml\XCloneTransformer.cs" />
     <Compile Include="Xml\XContainerExtensions.cs" />
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="Xml\XDocumentExtensions.cs" />

@@ -17,6 +17,7 @@ namespace NXKit.XForms
     {
 
         readonly XElement element;
+        readonly IInvoker invoker;
         readonly Binding binding;
         readonly Lazy<UIBindingState> state;
         ModelItem modelItem;
@@ -24,23 +25,28 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="node"></param>
-        public UIBinding(XElement node)
+        /// <param name="element"></param>
+        /// <param name="invoker"></param>
+        public UIBinding(XElement element, IInvoker invoker)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(invoker != null);
 
-            this.element = node;
+            this.element = element;
+            this.invoker = invoker;
             this.state = new Lazy<UIBindingState>(() => element.AnnotationOrCreate<UIBindingState>());
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="node"></param>
-        internal UIBinding(XElement node, ModelItem modelItem)
-            : this(node)
+        /// <param name="element"></param>
+        /// <param name="invoker"></param>
+        internal UIBinding(XElement element, IInvoker invoker, ModelItem modelItem)
+            : this(element, invoker)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(invoker != null);
 
             this.modelItem = modelItem;
         }
@@ -49,11 +55,13 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="invoker"></param>
         /// <param name="binding"></param>
-        internal UIBinding(XElement element, Binding binding)
-            : this(element, binding.ModelItem)
+        internal UIBinding(XElement element, IInvoker invoker, Binding binding)
+            : this(element, invoker,binding.ModelItem)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(invoker != null);
             Contract.Requires<ArgumentNullException>(binding != null);
 
             this.binding = binding;
@@ -156,8 +164,11 @@ namespace NXKit.XForms
         /// <param name="value"></param>
         void SetValue(string value)
         {
-            if (modelItem != null)
-                modelItem.Value = value;
+            invoker.Invoke(() =>
+            {
+                if (modelItem != null)
+                    modelItem.Value = value ?? "";
+            });
         }
 
         /// <summary>

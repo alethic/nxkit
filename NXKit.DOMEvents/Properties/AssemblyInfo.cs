@@ -14,4 +14,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: Guid("9e5c8b2d-9968-4713-a055-fd3ac9543963")]
 
-[assembly: InternalsVisibleTo("NXKit")]
+[assembly: InternalsVisibleTo("NXKit.DOMEvents.Tests")]

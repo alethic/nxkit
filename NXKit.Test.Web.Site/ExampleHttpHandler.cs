@@ -1,5 +1,8 @@
-﻿using System.Web;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Web;
+
 using NXKit.XForms.Examples;
 
 namespace NXKit.Test.Web.Site
@@ -23,6 +26,8 @@ namespace NXKit.Test.Web.Site
 
         void ProcessRequest(HttpContext context, string path)
         {
+            Contract.Requires<ArgumentNullException>(context != null);
+
             var stm = typeof(Ref).Assembly
                 .GetManifestResourceNames()
                 .Where(i => i.EndsWith("." + path))

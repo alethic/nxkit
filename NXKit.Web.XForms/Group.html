@@ -5,7 +5,14 @@
     <!-- ko with: new NXKit.Web.XForms.GroupViewModel($context, $parent) -->
 
     <div class="xforms-group ui form segment"
-         data-bind="nxkit_visible: Relevant, css: { attached: Help }">
+         data-bind="
+    nxkit_visible: Relevant,
+    css: {
+        attached: Help
+    },
+    event: {
+        focusin: function (data, event) { SetFocus(); return true; },
+    }">
 
         <!-- ko with: Label -->
         <!-- ko if: ($data.Appearance || 'full') == 'full' -->
@@ -111,7 +118,6 @@ css: {
             layout: 'field-label',
         } -->
         <!-- /ko -->
-
         <!-- ko nxkit_layout: {
             SuppressLabel: true,
         } -->
@@ -201,7 +207,11 @@ css: {
         data-nxkit-layout="group">
 
     <div class="xforms-group secondary"
-         data-bind="nxkit_visible: Relevant">
+         data-bind="
+    nxkit_visible: Relevant,
+    event: {
+        focusin: function (data, event) { SetFocus(); return true; },
+    }">
 
         <!-- ko with: Label -->
         <!-- ko if: ($data.Appearance || 'full') == 'full' -->
@@ -294,7 +304,11 @@ css: {
         data-nxkit-layout="group">
 
     <div style="margin-bottom: 10px;"
-         data-bind="nxkit_visible: Relevant">
+         data-bind="
+    nxkit_visible: Relevant,
+    event: {
+        focusin: function (data, event) { SetFocus(); return true; },
+    }">
 
         <!-- ko with: Label -->
         <!-- ko if: ($data.Appearance || 'full') == 'full' -->
@@ -384,7 +398,11 @@ css: {
         data-nxkit-layout="group">
 
     <div style="margin-bottom: 10px;"
-         data-bind="nxkit_visible: Relevant">
+         data-bind="
+    nxkit_visible: Relevant,
+    event: {
+        focusin: function (data, event) { SetFocus(); return true; },
+    }">
 
         <!-- ko with: Label -->
         <!-- ko if: ($data.Appearance || 'full') == 'full' -->

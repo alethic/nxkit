@@ -9,40 +9,32 @@ module NXKit.Web {
     export class View {
 
         private _body: HTMLElement;
+        private _server: IServerInvoke;
+
         private _root: Node;
         private _bind: boolean;
+        private _messages: KnockoutObservableArray<Message>;
+        private _threshold: Severity;
 
-        private _onNodePropertyChanged: (node: Node, $interface: Interface, property: Property, value: any) => void;
-        private _onNodeMethodInvoked: (node: Node, $interface: Interface, method: Method, params: any) => void;
-
-        private _queue: Array<(cb: ICallbackComplete) => void>;
+        private _queue: any[];
         private _queueRunning: boolean;
 
         private _busy: KnockoutObservable<boolean>;
 
-        /**
-         * Raised when the Node has changes to be pushed to the server.
-         */
-        public CallbackRequest: ICallbackRequestEvent = new TypedEvent();
-
-        constructor(body: HTMLElement) {
+        constructor(body: HTMLElement, server: IServerInvoke) {
             var self = this;
 
+            self._server = server;
             self._body = body;
             self._root = null;
             self._bind = true;
 
+            self._messages = ko.observableArray<Message>();
+            self._threshold = Severity.Warning;
+
             self._queue = new Array<any>();
             self._queueRunning = false;
             self._busy = ko.observable(false);
-
-            self._onNodePropertyChanged = (node: Node, $interface: Interface, property: Property, value: any) => {
-                self.OnRootNodePropertyChanged(node, $interface, property, value);
-            };
-
-            self._onNodeMethodInvoked = (node: Node, $interface: Interface, method: Method, params: any) => {
-                self.OnRootNodeMethodInvoked(node, $interface, method, params);
-            };
         }
 
         public get Busy(): KnockoutObservable<boolean> {
@@ -53,112 +45,167 @@ module NXKit.Web {
             return this._body;
         }
 
-        public get Data(): any {
-            return this._root.ToData();
-        }
-
-        public set Data(value: any) {
-            var self = this;
-
-            if (typeof (value) === 'string')
-                // update the form with the parsed data
-                self.Update(JSON.parse(<string>value));
-            else
-                // update the form with the data itself
-                self.Update(value);
-        }
-
         public get Root(): Node {
             return this._root;
+        }
+
+        public get Messages(): KnockoutObservableArray<Message> {
+            return this._messages;
+        }
+
+        public get Threshold(): Severity {
+            return this._threshold;
+        }
+
+        public set Threshold(threshold: Severity) {
+            this._threshold = threshold;
+        }
+
+        /**
+         * Updates the view in response to some received data.
+         */
+        public Receive(data: any) {
+            this.Apply(data['Node'] || null);
+            this.AppendMessages(data['Messages'] || []);
+            this.ExecuteScripts(data['Scripts'] || []);
+        }
+
+        /**
+         * Updates the messages of the view with the specified items.
+         */
+        private AppendMessages(messages: any[]) {
+            var self = this;
+
+            for (var i = 0; i < messages.length; i++) {
+
+                var severity = <Severity>((<any>Severity)[<string>(messages[i].Severity)]);
+                var text = messages[i].Text || '';
+                if (severity >= self._threshold)
+                    self._messages.push(new Message(severity, text));
+            }
+        }
+
+        /**
+         * Executes the given scripts.
+         */
+        private ExecuteScripts(scripts: string[]) {
+            for (var i = 0; i < scripts.length; i++) {
+                var script = scripts[i];
+                if (script != null)
+                    eval(script);
+            }
+        }
+
+        /**
+         * Removes the current message from the set of messages.
+         */
+        public RemoveMessage(message: Message) {
+            this._messages.remove(message);
         }
 
         /**
          * Initiates a refresh of the view model.
          */
-        private Update(data: any) {
+        private Apply(data: any) {
             var self = this;
 
             if (self._root == null) {
                 // generate new node tree
-                self._root = new Node(data);
-                self._root.PropertyChanged.add(self._onNodePropertyChanged);
-                self._root.MethodInvoked.add(self._onNodeMethodInvoked);
+                self._root = new Node(self, data);
             }
             else {
                 // update existing node tree
-                self._root.PropertyChanged.remove(self._onNodePropertyChanged);
-                self._root.MethodInvoked.remove(self._onNodeMethodInvoked);
-                self._root.Update(data);
-                self._root.PropertyChanged.add(self._onNodePropertyChanged);
-                self._root.MethodInvoked.add(self._onNodeMethodInvoked);
+                self._root.Apply(data);
             }
 
             self.ApplyBindings();
         }
 
         /**
-         * Invoked to handle root node value change events.
-         */
-        OnRootNodePropertyChanged(node: Node, $interface: Interface, property: Property, value: any) {
-            this.Push(node);
-        }
-
-        /**
-         * Invoked to handle root node method invocations.
-         */
-        OnRootNodeMethodInvoked(node: Node, $interface: Interface, method: Method, params: any) {
-            this.Push(node);
-        }
-
-        /**
          * Invoked when the view model initiates a request to push an update to a node.
          */
-        Push(node: Node) {
+        PushUpdate(node: Node, $interface: Interface, property: Property, value: any) {
             var self = this;
-            Log.Debug('View.Push');
+            Log.Debug('View.PushUpdate');
 
-            this.Queue((cb: ICallbackComplete) => {
-                Log.Debug('View.Push: queue');
-                self.CallbackRequest.trigger({
-                    Action: 'Push',
-                    Args: {
-                        Nodes: [node.ToData()],
-                    }
-                }, cb);
-            });
+            // generate push action
+            var data = {
+                Action: 'Update',
+                Args: {
+                    NodeId: node.Id,
+                    Interface: $interface.Name,
+                    Property: property.Name,
+                    Value: value,
+                }
+            };
+
+            self.Queue(data);
+        }
+
+        PushInvoke(node: Node, interfaceName: string, methodName: string, params: any) {
+            var self = this;
+            Log.Debug('View.PushInvoke');
+
+            // generate push action
+            var data = {
+                Action: 'Invoke',
+                Args: {
+                    NodeId: node.Id,
+                    Interface: interfaceName,
+                    Method: methodName,
+                    Params: params,
+                }
+            };
+
+            self.Queue(data);
         }
 
         /**
-         * Runs any available items in the queue.
+         * Queues the given data to be sent to the server.
          */
-        Queue(func: (cb: ICallbackComplete) => void) {
+        Queue(command: any) {
             var self = this;
 
-            // pushes a new event to trigger a callback onto the queue
-            self._queue.push(func);
+            // pushes a new action onto the queue
+            self._queue.push(command);
 
             // only one runner at a time
             if (self._queueRunning) {
                 return;
             } else {
                 self._queueRunning = true;
-                self._busy(true);
 
-                // recursive call to work queue
-                var l = () => {
-                    var f = self._queue.shift();
-                    if (f) {
-                        f((result: any) => {
-                            l(); // recurse
-                        });
-                    } else {
-                        self._queueRunning = false;
-                        self._busy(false);
-                    }
-                };
+                // delay processing in case of new commands
+                setTimeout(() => {
+                    self._busy(true);
 
-                // initiate queue run
-                l();
+                    // recursive call to work queue
+                    var l = () => {
+                        var commands = self._queue.splice(0);
+                        if (commands.length > 0) {
+                            self._server(commands, (data: any) => {
+
+                                // only update node data if no outstanding commands
+                                if (self._queue.length == 0) {
+                                    self.Apply(data['Node'] || null);
+                                }
+
+                                // display messages and execute scripts
+                                self.AppendMessages(data['Messages'] || []);
+                                self.ExecuteScripts(data['Scripts'] || []);
+
+                                // recurse
+                                l();
+                            });
+                        } else {
+                            self._queueRunning = false;
+                            self._busy(false);
+                        }
+                    };
+
+                    // initiate queue run
+                    l();
+                }, 500);
             }
         }
 

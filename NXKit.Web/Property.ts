@@ -4,7 +4,7 @@ module NXKit.Web {
 
     export class Property {
 
-        private _interface: Interface;
+        private _intf: Interface;
         private _name: string;
         private _value: KnockoutObservable<any>;
         private _suspend: boolean = false;
@@ -14,26 +14,16 @@ module NXKit.Web {
         private _valueAsNumber: KnockoutComputed<number>;
         private _valueAsDate: KnockoutComputed<Date>;
 
-        /**
-         * Raised when this property, or a nested property's value changes.
-         */
-        public PropertyChanged: INodePropertyChangedEvent = new TypedEvent();
-
-        /**
-         * Raised when a nested node method is invoked.
-         */
-        public MethodInvoked: INodeMethodInvokedEvent = new TypedEvent();
-
-        constructor($interface: Interface, name: string, source: any) {
+        constructor(intf: Interface, name: string, source: any) {
             var self = this;
 
-            self._interface = $interface;
+            self._intf = intf;
             self._name = name;
 
             self._value = ko.observable<any>(null);
             self._value.subscribe(_ => {
                 if (!self._suspend) {
-                    self.PropertyChanged.trigger(self._interface.Node, self._interface, self, self._value());
+                    self.OnUpdate();
                 }
             });
 
@@ -84,6 +74,18 @@ module NXKit.Web {
                 self.Update(source);
         }
 
+        public get Interface(): Interface {
+            return this._intf;
+        }
+
+        public get Node(): Node {
+            return this._intf.Node;
+        }
+
+        public get View(): View {
+            return this._intf.View;
+        }
+
         public get Name(): string {
             return this._name;
         }
@@ -118,16 +120,10 @@ module NXKit.Web {
                     self._suspend = true;
                     if (self._value() != null &&
                         self._value() instanceof Node) {
-                        (<Node>self._value()).Update(source);
+                        (<Node>self._value()).Apply(source);
                         Log.Debug(self.Name + ': ' + 'Node' + '=>' + 'Node');
                     } else {
-                        var node = new Node(source);
-                        node.PropertyChanged.add((n, intf, property, value) => {
-                            self.PropertyChanged.trigger(n, intf, property, value);
-                        });
-                        node.MethodInvoked.add((n, intf, method, params) => {
-                            self.MethodInvoked.trigger(n, intf, method, params);
-                        });
+                        var node = new Node(self._intf.View, source);
                         self._value(node);
                         Log.Debug(self.Name + ': ' + 'Node' + '+>' + 'Node');
                     }
@@ -151,6 +147,10 @@ module NXKit.Web {
 
         public ToData(): any {
             return this._value();
+        }
+
+        public OnUpdate() {
+            this.View.PushUpdate(this.Node, this.Interface, this, this.Value());
         }
 
     }

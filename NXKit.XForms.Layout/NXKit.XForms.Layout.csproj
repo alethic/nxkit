@@ -18,7 +18,7 @@
     <TargetFrameworkProfile />
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
-    <NuGetPackageImportStamp>2a1a51f4</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>d26059ef</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -152,7 +152,7 @@
       <Name>NXKit.XForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
-      <Project>{2B27233A-849A-4339-96C6-BABCB968B8B0}</Project>
+      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
       <Name>NXKit</Name>
     </ProjectReference>
   </ItemGroup>

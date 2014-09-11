@@ -52,7 +52,9 @@ namespace NXKit.XForms.XPath.Functions
 
                 return instance
                     .Interfaces<Instance>()
-                    .Select(i => i.State.Document.Root.CreateNavigator().Select("."))
+                    .Select(i => i.State.Document)
+                    .Where(i => i != null)
+                    .Select(i => i.Root.CreateNavigator().Select("."))
                     .FirstOrDefault();
             }
         }

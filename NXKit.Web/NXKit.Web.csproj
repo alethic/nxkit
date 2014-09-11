@@ -27,7 +27,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <RootNamespace>NXKit.Web</RootNamespace>
-    <NuGetPackageImportStamp>dbd962be</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>e419b473</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -119,7 +119,7 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -136,21 +136,17 @@
     <Compile Include="Serialization\RemoteXCommentJsonConverter.cs" />
     <Compile Include="Serialization\RemoteXTextJsonConverter.cs" />
     <Compile Include="Serialization\RemoteXElementJsonConverter.cs" />
-    <Compile Include="Serialization\RemoteJson.cs" />
+    <Compile Include="Serialization\RemoteHelper.cs" />
     <Compile Include="Serialization\RemoteObjectJsonConverter.cs" />
     <Compile Include="Serialization\RemoteXNodeJsonConverter.cs" />
-    <TypeScriptCompile Include="ICallbackRequestEvent.ts" />
     <Compile Include="IHtmlTemplateProvider.cs" />
     <Compile Include="Serialization\XNameJsonConverter.cs" />
-    <TypeScriptCompile Include="ICallbackComplete.ts" />
+    <Compile Include="Severity.cs" />
+    <TypeScriptCompile Include="ICallback.ts" />
     <TypeScriptCompile Include="IEvent.ts" />
-    <TypeScriptCompile Include="IPropertyChangedEvent.ts" />
-    <TypeScriptCompile Include="INodeMethodInvokedEvent.ts" />
-    <TypeScriptCompile Include="IMethodMap.ts" />
     <TypeScriptCompile Include="IInterfaceMap.ts" />
     <TypeScriptCompile Include="IPropertyMap.ts" />
-    <TypeScriptCompile Include="INodePropertyChangedEvent.ts" />
-    <TypeScriptCompile Include="IMethodInvokedEvent.ts" />
+    <TypeScriptCompile Include="IServerInvoke.ts" />
     <TypeScriptCompile Include="Knockout\InputBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\HorizontalVisibleBindingHandler.ts" />
@@ -165,14 +161,14 @@
     <TypeScriptCompile Include="LayoutManager.ts" />
     <TypeScriptCompile Include="Interface.ts" />
     <TypeScriptCompile Include="Log.ts" />
-    <TypeScriptCompile Include="Method.ts" />
+    <TypeScriptCompile Include="Message.ts" />
     <TypeScriptCompile Include="InterfaceMap.ts" />
-    <TypeScriptCompile Include="MethodMap.ts" />
     <TypeScriptCompile Include="NodeType.ts" />
     <TypeScriptCompile Include="PropertyMap.ts" />
     <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
+    <TypeScriptCompile Include="Severity.ts" />
     <TypeScriptCompile Include="Util.ts" />
     <TypeScriptCompile Include="ViewModelUtil.ts" />
   </ItemGroup>
@@ -213,7 +209,7 @@
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
-    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptModuleKind>amd</TypeScriptModuleKind>

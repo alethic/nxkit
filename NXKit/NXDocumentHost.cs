@@ -4,7 +4,6 @@ using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
-using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -13,6 +12,7 @@ using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.IO;
 using NXKit.Serialization;
+using NXKit.Util;
 using NXKit.Xml;
 
 namespace NXKit
@@ -21,7 +21,8 @@ namespace NXKit
     /// <summary>
     /// Hosts an NXKit document. Provides access to the visual tree for a renderer or other processor.
     /// </summary>
-    public class NXDocumentHost
+    public class NXDocumentHost :
+        IDisposable
     {
 
         /// <summary>
@@ -35,16 +36,17 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
-
-            return new NXDocumentHost(
-                XNodeAnnotationSerializer.Deserialize(
-                    XDocument.Load(
-                        reader,
-                        LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
-                catalog,
-                exports);
+            return Compose(catalog, exports, (catalog_, global, host) =>
+            {
+                return new NXDocumentHost(
+                    XNodeAnnotationSerializer.Deserialize(
+                        XDocument.Load(
+                            reader,
+                            LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
+                    catalog_,
+                    global,
+                    host);
+            });
         }
 
         /// <summary>
@@ -68,9 +70,6 @@ namespace NXKit
         public static NXDocumentHost Load(TextReader reader, ComposablePartCatalog catalog = null, ExportProvider exports = null)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
-
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
 
             using (var rdr = XmlReader.Create(reader))
                 return Load(rdr, catalog, exports);
@@ -98,9 +97,6 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(stream != null);
 
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
-
             using (var rdr = new StreamReader(stream))
                 return Load(rdr, catalog, exports);
         }
@@ -127,13 +123,19 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
-
-            return Load(
-                NXKit.Xml.IOXmlReader.Create(
-                    exports.GetExportedValue<IIOService>(),
-                    uri));
+            return Compose(catalog, exports, (catalog_, global, host) =>
+            {
+                return new NXDocumentHost(
+                    XNodeAnnotationSerializer.Deserialize(
+                        XDocument.Load(
+                            NXKit.Xml.IOXmlReader.Create(
+                                host.GetExportedValue<IIOService>(),
+                                uri),
+                            LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
+                    catalog_,
+                    global,
+                    host);
+            });
         }
 
         /// <summary>
@@ -159,9 +161,6 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
-
             return Load(document.CreateReader(), catalog, exports);
         }
 
@@ -177,48 +176,77 @@ namespace NXKit
             return Load(document, null, null);
         }
 
-        readonly ComposablePartCatalog catalog;
-        readonly CompositionContainer global;
-        readonly CompositionContainer host;
+        /// <summary>
+        /// Invokes a method, passing it the appropriate composition containers.
+        /// </summary>
+        /// <param name="catalog"></param>
+        /// <param name="exports"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        static NXDocumentHost Compose(
+            ComposablePartCatalog catalog,
+            ExportProvider exports,
+            Func<ComposablePartCatalog, CompositionContainer, CompositionContainer, NXDocumentHost> func)
+        {
+            Contract.Requires<ArgumentNullException>(func != null);
+
+            catalog = catalog ?? CompositionUtil.DefaultCatalog;
+            exports = exports ?? new CompositionContainer();
+
+            // global container, contains all exports that are global in nature
+            var global = new CompositionContainer(
+                new ScopeCatalog(catalog, Scope.Global),
+                exports);
+
+            // host container, contains all exports that are host scoped, and catalog of host scoped parts
+            var host = new CompositionContainer(
+                new ScopeCatalog(catalog, Scope.Host),
+                global);
+
+            var _ = func(catalog, global, host);
+            if (_ == null)
+                throw new NullReferenceException();
+
+            return _;
+        }
+
+        bool disposed;
+        readonly GlobalContainer global;
+        readonly HostContainer host;
+        readonly IInvoker invoker;
         readonly ITraceService trace;
-        XDocument xml;
+        readonly XDocument xml;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
         /// <param name="catalog"></param>
-        /// <param name="exports"></param>
-        NXDocumentHost(XDocument xml, ComposablePartCatalog catalog = null, ExportProvider exports = null)
-            : base()
+        /// <param name="global"></param>
+        /// <param name="host"></param>
+        NXDocumentHost(
+            XDocument xml,
+            ComposablePartCatalog catalog,
+            CompositionContainer global,
+            CompositionContainer host)
         {
             Contract.Requires<ArgumentNullException>(xml != null);
+            Contract.Requires<ArgumentNullException>(catalog != null);
+            Contract.Requires<ArgumentNullException>(global != null);
+            Contract.Requires<ArgumentNullException>(host != null);
 
-            catalog = catalog ?? CompositionUtil.DefaultCatalog;
-            exports = exports ?? CompositionUtil.CreateContainer(catalog);
-
-            this.catalog = catalog;
-
-            // global container, contains all exports that are global in nature
-            this.global = new CompositionContainer(
-                new ScopeExportProvider(exports, Scope.Global));
-
-            // host container, contains all exports that are host scoped, and catalog of host scoped parts
-            this.host = new CompositionContainer(
-                new ScopeCatalog(this.catalog, Scope.Host), 
-                this.global);
-
-            // ensures the document is in the container
-            this.host.WithExport<NXDocumentHost>(this);
-            this.host.WithExport<ExportProvider>(host);
-
-            // initialize document configuration
+            this.global = new GlobalContainer(global, catalog);
+            this.host = new HostContainer(host, catalog);
+            this.invoker = host.GetExportedValue<IInvoker>();
             this.trace = host.GetExportedValue<ITraceService>();
             this.xml = xml;
 
             // ensure XML document has access to document host
             this.xml.AddAnnotation(this);
-            this.xml.AddAnnotation(host);
+            this.xml.AddAnnotation(this.host);
+
+            // ensure document host is available to exports
+            this.host.WithExport<NXDocumentHost>(this);
 
             Initialize();
         }
@@ -235,83 +263,28 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Handles an exception by dispatching it to the root <see cref="IExceptionHandler"/>.
-        /// </summary>
-        /// <param name="exception"></param>
-        void HandleException(Exception exception)
-        {
-            Contract.Requires<ArgumentNullException>(exception != null);
-            trace.Warning(exception);
-
-            bool rethrow = true;
-
-            // search for exception handlers
-            foreach (var handler in Xml.Interfaces<IExceptionHandler>())
-                rethrow |= !handler.HandleException(exception);
-
-            // should we rethrow the exception?
-            if (rethrow)
-                ExceptionDispatchInfo.Capture(exception).Throw();
-        }
-
-        /// <summary>
-        /// Invokes the given <see cref="Action"/>, protecting the caller against exceptions.
-        /// </summary>
-        /// <param name="action"></param>
-        void Invoke(Action action)
-        {
-            Contract.Requires<ArgumentNullException>(action != null);
-
-            try
-            {
-                action();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-            }
-        }
-
-        /// <summary>
-        /// Invokes the given <see cref="Func`1"/>, protecting the caller against exception.s
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="func"></param>
-        T Invoke<T>(Func<T> func)
-        {
-            Contract.Requires<ArgumentNullException>(func != null);
-
-            try
-            {
-                return func();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-            }
-
-            return default(T);
-        }
-
-        /// <summary>
         /// Invokes any <see cref="IOnInit"/> interfaces the first time the document is loaded.
         /// </summary>
         void InvokeInit()
         {
             while (true)
             {
+                xml.DescendantNodesAndSelf()
+                    .Select(i => i.GetObjectId())
+                    .ToList();
+
                 var inits = xml
                     .DescendantNodesAndSelf()
                     .Where(i => i.InterfaceOrDefault<IOnInit>() != null)
                     .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Init == false)
-                    .ToList();
+                    .ToLinkedList();
 
                 if (inits.Count == 0)
                     break;
 
                 foreach (var init in inits)
                     if (init.Document != null)
-                        Invoke(() =>
+                        invoker.Invoke(() =>
                         {
                             init.Interface<IOnInit>().Init();
                             init.AnnotationOrCreate<ObjectAnnotation>().Init = true;
@@ -327,11 +300,11 @@ namespace NXKit
             var loads = xml
                 .DescendantNodesAndSelf()
                 .Where(i => i.InterfaceOrDefault<IOnLoad>() != null)
-                .ToList();
+                .ToLinkedList();
 
             foreach (var load in loads)
                 if (load.Document != null)
-                    Invoke(() =>
+                    invoker.Invoke(() =>
                     {
                         load.Interface<IOnLoad>().Load();
                     });
@@ -342,7 +315,7 @@ namespace NXKit
         /// </summary>
         public CompositionContainer Container
         {
-            get { return host; }
+            get { return host.Exports; }
         }
 
         /// <summary>
@@ -363,11 +336,11 @@ namespace NXKit
             {
                 var invokes = Xml.DescendantsAndSelf()
                     .SelectMany(i => i.Interfaces<IOnInvoke>())
-                    .ToList();
+                    .ToLinkedList();
 
                 run = false;
                 foreach (var invoke in invokes)
-                    run |= Invoke(() => invoke.Invoke());
+                    run |= invoker.Invoke(() => invoke.Invoke());
             }
             while (run);
         }
@@ -389,6 +362,14 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(writer != null);
 
+            // instruct any interfaces to save their state
+            var saves = Xml.DescendantsAndSelf()
+                .SelectMany(i => i.Interfaces<IOnSave>())
+                .ToLinkedList();
+            foreach (var save in saves)
+                save.Save();
+
+            // serialize document to writer
             XNodeAnnotationSerializer.Serialize(xml).Save(writer);
         }
 
@@ -421,6 +402,31 @@ namespace NXKit
 
             using (var wrt = new StreamWriter(stream, Encoding.UTF8))
                 Save(wrt);
+        }
+
+        /// <summary>
+        /// Gets whether or not the <see cref="NXDocumentHost"/> has been disposed.
+        /// </summary>
+        public bool Disposed
+        {
+            get { return disposed; }
+        }
+
+        /// <summary>
+        /// Disposes of the <see cref="NXDocumentHost"/>.
+        /// </summary>
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            disposed = true;
+        }
+
+        /// <summary>
+        /// Finalizes the instance.
+        /// </summary>
+        ~NXDocumentHost()
+        {
+            Dispose();
         }
 
     }

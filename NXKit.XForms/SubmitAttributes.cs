@@ -28,7 +28,7 @@ namespace NXKit.XForms
         /// </summary>
         public IdRef Submission
         {
-            get { return GetAttributeValue("if"); }
+            get { return GetAttributeValue("submission"); }
         }
 
     }
