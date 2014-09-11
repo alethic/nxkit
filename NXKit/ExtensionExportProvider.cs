@@ -26,6 +26,7 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="obj"></param>
         /// <param name="providers"></param>
         [ImportingConstructor]
         public ExtensionExportProvider(

@@ -26,16 +26,25 @@ namespace NXKit.Composition
 
         }
 
+        IEnumerable<IExportProvider> Providers
+        {
+            get { return providers ?? (providers = GetProviders()); }
+        }
+
+        IEnumerable<IExportProvider> GetProviders()
+        {
+            return source
+                .GetExports<IExportProvider>()
+                .Select(i => i.Value)
+                .ToList();
+        }
+
         protected override IEnumerable<Export> GetExportsCore(ImportDefinition definition, AtomicComposition atomicComposition)
         {
             if (definition.ContractName == AttributedModelServices.GetContractName(typeof(IExportProvider)))
                 return Enumerable.Empty<Export>();
-
-            // initialize providers
-            if (providers == null && source != null)
-                providers = source.GetExports<IExportProvider>().Select(i => i.Value).ToList();
-
-            return providers.SelectMany(i => i.GetExports(source, definition, atomicComposition));
+            else
+                return Providers.SelectMany(i => i.GetExports(source, definition, atomicComposition));
         }
 
         /// <summary>
