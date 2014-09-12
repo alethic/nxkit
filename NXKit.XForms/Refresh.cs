@@ -1,12 +1,12 @@
-﻿using System;
-using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
-using System.Xml.Linq;
-
-using NXKit.Composition;
+﻿using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 using NXKit.XMLEvents;
+
+using System;
+using System.ComponentModel.Composition;
+using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 namespace NXKit.XForms
 {
@@ -17,8 +17,6 @@ namespace NXKit.XForms
         ElementExtension,
         IEventHandler
     {
-
-        readonly AttributeAccessor attributes;
 
         /// <summary>
         /// Initializes a new instance.
