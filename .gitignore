@@ -6,3 +6,4 @@ obj
 */bin/*
 */obj/*
 *.nupkg
+*.ide
