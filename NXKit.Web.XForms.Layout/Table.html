@@ -1,7 +1,13 @@
 ﻿<script type="text/html"
         data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}table">
     <!-- ko with: new NXKit.Web.XForms.Layout.TableViewModel($context, $data) -->
-    <table class="xforms-layout-table ui table segment">
+    <table class="xforms-layout-table" data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-label-appearance': LabelAppearance,
+}">
         <tbody>
             <!-- ko foreach: Contents -->
             <!-- ko nxkit_template -->
@@ -24,10 +30,12 @@
 
 <script type="text/html"
         data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}table-cell">
-    <td>
-        <!-- ko foreach: Nodes -->
+    <!-- ko with: new NXKit.Web.XForms.Layout.TableCellViewModel($context, $data) -->
+    <td data-bind="event: { click: Activate }">
+        <!-- ko foreach: Contents -->
         <!-- ko nxkit_template -->
         <!-- /ko -->
         <!-- /ko -->
     </td>
+    <!-- /ko -->
 </script>

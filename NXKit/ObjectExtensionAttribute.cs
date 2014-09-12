@@ -2,27 +2,45 @@
 using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-using NXKit.Composition;
-
 namespace NXKit
 {
 
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     [MetadataAttribute]
     public abstract class ObjectExtensionAttribute :
-        ScopeExportAttribute
+        ExportAttribute
     {
 
+        readonly ExtensionObjectType objectType;
         Type predicateType;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="objectType"></param>
-        public ObjectExtensionAttribute(Type objectType)
-            : base(typeof(IExtension<>).MakeGenericType(objectType))
+        public ObjectExtensionAttribute(ExtensionObjectType objectType, Type predicateType)
+            : base(typeof(IExtension))
         {
+            this.objectType = objectType;
+            this.predicateType = predicateType;
+        }
 
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="objectType"></param>
+        public ObjectExtensionAttribute(ExtensionObjectType objectType)
+            : base(typeof(IExtension))
+        {
+            this.objectType = objectType;
+        }
+
+        /// <summary>
+        /// Specifies the object type this extension applies to.
+        /// </summary>
+        public ExtensionObjectType ObjectType
+        {
+            get { return objectType; }
         }
 
         /// <summary>

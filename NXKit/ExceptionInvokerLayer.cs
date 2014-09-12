@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Runtime.ExceptionServices;
+using NXKit.Composition;
 
 namespace NXKit
 {
 
-    [InvokerLayer]
+    [Export(typeof(IInvokerLayer))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class ExceptionInvokerLayer :
         IInvokerLayer
     {

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -11,13 +13,14 @@ namespace NXKit.XForms
     /// When the name element appears as a child of element header, it is used to specify the name of a header entry to
     /// be provided to the submission protocol.
     /// </summary>
-    [Interface("{http://www.w3.org/2002/xforms}name", PredicateType = typeof(HeaderNamePredicate))]
+    [Extension("{http://www.w3.org/2002/xforms}name", PredicateType = typeof(HeaderNamePredicate))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class HeaderName :
         ElementExtension
     {
 
         class HeaderNamePredicate :
-            IInterfacePredicate
+            IExtensionPredicate
         {
 
             public bool IsMatch(XObject obj, Type type)

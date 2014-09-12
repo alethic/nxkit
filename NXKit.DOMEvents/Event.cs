@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Dynamic;
+using System.Xml.Linq;
 
 namespace NXKit.DOMEvents
 {
@@ -12,31 +13,34 @@ namespace NXKit.DOMEvents
     public class Event
     {
 
-        NXDocumentHost host;
-        string type;
-        IEventTarget target;
-        IEventTarget currentTarget;
-        EventPhase eventPhase;
-        bool bubbles;
-        bool cancelable;
-        ulong timeStamp;
-        bool defaultPrevented;
-        bool isTrusted;
-        bool stopPropagationSet;
-        bool stopImmediatePropagationSet;
-        bool preventDefaultSet;
+        readonly Document host;
+        internal string type;
+        internal bool bubbles;
+        internal bool cancelable;
+        internal XNode target;
+        internal XNode currentTarget;
+        internal EventPhase eventPhase;
+        internal bool stopPropagation;
+        internal bool stopImmediatePropagation;
+        internal bool canceled;
+        internal bool initialized;
+        internal bool dispatch;
+        internal bool isTrusted;
+        internal ulong timeStamp;
         dynamic context;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public Event(NXDocumentHost host)
+        public Event(Document host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
 
+            this.initialized = false;
             this.host = host;
-            this.eventPhase = EventPhase.Uninitialized;
+            this.eventPhase = EventPhase.None;
             this.timeStamp = (ulong)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+            this.isTrusted = false;
             this.context = new ExpandoObject();
         }
 
@@ -45,7 +49,7 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="host"></param>
         /// <param name="type"></param>
-        public Event(NXDocumentHost host, string type)
+        public Event(Document host, string type)
             : this(host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
@@ -61,7 +65,7 @@ namespace NXKit.DOMEvents
         /// <param name="type"></param>
         /// <param name="canBubble"></param>
         /// <param name="cancelable"></param>
-        public Event(NXDocumentHost host, string type, bool canBubble, bool cancelable)
+        public Event(Document host, string type, bool canBubble, bool cancelable)
             : this(host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
@@ -71,24 +75,26 @@ namespace NXKit.DOMEvents
             InitEvent(type, canBubble, cancelable);
         }
 
-        public void InitEvent(string type, bool canBubble, bool cancelable)
+        public void InitEvent(string type, bool bubbles, bool cancelable)
         {
-            Contract.Requires<InvalidOperationException>(EventPhase == EventPhase.Uninitialized);
+            this.initialized = true;
+            if (this.dispatch)
+                return;
 
-            this.type = type;
-            this.bubbles = canBubble;
-            this.cancelable = cancelable;
-            this.defaultPrevented = false;
+            this.stopPropagation = false;
+            this.stopImmediatePropagation = false;
+            this.canceled = false;
             this.isTrusted = false;
-            this.stopPropagationSet = false;
-            this.stopImmediatePropagationSet = false;
-            this.preventDefaultSet = false;
+            this.target = null;
+            this.type = type;
+            this.bubbles = bubbles;
+            this.cancelable = cancelable;
         }
 
         /// <summary>
-        /// Gets the <see cref="NXDocumentHost"/> that owns the event.
+        /// Gets the <see cref="Document"/> that owns the event.
         /// </summary>
-        public NXDocumentHost Host
+        public Document Host
         {
             get { return host; }
         }
@@ -98,22 +104,19 @@ namespace NXKit.DOMEvents
             get { return type; }
         }
 
-        public IEventTarget Target
+        public XNode Target
         {
             get { return target; }
-            internal set { target = value; }
         }
 
-        public IEventTarget CurrentTarget
+        public XNode CurrentTarget
         {
             get { return currentTarget; }
-            internal set { currentTarget = value; }
         }
 
         public EventPhase EventPhase
         {
             get { return eventPhase; }
-            internal set { eventPhase = value; }
         }
 
         public bool Bubbles
@@ -131,34 +134,34 @@ namespace NXKit.DOMEvents
             get { return timeStamp; }
         }
 
-        public bool StopPropagationSet
-        {
-            get { return stopPropagationSet; }
-        }
-
-        public bool PreventDefaultSet
-        {
-            get { return preventDefaultSet; }
-        }
-
         public void StopPropagation()
         {
-            stopPropagationSet = true;
-        }
-
-        public void PreventDefault()
-        {
-            preventDefaultSet = true;
+            stopPropagation = true;
         }
 
         public void StopImmediatePropagation()
         {
-            stopImmediatePropagationSet = true;
+            stopImmediatePropagation = true;
+        }
+
+        public bool PropagationStopped
+        {
+            get { return stopPropagation; }
+        }
+
+        public bool ImmediatePropagationStopped
+        {
+            get { return stopImmediatePropagation; }
+        }
+
+        public void PreventDefault()
+        {
+            canceled = true;
         }
 
         public bool DefaultPrevented
         {
-            get { return defaultPrevented; }
+            get { return canceled; }
         }
 
         public bool IsTrusted

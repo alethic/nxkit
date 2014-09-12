@@ -1,16 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.XForms.IO;
+using NXKit.XForms.XmlSchema;
 using NXKit.Xml;
 
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}instance")]
+    [Extension("{http://www.w3.org/2002/xforms}instance")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Instance :
         ElementExtension,
         IOnLoad
@@ -19,20 +24,26 @@ namespace NXKit.XForms
         readonly IModelRequestService requestService;
         readonly InstanceAttributes attributes;
         readonly Lazy<InstanceState> state;
+        readonly IEnumerable<IXsdTypeConverter> xsdTypeConverters;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Instance(XElement element, IModelRequestService requestService)
+        public Instance(
+            XElement element, 
+            IModelRequestService requestService,
+            [ImportMany] IEnumerable<IXsdTypeConverter> xsdTypeConverters)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(requestService != null);
+            Contract.Requires<ArgumentNullException>(xsdTypeConverters != null);
 
             this.requestService = requestService;
             this.attributes = new InstanceAttributes(Element);
             this.state = new Lazy<InstanceState>(() => Element.AnnotationOrCreate<InstanceState>());
+            this.xsdTypeConverters = xsdTypeConverters.ToList();
         }
 
         /// <summary>
@@ -49,6 +60,14 @@ namespace NXKit.XForms
         public InstanceState State
         {
             get { return state.Value; }
+        }
+        
+        /// <summary>
+        /// Gets the available <see cref="IXsdTypeConverter"/>s for this instance.
+        /// </summary>
+        public IEnumerable<IXsdTypeConverter> XsdTypeConverters
+        {
+            get { return xsdTypeConverters; }
         }
 
         /// <summary>

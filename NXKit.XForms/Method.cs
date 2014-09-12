@@ -1,6 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
+using NXKit.Composition;
 using NXKit.XForms.IO;
 using NXKit.Xml;
 
@@ -11,7 +14,8 @@ namespace NXKit.XForms
     /// The method element (deprecated in favor of using an AVT in the method attribute) allows the submission method
     /// to be dynamically calculated based on instance data.
     /// </summary>
-    [Interface("{http://www.w3.org/2002/xforms}method")]
+    [Extension("{http://www.w3.org/2002/xforms}method")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Method :
         ElementExtension
     {

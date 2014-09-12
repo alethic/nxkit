@@ -3,11 +3,17 @@
 namespace NXKit
 {
 
-    public interface IExtension<T>
-        where T : XObject
+    /// <summary>
+    /// Describes an extension compatible with a <see cref="XObject"/>.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IExtension
     {
 
-        T Object { get; }
+        /// <summary>
+        /// Gets the targetted <see cref="XObject"/>.
+        /// </summary>
+        XObject Object { get; }
 
     }
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.Web.UI;
 
 namespace NXKit.Test.Web.Site
@@ -20,6 +22,12 @@ namespace NXKit.Test.Web.Site
             ScriptManager.ScriptResourceMapping.AddDefinition("semantic", new ScriptResourceDefinition
             {
                 Path = "~/Content/semantic/packaged/javascript/semantic.js",
+            });
+
+            ScriptManager.ScriptResourceMapping.AddDefinition("bootstrap", new ScriptResourceDefinition
+            {
+                Path = "~/Content/bootstrap/dist/js/bootstrap.min.js",
+                DebugPath = "~/Content/bootstrap/dist/js/bootstrap.js",
             });
 
             ScriptManager.ScriptResourceMapping.AddDefinition("knockout", new ScriptResourceDefinition

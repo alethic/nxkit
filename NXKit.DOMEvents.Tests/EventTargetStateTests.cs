@@ -38,10 +38,10 @@ namespace NXKit.DOMEvents.Tests
             {
                 w.WriteWhitespace("");
                 var s = new EventTargetState();
-                s.Listeners.Add(new EventTargetListenerItem("event1", false, l1));
-                s.Listeners.Add(new EventTargetListenerItem("event2", true, l1));
-                s.Listeners.Add(new EventTargetListenerItem("event1", false, l2));
-                s.Listeners.Add(new EventTargetListenerItem("event2", true, l2));
+                s.registrations.Add(new EventListenerRegistration("event1", l1, false));
+                s.registrations.Add(new EventListenerRegistration("event2", l1, true));
+                s.registrations.Add(new EventListenerRegistration("event1", l2, false));
+                s.registrations.Add(new EventListenerRegistration("event2", l2, true));
                 new XmlSerializer(s.GetType()).Serialize(w, s);
             }
 

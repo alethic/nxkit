@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
-
 using NXKit.DOMEvents;
+using NXKit.XForms.XmlSchema;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -100,8 +101,6 @@ namespace NXKit.XForms
         /// <summary>
         /// Sets the type of the given model item.
         /// </summary>
-        /// <param name="module"></param>
-        /// <param name="item"></param>
         /// <param name="type"></param>
         public void SetItemType(XName type)
         {
@@ -202,12 +201,37 @@ namespace NXKit.XForms
         }
 
         /// <summary>
+        /// Converts the given value to the specified XSD type.sss
+        /// </summary>
+        /// <param name="xsdType"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        string ConvertTo(XName xsdType, string value)
+        {
+            // select compatible converter
+            var converter = Instance.XsdTypeConverters
+                .Where(i => i.CanConvertTo(xsdType))
+                .FirstOrDefault();
+
+            // convert if converter found
+            if (converter != null)
+                value = converter.ConvertTo(xsdType, value) ?? value;
+
+            // return new or existing value
+            return value;
+        }
+
+        /// <summary>
         /// Implements the setter for Value.
         /// </summary>
         /// <param name="newValue"></param>
         void SetValue(string newValue)
         {
             Contract.Requires<ArgumentNullException>(newValue != null);
+
+            // convert value to destination item type if possible
+            if (ItemType != null)
+                newValue = ConvertTo(ItemType, newValue);
 
             // nothing changed
             if (newValue == GetValue())
@@ -262,7 +286,6 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the element value of the given model item.
         /// </summary>
-        /// <param name="newElement"></param>
         public XElement Contents
         {
             get { return GetContents(); }
@@ -400,7 +423,6 @@ namespace NXKit.XForms
         /// <summary>
         /// Creates a <see cref="XPathNavigator"/> for the given model item.
         /// </summary>
-        /// <param name="item"></param>
         /// <returns></returns>
         internal XPathNavigator CreateNavigator()
         {

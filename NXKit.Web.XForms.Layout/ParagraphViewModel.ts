@@ -3,7 +3,7 @@
 module NXKit.Web.XForms.Layout {
 
     export class ParagraphViewModel
-        extends NodeViewModel {
+        extends LayoutNodeViewModel {
 
         constructor(context: KnockoutBindingContext, node: Node) {
             super(context, node);

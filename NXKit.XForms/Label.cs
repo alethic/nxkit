@@ -1,6 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
+using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -10,7 +13,8 @@ namespace NXKit.XForms
     /// presented visually and made available to accessibility software so the visually-impaired user can obtain a
     /// short description of form controls while navigating among them.
     /// </summary>
-    [Interface("{http://www.w3.org/2002/xforms}label")]
+    [Extension("{http://www.w3.org/2002/xforms}label")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Label :
         ElementExtension
     {

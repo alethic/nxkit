@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -20,6 +22,20 @@ namespace NXKit.XForms.Serialization
             "text/xml",
         };
 
+        readonly AnnotationSerializer serializer;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="serializer"></param>
+        [ImportingConstructor]
+        public XmlModelDeserializer(AnnotationSerializer serializer)
+        {
+            Contract.Requires<ArgumentNullException>(serializer != null);
+
+            this.serializer = serializer;
+        }
+
         public Priority CanDeserialize(MediaRange mediaType)
         {
             return MEDIA_RANGE.Any(i => i.Matches(mediaType)) ? Priority.Default : Priority.Ignore;
@@ -27,7 +43,7 @@ namespace NXKit.XForms.Serialization
 
         public XDocument Deserialize(TextReader reader, MediaRange mediaType)
         {
-            return XNodeAnnotationSerializer.Deserialize(XDocument.Load(reader));
+            return serializer.Deserialize(XDocument.Load(reader));
         }
 
     }

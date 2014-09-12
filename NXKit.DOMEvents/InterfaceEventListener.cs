@@ -97,31 +97,50 @@ namespace NXKit.DOMEvents
         }
 
         /// <summary>
+        /// Creates a new instance.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static InterfaceEventListener Create(Action<Event> action)
+        {
+            Contract.Requires<ArgumentNullException>(action != null);
+            Contract.Requires<ArgumentException>(action.Target != null, "Action must have target.");
+            Contract.Requires<ArgumentException>(action.Method != null, "Action must have method.");
+            Contract.Requires<ArgumentException>(action.Target is ElementExtension);
+            Contract.Requires<ArgumentException>(IsValidMethodInfo(action.Method));
+
+            var target = action.Target;
+            var method = action.Method;
+
+            return Create(((ElementExtension)target).Element, target.GetType(), method);
+        }
+
+        /// <summary>
         /// Gets the existing <see cref="InterfaceEventListener"/> registered on the target.
         /// </summary>
-        /// <param name="target"></param>
+        /// <param name="dispatcher"></param>
         /// <param name="eventType"></param>
-        /// <param name="useCapture"></param>
+        /// <param name="capture"></param>
         /// <param name="handler"></param>
         /// <param name="interfaceType"></param>
         /// <param name="methodInfo"></param>
         /// <returns></returns>
-        public static InterfaceEventListener GetListener(IEventTarget target, string eventType, bool useCapture, XObject handler, Type interfaceType, MethodInfo methodInfo)
+        public static InterfaceEventListener GetListener(EventTarget dispatcher, string eventType, bool capture, XObject handler, Type interfaceType, MethodInfo methodInfo)
         {
-            Contract.Requires<ArgumentNullException>(target != null);
+            Contract.Requires<ArgumentNullException>(dispatcher != null);
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(eventType));
             Contract.Requires<ArgumentNullException>(handler != null);
             Contract.Requires<ArgumentNullException>(interfaceType != null);
             Contract.Requires<ArgumentNullException>(methodInfo != null);
             Contract.Requires<ArgumentException>(IsValidMethodInfo(methodInfo));
 
-            var host = handler.Container().GetExportedValue<NXDocumentHost>();
+            var host = handler.Exports().GetExportedValue<Func<Document>>()();
             if (host == null)
                 throw new InvalidOperationException();
 
             // find existing listener
-            var listener = Enumerable.Empty<IEventListener>()
-                .Concat(target.GetEventListeners(eventType, true))
+            var listener = Enumerable.Empty<EventListenerRegistration>()
+                .Concat(dispatcher.GetRegistrations())
                 .OfType<InterfaceEventListener>()
                 .Where(i => i.GetHandler(host) == handler)
                 .Where(i => i.InterfaceType == interfaceType)
@@ -133,14 +152,14 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Gets the existing <see cref="InterfaceEventListener"/> for the given <see cref="Action"/>.
         /// </summary>
-        /// <param name="target"></param>
+        /// <param name="dispatcher"></param>
         /// <param name="eventType"></param>
-        /// <param name="useCapture"></param>
+        /// <param name="capture"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static InterfaceEventListener GetListener(IEventTarget target, string eventType, bool useCapture, Action action)
+        public static InterfaceEventListener GetListener(EventTarget dispatcher, string eventType, bool capture, Action action)
         {
-            Contract.Requires<ArgumentNullException>(target != null);
+            Contract.Requires<ArgumentNullException>(dispatcher != null);
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(eventType));
             Contract.Requires<ArgumentNullException>(action != null);
             Contract.Requires<ArgumentException>(action.Target != null, "Action must have target.");
@@ -151,7 +170,31 @@ namespace NXKit.DOMEvents
             var handler = action.Target;
             var method = action.Method;
 
-            return GetListener(target, eventType, useCapture, ((ElementExtension)handler).Element, handler.GetType(), method);
+            return GetListener(dispatcher, eventType, capture, ((ElementExtension)handler).Element, handler.GetType(), method);
+        }
+
+        /// <summary>
+        /// Gets the existing <see cref="InterfaceEventListener"/> for the given <see cref="Action"/>.
+        /// </summary>
+        /// <param name="dispatcher"></param>
+        /// <param name="eventType"></param>
+        /// <param name="capture"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static InterfaceEventListener GetListener(EventTarget dispatcher, string eventType, bool capture, Action<Event> action)
+        {
+            Contract.Requires<ArgumentNullException>(dispatcher != null);
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(eventType));
+            Contract.Requires<ArgumentNullException>(action != null);
+            Contract.Requires<ArgumentException>(action.Target != null, "Action must have target.");
+            Contract.Requires<ArgumentException>(action.Method != null, "Action must have method.");
+            Contract.Requires<ArgumentException>(action.Target is ElementExtension, "Action.Target must be a ElementExtension.");
+            Contract.Requires<ArgumentException>(IsValidMethodInfo(action.Method));
+
+            var handler = action.Target;
+            var method = action.Method;
+
+            return GetListener(dispatcher, eventType, capture, ((ElementExtension)handler).Element, handler.GetType(), method);
         }
 
 
@@ -190,7 +233,7 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="host"></param>
         /// <returns></returns>
-        public XObject GetHandler(NXDocumentHost host)
+        public XObject GetHandler(Document host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
 

@@ -5,9 +5,6 @@ _NXKit.Web.UI.View = function (element) {
     _NXKit.Web.UI.View.initializeBase(self, [element]);
 
     self._view = null;
-    self._data = null;
-    self._save = null;
-    self._body = null;
     self._push = null;
 };
 
@@ -16,42 +13,16 @@ _NXKit.Web.UI.View.prototype = {
     initialize: function () {
         var self = this;
         _NXKit.Web.UI.View.callBaseMethod(self, 'initialize');
+
+        self._init();
     },
 
     dispose: function () {
         var self = this;
         _NXKit.Web.UI.View.callBaseMethod(self, 'dispose');
-    },
 
-    get_view: function () {
-        return this._view;
-    },
-
-    get_data: function () {
-        return this._data;
-    },
-
-    set_data: function (value) {
-        this._data = value;
-        this._init();
-    },
-
-    get_save: function () {
-        return this._save;
-    },
-
-    set_save: function (value) {
-        this._save = value;
-        this._init();
-    },
-
-    get_body: function () {
-        return this._body;
-    },
-
-    set_body: function (value) {
-        this._body = value;
-        this._init();
+        self._view = null;
+        self._push = null;
     },
 
     get_push: function () {
@@ -62,51 +33,67 @@ _NXKit.Web.UI.View.prototype = {
         this._push = value;
     },
 
-    _init: function () {
+    _onsubmit: function () {
         var self = this;
 
-        if (self._body != null &&
-            self._data != null &&
-            self._save != null) {
+        var data = $(self.get_element()).find('>.data');
+        if (data.length == 0)
+            throw new Error("cannot find data element");
 
-            // generate new view
-            if (self._view == null) {
-                self._view = new NXKit.Web.View(self._body, function (commands, cb) {
-                    self.sendCommands(commands, cb);
-                });
-            }
-
-            // update view with data
-            self._view.Receive(JSON.parse($(self._data).val()));
+        // update the hidden data field value before submit
+        if (self._view != null) {
+            $(data).val(JSON.stringify(self._view.Data));
         }
     },
 
-    sendCommands: function (commands, wh) {
+    _init: function () {
         var self = this;
 
-        // generate event argument to pass to server
-        var args = JSON.stringify({
-            Save: $(self._save).val(),
-            Commands: commands,
+        var form = $(self.get_element()).closest('form');
+        if (form.length == 0)
+            throw new Error('cannot find form element');
+
+        var data = $(self.get_element()).find('>.data');
+        if (data.length == 0)
+            throw new Error("cannot find data element");
+
+        var body = $(self.get_element()).find('>.body');
+        if (body.length == 0)
+            throw new Error("cannot find body element");
+
+        Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(function (s, a) {
+            self._onsubmit();
         });
 
-        // initiate server request
-        var cb = function (args) {
-            self.sendCommandsEnd(args, wh);
-        };
+        // generate new view
+        if (self._view == null) {
+            self._view = new NXKit.Web.View(body[0], function (data, cb) {
+                self.send(data, cb);
+            });
+        }
 
-        eval(self._push);
+        // update view with data, and remove data from resubmission
+        self._view.Receive(JSON.parse($(data).val()));
+        $(data).val('');
     },
 
-    sendCommandsEnd: function (result, cb) {
+    send: function (data, wh) {
         var self = this;
 
-        // result contains new save and data values
-        var args = JSON.parse(result);
-        $(self._save).val(args.Save);
+        // initiate server request
+        var cb = function (response) {
+            wh(response);
+        };
 
-        // send results to caller
-        cb(args.Data);
+        self.sendEval(data, cb);
+    },
+
+    sendEval: function (args, cb) {
+        this.sendEvalExec(JSON.stringify(args), function (_) { cb(JSON.parse(_)); });
+    },
+
+    sendEvalExec: function (args, cb) {
+        eval(this._push);
     },
 
 };

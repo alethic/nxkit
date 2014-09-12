@@ -1,23 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
+using NXKit.Serialization;
 using NXKit.Xml;
 
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}repeat")]
+    [Extension("{http://www.w3.org/2002/xforms}repeat")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
+    [Remote]
     public class Repeat :
         ElementExtension,
         IOnInit,
         IOnRefresh
     {
 
-        readonly NXDocumentHost host;
+        readonly AnnotationSerializer serializer;
         readonly RepeatAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<Binding> binding;
@@ -31,15 +36,15 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="host"></param>
         /// <param name="element"></param>
-        public Repeat(NXDocumentHost host, XElement element)
+        /// <param name="serializer"></param>
+        public Repeat(XElement element, AnnotationSerializer serializer)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(serializer != null);
 
-            this.host = host;
+            this.serializer = serializer;
             this.attributes = new RepeatAttributes(Element);
             this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
             this.binding = new Lazy<Binding>(() => bindingNode.Value.Binding);
@@ -67,6 +72,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets or sets the current repeat index.
         /// </summary>
+        [Remote]
         public int Index
         {
             get { return State.Index; }
@@ -107,7 +113,7 @@ namespace NXKit.XForms
                 Binding.Context != null)
                 if (listener == null)
                 {
-                    var target = Binding.Context.Instance.Element.Parent.Interface<IEventTarget>();
+                    var target = Binding.Context.Instance.Element.Parent.Interface<EventTarget>();
 
                     // find existing listener
                     listener =
@@ -118,8 +124,8 @@ namespace NXKit.XForms
                     if (listener == null)
                     {
                         listener = InterfaceEventListener.Create(Update);
-                        target.AddEventListener(Events.Insert, listener, true);
-                        target.AddEventListener(Events.Delete, listener, true);
+                        target.Register(Events.Insert, listener, true);
+                        target.Register(Events.Delete, listener, true);
                     }
                 }
 
@@ -170,10 +176,6 @@ namespace NXKit.XForms
                     .Except(nodes)
                     .ToArray();
 
-                // initialize any object ids (seems to fix a bug that comes up with object IDs being changed)
-                foreach (var node in added.DescendantNodesAndSelf())
-                    node.GetObjectId();
-
                 // model-construct-done sequence applied to new children
                 foreach (var node in added)
                     foreach (var i in GetAllExtensions<IOnRefresh>(node))
@@ -189,7 +191,6 @@ namespace NXKit.XForms
                     foreach (var i in GetAllExtensions<IOnRefresh>(node))
                         i.Refresh();
             }
-
 
             // restore or reset index
             var length = Element.Elements().Count();
@@ -236,7 +237,7 @@ namespace NXKit.XForms
             var xml = Binding.ModelItem.Instance.State.Document.ResolveObjectId(item.ModelObjectId);
             if (xml == null)
             {
-                var d = NXKit.Serialization.XNodeAnnotationSerializer.Serialize(Binding.ModelItem.Instance.State.Document);
+                var d = serializer.Serialize(Binding.ModelItem.Instance.State.Document);
                 var s = d.ToString();
                 var l = Binding.ModelItem.Instance.State.Document.ToString();
                 throw new InvalidOperationException();

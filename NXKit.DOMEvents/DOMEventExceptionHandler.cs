@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 
 using NXKit.Composition;
 using NXKit.Xml;
@@ -9,7 +10,8 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Handles exceptions capable of raising events.
     /// </summary>
-    [ScopeExport(typeof(IExceptionHandler), Scope.Global)]
+    [Export(typeof(IExceptionHandler))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Global)]
     public class DOMEventExceptionHandler :
         IExceptionHandler
     {
@@ -20,11 +22,11 @@ namespace NXKit.DOMEvents
             var eventException = exception as DOMTargetEventException;
             if (eventException != null)
             {
-                var target = eventException.Target.InterfaceOrDefault<INXEventTarget>();
+                var target = eventException.Target.InterfaceOrDefault<EventTarget>();
                 if (target == null)
                     return false;
 
-                target.DispatchEvent(eventException.EventType, eventException.ContextInfo);
+                target.Dispatch(eventException.EventType, eventException.ContextInfo);
                 return true;
             }
 

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.IO;
 using NXKit.XForms.IO;
@@ -13,10 +15,11 @@ using NXKit.Xml;
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}submission")]
+    [Extension("{http://www.w3.org/2002/xforms}submission")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Submission :
         ElementExtension,
-        IEventDefaultActionHandler
+        IEventDefaultAction
     {
 
         /// <summary>
@@ -140,7 +143,7 @@ namespace NXKit.XForms
             this.context = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
         }
 
-        void IEventDefaultActionHandler.DefaultAction(Event evt)
+        void IEventDefaultAction.DefaultAction(Event evt)
         {
             switch (evt.Type)
             {
@@ -222,7 +225,7 @@ namespace NXKit.XForms
             // However, one of the two is mandatory as there is no default submission method.
             var method = GetMethod();
             if (method == null)
-                throw new DOMTargetEventException(Element, Events.SubmitError, "Unknown ModelMethd.");
+                throw new DOMTargetEventException(Element, Events.SubmitError, "Unknown ModelMethod.");
 
             // The resource element provides the submission URI, overriding the resource attribute and the action 
             // attribute. If a submission has more than one resource child element, the first resource element child 
@@ -244,7 +247,7 @@ namespace NXKit.XForms
                 node = null;
             else
             {
-                var evt = Element.Interface<INXEventTarget>().DispatchEvent(Events.SubmitSerialize, new SubmitSerializeContextInfo());
+                var evt = Element.Interface<EventTarget>().Dispatch(Events.SubmitSerialize, new SubmitSerializeContextInfo());
                 var ctx = evt.Context as SubmitSerializeContextInfo;
                 if (ctx != null &&
                     ctx.SubmissionBody != "")

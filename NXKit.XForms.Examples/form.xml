@@ -1,393 +1,557 @@
-﻿<f:form xmlns="http://www.w3.org/2002/xforms"
-        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
-        xmlns:xf="http://www.w3.org/2002/xforms"
-        xmlns:ev="http://www.w3.org/2001/xml-events"
-        xmlns:d="urn::data">
-    <model id="data">
-
-        <instance id="misc">
-            <data xmlns="urn::data">
-                <secondary>false</secondary>
-            </data>
-        </instance>
-
-        <bind ref="instance('misc')/d:secondary"
-              type="xsd:boolean" />
-
-        <instance id="primaryperson"
-                  src="primaryperson.xml" />
-
-        <bind ref="instance('primaryperson')">
-            <bind ref="d:heightfeet"
-                  required="true()"
-                  type="xsd:int"/>
-            <bind ref="d:heightinches"
-                  required="true()"
-                  type="xsd:int"/>
-            <bind ref="d:weight"
-                  required="true()"
-                  type="xsd:int"/>
-            <bind ref="d:gender"
-                  required="true()"
-                  type="xsd:string"/>
-            <bind ref="d:dateofbirth"
-                  required="true()"
-                  type="xsd:date"/>
-            <bind ref="d:socialsecuritynumber"
-                  required="true()"
-                  constraint="matches(., '^(\d{3}-\d{2}-\d{4})|(\d{9})$')"/>
-            <bind ref="d:telephone1"
-                  required="true()"
-                  constraint="string-length()>=10"/>
-            <bind ref="d:telephone2"
-                  required="false()"
-                  constraint=".='' or string-length()>=10" />
-        </bind>
-
-
-        <instance id="secondaryperson"
-                  src="secondaryperson.xml" />
-
-        <bind ref="instance('secondaryperson')"
-              id="secondary"
-              relevant="instance('misc')/d:secondary='true'">
-            <bind ref="d:heightfeet"
-                  required="true()"
-                  type="xsd:int"/>
-            <bind ref="d:heightinches"
-                  required="true()"
-                  type="xsd:int"/>
-            <bind ref="d:weight"
-                  required="true()"
-                  type="xsd:int"/>
-            <bind ref="d:dateofbirth"
-                  type="xsd:date"/>
-        </bind>
-
-        <instance id="primaryelections"
-                  src="primaryelections.xml" />
-
-        <instance id="secondaryelections"
-                  src="secondaryelections.xml" />
-
-        <bind ref="instance('secondaryelections')"
-              relevant="instance('misc')/d:secondary='true'" />
-
-        <instance id="primaryquestions"
-                  src="questions.xml" />
-
-        <bind ref="instance('primaryquestions')">
-            <bind ref="d:question/d:healthinfo"
-                  relevant="../d:answer='true' and ./@enable='true'">
-                <bind ref="./*"
-                      type="xsd:string" />
-            </bind>
-        </bind>
-
-        <instance id="secondaryquestions"
-                  src="questions.xml" />
-
-        <bind ref="instance('secondaryquestions')"
-              relevant="instance('misc')/d:secondary='true'">
-            <bind ref="//d:healthinfo"
-                  relevant="../d:answer='true' and ./@enable='true'" />
-            <bind ref="//d:healthinfo/*"
-                  type="xsd:string" />
-        </bind>
-
-        <instance id="relationships"
-                  src="relationships.xml" />
-
-        <instance id="beneficiaries"
-                  src="beneficiaries.xml" />
-
-        <bind ref="instance('beneficiaries')//d:percentage"
-              type="xsd:integer" />
-
-        <submission ref="instance('primaryperson')"
-                    method="put"
-                    action="primaryperson.xml" />
-        <submission ref="instance('secondaryperson')"
-                    method="put"
-                    action="secondaryperson.xml" />
-        <submission ref="instance('primaryelections')"
-                    method="put"
-                    action="primaryelections.xml" />
-        <submission ref="instance('secondaryelections')"
-                    method="put"
-                    action="secondaryelections.xml" />
-        <submission ref="instance('primaryquestions')"
-                    method="put"
-                    action="primaryquestions.xml" />
-        <submission ref="instance('secondaryquestions')"
-                    method="put"
-                    action="secondaryquestions.xml" />
-        <submission ref="instance('beneficiaries')"
-                    method="put"
-                    action="beneficiaries.xml" />
-    </model>
-    <f:section>
-        <label>Primary Enrollment</label>
-        <group ref="instance('primaryperson')">
-            <label>Additional Information About You</label>
-            <help>Complete the form by providing your physical characterists, personal information, and contact information.</help>
-            <group>
-                <label>Physical Characteristics</label>
-                <range ref="d:heightfeet"
-                       start="2"
-                       end="15"
-                       step="1">
-                    <label>Feet</label>
-                </range>
-                <range ref="d:heightinches"
-                       start="0"
-                       end="11"
-                       step="1">
-                    <label>Inches</label>
-                </range>
-                <range ref="d:weight"
-                       start="50"
-                       end="500"
-                       step="5">
-                    <label>Weight</label>
-                </range>
-                <select1 ref="d:gender">
-                    <label>Sex</label>
-                    <item>
-                        <label>Male</label>
-                        <value>M</value>
-                    </item>
-                    <item>
-                        <label>Female</label>
-                        <value>F</value>
-                    </item>
-                </select1>
-            </group>
-            <input ref="d:dateofbirth">
-                <label>Date of Birth</label>
-                <help>Provide your date of birth to continue.</help>
-                <hint appearance="minimal">mm/dd/yyyy</hint>
-            </input>
-            <input ref="d:socialsecuritynumber">
-                <label>Social Security Number</label>
-                <hint appearance="minimal">___-__-____</hint>
-                <alert>Your social security number is required to continue.</alert>
-            </input>
-            <group>
-                <label>Contact Information</label>
-                <input ref="d:telephone1">
-                    <label>Home Phone</label>
-                    <hint appearance="minimal">1 (___) ___-____</hint>
-                </input>
-                <input ref="d:telephone2">
-                    <label>Work Phone</label>
-                </input>
-            </group>
-        </group>
-        <group ref="instance('primaryelections')/d:term-life">
-            <label>Coverage Election</label>
-            <hint>Choose the type of coverage and amounts for which you are applying.</hint>
-            <select1 ref="d:coverage-amount"
-                     appearance="full">
-                <item>
-                    <label>$75,000</label>
-                    <value>75000</value>
-                </item>
-                <item>
-                    <label>$100,000</label>
-                    <value>100000</value>
-                </item>
-                <item>
-                    <label>$150,000</label>
-                    <value>150000</value>
-                </item>
-            </select1>
-        </group>
-        <group ref="instance('primaryquestions')">
-            <label>Health Questions</label>
-            <hint>Please answer the following questions by checking “Yes” or “No.”</hint>
-            <repeat ref="d:question">
-                <select1 ref="d:answer"
-                         incremental="true">
-                    <label ref="../d:text" />
-                    <item>
-                        <label>No</label>
-                        <value>false</value>
-                    </item>
-                    <item>
-                        <label>Yes</label>
-                        <value>true</value>
-                    </item>
-                </select1>
-                <group ref="d:healthinfo">
-                    <input ref="d:condition">
-                        <label>Condition</label>
-                    </input>
-                    <input ref="d:dates">
-                        <label>Dates</label>
-                    </input>
-                    <input ref="d:currentstatus">
-                        <label>Current Status</label>
-                    </input>
-                    <input ref="d:physicianname">
-                        <label>Physician Name</label>
-                    </input>
-                    <input ref="d:physicianaddress">
-                        <label>Physician Address</label>
-                    </input>
-                    <input ref="d:physicianphonenumber">
-                        <label>Physician Phone Number</label>
-                    </input>
-                </group>
-            </repeat>
-        </group>
-    </f:section>
-    <f:section>
-        <label appearance="compact">Spousal Enrollment</label>
-        <input ref="instance('misc')/d:secondary">
-            <label>Yes, I'd like to take advantage of this offer for my spouse or other partner or whatever and stuff and we will fill in the contents of the rest of this text later.</label>
-        </input>
-        <group ref="instance('secondaryperson')">
-            <label>Spouse Information</label>
-            <group>
-                <label>Name</label>
-                <input ref="d:firstname">
-                    <label>First</label>
-                </input>
-                <input ref="d:middlename">
-                    <label>Middle</label>
-                </input>
-                <input ref="d:lastname">
-                    <label>Last</label>
-                </input>
-            </group>
-            <group>
-                <label>Physical Characteristics</label>
-                <range ref="d:heightfeet"
-                       start="2"
-                       end="15"
-                       step="1">
-                    <label>Feet</label>
-                </range>
-                <range ref="d:heightinches"
-                       start="0"
-                       end="11"
-                       step="1">
-                    <label>Inches</label>
-                </range>
-                <range ref="d:weight"
-                       start="50"
-                       end="500"
-                       step="5">
-                    <label>Weight</label>
-                </range>
-                <select1 ref="d:gender">
-                    <label>Sex</label>
-                    <item>
-                        <label>Male</label>
-                        <value>M</value>
-                    </item>
-                    <item>
-                        <label>Female</label>
-                        <value>F</value>
-                    </item>
-                </select1>
-            </group>
-            <input ref="d:dateofbirth">
-                <label>Date of Birth</label>
-            </input>
-            <input ref="d:socialsecuritynumber">
-                <label>Social Security Number</label>
-            </input>
-        </group>
-        <group ref="instance('secondaryelections')/d:term-life">
-            <label>Coverage Selection</label>
-            <hint>Choose the type of coverage and amounts for which you are applying.</hint>
-            <select1 ref="d:coverage-amount">
-                <item>
-                    <label>$75,000</label>
-                    <value>75000</value>
-                </item>
-                <item>
-                    <label>$100,000</label>
-                    <value>100000</value>
-                </item>
-                <item>
-                    <label>$150,000</label>
-                    <value>150000</value>
-                </item>
-            </select1>
-        </group>
-        <group ref="instance('secondaryquestions')">
-            <label>Health Questions</label>
-            <hint>Please answer the following questions by checking “Yes” or “No.”</hint>
-            <repeat ref="d:question">
-                <select1 ref="d:answer"
-                         incremental="true">
-                    <label ref="../d:text" />
-                    <item>
-                        <label>No</label>
-                        <value>false</value>
-                    </item>
-                    <item>
-                        <label>Yes</label>
-                        <value>true</value>
-                    </item>
-                </select1>
-                <group ref="d:healthinfo">
-                    <input ref="d:condition">
-                        <label>Condition</label>
-                    </input>
-                    <input ref="d:dates">
-                        <label>Dates</label>
-                    </input>
-                    <input ref="d:currentstatus">
-                        <label>Current Status</label>
-                    </input>
-                    <input ref="d:physicianname">
-                        <label>Physician Name</label>
-                    </input>
-                    <input ref="d:physicianaddress">
-                        <label>Physician Address</label>
-                    </input>
-                    <input ref="d:physicianphonenumber">
-                        <label>Physician Phone Number</label>
-                    </input>
-                </group>
-            </repeat>
-        </group>
-    </f:section>
-    <f:section>
-        <label>Beneficiaries</label>
-        <repeat ref="instance('beneficiaries')/d:beneficiary">
-            <input ref="d:firstname"
-                   appearance="minimal">
-                <label />
-            </input>
-            <input ref="d:middlename"
-                   appearance="minimal">
-                <label />
-            </input>
-            <input ref="d:lastname"
-                   appearance="minimal">
-                <label />
-            </input>
-            <input ref="d:socialsecuritynumber"
-                   appearance="minimal">
-                <label />
-            </input>
-            <input ref="d:telephone"
-                   appearance="minimal">
-                <label />
-            </input>
-            <input ref="d:relationship" />
-            <range ref="d:percentage"
-                   start="0"
-                   step="5"
-                   end="100">
-                <label />
-            </range>
-        </repeat>
-    </f:section>
+﻿<f:form xmlns="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:f="http://schemas.nxkit.org/2014/xforms-layout" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:d="urn::data" id="form">
+  <xf:model id="data">
+    <xf:instance id="misc">
+      <data xmlns="urn::data">
+        <secondary>false</secondary>
+        <secondary_relevant />
+      </data>
+    </xf:instance>
+    <xf:bind ref="instance('misc')">
+      <xf:bind ref="d:secondary" type="xsd:boolean" />
+      <xf:bind ref="d:secondary_relevant" relevant="../d:secondary='true'" />
+    </xf:bind>
+    <xf:instance id="primaryperson" src="primaryperson.xml" />
+    <xf:bind ref="instance('primaryperson')">
+      <xf:bind ref="d:heightfeet" required="true()" type="xsd:integer" constraint=". &gt;= 2 and . &lt;= 10" />
+      <xf:bind ref="d:heightinches" required="true()" type="xsd:integer" constraint=". &gt;= 0 and . &lt;= 11" />
+      <xf:bind ref="d:weight" required="true()" type="xsd:integer" constraint=". &gt;= 20 and . &lt;= 1000" />
+      <xf:bind ref="d:gender" required="true()" type="xsd:string" />
+      <xf:bind ref="d:smokerstatus" calculate="instance('primaryquestions')/d:question[1]/d:answer='true' " />
+      <xf:bind ref="d:dateofbirth" required="true()" type="xsd:date" />
+      <xf:bind ref="d:socialsecuritynumber" required="true()" constraint="matches(., '^(\d{3}-\d{2}-\d{4})|(\d{9})$')" />
+      <xf:bind ref="d:telephone1" required="true()" constraint="string-length()&gt;=10" />
+      <xf:bind ref="d:telephone2" required="false()" constraint=".='' or string-length()&gt;=10" />
+    </xf:bind>
+    <xf:instance id="secondaryperson" src="secondaryperson.xml" />
+    <xf:bind ref="instance('secondaryperson')" id="secondary">
+      <xf:bind ref="./*" relevant="instance('misc')/d:secondary='true'" />
+      <xf:bind ref="d:heightfeet" required="true()" type="xsd:integer" />
+      <xf:bind ref="d:heightinches" required="true()" type="xsd:integer" />
+      <xf:bind ref="d:weight" required="true()" type="xsd:integer" />
+      <xf:bind ref="d:dateofbirth" type="xsd:date" required="true()" />
+      <xf:bind ref="d:smokerstatus" calculate="instance('secondaryquestions')/d:question[1]/d:answer='true' " />
+    </xf:bind>
+    <xf:instance id="primaryelections" src="primaryelections.xml" />
+    <xf:bind ref="instance('primaryelections')">
+      <xf:bind ref="d:term-life/d:coverage-amount" type="xsd:integer" required="true()" constraint="number(.) &gt; 0" />
+      <xf:bind ref="d:dateofbirth" calculate="instance('primaryperson')/d:dateofbirth" type="xsd:date" />
+      <xf:bind ref="d:age" calculate="               if(  string(../d:dateofbirth)!='',  number(substring(xf:now(), 1, 4)) - number(substring(../d:dateofbirth, 1, 4)) +   if(    number(substring(xf:now(), 6, 2)) &lt; number(substring(../d:dateofbirth, 6, 2)),    -1,     if(     number(substring(xf:now(), 6, 2))    = number(substring(../d:dateofbirth, 6, 2)) and      number(substring(xf:now(), 9, 2)) &lt; number(substring(../d:dateofbirth, 9, 2)),     -1,      0    )   ),  '' )                     " />
+    </xf:bind>
+    <xf:instance id="secondaryelections" src="secondaryelections.xml" />
+    <xf:bind ref="instance('secondaryelections')">
+      <xf:bind ref="./*" relevant="instance('misc')/d:secondary='true'" />
+      <xf:bind ref="d:term-life/d:elected" type="xsd:boolean" calculate="instance('misc')/d:secondary" />
+      <xf:bind ref="d:term-life/d:coverage-amount" type="xsd:integer" required="true()" constraint="number(.) &gt; 0" />
+      <xf:bind ref="d:dateofbirth" calculate="instance('secondaryperson')/d:dateofbirth" type="xsd:date" />
+      <xf:bind ref="d:gender" calculate="instance('secondaryperson')/d:gender" />
+      <xf:bind ref="d:smokerstatus" calculate="instance('secondaryperson')/d:smokerstatus" />
+      <xf:bind ref="d:age" calculate="               if(  string(../d:dateofbirth)!='',  number(substring(xf:now(), 1, 4)) - number(substring(../d:dateofbirth, 1, 4)) +   if(    number(substring(xf:now(), 6, 2)) &lt; number(substring(../d:dateofbirth, 6, 2)),    -1,     if(     number(substring(xf:now(), 6, 2))    = number(substring(../d:dateofbirth, 6, 2)) and      number(substring(xf:now(), 9, 2)) &lt; number(substring(../d:dateofbirth, 9, 2)),     -1,      0    )   ),  '' )                     " />
+    </xf:bind>
+    <xf:instance id="primaryquestions" src="primaryquestions.xml" />
+    <xf:bind ref="instance('primaryquestions')">
+      <xf:bind ref="d:question/d:answer" required="true()" type="xsd:boolean" />
+      <xf:bind ref="d:question/d:healthinfo" relevant="../d:answer='true' and ./@enable='true'">
+        <xf:bind ref="./*" type="xsd:string" />
+      </xf:bind>
+    </xf:bind>
+    <xf:instance id="secondaryquestions" src="secondaryquestions.xml" />
+    <xf:bind ref="instance('secondaryquestions')">
+      <xf:bind ref="./*" relevant="instance('misc')/d:secondary='true'" />
+      <xf:bind ref="d:question/d:answer" required="true()" type="xsd:boolean" />
+      <xf:bind ref="d:question/d:healthinfo" relevant="../d:answer='true' and ./@enable='true'">
+        <xf:bind ref="./*" type="xsd:string" />
+      </xf:bind>
+    </xf:bind>
+    <xf:instance id="relationships" src="relationships.xml" />
+    <xf:instance id="beneficiaries" src="beneficiaries.xml" />
+    <xf:bind ref="instance('beneficiaries')">
+      <xf:bind ref="d:beneficiary">
+        <xf:bind ref="d:firstname" type="xsd:string" required="true()" />
+        <xf:bind ref="d:lastname" type="xsd:string" required="true()" />
+        <xf:bind ref="d:percentage" type="xsd:integer" />
+        <xf:bind ref="d:socialsecuritynumber" constraint="matches(., '^(\d{3}-\d{2}-\d{4})|(\d{9})$')" />
+        <xf:bind ref="d:telephone1" required="false()" constraint="string-length()&gt;=10" />
+        <xf:bind ref="d:telephone2" required="false()" constraint=".='' or string-length()&gt;=10" />
+      </xf:bind>
+    </xf:bind>
+    <xf:submission id="primaryperson_submission" ref="instance('primaryperson')" method="put" action="primaryperson.xml">
+      <xf:send ev:event="xforms-submit-done" submission="secondaryperson_submission" />
+    </xf:submission>
+    <xf:submission id="secondaryperson_submission" ref="instance('secondaryperson')" method="put" action="secondaryperson.xml">
+      <xf:send ev:event="xforms-submit-done" submission="primaryelections_submission" />
+    </xf:submission>
+    <xf:submission id="primaryelections_submission" ref="instance('primaryelections')" method="put" action="primaryelections.xml">
+      <xf:send ev:event="xforms-submit-done" submission="secondaryelections_submission" />
+    </xf:submission>
+    <xf:submission id="secondaryelections_submission" ref="instance('secondaryelections')" method="put" action="secondaryelections.xml">
+      <xf:send ev:event="xforms-submit-done" submission="primaryquestions_submission" />
+    </xf:submission>
+    <xf:submission id="primaryquestions_submission" ref="instance('primaryquestions')" method="put" action="primaryquestions.xml">
+      <xf:send ev:event="xforms-submit-done" submission="secondaryquestions_submission" />
+    </xf:submission>
+    <xf:submission id="secondaryquestions_submission" ref="instance('secondaryquestions')" method="put" action="secondaryquestions.xml">
+      <xf:send ev:event="xforms-submit-done" submission="beneficiaries_submission" />
+    </xf:submission>
+    <xf:submission id="beneficiaries_submission" ref="instance('beneficiaries')" method="put" action="beneficiaries.xml">
+      <xf:dispatch ev:event="xforms-submit-done" name="isis-form-next" targetid="form" bubbles="true" />
+    </xf:submission>
+  </xf:model>
+  <f:section>
+    <xf:label>Apply Online for Term Life Coverage, TODAY!</xf:label>
+    <f:segment>
+      <f:p>Ready to take the next step in securing your family's financial future? Your credit union has made it easy by offering group term life insurance at competitive rates through The Prudential Insurance Company of America. </f:p>
+      <f:list>
+        <xf:label>The online application process is quick and easy. Through this site, you may:</xf:label>
+        <f:item>Review all the features of your plan</f:item>
+        <f:item>Calculate premium for various amounts of coverage</f:item>
+      </f:list>
+      <f:p>Before beginning, please take a few minutes to gather personal health information like your doctor's name and address, details of current or past medical conditions and personal information about those you wish to name as a beneficiary.</f:p>
+      <f:p>At Prudential, we know this is a big life decision and we look forward to providing you the best coverage with the least amount of effort.</f:p>
+    </f:segment>
+  </f:section>
+  <f:section>
+    <xf:label>Primary Enrollment</xf:label>
+    <xf:group ref="instance('primaryperson')">
+      <xf:label>Additional Information About You</xf:label>
+      <xf:help>Complete the form by providing your physical characterists, personal information, and contact information.</xf:help>
+      <xf:input ref="d:dateofbirth">
+        <xf:label>Date of Birth</xf:label>
+        <xf:help>Provide your date of birth to continue.</xf:help>
+        <xf:hint appearance="minimal">mm/dd/yyyy</xf:hint>
+      </xf:input>
+      <xf:input ref="d:socialsecuritynumber">
+        <xf:label>Social Security Number</xf:label>
+        <xf:hint appearance="minimal">___-__-____</xf:hint>
+        <xf:alert>Your social security number is required to continue.</xf:alert>
+      </xf:input>
+      <xf:group appearance="minimal">
+        <xf:label>Physical Characteristics</xf:label>
+        <xf:range ref="d:heightfeet" start="2" end="15" step="1">
+          <xf:label>Feet</xf:label>
+        </xf:range>
+        <xf:range ref="d:heightinches" start="0" end="11" step="1">
+          <xf:label>Inches</xf:label>
+        </xf:range>
+        <xf:range ref="d:weight" start="50" end="500" step="5">
+          <xf:label>Weight</xf:label>
+        </xf:range>
+        <xf:select1 ref="d:gender">
+          <xf:label>Sex</xf:label>
+          <xf:item>
+            <xf:label>Male</xf:label>
+            <xf:value>M</xf:value>
+          </xf:item>
+          <xf:item>
+            <xf:label>Female</xf:label>
+            <xf:value>F</xf:value>
+          </xf:item>
+        </xf:select1>
+      </xf:group>
+      <xf:group appearance="minimal">
+        <xf:label>Contact Information</xf:label>
+        <xf:input ref="d:telephone1">
+          <xf:label>Home Phone</xf:label>
+          <xf:hint appearance="minimal">1 (___) ___-____</xf:hint>
+        </xf:input>
+        <xf:input ref="d:telephone2">
+          <xf:label>Work Phone</xf:label>
+        </xf:input>
+      </xf:group>
+    </xf:group>
+    <xf:group ref="instance('primaryelections')/d:term-life">
+      <xf:label>Coverage Election</xf:label>
+      <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
+      <f:p>The rates shown are available to eligible accountholders and spouses under age 70, subject to evidence of insurability acceptable to the insurer.
+                Rates increase at age 30 and as you enter each 5-year age band thereafter. Coverage reduces at age 65 to 50% of the previous amount and again by 50% at age 70.
+                Insurance coverage terminates at age 75. Male rates apply for both accountholders and spouses in MT.</f:p>
+      <xf:select1 ref="d:coverage-amount" appearance="full">
+        <xf:label>Coverage Amount</xf:label>
+        <xf:item>
+          <xf:label>$75,000</xf:label>
+          <xf:value>75000</xf:value>
+        </xf:item>
+        <xf:item>
+          <xf:label>$100,000</xf:label>
+          <xf:value>100000</xf:value>
+        </xf:item>
+        <xf:item>
+          <xf:label>$150,000</xf:label>
+          <xf:value>150000</xf:value>
+        </xf:item>
+      </xf:select1>
+      <f:table>
+        <xf:label>Monthly Rates per $10,000 of coverage</xf:label>
+        <f:table-row>
+          <f:table-cell>Age</f:table-cell>
+          <f:table-cell>Non-Tobacco</f:table-cell>
+          <f:table-cell>Tobacco</f:table-cell>
+          <f:table-cell>Non-Tobacco</f:table-cell>
+          <f:table-cell>Tobacco</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>Under 30</f:table-cell>
+          <f:table-cell>$ 1.17</f:table-cell>
+          <f:table-cell>$ 2.05</f:table-cell>
+          <f:table-cell>$ 0.72</f:table-cell>
+          <f:table-cell>$ 1.23</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>30-34</f:table-cell>
+          <f:table-cell>$ 1.14</f:table-cell>
+          <f:table-cell>$ 2.00</f:table-cell>
+          <f:table-cell>$ 0.89</f:table-cell>
+          <f:table-cell>$ 1.56</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>35-39</f:table-cell>
+          <f:table-cell>$ 1.41</f:table-cell>
+          <f:table-cell>$ 2.47</f:table-cell>
+          <f:table-cell>$ 1.16</f:table-cell>
+          <f:table-cell>$ 2.03</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>40-44</f:table-cell>
+          <f:table-cell>$ 2.12</f:table-cell>
+          <f:table-cell>$ 3.71</f:table-cell>
+          <f:table-cell>$ 1.54</f:table-cell>
+          <f:table-cell>$ 2.70</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>45-49</f:table-cell>
+          <f:table-cell>$ 3.06</f:table-cell>
+          <f:table-cell>$ 5.36</f:table-cell>
+          <f:table-cell>$ 2.49</f:table-cell>
+          <f:table-cell>$ 4.36</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>50-54</f:table-cell>
+          <f:table-cell>$ 4.83</f:table-cell>
+          <f:table-cell>$ 8.45</f:table-cell>
+          <f:table-cell>$ 4.23</f:table-cell>
+          <f:table-cell>$ 7.40</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>55-59</f:table-cell>
+          <f:table-cell>$ 8.11</f:table-cell>
+          <f:table-cell>$ 14.19</f:table-cell>
+          <f:table-cell>$ 5.77</f:table-cell>
+          <f:table-cell>$ 10.97</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>60-64</f:table-cell>
+          <f:table-cell>$ 14.20</f:table-cell>
+          <f:table-cell>$ 24.85</f:table-cell>
+          <f:table-cell>$ 9.44</f:table-cell>
+          <f:table-cell>$ 16.74</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>65-69</f:table-cell>
+          <f:table-cell>$ 24.85</f:table-cell>
+          <f:table-cell>$ 43.49</f:table-cell>
+          <f:table-cell>$ 13.62</f:table-cell>
+          <f:table-cell>$ 23.56</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>70-74*</f:table-cell>
+          <f:table-cell>$ 39.80</f:table-cell>
+          <f:table-cell>$ 62.78</f:table-cell>
+          <f:table-cell>$ 19.28</f:table-cell>
+          <f:table-cell>$ 29.93</f:table-cell>
+        </f:table-row>
+      </f:table>
+      <f:p>* Renewal rates only</f:p>
+    </xf:group>
+    <xf:group ref="instance('primaryquestions')">
+      <xf:label>Health Questions</xf:label>
+      <f:p>Please answer the following questions by checking “Yes” or “No.”</f:p>
+      <f:p>If you answer “Yes” to any questions 2-4, you will be asked to provide full details just below the question.</f:p>
+      <xf:repeat ref="d:question">
+        <xf:group>
+          <xf:select1 ref="d:answer" appearance="full" incremental="true">
+            <xf:label ref="../d:text" />
+            <xf:item>
+              <xf:label>provide your answer...</xf:label>
+              <xf:value />
+            </xf:item>
+            <xf:item>
+              <xf:label>No</xf:label>
+              <xf:value>false</xf:value>
+            </xf:item>
+            <xf:item>
+              <xf:label>Yes</xf:label>
+              <xf:value>true</xf:value>
+            </xf:item>
+          </xf:select1>
+          <xf:group ref="d:healthinfo" appearance="full">
+            <xf:input ref="d:condition">
+              <xf:label>Condition</xf:label>
+            </xf:input>
+            <xf:input ref="d:dates">
+              <xf:label>Dates</xf:label>
+            </xf:input>
+            <xf:input ref="d:currentstatus">
+              <xf:label>Current Status</xf:label>
+            </xf:input>
+            <xf:input ref="d:physicianname">
+              <xf:label>Physician Name</xf:label>
+            </xf:input>
+            <xf:input ref="d:physicianaddress">
+              <xf:label>Physician Address</xf:label>
+            </xf:input>
+            <xf:input ref="d:physicianphonenumber">
+              <xf:label>Physician Phone Number</xf:label>
+            </xf:input>
+          </xf:group>
+        </xf:group>
+      </xf:repeat>
+    </xf:group>
+  </f:section>
+  <f:section>
+    <xf:label appearance="compact">Spousal Enrollment</xf:label>
+    <xf:input ref="instance('misc')/d:secondary">
+      <xf:label>Yes, I'd like to take advantage of this offer for my spouse or other partner or whatever and stuff and we will fill in the contents of the rest of this text later.</xf:label>
+    </xf:input>
+    <xf:group ref="instance('misc')/d:secondary_relevant">
+      <xf:label>Spouse Information</xf:label>
+      <xf:group context="instance('secondaryperson')">
+        <xf:label>Name</xf:label>
+        <xf:input ref="d:firstname">
+          <xf:label>First</xf:label>
+        </xf:input>
+        <xf:input ref="d:middlename">
+          <xf:label>Middle</xf:label>
+        </xf:input>
+        <xf:input ref="d:lastname">
+          <xf:label>Last</xf:label>
+        </xf:input>
+      </xf:group>
+      <xf:group context="instance('secondaryperson')">
+        <xf:label>Physical Characteristics</xf:label>
+        <xf:range ref="d:heightfeet" start="2" end="15" step="1">
+          <xf:label>Feet</xf:label>
+        </xf:range>
+        <xf:range ref="d:heightinches" start="0" end="11" step="1">
+          <xf:label>Inches</xf:label>
+        </xf:range>
+        <xf:range ref="d:weight" start="50" end="500" step="5">
+          <xf:label>Weight</xf:label>
+        </xf:range>
+        <xf:select1 context="instance('secondaryperson')" ref="d:gender">
+          <xf:label>Sex</xf:label>
+          <xf:item>
+            <xf:label>Male</xf:label>
+            <xf:value>M</xf:value>
+          </xf:item>
+          <xf:item>
+            <xf:label>Female</xf:label>
+            <xf:value>F</xf:value>
+          </xf:item>
+        </xf:select1>
+      </xf:group>
+      <xf:input context="instance('secondaryperson')" ref="d:dateofbirth">
+        <xf:label>Date of Birth</xf:label>
+      </xf:input>
+      <xf:input context="instance('secondaryperson')" ref="d:socialsecuritynumber">
+        <xf:label>Social Security Number</xf:label>
+      </xf:input>
+    </xf:group>
+    <xf:group ref="instance('misc')/d:secondary_relevant">
+      <xf:label>Coverage Election</xf:label>
+      <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
+      <f:p>The rates shown are available to eligible accountholders and spouses under age 70, subject to evidence of insurability acceptable to the insurer.
+                Rates increase at age 30 and as you enter each 5-year age band thereafter. Coverage reduces at age 65 to 50% of the previous amount and again by 50% at age 70.
+                Insurance coverage terminates at age 75. Male rates apply for both accountholders and spouses in MT.</f:p>
+      <xf:select1 context="instance('secondaryelections')/d:term-life" ref="d:coverage-amount">
+        <xf:label>Coverage Amount</xf:label>
+        <xf:item>
+          <xf:label>$75,000</xf:label>
+          <xf:value>75000</xf:value>
+        </xf:item>
+        <xf:item>
+          <xf:label>$100,000</xf:label>
+          <xf:value>100000</xf:value>
+        </xf:item>
+        <xf:item>
+          <xf:label>$150,000</xf:label>
+          <xf:value>150000</xf:value>
+        </xf:item>
+      </xf:select1>
+      <f:table>
+        <f:table-row>
+          <f:table-cell>Age</f:table-cell>
+          <f:table-cell>Non-Tobacco</f:table-cell>
+          <f:table-cell>Tobacco</f:table-cell>
+          <f:table-cell>Non-Tobacco</f:table-cell>
+          <f:table-cell>Tobacco</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>Under 30</f:table-cell>
+          <f:table-cell>$ 1.17</f:table-cell>
+          <f:table-cell>$ 2.05</f:table-cell>
+          <f:table-cell>$ 0.72</f:table-cell>
+          <f:table-cell>$ 1.23</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>30-34</f:table-cell>
+          <f:table-cell>$ 1.14</f:table-cell>
+          <f:table-cell>$ 2.00</f:table-cell>
+          <f:table-cell>$ 0.89</f:table-cell>
+          <f:table-cell>$ 1.56</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>35-39</f:table-cell>
+          <f:table-cell>$ 1.41</f:table-cell>
+          <f:table-cell> $2.47</f:table-cell>
+          <f:table-cell> $1.16</f:table-cell>
+          <f:table-cell> $2.03</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>40-44</f:table-cell>
+          <f:table-cell>$ 2.12</f:table-cell>
+          <f:table-cell> $3.71</f:table-cell>
+          <f:table-cell> $1.54</f:table-cell>
+          <f:table-cell> $2.70</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>45-49</f:table-cell>
+          <f:table-cell>$ 3.06</f:table-cell>
+          <f:table-cell> $5.36</f:table-cell>
+          <f:table-cell> $2.49</f:table-cell>
+          <f:table-cell> $4.36</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>50-54</f:table-cell>
+          <f:table-cell>$ 4.83</f:table-cell>
+          <f:table-cell> $8.45</f:table-cell>
+          <f:table-cell> $4.23</f:table-cell>
+          <f:table-cell> $7.40</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>55-59</f:table-cell>
+          <f:table-cell>$ 8.11</f:table-cell>
+          <f:table-cell> $14.19</f:table-cell>
+          <f:table-cell> $5.77</f:table-cell>
+          <f:table-cell> $10.97</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>60-64</f:table-cell>
+          <f:table-cell>$ 14.20</f:table-cell>
+          <f:table-cell> $24.85</f:table-cell>
+          <f:table-cell> $9.44</f:table-cell>
+          <f:table-cell> $16.74</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>65-69</f:table-cell>
+          <f:table-cell>$ 24.85</f:table-cell>
+          <f:table-cell> $43.49</f:table-cell>
+          <f:table-cell> $13.62</f:table-cell>
+          <f:table-cell> $23.56</f:table-cell>
+        </f:table-row>
+        <f:table-row>
+          <f:table-cell>70-74*</f:table-cell>
+          <f:table-cell>$ 39.80</f:table-cell>
+          <f:table-cell>$ 62.78</f:table-cell>
+          <f:table-cell>$ 19.28</f:table-cell>
+          <f:table-cell>$ 29.93</f:table-cell>
+        </f:table-row>
+      </f:table>
+    </xf:group>
+    <xf:group ref="instance('misc')/d:secondary_relevant">
+      <xf:label>Health Questions</xf:label>
+      <xf:hint>Please answer the following questions by checking “Yes” or “No.”</xf:hint>
+      <xf:repeat ref="instance('secondaryquestions')/d:question">
+        <xf:group>
+          <xf:select1 ref="d:answer" incremental="true">
+            <xf:label ref="../d:text" />
+            <xf:item>
+              <xf:label>provide your answer...</xf:label>
+              <xf:value />
+            </xf:item>
+            <xf:item>
+              <xf:label>No</xf:label>
+              <xf:value>false</xf:value>
+            </xf:item>
+            <xf:item>
+              <xf:label>Yes</xf:label>
+              <xf:value>true</xf:value>
+            </xf:item>
+          </xf:select1>
+        </xf:group>
+        <xf:group ref="d:healthinfo">
+          <xf:input ref="d:condition">
+            <xf:label>Condition</xf:label>
+          </xf:input>
+          <xf:input ref="d:dates">
+            <xf:label>Dates</xf:label>
+          </xf:input>
+          <xf:input ref="d:currentstatus">
+            <xf:label>Current Status</xf:label>
+          </xf:input>
+          <xf:input ref="d:physicianname">
+            <xf:label>Physician Name</xf:label>
+          </xf:input>
+          <xf:input ref="d:physicianaddress">
+            <xf:label>Physician Address</xf:label>
+          </xf:input>
+          <xf:input ref="d:physicianphonenumber">
+            <xf:label>Physician Phone Number</xf:label>
+          </xf:input>
+        </xf:group>
+      </xf:repeat>
+    </xf:group>
+  </f:section>
+  <f:section>
+    <xf:label>Beneficiaries</xf:label>
+    <f:p>You may name anyone or any entity as your beneficiary. Common designations include individuals, estates, corporation/organizations and trust.
+        <f:strong>Payment will be made to the named beneficiary. If there is no named beneficiary, or the named beneficiary predeceased the insured, settlement will be made in accordance with the terms of your Group Contract</f:strong></f:p>
+    <xf:trigger>
+      <xf:label>
+        <f:icon name="add" /> Add New Benericiary</xf:label>
+      <xf:insert context="instance('beneficiaries')" ref="d:beneficiary" origin="d:template/d:beneficiary" at="index('repeatBeneficiaries')" position="after" ev:event="DOMActivate" />
+    </xf:trigger>
+    <xf:repeat context="instance('beneficiaries')" ref="d:beneficiary">
+      <xf:group>
+        <xf:label>Beneficiary #<xf:output value="position()" /></xf:label>
+        <xf:group>
+          <xf:label appearance="compact">Name</xf:label>
+          <xf:input ref="d:firstname" appearance="minimal">
+            <xf:label>First</xf:label>
+          </xf:input>
+          <xf:input ref="d:middlename" appearance="compact">
+            <xf:label>Middle</xf:label>
+          </xf:input>
+          <xf:input ref="d:lastname" appearance="minimal">
+            <xf:label>Last</xf:label>
+          </xf:input>
+        </xf:group>
+        <xf:input ref="d:socialsecuritynumber">
+          <xf:label>Social Security Number</xf:label>
+        </xf:input>
+        <xf:input ref="d:telephone">
+          <xf:label>Telephone</xf:label>
+        </xf:input>
+        <xf:input ref="d:relationship">
+          <xf:label>Relationship</xf:label>
+        </xf:input>
+        <xf:range ref="d:percentage" start="0" step="5" end="100">
+          <xf:label>Percentage</xf:label>
+        </xf:range>
+        <xf:trigger>
+          <xf:label>
+            <f:icon name="remove" /> Delete</xf:label>
+          <xf:delete ev:event="DOMActivate" />
+        </xf:trigger>
+      </xf:group>
+    </xf:repeat>
+  </f:section>
+  <xf:trigger>
+    <xf:label>
+      <f:icon name="left" /> Back
+        </xf:label>
+    <xf:dispatch ev:event="DOMActivate" name="isis-form-previous" targetid="form" />
+  </xf:trigger>
+  <xf:trigger>
+    <xf:label>Next <f:icon name="right" /></xf:label>
+    <xf:send ev:event="DOMActivate" submission="primaryperson_submission" />
+  </xf:trigger>
 </f:form>

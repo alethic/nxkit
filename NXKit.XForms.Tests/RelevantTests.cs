@@ -31,9 +31,9 @@ namespace NXKit.XForms.Tests
     </xf:group>
 </unknown>");
 
-        NXDocumentHost GetSampleDocument()
+        Document GetSampleDocument()
         {
-            return NXDocumentHost.Load(Sample);
+            return Document.Load(Sample);
         }
 
         [TestMethod]
@@ -77,13 +77,13 @@ namespace NXKit.XForms.Tests
                 {
                     Input = i.Interface<Input>(),
                     BindingNode = i.Interface<IUIBindingNode>(),
-                    Target = i.Interface<INXEventTarget>(),
+                    Target = i.Interface<EventTarget>(),
                 })
                 .Where(i => i.Input != null)
                 .ToList();
 
             int c = 0;
-            inputs[0].Target.AddEventHandler("xforms-value-changed", i => c++);
+            inputs[0].Target.AddEventDelegate("xforms-value-changed", i => c++);
             inputs[0].BindingNode.UIBinding.Value = "false";
             inputs[0].BindingNode.UIBinding.Value = "false";
             d.Invoke();
@@ -106,13 +106,13 @@ namespace NXKit.XForms.Tests
                 {
                     Input = i.Interface<Input>(),
                     BindingNode = i.Interface<IUIBindingNode>(),
-                    Target = i.Interface<INXEventTarget>(),
+                    Target = i.Interface<EventTarget>(),
                 })
                 .Where(i => i.Input != null)
                 .ToList();
 
             int c = 0;
-            inputs[1].Target.AddEventHandler("xforms-disabled", i => c++);
+            inputs[1].Target.AddEventDelegate("xforms-disabled", i => c++);
             inputs[0].BindingNode.UIBinding.Value = "false";
             inputs[0].BindingNode.UIBinding.Value = "false";
             d.Invoke();
@@ -131,13 +131,13 @@ namespace NXKit.XForms.Tests
                 {
                     Input = i.Interface<Input>(),
                     BindingNode = i.Interface<IUIBindingNode>(),
-                    Target = i.Interface<INXEventTarget>(),
+                    Target = i.Interface<EventTarget>(),
                 })
                 .Where(i => i.Input != null)
                 .ToList();
 
             int c = 0;
-            inputs[1].Target.AddEventHandler("xforms-enabled", i => c++);
+            inputs[1].Target.AddEventDelegate("xforms-enabled", i => c++);
             inputs[0].BindingNode.UIBinding.Value = "false";
             d.Invoke();
             inputs[0].BindingNode.UIBinding.Value = "true";

@@ -15,6 +15,16 @@ namespace NXKit.Util
         IEnumerable<MediaRange>
     {
 
+        public static MediaRangeList empty = new MediaRangeList();
+
+        /// <summary>
+        /// Gets an empty media range list.
+        /// </summary>
+        public static MediaRangeList Empty
+        {
+            get { return empty; }
+        }
+
         /// <summary>
         /// Parses a string representation of a media-range list.
         /// </summary>
@@ -22,7 +32,8 @@ namespace NXKit.Util
         /// <returns></returns>
         public static MediaRangeList Parse(string value)
         {
-            Contract.Requires<ArgumentNullException>(value != null);
+            if (value == null)
+                return Empty;
 
             return new MediaRangeList(value
                 .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
@@ -36,8 +47,6 @@ namespace NXKit.Util
 
         public static implicit operator MediaRangeList(string value)
         {
-            Contract.Requires<ArgumentNullException>(value != null);
-
             return Parse(value);
         }
 
@@ -97,6 +106,14 @@ namespace NXKit.Util
             : this((IEnumerable<MediaRange>)source)
         {
 
+        }
+
+        /// <summary>
+        /// Returns whether or not the media rage list is empty.
+        /// </summary>
+        public bool IsEmpty
+        {
+            get { return items == null || items.IsEmpty; }
         }
 
         /// <summary>

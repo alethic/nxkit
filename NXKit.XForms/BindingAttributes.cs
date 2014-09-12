@@ -23,14 +23,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the 'ref' attribute.
-        /// </summary>
-        public XAttribute RefAttribute
-        {
-            get { return GetAttribute("ref"); }
-        }
-
-        /// <summary>
         /// Gets the 'ref' attribute values.
         /// </summary>
         public string Ref
@@ -39,27 +31,11 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the 'nodeset' attribute.
-        /// </summary>
-        public XAttribute NodeSetAttribute
-        {
-            get { return GetAttribute("nodeset"); }
-        }
-
-        /// <summary>
         /// Gets the 'nodeset' attribute values.
         /// </summary>
         public string NodeSet
         {
             get { return GetAttributeValue("nodeset"); }
-        }
-
-        /// <summary>
-        /// Gets the 'bind' attribute value.
-        /// </summary>
-        public XAttribute BindAttribute
-        {
-            get { return GetAttribute("bind"); }
         }
 
         /// <summary>

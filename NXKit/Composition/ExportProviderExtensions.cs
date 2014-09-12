@@ -1,34 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.Composition
 {
 
-    /// <summary>
-    /// Various extension methods avaible for use against the Cogito specific <see cref="ExportProvider"/>
-    /// implementation.
-    /// </summary>
-    static class ExportProviderExtensions
+    public static class ExportProviderExtensions
     {
 
         /// <summary>
-        /// Invokes TryGetExports, returning the output as a collection.
+        /// Gets all exports with the specified contract name.
         /// </summary>
-        /// <param name="provider"></param>
-        /// <param name="definition"></param>
-        /// <param name="atomicComposition"></param>
+        /// <param name="exports"></param>
+        /// <param name="contractType"></param>
         /// <returns></returns>
-        public static IEnumerable<Export> TryGetExports(this ExportProvider provider, ImportDefinition definition, AtomicComposition atomicComposition)
+        public static IEnumerable<object> GetExports(this ExportProvider exports, Type contractType)
         {
-            Contract.Requires<ArgumentNullException>(provider != null);
-            Contract.Requires<ArgumentNullException>(definition != null);
-
-            IEnumerable<Export> exports;
-            provider.TryGetExports(definition, atomicComposition, out exports);
-            return exports;
+            return exports.GetExports(new ContractBasedImportDefinition(
+                AttributedModelServices.GetContractName(contractType),
+                AttributedModelServices.GetTypeIdentity(contractType),
+                null,
+                ImportCardinality.ZeroOrMore,
+                false,
+                false,
+                CreationPolicy.Any));
         }
 
     }

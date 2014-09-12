@@ -1,38 +1,43 @@
 <questions xmlns="urn::data">
-    <question1>
-        <answer>false</answer>
-    </question1>
-    <question2>
-        <answer>false</answer>
-        <healthinfo>
-            <condition />
-            <dates />
-            <currentstatus />
-            <physicianname />
-            <physicianaddress />
-            <physicianphonenumber />
-        </healthinfo>
-    </question2>
-    <question3>
-        <answer>false</answer>
-        <healthinfo>
-            <condition />
-            <dates />
-            <currentstatus />
-            <physicianname />
-            <physicianaddress />
-            <physicianphonenumber />
-        </healthinfo>
-    </question3>
-    <question4>
-        <answer>false</answer>
-        <healthinfo>
-            <condition />
-            <dates />
-            <currentstatus />
-            <physicianname />
-            <physicianaddress />
-            <physiciantelephone />
-        </healthinfo>
-    </question4>
+  <question>
+    <text>Within the last 12 months, have you used tobacco or nicotine in any form?</text>
+    <answer />
+    <healthinfo />
+  </question>
+  <question>
+    <text>Within the last five years, have you been treated for or diagnosed with any of the following: circulatory or respiratory disease or disorder; chest pain; high blood pressure; cancer or tumors; diabetes; disease or disorder of the heart, lungs, kidneys, liver, genitourinary system; arthritis or other musculoskeletal condition; alcoholism; mental or nervous disorder, or have you been diagnosed with, or treated by a member of the medical profession for Acquired Immune Deficiency Syndrome (AIDS) or AIDS-Related Complex (ARC)?</text>
+    <answer />
+    <healthinfo enable="true">
+      <condition />
+      <dates />
+      <currentstatus />
+      <physicianname />
+      <physicianaddress />
+      <physicianphonenumber />
+    </healthinfo>
+  </question>
+  <question>
+    <text>Are you currently taking any medication or being treated for any condition, including pregnancy, or disease not mentioned in the previous questions?</text>
+    <answer />
+    <healthinfo enable="true">
+      <condition />
+      <dates />
+      <currentstatus />
+      <physicianname />
+      <physicianaddress />
+      <physicianphonenumber />
+    </healthinfo>
+  </question>
+  <question>
+    <text>Within the last five years, have you been counseled, treated or hospitalized for the use of alcohol or drugs?</text>
+    <answer />
+    <healthinfo enable="true">
+      <condition />
+      <dates />
+      <currentstatus />
+      <physicianname />
+      <physicianaddress />
+      <physicianphonenumber />
+    </healthinfo>
+  </question>
 </questions>

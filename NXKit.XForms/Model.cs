@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Util;
 using NXKit.Xml;
@@ -11,10 +13,11 @@ using NXKit.Xml;
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}model")]
+    [Extension("{http://www.w3.org/2002/xforms}model")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Model :
         ElementExtension,
-        IEventDefaultActionHandler
+        IEventDefaultAction
     {
 
 
@@ -100,7 +103,7 @@ namespace NXKit.XForms
                 .SelectMany(i => i.Interfaces<T>());
         }
 
-        void IEventDefaultActionHandler.DefaultAction(Event evt)
+        void IEventDefaultAction.DefaultAction(Event evt)
         {
             switch (evt.Type)
             {
@@ -279,6 +282,24 @@ namespace NXKit.XForms
         internal void OnReset()
         {
 
+        }
+
+        /// <summary>
+        /// Invokes any outstanding deferred updates.
+        /// </summary>
+        internal void InvokeDeferredUpdates()
+        {
+            if (state.Value.Rebuild)
+                OnRebuild();
+
+            if (state.Value.Recalculate)
+                OnRecalculate();
+
+            if (state.Value.Revalidate)
+                OnRevalidate();
+
+            if (state.Value.Refresh)
+                OnRefresh();
         }
 
     }

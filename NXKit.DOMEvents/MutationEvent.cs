@@ -12,7 +12,7 @@ namespace NXKit.DOMEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="host"></param>
-        public MutationEvent(NXDocumentHost host)
+        public MutationEvent(Document host)
             : base(host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
@@ -23,7 +23,7 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="host"></param>
         /// <param name="type"></param>
-        public MutationEvent(NXDocumentHost host, string type)
+        public MutationEvent(Document host, string type)
             : base(host, type)
         {
             Contract.Requires<ArgumentNullException>(host != null);
@@ -37,7 +37,7 @@ namespace NXKit.DOMEvents
         /// <param name="type"></param>
         /// <param name="bubbles"></param>
         /// <param name="cancelable"></param>
-        public MutationEvent(NXDocumentHost host, string type, bool bubbles, bool cancelable)
+        public MutationEvent(Document host, string type, bool bubbles, bool cancelable)
             : base(host, type, bubbles, cancelable)
         {
             Contract.Requires<ArgumentNullException>(host != null);

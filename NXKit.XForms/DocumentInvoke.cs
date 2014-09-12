@@ -1,16 +1,18 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
 namespace NXKit.XForms
 {
 
-    [Interface(XmlNodeType.Document)]
+    [Extension(ExtensionObjectType.Document)]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DocumentInvoke :
         IOnInvoke
     {
@@ -46,7 +48,7 @@ namespace NXKit.XForms
             foreach (var model in models)
                 if (!model.State.Construct)
                 {
-                    model.Element.Interface<INXEventTarget>().DispatchEvent(Events.ModelConstruct);
+                    model.Element.Interface<EventTarget>().Dispatch(Events.ModelConstruct);
                     work = true;
                 }
 
@@ -55,7 +57,7 @@ namespace NXKit.XForms
                 foreach (var model in models)
                     if (!model.State.ConstructDone)
                     {
-                        model.Element.Interface<INXEventTarget>().DispatchEvent(Events.ModelConstructDone);
+                        model.Element.Interface<EventTarget>().Dispatch(Events.ModelConstructDone);
                         work = true;
                     }
 
@@ -64,7 +66,7 @@ namespace NXKit.XForms
                 foreach (var model in models)
                     if (!model.State.Ready)
                     {
-                        model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Ready);
+                        model.Element.Interface<EventTarget>().Dispatch(Events.Ready);
                         work = true;
                     }
 
@@ -74,25 +76,25 @@ namespace NXKit.XForms
                 foreach (var model in models.Where(i => i.State.Rebuild))
                 {
                     work = true;
-                    model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Rebuild);
+                    model.Element.Interface<EventTarget>().Dispatch(Events.Rebuild);
                 }
 
                 foreach (var model in models.Where(i => i.State.Recalculate))
                 {
                     work = true;
-                    model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Recalculate);
+                    model.Element.Interface<EventTarget>().Dispatch(Events.Recalculate);
                 }
 
                 foreach (var model in models.Where(i => i.State.Revalidate))
                 {
                     work = true;
-                    model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Revalidate);
+                    model.Element.Interface<EventTarget>().Dispatch(Events.Revalidate);
                 }
 
                 foreach (var model in models.Where(i => i.State.Refresh))
                 {
                     work = true;
-                    model.Element.Interface<INXEventTarget>().DispatchEvent(Events.Refresh);
+                    model.Element.Interface<EventTarget>().Dispatch(Events.Refresh);
                 }
             }
 

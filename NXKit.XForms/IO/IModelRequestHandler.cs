@@ -21,7 +21,7 @@ namespace NXKit.XForms.IO
         /// <summary>
         /// Initiates the submission.
         /// </summary>
-        /// <param name="elementrequest"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
         ModelResponse Submit(ModelRequest request);
 

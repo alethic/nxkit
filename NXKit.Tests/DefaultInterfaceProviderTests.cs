@@ -29,11 +29,9 @@ namespace NXKit.Tests
 
         }
 
-        static readonly HostContainer hostContainer = new HostContainer(CompositionUtil.CreateContainer(), CompositionUtil.DefaultCatalog);
-
         static readonly XNamespace NS = XNamespace.Get("http://tempuri.org");
 
-        static readonly List<IInterfacePredicate> predicates = new List<IInterfacePredicate>()
+        static readonly List<IExtensionPredicate> predicates = new List<IExtensionPredicate>()
         {
 
         };
@@ -72,8 +70,8 @@ namespace NXKit.Tests
         [TestMethod]
         public void Test_full_element()
         {
-            var p = new DefaultInterfaceProvider(hostContainer, predicates, descriptors);
-            var i = p.GetInterfaces(new XElement(NS + "element1")).ToArray();
+            var p = new DefaultExtensionProvider(descriptors);
+            var i = p.GetExtensions(new XElement(NS + "element1")).ToArray();
             Assert.IsTrue(i.Length == 2);
             Assert.IsInstanceOfType(i[0], typeof(Object1));
         }
@@ -81,8 +79,8 @@ namespace NXKit.Tests
         [TestMethod]
         public void Test_local_only_element()
         {
-            var p = new DefaultInterfaceProvider(hostContainer, predicates, descriptors);
-            var i = p.GetInterfaces(new XElement(NS + "element2")).ToArray();
+            var p = new DefaultExtensionProvider(predicates, descriptors);
+            var i = p.GetExtensions(new XElement(NS + "element2")).ToArray();
             Assert.IsTrue(i.Length == 2);
             Assert.IsInstanceOfType(i[0], typeof(Object2));
         }
@@ -90,8 +88,8 @@ namespace NXKit.Tests
         [TestMethod]
         public void Test_ns_only_element()
         {
-            var p = new DefaultInterfaceProvider(hostContainer, predicates, descriptors);
-            var i = p.GetInterfaces(new XElement(NS + "element3")).ToArray();
+            var p = new DefaultExtensionProvider(predicates, descriptors);
+            var i = p.GetExtensions(new XElement(NS + "element3")).ToArray();
             Assert.IsTrue(i.Length == 1);
             Assert.IsInstanceOfType(i[0], typeof(Object3));
         }

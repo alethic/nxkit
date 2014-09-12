@@ -9,7 +9,8 @@ using NXKit.Composition;
 namespace NXKit.Diagnostics
 {
 
-    [ScopeExport(typeof(ITraceService), Scope.Global)]
+    [Export(typeof(ITraceService))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class DefaultTraceService :
         ITraceService
     {

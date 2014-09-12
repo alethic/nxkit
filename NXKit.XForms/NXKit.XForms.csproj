@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -17,7 +16,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
-    <NuGetPackageImportStamp>52690462</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>c5efbea6</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,7 +63,6 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <BuildPackage>true</BuildPackage>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -119,12 +117,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionProperties.cs" />
     <Compile Include="CommonProperties.cs" />
     <Compile Include="DeferredUpdateInvokerLayer.cs" />
+    <Compile Include="LoadShow.cs" />
+    <Compile Include="LoadAttributes.cs" />
+    <Compile Include="LoadProperties.cs" />
+    <Compile Include="VarProperties.cs" />
+    <Compile Include="VarAttributes.cs" />
+    <Compile Include="Var.cs" />
+    <Compile Include="RepeatExtensionAttributes.cs" />
+    <Compile Include="RepeatExtension.cs" />
+    <Compile Include="RepeatExtensionProperties.cs" />
+    <Compile Include="SetValueProperties.cs" />
+    <Compile Include="SetValueAttributes.cs" />
     <Compile Include="DispatchAttributes.cs" />
     <Compile Include="InsertPosition.cs" />
     <Compile Include="BindingProperties.cs" />
     <Compile Include="DeleteProperties.cs" />
+    <Compile Include="OutputProperties.cs" />
     <Compile Include="IO\FileHandler.cs" />
     <Compile Include="IO\IModelRequestService.cs" />
     <Compile Include="IO\ModelRequest.cs" />
@@ -135,6 +146,7 @@
     <Compile Include="IO\RequestException.cs" />
     <Compile Include="IO\UnsupportedMediaTypeException.cs" />
     <Compile Include="InsertAttributes.cs" />
+    <Compile Include="OutputAttributes.cs" />
     <Compile Include="Serialization\IModelDeserializer.cs" />
     <Compile Include="Serialization\IModelSerializer.cs" />
     <Compile Include="Serialization\XmlModelDeserializer.cs" />
@@ -257,9 +269,16 @@
     <Compile Include="Trigger.cs" />
     <Compile Include="ItemValue.cs" />
     <Compile Include="IO\HttpHandler.cs" />
+    <Compile Include="XmlSchema\BooleanXsdTypeConverter.cs" />
+    <Compile Include="XmlSchema\DateXsdTypeConverter.cs" />
+    <Compile Include="XmlSchema\DateTimeXsdTypeConverter.cs" />
+    <Compile Include="XmlSchema\IXsdTypeConverter.cs" />
+    <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="XPath\Functions\BooleanFromString.cs" />
     <Compile Include="XPath\Functions\IfFunction.cs" />
     <Compile Include="XPath\Functions\IndexFunction.cs" />
+    <Compile Include="XPath\Functions\DaysFromDateFunction.cs" />
+    <Compile Include="XPath\Functions\NowFunction.cs" />
     <Compile Include="XPath\Functions\InstanceFunction.cs" />
     <Compile Include="XPath\Functions\MaxFunction.cs" />
     <Compile Include="XPath\Functions\PositionFunction.cs" />
@@ -306,7 +325,6 @@
       <LastGenOutput>Events.partial.cs</LastGenOutput>
     </None>
     <None Include="NXKit.XForms.nuspec" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Events.xml" />
@@ -316,16 +334,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets'))" />
-  </Target>
-  <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
-  <Import Project="..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

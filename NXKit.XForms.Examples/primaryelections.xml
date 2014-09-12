@@ -1,5 +1,7 @@
 <elections xmlns="urn::data">
-    <term-life>
-        <coverage-amount />
-    </term-life>
+  <term-life>
+    <coverage-amount />
+  </term-life>
+  <dateofbirth />
+  <age />
 </elections>

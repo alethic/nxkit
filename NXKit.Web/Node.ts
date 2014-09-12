@@ -23,7 +23,7 @@ module NXKit.Web {
             this._data = null;
             this._type = null;
             this._name = null;
-            this._value = ko.observable<string>(null);
+            this._value = ko.observable<string>();
             this._intfs = new InterfaceMap();
             this._nodes = ko.observableArray<Node>();
 

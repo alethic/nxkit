@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
 using NXKit.Diagnostics;
+using NXKit.DOM;
 using NXKit.Util;
 using NXKit.Xml;
 
@@ -14,16 +14,17 @@ namespace NXKit.DOMEvents
 {
 
     /// <summary>
-    /// Implements the <see cref="IEventTarget"/> interface.
+    /// Manages event listener registrations and event dispatching for a given <see cref="XNode"/>.
     /// </summary>
-    [Interface(XmlNodeType.Document)]
-    [Interface(XmlNodeType.Element)]
-    [Interface(XmlNodeType.Text)]
+    [Extension]
+    [Remote]
     public class EventTarget :
         IEventTarget
     {
 
+        readonly IEventFactory events;
         readonly ITraceService trace;
+        readonly IInvoker invoker;
         readonly XNode node;
         readonly EventTargetState state;
 
@@ -31,64 +32,83 @@ namespace NXKit.DOMEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="node"></param>
-        [ImportingConstructor]
-        public EventTarget(XNode node, ITraceService trace)
+        /// <param name="trace"></param>
+        /// <param name="invoker"></param>
+        public EventTarget(XNode node, IEventFactory events, ITraceService trace, IInvoker invoker)
         {
             Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(events != null);
             Contract.Requires<ArgumentNullException>(trace != null);
+            Contract.Requires<ArgumentNullException>(invoker != null);
 
             this.node = node;
+            this.events = events;
             this.trace = trace;
+            this.invoker = invoker;
             this.state = node.AnnotationOrCreate<EventTargetState>();
         }
 
-        public IEnumerable<IEventListener> GetEventListeners(string type, bool useCapture)
+        /// <summary>
+        /// Gets the set of <see cref="IEventListener"/>s which are registered on this instance.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<EventListenerRegistration> GetRegistrations()
         {
-            return state.Listeners
-                .Where(i => i.EventType == type && i.UseCapture == useCapture)
-                .Select(i => i.Listener);
+            return state.registrations;
         }
 
-        public bool HasEventListener(string type, IEventListener listener, bool useCapture)
+        /// <summary>
+        /// Adds the given <see cref="IEventListener"/> to this <see cref="XNode"/>.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="capture"></param>
+        public void Register(string type, IEventListener listener, bool capture)
         {
-            return GetEventListeners(type, useCapture)
-                .Any(i => object.Equals(i, listener));
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(listener != null);
+
+            state.registrations = state.registrations.Add(new EventListenerRegistration(type, listener, capture));
         }
 
-        public void AddEventListener(string type, IEventListener listener, bool useCapture)
+        /// <summary>
+        /// Removes the given <see cref="IEventListener"/> from this <see cref="XNode"/>.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="listener"></param>
+        /// <param name="capture"></param>
+        public void Unregister(string type, IEventListener listener, bool capture)
         {
-            state.Listeners.Add(new EventTargetListenerItem(type, useCapture, listener));
-        }
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(listener != null);
 
-        public void RemoveEventListener(string type, IEventListener listener, bool useCapture)
-        {
-            var items = state.Listeners
+            var items = state.registrations
                 .Where(i => i.EventType == type)
-                .Where(i => i.UseCapture == useCapture)
+                .Where(i => i.Capture == capture)
                 .Where(i => i.Listener == listener);
 
             foreach (var item in items)
-                state.Listeners.Remove(item);
+                state.registrations = state.registrations.Remove(item);
         }
 
-        public void DispatchEvent(Event evt)
+        /// <summary>
+        /// Dispatches the event to this <see cref="XNode"/>.
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <returns></returns>
+        public bool Dispatch(Event evt)
         {
-            trace.Information("EventTarget.DispatchEvent: {0} to {1}", evt.Type, node);
+            Contract.Requires<ArgumentNullException>(evt != null);
 
-            var target = node.Interface<IEventTarget>();
-            if (target == null)
-                throw new InvalidOperationException();
+            trace.Information("EventDispatcher.DispatchEvent: {0} to {1}", evt.Type, node);
 
-            // event type must be specified
-            if (string.IsNullOrEmpty(evt.Type))
-                throw new InvalidOperationException();
+            if (evt.dispatch ||
+                evt.initialized == false ||
+                evt.type == null)
+                throw new DOMException(DOMException.INVALID_STATE_ERR);
 
-            // event phase must be uninitialized
-            if (evt.EventPhase != EventPhase.Uninitialized)
-                throw new InvalidOperationException();
-
-            // prevent event for dispatch
-            evt.Target = target;
+            evt.dispatch = true;
+            evt.target = node;
 
             // path to root from root
             var path = node.Ancestors()
@@ -96,66 +116,200 @@ namespace NXKit.DOMEvents
                 .Append(node.Document)
                 .ToLinkedList();
 
-            // capture phase
-            evt.EventPhase = EventPhase.Capturing;
+            evt.eventPhase = EventPhase.Capturing;
 
             // capture phase moves from root to target
-            foreach (var n in path.Backwards().Select(i => i.Value))
+            foreach (var currentTarget in path.Backwards())
             {
-                HandleEventOnNode(n, evt);
+                if (evt.stopPropagation)
+                    break;
 
-                // was told to stop propagation
-                if (evt.StopPropagationSet)
-                    return;
+                InvokeListeners(currentTarget, evt);
             }
 
             // at-target phase
-            evt.EventPhase = EventPhase.AtTarget;
-            HandleEventOnNode(node, evt);
+            evt.eventPhase = EventPhase.AtTarget;
 
-            // was told to stop propagation
-            if (evt.StopPropagationSet)
-                return;
+            if (!evt.stopPropagation)
+                InvokeListeners(node, evt);
 
             // bubbling phase
-            evt.EventPhase = EventPhase.Bubbling;
-
-            // bubbling phase moves from target to root
-            foreach (var n in path)
+            if (evt.bubbles)
             {
-                HandleEventOnNode(n, evt);
+                evt.eventPhase = EventPhase.Bubbling;
 
-                // was told to stop propagation
-                if (evt.StopPropagationSet)
-                    return;
+                // bubbling phase moves from target to root
+                foreach (var currentTarget in path.Forwards())
+                {
+                    if (evt.stopPropagation)
+                        break;
+
+                    InvokeListeners(currentTarget, evt);
+                }
             }
 
+            evt.dispatch = false;
+            evt.eventPhase = EventPhase.None;
+            evt.currentTarget = null;
+
+            if (evt.canceled)
+                return false;
+
             // handle default action
-            if (!evt.PreventDefaultSet)
-                foreach (var da in node.Interfaces<IEventDefaultActionHandler>())
-                    if (da != null)
-                        da.DefaultAction(evt);
+            foreach (var da in node.Interfaces<IEventDefaultAction>())
+                if (da != null)
+                    da.DefaultAction(evt);
+
+            return true;
         }
 
         /// <summary>
-        /// Attempts to handle the event at the given <see cref="XNode"/>.
+        /// Invokes the applicable listeners for this node.
         /// </summary>
         /// <param name="node"></param>
         /// <param name="evt"></param>
-        void HandleEventOnNode(XNode node, Event evt)
+        void InvokeListeners(XNode node, Event evt)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(evt != null);
 
-            evt.CurrentTarget = node.Interface<IEventTarget>();
+            // Initialize event's currentTarget attribute to the object for which these steps are run.
+            evt.currentTarget = node;
 
-            var listeners = node.AnnotationOrCreate<EventTargetState>().Listeners
-                .Where(i => i.EventType == evt.Type)
-                .Where(i => i.UseCapture == (evt.EventPhase == EventPhase.Capturing))
-                .Select(i => i.Listener);
+            // invoke registered listeners
+            foreach (var registration in node.Interface<EventTarget>().state.registrations)
+            {
+                // If event's stop immediate propagation flag is set, terminate the invoke algorithm.
+                if (evt.stopImmediatePropagation)
+                    return;
 
-            foreach (var listener in listeners)
-                listener.HandleEvent(evt);
+                // If event's type attribute value is not listener's type, terminate these substeps (and run them for
+                // the next event listener).
+                if (evt.type != registration.EventType)
+                    continue;
+
+                // If event's eventPhase attribute value is CAPTURING_PHASE and listener's capture is false, terminate
+                // these substeps (and run them for the next event listener).
+                if (evt.eventPhase == EventPhase.Capturing && registration.Capture == false)
+                    continue;
+
+                // If event's eventPhase attribute value is BUBBLING_PHASE and listener's capture is true, terminate
+                // these substeps (and run them for the next event listener).
+                if (evt.eventPhase == EventPhase.Bubbling && registration.Capture == true)
+                    continue;
+
+                // Call listener's callback's handleEvent, with the event passed to this algorithm as the first
+                // argument and event's currentTarget attribute value as callback this value.
+                invoker.Invoke(() =>
+                    registration.Listener.HandleEvent(evt));
+            }
+
+            // invoke listeners available directly as interfaces
+            foreach (var listener in node.Interfaces<IEventListener>())
+            {
+                // If event's stop immediate propagation flag is set, terminate the invoke algorithm.
+                if (evt.stopImmediatePropagation)
+                    return;
+
+                invoker.Invoke(() =>
+                    listener.HandleEvent(evt));
+            }
+        }
+
+        /// <summary>
+        /// Dispatches a trusted event by name.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        [Remote]
+        public Event Dispatch(string type)
+        {
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(type));
+
+            var evt = events.CreateEvent(type);
+            if (evt == null)
+                throw new DOMException();
+
+            // dispatch event internally
+            Dispatch(evt);
+
+            return evt;
+        }
+
+        /// <summary>
+        /// Dispatches a trusted event by name.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public Event Dispatch(string type, object context)
+        {
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(type));
+
+            var evt = events.CreateEvent(type);
+            if (evt == null)
+                throw new DOMException();
+
+            // set supplied context information
+            evt.Context = context;
+
+            // dispatch event internally
+            Dispatch(evt);
+
+            return evt;
+        }
+
+        /// <summary>
+        /// Adds an event handler delegate.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="handler"></param>
+        public void AddEventDelegate(string type, EventHandlerDelegate handler)
+        {
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(type));
+            Contract.Requires<ArgumentNullException>(handler != null);
+
+            AddEventDelegate(type, handler, false);
+        }
+
+        /// <summary>
+        /// Adds an event handler delegate.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="handler"></param>
+        /// <param name="capture"></param>
+        public void AddEventDelegate(string type, EventHandlerDelegate handler, bool capture)
+        {
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(type));
+            Contract.Requires<ArgumentNullException>(handler != null);
+
+            Register(type, new ActionEventListener(_ => handler(_)), capture);
+        }
+
+        void IEventTarget.AddEventListener(string type, IEventListener listener, bool useCapture)
+        {
+            Register(type, listener, useCapture);
+        }
+
+        void IEventTarget.AddEventListener(string type, IEventListener listener)
+        {
+            Register(type, listener, false);
+        }
+
+        void IEventTarget.RemoveEventListener(string type, IEventListener listener, bool useCapture)
+        {
+            Unregister(type, listener, useCapture);
+        }
+
+        void IEventTarget.RemoveEventListener(string type, IEventListener listener)
+        {
+            Unregister(type, listener, false);
+        }
+
+        bool IEventTarget.DispatchEvent(Event evt)
+        {
+            evt.isTrusted = false;
+            return Dispatch(evt);
         }
 
     }

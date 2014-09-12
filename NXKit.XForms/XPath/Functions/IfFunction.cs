@@ -5,6 +5,7 @@ namespace NXKit.XForms.XPath.Functions
 {
 
     [XsltContextFunction("{http://www.w3.org/2002/xforms}if")]
+    [XsltContextFunction("if")]
     public class IfFunction :
         XPathFunction
     {

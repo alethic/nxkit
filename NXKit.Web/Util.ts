@@ -1,5 +1,35 @@
 ﻿module NXKit.Web.Util {
 
+    export function Observable<T>(value?: T): KnockoutObservable<T> {
+        return ko.observable<T>(value)
+            .extend({
+                rateLimit: {
+                    timeout: 50,
+                    method: "notifyWhenChangesStop"
+                }
+            });
+    }
+
+    export function ObservableArray<T>(value?: T[]): KnockoutObservableArray<T> {
+        return ko.observableArray<T>(value)
+            .extend({
+                rateLimit: {
+                    timeout: 50,
+                    method: "notifyWhenChangesStop"
+                }
+            });
+    }
+
+    export function Computed<T>(def: KnockoutComputedDefine<T>): KnockoutComputed<T> {
+        return ko.computed(def)
+            .extend({
+                rateLimit: {
+                    timeout: 50,
+                    method: "notifyWhenChangesStop"
+                }
+            });
+    }
+
     /**
      * Tests two objects for equality.
      */

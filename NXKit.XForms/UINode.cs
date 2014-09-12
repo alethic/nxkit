@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Xml;
+
 
 namespace NXKit.XForms
 {
@@ -11,7 +14,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Encapsulates the binding information for a UI element.
     /// </summary>
-    [Interface]
+    [Extension]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class UINode :
         ElementExtension,
         IUINode

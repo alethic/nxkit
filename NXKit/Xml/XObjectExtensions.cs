@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
@@ -76,7 +78,7 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentNullException>(self.Document != null);
 
             return self.Document.AnnotationOrCreate<ObjectIdCache>()
-                .cache.GetOrAdd(objectId, () => 
+                .cache.GetOrAdd(objectId, () =>
                     self.Document.DescendantNodesAndSelf()
                         .FirstOrDefault(i => i.GetObjectId() == objectId));
         }
@@ -166,7 +168,8 @@ namespace NXKit.Xml
         /// Resolves a sequence of <see cref="XName"/>s from the given prefixed names, given the specified <see cref="XObject"/>'s
         /// naming context.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="self"></param>
+        /// <param name="prefixedNames"></param>
         /// <returns></returns>
         public static IEnumerable<XName> ResolvePrefixedNames(this XObject self, string prefixedNames)
         {
@@ -347,54 +350,83 @@ namespace NXKit.Xml
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public static IEnumerable<object> Interfaces(this XObject node)
-        {
-            Contract.Requires<ArgumentNullException>(node != null);
-
-            return Interfaces(node, node.Container());
-        }
-
-        /// <summary>
-        /// Implements Interfaces, allowing the specification of an export provider.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="container"></param>
-        /// <returns></returns>
-        internal static IEnumerable<object> Interfaces(this XObject node, IContainer container)
-        {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(container != null);
-
-            return container
-                .GetExportedValues<IInterfaceProvider>()
-                .SelectMany(i => i.GetInterfaces(node));
-        }
-
-        /// <summary>
-        /// Gets the implemented interfaces of this <see cref="XObject"/> of the given type.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="node"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public static IEnumerable<object> Interfaces(this XObject node, Type type)
         {
             Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(type != null);
 
-            return Interfaces(node).Where(i => type.IsInstanceOfType(i));
+            return Interfaces(node, type, node.Exports());
         }
 
         /// <summary>
-        /// Gets the implemented interfaces of the given <see cref="XNode"/> of the given type.
+        /// Gets all the implemented interfaces of this <see cref="XObject"/>.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="node"></param>
         /// <returns></returns>
         public static IEnumerable<T> Interfaces<T>(this XObject node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            return Interfaces(node).OfType<T>();
+            return Interfaces<T>(node, node.Exports());
+        }
+
+        /// <summary>
+        /// Static <see cref="ContractBasedImportDefinition"/> for the <see cref="IExtensionProvider"/> interface.
+        /// Prevents recreation.
+        /// </summary>
+        static readonly ContractBasedImportDefinition InterfaceProviderImportDefinition =
+            new ContractBasedImportDefinition(
+                AttributedModelServices.GetContractName(typeof(IExtensionProvider)),
+                AttributedModelServices.GetTypeIdentity(typeof(IExtensionProvider)),
+                null,
+                ImportCardinality.ZeroOrMore,
+                false,
+                false,
+                CreationPolicy.Any);
+
+        /// <summary>
+        /// Implements Interfaces, allowing the specification of an export provider.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="exports"></param>
+        /// <returns></returns>
+        static IEnumerable<object> Interfaces(this XObject node, Type type, ExportProvider exports)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(exports != null);
+
+            //return node.AnnotationOrCreate(() =>
+            //    exports
+            //        .GetExports(InterfaceProviderImportDefinition)
+            //        .Select(i => i.Value)
+            //        .Cast<IInterfaceProvider>()
+            //        .ToLinkedList())
+            //    .SelectMany(i => i.GetInterfaces(node, type));
+
+            return exports.GetExports(type);
+        }
+
+        /// <summary>
+        /// Implements Interfaces, allowing the specification of an export provider.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="exports"></param>
+        /// <returns></returns>
+        static IEnumerable<T> Interfaces<T>(this XObject node, ExportProvider exports)
+        {
+            Contract.Requires<ArgumentNullException>(node != null);
+            Contract.Requires<ArgumentNullException>(exports != null);
+
+            return exports.GetExportedValues<T>();
+
+            //return node.AnnotationOrCreate(() =>
+            //    exports
+            //        .GetExports(InterfaceProviderImportDefinition)
+            //        .Select(i => i.Value)
+            //        .Cast<IInterfaceProvider>()
+            //        .ToLinkedList())
+            //    .SelectMany(i => i.GetInterfaces<T>(node));
         }
 
         /// <summary>
@@ -407,7 +439,8 @@ namespace NXKit.Xml
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
-            return Interfaces<T>(node).FirstOrDefault();
+            return Interfaces<T>(node)
+                .FirstOrDefault();
         }
 
         /// <summary>
@@ -429,28 +462,47 @@ namespace NXKit.Xml
         }
 
         /// <summary>
-        /// Gets the <see cref="IObjectContainer"/> for the given <see cref="XObject"/>.
+        /// Gets the <see cref="ExportProvider"/> for the given <see cref="XObject"/>.
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static IContainer Container(this XObject self)
+        public static ExportProvider Exports(this XObject self)
         {
             Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Ensures(Contract.Result<IContainer>() != null);
+            Contract.Ensures(Contract.Result<ExportProvider>() != null);
 
             // get or create the new object container annotation
-            return self.AnnotationOrCreate<ObjectContainer>(() =>
+            return self.AnnotationOrCreate<ExportProvider>(() =>
             {
-                var host = self.Document.Annotation<HostContainer>();
-                if (host == null)
+                var document = self.Document.Annotation<Document>();
+                if (document == null)
                     throw new InvalidOperationException();
 
-                return new ObjectContainer(
-                    self,
-                    new CompositionContainer(
-                        new ScopeCatalog(host.Catalog, Scope.Object),
-                        host.Exports),
-                    host.Catalog);
+                // provides additional exports
+                var exports = new ExportProviderProvider();
+
+                // initialize new container
+                var container = new CompositionContainer(
+                    document.Configuration.ObjectCatalog,
+                    CompositionOptions.DisableSilentRejection,
+                    exports,
+                    document.Container);
+
+                // point to container to complete resolution
+                exports.Source = container;
+
+                if (self is XObject)
+                    container.WithExport<XObject>(self);
+                if (self is XDocument)
+                    container.WithExport<XDocument>((XDocument)self);
+                if (self is XElement)
+                    container.WithExport<XElement>((XElement)self);
+                if (self is XNode)
+                    container.WithExport<XNode>((XNode)self);
+                if (self is XAttribute)
+                    container.WithExport<XAttribute>((XAttribute)self);
+
+                return container;
             });
         }
 

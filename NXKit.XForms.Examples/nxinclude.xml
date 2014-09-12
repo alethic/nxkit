@@ -1,0 +1,13 @@
+﻿<xl:form
+    xmlns:xf="http://www.w3.org/2002/xforms"
+    xmlns:xl="http://schemas.nxkit.org/2014/xforms-layout"
+    xmlns:nxi="http://schemas.nxkit.org/2014/NXInclude">
+    <xf:model>
+        <xf:instance>
+            <data>
+                <value>Sample Value</value>
+            </data>
+        </xf:instance>
+    </xf:model>
+    <nxi:include href="nxinclude_form1.xml" />
+</xl:form>

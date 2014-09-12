@@ -10,35 +10,30 @@ using NXKit.Xml;
 namespace NXKit.DOMEvents
 {
 
-    [ScopeExport(typeof(IEventProvider), Scope.Host)]
+    [Export(typeof(IEventProvider))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class EventInfoTableProvider :
         IEventProvider
     {
 
-        readonly NXDocumentHost document;
         readonly IEnumerable<IEventInfoTable> tables;
-        IDocumentEvent documentEvent;
+        readonly Lazy<IDocumentEvent> documentEvent;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="document"></param>
+        /// <param name="host"></param>
         /// <param name="tables"></param>
         [ImportingConstructor]
         public EventInfoTableProvider(
-            NXDocumentHost document,
+            Func<Document> host,
             [ImportMany] IEnumerable<IEventInfoTable> tables)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            Contract.Requires<ArgumentNullException>(host != null);
             Contract.Requires<ArgumentNullException>(tables != null);
 
-            this.document = document;
             this.tables = tables;
-        }
-
-        IDocumentEvent DocumentEvent
-        {
-            get { return documentEvent ?? (documentEvent = document.Xml.Interface<IDocumentEvent>()); }
+            this.documentEvent = new Lazy<IDocumentEvent>(() => host().Xml.Interface<IDocumentEvent>());
         }
 
         public Event CreateEvent(string type)
@@ -46,7 +41,7 @@ namespace NXKit.DOMEvents
             var evt = tables
                 .SelectMany(i => i.GetEventInfos())
                 .Where(i => i.Type == type)
-                .Select(i => new { Event = DocumentEvent.CreateEvent(i.EventInterface), EventInfo = i })
+                .Select(i => new { Event = documentEvent.Value.CreateEvent(i.EventInterface), EventInfo = i })
                 .Where(i => i.Event != null)
                 .FirstOrDefault();
 
@@ -54,6 +49,7 @@ namespace NXKit.DOMEvents
             if (evt != null)
             {
                 evt.EventInfo.InitEvent(evt.Event);
+                evt.Event.isTrusted = true;
                 return evt.Event;
             }
 

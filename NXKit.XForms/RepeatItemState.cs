@@ -1,5 +1,4 @@
 ﻿using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
 using NXKit.Serialization;
@@ -35,7 +34,7 @@ namespace NXKit.XForms
             set { size = value; }
         }
 
-        public XmlSchema GetSchema()
+        public System.Xml.Schema.XmlSchema GetSchema()
         {
             return null;
         }

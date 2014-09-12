@@ -53,6 +53,10 @@ module NXKit.Web {
             }
         }
 
+        public get ContentsCount(): number {
+            return this.Contents.length;
+        }
+
     }
 
 }

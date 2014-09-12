@@ -10,17 +10,17 @@
         /// <summary>
         /// Export is derived from the provided catalog or export provider, and is not further scoped.
         /// </summary>
-        Global,
+        Global = 0,
 
         /// <summary>
         /// Export is allocated within the host container. These exports are not available to Global exports.
         /// </summary>
-        Host,
+        Host = 1,
 
         /// <summary>
         /// Export is allocated within the pbject container. These exports are not available to Host or Global exports.
         /// </summary>
-        Object,
+        Object = 2,
 
     }
 

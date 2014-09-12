@@ -6,6 +6,7 @@
         constructor(context: KnockoutBindingContext, node: Node) {
             super(context, node);
         }
+
     }
 
 }

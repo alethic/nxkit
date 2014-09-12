@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Xml;
+
+using NXKit.Composition;
 
 namespace NXKit.DOMEvents
 {
@@ -10,7 +12,8 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Provides a <see cref="IDocumentEvent"/> implementation.
     /// </summary>
-    [Interface(XmlNodeType.Document)]
+    [Extension(ExtensionObjectType.Document)]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DocumentEvent :
          IDocumentEvent
     {

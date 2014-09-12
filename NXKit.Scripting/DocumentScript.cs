@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
-using System.Xml;
+
+using NXKit.Composition;
 
 namespace NXKit.Scripting
 {
@@ -8,7 +10,8 @@ namespace NXKit.Scripting
     /// <summary>
     /// Provides an interface towards executing scripts within the document.
     /// </summary>
-    [Interface(XmlNodeType.Document)]
+    [Extension(ExtensionObjectType.Document)]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DocumentScript :
         IDocumentScript,
         IOnSave,

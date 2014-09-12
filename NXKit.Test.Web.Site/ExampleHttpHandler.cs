@@ -28,6 +28,10 @@ namespace NXKit.Test.Web.Site
         {
             Contract.Requires<ArgumentNullException>(context != null);
 
+            if (context.Request.HttpMethod == "PUT" ||
+                context.Request.HttpMethod == "POST")
+                return;
+
             var stm = typeof(Ref).Assembly
                 .GetManifestResourceNames()
                 .Where(i => i.EndsWith("." + path))

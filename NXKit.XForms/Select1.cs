@@ -1,14 +1,17 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}select1")]
+    [Extension("{http://www.w3.org/2002/xforms}select1")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class Select1 :
         ElementExtension
@@ -129,7 +132,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Implements the setter for SelectedItemVisual.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="selected"></param>
         void SetSelected(ISelectable selected)
         {
             // deselect existing item

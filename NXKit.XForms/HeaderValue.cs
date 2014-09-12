@@ -1,19 +1,22 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
 {
 
-    [Interface("{http://www.w3.org/2002/xforms}value", PredicateType = typeof(HeaderValuePredicate))]
+    [Extension("{http://www.w3.org/2002/xforms}value", PredicateType = typeof(HeaderValuePredicate))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class HeaderValue :
         ElementExtension
     {
 
         class HeaderValuePredicate :
-            IInterfacePredicate
+            IExtensionPredicate
         {
 
             public bool IsMatch(XObject obj, Type type)

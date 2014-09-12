@@ -11,7 +11,7 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public UIEvent(NXDocumentHost host)
+        public UIEvent(Document host)
             : base(host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
@@ -22,7 +22,7 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="host"></param>
         /// <param name="type"></param>
-        public UIEvent(NXDocumentHost host, string type)
+        public UIEvent(Document host, string type)
             : base(host, type)
         {
             Contract.Requires<ArgumentNullException>(host != null);
@@ -38,7 +38,7 @@ namespace NXKit.DOMEvents
         /// <param name="cancelable"></param>
         /// <param name="view"></param>
         /// <param name="detail"></param>
-        public UIEvent(NXDocumentHost host, string type, bool canBubble, bool cancelable, object view, long detail)
+        public UIEvent(Document host, string type, bool canBubble, bool cancelable, object view, long detail)
             : base(host, type, canBubble, cancelable)
         {
             Contract.Requires<ArgumentNullException>(host != null);

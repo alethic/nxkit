@@ -73,23 +73,39 @@ module NXKit.Web.XForms.ViewModelUtil {
     }
 
     export function GetRelevant(node: Node): KnockoutObservable<boolean> {
-        return node.Property(Constants.UINode, 'Relevant').ValueAsBoolean;
+        var p = node.Property(Constants.UINode, 'Relevant');
+        return p != null ? p.ValueAsBoolean : null;
     }
 
     export function GetReadOnly(node: Node): KnockoutObservable<boolean> {
-        return node.Property(Constants.UINode, 'ReadOnly').ValueAsBoolean;
+        var p = node.Property(Constants.UINode, 'ReadOnly');
+        return p != null ? p.ValueAsBoolean : null;
     }
 
     export function GetRequired(node: Node): KnockoutObservable<boolean> {
-        return node.Property(Constants.UINode, 'Required').ValueAsBoolean;
+        var p = node.Property(Constants.UINode, 'Required');
+        return p != null ? p.ValueAsBoolean : null;
     }
 
     export function GetValid(node: Node): KnockoutObservable<boolean> {
-        return node.Property(Constants.UINode, 'Valid').ValueAsBoolean;
+        var p = node.Property(Constants.UINode, 'Valid');
+        return p != null ? p.ValueAsBoolean : null;
     }
 
     export function GetAppearance(node: Node): KnockoutObservable<string> {
-        return node.Property(Constants.UINode, 'Appearance').ValueAsString;
+        var p = node.Property(Constants.UINode, 'Appearance');
+        return p != null ? p.ValueAsString : null;
+    }
+
+    export function GetDataItem(node: Node): KnockoutObservable<any> {
+        return ko.computed<any>(() => {
+            return [
+                GetValid(node)() ? 'valid' : 'invalid',
+                GetRelevant(node)() ? 'enabled' : 'disabled',
+                GetReadOnly(node)() ? 'readonly' : 'readwrite',
+                GetRequired(node)() ? 'required' : 'optional',
+            ].join(' ');
+        });
     }
 
     export function GetLabelNode(node: Node): Node {

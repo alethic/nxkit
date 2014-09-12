@@ -11,7 +11,6 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms binding properties.
     /// </summary>
-    [Interface]
     public class BindingProperties :
         ElementExtension
     {

@@ -1,6 +1,10 @@
 ﻿using System;
+using System.ComponentModel.Composition;
+using System.Diagnostics.Contracts;
+using System.Linq;
 
 using NXKit.Composition;
+using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -8,12 +12,27 @@ namespace NXKit.XForms
     /// <summary>
     /// Captures invocations to handle unwrapping and invoking the deferred update behavior.
     /// </summary>
-    [ScopeExport(typeof(IInvokerLayer), Scope.Host)]
+    [Export(typeof(IInvokerLayer))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class DeferredUpdateInvokerLayer :
         IInvokerLayer
     {
 
+        readonly Func<Document> host;
         int count = 0;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="host"></param>
+        [ImportingConstructor]
+        public DeferredUpdateInvokerLayer(
+            [Import] Func<Document> host)
+        {
+            Contract.Requires<ArgumentNullException>(host != null);
+
+            this.host = host;
+        }
 
         public void Invoke(System.Action action)
         {
@@ -25,6 +44,9 @@ namespace NXKit.XForms
             finally
             {
                 count--;
+
+                if (count == 0)
+                    InvokeDeferredUpdates();
             }
         }
 
@@ -38,7 +60,23 @@ namespace NXKit.XForms
             finally
             {
                 count--;
+
+                if (count == 0)
+                    InvokeDeferredUpdates();
             }
+        }
+
+        /// <summary>
+        /// Invoke any outstanding model updates.
+        /// </summary>
+        void InvokeDeferredUpdates()
+        {
+            var models = host().Xml
+                .Descendants(Constants.XForms_1_0 + "model")
+                .Select(i => i.Interface<Model>());
+
+            foreach (var model in models)
+                model.InvokeDeferredUpdates();
         }
 
     }

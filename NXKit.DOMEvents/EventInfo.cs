@@ -70,6 +70,8 @@ namespace NXKit.DOMEvents
 
         public virtual void InitEvent(Event evt)
         {
+            Contract.Requires<ArgumentNullException>(evt != null);
+
             evt.InitEvent(type, canBubble, cancelable);
         }
 

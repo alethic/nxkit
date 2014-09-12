@@ -10,7 +10,7 @@ module NXKit.Web.XForms {
         }
 
         get Text(): KnockoutObservable<string> {
-            return this.ValueAsString;
+            return ko.computed(() => this.ValueAsString() || this.Node.Property('NXKit.XForms.Output', 'Value').ValueAsString());
         }
 
     }

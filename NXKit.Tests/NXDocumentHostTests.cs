@@ -16,19 +16,19 @@ namespace NXKit.Tests
         [TestMethod]
         public void Test_basic_load()
         {
-            NXDocumentHost.Load(XDocument.Parse(@"<unknown />"));
+            Document.Load(XDocument.Parse(@"<unknown />"));
         }
 
         [TestMethod]
         public void Test_basic_invoke()
         {
-            NXDocumentHost.Load(XDocument.Parse(@"<unknown />")).Invoke();
+            Document.Load(XDocument.Parse(@"<unknown />")).Invoke();
         }
 
         [TestMethod]
         public void Test_basic_save()
         {
-            var doc = NXDocumentHost.Load(XDocument.Parse(@"<unknown />"));
+            var doc = Document.Load(XDocument.Parse(@"<unknown />"));
 
             using (var str = new StringWriter())
             using (var wrt = XmlWriter.Create(str))
@@ -44,7 +44,7 @@ namespace NXKit.Tests
         [TestMethod]
         public void Test_basic_invoke_save()
         {
-            var doc = NXDocumentHost.Load(XDocument.Parse(@"<unknown />"));
+            var doc = Document.Load(XDocument.Parse(@"<unknown />"));
             doc.Invoke();
 
             using (var str = new StringWriter())

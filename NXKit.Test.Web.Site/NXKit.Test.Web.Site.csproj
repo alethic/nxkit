@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" />
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -14,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NXKit.Test.Web.Site</RootNamespace>
     <AssemblyName>NXKit.Test.Web.Site</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -25,7 +24,8 @@
     <RestorePackages>true</RestorePackages>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
-    <NuGetPackageImportStamp>b160e666</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>2a4f4a8d</NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -116,10 +116,12 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AspNet.ScriptManager.jQuery">
-      <HintPath>..\packages\AspNet.ScriptManager.jQuery.2.1.0\lib\net45\AspNet.ScriptManager.jQuery.dll</HintPath>
+    <Reference Include="AspNet.ScriptManager.jQuery, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AspNet.ScriptManager.jQuery.2.1.1\lib\net45\AspNet.ScriptManager.jQuery.dll</HintPath>
     </Reference>
-    <Reference Include="AspNet.ScriptManager.jQuery.UI.Combined">
+    <Reference Include="AspNet.ScriptManager.jQuery.UI.Combined, Version=1.10.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AspNet.ScriptManager.jQuery.UI.Combined.1.10.4\lib\net45\AspNet.ScriptManager.jQuery.UI.Combined.dll</HintPath>
     </Reference>
     <Reference Include="ClearScript, Version=5.3.10.0, Culture=neutral, processorArchitecture=MSIL">
@@ -128,8 +130,13 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
@@ -142,6 +149,103 @@
     <Content Include="Content\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\normalize.css" />
+    <Content Include="Content\semantic\less\collections\breadcrumb.less" />
+    <Content Include="Content\semantic\less\collections\form.less" />
+    <Content Include="Content\semantic\less\collections\grid.less" />
+    <Content Include="Content\semantic\less\collections\menu.less" />
+    <Content Include="Content\semantic\less\collections\message.less" />
+    <Content Include="Content\semantic\less\collections\table.less" />
+    <Content Include="Content\semantic\less\elements\basic.icon.less" />
+    <Content Include="Content\semantic\less\elements\button.less" />
+    <Content Include="Content\semantic\less\elements\divider.less" />
+    <Content Include="Content\semantic\less\elements\header.less" />
+    <Content Include="Content\semantic\less\elements\icon.less" />
+    <Content Include="Content\semantic\less\elements\image.less" />
+    <Content Include="Content\semantic\less\elements\input.less" />
+    <Content Include="Content\semantic\less\elements\label.less" />
+    <Content Include="Content\semantic\less\elements\loader.less" />
+    <Content Include="Content\semantic\less\elements\progress.less" />
+    <Content Include="Content\semantic\less\elements\reveal.less" />
+    <Content Include="Content\semantic\less\elements\segment.less" />
+    <Content Include="Content\semantic\less\elements\step.less" />
+    <Content Include="Content\semantic\less\fonts\basic.icons.eot" />
+    <Content Include="Content\semantic\less\fonts\basic.icons.svg" />
+    <Content Include="Content\semantic\less\fonts\basic.icons.ttf" />
+    <Content Include="Content\semantic\less\fonts\basic.icons.woff" />
+    <Content Include="Content\semantic\less\fonts\icons.eot" />
+    <Content Include="Content\semantic\less\fonts\icons.otf" />
+    <Content Include="Content\semantic\less\fonts\icons.svg" />
+    <Content Include="Content\semantic\less\fonts\icons.ttf" />
+    <Content Include="Content\semantic\less\fonts\icons.woff" />
+    <Content Include="Content\semantic\less\images\loader-large-inverted.gif" />
+    <Content Include="Content\semantic\less\images\loader-large.gif" />
+    <Content Include="Content\semantic\less\images\loader-medium-inverted.gif" />
+    <Content Include="Content\semantic\less\images\loader-medium.gif" />
+    <Content Include="Content\semantic\less\images\loader-mini-inverted.gif" />
+    <Content Include="Content\semantic\less\images\loader-mini.gif" />
+    <Content Include="Content\semantic\less\images\loader-small-inverted.gif" />
+    <Content Include="Content\semantic\less\images\loader-small.gif" />
+    <Content Include="Content\semantic\less\modules\accordion.js" />
+    <Content Include="Content\semantic\less\modules\accordion.less" />
+    <Content Include="Content\semantic\less\modules\behavior\api.js" />
+    <Content Include="Content\semantic\less\modules\behavior\colorize.js" />
+    <Content Include="Content\semantic\less\modules\behavior\form.js" />
+    <Content Include="Content\semantic\less\modules\behavior\state.js" />
+    <Content Include="Content\semantic\less\modules\chatroom.js" />
+    <Content Include="Content\semantic\less\modules\chatroom.less" />
+    <Content Include="Content\semantic\less\modules\checkbox.js" />
+    <Content Include="Content\semantic\less\modules\checkbox.less" />
+    <Content Include="Content\semantic\less\modules\dimmer.js" />
+    <Content Include="Content\semantic\less\modules\dimmer.less" />
+    <Content Include="Content\semantic\less\modules\dropdown.js" />
+    <Content Include="Content\semantic\less\modules\dropdown.less" />
+    <Content Include="Content\semantic\less\modules\modal.js" />
+    <Content Include="Content\semantic\less\modules\modal.less" />
+    <Content Include="Content\semantic\less\modules\nag.js" />
+    <Content Include="Content\semantic\less\modules\nag.less" />
+    <Content Include="Content\semantic\less\modules\popup.js" />
+    <Content Include="Content\semantic\less\modules\popup.less" />
+    <Content Include="Content\semantic\less\modules\rating.js" />
+    <Content Include="Content\semantic\less\modules\rating.less" />
+    <Content Include="Content\semantic\less\modules\search.js" />
+    <Content Include="Content\semantic\less\modules\search.less" />
+    <Content Include="Content\semantic\less\modules\shape.js" />
+    <Content Include="Content\semantic\less\modules\shape.less" />
+    <Content Include="Content\semantic\less\modules\sidebar.js" />
+    <Content Include="Content\semantic\less\modules\sidebar.less" />
+    <Content Include="Content\semantic\less\modules\tab.js" />
+    <Content Include="Content\semantic\less\modules\tab.less" />
+    <Content Include="Content\semantic\less\modules\transition.js" />
+    <Content Include="Content\semantic\less\modules\transition.less" />
+    <Content Include="Content\semantic\less\modules\video.js" />
+    <Content Include="Content\semantic\less\modules\video.less" />
+    <Content Include="Content\semantic\less\semantic.config" />
+    <Content Include="Content\semantic\less\views\comment.less" />
+    <Content Include="Content\semantic\less\views\feed.less" />
+    <Content Include="Content\semantic\less\views\item.less" />
+    <Content Include="Content\semantic\less\views\list.less" />
+    <Content Include="Content\semantic\less\views\statistic.less" />
+    <Content Include="Content\semantic\packaged\css\semantic.css" />
+    <Content Include="Content\semantic\packaged\css\semantic.min.css" />
+    <Content Include="Content\semantic\packaged\fonts\basic.icons.eot" />
+    <Content Include="Content\semantic\packaged\fonts\basic.icons.svg" />
+    <Content Include="Content\semantic\packaged\fonts\basic.icons.ttf" />
+    <Content Include="Content\semantic\packaged\fonts\basic.icons.woff" />
+    <Content Include="Content\semantic\packaged\fonts\icons.eot" />
+    <Content Include="Content\semantic\packaged\fonts\icons.otf" />
+    <Content Include="Content\semantic\packaged\fonts\icons.svg" />
+    <Content Include="Content\semantic\packaged\fonts\icons.ttf" />
+    <Content Include="Content\semantic\packaged\fonts\icons.woff" />
+    <Content Include="Content\semantic\packaged\images\loader-large-inverted.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-large.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-medium-inverted.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-medium.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-mini-inverted.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-mini.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-small-inverted.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-small.gif" />
+    <Content Include="Content\semantic\packaged\javascript\semantic.js" />
+    <Content Include="Content\semantic\packaged\javascript\semantic.min.js" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -204,58 +308,29 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\xforms-layout.css">
+      <DependentUpon>xforms-layout.less</DependentUpon>
+    </Content>
+    <Content Include="Content\xforms.css">
+      <DependentUpon>xforms.less</DependentUpon>
+    </Content>
     <Content Include="Default.aspx" />
     <Content Include="Content\styles.less" />
     <Content Include="Global.asax" />
-    <Content Include="Content\semantic\less\fonts\basic.icons.svg" />
-    <Content Include="Content\semantic\less\fonts\icons.svg" />
-    <Content Include="Content\semantic\less\images\loader-large-inverted.gif" />
-    <Content Include="Content\semantic\less\images\loader-large.gif" />
-    <Content Include="Content\semantic\less\images\loader-medium-inverted.gif" />
-    <Content Include="Content\semantic\less\images\loader-medium.gif" />
-    <Content Include="Content\semantic\less\images\loader-mini-inverted.gif" />
-    <Content Include="Content\semantic\less\images\loader-mini.gif" />
-    <Content Include="Content\semantic\less\images\loader-small-inverted.gif" />
-    <Content Include="Content\semantic\less\images\loader-small.gif" />
-    <Content Include="Content\semantic\less\modules\accordion.js" />
-    <Content Include="Content\semantic\less\modules\behavior\api.js" />
-    <Content Include="Content\semantic\less\modules\behavior\colorize.js" />
-    <Content Include="Content\semantic\less\modules\behavior\form.js" />
-    <Content Include="Content\semantic\less\modules\behavior\state.js" />
-    <Content Include="Content\semantic\less\modules\chatroom.js" />
-    <Content Include="Content\semantic\less\modules\checkbox.js" />
-    <Content Include="Content\semantic\less\modules\dimmer.js" />
-    <Content Include="Content\semantic\less\modules\dropdown.js" />
-    <Content Include="Content\semantic\less\modules\modal.js" />
-    <Content Include="Content\semantic\less\modules\nag.js" />
-    <Content Include="Content\semantic\less\modules\popup.js" />
-    <Content Include="Content\semantic\less\modules\rating.js" />
-    <Content Include="Content\semantic\less\modules\search.js" />
-    <Content Include="Content\semantic\less\modules\shape.js" />
-    <Content Include="Content\semantic\less\modules\sidebar.js" />
-    <Content Include="Content\semantic\less\modules\tab.js" />
-    <Content Include="Content\semantic\less\modules\transition.js" />
-    <Content Include="Content\semantic\less\modules\video.js" />
-    <Content Include="Content\semantic\packaged\css\semantic.css" />
-    <Content Include="Content\semantic\packaged\css\semantic.min.css" />
-    <Content Include="Content\semantic\packaged\fonts\basic.icons.svg" />
-    <Content Include="Content\semantic\packaged\fonts\icons.svg" />
-    <Content Include="Content\semantic\packaged\images\loader-large-inverted.gif" />
-    <Content Include="Content\semantic\packaged\images\loader-large.gif" />
-    <Content Include="Content\semantic\packaged\images\loader-medium-inverted.gif" />
-    <Content Include="Content\semantic\packaged\images\loader-medium.gif" />
-    <Content Include="Content\semantic\packaged\images\loader-mini-inverted.gif" />
-    <Content Include="Content\semantic\packaged\images\loader-mini.gif" />
-    <Content Include="Content\semantic\packaged\images\loader-small-inverted.gif" />
-    <Content Include="Content\semantic\packaged\images\loader-small.gif" />
-    <Content Include="Content\semantic\packaged\javascript\semantic.js" />
-    <Content Include="Content\semantic\packaged\javascript\semantic.min.js" />
-    <Content Include="packages.config" />
-    <None Include="Properties\PublishProfiles\asd.pubxml" />
+    <Content Include="Content\semantic.less" />
     <Content Include="Examples\Post.ashx" />
-    <None Include="Scripts\jquery-2.1.0.intellisense.js" />
-    <Content Include="Scripts\jquery-2.1.0.js" />
-    <Content Include="Scripts\jquery-2.1.0.min.js" />
+    <Content Include="Content\xforms-layout.less" />
+    <Content Include="Content\xforms.css.map">
+      <DependentUpon>xforms.css</DependentUpon>
+    </Content>
+    <Content Include="Content\xforms-layout.css.map">
+      <DependentUpon>xforms-layout.css</DependentUpon>
+    </Content>
+    <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\nxkit.pubxml" />
+    <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.1.js" />
+    <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.10.4.js" />
     <Content Include="Scripts\jquery-ui-1.10.4.min.js" />
     <Content Include="Scripts\knockout-3.1.0.debug.js" />
@@ -281,68 +356,13 @@
       <DependentUpon>Post.ashx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Content\semantic\less\collections\breadcrumb.less" />
-    <Content Include="Content\semantic\less\collections\form.less" />
-    <Content Include="Content\semantic\less\collections\grid.less" />
-    <Content Include="Content\semantic\less\collections\menu.less" />
-    <Content Include="Content\semantic\less\collections\message.less" />
-    <Content Include="Content\semantic\less\collections\table.less" />
-    <Content Include="Content\semantic\less\elements\basic.icon.less" />
-    <Content Include="Content\semantic\less\elements\button.less" />
-    <Content Include="Content\semantic\less\elements\divider.less" />
-    <Content Include="Content\semantic\less\elements\header.less" />
-    <Content Include="Content\semantic\less\elements\icon.less" />
-    <Content Include="Content\semantic\less\elements\image.less" />
-    <Content Include="Content\semantic\less\elements\input.less" />
-    <Content Include="Content\semantic\less\elements\label.less" />
-    <Content Include="Content\semantic\less\elements\loader.less" />
-    <Content Include="Content\semantic\less\elements\progress.less" />
-    <Content Include="Content\semantic\less\elements\reveal.less" />
-    <Content Include="Content\semantic\less\elements\segment.less" />
-    <Content Include="Content\semantic\less\elements\step.less" />
-    <Content Include="Content\semantic\less\fonts\basic.icons.eot" />
-    <Content Include="Content\semantic\less\fonts\basic.icons.ttf" />
-    <Content Include="Content\semantic\less\fonts\basic.icons.woff" />
-    <Content Include="Content\semantic\less\fonts\icons.eot" />
-    <Content Include="Content\semantic\less\fonts\icons.otf" />
-    <Content Include="Content\semantic\less\fonts\icons.ttf" />
-    <Content Include="Content\semantic\less\fonts\icons.woff" />
-    <Content Include="Content\semantic\less\modules\accordion.less" />
-    <Content Include="Content\semantic\less\modules\chatroom.less" />
-    <Content Include="Content\semantic\less\modules\checkbox.less" />
-    <Content Include="Content\semantic\less\modules\dimmer.less" />
-    <Content Include="Content\semantic\less\modules\dropdown.less" />
-    <Content Include="Content\semantic\less\modules\modal.less" />
-    <Content Include="Content\semantic\less\modules\nag.less" />
-    <Content Include="Content\semantic\less\modules\popup.less" />
-    <Content Include="Content\semantic\less\modules\rating.less" />
-    <Content Include="Content\semantic\less\modules\search.less" />
-    <Content Include="Content\semantic\less\modules\shape.less" />
-    <Content Include="Content\semantic\less\modules\sidebar.less" />
-    <Content Include="Content\semantic\less\modules\tab.less" />
-    <Content Include="Content\semantic\less\modules\transition.less" />
-    <Content Include="Content\semantic\less\modules\video.less" />
-    <Content Include="Content\semantic\less\semantic.config" />
-    <Content Include="Content\semantic\less\views\comment.less" />
-    <Content Include="Content\semantic\less\views\feed.less" />
-    <Content Include="Content\semantic\less\views\item.less" />
-    <Content Include="Content\semantic\less\views\list.less" />
-    <Content Include="Content\semantic\less\views\statistic.less" />
-    <Content Include="Content\semantic\packaged\fonts\basic.icons.eot" />
-    <Content Include="Content\semantic\packaged\fonts\basic.icons.ttf" />
-    <Content Include="Content\semantic\packaged\fonts\basic.icons.woff" />
-    <Content Include="Content\semantic\packaged\fonts\icons.eot" />
-    <Content Include="Content\semantic\packaged\fonts\icons.otf" />
-    <Content Include="Content\semantic\packaged\fonts\icons.ttf" />
-    <Content Include="Content\semantic\packaged\fonts\icons.woff" />
     <Content Include="Content\xforms.less" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\font-awesome\fonts\FontAwesome.otf" />
-    <Content Include="Scripts\jquery-2.1.0.min.map" />
+    <Content Include="Scripts\jquery-2.1.1.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -358,6 +378,10 @@
     <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj">
       <Project>{075ba36b-f95a-4563-bbe9-20d4405e9c9e}</Project>
       <Name>NXKit.DOM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.NXInclude\NXKit.NXInclude.csproj">
+      <Project>{8d43ba5c-df3f-4ad8-bf28-6dda74a0a2a1}</Project>
+      <Name>NXKit.NXInclude</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.Scripting.EcmaScript\NXKit.Scripting.EcmaScript.csproj">
       <Project>{285cda69-8a75-408c-a3a1-b750ad9b6bd1}</Project>
@@ -412,11 +436,24 @@
       <Name>NXKit</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Knockout\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
+    <TypeScriptOutFile>NXKit.Test.Web.Site.js</TypeScriptOutFile>
+  </PropertyGroup>
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
@@ -438,20 +475,13 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets'))" />
-  </Target>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\x86\*.*" "$(ProjectDir)"
+    <PostBuildEvent>
+if not exist "$(TargetDir)" md "$(TargetDir)"
+xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\x86\*.*" "$(ProjectDir)"
+if not exist "$(TargetDir)" md "$(TargetDir)"
 xcopy /s /y "$(SolutionDir)packages\ClearScript.V8.5.3.10.0\tools\native\amd64\*.*" "$(ProjectDir)"</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
-  <Import Project="..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

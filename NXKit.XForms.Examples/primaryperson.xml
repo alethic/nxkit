@@ -1,16 +1,14 @@
-<person 
-    xmlns="urn::data"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <firstname />
-    <middlename />
-    <lastname />
-    <heightfeet />
-    <heightinches />
-    <weight />
-    <socialsecuritynumber />
-    <dateofbirth xsi:type="xsd:date" />
-    <gender />
-    <telephone1 />
-    <telephone2 />
+<person xmlns="urn::data" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <firstname />
+  <middlename />
+  <lastname />
+  <heightfeet />
+  <heightinches>0</heightinches>
+  <weight />
+  <socialsecuritynumber />
+  <dateofbirth xsi:type="xsd:date" />
+  <gender>M</gender>
+  <smokerstatus>N</smokerstatus>
+  <telephone1 />
+  <telephone2 />
 </person>

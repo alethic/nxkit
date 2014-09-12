@@ -4,16 +4,18 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 
 using NXKit.Composition;
+using NXKit.Util;
 
 namespace NXKit
 {
 
-    [ScopeExport(typeof(IInvoker), Scope.Host)]
+    [Export(typeof(IInvoker))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class DefaultInvoker :
         IInvoker
     {
 
-        readonly LinkedList<IInvokerLayer> layers;
+        readonly LinkedList<Lazy<IInvokerLayer>> layers;
 
         /// <summary>
         /// Initializes a new instance.
@@ -21,11 +23,11 @@ namespace NXKit
         /// <param name="layers"></param>
         [ImportingConstructor]
         public DefaultInvoker(
-            [ImportMany] IEnumerable<IInvokerLayer> layers)
+            [ImportMany] IEnumerable<Lazy<IInvokerLayer>> layers)
         {
             Contract.Requires<ArgumentNullException>(layers != null);
 
-            this.layers = new LinkedList<IInvokerLayer>(layers);
+            this.layers = layers.ToLinkedList();
         }
 
         public void Invoke(Action action)
@@ -33,10 +35,10 @@ namespace NXKit
             Invoke(action, layers.First);
         }
 
-        void Invoke(Action action, LinkedListNode<IInvokerLayer> next)
+        void Invoke(Action action, LinkedListNode<Lazy<IInvokerLayer>> next)
         {
             if (next != null)
-                next.Value.Invoke(() => Invoke(action, next.Next));
+                next.Value.Value.Invoke(() => Invoke(action, next.Next));
             else
                 action();
         }
@@ -46,10 +48,10 @@ namespace NXKit
             return Invoke(func, layers.First);
         }
 
-        R Invoke<R>(Func<R> func, LinkedListNode<IInvokerLayer> next)
+        R Invoke<R>(Func<R> func, LinkedListNode<Lazy<IInvokerLayer>> next)
         {
             if (next != null)
-                return next.Value.Invoke<R>(() => Invoke<R>(func, next.Next));
+                return next.Value.Value.Invoke<R>(() => Invoke<R>(func, next.Next));
             else
                 return func();
         }

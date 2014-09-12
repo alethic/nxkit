@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" />
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -17,7 +16,7 @@
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <NuGetPackageImportStamp>ca575762</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>c5fa3fb6</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,7 +63,6 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <BuildPackage>true</BuildPackage>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -110,8 +108,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable">
-      <HintPath>..\packages\Microsoft.Bcl.Immutable.1.0.30\lib\portable-net45+win8+wp8\System.Collections.Immutable.dll</HintPath>
+    <Reference Include="System.Collections.Immutable, Version=1.0.34.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Bcl.Immutable.1.0.34\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
@@ -123,26 +122,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeAccessor.cs" />
-    <Compile Include="Composition\Container.cs" />
-    <Compile Include="Composition\EmptyExportProvider.cs" />
     <Compile Include="Composition\ExportProviderExtensions.cs" />
-    <Compile Include="Composition\ObjectContainer.cs" />
-    <Compile Include="Composition\HostContainer.cs" />
-    <Compile Include="Composition\GlobalContainer.cs" />
-    <Compile Include="Composition\IContainer.cs" />
-    <Compile Include="Composition\IGlobalContainer.cs" />
-    <Compile Include="Composition\IObjectContainer.cs" />
-    <Compile Include="Composition\IHostContainer.cs" />
-    <Compile Include="Composition\IScopeMetadata.cs" />
+    <Compile Include="Composition\ExportProviderProvider.cs" />
+    <Compile Include="Composition\IExportProvider.cs" />
+    <Compile Include="Composition\ObjectCatalogExportProvider.cs" />
+    <Compile Include="Composition\ObjectCompositionContainer.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Composition\Scope.cs" />
     <Compile Include="Composition\ScopeCatalog.cs" />
-    <Compile Include="Composition\ScopeExportAttribute.cs" />
-    <Compile Include="Composition\ScopeExportProvider.cs" />
-    <Compile Include="Composition\ScopeHelper.cs" />
-    <Compile Include="Composition\ScopeImportDefinition.cs" />
-    <Compile Include="Composition\ScopePartDefinition.cs" />
-    <Compile Include="ContainerInterfaceProvider.cs" />
+    <Compile Include="DefaultExtensionProvider.cs" />
     <Compile Include="DefaultInvoker.cs" />
+    <Compile Include="DeferredInvokerLayer.cs" />
     <Compile Include="Diagnostics\ITypeProxyProvider.cs" />
     <Compile Include="Diagnostics\DiagnosticsTraceSink.cs" />
     <Compile Include="Diagnostics\DefaultTraceService.cs" />
@@ -152,17 +142,23 @@
     <Compile Include="Diagnostics\XDocumentTypeProxyProvider.cs" />
     <Compile Include="Diagnostics\XElementTypeProxyProvider.cs" />
     <Compile Include="Diagnostics\XTextTypeProxyProvider.cs" />
+    <Compile Include="DocumentEnvironment.cs" />
     <Compile Include="ExceptionInvokerLayer.cs" />
+    <Compile Include="ExtensionExportProvider.cs" />
+    <Compile Include="ExtensionMetadata.cs" />
+    <Compile Include="ExtensionObjectType.cs" />
     <Compile Include="IExtension.cs" />
+    <Compile Include="IExtensionMetadata.cs" />
     <Compile Include="IInvokerLayer.cs" />
     <Compile Include="IInvoker.cs" />
     <Compile Include="IOnSave.cs" />
+    <Compile Include="IO\IOTextReader.cs" />
+    <Compile Include="IRefRoot.cs" />
     <Compile Include="ITextExtension.cs" />
     <Compile Include="IDocumentExtension.cs" />
-    <Compile Include="InvokerLayerAttribute.cs" />
-    <Compile Include="TextExtensionAttribute.cs" />
-    <Compile Include="DocumentExtensionAttribute.cs" />
-    <Compile Include="ElementExtensionAttribute.cs" />
+    <Compile Include="Serialization\IAnnotationObjectDeserializer.cs" />
+    <Compile Include="Serialization\IAnnotationObjectSerializer.cs" />
+    <Compile Include="Serialization\ISerializableAnnotation.cs" />
     <Compile Include="IdRef.cs" />
     <Compile Include="IElementExtension.cs" />
     <Compile Include="IExceptionHandler.cs" />
@@ -182,17 +178,14 @@
     <Compile Include="IO\IOService.cs" />
     <Compile Include="IO\IOResponse.cs" />
     <Compile Include="IO\WebTransport.cs" />
-    <Compile Include="ObjectContainerAnnotation.cs" />
     <Compile Include="ObjectAnnotation.cs" />
     <Compile Include="DocumentAnnotation.cs" />
-    <Compile Include="IInterfacePredicate.cs" />
-    <Compile Include="InterfaceDescriptor.cs" />
-    <Compile Include="InterfacePredicateBase.cs" />
+    <Compile Include="IExtensionPredicate.cs" />
+    <Compile Include="ExtensionPredicateBase.cs" />
     <Compile Include="IOnInvoke.cs" />
     <Compile Include="IOnLoad.cs" />
-    <Compile Include="InterfaceAttribute.cs" />
-    <Compile Include="DefaultInterfaceProvider.cs" />
-    <Compile Include="IInterfaceProvider.cs" />
+    <Compile Include="ExtensionAttribute.cs" />
+    <Compile Include="IExtensionProvider.cs" />
     <Compile Include="Net\ResourceUriHelper.cs" />
     <Compile Include="Net\ResourceUriParser.cs" />
     <Compile Include="Net\ResourceWebRequest.cs" />
@@ -205,7 +198,7 @@
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="RemoteAttribute.cs" />
     <Compile Include="Serialization\SerializableAnnotationAttribute.cs" />
-    <Compile Include="Serialization\XNodeAnnotationSerializer.cs" />
+    <Compile Include="Serialization\AnnotationSerializer.cs" />
     <Compile Include="Util\DictionaryExtensions.cs" />
     <Compile Include="Net\DynamicUriAuthority.cs" />
     <Compile Include="Net\DynamicUriHelper.cs" />
@@ -218,6 +211,7 @@
     <Compile Include="Util\DynamicDictionary.cs" />
     <Compile Include="Util\DynamicDictionaryValue.cs" />
     <Compile Include="Util\EnumerableExtensions.cs" />
+    <Compile Include="Util\FrameworkUtil.cs" />
     <Compile Include="Util\LinkedListExtensions.cs" />
     <Compile Include="Util\MediaRangeList.cs" />
     <Compile Include="Util\MediaRangeParameters.cs" />
@@ -225,8 +219,7 @@
     <Compile Include="Util\MediaRange.cs" />
     <Compile Include="Util\ObjectExtensions.cs" />
     <Compile Include="Util\StringExtensions.cs" />
-    <Compile Include="CompositionUtil.cs" />
-    <Compile Include="InterfaceProviderBase.cs" />
+    <Compile Include="Composition\CompositionUtil.cs" />
     <Compile Include="Xml\BaseUriAnnotation.cs" />
     <Compile Include="Xml\IOXmlReader.cs" />
     <Compile Include="Xml\XCloneTransformer.cs" />
@@ -242,7 +235,7 @@
     <Compile Include="SchemaPackage.cs" />
     <Compile Include="SchemaContainer.cs" />
     <Compile Include="IRefScope.cs" />
-    <Compile Include="NXDocumentHost.cs" />
+    <Compile Include="Document.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Xml\XTransformer.cs" />
     <Compile Include="Xml\XVisitor.cs" />
@@ -265,16 +258,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets'))" />
-  </Target>
-  <Import Project="..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets" Condition="Exists('..\packages\Microsoft.CodeContracts.1.5.60911.12\build\Microsoft.CodeContracts.targets')" />
-  <Import Project="..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.0.20.1-jhaltom0003\Build\GitVersionTask.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

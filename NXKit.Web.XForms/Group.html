@@ -1,434 +1,57 @@
 ﻿<script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
         data-nxkit-data-type="*">
-    <!-- ko with: new NXKit.Web.XForms.GroupLayoutManager($context) -->
     <!-- ko with: new NXKit.Web.XForms.GroupViewModel($context, $parent) -->
-
-    <div class="xforms-group ui form segment"
+    <div class="xforms-group"
          data-bind="
-    nxkit_visible: Relevant,
-    css: {
-        attached: Help
-    },
-    event: {
-        focusin: function (data, event) { SetFocus(); return true; },
-    }">
-
+nxkit_visible: Relevant,
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-label-appearance': LabelAppearance,
+}">
         <!-- ko with: Label -->
-        <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <header class="ui header"
-                data-bind="nxkit_template: $data" />
-        <!-- /ko -->
-        <!-- /ko -->
-        <!-- ko with: Help -->
-        <div class="ui modal"
-             data-bind="attr: { 'id': $parent.UniqueId }">
-            <div class="header">
-                <!-- ko with: $parent.Label -->
-                <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-                <!-- ko nxkit_template -->
-                <!-- /ko -->
-                <!-- /ko -->
-                <!-- /ko -->
-            </div>
-            <div class="content">
-                <div class="left">
-                    <i class="help icon"></i>
-                </div>
-                <div class="right">
-                    <!-- ko nxkit_template -->
-                    <!-- /ko -->
-                </div>
-            </div>
-            <div class="actions">
-                <div class="ui button">OK</div>
-            </div>
-        </div>
-
-        <div class="ui right green corner label"
-             data-bind="nxkit_modal: $parent.UniqueId">
-            <i class="link help icon"></i>
+        <div class="label"
+             data-bind="
+attr : {
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data),
+}">
+            <!-- ko nxkit_template -->
+            <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko with: Hint -->
-        <div class="ui small blue message">
-            <div class="content">
+        <div class="hint">
+            <!-- ko nxkit_template -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nxkit_template -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <div class="contents" data-bind="
+attr: {
+    'data-nx-xforms-count': $data.Count,
+    'data-nx-xforms-count-enabled': $data.CountEnabled,
+}">
+            <!-- ko foreach: Contents -->
+            <div class="item"
+                 data-bind="
+attr: {
+    'data-nx-name': Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data),
+}">
                 <!-- ko nxkit_template -->
                 <!-- /ko -->
             </div>
+            <!-- /ko -->
         </div>
-        <!-- /ko -->
-        <!-- ko foreach: Items -->
-        <!-- ko nxkit_template: Layout -->
-        <!-- /ko -->
-        <!-- /ko -->
-
     </div>
-
-    <!-- ko with: Help -->
-    <div class="ui bottom attached info message"
-         data-bind="nxkit_modal: $parent.UniqueId">
-        <i class="link help icon"></i>
-        Are you sure you know what you're doing?
-    </div>
-    <!-- /ko -->
-    <!-- /ko -->
-    <!-- /ko -->
-</script>
-
-<!--
-    HTML for a field label.
--->
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-layout="field-label">
-
-    <!-- ko with: Label -->
-    <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-    <label>
-        <!-- ko nxkit_template -->
-        <!-- /ko -->
-        <!-- ko with: $parent.Help -->
-        <i class="help icon"></i>
-        <!-- /ko -->
-    </label>
-    <!-- /ko -->
-    <!-- /ko -->
-
-</script>
-
-<!--
-    HTML for a single field with label.
--->
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-layout="field-with-label">
-
-    <div class="field"
-         data-bind="
-nxkit_visible: Relevant,
-css: {
-    error: !$data.Valid(),
-    disabled: $data.ReadOnly,
-}">
-
-        <!-- ko nxkit_template: {
-            name: '{http://www.w3.org/2002/xforms}group',
-            data: $data,
-            layout: 'field-label',
-        } -->
-        <!-- /ko -->
-        <!-- ko nxkit_layout: {
-            SuppressLabel: true,
-        } -->
-        <!-- ko nxkit_template: Layout -->
-        <!-- /ko -->
-        <!-- /ko -->
-
-    </div>
-
-</script>
-
-<!--
-    HTML for a single field with no label.
--->
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-layout="field-without-label">
-
-    <div class="inline field"
-         data-bind="
-css: {
-    error: !$data.Valid(),
-    disabled: $data.ReadOnly,
-}">
-
-        <!-- ko nxkit_template: Layout -->
-        <!-- /ko -->
-
-    </div>
-
-</script>
-
-<!--
-    HTML for a single field.
--->
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-layout="field">
-
-    <!-- ko nxkit_template: {
-        name: '{http://www.w3.org/2002/xforms}group',
-        data: $data,
-        layout: Label != null ? 'field-with-label' : 'field-without-label',
-    } -->
-    <!-- /ko -->
-
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="1"
-        data-nxkit-layout="single">
-
-    <!-- ko nxkit_template: {
-        name: '{http://www.w3.org/2002/xforms}group',
-        data: $data.Items[0],
-        layout: 'field',
-    }-->
-    <!-- /ko -->
-
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="1"
-        data-nxkit-layout="double">
-
-    <div class="two fields"
-         data-bind="nxkit_visible: Relevant">
-
-        <!-- ko foreach: Items -->
-        <!-- ko nxkit_template: {
-            name: '{http://www.w3.org/2002/xforms}group',
-            data: $data,
-            layout: 'field',
-        }-->
-        <!-- /ko -->
-        <!-- /ko -->
-
-    </div>
-
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="1"
-        data-nxkit-layout="group">
-
-    <div class="xforms-group secondary"
-         data-bind="
-    nxkit_visible: Relevant,
-    event: {
-        focusin: function (data, event) { SetFocus(); return true; },
-    }">
-
-        <!-- ko with: Label -->
-        <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <div class="ui blue ribbon label"
-             data-bind="nxkit_template: $data" />
-        <!-- /ko -->
-        <!-- /ko -->
-        <!-- ko foreach: Items -->
-        <!-- ko nxkit_template: Layout -->
-        <!-- /ko -->
-        <!-- /ko -->
-
-    </div>
-
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="1"
-        data-nxkit-layout="node">
-
-    <!-- ko nxkit_template: ItemNode -->
-    <!-- /ko -->
-
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="1"
-        data-nxkit-layout="input">
-
-    <!-- ko nxkit_template: ItemNode -->
-    <!-- /ko -->
-
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="2"
-        data-nxkit-layout="single">
-
-    <!-- ko with: Items[0] -->
-    <div class="field">
-
-        <!-- ko with: Label -->
-        <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <label data-bind="nxkit_template: $data" />
-        <!-- /ko -->
-        <!-- /ko -->
-        <!-- ko nxkit_template: Layout -->
-        <!-- /ko -->
-
-    </div>
-    <!-- /ko -->
-
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="2"
-        data-nxkit-layout="double">
-
-    <div class="two fields">
-
-        <!-- ko foreach: Items-->
-        <div class="field" data-bind="
-nxkit_visible: Relevant,
-css: {
-    error: !$data.Valid(),
-    disabled: $data.ReadOnly,
-}">
-
-            <!-- ko with: Label -->
-            <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-            <label data-bind="nxkit_template: $data" />
-            <!-- /ko -->
-            <!-- /ko -->
-            <!-- ko nxkit_template: Layout -->
-            <!-- /ko -->
-
-        </div>
-        <!-- /ko -->
-
-    </div>
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="2"
-        data-nxkit-layout="group">
-
-    <div style="margin-bottom: 10px;"
-         data-bind="
-    nxkit_visible: Relevant,
-    event: {
-        focusin: function (data, event) { SetFocus(); return true; },
-    }">
-
-        <!-- ko with: Label -->
-        <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <header class="ui top attached tiny header"
-                data-bind="nxkit_template: $data" />
-        <!-- /ko -->
-        <!-- /ko -->
-
-        <div class="ui secondary segment"
-             data-bind="css: { attached: Label }">
-
-            <!-- ko foreach: Items -->
-            <!-- ko nxkit_template: Layout -->
-            <!-- /ko -->
-            <!-- /ko -->
-
-        </div>
-
-    </div>
-
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="2"
-        data-nxkit-layout="node">
-    <!-- ko nxkit_template: ItemNode -->
-    <!-- /ko -->
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="2"
-        data-nxkit-layout="input">
-    <!-- ko nxkit_template: ItemNode -->
-    <!-- /ko -->
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="3"
-        data-nxkit-layout="single">
-
-    <!-- ko with: Items[0] -->
-    <div class="field">
-
-        <!-- ko with: Label -->
-        <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <label data-bind="nxkit_template: $data" />
-        <!-- /ko -->
-        <!-- /ko -->
-        <!-- ko nxkit_template: Layout -->
-        <!-- /ko -->
-
-    </div>
-    <!-- /ko -->
-
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="3"
-        data-nxkit-layout="double">
-
-    <div class="two fields">
-
-        <!-- ko foreach: Items -->
-        <div class="field">
-
-            <!-- ko with: Label -->
-            <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-            <label data-bind="nxkit_template: $data" />
-            <!-- /ko -->
-            <!-- /ko -->
-            <!-- ko nxkit_template: Layout -->
-            <!-- /ko -->
-
-        </div>
-        <!-- /ko -->
-
-    </div>
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="3"
-        data-nxkit-layout="group">
-
-    <div style="margin-bottom: 10px;"
-         data-bind="
-    nxkit_visible: Relevant,
-    event: {
-        focusin: function (data, event) { SetFocus(); return true; },
-    }">
-
-        <!-- ko with: Label -->
-        <!-- ko if: ($data.Appearance || 'full') == 'full' -->
-        <header class="ui top attached tiny header"
-                data-bind="nxkit_template: $data" />
-        <!-- /ko -->
-        <!-- /ko -->
-
-        <div class="ui secondary segment"
-             data-bind="css: { attached: Label }">
-
-            <!-- ko foreach: Items -->
-            <!-- ko nxkit_template: Layout -->
-            <!-- /ko -->
-            <!-- /ko -->
-
-        </div>
-
-    </div>
-
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-level="3"
-        data-nxkit-layout="node">
-    <!-- ko nxkit_template: ItemNode -->
     <!-- /ko -->
 </script>

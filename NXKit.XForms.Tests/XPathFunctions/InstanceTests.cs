@@ -22,7 +22,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
         [TestMethod]
         public void Test_default_instance_resolution()
         {
-            var e = NXDocumentHost.Load(RegisterXml(@"
+            var e = Document.Load(RegisterXml(@"
 <unknown xmlns:xf=""http://www.w3.org/2002/xforms"">
     <xf:model id=""data"">
         <xf:instance id=""instance1"">
@@ -47,7 +47,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
         [TestMethod]
         public void Test_specified_instance_resolution()
         {
-            var e = NXDocumentHost.Load(RegisterXml(@"
+            var e = Document.Load(RegisterXml(@"
                 <unknown xmlns:xf=""http://www.w3.org/2002/xforms"">
                     <xf:model id=""data"">
                         <xf:instance id=""instance1"">
