@@ -1,12 +1,11 @@
-﻿using NXKit.Composition;
-using NXKit.DOMEvents;
-using NXKit.Xml;
-using NXKit.XMLEvents;
-
-using System;
+﻿using System;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
+using NXKit.Composition;
+using NXKit.DOMEvents;
+using NXKit.XMLEvents;
 
 namespace NXKit.XForms
 {
@@ -30,18 +29,7 @@ namespace NXKit.XForms
 
         public void HandleEvent(Event ev)
         {
-            var modelAttr = attributes.GetAttributeValue("model");
-            if (modelAttr != null)
-            {
-                var model = Element.ResolveId(modelAttr);
-                if (model != null)
-                    model.Interface<Model>().OnRefresh();
-                else
-                {
-                    Element.Interface<EventTarget>().Dispatch(Events.BindingException);
-                    return;
-                }
-            }
+            throw new NotImplementedException();
         }
 
     }
