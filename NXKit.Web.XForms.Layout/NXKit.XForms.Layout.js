@@ -283,4 +283,3 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
-//# sourceMappingURL=NXKit.XForms.Layout.js.map

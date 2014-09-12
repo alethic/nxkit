@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit", "NXKit\NXKit.csproj", "{2B27233A-849A-4339-96C6-BABCB968B8B0}"
 EndProject
@@ -61,6 +61,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.DOMEvents.Tests", "NXKit.DOMEvents.Tests\NXKit.DOMEvents.Tests.csproj", "{C0FC2477-6735-4962-9E7C-5E8ACCE9B3DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.NXInclude", "NXKit.NXInclude\NXKit.NXInclude.csproj", "{8D43BA5C-DF3F-4AD8-BF28-6DDA74A0A2A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6076674D-F023-4DBB-8173-CF2B27C55C6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -167,5 +169,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{606CFC52-D06A-4B21-B295-A52C5D8C979E} = {6076674D-F023-4DBB-8173-CF2B27C55C6E}
+		{5FE52D8D-76F0-4E3E-B54C-FF79343DE832} = {6076674D-F023-4DBB-8173-CF2B27C55C6E}
+		{80087881-51FE-4499-8788-5BF5A76CF34B} = {6076674D-F023-4DBB-8173-CF2B27C55C6E}
+		{190BE7BF-2A9F-453C-B9AF-EA6765ECE231} = {6076674D-F023-4DBB-8173-CF2B27C55C6E}
+		{E5478294-82C4-4FD1-9FDA-830C3020E612} = {6076674D-F023-4DBB-8173-CF2B27C55C6E}
+		{C0FC2477-6735-4962-9E7C-5E8ACCE9B3DF} = {6076674D-F023-4DBB-8173-CF2B27C55C6E}
 	EndGlobalSection
 EndGlobal
