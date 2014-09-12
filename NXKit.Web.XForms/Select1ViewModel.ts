@@ -1,6 +1,6 @@
 ﻿/// <reference path="XFormsNodeViewModel.ts" />
 
-module NXKit.Web.XForms {
+ module NXKit.Web.XForms {
 
     export class Select1ViewModel
         extends NXKit.Web.XForms.XFormsNodeViewModel {

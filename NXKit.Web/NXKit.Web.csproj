@@ -178,10 +178,16 @@
     <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
     <TypeScriptCompile Include="Severity.ts" />
     <TypeScriptCompile Include="Util.ts" />
+    <TypeScriptCompile Include="ViewExport.ts" />
     <TypeScriptCompile Include="ViewModelUtil.ts" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".bin\git.cmd" />
+    <None Include=".bin\grunt.cmd" />
+    <None Include=".bin\node.cmd" />
+    <None Include=".bin\npm.cmd" />
     <None Include="NXKit.Web.nuspec" />
+    <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +216,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="View.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Gruntfile.js" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
@@ -254,4 +263,13 @@
     </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
+  <Target Name="BuildGrunt">
+    <Exec Command=".bin\grunt build" />
+  </Target>
+  <PropertyGroup>
+    <BuildDependsOn>
+            $(BuildDependsOn);
+            BuildGrunt;
+        </BuildDependsOn>
+  </PropertyGroup>
 </Project>

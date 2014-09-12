@@ -1,7 +1,7 @@
 ﻿module NXKit.Web {
 
-    export class TypedEvent
-        implements IEvent {
+    class TypedEvent
+        implements NXKit.Web.IEvent {
 
         _listeners: any[] = [];
 
