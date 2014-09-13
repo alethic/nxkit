@@ -1459,6 +1459,234 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (ViewModelUtil) {
+            /**
+            * Set of functions to inject layout managers at the top of the hierarchy.
+            */
+            ViewModelUtil.LayoutManagers = [
+                function (c) {
+                    return new Web.DefaultLayoutManager(c);
+                }
+            ];
+
+            /**
+            * Nodes which represent a grouping element.
+            */
+            ViewModelUtil.GroupNodes = [];
+
+            /**
+            * Nodes which are considered to be control elements.
+            */
+            ViewModelUtil.ControlNodes = [];
+
+            /**
+            * Nodes which are considered to be metadata elements for their parents.
+            */
+            ViewModelUtil.MetadataNodes = [];
+
+            /**
+            * Nodes which are considered to be transparent, and ignored when calculating content membership.
+            */
+            ViewModelUtil.TransparentNodes = [];
+
+            /**
+            * Nodes which are considered to be transparent, and ignored when calculating content membership.
+            */
+            ViewModelUtil.TransparentNodePredicates = [
+                function (n) {
+                    return ViewModelUtil.TransparentNodes.some(function (_) {
+                        return _ === n.Name;
+                    });
+                }
+            ];
+
+            /**
+            * Returns true of the given node is an empty text node.
+            */
+            function IsEmptyTextNode(node) {
+                return node.Type == Web.NodeType.Text && (node.Value() || '').trim() === '';
+            }
+            ViewModelUtil.IsEmptyTextNode = IsEmptyTextNode;
+
+            /**
+            * Returns true if the current node is one that should be completely ignored.
+            */
+            function IsIgnoredNode(node) {
+                return node == null || IsEmptyTextNode(node);
+            }
+            ViewModelUtil.IsIgnoredNode = IsIgnoredNode;
+
+            /**
+            * Returns true if the given node is a control node.
+            */
+            function IsGroupNode(node) {
+                return !IsIgnoredNode(node) && ViewModelUtil.GroupNodes.some(function (_) {
+                    return node.Name == _;
+                });
+            }
+            ViewModelUtil.IsGroupNode = IsGroupNode;
+
+            /**
+            * Returns true if the given node set contains a control node.
+            */
+            function HasGroupNode(nodes) {
+                return nodes.some(function (_) {
+                    return IsGroupNode(_);
+                });
+            }
+            ViewModelUtil.HasGroupNode = HasGroupNode;
+
+            /**
+            * Filters out the given node set for control nodes.
+            */
+            function GetGroupNodes(nodes) {
+                return nodes.filter(function (_) {
+                    return IsGroupNode(_);
+                });
+            }
+            ViewModelUtil.GetGroupNodes = GetGroupNodes;
+
+            /**
+            * Returns true if the given node is a control node.
+            */
+            function IsControlNode(node) {
+                return !IsIgnoredNode(node) && ViewModelUtil.ControlNodes.some(function (_) {
+                    return node.Name == _;
+                });
+            }
+            ViewModelUtil.IsControlNode = IsControlNode;
+
+            /**
+            * Returns true if the given node set contains a control node.
+            */
+            function HasControlNode(nodes) {
+                return nodes.some(function (_) {
+                    return IsControlNode(_);
+                });
+            }
+            ViewModelUtil.HasControlNode = HasControlNode;
+
+            /**
+            * Filters out the given node set for control nodes.
+            */
+            function GetControlNodes(nodes) {
+                return nodes.filter(function (_) {
+                    return IsControlNode(_);
+                });
+            }
+            ViewModelUtil.GetControlNodes = GetControlNodes;
+
+            /**
+            * Returns true if the given node is a transparent node.
+            */
+            function IsMetadataNode(node) {
+                return !IsIgnoredNode(node) && ViewModelUtil.MetadataNodes.some(function (_) {
+                    return node.Name == _;
+                });
+            }
+            ViewModelUtil.IsMetadataNode = IsMetadataNode;
+
+            /**
+            * Returns true if the given node set contains a metadata node.
+            */
+            function HasMetadataNode(nodes) {
+                return nodes.some(function (_) {
+                    return IsMetadataNode(_);
+                });
+            }
+            ViewModelUtil.HasMetadataNode = HasMetadataNode;
+
+            /**
+            * Filters out the given node set for control nodes.
+            */
+            function GetMetadataNodes(nodes) {
+                return nodes.filter(function (_) {
+                    return IsMetadataNode(_);
+                });
+            }
+            ViewModelUtil.GetMetadataNodes = GetMetadataNodes;
+
+            /**
+            * Returns true if the given node is a transparent node.
+            */
+            function IsTransparentNode(node) {
+                return IsIgnoredNode(node) || ViewModelUtil.TransparentNodePredicates.some(function (_) {
+                    return _(node);
+                });
+            }
+            ViewModelUtil.IsTransparentNode = IsTransparentNode;
+
+            /**
+            * Returns true if the given node set contains a transparent node.
+            */
+            function HasTransparentNode(nodes) {
+                return nodes.some(function (_) {
+                    return IsTransparentNode(_);
+                });
+            }
+            ViewModelUtil.HasTransparentNode = HasTransparentNode;
+
+            /**
+            * Filters out the given node set for transparent nodes.
+            */
+            function GetTransparentNodes(nodes) {
+                return nodes.filter(function (_) {
+                    return IsControlNode(_);
+                });
+            }
+            ViewModelUtil.GetTransparentNodes = GetTransparentNodes;
+
+            /**
+            * Filters out the given node set for content nodes. This descends through transparent nodes.
+            */
+            function GetContentNodes(nodes) {
+                try  {
+                    var l = nodes.filter(function (_) {
+                        return !IsMetadataNode(_);
+                    });
+                    var r = new Array();
+                    for (var i = 0; i < l.length; i++) {
+                        var v = l[i];
+                        if (v == null) {
+                            throw new Error('ViewModelUtil.GetContentNodes(): prospective Node is null');
+                        }
+                        if (IsTransparentNode(v)) {
+                            var s = GetContentNodes(v.Nodes());
+                            for (var j = 0; j < s.length; j++)
+                                r.push(s[j]);
+                        } else {
+                            r.push(v);
+                        }
+                    }
+
+                    return r;
+                } catch (ex) {
+                    ex.message = 'ViewModelUtil.GetContentNodes()' + '"\nMessage: ' + ex.message;
+                    throw ex;
+                }
+            }
+            ViewModelUtil.GetContentNodes = GetContentNodes;
+
+            /**
+            * Gets the content nodes of the given node. This descends through transparent nodes.
+            */
+            function GetContents(node) {
+                try  {
+                    return GetContentNodes(node.Nodes());
+                } catch (ex) {
+                    ex.message = 'ViewModelUtil.GetContents()' + '"\nMessage: ' + ex.message;
+                    throw ex;
+                }
+            }
+            ViewModelUtil.GetContents = GetContents;
+        })(Web.ViewModelUtil || (Web.ViewModelUtil = {}));
+        var ViewModelUtil = Web.ViewModelUtil;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
 /// <reference path="Node.ts" />
 /// <reference path="TypedEvent.ts" />
 var NXKit;
@@ -1777,234 +2005,6 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (ViewModelUtil) {
-            /**
-            * Set of functions to inject layout managers at the top of the hierarchy.
-            */
-            ViewModelUtil.LayoutManagers = [
-                function (c) {
-                    return new Web.DefaultLayoutManager(c);
-                }
-            ];
-
-            /**
-            * Nodes which represent a grouping element.
-            */
-            ViewModelUtil.GroupNodes = [];
-
-            /**
-            * Nodes which are considered to be control elements.
-            */
-            ViewModelUtil.ControlNodes = [];
-
-            /**
-            * Nodes which are considered to be metadata elements for their parents.
-            */
-            ViewModelUtil.MetadataNodes = [];
-
-            /**
-            * Nodes which are considered to be transparent, and ignored when calculating content membership.
-            */
-            ViewModelUtil.TransparentNodes = [];
-
-            /**
-            * Nodes which are considered to be transparent, and ignored when calculating content membership.
-            */
-            ViewModelUtil.TransparentNodePredicates = [
-                function (n) {
-                    return ViewModelUtil.TransparentNodes.some(function (_) {
-                        return _ === n.Name;
-                    });
-                }
-            ];
-
-            /**
-            * Returns true of the given node is an empty text node.
-            */
-            function IsEmptyTextNode(node) {
-                return node.Type == Web.NodeType.Text && (node.Value() || '').trim() === '';
-            }
-            ViewModelUtil.IsEmptyTextNode = IsEmptyTextNode;
-
-            /**
-            * Returns true if the current node is one that should be completely ignored.
-            */
-            function IsIgnoredNode(node) {
-                return node == null || IsEmptyTextNode(node);
-            }
-            ViewModelUtil.IsIgnoredNode = IsIgnoredNode;
-
-            /**
-            * Returns true if the given node is a control node.
-            */
-            function IsGroupNode(node) {
-                return !IsIgnoredNode(node) && ViewModelUtil.GroupNodes.some(function (_) {
-                    return node.Name == _;
-                });
-            }
-            ViewModelUtil.IsGroupNode = IsGroupNode;
-
-            /**
-            * Returns true if the given node set contains a control node.
-            */
-            function HasGroupNode(nodes) {
-                return nodes.some(function (_) {
-                    return IsGroupNode(_);
-                });
-            }
-            ViewModelUtil.HasGroupNode = HasGroupNode;
-
-            /**
-            * Filters out the given node set for control nodes.
-            */
-            function GetGroupNodes(nodes) {
-                return nodes.filter(function (_) {
-                    return IsGroupNode(_);
-                });
-            }
-            ViewModelUtil.GetGroupNodes = GetGroupNodes;
-
-            /**
-            * Returns true if the given node is a control node.
-            */
-            function IsControlNode(node) {
-                return !IsIgnoredNode(node) && ViewModelUtil.ControlNodes.some(function (_) {
-                    return node.Name == _;
-                });
-            }
-            ViewModelUtil.IsControlNode = IsControlNode;
-
-            /**
-            * Returns true if the given node set contains a control node.
-            */
-            function HasControlNode(nodes) {
-                return nodes.some(function (_) {
-                    return IsControlNode(_);
-                });
-            }
-            ViewModelUtil.HasControlNode = HasControlNode;
-
-            /**
-            * Filters out the given node set for control nodes.
-            */
-            function GetControlNodes(nodes) {
-                return nodes.filter(function (_) {
-                    return IsControlNode(_);
-                });
-            }
-            ViewModelUtil.GetControlNodes = GetControlNodes;
-
-            /**
-            * Returns true if the given node is a transparent node.
-            */
-            function IsMetadataNode(node) {
-                return !IsIgnoredNode(node) && ViewModelUtil.MetadataNodes.some(function (_) {
-                    return node.Name == _;
-                });
-            }
-            ViewModelUtil.IsMetadataNode = IsMetadataNode;
-
-            /**
-            * Returns true if the given node set contains a metadata node.
-            */
-            function HasMetadataNode(nodes) {
-                return nodes.some(function (_) {
-                    return IsMetadataNode(_);
-                });
-            }
-            ViewModelUtil.HasMetadataNode = HasMetadataNode;
-
-            /**
-            * Filters out the given node set for control nodes.
-            */
-            function GetMetadataNodes(nodes) {
-                return nodes.filter(function (_) {
-                    return IsMetadataNode(_);
-                });
-            }
-            ViewModelUtil.GetMetadataNodes = GetMetadataNodes;
-
-            /**
-            * Returns true if the given node is a transparent node.
-            */
-            function IsTransparentNode(node) {
-                return IsIgnoredNode(node) || ViewModelUtil.TransparentNodePredicates.some(function (_) {
-                    return _(node);
-                });
-            }
-            ViewModelUtil.IsTransparentNode = IsTransparentNode;
-
-            /**
-            * Returns true if the given node set contains a transparent node.
-            */
-            function HasTransparentNode(nodes) {
-                return nodes.some(function (_) {
-                    return IsTransparentNode(_);
-                });
-            }
-            ViewModelUtil.HasTransparentNode = HasTransparentNode;
-
-            /**
-            * Filters out the given node set for transparent nodes.
-            */
-            function GetTransparentNodes(nodes) {
-                return nodes.filter(function (_) {
-                    return IsControlNode(_);
-                });
-            }
-            ViewModelUtil.GetTransparentNodes = GetTransparentNodes;
-
-            /**
-            * Filters out the given node set for content nodes. This descends through transparent nodes.
-            */
-            function GetContentNodes(nodes) {
-                try  {
-                    var l = nodes.filter(function (_) {
-                        return !IsMetadataNode(_);
-                    });
-                    var r = new Array();
-                    for (var i = 0; i < l.length; i++) {
-                        var v = l[i];
-                        if (v == null) {
-                            throw new Error('ViewModelUtil.GetContentNodes(): prospective Node is null');
-                        }
-                        if (IsTransparentNode(v)) {
-                            var s = GetContentNodes(v.Nodes());
-                            for (var j = 0; j < s.length; j++)
-                                r.push(s[j]);
-                        } else {
-                            r.push(v);
-                        }
-                    }
-
-                    return r;
-                } catch (ex) {
-                    ex.message = 'ViewModelUtil.GetContentNodes()' + '"\nMessage: ' + ex.message;
-                    throw ex;
-                }
-            }
-            ViewModelUtil.GetContentNodes = GetContentNodes;
-
-            /**
-            * Gets the content nodes of the given node. This descends through transparent nodes.
-            */
-            function GetContents(node) {
-                try  {
-                    return GetContentNodes(node.Nodes());
-                } catch (ex) {
-                    ex.message = 'ViewModelUtil.GetContents()' + '"\nMessage: ' + ex.message;
-                    throw ex;
-                }
-            }
-            ViewModelUtil.GetContents = GetContents;
-        })(Web.ViewModelUtil || (Web.ViewModelUtil = {}));
-        var ViewModelUtil = Web.ViewModelUtil;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
 /// <reference path="Node.ts" />
 var NXKit;
 (function (NXKit) {
@@ -2214,4 +2214,4 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
-//# sourceMappingURL=NXKit.js.map
+//# sourceMappingURL=nxkit.js.map

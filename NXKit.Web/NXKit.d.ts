@@ -353,68 +353,6 @@ declare module NXKit.Web {
         Error = 4,
     }
 }
-declare module NXKit.Web {
-    /**
-    * Main NXKit client-side view class. Injects the view interface into a set of HTML elements.
-    */
-    class View {
-        private _body;
-        private _server;
-        private _save;
-        private _hash;
-        private _root;
-        private _bind;
-        private _messages;
-        private _threshold;
-        private _queue;
-        private _queueRunning;
-        private _busy;
-        constructor(body: HTMLElement, server: IServerInvoke);
-        public Busy : KnockoutObservable<boolean>;
-        public Body : HTMLElement;
-        public Data : any;
-        public Root : Node;
-        public Messages : KnockoutObservableArray<Message>;
-        public Threshold : Severity;
-        /**
-        * Updates the view in response to a received message.
-        */
-        public Receive(args: any): void;
-        /**
-        * Updates the view in response to a received data package.
-        */
-        public ReceiveData(data: any): void;
-        /**
-        * Updates the messages of the view with the specified items.
-        */
-        private AppendMessages(messages);
-        /**
-        * Executes the given scripts.
-        */
-        private ExecuteScripts(scripts);
-        /**
-        * Removes the current message from the set of messages.
-        */
-        public RemoveMessage(message: Message): void;
-        /**
-        * Initiates a refresh of the view model.
-        */
-        private Apply(data);
-        /**
-        * Invoked when the view model initiates a request to push an update to a node.
-        */
-        public PushUpdate(node: Node, $interface: Interface, property: Property, value: any): void;
-        public PushInvoke(node: Node, interfaceName: string, methodName: string, params: any): void;
-        /**
-        * Queues the given data to be sent to the server.
-        */
-        public Queue(command: any): void;
-        /**
-        * Applies the bindings to the view if possible.
-        */
-        public ApplyBindings(): void;
-    }
-}
 declare module NXKit.Web.ViewModelUtil {
     /**
     * Set of functions to inject layout managers at the top of the hierarchy.
@@ -508,6 +446,68 @@ declare module NXKit.Web.ViewModelUtil {
     * Gets the content nodes of the given node. This descends through transparent nodes.
     */
     function GetContents(node: Node): Node[];
+}
+declare module NXKit.Web {
+    /**
+    * Main NXKit client-side view class. Injects the view interface into a set of HTML elements.
+    */
+    class View {
+        private _body;
+        private _server;
+        private _save;
+        private _hash;
+        private _root;
+        private _bind;
+        private _messages;
+        private _threshold;
+        private _queue;
+        private _queueRunning;
+        private _busy;
+        constructor(body: HTMLElement, server: IServerInvoke);
+        public Busy : KnockoutObservable<boolean>;
+        public Body : HTMLElement;
+        public Data : any;
+        public Root : Node;
+        public Messages : KnockoutObservableArray<Message>;
+        public Threshold : Severity;
+        /**
+        * Updates the view in response to a received message.
+        */
+        public Receive(args: any): void;
+        /**
+        * Updates the view in response to a received data package.
+        */
+        public ReceiveData(data: any): void;
+        /**
+        * Updates the messages of the view with the specified items.
+        */
+        private AppendMessages(messages);
+        /**
+        * Executes the given scripts.
+        */
+        private ExecuteScripts(scripts);
+        /**
+        * Removes the current message from the set of messages.
+        */
+        public RemoveMessage(message: Message): void;
+        /**
+        * Initiates a refresh of the view model.
+        */
+        private Apply(data);
+        /**
+        * Invoked when the view model initiates a request to push an update to a node.
+        */
+        public PushUpdate(node: Node, $interface: Interface, property: Property, value: any): void;
+        public PushInvoke(node: Node, interfaceName: string, methodName: string, params: any): void;
+        /**
+        * Queues the given data to be sent to the server.
+        */
+        public Queue(command: any): void;
+        /**
+        * Applies the bindings to the view if possible.
+        */
+        public ApplyBindings(): void;
+    }
 }
 declare module NXKit.Web {
     /**
