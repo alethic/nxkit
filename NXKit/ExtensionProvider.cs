@@ -14,50 +14,59 @@ namespace NXKit
     /// <summary>
     /// Provides interface lookup using the container.
     /// </summary>
-    [Export(typeof(IExtensionProvider))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
-    public class DefaultExtensionProvider :
-        IExtensionProvider
+    public class ExtensionProvider<T>
+        where T : class
     {
 
-        static Func<T> GetLazyFunc<T>(Lazy<T> inner)
-        {
-            return () => inner.Value;
-        }
-
         readonly XObject obj;
-        readonly IEnumerable<Lazy<IExtension, IExtensionMetadata>> extensions;
+        readonly IEnumerable<Lazy<IExtension>> extensions;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="container"></param>
-        /// <param name="predicates"></param>
+        /// <param name="obj"></param>
+        /// <param name="extensions"></param>
         [ImportingConstructor]
-        public DefaultExtensionProvider(
+        public ExtensionProvider(
             XObject obj,
-            [ImportMany] IEnumerable<Lazy<IExtension, IExtensionMetadata>> extensions)
+            [ImportMany] IEnumerable<Lazy<IExtension, IDictionary<string, object>>> extensions)
         {
             Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(extensions != null);
 
             this.obj = obj;
-            this.extensions = extensions;
+            this.extensions = GetExtensions(extensions).ToList();
         }
 
-        public IEnumerable<T> GetExtensions<T>(XObject obj)
+        /// <summary>
+        /// Exports typed extensions.
+        /// </summary>
+        [Export(typeof(Extension<>))]
+        public Extension<T> Extension
         {
-            return GetExtensions(obj, typeof(T)).OfType<T>();
+            get { return new Extension<T>(() => extensions.Select(i => i.Value).OfType<T>().FirstOrDefault()); }
         }
 
-        public IEnumerable<object> GetExtensions(XObject obj, Type type)
+        /// <summary>
+        /// Exports typed extensions.
+        /// </summary>
+        [Export(typeof(ExtensionQuery<>))]
+        public ExtensionQuery<T> ExtensionQuery
         {
-            if (obj != this.obj)
-                yield break;
+            get { return new ExtensionQuery<T>(() => extensions.Select(i => i.Value).OfType<T>()); }
+        }
 
+        /// <summary>
+        /// Returns each <see cref="IExtension"/> implementation supported on this object.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<Lazy<IExtension>> GetExtensions(IEnumerable<Lazy<IExtension, IDictionary<string, object>>> extensions)
+        {
             foreach (var extension in extensions)
-                if (Predicate(obj, extension.Metadata, type))
-                    yield return extension.Value;
+                foreach (var metadata in ExtensionMetadata.Extract(extension.Metadata))
+                    if (Predicate(obj, metadata))
+                        yield return extension;
         }
 
         /// <summary>
@@ -66,16 +75,18 @@ namespace NXKit
         /// <param name="obj"></param>
         /// <param name="metadata"></param>
         /// <returns></returns>
-        bool Predicate(XObject obj, IExtensionMetadata metadata, Type interfaceType)
+        bool Predicate(XObject obj, IExtensionMetadata metadata)
         {
-            if (metadata.ObjectType != GetObjectType(obj))
+            if (!metadata.ObjectType.HasFlag(GetObjectType(obj)))
                 return false;
 
             if (obj is XElement)
-                return IsMatch((XElement)obj, metadata.NamespaceName, metadata.LocalName);
+                if (!IsMatch((XElement)obj, metadata.NamespaceName, metadata.LocalName))
+                    return false;
 
             if (obj is XAttribute)
-                return IsMatch((XAttribute)obj, metadata.NamespaceName, metadata.LocalName);
+                if (!IsMatch((XAttribute)obj, metadata.NamespaceName, metadata.LocalName))
+                    return false;
 
             // test against specified predicate type
             var predicate = metadata.PredicateType != null ? (IExtensionPredicate)Activator.CreateInstance(metadata.PredicateType) : null;

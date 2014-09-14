@@ -1,6 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
+using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -8,6 +11,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'send' element.
     /// </summary>
+    [Extension("{http://www.w3.org/2002/xforms}send")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class SendAttributes :
         ActionAttributes
     {
@@ -16,11 +21,11 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        [ImportingConstructor]
         public SendAttributes(XElement element)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(element.Name == Constants.XForms_1_0 + "send");
         }
 
         /// <summary>

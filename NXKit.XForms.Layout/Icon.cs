@@ -16,18 +16,21 @@ namespace NXKit.XForms.Layout
         ElementExtension
     {
 
-        readonly IconAttributes attributes;
+        readonly Extension<IconAttributes> attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Icon(XElement element)
+        [ImportingConstructor]
+        public Icon(
+            XElement element,
+            Extension<IconAttributes> attributes)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.attributes = element.AnnotationOrCreate(() => new IconAttributes(element));
+            this.attributes = attributes;
         }
 
         /// <summary>
@@ -36,7 +39,7 @@ namespace NXKit.XForms.Layout
         [Remote]
         public string Name
         {
-            get { return attributes.Name; }
+            get { return attributes.Value.Name; }
         }
 
     }

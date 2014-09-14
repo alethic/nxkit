@@ -104,7 +104,20 @@ namespace NXKit.Composition
         /// <returns></returns>
         public static CompositionContainer CreateContainer(ComposablePartCatalog catalog)
         {
-            return new CompositionContainer(catalog);
+            return ConfigureContainer(new CompositionContainer(catalog));
+        }
+
+        /// <summary>
+        /// Injects a reference to the container into the container.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        public static CompositionContainer ConfigureContainer(CompositionContainer container)
+        {
+            if (container.GetExportedValueOrDefault<ContainerRef>() == null)
+                container.WithExport<ContainerRef>(new ContainerRef(container));
+
+            return container;
         }
 
         /// <summary>

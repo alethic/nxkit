@@ -18,7 +18,7 @@ namespace NXKit.XMLEvents
         /// <param name="element"></param>
         /// <param name="defaultNamespace"></param>
         public AttributeAccessor(XElement element, XNamespace defaultNamespace)
-            :base(element, defaultNamespace)
+            : base(element, defaultNamespace)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(defaultNamespace != null);

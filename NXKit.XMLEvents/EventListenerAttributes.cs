@@ -1,11 +1,16 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
+using NXKit.Composition;
 
 namespace NXKit.XMLEvents
 {
 
-    class EventListenerAttributes :
+    [Extension]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
+    public class EventListenerAttributes :
         AttributeAccessor
     {
 
@@ -13,6 +18,7 @@ namespace NXKit.XMLEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        [ImportingConstructor]
         public EventListenerAttributes(XElement element)
             : base(element)
         {
@@ -80,7 +86,7 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         public string DefaultAction
         {
-            get{  return GetAttributeValue("defaultAction");}
+            get { return GetAttributeValue("defaultAction"); }
         }
 
     }

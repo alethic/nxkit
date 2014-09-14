@@ -15,8 +15,8 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly Lazy<EvaluationContextResolver> context;
-        readonly Lazy<OutputProperties> properties;
+        readonly Extension<EvaluationContextResolver> context;
+        readonly Extension<OutputProperties> properties;
         readonly Lazy<Binding> value;
 
         /// <summary>
@@ -25,10 +25,11 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="context"></param>
         /// <param name="properties"></param>
+        [ImportingConstructor]
         public Output(
             XElement element,
-            Lazy<EvaluationContextResolver> context,
-            Lazy<OutputProperties> properties)
+            Extension<EvaluationContextResolver> context,
+            Extension<OutputProperties> properties)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);

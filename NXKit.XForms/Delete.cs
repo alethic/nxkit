@@ -20,27 +20,34 @@ namespace NXKit.XForms
         IEventHandler
     {
 
-        readonly CommonProperties commonProperties;
-        readonly BindingProperties bindingProperties;
-        readonly DeleteProperties deleteProperties;
-        readonly Lazy<EvaluationContextResolver> contextResolver;
+        readonly Extension<CommonProperties> commonProperties;
+        readonly Extension<BindingProperties> bindingProperties;
+        readonly Extension<DeleteProperties> deleteProperties;
+        readonly Extension<EvaluationContextResolver> resolver;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        [ImportingConstructor]
         public Delete(
             XElement element,
-            Lazy<EvaluationContextResolver> contextResolver)
+            Extension<CommonProperties> commonProperties,
+            Extension<BindingProperties> bindingProperties,
+            Extension<DeleteProperties> deleteProperties,
+            Extension<EvaluationContextResolver> resolver)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(contextResolver != null);
+            Contract.Requires<ArgumentNullException>(commonProperties != null);
+            Contract.Requires<ArgumentNullException>(bindingProperties != null);
+            Contract.Requires<ArgumentNullException>(deleteProperties != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
 
-            this.contextResolver = contextResolver;
-            this.commonProperties = element.AnnotationOrCreate(() => new CommonProperties(element, contextResolver));
-            this.bindingProperties = element.AnnotationOrCreate(() => new BindingProperties(element, contextResolver));
-            this.deleteProperties = element.AnnotationOrCreate(() => new DeleteProperties(element, contextResolver));
+            this.commonProperties = commonProperties;
+            this.bindingProperties = bindingProperties;
+            this.deleteProperties = deleteProperties;
+            this.resolver = resolver;
         }
 
         public void HandleEvent(Event ev)
@@ -56,10 +63,10 @@ namespace NXKit.XForms
         /// <returns></returns>
         EvaluationContext GetDeleteContext()
         {
-            var deleteContext = contextResolver.Value.GetInScopeEvaluationContext();
-            if (commonProperties.Context != null)
+            var deleteContext = resolver.Value.GetInScopeEvaluationContext();
+            if (commonProperties.Value.Context != null)
             {
-                var item = new Binding(Element, deleteContext, commonProperties.Context).ModelItems.First();
+                var item = new Binding(Element, deleteContext, commonProperties.Value.Context).ModelItems.First();
                 if (item == null)
                     return null;
 
@@ -80,7 +87,7 @@ namespace NXKit.XForms
             Contract.Ensures(Contract.Result<XObject[]>() != null);
 
             // If a bind attribute is present, it directly determines the Sequence Binding node-sequence.
-            var bindId = bindingProperties.Bind;
+            var bindId = bindingProperties.Value.Bind;
             if (bindId != null)
             {
                 var element = Element.ResolveId(bindId);
@@ -98,7 +105,7 @@ namespace NXKit.XForms
 
             // If a ref (or deprecated nodeset) attribute is present, it is evaluated within the insert context to
             // determine the Sequence Binding node-sequence.
-            var ref_ = bindingProperties.Ref ?? bindingProperties.NodeSet;
+            var ref_ = bindingProperties.Value.Ref ?? bindingProperties.Value.NodeSet;
             if (ref_ != null)
                 return new Binding(Element, deleteContext, ref_).ModelItems
                     .Select(i => i.Xml)
@@ -139,7 +146,7 @@ namespace NXKit.XForms
             // Otherwise, the delete location is determined by evaluating the expression specified by the at attribute
             // as follows:
             var deleteLocation = 0d;
-            if (deleteProperties.At != null)
+            if (deleteProperties.Value.At != null)
             {
                 // 1. The evaluation context node is the first node in document order from the Sequence Binding
                 // node-sequence, the context size is the size of the Sequence Binding node-sequence, and the context
@@ -147,7 +154,7 @@ namespace NXKit.XForms
                 var at = new Binding(
                     Element,
                     new EvaluationContext(ModelItem.Get(sequenceBindingNodeSequence[0]), 1, sequenceBindingNodeSequence.Length),
-                    deleteProperties.At).Value;
+                    deleteProperties.Value.At).Value;
 
                 // 2. The return value is processed according to the rules of the XPath function round(). For example,
                 // the literal 1.5 becomes 2, and the literal 'string' becomes NaN.

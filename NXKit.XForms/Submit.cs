@@ -18,20 +18,28 @@ namespace NXKit.XForms
         IEventDefaultAction
     {
 
-        readonly SubmitAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<SubmitAttributes> attributes;
+        readonly Extension<EvaluationContextResolver> context;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Submit(XElement element)
+        /// <param name="attributes"></param>
+        /// <param name="context"></param>
+        [ImportingConstructor]
+        public Submit(
+            XElement element,
+            Extension<SubmitAttributes> attributes,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
+            Contract.Requires<ArgumentNullException>(context != null);
 
-            this.attributes = new SubmitAttributes(element);
-            this.context = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
+            this.attributes = attributes;
+            this.context = context;
         }
 
         void OnDOMActivate()
@@ -52,8 +60,8 @@ namespace NXKit.XForms
             // Author-optional attribute containing a reference to element submission. If this attribute is given but
             // does not identify a submission element, then activating the submit does not result in the dispatch of
             // an xforms-submit event.
-            if (attributes.Submission != null)
-                return Element.ResolveId(attributes.Submission);
+            if (attributes.Value.Submission != null)
+                return Element.ResolveId(attributes.Value.Submission);
 
             // If this attribute is omitted, then the first submission in document order from the model associated with
             // the in-scope evaluation context is used.

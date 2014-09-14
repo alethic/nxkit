@@ -6,7 +6,6 @@ using System.Xml.Linq;
 
 using NXKit.Composition;
 using NXKit.Util;
-using NXKit.Xml;
 
 namespace NXKit.XInclude
 {
@@ -17,14 +16,31 @@ namespace NXKit.XInclude
         ElementExtension
     {
 
-        readonly IncludeAttributes attributes;
+        readonly Func<IncludeAttributes> attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         /// <param name="attributes"></param>
-        public IncludeProperties(XElement element, IncludeAttributes attributes)
+        [ImportingConstructor]
+        public IncludeProperties(
+            XElement element, 
+            Extension<IncludeAttributes> attributes)
+            : this(element, () => attributes.Value)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="attributes"></param>
+        public IncludeProperties(
+            XElement element,
+            Func<IncludeAttributes> attributes)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
@@ -33,45 +49,39 @@ namespace NXKit.XInclude
             this.attributes = attributes;
         }
 
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="element"></param>
-        [ImportingConstructor]
-        public IncludeProperties(XElement element)
-            : this(element, element.AnnotationOrCreate<IncludeAttributes>(() => new IncludeAttributes(element)))
+        public IncludeAttributes Attributes
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            get { return attributes(); }
         }
 
         public virtual Uri Href
         {
-            get { return !string.IsNullOrWhiteSpace(attributes.Href) ? new Uri(attributes.Href, UriKind.RelativeOrAbsolute) : null; }
+            get { return !string.IsNullOrWhiteSpace(Attributes.Href) ? new Uri(Attributes.Href, UriKind.RelativeOrAbsolute) : null; }
         }
 
         public virtual IncludeParse Parse
         {
-            get { return !string.IsNullOrWhiteSpace(attributes.Parse) ? (IncludeParse)Enum.Parse(typeof(IncludeParse), attributes.Parse) : IncludeParse.Xml; }
+            get { return !string.IsNullOrWhiteSpace(Attributes.Parse) ? (IncludeParse)Enum.Parse(typeof(IncludeParse), Attributes.Parse) : IncludeParse.Xml; }
         }
 
         public virtual string XPointer
         {
-            get { return attributes.XPointer; }
+            get { return Attributes.XPointer; }
         }
 
         public virtual Encoding Encoding
         {
-            get { return !string.IsNullOrWhiteSpace(attributes.Encoding) ? System.Text.Encoding.GetEncoding(attributes.Encoding) : null; }
+            get { return !string.IsNullOrWhiteSpace(Attributes.Encoding) ? System.Text.Encoding.GetEncoding(Attributes.Encoding) : null; }
         }
 
         public virtual MediaRangeList Accept
         {
-            get { return attributes.Accept; }
+            get { return Attributes.Accept; }
         }
 
         public virtual string AcceptLanguage
         {
-            get { return attributes.AcceptLanguage; }
+            get { return Attributes.AcceptLanguage; }
         }
 
     }

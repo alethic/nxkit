@@ -10,27 +10,31 @@ namespace NXKit.XForms.Layout
 
     [Extension("{http://schemas.nxkit.org/2014/xforms-layout}table-row")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
-    public class TableRow
+    public class TableRow :
+        ElementExtension
     {
 
-        readonly XElement element;
-        readonly TableRowAttributes attributes;
+        readonly Extension<TableRowAttributes> attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public TableRow(XElement element)
+        [ImportingConstructor]
+        public TableRow(
+            XElement element,
+            Extension<TableRowAttributes> attributes)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
 
-            this.element = element;
-            this.attributes = new TableRowAttributes(element);
+            this.attributes = attributes;
         }
 
         public string ColumnGroup
         {
-            get { return attributes.ColumnGroup; }
+            get { return attributes.Value.ColumnGroup; }
         }
 
     }

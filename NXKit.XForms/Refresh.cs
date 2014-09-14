@@ -21,6 +21,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        [ImportingConstructor]
         public Refresh(XElement element)
             : base(element)
         {

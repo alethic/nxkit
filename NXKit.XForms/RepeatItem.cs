@@ -39,10 +39,11 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        [ImportingConstructor]
         public RepeatItem(XElement element)
             : base(element)
         {
-            Contract.Requires<System.ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(element != null);
 
             this.state = element.AnnotationOrCreate<RepeatItemState>();
         }

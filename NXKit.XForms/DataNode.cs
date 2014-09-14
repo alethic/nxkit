@@ -4,7 +4,6 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -19,19 +18,24 @@ namespace NXKit.XForms
         IDataNode
     {
 
-        readonly Lazy<IUIBindingNode> uiBindingNode;
+        readonly Extension<IUIBindingNode> uiBindingNode;
         readonly Lazy<UIBinding> uiBinding;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public DataNode(XElement element)
+        /// <param name="uiBindingNode"></param>
+        [ImportingConstructor]
+        public DataNode(
+            XElement element,
+            Extension<IUIBindingNode> uiBindingNode)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(uiBindingNode != null);
 
-            this.uiBindingNode = new Lazy<IUIBindingNode>(() => Element.Interface<IUIBindingNode>());
+            this.uiBindingNode = uiBindingNode;
             this.uiBinding = new Lazy<UIBinding>(() => uiBindingNode.Value.UIBinding);
         }
 

@@ -5,7 +5,6 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -19,9 +18,8 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly CommonAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> contextResolver;
-        readonly IdRef model;
+        readonly Extension<CommonAttributes> attributes;
+        readonly Extension<EvaluationContextResolver> contextResolver;
         readonly Lazy<XPathExpression> context;
 
         /// <summary>
@@ -29,26 +27,26 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="contextResolver"></param>
+        [ImportingConstructor]
         public CommonProperties(
             XElement element,
-            Lazy<EvaluationContextResolver> contextResolver)
+            Extension<CommonAttributes> attributes,
+            Extension<EvaluationContextResolver> contextResolver)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(contextResolver != null);
 
-            this.attributes = element.AnnotationOrCreate<CommonAttributes>(() => new CommonAttributes(element));
+            this.attributes = attributes;
             this.contextResolver = contextResolver;
 
-            this.model = attributes.Model;
-
             this.context = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.Context) ? contextResolver.Value.Context.CompileXPath(element, attributes.Context) : null);
+                !string.IsNullOrEmpty(attributes.Value.Context) ? contextResolver.Value.Context.CompileXPath(element, attributes.Value.Context) : null);
         }
 
         public IdRef Model
         {
-            get { return model; }
+            get { return attributes.Value.Model; }
         }
 
         public XPathExpression Context

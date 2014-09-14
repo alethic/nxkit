@@ -5,7 +5,6 @@ using System.Xml.Linq;
 
 using NXKit.Composition;
 using NXKit.DOMEvents;
-using NXKit.Xml;
 using NXKit.XMLEvents;
 
 namespace NXKit.XForms
@@ -18,18 +17,23 @@ namespace NXKit.XForms
         IEventHandler
     {
 
-        readonly Lazy<LoadProperties> properties;
+        readonly Extension<LoadProperties> properties;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Load(XElement element)
+        /// <param name="properties"></param>
+        [ImportingConstructor]
+        public Load(
+            XElement element,
+            Extension<LoadProperties> properties)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(properties != null);
 
-            this.properties = new Lazy<LoadProperties>(() => element.Interface<LoadProperties>());
+            this.properties = properties;
         }
 
         public void HandleEvent(Event ev)

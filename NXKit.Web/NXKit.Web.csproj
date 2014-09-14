@@ -254,13 +254,4 @@
     </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
-  <Target Name="BuildGrunt">
-    <Exec Command=".bin\grunt build" />
-  </Target>
-  <PropertyGroup>
-    <BuildDependsOn>
-            $(BuildDependsOn);
-            BuildGrunt;
-        </BuildDependsOn>
-  </PropertyGroup>
 </Project>

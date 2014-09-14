@@ -46,7 +46,7 @@ namespace NXKit
         /// </summary>
         /// <param name="objectType"></param>
         public ExtensionAttribute(ExtensionObjectType objectType)
-            :base(typeof(IExtension))
+            : base(typeof(IExtension))
         {
             this.objectType = objectType;
         }

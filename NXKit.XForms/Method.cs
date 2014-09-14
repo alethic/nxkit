@@ -5,7 +5,6 @@ using System.Xml.Linq;
 
 using NXKit.Composition;
 using NXKit.XForms.IO;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -20,28 +19,35 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly MethodAttributes attributes;
-        readonly Lazy<IBindingNode> bindingNode;
+        readonly Extension<MethodAttributes> attributes;
+        readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Method(XElement element)
+        /// <param name="attributes"></param>
+        /// <param name="bindingNode"></param>
+        [ImportingConstructor]
+        public Method(
+            XElement element,
+            Extension<MethodAttributes> attributes,
+            Extension<IBindingNode> bindingNode)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(element.Name == Constants.XForms_1_0 + "method");
+            Contract.Requires<ArgumentNullException>(attributes != null);
+            Contract.Requires<ArgumentNullException>(bindingNode != null);
 
-            this.attributes = new MethodAttributes(element);
-            this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
-            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
+            this.attributes = attributes;
+            this.bindingNode = bindingNode;
+            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.Value.ValueAttribute));
         }
 
         MethodAttributes Attributes
         {
-            get { return attributes; }
+            get { return attributes.Value; }
         }
 
         Binding Binding

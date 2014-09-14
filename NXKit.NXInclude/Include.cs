@@ -26,17 +26,16 @@ namespace NXKit.NXInclude
         [ImportingConstructor]
         public Include(
             XElement element,
+            Extension<IncludeProperties> properties,
             ITraceService trace,
-            IIOService io,
-            IncludeProperties properties)
-            : base(element, trace, io, properties)
+            IIOService io)
+            : base(element, () => properties.Value, trace, io)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(properties != null);
             Contract.Requires<ArgumentNullException>(trace != null);
             Contract.Requires<ArgumentNullException>(io != null);
-            Contract.Requires<ArgumentNullException>(properties != null);
         }
-
 
         public new IncludeProperties Properties
         {

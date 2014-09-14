@@ -19,6 +19,7 @@ namespace NXKit.Xml
         static readonly MediaRangeList XML_MEDIA_RANGES = new[] {
             "text/xml",
             "application/xml",
+            "application/octet-stream",
         };
 
         /// <summary>

@@ -27,22 +27,28 @@ namespace NXKit.XForms
 
         }
 
-        readonly ItemValueAttributes attributes;
-        readonly Lazy<IBindingNode> bindingNode;
+        readonly Extension<ItemValueAttributes> attributes;
+        readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public ItemValue(XElement element)
+        [ImportingConstructor]
+        public ItemValue(
+            XElement element,
+            Extension<ItemValueAttributes> attributes,
+            Extension<IBindingNode> bindingNode)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
+            Contract.Requires<ArgumentNullException>(bindingNode != null);
 
-            this.attributes = new ItemValueAttributes(Element);
-            this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
-            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
+            this.attributes = attributes;
+            this.bindingNode = bindingNode;
+            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.Value.ValueAttribute));
         }
 
         /// <summary>
@@ -50,7 +56,7 @@ namespace NXKit.XForms
         /// </summary>
         ItemValueAttributes Attributes
         {
-            get { return attributes; }
+            get { return attributes.Value; }
         }
 
         /// <summary>

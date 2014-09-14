@@ -20,24 +20,30 @@ namespace NXKit.XForms
         IBindingNode
     {
 
-        readonly BindingAttributes attributes;
-        readonly Lazy<BindingProperties> properties;
-        readonly Lazy<EvaluationContextResolver> resolver;
+        readonly Extension<BindingProperties> properties;
+        readonly Extension<EvaluationContextResolver> resolver;
         readonly Lazy<Binding> binding;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public BindingNode(XElement element)
+        /// <param name="properties"></param>
+        /// <param name="resolver"></param>
+        [ImportingConstructor]
+        public BindingNode(
+            XElement element,
+            Extension<BindingProperties> properties,
+            Extension<EvaluationContextResolver> resolver)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(properties != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
 
-            this.attributes = new BindingAttributes(element);
-            this.resolver = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
+            this.properties = properties;
+            this.resolver = resolver;
             this.binding = new Lazy<Binding>(() => GetOrCreateBinding());
-            this.properties = new Lazy<BindingProperties>(() => new BindingProperties(element, resolver));
         }
 
         /// <summary>

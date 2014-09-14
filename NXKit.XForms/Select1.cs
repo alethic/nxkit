@@ -17,22 +17,30 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly Select1Attributes attributes;
-        readonly Lazy<IBindingNode> bindingNode;
-        readonly Lazy<IUIBindingNode> uiBindingNode;
+        readonly Extension<Select1Attributes> attributes;
+        readonly Extension<IBindingNode> bindingNode;
+        readonly Extension<IUIBindingNode> uiBindingNode;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Select1(XElement element)
+        [ImportingConstructor]
+        public Select1(
+            XElement element,
+            Extension<Select1Attributes> attributes,
+            Extension<IBindingNode> bindingNode,
+            Extension<IUIBindingNode> uiBindingNode)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
+            Contract.Requires<ArgumentNullException>(bindingNode != null);
+            Contract.Requires<ArgumentNullException>(uiBindingNode != null);
 
-            this.attributes = new Select1Attributes(Element);
-            this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
-            this.uiBindingNode = new Lazy<IUIBindingNode>(() => Element.Interface<IUIBindingNode>());
+            this.attributes = attributes;
+            this.bindingNode = bindingNode;
+            this.uiBindingNode = uiBindingNode;
         }
 
         /// <summary>
@@ -40,7 +48,7 @@ namespace NXKit.XForms
         /// </summary>
         public Select1Attributes Attributes
         {
-            get { return attributes; }
+            get { return attributes.Value; }
         }
 
         /// <summary>

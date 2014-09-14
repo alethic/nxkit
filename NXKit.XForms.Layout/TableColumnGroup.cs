@@ -11,27 +11,32 @@ namespace NXKit.XForms.Layout
     [Extension("{http://schemas.nxkit.org/2014/xforms-layout}table-column-group")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class TableColumnGroup :
+        ElementExtension,
         ITableColumnGroupContainer
     {
 
-        readonly XElement element;
-        readonly TableColumnGroupAttributes attributes;
+        readonly Extension<TableColumnGroupAttributes> attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public TableColumnGroup(XElement element)
+        /// <param name="attributes"></param>
+        [ImportingConstructor]
+        public TableColumnGroup(
+            XElement element,
+            Extension<TableColumnGroupAttributes> attributes)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
 
-            this.element = element;
-            this.attributes = new TableColumnGroupAttributes(element);
+            this.attributes = attributes;
         }
 
         public string Name
         {
-            get { return attributes.Name; }
+            get { return attributes.Value.Name; }
         }
 
     }

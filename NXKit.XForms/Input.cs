@@ -20,7 +20,7 @@ namespace NXKit.XForms
         IEventDefaultAction
     {
 
-        readonly Lazy<EventTarget> eventTarget;
+        readonly Extension<EventTarget> eventTarget;
 
         /// <summary>
         /// Initializes a new instance.
@@ -28,7 +28,9 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="eventTarget"></param>
         [ImportingConstructor]
-        public Input(XElement element, Lazy<EventTarget> eventTarget)
+        public Input(
+            XElement element, 
+            Extension<EventTarget> eventTarget)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);

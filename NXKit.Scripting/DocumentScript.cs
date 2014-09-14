@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
 
 using NXKit.Composition;
 
@@ -13,6 +14,7 @@ namespace NXKit.Scripting
     [Extension(ExtensionObjectType.Document)]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DocumentScript :
+        DocumentExtension,
         IDocumentScript,
         IOnSave,
         IOnLoad
@@ -23,9 +25,15 @@ namespace NXKit.Scripting
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="document"></param>
         /// <param name="dispatcher"></param>
-        public DocumentScript(IScriptDispatcher dispatcher)
+        [ImportingConstructor]
+        public DocumentScript(
+            XDocument document,
+            IScriptDispatcher dispatcher)
+            :base(document)
         {
+            Contract.Requires<ArgumentNullException>(document != null);
             Contract.Requires<ArgumentNullException>(dispatcher != null);
 
             this.dispatcher = dispatcher;

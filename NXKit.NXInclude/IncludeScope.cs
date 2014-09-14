@@ -29,6 +29,7 @@ namespace NXKit.NXInclude
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        [ImportingConstructor]
         public IncludeScope(XElement element)
             : base(element)
         {

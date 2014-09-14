@@ -19,27 +19,38 @@ namespace NXKit.XForms
         IEventHandler
     {
 
-        readonly Lazy<EvaluationContextResolver> context;
-        readonly Lazy<CommonProperties> commonProperties;
-        readonly Lazy<BindingProperties> bindingProperties;
-        readonly Lazy<SetValueProperties> setValueProperties;
+        readonly Extension<CommonProperties> commonProperties;
+        readonly Extension<BindingProperties> bindingProperties;
+        readonly Extension<SetValueProperties> setValueProperties;
+        readonly Extension<EvaluationContextResolver> context;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="commonProperties"></param>
+        /// <param name="bindingProperties"></param>
+        /// <param name="setValueProperties"></param>
+        /// <param name="context"></param>
+        [ImportingConstructor]
         public SetValue(
             XElement element,
-            Lazy<EvaluationContextResolver> context)
+            Extension<CommonProperties> commonProperties,
+            Extension<BindingProperties> bindingProperties,
+            Extension<SetValueProperties> setValueProperties,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(commonProperties != null);
+            Contract.Requires<ArgumentNullException>(bindingProperties != null);
+            Contract.Requires<ArgumentNullException>(setValueProperties != null);
             Contract.Requires<ArgumentNullException>(context != null);
 
+            this.commonProperties = commonProperties;
+            this.bindingProperties = bindingProperties;
+            this.setValueProperties = setValueProperties;
             this.context = context;
-            this.commonProperties = new Lazy<CommonProperties>(() => new CommonProperties(element, context));
-            this.bindingProperties = new Lazy<BindingProperties>(() => new BindingProperties(element, context));
-            this.setValueProperties = new Lazy<SetValueProperties>(() => new SetValueProperties(element, context));
         }
 
         EvaluationContext GetContext()

@@ -5,7 +5,6 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -19,8 +18,8 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly ActionAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> contextResolver;
+        readonly Extension<ActionAttributes> attributes;
+        readonly Extension<EvaluationContextResolver> contextResolver;
         readonly Lazy<XPathExpression> while_;
         readonly Lazy<XPathExpression> if_;
         readonly Lazy<XPathExpression> iterate;
@@ -29,26 +28,29 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         /// <param name="contextResolver"></param>
+        [ImportingConstructor]
         public ActionProperties(
             XElement element,
-            Lazy<EvaluationContextResolver> contextResolver)
+            Extension<ActionAttributes> attributes,
+            Extension<EvaluationContextResolver> contextResolver)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(contextResolver != null);
 
-            this.attributes = element.AnnotationOrCreate<ActionAttributes>(() => new ActionAttributes(element));
+            this.attributes = attributes;
             this.contextResolver = contextResolver;
 
             this.while_ = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.White) ? contextResolver.Value.Context.CompileXPath(element, attributes.White) : null);
+                !string.IsNullOrEmpty(attributes.Value.White) ? contextResolver.Value.Context.CompileXPath(element, attributes.Value.White) : null);
 
             this.if_ = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.If) ? contextResolver.Value.Context.CompileXPath(element, attributes.If) : null);
+                !string.IsNullOrEmpty(attributes.Value.If) ? contextResolver.Value.Context.CompileXPath(element, attributes.Value.If) : null);
 
             this.iterate = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.Iterate) ? contextResolver.Value.Context.CompileXPath(element, attributes.Iterate) : null);
+                !string.IsNullOrEmpty(attributes.Value.Iterate) ? contextResolver.Value.Context.CompileXPath(element, attributes.Value.Iterate) : null);
         }
 
         public XPathExpression While

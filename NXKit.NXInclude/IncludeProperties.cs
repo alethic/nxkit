@@ -19,11 +19,15 @@ namespace NXKit.NXInclude
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         [ImportingConstructor]
-        public IncludeProperties(XElement element)
-            : base((XElement)element, element.AnnotationOrCreate<IncludeAttributes>(() => new IncludeAttributes((XElement)element)))
+        public IncludeProperties(
+            XElement element,
+            Extension<IncludeAttributes> attributes)
+            : base(element, () => attributes.Value)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
         }
 
     }

@@ -122,15 +122,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeAccessor.cs" />
-    <Compile Include="Composition\ExportProviderExtensions.cs" />
-    <Compile Include="Composition\ExportProviderProvider.cs" />
-    <Compile Include="Composition\IExportProvider.cs" />
-    <Compile Include="Composition\ObjectCatalogExportProvider.cs" />
-    <Compile Include="Composition\ObjectCompositionContainer.cs" />
+    <Compile Include="Composition\ContainerRef.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Composition\Scope.cs" />
     <Compile Include="Composition\ScopeCatalog.cs" />
-    <Compile Include="DefaultExtensionProvider.cs" />
+    <Compile Include="DocumentExtension.cs" />
+    <Compile Include="ExtensionQuery.cs" />
+    <Compile Include="Extension.cs" />
+    <Compile Include="ExtensionProvider.cs" />
     <Compile Include="DefaultInvoker.cs" />
     <Compile Include="DeferredInvokerLayer.cs" />
     <Compile Include="Diagnostics\ITypeProxyProvider.cs" />
@@ -144,7 +143,6 @@
     <Compile Include="Diagnostics\XTextTypeProxyProvider.cs" />
     <Compile Include="DocumentEnvironment.cs" />
     <Compile Include="ExceptionInvokerLayer.cs" />
-    <Compile Include="ExtensionExportProvider.cs" />
     <Compile Include="ExtensionMetadata.cs" />
     <Compile Include="ExtensionObjectType.cs" />
     <Compile Include="IExtension.cs" />
@@ -185,7 +183,6 @@
     <Compile Include="IOnInvoke.cs" />
     <Compile Include="IOnLoad.cs" />
     <Compile Include="ExtensionAttribute.cs" />
-    <Compile Include="IExtensionProvider.cs" />
     <Compile Include="Net\ResourceUriHelper.cs" />
     <Compile Include="Net\ResourceUriParser.cs" />
     <Compile Include="Net\ResourceWebRequest.cs" />

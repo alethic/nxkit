@@ -124,23 +124,30 @@ namespace NXKit.XForms
         }
 
         readonly IModelRequestService requestService;
-        readonly SubmissionProperties properties;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<SubmissionProperties> properties;
+        readonly Extension<EvaluationContextResolver> context;
         bool submissionInProgress = false;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Submission(XElement element, IModelRequestService requestService)
+        [ImportingConstructor]
+        public Submission(
+            XElement element,
+            Extension<SubmissionProperties> properties,
+            Extension<EvaluationContextResolver> context,
+            IModelRequestService requestService)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(properties != null);
+            Contract.Requires<ArgumentNullException>(context != null);
             Contract.Requires<ArgumentNullException>(requestService != null);
 
             this.requestService = requestService;
-            this.properties = new SubmissionProperties(element, new SubmissionAttributes(element));
-            this.context = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
+            this.properties = properties;
+            this.context = context;
         }
 
         void IEventDefaultAction.DefaultAction(Event evt)
@@ -188,7 +195,7 @@ namespace NXKit.XForms
             // If the binding attributes of submission indicate an empty sequence or an item other than an element or 
             // an instance document root node, then submission fails with no-data. Otherwise, the binding attributes of 
             // submission indicate a node of instance data.
-            var modelItems = new Binding(Element, context.Value.Context, properties.Ref).ModelItems;
+            var modelItems = new Binding(Element, context.Value.Context, properties.Value.Ref).ModelItems;
             if (modelItems == null ||
                 modelItems.Length != 1 ||
                 modelItems.Any(i => i.Xml.NodeType != XmlNodeType.Document && i.Xml.NodeType != XmlNodeType.Element))
@@ -200,7 +207,7 @@ namespace NXKit.XForms
             // true, whether by default or declaration, then any selected node which is not relevant as defined in The
             // relevant Property is deselected (pruned). If all instance nodes are deselected, then submission fails
             // with no-data.
-            var node = (XNode)new SubmitTransformer(properties.Relevant)
+            var node = (XNode)new SubmitTransformer(properties.Value.Relevant)
                 .Visit(modelItems[0].Xml);
             if (node == null)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
@@ -211,7 +218,7 @@ namespace NXKit.XForms
             // nodes are checked for validity according to the definition in The xforms-revalidate Event (no
             // notification events are marked for dispatching due to this operation). If any selected instance data
             // node is found to be invalid, submission fails with validation-error.
-            if (properties.Validate &&
+            if (properties.Value.Validate &&
                 new ValidationVisitor().Validate(node) == false)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
                     SubmitErrorErrorType.ValidationError
@@ -243,7 +250,7 @@ namespace NXKit.XForms
             // property string is used as the submission data serialization. Otherwise, the submission data
             // serialization consists of a serialization of the selected instance data according to the rules stated
             // in Serialization.
-            if (properties.Serialization.None)
+            if (properties.Value.Serialization.None)
                 node = null;
             else
             {
@@ -259,9 +266,9 @@ namespace NXKit.XForms
             // submission data serialization. The exact rules of submission are based on the URI scheme and the 
             // submission method, as defined in Submission Options.
             var request = new ModelRequest(resource, (ModelMethod)method);
-            request.MediaType = properties.MediaType;
+            request.MediaType = properties.Value.MediaType;
             request.Body = node;
-            request.Encoding = properties.Encoding;
+            request.Encoding = properties.Value.Encoding;
             request.Headers.Add(GetHeaders());
 
             // submit and check for response
@@ -285,7 +292,7 @@ namespace NXKit.XForms
             }
 
             // handle result based on 'replace' property
-            switch (properties.Replace)
+            switch (properties.Value.Replace)
             {
                 // none: submission succeeds.
                 case SubmissionReplace.None:
@@ -331,7 +338,7 @@ namespace NXKit.XForms
             if (method != null)
                 return method.Interface<Method>().RequestMethod;
 
-            return properties.Method;
+            return properties.Value.Method;
         }
 
         /// <summary>
@@ -372,11 +379,11 @@ namespace NXKit.XForms
                     yield return uri;
             }
 
-            if (properties.Resource != null)
-                yield return properties.Resource;
+            if (properties.Value.Resource != null)
+                yield return properties.Value.Resource;
 
-            if (properties.Action != null)
-                yield return properties.Action;
+            if (properties.Value.Action != null)
+                yield return properties.Value.Action;
         }
 
         /// <summary>
@@ -407,9 +414,9 @@ namespace NXKit.XForms
             // "instance". When the attribute is absent, then the default is the instance that contains the submission
             // data. An xforms-binding-exception (The xforms-binding-exception Event) occurs if this attribute does not
             // indicate an instance in the same model as the submission.
-            if (properties.Instance != null)
+            if (properties.Value.Instance != null)
             {
-                var instanceElement = Element.ResolveId(properties.Instance);
+                var instanceElement = Element.ResolveId(properties.Value.Instance);
                 if (instanceElement != null)
                     instance = instanceElement.Interface<Instance>();
             }
@@ -424,7 +431,7 @@ namespace NXKit.XForms
                 throw new InvalidOperationException();
 
             // Author-optional attribute containing an expression that indicates the target node for data replacement.
-            if (properties.TargetRef != null)
+            if (properties.Value.TargetRef != null)
             {
                 // The evaluation context for this attribute is the in-scope evaluation context for the submission 
                 // element, except the context node is modified to be the document element of the instance identified
@@ -436,7 +443,7 @@ namespace NXKit.XForms
 
                 // If the submission element has a targetref attribute, the attribute value is interpreted as a binding
                 // expression to which the first-item rule is applied to obtain the replacement target node.
-                target = new Binding(Element, ec, properties.TargetRef).ModelItem;
+                target = new Binding(Element, ec, properties.Value.TargetRef).ModelItem;
             }
 
             // final check

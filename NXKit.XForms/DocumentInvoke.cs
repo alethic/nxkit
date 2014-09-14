@@ -14,20 +14,20 @@ namespace NXKit.XForms
     [Extension(ExtensionObjectType.Document)]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DocumentInvoke :
+        DocumentExtension,
         IOnInvoke
     {
-
-        readonly XDocument document;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="document"></param>
-        public DocumentInvoke(XDocument document)
+        [ImportingConstructor]
+        public DocumentInvoke(
+            XDocument document)
+            : base(document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
-
-            this.document = document;
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace NXKit.XForms
             var work = false;
 
             // obtain all models
-            var models = document
+            var models = Document
                 .Descendants(Constants.XForms_1_0 + "model")
                 .Select(i => i.Interface<Model>())
                 .ToList();

@@ -5,7 +5,6 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -19,28 +18,32 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly DeleteAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<DeleteAttributes> attributes;
+        readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<XPathExpression> at;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         /// <param name="context"></param>
+        [ImportingConstructor]
         public DeleteProperties(
             XElement element,
-            Lazy<EvaluationContextResolver> context)
+            Extension<DeleteAttributes> attributes,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
             Contract.Requires<ArgumentNullException>(context != null);
 
-            this.attributes = element.AnnotationOrCreate<DeleteAttributes>(() => new DeleteAttributes(element));
+            this.attributes = attributes;
             this.context = context;
 
-            this.at = new Lazy<XPathExpression>(() => 
-                !string.IsNullOrEmpty(attributes.At) ? context.Value.Context.CompileXPath(element, attributes.At) : null);
+            this.at = new Lazy<XPathExpression>(() =>
+                !string.IsNullOrEmpty(attributes.Value.At) ? context.Value.Context.CompileXPath(element, attributes.Value.At) : null);
         }
 
         public XPathExpression At

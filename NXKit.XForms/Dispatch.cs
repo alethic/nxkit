@@ -18,20 +18,28 @@ namespace NXKit.XForms
         IEventHandler
     {
 
-        readonly DispatchAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<DispatchAttributes> attributes;
+        readonly Extension<EvaluationContextResolver> context;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Dispatch(XElement element)
+        /// <param name="attributes"></param>
+        /// <param name="context"></param>
+        [ImportingConstructor]
+        public Dispatch(
+            XElement element,
+            Extension<DispatchAttributes> attributes,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
+            Contract.Requires<ArgumentNullException>(context != null);
 
-            this.attributes = new DispatchAttributes(element);
-            this.context = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
+            this.attributes = attributes;
+            this.context = context;
         }
 
         public void HandleEvent(Event ev)
@@ -45,8 +53,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         XElement GetTarget()
         {
-            if (attributes.TargetId != null)
-                return Element.ResolveId(attributes.TargetId);
+            if (attributes.Value.TargetId != null)
+                return Element.ResolveId(attributes.Value.TargetId);
             else
                 return null;
         }
@@ -70,9 +78,9 @@ namespace NXKit.XForms
 
         Event GetEvent()
         {
-            var name = attributes.Name;
+            var name = attributes.Value.Name;
             if (name != null)
-                return CreateEvent(name, attributes.Bubbles == "true", attributes.Cancelable == "true");
+                return CreateEvent(name, attributes.Value.Bubbles == "true", attributes.Value.Cancelable == "true");
 
             return null;
         }

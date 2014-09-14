@@ -46,6 +46,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="context"></param>
+        [ImportingConstructor]
         public RepeatExtension(XElement element, Lazy<EvaluationContextResolver> context)
             : base(element)
         {

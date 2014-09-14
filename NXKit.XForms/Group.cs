@@ -17,6 +17,7 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        [ImportingConstructor]
         public Group(XElement element)
             : base(element)
         {

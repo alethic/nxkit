@@ -10,10 +10,10 @@ namespace NXKit
     /// <summary>
     /// Base class for an interface which provides XForms attributes of a specific element.
     /// </summary>
-    public abstract class AttributeAccessor
+    public abstract class AttributeAccessor :
+        ElementExtension
     {
 
-        readonly XElement element;
         readonly XNamespace defaultNamespace;
 
         /// <summary>
@@ -22,11 +22,11 @@ namespace NXKit
         /// <param name="element"></param>
         /// <param name="defaultNamespace"></param>
         public AttributeAccessor(XElement element, XNamespace defaultNamespace)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(defaultNamespace != null);
 
-            this.element = element;
             this.defaultNamespace = defaultNamespace;
         }
 
@@ -44,11 +44,11 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(name != null);
 
-            var fq = element.Attribute(defaultNamespace + name);
+            var fq = Element.Attribute(defaultNamespace + name);
             if (fq != null)
                 return fq;
 
-            var ln = element.Name.Namespace == defaultNamespace ? element.Attribute(name) : null;
+            var ln = Element.Name.Namespace == defaultNamespace ? Element.Attribute(name) : null;
             if (ln != null)
                 return ln;
 

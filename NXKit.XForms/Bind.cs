@@ -21,23 +21,31 @@ namespace NXKit.XForms
     {
 
         readonly string id;
-        readonly BindAttributes attributes;
-        readonly Lazy<IBindingNode> nodeBinding;
+        readonly Extension< BindAttributes > attributes;
+        readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<EvaluationContext> context;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Bind(XElement element)
+        [ImportingConstructor]
+        public Bind(
+            XElement element,
+            Extension<BindAttributes> attributes,
+            Extension<IBindingNode> bindingNode,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
+            Contract.Requires<ArgumentNullException>(bindingNode != null);
+            Contract.Requires<ArgumentNullException>(context != null);
 
             this.id = (string)element.Attribute("id");
-            this.attributes = new BindAttributes(Element);
-            this.nodeBinding = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
-            this.context = new Lazy<EvaluationContext>(() => Element.Interface<EvaluationContextResolver>().Context);
+            this.attributes = attributes;
+            this.bindingNode = bindingNode;
+            this.context = new Lazy<EvaluationContext>(() => context.Value.Context);
         }
 
         /// <summary>
@@ -45,7 +53,7 @@ namespace NXKit.XForms
         /// </summary>
         BindAttributes Attributes
         {
-            get { return attributes; }
+            get { return attributes.Value; }
         }
 
         /// <summary>
@@ -61,7 +69,7 @@ namespace NXKit.XForms
         /// </summary>
         Binding Binding
         {
-            get { return nodeBinding.Value != null ? nodeBinding.Value.Binding : null; }
+            get { return bindingNode.Value != null ? bindingNode.Value.Binding : null; }
         }
 
         IEnumerable<ModelItem> ModelItems
@@ -87,7 +95,7 @@ namespace NXKit.XForms
             if (Attributes.Type == null)
                 return null;
 
-            return Element.ResolvePrefixedName(attributes.Type);
+            return Element.ResolvePrefixedName(attributes.Value.Type);
         }
 
         /// <summary>
@@ -115,9 +123,8 @@ namespace NXKit.XForms
         /// </summary>
         public void Recalculate()
         {
-            if (nodeBinding.IsValueCreated &&
-                nodeBinding.Value != null)
-                nodeBinding.Value.Binding.Recalculate();
+            if (bindingNode.Value != null)
+                bindingNode.Value.Binding.Recalculate();
         }
 
         internal ModelItem[] GetBoundNodes()
@@ -175,23 +182,23 @@ namespace NXKit.XForms
 
                 var ec = new EvaluationContext(modelItem.Model, modelItem.Instance, modelItem, i, modelItems.Length);
 
-                if (!string.IsNullOrWhiteSpace(attributes.ReadOnly))
+                if (!string.IsNullOrWhiteSpace(attributes.Value.ReadOnly))
                 {
-                    var readOnly = ParseBooleanValue(new Binding(Element, ec, attributes.ReadOnly));
+                    var readOnly = ParseBooleanValue(new Binding(Element, ec, attributes.Value.ReadOnly));
                     if (readOnly != null)
                         state.ReadOnly = readOnly;
                 }
 
-                if (!string.IsNullOrWhiteSpace(attributes.Required))
+                if (!string.IsNullOrWhiteSpace(attributes.Value.Required))
                 {
-                    var required = ParseBooleanValue(new Binding(Element, ec, attributes.Required));
+                    var required = ParseBooleanValue(new Binding(Element, ec, attributes.Value.Required));
                     if (required != null)
                         state.Required = required;
                 }
 
-                if (!string.IsNullOrWhiteSpace(attributes.Relevant))
+                if (!string.IsNullOrWhiteSpace(attributes.Value.Relevant))
                 {
-                    var relevant = ParseBooleanValue(new Binding(Element, ec, attributes.Relevant));
+                    var relevant = ParseBooleanValue(new Binding(Element, ec, attributes.Value.Relevant));
                     if (relevant != null &&
                         relevant != state.Relevant)
                     {
@@ -200,16 +207,16 @@ namespace NXKit.XForms
                     }
                 }
 
-                if (!string.IsNullOrWhiteSpace(attributes.Constraint))
+                if (!string.IsNullOrWhiteSpace(attributes.Value.Constraint))
                 {
-                    var constraint = ParseBooleanValue(new Binding(Element, ec, attributes.Constraint));
+                    var constraint = ParseBooleanValue(new Binding(Element, ec, attributes.Value.Constraint));
                     if (constraint != null)
                         state.Constraint = constraint;
                 }
 
-                if (!string.IsNullOrWhiteSpace(attributes.Calculate))
+                if (!string.IsNullOrWhiteSpace(attributes.Value.Calculate))
                 {
-                    var calculate = new Binding(Element, ec, attributes.Calculate).Value;
+                    var calculate = new Binding(Element, ec, attributes.Value.Calculate).Value;
                     if (calculate != null)
                     {
                         if (state.ReadOnly == false)

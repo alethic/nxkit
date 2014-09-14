@@ -20,7 +20,7 @@ namespace NXKit.XForms
     {
 
         readonly SetValueAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<XPathExpression> value;
 
         /// <summary>
@@ -28,9 +28,10 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="context"></param>
+        [ImportingConstructor]
         public SetValueProperties(
             XElement element,
-            Lazy<EvaluationContextResolver> context)
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);

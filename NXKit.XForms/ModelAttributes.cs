@@ -1,6 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
+using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -8,6 +11,8 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'model' attributes.
     /// </summary>
+    [Extension("{http://www.w3.org/2002/xforms}model")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ModelAttributes :
         AttributeAccessor
     {
@@ -16,6 +21,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        [ImportingConstructor]
         public ModelAttributes(XElement element)
             : base(element)
         {

@@ -21,7 +21,7 @@ namespace NXKit.XForms
     {
 
 
-        readonly ModelAttributes attributes;
+        readonly Extension<ModelAttributes> attributes;
         readonly Lazy<ModelState> state;
         readonly Lazy<DocumentAnnotation> documentAnnotation;
 
@@ -29,12 +29,17 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Model(XElement element)
+        /// <param name="attributes"></param>
+        [ImportingConstructor]
+        public Model(
+            XElement element,
+            Extension<ModelAttributes> attributes)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
 
-            this.attributes = new ModelAttributes(Element);
+            this.attributes = attributes;
             this.state = new Lazy<ModelState>(() => Element.AnnotationOrCreate<ModelState>());
             this.documentAnnotation = new Lazy<DocumentAnnotation>(() => Element.Document.AnnotationOrCreate<DocumentAnnotation>());
         }
@@ -143,13 +148,13 @@ namespace NXKit.XForms
             State.Construct = true;
 
             // validate model version, we only support 1.0
-            if (attributes.Version != null)
-                foreach (var version in attributes.Version.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
+            if (attributes.Value.Version != null)
+                foreach (var version in attributes.Value.Version.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     if (version != "1.0")
                         throw new DOMTargetEventException(Element, Events.VersionException);
 
-            if (attributes.Schema != null)
-                foreach (var item in attributes.Schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
+            if (attributes.Value.Schema != null)
+                foreach (var item in attributes.Value.Schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     continue; // TODO
 
             // attempt to load model instance data

@@ -6,7 +6,6 @@ using System.Xml.XPath;
 
 using NXKit.Composition;
 using NXKit.Util;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -20,8 +19,8 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly OutputAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<OutputAttributes> attributes;
+        readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<XPathExpression> value;
         readonly MediaRange mediaType;
 
@@ -29,20 +28,23 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         /// <param name="context"></param>
+        [ImportingConstructor]
         public OutputProperties(
             XElement element,
-            Lazy<EvaluationContextResolver> context)
+            Extension<OutputAttributes> attributes,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(context != null);
 
-            this.attributes = element.AnnotationOrCreate<OutputAttributes>(() => new OutputAttributes(element));
+            this.attributes = attributes;
             this.context = context;
 
-            this.value = new Lazy<XPathExpression>(() => 
-                !string.IsNullOrEmpty(attributes.Value) ? context.Value.Context.CompileXPath(element, attributes.Value) : null);
+            this.value = new Lazy<XPathExpression>(() =>
+                !string.IsNullOrEmpty(attributes.Value.Value) ? context.Value.Context.CompileXPath(element, attributes.Value.Value) : null);
         }
 
         public XPathExpression Value
@@ -52,12 +54,12 @@ namespace NXKit.XForms
 
         public MediaRange MediaType
         {
-            get { return attributes.MediaType; }
+            get { return attributes.Value.MediaType; }
         }
 
         public string Appearance
         {
-            get { return attributes.Appearance; }
+            get { return attributes.Value.Appearance; }
         }
 
     }

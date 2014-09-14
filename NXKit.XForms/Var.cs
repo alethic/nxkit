@@ -15,8 +15,8 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly Lazy<VarProperties> properties;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<VarProperties> properties;
+        readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<Binding> value;
 
         /// <summary>
@@ -25,10 +25,11 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="properties"></param>
         /// <param name="context"></param>
+        [ImportingConstructor]
         public Var(
             XElement element,
-            Lazy<VarProperties> properties,
-            Lazy<EvaluationContextResolver> context)
+            Extension<VarProperties> properties,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);

@@ -23,10 +23,10 @@ namespace NXKit.XForms
     {
 
         readonly AnnotationSerializer serializer;
-        readonly RepeatAttributes attributes;
-        readonly Lazy<IBindingNode> bindingNode;
+        readonly Extension<RepeatAttributes> attributes;
+        readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<Binding> binding;
-        readonly Lazy<IUIBindingNode> uiBindingNode;
+        readonly Extension<IUIBindingNode> uiBindingNode;
         readonly Lazy<UIBinding> uiBinding;
         readonly Lazy<RepeatState> state;
         readonly Lazy<XElement> template;
@@ -37,18 +37,30 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
+        /// <param name="bindingNode"></param>
+        /// <param name="uiBindingNode"></param>
         /// <param name="serializer"></param>
-        public Repeat(XElement element, AnnotationSerializer serializer)
+        [ImportingConstructor]
+        public Repeat(
+            XElement element,
+            Extension<RepeatAttributes> attributes,
+            Extension<IBindingNode> bindingNode,
+            Extension<IUIBindingNode> uiBindingNode,
+            AnnotationSerializer serializer)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
+            Contract.Requires<ArgumentNullException>(bindingNode != null);
+            Contract.Requires<ArgumentNullException>(uiBindingNode != null);
             Contract.Requires<ArgumentNullException>(serializer != null);
 
             this.serializer = serializer;
-            this.attributes = new RepeatAttributes(Element);
-            this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
+            this.attributes = attributes;
+            this.bindingNode = bindingNode;
             this.binding = new Lazy<Binding>(() => bindingNode.Value.Binding);
-            this.uiBindingNode = new Lazy<IUIBindingNode>(() => Element.Interface<IUIBindingNode>());
+            this.uiBindingNode = uiBindingNode;
             this.uiBinding = new Lazy<UIBinding>(() => uiBindingNode.Value.UIBinding);
             this.state = new Lazy<RepeatState>(() => Element.AnnotationOrCreate<RepeatState>());
             this.template = new Lazy<XElement>(() => State.Template);

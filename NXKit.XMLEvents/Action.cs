@@ -23,6 +23,7 @@ namespace NXKit.XMLEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        [ImportingConstructor]
         public Action(XElement element)
             : base(element)
         {

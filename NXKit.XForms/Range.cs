@@ -15,36 +15,41 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly RangeAttributes attributes;
+        readonly Extension<RangeAttributes> attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Range(XElement element)
+        /// <param name="attributes"></param>
+        [ImportingConstructor]
+        public Range(
+            XElement element,
+            Extension<RangeAttributes> attributes)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
 
-            this.attributes = new RangeAttributes(Element);
+            this.attributes = attributes;
         }
 
         [Remote]
         public int? Start
         {
-            get { return attributes.Start; }
+            get { return attributes.Value.Start; }
         }
 
         [Remote]
         public int? End
         {
-            get { return attributes.End; }
+            get { return attributes.Value.End; }
         }
 
         [Remote]
         public int? Step
         {
-            get { return attributes.Step; }
+            get { return attributes.Value.Step; }
         }
 
     }

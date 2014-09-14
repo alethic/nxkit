@@ -28,6 +28,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="invoker"></param>
+        [ImportingConstructor]
         public UIBindingNode(XElement element, IInvoker invoker)
             : base(element)
         {

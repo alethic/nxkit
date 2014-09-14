@@ -14,10 +14,10 @@ namespace NXKit.DOMEvents
     [Extension(ExtensionObjectType.Document)]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class NXDocumentEvent :
+        DocumentExtension,
         INXDocumentEvent
     {
 
-        readonly XDocument document;
         readonly IEventFactory factory;
 
         /// <summary>
@@ -25,12 +25,15 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="document"></param>
         /// <param name="factory"></param>
-        public NXDocumentEvent(XDocument document, IEventFactory factory)
+        [ImportingConstructor]
+        public NXDocumentEvent(
+            XDocument document,
+            IEventFactory factory)
+            : base(document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
             Contract.Requires<ArgumentNullException>(factory != null);
 
-            this.document = document;
             this.factory = factory;
         }
 

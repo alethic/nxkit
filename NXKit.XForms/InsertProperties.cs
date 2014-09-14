@@ -5,7 +5,6 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -19,8 +18,8 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly InsertAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<InsertAttributes> attributes;
+        readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<XPathExpression> origin;
         readonly Lazy<XPathExpression> at;
         readonly Lazy<InsertPosition> position;
@@ -29,26 +28,30 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         /// <param name="context"></param>
+        [ImportingConstructor]
         public InsertProperties(
             XElement element,
-            Lazy<EvaluationContextResolver> context)
+            Extension<InsertAttributes> attributes,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
             Contract.Requires<ArgumentNullException>(context != null);
 
-            this.attributes = element.AnnotationOrCreate<InsertAttributes>(() => new InsertAttributes(element));
+            this.attributes = attributes;
             this.context = context;
 
-            this.origin = new Lazy<XPathExpression>(() => 
-                !string.IsNullOrEmpty(attributes.Origin) ? context.Value.Context.CompileXPath(element, attributes.Origin) : null);
+            this.origin = new Lazy<XPathExpression>(() =>
+                !string.IsNullOrEmpty(attributes.Value.Origin) ? context.Value.Context.CompileXPath(element, attributes.Value.Origin) : null);
 
-            this.at = new Lazy<XPathExpression>(() => 
-                !string.IsNullOrEmpty(attributes.At) ? context.Value.Context.CompileXPath(element, attributes.At) : null);
+            this.at = new Lazy<XPathExpression>(() =>
+                !string.IsNullOrEmpty(attributes.Value.At) ? context.Value.Context.CompileXPath(element, attributes.Value.At) : null);
 
-            this.position = new Lazy<InsertPosition>(() => 
-                !string.IsNullOrEmpty(attributes.Postition) ? (InsertPosition)Enum.Parse(typeof(InsertPosition), attributes.Postition, true) : InsertPosition.After);
+            this.position = new Lazy<InsertPosition>(() =>
+                !string.IsNullOrEmpty(attributes.Value.Postition) ? (InsertPosition)Enum.Parse(typeof(InsertPosition), attributes.Value.Postition, true) : InsertPosition.After);
         }
 
         public XPathExpression Origin

@@ -22,7 +22,7 @@ namespace NXKit.XForms
     {
 
         readonly IModelRequestService requestService;
-        readonly InstanceAttributes attributes;
+        readonly Extension<InstanceAttributes> attributes;
         readonly Lazy<InstanceState> state;
         readonly IEnumerable<IXsdTypeConverter> xsdTypeConverters;
 
@@ -30,8 +30,13 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
+        /// <param name="requestService"></param>
+        /// <param name="xsdTypeConverters"></param>
+        [ImportingConstructor]
         public Instance(
-            XElement element, 
+            XElement element,
+            Extension<InstanceAttributes> attributes,
             IModelRequestService requestService,
             [ImportMany] IEnumerable<IXsdTypeConverter> xsdTypeConverters)
             : base(element)
@@ -41,7 +46,7 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(xsdTypeConverters != null);
 
             this.requestService = requestService;
-            this.attributes = new InstanceAttributes(Element);
+            this.attributes = attributes;
             this.state = new Lazy<InstanceState>(() => Element.AnnotationOrCreate<InstanceState>());
             this.xsdTypeConverters = xsdTypeConverters.ToList();
         }
@@ -61,7 +66,7 @@ namespace NXKit.XForms
         {
             get { return state.Value; }
         }
-        
+
         /// <summary>
         /// Gets the available <see cref="IXsdTypeConverter"/>s for this instance.
         /// </summary>
@@ -75,8 +80,8 @@ namespace NXKit.XForms
         /// </summary>
         internal void Load()
         {
-            if (attributes.Src != null)
-                Load(attributes.Src);
+            if (attributes.Value.Src != null)
+                Load(attributes.Value.Src);
             else
             {
                 // extract instance data model from xml

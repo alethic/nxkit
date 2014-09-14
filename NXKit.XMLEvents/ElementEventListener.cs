@@ -21,7 +21,7 @@ namespace NXKit.XMLEvents
     {
 
         readonly IInvoker invoker;
-        readonly EventListenerAttributes attributes;
+        readonly Extension<EventListenerAttributes> attributes;
         readonly Lazy<IEventHandler> handler;
         readonly Lazy<EventTarget> observer;
 
@@ -29,17 +29,28 @@ namespace NXKit.XMLEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         /// <param name="invoker"></param>
-        public ElementEventListener(XElement element, IInvoker invoker)
+        [ImportingConstructor]
+        public ElementEventListener(
+            XElement element,
+            Extension<EventListenerAttributes> attributes,
+            IInvoker invoker)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
             Contract.Requires<ArgumentNullException>(invoker != null);
 
             this.invoker = invoker;
-            this.attributes = new EventListenerAttributes(element);
+            this.attributes = attributes;
             this.handler = new Lazy<IEventHandler>(() => GetHandler());
             this.observer = new Lazy<EventTarget>(() => GetObserver());
+        }
+
+        EventListenerAttributes Attributes
+        {
+            get { return attributes.Value; }
         }
 
         /// <summary>
@@ -48,11 +59,11 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         XElement GetHandlerElement()
         {
-            if (attributes.Handler != null)
-                return Element.ResolveId(attributes.Handler);
-            else if (attributes.Observer != null)
+            if (Attributes.Handler != null)
+                return Element.ResolveId(Attributes.Handler);
+            else if (Attributes.Observer != null)
                 return Element;
-            else if (attributes.Observer == null)
+            else if (Attributes.Observer == null)
                 return Element;
             else
                 throw new DOMTargetEventException(Element, Events.Error);
@@ -77,11 +88,11 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         XElement GetObserverElement()
         {
-            if (attributes.Observer != null)
-                return Element.ResolveId(attributes.Observer);
-            else if (attributes.Handler != null)
+            if (Attributes.Observer != null)
+                return Element.ResolveId(Attributes.Observer);
+            else if (Attributes.Handler != null)
                 return Element;
-            else if (attributes.Handler == null)
+            else if (Attributes.Handler == null)
                 return (XElement)Element.Parent;
             else
                 throw new DOMTargetEventException(Element, Events.Error);
@@ -106,8 +117,8 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         XElement GetTargetElement()
         {
-            if (attributes.Target != null)
-                return Element.ResolveId(attributes.Target);
+            if (Attributes.Target != null)
+                return Element.ResolveId(Attributes.Target);
 
             return null;
         }
@@ -118,7 +129,7 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         public bool GetCapture()
         {
-            return attributes.Phase == "capture";
+            return Attributes.Phase == "capture";
         }
 
         /// <summary>
@@ -127,7 +138,7 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         public bool GetPropagate()
         {
-            return attributes.Propagate != "stop";
+            return Attributes.Propagate != "stop";
         }
 
         /// <summary>
@@ -136,7 +147,7 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         public bool InvokeDefaultAction()
         {
-            return attributes.DefaultAction != "cancel";
+            return Attributes.DefaultAction != "cancel";
         }
 
         /// <summary>
@@ -144,7 +155,7 @@ namespace NXKit.XMLEvents
         /// </summary>
         void Attach()
         {
-            var evt = attributes.Event;
+            var evt = Attributes.Event;
             if (evt == null)
                 return;
 
@@ -164,7 +175,7 @@ namespace NXKit.XMLEvents
         {
             Contract.Requires<ArgumentNullException>(evt != null);
 
-            invoker.Invoke(() => 
+            invoker.Invoke(() =>
                 handler.Value.HandleEvent(evt));
         }
 

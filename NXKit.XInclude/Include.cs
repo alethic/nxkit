@@ -18,38 +18,58 @@ namespace NXKit.XInclude
         IOnInit
     {
 
+        readonly Func<IncludeProperties> properties;
         readonly ITraceService trace;
         readonly IIOService io;
-        readonly IncludeProperties properties;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="properties"></param>
         /// <param name="trace"></param>
         /// <param name="io"></param>
-        /// <param name="properties"></param>
         [ImportingConstructor]
         public Include(
             XElement element,
+            Extension<IncludeProperties> properties,
             ITraceService trace,
-            IIOService io,
-            IncludeProperties properties)
+            IIOService io)
+            : this(element, () => properties.Value, trace, io)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(properties != null);
+            Contract.Requires<ArgumentNullException>(trace != null);
+            Contract.Requires<ArgumentNullException>(io != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="properties"></param>
+        /// <param name="trace"></param>
+        /// <param name="io"></param>
+        public Include(
+            XElement element,
+            Func<IncludeProperties> properties,
+            ITraceService trace,
+            IIOService io)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(properties != null);
             Contract.Requires<ArgumentNullException>(trace != null);
             Contract.Requires<ArgumentNullException>(io != null);
-            Contract.Requires<ArgumentNullException>(properties != null);
 
+            this.properties = properties;
             this.trace = trace;
             this.io = io;
-            this.properties = properties;
         }
 
         public IncludeProperties Properties
         {
-            get { return properties; }
+            get { return properties(); }
         }
 
         protected ITraceService Trace
