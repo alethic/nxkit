@@ -23,6 +23,7 @@
   <ItemGroup>
     <Compile Include="gulpfile.js" />
     <Compile Include="src\js\templates.js" />
+    <Compile Include="src\js\view-node.js" />
     <Compile Include="src\js\view.js" />
     <Compile Include="src\js\_module.js" />
   </ItemGroup>

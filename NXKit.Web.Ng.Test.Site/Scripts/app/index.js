@@ -2,17 +2,35 @@
     'angular',
     './_module',
 ], function (ng, app) {
-    app.controller('index', function ($scope) {
-        $scope.data = {
-            'item1': 'value1',
-            'item2': 'value2',
-            'item3': 'value3',
-        };
+    app.controller('index', function ($scope, $http) {
+
+        $scope.data = {};
+
+        $scope.init = function () {
+            $http.get('/api/view/form')
+                .success(function (response) {
+                    $scope.data = response;
+                })
+                .error(function (response) {
+                    console.log(response);
+                });
+        }
+
         $scope.push = function (data) {
-            console.log('push: ' + data);
+            $http.post('/api/view/form', data)
+                .success(function (response) {
+                    $scope.data = response;
+                })
+                .error(function (response) {
+                    console.log(response);
+                });
         };
+
         $scope.getTemplate = function (data) {
-            console.log('getTemplate: ' + data);
+            return null;
         };
+
+        $scope.init();
+
     });
 });

@@ -6,9 +6,32 @@ module.service('nxTemplates', function () {
 
 });
 
-module.directive('nxView', function () {
+module.directive('nxViewNode', function () {
     return {
-        restrict: 'AE',
+        restrict: 'E',
+        scope: {
+            node: '=node',
+            push: '&push',
+            templateProvider: '&templateProvider',
+        },
+        controller: 'nxViewNode',
+        link: function (scope, element, attrs, ctrl) {
+            ctrl.init(element);
+        },
+        template: 'Here Node Lies',
+    };
+});
+
+module.controller('nxViewNode', ['$scope', '$attrs', function ($scope, $attrs) {
+    this.init = function (element) {
+        console.log($scope.data);
+        console.log($scope.push);
+        console.log($scope.templateProvider);
+    };
+}]);
+module.directive('nxView', function ($compile) {
+    return {
+        restrict: 'E',
         scope: {
             data: '=data',
             push: '&push',
@@ -18,20 +41,18 @@ module.directive('nxView', function () {
         link: function (scope, element, attrs, ctrl) {
             ctrl.init(element);
         },
-        template: '<div nx-view-node></div>',
+        template: 
+'           <div ng-if="data.Node">' +
+'               <div ng-view-node node="data.Node" push="push()" template-provider="templateProvider()"></div>' +
+'           </div>'
     };
 });
 
-module.service('nxView', ['$http', function ($http) {
-    this.foo = {};
-}]);
-
-module.controller('nxView', ['$scope', '$attrs', 'nxView', function ($scope, $attrs, nxView) {
+module.controller('nxView', ['$scope', '$attrs', function ($scope, $attrs) {
     this.init = function (element) {
         console.log($scope.data);
         console.log($scope.push);
         console.log($scope.templateProvider);
-        console.log(nxView.foo);
     };
 }]);
 
