@@ -1,11 +1,15 @@
 ﻿require.config({
     baseUrl: 'Scripts',
     paths: {
-
+        'jquery': 'jquery-2.1.1',
+        'knockout': 'knockout-3.2.0'
     },
     shim: {
-        'angular':{
+        'angular': {
             exports: 'angular',
+        },
+        'nxkit': {
+            deps: ['knockout'],
         }
     }
 });

@@ -22,8 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gulpfile.js" />
-    <Compile Include="src\js\templates.js" />
-    <Compile Include="src\js\view-node.js" />
+    <Compile Include="src\js\layout-manager.js" />
     <Compile Include="src\js\view.js" />
     <Compile Include="src\js\_module.js" />
   </ItemGroup>
@@ -34,7 +33,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
   <Target Name="Gulp">
-    <Exec Command="gulp" WorkingDirectory="$(ProjectDir)" />
+    <Exec Command="$(ProjectDir)node_modules/.bin/gulp" WorkingDirectory="$(ProjectDir)" />
   </Target>
   <PropertyGroup>
     <BuildDependsOn>

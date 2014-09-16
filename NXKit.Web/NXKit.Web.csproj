@@ -5,6 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A296BBEA-D7B7-40E6-B107-558413A59B8C}</ProjectGuid>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AssemblyName>NXKit.Web</AssemblyName>
     <OutputPath>bin</OutputPath>
@@ -181,7 +182,10 @@
     <TypeScriptCompile Include="ViewModelUtil.ts" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="nxkit.prefix" />
+    <None Include="nxkit.suffix" />
     <None Include="NXKit.Web.nuspec" />
+    <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -211,15 +215,18 @@
   <ItemGroup>
     <EmbeddedResource Include="View.html" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="gulpfile.js" />
+  </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
-    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
-    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptModuleKind>none</TypeScriptModuleKind>
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
     <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
@@ -243,15 +250,16 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptOutFile>NXKit.js</TypeScriptOutFile>
+    <TypeScriptOutFile>nxkit.ts.js</TypeScriptOutFile>
   </PropertyGroup>
+  <Target Name="Gulp">
+    <Exec Command="$(ProjectDir)node_modules/.bin/gulp" WorkingDirectory="$(ProjectDir)" />
+  </Target>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <BuildDependsOn>
+            $(BuildDependsOn);
+            Gulp;
+        </BuildDependsOn>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
 </Project>

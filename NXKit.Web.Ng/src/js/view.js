@@ -1,24 +1,60 @@
-﻿module.directive('nxView', function ($compile) {
+﻿module.directive('nxView', ['nxLayoutManager', function ($compile) {
     return {
         restrict: 'E',
         scope: {
-            data: '=data',
-            push: '&push',
-            templateProvider: '&templateProvider',
+            url: '@url',
         },
         controller: 'nxView',
-        link: function (scope, element, attrs, ctrl) {
-            ctrl.init(element);
+        template:
+'           <div class="host" data-bind="template { name: \'d\' }">' +
+'               <div class="body"></div>' +
+'           </div>',
+        link: function ($scope, element, attrs, ctrl) {
+            ctrl.init(element, $scope.url);
         },
-        template: 
-'           <div ng-if="data.Node">' +
-'               <div ng-view-node node="data.Node" push="push()" template-provider="templateProvider()"></div>' +
-'           </div>'
     };
-});
+}]);
 
-module.controller('nxView', ['$scope', '$attrs', function ($scope, $attrs) {
-    this.init = function (element) {
-
+module.controller('nxView', ['$scope', '$attrs', '$http', function ($scope, $attrs, $http) {
+    
+    this.init = function (element, url) {
+        $scope.url = url;
+        
+        // locate element for view body
+        var host = $(element[0]).find('>.host');
+        if (host.length == 0)
+            throw new Error("cannot find host element");
+        
+        // locate element for view body
+        var body = $(host).find('>.body');
+        if (body.length == 0)
+            throw new Error("cannot find body element");
+        
+        // initialize view
+        if ($scope.view == null) {
+            $scope.view = new nx.Web.View(body[0], function (data, cb) {
+                this.send(data, cb);
+            });
+        }
+        
+        // get initial data
+        $http.get($scope.url)
+            .success(function (result) {
+                $scope.view.Receive(result);
+            })
+            .error(function (result) {
+                console.log(result);
+            });
     };
+    
+    this.send = function (data, cb) {
+        $http.post($scope.url, data)
+            .success(function (result) {
+                cb(result);
+            })
+            .error(function (result) {
+                console.log(result);
+            });
+    };
+
 }]);

@@ -22,5 +22,4 @@
     }
 
     ko.bindingHandlers['nxkit_input'] = new InputBindingHandler();
-
 }

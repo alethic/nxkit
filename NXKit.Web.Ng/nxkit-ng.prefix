@@ -1,3 +1,6 @@
 ﻿define([
+    'jquery',
     'angular',
-], function (ng) {
+    'nxkit',
+    'knockout',
+], function ($, ng, nx, ko) {

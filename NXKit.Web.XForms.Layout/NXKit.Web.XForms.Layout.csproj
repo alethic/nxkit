@@ -21,9 +21,9 @@
   <ProjectExtensions />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
     <TypeScriptSourceMap>False</TypeScriptSourceMap>
-    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
+    <TypeScriptModuleKind>none</TypeScriptModuleKind>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
@@ -66,11 +66,11 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="..\NXKit.Web.XForms\NXKit.XForms.d.ts">
-      <Link>Scripts\typings\nxkit\NXKit.XForms.d.ts</Link>
+    <TypeScriptCompile Include="..\NXKit.Web.XForms\nxkit-xforms.ts.d.ts">
+      <Link>Scripts\typings\nxkit\nxkit-xforms.ts.d.ts</Link>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="..\NXKit.Web\NXKit.d.ts">
-      <Link>Scripts\typings\nxkit\NXKit.d.ts</Link>
+    <TypeScriptCompile Include="..\NXKit.Web\nxkit.ts.d.ts">
+      <Link>Scripts\typings\nxkit\nxkit.ts.d.ts</Link>
     </TypeScriptCompile>
     <TypeScriptCompile Include="FormViewModel.ts" />
     <TypeScriptCompile Include="IconViewModel.ts" />
@@ -103,7 +103,10 @@
     <Compile Include="Properties\Ref.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="nxkit-xforms-layout.prefix" />
+    <None Include="nxkit-xforms-layout.suffix" />
     <None Include="NXKit.Web.XForms.Layout.nuspec" />
+    <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -118,8 +121,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Strong.html" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="gulpfile.js" />
+  </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptOutFile>NXKit.XForms.Layout.js</TypeScriptOutFile>
+    <TypeScriptOutFile>nxkit-xforms-layout.ts.js</TypeScriptOutFile>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
     <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
@@ -173,6 +179,14 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <Target Name="Gulp">
+    <Exec Command="$(ProjectDir)node_modules/.bin/gulp" WorkingDirectory="$(ProjectDir)" />
+  </Target>
+  <PropertyGroup>
+    <BuildDependsOn>
+            $(BuildDependsOn);
+            Gulp;
+        </BuildDependsOn>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
 </Project>

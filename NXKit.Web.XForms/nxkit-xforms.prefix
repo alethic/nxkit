@@ -1,0 +1,5 @@
+﻿define('nxkit-xforms', [
+    'knockout',
+    'jquery',
+    'nxkit',
+], function (ko, $, NXKit) {

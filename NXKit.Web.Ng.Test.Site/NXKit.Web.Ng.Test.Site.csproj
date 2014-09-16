@@ -86,6 +86,8 @@
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <Content Include="Scripts\knockout-3.2.0.debug.js" />
+    <Content Include="Scripts\knockout-3.2.0.js" />
     <Content Include="Scripts\r.js" />
     <Content Include="Scripts\require.js" />
     <Content Include="Web.config" />
@@ -109,10 +111,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\NXKit.Web\NXKit.Web.csproj">
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
@@ -126,6 +125,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
@@ -156,13 +158,34 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>copy "$(ProjectDir)..\NXKit.Web.Ng\nxkit-ng.js" "$(ProjectDir)Scripts"</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+    <Target Name="CopyFromOutSide">
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web\nxkit.js"
+              DestinationFiles="$(ProjectDir)Scripts\nxkit.js" />
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web\nxkit.js.map"
+              DestinationFiles="$(ProjectDir)Scripts\nxkit.js.map" />
+        
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms\nxkit-xforms.js"
+              DestinationFiles="$(ProjectDir)Scripts\nxkit-xforms.js" />
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms\nxkit-xforms.js.map"
+              DestinationFiles="$(ProjectDir)Scripts\nxkit-xforms.js.map" />
+        
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms.Layout\nxkit-xforms-layout.js"
+              DestinationFiles="$(ProjectDir)Scripts\nxkit-xforms-layout.js" />
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms.Layout\nxkit-xforms-layout.js.map"
+              DestinationFiles="$(ProjectDir)Scripts\nxkit-xforms-layout.js.map" />
+        
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.Ng\nxkit-ng.js"
+              DestinationFiles="$(ProjectDir)Scripts\nxkit-ng.js" 
+              SkipUnchangedFiles="false" />
+        
+    </Target>
+  <PropertyGroup>
+      <BuildDependsOn>
+          CopyFromOutSide;
+          $(BuildDependsOn);
+      </BuildDependsOn>
+  </PropertyGroup>
 </Project>

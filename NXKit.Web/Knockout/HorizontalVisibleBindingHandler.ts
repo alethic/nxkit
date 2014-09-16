@@ -1,4 +1,4 @@
-﻿jQuery.fn.extend({
+﻿$.fn.extend({
     slideRightShow: function () {
         return this.each(function () {
             $(this).show('slide', { direction: 'right' }, 1000);
@@ -41,5 +41,4 @@ module NXKit.Web.Knockout {
 
     ko.bindingHandlers['nxkit_hvisible'] = new HorizontalVisibleBindingHandler();
     ko.virtualElements.allowedBindings['nxkit_hvisible'] = true;
-
 }

@@ -1,3 +1,0 @@
-﻿module.service('nxTemplates', function () {
-
-});
