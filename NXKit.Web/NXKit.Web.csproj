@@ -5,7 +5,6 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A296BBEA-D7B7-40E6-B107-558413A59B8C}</ProjectGuid>
-    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AssemblyName>NXKit.Web</AssemblyName>
     <OutputPath>bin</OutputPath>
