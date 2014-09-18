@@ -177,12 +177,14 @@
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
     <TypeScriptCompile Include="Severity.ts" />
+    <TypeScriptCompile Include="TemplateManager.ts" />
+    <TypeScriptCompile Include="ViewDeferred.ts" />
     <TypeScriptCompile Include="Util.ts" />
     <TypeScriptCompile Include="ViewModelUtil.ts" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="nxkit.prefix" />
-    <None Include="nxkit.suffix" />
+    <None Include="nxkit.js.prefix" />
+    <None Include="nxkit.js.suffix" />
     <None Include="NXKit.Web.nuspec" />
     <None Include="package.json" />
     <None Include="packages.config" />
@@ -232,10 +234,10 @@
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
-    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
-    <TypeScriptOutFile>NXKit.js</TypeScriptOutFile>
+    <TypeScriptModuleKind>none</TypeScriptModuleKind>
+    <TypeScriptOutFile>nxkit.ts.js</TypeScriptOutFile>
     <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
@@ -252,13 +254,16 @@
     <TypeScriptOutFile>nxkit.ts.js</TypeScriptOutFile>
   </PropertyGroup>
   <Target Name="Gulp">
-    <Exec Command="$(ProjectDir)node_modules/.bin/gulp" WorkingDirectory="$(ProjectDir)" />
+    <Exec Command="&quot;$(ProjectDir)node_modules/.bin/gulp&quot; --TargetDir $(TargetDir)" WorkingDirectory="$(ProjectDir)" />
   </Target>
   <PropertyGroup>
     <BuildDependsOn>
             $(BuildDependsOn);
             Gulp;
         </BuildDependsOn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
 </Project>

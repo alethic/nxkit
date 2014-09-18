@@ -1,4 +1,5 @@
 ﻿var gulp = require('gulp');
+var util = require('gulp-util');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
@@ -6,23 +7,23 @@ var del = require('del');
 
 gulp.task('clean', function (cb) {
     del([
-        'nxkit.js',
-        'nxkit.min.js',
-        'nxkit.html',
+        util.env.TargetDir + 'nxkit.js',
+        util.env.TargetDir + 'nxkit.min.js',
+        util.env.TargetDir + 'nxkit.html',
     ], cb);
 });
 
 gulp.task('scripts', ['clean'], function () {
     return gulp.src([
-            'nxkit.prefix',
+            'nxkit.js.prefix',
             'nxkit.ts.js',
-            'nxkit.suffix',
+            'nxkit.js.suffix',
         ])
         .pipe(concat('nxkit.js'))
-        .pipe(gulp.dest('.'))
+        .pipe(gulp.dest(util.env.TargetDir))
         .pipe(uglify())
         .pipe(rename('nxkit.min.js'))
-        .pipe(gulp.dest('.'));
+        .pipe(gulp.dest(util.env.TargetDir));
 });
 
 gulp.task('templates', ['clean'], function () {
@@ -30,7 +31,7 @@ gulp.task('templates', ['clean'], function () {
             '*.html',
         ])
         .pipe(concat('nxkit.html'))
-        .pipe(gulp.dest('.'));
+        .pipe(gulp.dest(util.env.TargetDir));
 });
 
 gulp.task('default', ['scripts', 'templates']);

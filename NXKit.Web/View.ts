@@ -15,6 +15,7 @@ module NXKit.Web {
         private _hash: string;
         private _root: Node;
         private _bind: boolean;
+        private _templateUrl: string;
         private _messages: KnockoutObservableArray<Message>;
         private _threshold: Severity;
 
@@ -32,6 +33,7 @@ module NXKit.Web {
             self._hash = null;
             self._root = null;
             self._bind = true;
+            self._templateUrl = '/';
 
             self._messages = Util.ObservableArray<Message>();
             self._threshold = Severity.Warning;
@@ -60,6 +62,14 @@ module NXKit.Web {
             return this._root;
         }
 
+        public get TemplateUrl(): string {
+            return this._templateUrl;
+        }
+
+        public set TemplateUrl(value: string) {
+            this._templateUrl = value;
+        }
+
         public get Messages(): KnockoutObservableArray<Message> {
             return this._messages;
         }
@@ -76,24 +86,28 @@ module NXKit.Web {
          * Updates the view in response to a received message.
          */
         public Receive(args: any) {
-            this._save = args['Save'] || this._save;
-            this._hash = args['Hash'] || this._hash;
+            var self = this;
 
-            var data = args['Data'] || null;
-            if (data != null) {
-                this.ReceiveData(data);
-            }
+                self._save = args['Save'] || self._save;
+                self._hash = args['Hash'] || self._hash;
+
+                var data = args['Data'] || null;
+                if (data != null) {
+                    self.ReceiveData(data);
+                }
         }
 
         /**
          * Updates the view in response to a received data package.
          */
         public ReceiveData(data: any) {
-            if (data != null) {
-                this.Apply(data['Node'] || null);
-                this.AppendMessages(data['Messages'] || []);
-                this.ExecuteScripts(data['Scripts'] || []);
-            }
+            var self = this;
+
+                if (data != null) {
+                    self.Apply(data['Node'] || null);
+                    self.AppendMessages(data['Messages'] || []);
+                    self.ExecuteScripts(data['Scripts'] || []);
+                }
         }
 
         /**
@@ -300,16 +314,20 @@ module NXKit.Web {
                 ko.cleanNode(
                     self._body);
 
-                // ensure body is to render template
-                $(self._body)
-                    .attr('data-bind', 'template: { name: \'NXKit.View\' }');
+                // execute after deferral
+                ViewDeferred.Wait(() => {
 
-                // apply knockout to view node
-                ko.applyBindings(
-                    self,
-                    self._body);
+                    // ensure body is to render template
+                    $(self._body)
+                        .attr('data-bind', 'template: { name: \'NXKit.View\' }');
 
-                self._bind = false;
+                    // apply knockout to view node
+                    ko.applyBindings(
+                        self,
+                        self._body);
+
+                    self._bind = false;
+                });
             }
 
         }

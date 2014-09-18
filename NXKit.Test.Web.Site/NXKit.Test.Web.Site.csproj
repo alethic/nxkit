@@ -481,25 +481,25 @@
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
     <Target Name="PostBuildTarget">
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web\nxkit.js"
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.js"
               DestinationFolder="$(ProjectDir)Scripts" />
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web\nxkit.min.js"
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.min.js"
               DestinationFolder="$(ProjectDir)Scripts" />
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web\nxkit.html"
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.html"
               DestinationFolder="$(ProjectDir)Content" />
 
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms\nxkit-xforms.js"
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.js"
               DestinationFolder="$(ProjectDir)Scripts" />
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms\nxkit-xforms.min.js"
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.min.js"
               DestinationFolder="$(ProjectDir)Scripts" />
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms\nxkit-xforms.html"
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.html"
               DestinationFolder="$(ProjectDir)Content" />
 
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms.Layout\nxkit-xforms-layout.js"
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.js"
               DestinationFolder="$(ProjectDir)Scripts" />
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms.Layout\nxkit-xforms-layout.min.js"
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.min.js"
               DestinationFolder="$(ProjectDir)Scripts" />
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms.Layout\nxkit-xforms-layout.html"
+        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.html"
               DestinationFolder="$(ProjectDir)Content" />
     </Target>
   <PropertyGroup>

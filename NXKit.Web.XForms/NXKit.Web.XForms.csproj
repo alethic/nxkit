@@ -109,8 +109,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
-    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
     <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
   </PropertyGroup>
   <ItemGroup>
@@ -183,8 +183,8 @@
     <Compile Include="Properties\Ref.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="nxkit-xforms.prefix" />
-    <None Include="nxkit-xforms.suffix" />
+    <None Include="nxkit-xforms.js.prefix" />
+    <None Include="nxkit-xforms.js.suffix" />
     <None Include="NXKit.Web.XForms.nuspec" />
     <None Include="package.json" />
     <None Include="packages.config" />
@@ -216,7 +216,7 @@
   </Target>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TypeScriptOutFile>NXKit.XForms.js</TypeScriptOutFile>
+    <TypeScriptOutFile>nxkit-xforms.ts.js</TypeScriptOutFile>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -224,7 +224,7 @@
     <TypeScriptOutFile>nxkit-xforms.ts.js</TypeScriptOutFile>
   </PropertyGroup>
   <Target Name="Gulp">
-    <Exec Command="$(ProjectDir)node_modules/.bin/gulp" WorkingDirectory="$(ProjectDir)" />
+    <Exec Command="&quot;$(ProjectDir)node_modules/.bin/gulp&quot; --TargetDir $(TargetDir)" WorkingDirectory="$(ProjectDir)" />
   </Target>
   <PropertyGroup>
     <BuildDependsOn>

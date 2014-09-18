@@ -183,7 +183,7 @@ module NXKit.Web {
         /**
          * Gets the template that applies for the given data.
          */
-        public GetTemplateName(data: any): string {
+        public GetTemplateName(data: any): KnockoutObservable<string> {
             return Log.Group('LayoutManager.GetTemplateName', () => {
                 var node = this.GetTemplate(data);
                 if (node == null)
@@ -200,7 +200,7 @@ module NXKit.Web {
                 });
 
                 // caller expects the id
-                return node.id;
+                return ko.observable(node.id);
             });
         }
 

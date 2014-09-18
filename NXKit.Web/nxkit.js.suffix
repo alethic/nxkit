@@ -1,0 +1,18 @@
+﻿
+    NXKit.Web.TemplateManager.Register('nxkit.html');
+    NXKit.Web.TemplateManager.Register('nxkit-xforms.html');
+    NXKit.Web.TemplateManager.Register('nxkit-xforms-layout.html');
+
+    window.NXKit = NXKit;
+    return NXKit;
+};
+
+if (typeof define === "function" && define.amd) {
+    define("nxkit", ['jquery', 'knockout'], function ($, ko) {
+        return ___init_nxkit___($, ko);
+    });
+} else if (typeof $ === "function" && typeof ko === "object") {
+    ___init_nxkit___($, ko);
+} else {
+    throw new Error("RequireJS missing or jQuery and knockout missing.");
+}

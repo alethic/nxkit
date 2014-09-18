@@ -1,4 +1,5 @@
 ﻿var gulp = require('gulp');
+var util = require('gulp-util');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
@@ -6,23 +7,23 @@ var del = require('del');
 
 gulp.task('clean', function (cb) {
     del([
-        'nxkit-xforms-layout.js',
-        'nxkit-xforms-layout.min.js',
-        'nxkit-xforms-layout.html',
+        util.env.TargetDir + 'nxkit-xforms-layout.js',
+        util.env.TargetDir + 'nxkit-xforms-layout.min.js',
+        util.env.TargetDir + 'nxkit-xforms-layout.html',
     ], cb);
 });
 
 gulp.task('scripts', ['clean'], function () {
     return gulp.src([
-            'nxkit-xforms-layout.prefix',
+            'nxkit-xforms-layout.js.prefix',
             'nxkit-xforms-layout.ts.js',
-            'nxkit-xforms-layout.suffix',
+            'nxkit-xforms-layout.js.suffix',
         ])
         .pipe(concat('nxkit-xforms-layout.js'))
-        .pipe(gulp.dest('.'))
+        .pipe(gulp.dest(util.env.TargetDir))
         //.pipe(uglify())
         .pipe(rename('nxkit-xforms-layout.min.js'))
-        .pipe(gulp.dest('.'));
+        .pipe(gulp.dest(util.env.TargetDir));
 });
 
 gulp.task('templates', ['clean'], function () {
@@ -30,7 +31,7 @@ gulp.task('templates', ['clean'], function () {
         '*.html',
         ])
         .pipe(concat('nxkit-xforms-layout.html'))
-        .pipe(gulp.dest('.'));
+        .pipe(gulp.dest(util.env.TargetDir));
 });
 
 gulp.task('default', ['scripts', 'templates']);
