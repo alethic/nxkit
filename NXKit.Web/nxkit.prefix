@@ -1,4 +1,1 @@
-﻿define('nxkit', [
-    'knockout',
-    'jquery',
-], function (ko, $) {
+﻿var ___init_nxkit___ = function ($, ko) {

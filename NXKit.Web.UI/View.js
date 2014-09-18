@@ -65,16 +65,18 @@ _NXKit.Web.UI.View.prototype = {
             self._onsubmit();
         });
 
-        // generate new view
-        if (self._view == null) {
-            self._view = new NXKit.Web.View(body[0], function (data, cb) {
-                self.send(data, cb);
-            });
-        }
+        $(document).ready(function () {
+            // generate new view
+            if (self._view == null) {
+                self._view = new NXKit.Web.View(body[0], function (data, cb) {
+                    self.send(data, cb);
+                });
+            }
 
-        // update view with data, and remove data from resubmission
-        self._view.Receive(JSON.parse($(data).val()));
-        $(data).val('');
+            // update view with data, and remove data from resubmission
+            self._view.Receive(JSON.parse($(data).val()));
+            $(data).val('');
+        });
     },
 
     send: function (data, wh) {

@@ -30,6 +30,9 @@
                 <asp:ScriptReference Name="less" />
                 <asp:ScriptReference Name="semantic" />
                 <asp:ScriptReference Name="knockout" />
+                <asp:ScriptReference Name="nxkit" />
+                <asp:ScriptReference Name="nxkit-xforms" />
+                <asp:ScriptReference Name="nxkit-xforms-layout" />
             </Scripts>
         </asp:ScriptManager>
 
@@ -51,6 +54,14 @@
                 OnLoad="View_Load" />
         </div>
     </form>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('head').load('/Content/nxkit.html', function () { alert('done'); });
+            $('head').load('/Content/nxkit-xforms.html');
+            $('head').load('/Content/nxkit-xforms-layout.html');
+        });
+    </script>
 </body>
 
 </html>

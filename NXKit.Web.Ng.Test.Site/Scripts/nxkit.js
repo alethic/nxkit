@@ -1,7 +1,5 @@
-define('nxkit', [
-    'knockout',
-    'jquery',
-], function (ko, $) {
+var ___init_nxkit___ = function ($, ko) {
+
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -1897,4 +1895,14 @@ var NXKit;
 
     window.NXKit = NXKit;
     return NXKit;
-});
+};
+
+if (typeof define === "function" && define.amd) {
+    define("nxkit", ['jquery', 'knockout'], function ($, ko) {
+        return ___init_nxkit___($, ko);
+    });
+} else if (typeof $ === "function" && typeof ko === "object") {
+    ___init_nxkit___($, ko);
+} else {
+    throw new Error("RequireJS missing or jQuery and knockout missing.");
+}

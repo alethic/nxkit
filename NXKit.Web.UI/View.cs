@@ -166,13 +166,6 @@ namespace NXKit.Web.UI
             {
                 ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
                 Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"')._onsubmit();");
-
-                // write all available knockout templates
-                if (server != null)
-                    foreach (var template in server.GetHtmlTemplates())
-                        if (!Page.ClientScript.IsClientScriptBlockRegistered(typeof(View), template.Name))
-                            using (var rdr = new StreamReader(template.Open()))
-                                Page.ClientScript.RegisterClientScriptBlock(typeof(View), template.Name, rdr.ReadToEnd(), false);
             }
         }
 
@@ -259,9 +252,6 @@ namespace NXKit.Web.UI
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference("NXKit.Web.UI.TypeScript.NXKit.js", typeof(View).Assembly.FullName);
-            yield return new ScriptReference("NXKit.Web.UI.TypeScript.NXKit.XForms.js", typeof(View).Assembly.FullName);
-            yield return new ScriptReference("NXKit.Web.UI.TypeScript.NXKit.XForms.Layout.js", typeof(View).Assembly.FullName);
             yield return new ScriptReference("NXKit.Web.UI.View.js", typeof(View).Assembly.FullName);
         }
 

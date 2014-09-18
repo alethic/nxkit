@@ -1,5 +1,1 @@
-﻿define('nxkit-xforms-layout', [
-    'knockout',
-    'jquery',
-    'nxkit',
-], function (ko, $, NXKit) {
+﻿var ___init_nxkit_xforms_layout___ = function ($, ko, NXKit) {
