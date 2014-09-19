@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 
 using NXKit.Composition;
-using NXKit.Util;
+using NXKit.IO.Media;
 using NXKit.XForms.IO;
 using NXKit.Xml;
 

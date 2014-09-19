@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-using NXKit.Util;
+using NXKit.IO.Media;
 using NXKit.XForms.Serialization;
 
 namespace NXKit.XForms.IO

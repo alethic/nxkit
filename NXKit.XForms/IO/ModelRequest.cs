@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml.Linq;
 
 using NXKit.IO;
+using NXKit.IO.Media;
 using NXKit.Util;
 
 namespace NXKit.XForms.IO

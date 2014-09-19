@@ -5,8 +5,9 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net;
 using System.Text;
+
 using NXKit.IO;
-using NXKit.Util;
+using NXKit.IO.Media;
 using NXKit.XForms.Serialization;
 
 namespace NXKit.XForms.IO

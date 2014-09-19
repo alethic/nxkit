@@ -5,7 +5,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 
 using NXKit.Composition;
-using NXKit.Util;
+using NXKit.IO.Media;
 
 namespace NXKit.XForms
 {

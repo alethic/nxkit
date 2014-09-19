@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.IO.Media;
 using NXKit.Serialization;
-using NXKit.Util;
 
 namespace NXKit.XForms.Serialization
 {

@@ -1371,7 +1371,8 @@ var NXKit;
                 ViewModelUtil.GetDataValueAsDate = GetDataValueAsDate;
 
                 function GetDataType(node) {
-                    return node.Property(XForms.Constants.DataNode, 'DataType').ValueAsString;
+                    var p = node.Property(XForms.Constants.DataNode, 'DataType');
+                    return p != null ? p.ValueAsString : null;
                 }
                 ViewModelUtil.GetDataType = GetDataType;
 
