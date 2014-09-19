@@ -6,8 +6,18 @@ module NXKit.Web {
     export class DefaultLayoutManager
         extends LayoutManager {
 
+        private templates: HTMLElement[];
+
         constructor(context: KnockoutBindingContext) {
             super(context);
+
+            this.templates = this.GetTemplateElements();
+        }
+
+        private GetTemplateElements(): HTMLElement[] {
+            var all = $('body').find('script[type="text/html"]').addBack();
+            var top = all.slice(0, all.index($((<View>this.Context.$data).Body))).get();
+            return <HTMLElement[]>top.reverse();
         }
 
         /**
@@ -53,8 +63,8 @@ module NXKit.Web {
         /**
          * Gets all available templates currently in the document.
          */
-        public GetLocalTemplates(): HTMLElement[] {
-            return <HTMLElement[]>$('script[type="text/html"]').toArray();
+        public GetLocalTemplates(): HTMLElement[]{
+            return this.templates;
         }
 
     }

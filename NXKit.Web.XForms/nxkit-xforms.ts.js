@@ -199,6 +199,16 @@ var NXKit;
 (function (NXKit) {
     (function (Web) {
         (function (XForms) {
+            NXKit.Web.TemplateManager.Default.Register('nxkit-xforms.html');
+        })(Web.XForms || (Web.XForms = {}));
+        var XForms = Web.XForms;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (XForms) {
             var GroupLayoutManager = (function (_super) {
                 __extends(GroupLayoutManager, _super);
                 function GroupLayoutManager(context) {

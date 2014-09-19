@@ -1,8 +1,4 @@
 ﻿
-    NXKit.Web.TemplateManager.Register('nxkit.html');
-    NXKit.Web.TemplateManager.Register('nxkit-xforms.html');
-    NXKit.Web.TemplateManager.Register('nxkit-xforms-layout.html');
-
     window.NXKit = NXKit;
     return NXKit;
 };

@@ -23,7 +23,7 @@ namespace NXKit.XForms
             IExtensionPredicate
         {
 
-            public bool IsMatch(XObject obj, Type type)
+            public bool IsMatch(XObject obj)
             {
                 var element = obj as XElement;
                 if (element != null &&

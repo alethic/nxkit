@@ -138,20 +138,6 @@ namespace NXKit.Web
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<HtmlTemplateInfo> GetHtmlTemplates()
-        {
-            if (document != null)
-                return document.Value.Container
-                    .GetExportedValues<IHtmlTemplateProvider>()
-                    .SelectMany(i => i.GetTemplates());
-            else
-                return Enumerable.Empty<HtmlTemplateInfo>();
-        }
-
-        /// <summary>
         /// Registers the given script snippet for execution upon return to the client.
         /// </summary>
         /// <param name="script"></param>

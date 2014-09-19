@@ -19,7 +19,7 @@ namespace NXKit.NXInclude
             IExtensionPredicate
         {
 
-            public bool IsMatch(XObject obj, Type type)
+            public bool IsMatch(XObject obj)
             {
                 return obj.Annotation<IncludeScopeAnnotation>() != null;
             }

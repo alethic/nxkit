@@ -26,9 +26,9 @@ namespace NXKit.XForms
             ExtensionPredicateBase
         {
 
-            public override bool IsMatch(XObject obj, Type type)
+            public override bool IsMatch(XObject obj)
             {
-                return type == typeof(RepeatItem) && obj.Annotation<RepeatItemState>() != null;
+                return obj.Annotation<RepeatItemState>() != null;
             }
 
         }

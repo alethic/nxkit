@@ -20,7 +20,7 @@ namespace NXKit.XForms
             IExtensionPredicate
         {
 
-            public bool IsMatch(XObject obj, Type type)
+            public bool IsMatch(XObject obj)
             {
                 return obj.Parent != null && obj.Parent.Name == Constants.XForms_1_0 + "item";
             }

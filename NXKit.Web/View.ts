@@ -15,7 +15,6 @@ module NXKit.Web {
         private _hash: string;
         private _root: Node;
         private _bind: boolean;
-        private _templateUrl: string;
         private _messages: KnockoutObservableArray<Message>;
         private _threshold: Severity;
 
@@ -33,7 +32,6 @@ module NXKit.Web {
             self._hash = null;
             self._root = null;
             self._bind = true;
-            self._templateUrl = '/';
 
             self._messages = Util.ObservableArray<Message>();
             self._threshold = Severity.Warning;
@@ -60,14 +58,6 @@ module NXKit.Web {
 
         public get Root(): Node {
             return this._root;
-        }
-
-        public get TemplateUrl(): string {
-            return this._templateUrl;
-        }
-
-        public set TemplateUrl(value: string) {
-            this._templateUrl = value;
         }
 
         public get Messages(): KnockoutObservableArray<Message> {
@@ -315,7 +305,7 @@ module NXKit.Web {
                     self._body);
 
                 // execute after deferral
-                ViewDeferred.Wait(() => {
+                TemplateManager.Default.Wait(() => {
 
                     // ensure body is to render template
                     $(self._body)

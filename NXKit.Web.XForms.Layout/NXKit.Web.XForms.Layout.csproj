@@ -120,6 +120,7 @@
       <Link>Scripts\typings\nxkit\nxkit.ts.d.ts</Link>
     </TypeScriptCompile>
     <TypeScriptCompile Include="FormViewModel.ts" />
+    <TypeScriptCompile Include="DefaultTemplates.ts" />
     <TypeScriptCompile Include="IconViewModel.ts" />
     <TypeScriptCompile Include="ItemViewModel.ts" />
     <TypeScriptCompile Include="ListViewModel.ts" />
@@ -144,7 +145,6 @@
     <EmbeddedResource Include="Icon.html" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyHtmlTemplateProvider.cs" />
     <TypeScriptCompile Include="FormUtil.ts" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Ref.cs" />

@@ -26,6 +26,8 @@ declare module NXKit.Web.XForms {
     }
 }
 declare module NXKit.Web.XForms {
+}
+declare module NXKit.Web.XForms {
     class GroupLayoutManager extends LayoutManager {
         constructor(context: KnockoutBindingContext);
         public GetTemplateOptions(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, options: any): any;

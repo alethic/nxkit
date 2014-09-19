@@ -753,11 +753,63 @@ var NXKit;
             };
 
             DefaultLayoutManager.prototype.GetLocalTemplates = function () {
-                return $('script[type="text/html"]').toArray();
+                var all = $('body').find('script[type="text/html"]').addBack();
+                var top = all.slice(0, all.index($(this.Context.$data.Body))).get();
+                return top.reverse();
             };
             return DefaultLayoutManager;
         })(Web.LayoutManager);
         Web.DefaultLayoutManager = DefaultLayoutManager;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        var DeferredExecutorItem = (function () {
+            function DeferredExecutorItem(cb) {
+                this.callback = cb;
+            }
+            Object.defineProperty(DeferredExecutorItem.prototype, "Promise", {
+                get: function () {
+                    var self = this;
+
+                    if (self.deferred != null)
+                        return self.deferred.promise();
+
+                    self.deferred = $.Deferred();
+                    self.callback(self.deferred);
+
+                    return self.deferred.progress();
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return DeferredExecutorItem;
+        })();
+
+        var DeferredExecutor = (function () {
+            function DeferredExecutor() {
+                this._queue = new Array();
+            }
+            DeferredExecutor.prototype.Register = function (cb) {
+                var self = this;
+
+                self._queue.push(new DeferredExecutorItem(cb));
+            };
+
+            DeferredExecutor.prototype.Wait = function (cb) {
+                var self = this;
+
+                var wait = new Array();
+                for (var i = 0; i < self._queue.length; i++)
+                    wait[i] = self._queue[i].Promise;
+
+                $.when.apply($, wait).done(cb);
+            };
+            return DeferredExecutor;
+        })();
+        Web.DeferredExecutor = DeferredExecutor;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
@@ -1471,24 +1523,39 @@ var NXKit;
 (function (NXKit) {
     (function (Web) {
         var TemplateManager = (function () {
-            function TemplateManager() {
-            }
-            TemplateManager.Register = function (name) {
+            function TemplateManager(baseUrl) {
+                this._executor = new Web.DeferredExecutor();
                 var self = this;
 
-                Web.ViewDeferred.Push(function (promise) {
+                self._baseUrl = baseUrl;
+            }
+            TemplateManager.prototype.Register = function (name) {
+                var self = this;
+
+                self._executor.Register(function (promise) {
                     $(document).ready(function () {
-                        var div = $(document.createElement('div')).css('display', 'none').load(self._baseUrl + name, function () {
-                            $('body').append(div);
+                        var div1 = $('body>*[nx-template-container]');
+                        if (div1.length == 0)
+                            div1 = $(document.createElement('div')).attr('nx-template-container', '').css('display', 'none').prependTo('body');
+                        var div2 = $(document.createElement('div')).attr('nx-template-url', self._baseUrl + name).load(self._baseUrl + name, function () {
+                            $(div1).append(div2);
                             promise.resolve();
                         });
                     });
                 });
             };
-            TemplateManager._baseUrl = '/Content/';
+
+            TemplateManager.prototype.Wait = function (cb) {
+                var self = this;
+
+                self._executor.Wait(cb);
+            };
             return TemplateManager;
         })();
         Web.TemplateManager = TemplateManager;
+
+        TemplateManager.Default = new TemplateManager('/Content/');
+        TemplateManager.Default.Register('nxkit.html');
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
@@ -1505,7 +1572,6 @@ var NXKit;
                 self._hash = null;
                 self._root = null;
                 self._bind = true;
-                self._templateUrl = '/';
 
                 self._messages = Web.Util.ObservableArray();
                 self._threshold = 3 /* Warning */;
@@ -1548,18 +1614,6 @@ var NXKit;
                 enumerable: true,
                 configurable: true
             });
-
-            Object.defineProperty(View.prototype, "TemplateUrl", {
-                get: function () {
-                    return this._templateUrl;
-                },
-                set: function (value) {
-                    this._templateUrl = value;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
 
             Object.defineProperty(View.prototype, "Messages", {
                 get: function () {
@@ -1758,7 +1812,7 @@ var NXKit;
                 if (self._bind && self._body != null && self._root != null) {
                     ko.cleanNode(self._body);
 
-                    Web.ViewDeferred.Wait(function () {
+                    Web.TemplateManager.Default.Wait(function () {
                         $(self._body).attr('data-bind', 'template: { name: \'NXKit.View\' }');
 
                         ko.applyBindings(self, self._body);
@@ -1770,57 +1824,6 @@ var NXKit;
             return View;
         })();
         Web.View = View;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        var ViewDeferredTuple = (function () {
-            function ViewDeferredTuple(cb) {
-                this.callback = cb;
-            }
-            Object.defineProperty(ViewDeferredTuple.prototype, "Promise", {
-                get: function () {
-                    var self = this;
-
-                    if (self.deferred != null)
-                        return self.deferred.promise();
-
-                    self.deferred = $.Deferred();
-                    self.callback(self.deferred);
-
-                    return self.deferred.progress();
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return ViewDeferredTuple;
-        })();
-        Web.ViewDeferredTuple = ViewDeferredTuple;
-
-        var ViewDeferred = (function () {
-            function ViewDeferred() {
-            }
-            ViewDeferred.Push = function (cb) {
-                var self = this;
-
-                self._queue.push(new ViewDeferredTuple(cb));
-            };
-
-            ViewDeferred.Wait = function (cb) {
-                var self = this;
-
-                var wait = new Array();
-                for (var i = 0; i < self._queue.length; i++)
-                    wait[i] = self._queue[i].Promise;
-
-                $.when.apply($, wait).done(cb);
-            };
-            ViewDeferred._queue = new Array();
-            return ViewDeferred;
-        })();
-        Web.ViewDeferred = ViewDeferred;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
@@ -1987,10 +1990,6 @@ var NXKit;
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
 
-
-    NXKit.Web.TemplateManager.Register('nxkit.html');
-    NXKit.Web.TemplateManager.Register('nxkit-xforms.html');
-    NXKit.Web.TemplateManager.Register('nxkit-xforms-layout.html');
 
     window.NXKit = NXKit;
     return NXKit;

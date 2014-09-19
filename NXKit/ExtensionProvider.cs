@@ -91,7 +91,7 @@ namespace NXKit
             // test against specified predicate type
             var predicate = metadata.PredicateType != null ? (IExtensionPredicate)Activator.CreateInstance(metadata.PredicateType) : null;
             if (predicate != null)
-                if (!predicate.IsMatch(obj, null))
+                if (!predicate.IsMatch(obj))
                     return false;
 
             return true;

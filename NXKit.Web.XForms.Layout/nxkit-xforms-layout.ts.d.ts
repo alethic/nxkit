@@ -9,6 +9,8 @@ declare module NXKit.Web.XForms.Layout {
     }
 }
 declare module NXKit.Web.XForms.Layout {
+}
+declare module NXKit.Web.XForms.Layout {
     class IconViewModel extends LayoutNodeViewModel {
         constructor(context: KnockoutBindingContext, node: Node);
         public Name : KnockoutObservable<string>;

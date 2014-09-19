@@ -1,6 +1,6 @@
 ﻿module NXKit.Web {
 
-    export class ViewDeferredTuple {
+    class DeferredExecutorItem {
 
         callback: (promise: JQueryDeferred<void>) => void
         deferred: JQueryDeferred<void>;
@@ -26,17 +26,30 @@
 
     }
 
-    export class ViewDeferred {
+    /**
+     * Executes a series of callbacks once for the first waiter.
+     * @class NXKit.Web.DeferredExecutor
+     */
+    export class DeferredExecutor {
 
-        static _queue: ViewDeferredTuple[] = new Array<ViewDeferredTuple>();
-
-        static Push(cb: (promise: JQueryDeferred<void>) => void) {
+        private _queue: DeferredExecutorItem[] = new Array<DeferredExecutorItem>();
+        
+        /**
+         * Registers a callback to be executed. The callback is passed a JQueryDeferred that it can resolve upon
+         * completion.
+         * @method Register
+         */
+        public Register(cb: (promise: JQueryDeferred<void>) => void) {
             var self = this;
 
-            self._queue.push(new ViewDeferredTuple(cb));
+            self._queue.push(new DeferredExecutorItem(cb));
         }
-
-        static Wait(cb: () => void) {
+        
+        /**
+         * Invokes the given callback when the registered callbacks are completed.
+         * @method Wait
+         */
+        public Wait(cb: () => void) {
             var self = this;
 
             var wait = new Array<JQueryPromise<void>>();

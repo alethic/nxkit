@@ -46,6 +46,19 @@ var NXKit;
     (function (Web) {
         (function (XForms) {
             (function (Layout) {
+                NXKit.Web.TemplateManager.Default.Register('nxkit-xforms-layout.html');
+            })(XForms.Layout || (XForms.Layout = {}));
+            var Layout = XForms.Layout;
+        })(Web.XForms || (Web.XForms = {}));
+        var XForms = Web.XForms;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (XForms) {
+            (function (Layout) {
                 var IconViewModel = (function (_super) {
                     __extends(IconViewModel, _super);
                     function IconViewModel(context, node) {
