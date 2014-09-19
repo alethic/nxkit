@@ -83,6 +83,10 @@
     <Content Include="Scripts\app\_index.js" />
     <Content Include="Scripts\app\_module.js" />
     <Content Include="Scripts\config.js" />
+    <Content Include="..\NXKit.Web.XForms\bin\Debug\nxkit-xforms.min.js.map">
+      <Link>nxkit-xforms.min.js.map</Link>
+      <DependentUpon>nxkit-xforms.min.js</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
@@ -111,7 +115,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Content\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.Web\NXKit.Web.csproj">
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
@@ -157,35 +163,32 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <ItemGroup>
+    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.js" />
+    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.min.js" />
+    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.js" />
+    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.min.js" />
+    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.js" />
+    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.min.js" />
+    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.Ng\bin\$(Configuration)\nxkit-ng.js" />
+    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.Ng\bin\$(Configuration)\nxkit-ng.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.html" />
+    <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.html" />
+    <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.html" />
+  </ItemGroup>
+  <Target Name="CopySourceFiles">
+    <Copy SourceFiles="@(ScriptSourceFiles)" DestinationFiles="@(ScriptSourceFiles->'$(ProjectDir)\Scripts\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+  <Target Name="CopyContentFiles">
+    <Copy SourceFiles="@(ContentSourceFiles)" DestinationFiles="@(ContentSourceFiles->'$(ProjectDir)\Content\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
-    <Target Name="CopyFromOutSide">
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web\nxkit.js"
-              DestinationFiles="$(ProjectDir)Scripts\nxkit.js" />
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web\nxkit.js.map"
-              DestinationFiles="$(ProjectDir)Scripts\nxkit.js.map" />
-        
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms\nxkit-xforms.js"
-              DestinationFiles="$(ProjectDir)Scripts\nxkit-xforms.js" />
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms\nxkit-xforms.js.map"
-              DestinationFiles="$(ProjectDir)Scripts\nxkit-xforms.js.map" />
-        
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms.Layout\nxkit-xforms-layout.js"
-              DestinationFiles="$(ProjectDir)Scripts\nxkit-xforms-layout.js" />
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.XForms.Layout\nxkit-xforms-layout.js.map"
-              DestinationFiles="$(ProjectDir)Scripts\nxkit-xforms-layout.js.map" />
-        
-        <Copy SourceFiles="$(ProjectDir)..\NXKit.Web.Ng\nxkit-ng.js"
-              DestinationFiles="$(ProjectDir)Scripts\nxkit-ng.js" 
-              SkipUnchangedFiles="false" />
-        
-    </Target>
-  <PropertyGroup>
-      <BuildDependsOn>
-          CopyFromOutSide;
-          $(BuildDependsOn);
-      </BuildDependsOn>
+    <BuildDependsOn>
+        CopySourceFiles;
+        CopyContentFiles;
+        $(BuildDependsOn);
+    </BuildDependsOn>
   </PropertyGroup>
 </Project>

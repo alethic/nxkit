@@ -16,13 +16,12 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Content Include="nxkit-ng.suffix" />
-    <Content Include="nxkit-ng.prefix" />
+    <Content Include="nxkit-ng.js.suffix" />
+    <Content Include="nxkit-ng.js.prefix" />
     <Content Include="package.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gulpfile.js" />
-    <Compile Include="src\js\layout-manager.js" />
     <Compile Include="src\js\view.js" />
     <Compile Include="src\js\_module.js" />
   </ItemGroup>
@@ -32,13 +31,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
-  <Target Name="Gulp">
-    <Exec Command="$(ProjectDir)node_modules/.bin/gulp" WorkingDirectory="$(ProjectDir)" />
+  <Target Name="GulpBuild">
+    <Exec Command="$(ProjectDir)node_modules/.bin/gulp --TargetDir $(TargetDir)\bin\$(Configuration)" WorkingDirectory="$(ProjectDir)" />
   </Target>
   <PropertyGroup>
     <BuildDependsOn>
             $(BuildDependsOn);
-            Gulp;
+            GulpBuild;
         </BuildDependsOn>
   </PropertyGroup>
   <ProjectExtensions>

@@ -65,7 +65,8 @@ module NXKit.Web.XForms.ViewModelUtil {
     }
 
     export function GetDataType(node: Node): KnockoutObservable<string> {
-        return node.Property(Constants.DataNode, 'DataType').ValueAsString;
+        var p = node.Property(Constants.DataNode, 'DataType');
+        return p != null ? p.ValueAsString : null;
     }
 
     export function IsUINode(node: Node): boolean {
