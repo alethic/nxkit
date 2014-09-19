@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace NXKit.Util
+namespace NXKit.IO.Media
 {
 
     /// <summary>

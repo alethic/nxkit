@@ -151,6 +151,8 @@
     <Compile Include="IInvoker.cs" />
     <Compile Include="IOnSave.cs" />
     <Compile Include="IO\IOTextReader.cs" />
+    <Compile Include="IO\Media\IMediaConverter.cs" />
+    <Compile Include="IO\Media\MediaConverterProvider.cs" />
     <Compile Include="IRefRoot.cs" />
     <Compile Include="ITextExtension.cs" />
     <Compile Include="IDocumentExtension.cs" />
@@ -210,10 +212,10 @@
     <Compile Include="Util\EnumerableExtensions.cs" />
     <Compile Include="Util\FrameworkUtil.cs" />
     <Compile Include="Util\LinkedListExtensions.cs" />
-    <Compile Include="Util\MediaRangeList.cs" />
-    <Compile Include="Util\MediaRangeParameters.cs" />
-    <Compile Include="Util\MediaType.cs" />
-    <Compile Include="Util\MediaRange.cs" />
+    <Compile Include="IO\Media\MediaRangeList.cs" />
+    <Compile Include="IO\Media\MediaRangeParameters.cs" />
+    <Compile Include="IO\Media\MediaType.cs" />
+    <Compile Include="IO\Media\MediaRange.cs" />
     <Compile Include="Util\ObjectExtensions.cs" />
     <Compile Include="Util\StringExtensions.cs" />
     <Compile Include="Composition\CompositionUtil.cs" />
@@ -252,6 +254,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IO\Media\Converters\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

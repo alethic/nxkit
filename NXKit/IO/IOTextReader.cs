@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Text;
 
-using NXKit.Util;
+using NXKit.IO.Media;
 
 namespace NXKit.IO
 {

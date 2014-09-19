@@ -4,7 +4,7 @@ using System.IO;
 using System.Xml;
 
 using NXKit.IO;
-using NXKit.Util;
+using NXKit.IO.Media;
 
 namespace NXKit.Xml
 {

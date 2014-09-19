@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-namespace NXKit.Util
+namespace NXKit.IO.Media
 {
 
     /// <summary>

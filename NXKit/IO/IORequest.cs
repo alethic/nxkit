@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
 
+using NXKit.IO.Media;
 using NXKit.Util;
 
 namespace NXKit.IO
