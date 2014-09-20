@@ -2,16 +2,22 @@
     baseUrl: 'Scripts',
     paths: {
         'jquery': 'jquery-2.1.1',
-        'knockout': 'knockout-3.2.0'
+        'knockout': 'knockout-3.2.0',
+        'semantic': '../Content/semantic/packaged/javascript/semantic',
     },
     shim: {
+        'semantic': {
+            exports: 'semantic',
+            deps: ['jquery'],
+        },
         'angular': {
             exports: 'angular',
         },
         'nxkit': {
             deps: ['knockout'],
         }
-    }
+    },
+    deps: ['semantic'],
 });
 
 require([

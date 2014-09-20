@@ -69,12 +69,68 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\normalize.css" />
     <Content Include="Content\nxkit-xforms-layout.css" />
     <Content Include="Content\nxkit-xforms-layout.html" />
     <Content Include="Content\nxkit-xforms.css" />
     <Content Include="Content\nxkit-xforms.html" />
     <Content Include="Content\nxkit.css" />
     <Content Include="Content\nxkit.html" />
+    <Content Include="Content\semantic\less\fonts\basic.icons.svg" />
+    <Content Include="Content\semantic\less\fonts\icons.svg" />
+    <Content Include="Content\semantic\less\images\loader-large-inverted.gif" />
+    <Content Include="Content\semantic\less\images\loader-large.gif" />
+    <Content Include="Content\semantic\less\images\loader-medium-inverted.gif" />
+    <Content Include="Content\semantic\less\images\loader-medium.gif" />
+    <Content Include="Content\semantic\less\images\loader-mini-inverted.gif" />
+    <Content Include="Content\semantic\less\images\loader-mini.gif" />
+    <Content Include="Content\semantic\less\images\loader-small-inverted.gif" />
+    <Content Include="Content\semantic\less\images\loader-small.gif" />
+    <Content Include="Content\semantic\less\modules\accordion.js" />
+    <Content Include="Content\semantic\less\modules\behavior\api.js" />
+    <Content Include="Content\semantic\less\modules\behavior\colorize.js" />
+    <Content Include="Content\semantic\less\modules\behavior\form.js" />
+    <Content Include="Content\semantic\less\modules\behavior\state.js" />
+    <Content Include="Content\semantic\less\modules\chatroom.js" />
+    <Content Include="Content\semantic\less\modules\checkbox.js" />
+    <Content Include="Content\semantic\less\modules\dimmer.js" />
+    <Content Include="Content\semantic\less\modules\dropdown.js" />
+    <Content Include="Content\semantic\less\modules\modal.js" />
+    <Content Include="Content\semantic\less\modules\nag.js" />
+    <Content Include="Content\semantic\less\modules\popup.js" />
+    <Content Include="Content\semantic\less\modules\rating.js" />
+    <Content Include="Content\semantic\less\modules\search.js" />
+    <Content Include="Content\semantic\less\modules\shape.js" />
+    <Content Include="Content\semantic\less\modules\sidebar.js" />
+    <Content Include="Content\semantic\less\modules\tab.js" />
+    <Content Include="Content\semantic\less\modules\transition.js" />
+    <Content Include="Content\semantic\less\modules\video.js" />
+    <Content Include="Content\semantic\packaged\css\semantic.css" />
+    <Content Include="Content\semantic\packaged\css\semantic.min.css" />
+    <Content Include="Content\semantic\packaged\fonts\basic.icons.svg" />
+    <Content Include="Content\semantic\packaged\fonts\icons.svg" />
+    <Content Include="Content\semantic\packaged\images\loader-large-inverted.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-large.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-medium-inverted.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-medium.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-mini-inverted.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-mini.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-small-inverted.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-small.gif" />
+    <Content Include="Content\semantic\packaged\javascript\semantic.js" />
+    <Content Include="Content\semantic\packaged\javascript\semantic.min.js" />
+    <Content Include="Content\styles.css">
+      <DependentUpon>styles.less</DependentUpon>
+    </Content>
+    <Content Include="Content\styles.min.css">
+      <DependentUpon>styles.css</DependentUpon>
+    </Content>
+    <Content Include="Content\xforms-layout.css">
+      <DependentUpon>xforms-layout.less</DependentUpon>
+    </Content>
+    <Content Include="Content\xforms.css">
+      <DependentUpon>xforms.less</DependentUpon>
+    </Content>
     <Content Include="Global.asax" />
     <Content Include="index.html" />
     <Content Include="Scripts\angular-mocks.js" />
@@ -84,6 +140,74 @@
     <Content Include="Scripts\app\_index.js" />
     <Content Include="Scripts\app\_module.js" />
     <Content Include="Scripts\config.js" />
+    <Content Include="Content\semantic\less\collections\breadcrumb.less" />
+    <Content Include="Content\semantic\less\collections\form.less" />
+    <Content Include="Content\semantic\less\collections\grid.less" />
+    <Content Include="Content\semantic\less\collections\menu.less" />
+    <Content Include="Content\semantic\less\collections\message.less" />
+    <Content Include="Content\semantic\less\collections\table.less" />
+    <Content Include="Content\semantic\less\elements\basic.icon.less" />
+    <Content Include="Content\semantic\less\elements\button.less" />
+    <Content Include="Content\semantic\less\elements\divider.less" />
+    <Content Include="Content\semantic\less\elements\header.less" />
+    <Content Include="Content\semantic\less\elements\icon.less" />
+    <Content Include="Content\semantic\less\elements\image.less" />
+    <Content Include="Content\semantic\less\elements\input.less" />
+    <Content Include="Content\semantic\less\elements\label.less" />
+    <Content Include="Content\semantic\less\elements\loader.less" />
+    <Content Include="Content\semantic\less\elements\progress.less" />
+    <Content Include="Content\semantic\less\elements\reveal.less" />
+    <Content Include="Content\semantic\less\elements\segment.less" />
+    <Content Include="Content\semantic\less\elements\step.less" />
+    <Content Include="Content\semantic\less\fonts\basic.icons.eot" />
+    <Content Include="Content\semantic\less\fonts\basic.icons.ttf" />
+    <Content Include="Content\semantic\less\fonts\basic.icons.woff" />
+    <Content Include="Content\semantic\less\fonts\icons.eot" />
+    <Content Include="Content\semantic\less\fonts\icons.otf" />
+    <Content Include="Content\semantic\less\fonts\icons.ttf" />
+    <Content Include="Content\semantic\less\fonts\icons.woff" />
+    <Content Include="Content\semantic\less\modules\accordion.less" />
+    <Content Include="Content\semantic\less\modules\chatroom.less" />
+    <Content Include="Content\semantic\less\modules\checkbox.less" />
+    <Content Include="Content\semantic\less\modules\dimmer.less" />
+    <Content Include="Content\semantic\less\modules\dropdown.less" />
+    <Content Include="Content\semantic\less\modules\modal.less" />
+    <Content Include="Content\semantic\less\modules\nag.less" />
+    <Content Include="Content\semantic\less\modules\popup.less" />
+    <Content Include="Content\semantic\less\modules\rating.less" />
+    <Content Include="Content\semantic\less\modules\search.less" />
+    <Content Include="Content\semantic\less\modules\shape.less" />
+    <Content Include="Content\semantic\less\modules\sidebar.less" />
+    <Content Include="Content\semantic\less\modules\tab.less" />
+    <Content Include="Content\semantic\less\modules\transition.less" />
+    <Content Include="Content\semantic\less\modules\video.less" />
+    <Content Include="Content\semantic\less\semantic.config" />
+    <Content Include="Content\semantic\less\views\comment.less" />
+    <Content Include="Content\semantic\less\views\feed.less" />
+    <Content Include="Content\semantic\less\views\item.less" />
+    <Content Include="Content\semantic\less\views\list.less" />
+    <Content Include="Content\semantic\less\views\statistic.less" />
+    <Content Include="Content\semantic\packaged\fonts\basic.icons.eot" />
+    <Content Include="Content\semantic\packaged\fonts\basic.icons.ttf" />
+    <Content Include="Content\semantic\packaged\fonts\basic.icons.woff" />
+    <Content Include="Content\semantic\packaged\fonts\icons.eot" />
+    <Content Include="Content\semantic\packaged\fonts\icons.otf" />
+    <Content Include="Content\semantic\packaged\fonts\icons.ttf" />
+    <Content Include="Content\semantic\packaged\fonts\icons.woff" />
+    <Content Include="Content\default.less" />
+    <Content Include="Content\styles.less" />
+    <Content Include="Content\semantic.less" />
+    <Content Include="Content\xforms-layout.less" />
+    <Content Include="Content\xforms-layout.css.map">
+      <DependentUpon>xforms-layout.css</DependentUpon>
+    </Content>
+    <Content Include="Content\xforms.less" />
+    <Content Include="Content\xforms.css.map">
+      <DependentUpon>xforms.css</DependentUpon>
+    </Content>
+    <Content Include="Content\styles.css.map">
+      <DependentUpon>styles.css</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />

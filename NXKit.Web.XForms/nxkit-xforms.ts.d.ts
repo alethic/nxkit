@@ -20,12 +20,6 @@
     }
 }
 declare module NXKit.Web.XForms {
-    class AlertViewModel extends XFormsNodeViewModel {
-        constructor(context: KnockoutBindingContext, node: Node);
-        public Text : KnockoutObservable<string>;
-    }
-}
-declare module NXKit.Web.XForms {
     class DefaultLayoutManager extends LayoutManager {
         constructor(context: KnockoutBindingContext);
         public GetTemplateOptions(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, options: any): any;
@@ -38,6 +32,62 @@ declare module NXKit.Web.XForms {
         constructor(context: KnockoutBindingContext);
         public GetTemplateOptions(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, options: any): any;
     }
+}
+declare module NXKit.Web.XForms {
+    class OutputViewModel extends XFormsNodeViewModel {
+        constructor(context: KnockoutBindingContext, node: Node);
+        public Text : KnockoutObservable<string>;
+    }
+}
+declare module NXKit.Web.XForms {
+    class RepeatViewModel extends XFormsNodeViewModel {
+        private _items;
+        constructor(context: KnockoutBindingContext, node: Node);
+    }
+}
+declare module NXKit.Web.Knockout {
+    class InputBooleanBindingHandler implements KnockoutBindingHandler {
+        static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+    }
+}
+declare module NXKit.Web.XForms.Knockout {
+    class Select1BindingHandler implements KnockoutBindingHandler {
+        static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+    }
+}
+declare module NXKit.Web.XForms {
+    class SubmitViewModel extends XFormsNodeViewModel {
+        constructor(context: KnockoutBindingContext, node: Node);
+        public Activate(): void;
+    }
+}
+declare module NXKit.Web.XForms {
+    class TriggerViewModel extends XFormsNodeViewModel {
+        constructor(context: KnockoutBindingContext, node: Node);
+        public Activate(): void;
+    }
+}
+declare module NXKit.Web.XForms.SelectUtil {
+    class Selectable {
+        private _viewModel;
+        private _node;
+        constructor(viewModel: NodeViewModel, node: Node);
+        public ViewModel : NodeViewModel;
+        public Node : Node;
+        public Id : string;
+        public GetId(): string;
+        public Label : Node;
+        public GetLabelNode(): Node;
+        public Value : Node;
+        public GetValueNode(): Node;
+    }
+    function GetSelectables(viewModel: NodeViewModel, node: Node, level: number): Selectable[];
 }
 declare module NXKit.Web.XForms.GroupUtil {
     class Item {
@@ -121,6 +171,12 @@ declare module NXKit.Web.XForms {
     }
 }
 declare module NXKit.Web.XForms {
+    class AlertViewModel extends XFormsNodeViewModel {
+        constructor(context: KnockoutBindingContext, node: Node);
+        public Text : KnockoutObservable<string>;
+    }
+}
+declare module NXKit.Web.XForms {
     class HintViewModel extends XFormsNodeViewModel {
         constructor(context: KnockoutBindingContext, node: Node);
         public Text : KnockoutObservable<string>;
@@ -145,39 +201,11 @@ declare module NXKit.Web.XForms {
     }
 }
 declare module NXKit.Web.XForms {
-    class OutputViewModel extends XFormsNodeViewModel {
-        constructor(context: KnockoutBindingContext, node: Node);
-        public Text : KnockoutObservable<string>;
-    }
-}
-declare module NXKit.Web.XForms {
     class RangeViewModel extends XFormsNodeViewModel {
         constructor(context: KnockoutBindingContext, node: Node);
         public Start : KnockoutObservable<number>;
         public End : KnockoutObservable<number>;
         public Step : KnockoutObservable<number>;
-    }
-}
-declare module NXKit.Web.XForms {
-    class RepeatViewModel extends XFormsNodeViewModel {
-        private _items;
-        constructor(context: KnockoutBindingContext, node: Node);
-    }
-}
-declare module NXKit.Web.Knockout {
-    class InputBooleanBindingHandler implements KnockoutBindingHandler {
-        static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-    }
-}
-declare module NXKit.Web.XForms.Knockout {
-    class Select1BindingHandler implements KnockoutBindingHandler {
-        static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
     }
 }
 declare module NXKit.Web.XForms {
@@ -190,37 +218,9 @@ declare module NXKit.Web.XForms {
         public FocusOut(): void;
     }
 }
-declare module NXKit.Web.XForms.SelectUtil {
-    class Selectable {
-        private _viewModel;
-        private _node;
-        constructor(viewModel: NodeViewModel, node: Node);
-        public ViewModel : NodeViewModel;
-        public Node : Node;
-        public Id : string;
-        public GetId(): string;
-        public Label : Node;
-        public GetLabelNode(): Node;
-        public Value : Node;
-        public GetValueNode(): Node;
-    }
-    function GetSelectables(viewModel: NodeViewModel, node: Node, level: number): Selectable[];
-}
-declare module NXKit.Web.XForms {
-    class SubmitViewModel extends XFormsNodeViewModel {
-        constructor(context: KnockoutBindingContext, node: Node);
-        public Activate(): void;
-    }
-}
 declare module NXKit.Web.XForms {
     class TextAreaViewModel extends XFormsNodeViewModel {
         constructor(context: KnockoutBindingContext, node: Node);
-    }
-}
-declare module NXKit.Web.XForms {
-    class TriggerViewModel extends XFormsNodeViewModel {
-        constructor(context: KnockoutBindingContext, node: Node);
-        public Activate(): void;
     }
 }
 declare module NXKit.Web.XForms {
