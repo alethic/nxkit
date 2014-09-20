@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NXKit.Web.Ng.Test.Site</RootNamespace>
     <AssemblyName>NXKit.Web.Ng.Test.Site</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -21,6 +21,7 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,13 +42,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -73,10 +78,6 @@
     <Content Include="Scripts\app\_index.js" />
     <Content Include="Scripts\app\_module.js" />
     <Content Include="Scripts\config.js" />
-    <Content Include="..\NXKit.Web.XForms\bin\Debug\nxkit-xforms.min.js.map">
-      <Link>nxkit-xforms.min.js.map</Link>
-      <DependentUpon>nxkit-xforms.min.js</DependentUpon>
-    </Content>
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
@@ -89,7 +90,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\FormController.cs" />
     <Compile Include="Controllers\ViewController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -110,6 +110,30 @@
     <Folder Include="Content\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NXKit.DOMEvents.Tests\NXKit.DOMEvents.Tests.csproj">
+      <Project>{c0fc2477-6735-4962-9e7c-5e8acce9b3df}</Project>
+      <Name>NXKit.DOMEvents.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
+      <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
+      <Name>NXKit.DOMEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj">
+      <Project>{075ba36b-f95a-4563-bbe9-20d4405e9c9e}</Project>
+      <Name>NXKit.DOM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.NXInclude\NXKit.NXInclude.csproj">
+      <Project>{8d43ba5c-df3f-4ad8-bf28-6dda74a0a2a1}</Project>
+      <Name>NXKit.NXInclude</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Scripting\NXKit.Scripting.csproj">
+      <Project>{f509df8d-af13-468d-8381-028835a79dec}</Project>
+      <Name>NXKit.Scripting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Test.Web.Site\NXKit.Test.Web.Site.csproj">
+      <Project>{606cfc52-d06a-4b21-b295-a52c5d8c979e}</Project>
+      <Name>NXKit.Test.Web.Site</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.Web.XForms.Layout\NXKit.Web.XForms.Layout.csproj">
       <Project>{9499152c-156e-4005-a01f-4d6f1c480c63}</Project>
       <Name>NXKit.Web.XForms.Layout</Name>
@@ -122,6 +146,10 @@
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
       <Name>NXKit.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Json\NXKit.XForms.Json.csproj">
+      <Project>{fda6d401-d67e-4dac-80b4-4fe0aa4ce338}</Project>
+      <Name>NXKit.XForms.Json</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
       <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
       <Name>NXKit.XForms.Layout</Name>
@@ -129,6 +157,22 @@
     <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
       <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
       <Name>NXKit.XForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XInclude\NXKit.XInclude.csproj">
+      <Project>{9742529e-8881-4aa3-91ef-1a474cb38ac4}</Project>
+      <Name>NXKit.XInclude</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XMLEvents\NXKit.XMLEvents.csproj">
+      <Project>{db71b395-df60-470a-b761-b083d7acafe8}</Project>
+      <Name>NXKit.XMLEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XPath2\NXKit.XPath2.csproj">
+      <Project>{4fc0495c-b8e7-407a-9505-fba9e973ba4c}</Project>
+      <Name>NXKit.XPath2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XPath\NXKit.XPath.csproj">
+      <Project>{a91bc0e8-18cc-41f6-b00d-07e91b1593be}</Project>
+      <Name>NXKit.XPath</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
@@ -170,32 +214,35 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
-  <ItemGroup>
-    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.js" />
-    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.min.js" />
-    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.js" />
-    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.min.js" />
-    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.js" />
-    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.min.js" />
-    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.Ng\bin\$(Configuration)\nxkit-ng.js" />
-    <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.Ng\bin\$(Configuration)\nxkit-ng.min.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.html" />
-    <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.html" />
-    <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.html" />
-  </ItemGroup>
-  <Target Name="CopySourceFiles">
+    <ItemGroup>
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.min.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.min.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.min.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.Ng\bin\$(Configuration)\nxkit-ng.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.Ng\bin\$(Configuration)\nxkit-ng.min.js" />
+    </ItemGroup>
+    <ItemGroup>
+        <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.html" />
+        <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.css" />
+        <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.html" />
+        <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.css" />
+        <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.html" />
+        <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.css" />
+    </ItemGroup>
+  <Target Name="CopySourceFiles" Inputs="@(ScriptSourceFiles)" Outputs="@(ScriptSourceFiles->'$(ProjectDir)\Scripts\%(RecursiveDir)%(Filename)%(Extension)')">
     <Copy SourceFiles="@(ScriptSourceFiles)" DestinationFiles="@(ScriptSourceFiles->'$(ProjectDir)\Scripts\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
-  <Target Name="CopyContentFiles">
+  <Target Name="CopyContentFiles" Inputs="@(ContentSourceFiles)" Outputs="@(ContentSourceFiles->'$(ProjectDir)\Content\%(RecursiveDir)%(Filename)%(Extension)')">
     <Copy SourceFiles="@(ContentSourceFiles)" DestinationFiles="@(ContentSourceFiles->'$(ProjectDir)\Content\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
   <PropertyGroup>
-    <BuildDependsOn>
-        CopySourceFiles;
-        CopyContentFiles;
-        $(BuildDependsOn);
-    </BuildDependsOn>
+    <PrepareForRunDependsOn>
+            CopySourceFiles;
+            CopyContentFiles;
+            $(PrepareForRunDependsOn);
+        </PrepareForRunDependsOn>
   </PropertyGroup>
 </Project>

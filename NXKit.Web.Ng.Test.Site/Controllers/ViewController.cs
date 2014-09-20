@@ -1,7 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Web.Hosting;
 using System.Web.Http;
+
 using Newtonsoft.Json.Linq;
 
 namespace NXKit.Web.Ng.Test.Site.Controllers
@@ -14,7 +13,7 @@ namespace NXKit.Web.Ng.Test.Site.Controllers
         public object Get(string name)
         {
             var nx = new NXKit.Web.ViewServer();
-            nx.Load(new Uri(Request.RequestUri, "/api/form/" + name));
+            nx.Load(new Uri(Request.RequestUri, "/Examples/" + name + ".xml"));
             return nx.Save();
         }
 
