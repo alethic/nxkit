@@ -481,43 +481,21 @@
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
     <ItemGroup>
-        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.js">
-            <InProject>false</InProject>
-        </ScriptSourceFiles>
-        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.min.js" >
-            <InProject>false</InProject>
-        </ScriptSourceFiles>
-        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.js" >
-            <InProject>false</InProject>
-        </ScriptSourceFiles>
-        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.min.js" >
-            <InProject>false</InProject>
-        </ScriptSourceFiles>
-        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.js"  >
-            <InProject>false</InProject>
-        </ScriptSourceFiles>
-        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.min.js" >
-            <InProject>false</InProject>
-        </ScriptSourceFiles>
-        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.Ng\bin\$(Configuration)\nxkit-ng.js" >
-            <InProject>false</InProject>
-        </ScriptSourceFiles>
-        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.Ng\bin\$(Configuration)\nxkit-ng.min.js" >
-            <InProject>false</InProject>
-        </ScriptSourceFiles>
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.min.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.min.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.min.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.Ng\bin\$(Configuration)\nxkit-ng.js" />
+        <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Web.Ng\bin\$(Configuration)\nxkit-ng.min.js" />
     </ItemGroup>
     <ItemGroup>
-        <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.html">
-            <InProject>false</InProject>
-        </ContentSourceFiles>
-        <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.html"  >
-            <InProject>false</InProject>
-        </ContentSourceFiles>
-        <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.html"  >
-            <InProject>false</InProject>
-        </ContentSourceFiles>
+        <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web\bin\$(Configuration)\nxkit.html" />
+        <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms\bin\$(Configuration)\nxkit-xforms.html" />
+        <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Web.XForms.Layout\bin\$(Configuration)\nxkit-xforms-layout.html" />
     </ItemGroup>
-    <Target Name="CopySourceFiles" >
+    <Target Name="CopySourceFiles">
         <Copy SourceFiles="@(ScriptSourceFiles)"
               DestinationFiles="@(ScriptSourceFiles->'$(ProjectDir)\Scripts\%(RecursiveDir)%(Filename)%(Extension)')" />
     </Target>

@@ -67,9 +67,12 @@
     <!-- /ko -->
 </script>
 
-<script type="text/html" data-nxkit-name="{http://www.w3.org/2002/xforms}group" data-nxkit-data-type="*">
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
+        data-nxkit-data-type="*">
     <!-- ko with: new NXKit.Web.XForms.GroupViewModel($context, $parent) -->
-    <div class="panel panel-default" data-bind="
+    <div class="xforms-group"
+         data-bind="
 nxkit_visible: Relevant,
 attr : {
     'data-nx-name': $data.Node.Name,
@@ -78,7 +81,8 @@ attr : {
     'data-nx-xforms-label-appearance': LabelAppearance,
 }">
         <!-- ko with: Label -->
-        <div class="panel-heading" data-bind="
+        <div class="label"
+             data-bind="
 attr : {
     'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data),
     'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data),
@@ -88,7 +92,7 @@ attr : {
         </div>
         <!-- /ko -->
         <!-- ko with: Hint -->
-        <div class="">
+        <div class="hint">
             <!-- ko nxkit_template -->
             <!-- /ko -->
         </div>
@@ -99,7 +103,7 @@ attr : {
             <!-- /ko -->
         </div>
         <!-- /ko -->
-        <div class="panel-body" data-bind="
+        <div class="contents" data-bind="
 attr: {
     'data-nx-xforms-count': $data.Count,
     'data-nx-xforms-count-enabled': $data.CountEnabled,
@@ -173,7 +177,7 @@ attr : {
     'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
 }">
         <!-- ko with: Label -->
-        <label>
+        <label class="label">
             <!-- ko nxkit_template: $data -->
             <!-- /ko -->
         </label>
@@ -218,7 +222,7 @@ attr : {
         <input type="checkbox" />
 
         <!-- ko with: Label -->
-        <label>
+        <label class="label">
             <!-- ko nxkit_template: $data -->
             <!-- /ko -->
         </label>
@@ -252,7 +256,7 @@ attr : {
     'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
 }">
         <!-- ko with: Label -->
-        <label>
+        <label class="label">
             <!-- ko nxkit_template: $data -->
             <!-- /ko -->
         </label>
@@ -301,7 +305,7 @@ attr : {
     'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
 }">
         <!-- ko with: Label -->
-        <label>
+        <label class="label">
             <!-- ko nxkit_template: $data -->
             <!-- /ko -->
         </label>
@@ -458,7 +462,9 @@ css: {
     <!-- /ko -->
 </script>
 
-<script type="text/html"        data-nxkit-name="{http://www.w3.org/2002/xforms}select1"        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}string">
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}select1"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}string">
     <!-- ko with: new NXKit.Web.XForms.Select1ViewModel($context, $data) -->
 
     <div class="xforms-select1" data-bind="
