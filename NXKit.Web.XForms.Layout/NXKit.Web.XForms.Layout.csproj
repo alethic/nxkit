@@ -150,6 +150,10 @@
     <Compile Include="Properties\Ref.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Icon.css.map">
+      <DependentUpon>Icon.css</DependentUpon>
+    </None>
+    <None Include="Icon.less" />
     <None Include="nxkit-xforms-layout.js.prefix" />
     <None Include="nxkit-xforms-layout.js.suffix" />
     <None Include="NXKit.Web.XForms.Layout.nuspec" />
@@ -170,6 +174,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="gulpfile.js" />
+    <Content Include="Icon.css">
+      <DependentUpon>Icon.less</DependentUpon>
+    </Content>
+    <Content Include="Icon.min.css">
+      <DependentUpon>Icon.css</DependentUpon>
+    </Content>
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>

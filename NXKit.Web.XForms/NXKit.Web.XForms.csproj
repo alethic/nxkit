@@ -183,6 +183,85 @@
     <Compile Include="Properties\Ref.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\bootstrap.less" />
+    <None Include="Content\bootstrap\less\.csscomb.json" />
+    <None Include="Content\bootstrap\less\.csslintrc" />
+    <None Include="Content\bootstrap\less\alerts.less" />
+    <None Include="Content\bootstrap\less\badges.less" />
+    <None Include="Content\bootstrap\less\bootstrap.less" />
+    <None Include="Content\bootstrap\less\breadcrumbs.less" />
+    <None Include="Content\bootstrap\less\button-groups.less" />
+    <None Include="Content\bootstrap\less\buttons.less" />
+    <None Include="Content\bootstrap\less\carousel.less" />
+    <None Include="Content\bootstrap\less\close.less" />
+    <None Include="Content\bootstrap\less\code.less" />
+    <None Include="Content\bootstrap\less\component-animations.less" />
+    <None Include="Content\bootstrap\less\dropdowns.less" />
+    <None Include="Content\bootstrap\less\forms.less" />
+    <None Include="Content\bootstrap\less\glyphicons.less" />
+    <None Include="Content\bootstrap\less\grid.less" />
+    <None Include="Content\bootstrap\less\input-groups.less" />
+    <None Include="Content\bootstrap\less\jumbotron.less" />
+    <None Include="Content\bootstrap\less\labels.less" />
+    <None Include="Content\bootstrap\less\list-group.less" />
+    <None Include="Content\bootstrap\less\media.less" />
+    <None Include="Content\bootstrap\less\mixins.less" />
+    <None Include="Content\bootstrap\less\mixins\alerts.less" />
+    <None Include="Content\bootstrap\less\mixins\background-variant.less" />
+    <None Include="Content\bootstrap\less\mixins\border-radius.less" />
+    <None Include="Content\bootstrap\less\mixins\buttons.less" />
+    <None Include="Content\bootstrap\less\mixins\center-block.less" />
+    <None Include="Content\bootstrap\less\mixins\clearfix.less" />
+    <None Include="Content\bootstrap\less\mixins\forms.less" />
+    <None Include="Content\bootstrap\less\mixins\gradients.less" />
+    <None Include="Content\bootstrap\less\mixins\grid-framework.less" />
+    <None Include="Content\bootstrap\less\mixins\grid.less" />
+    <None Include="Content\bootstrap\less\mixins\hide-text.less" />
+    <None Include="Content\bootstrap\less\mixins\image.less" />
+    <None Include="Content\bootstrap\less\mixins\labels.less" />
+    <None Include="Content\bootstrap\less\mixins\list-group.less" />
+    <None Include="Content\bootstrap\less\mixins\nav-divider.less" />
+    <None Include="Content\bootstrap\less\mixins\nav-vertical-align.less" />
+    <None Include="Content\bootstrap\less\mixins\opacity.less" />
+    <None Include="Content\bootstrap\less\mixins\pagination.less" />
+    <None Include="Content\bootstrap\less\mixins\panels.less" />
+    <None Include="Content\bootstrap\less\mixins\progress-bar.less" />
+    <None Include="Content\bootstrap\less\mixins\reset-filter.less" />
+    <None Include="Content\bootstrap\less\mixins\resize.less" />
+    <None Include="Content\bootstrap\less\mixins\responsive-visibility.less" />
+    <None Include="Content\bootstrap\less\mixins\size.less" />
+    <None Include="Content\bootstrap\less\mixins\tab-focus.less" />
+    <None Include="Content\bootstrap\less\mixins\table-row.less" />
+    <None Include="Content\bootstrap\less\mixins\text-emphasis.less" />
+    <None Include="Content\bootstrap\less\mixins\text-overflow.less" />
+    <None Include="Content\bootstrap\less\mixins\vendor-prefixes.less" />
+    <None Include="Content\bootstrap\less\modals.less" />
+    <None Include="Content\bootstrap\less\navbar.less" />
+    <None Include="Content\bootstrap\less\navs.less" />
+    <None Include="Content\bootstrap\less\normalize.less" />
+    <None Include="Content\bootstrap\less\pager.less" />
+    <None Include="Content\bootstrap\less\pagination.less" />
+    <None Include="Content\bootstrap\less\panels.less" />
+    <None Include="Content\bootstrap\less\popovers.less" />
+    <None Include="Content\bootstrap\less\print.less" />
+    <None Include="Content\bootstrap\less\progress-bars.less" />
+    <None Include="Content\bootstrap\less\responsive-embed.less" />
+    <None Include="Content\bootstrap\less\responsive-utilities.less" />
+    <None Include="Content\bootstrap\less\scaffolding.less" />
+    <None Include="Content\bootstrap\less\tables.less" />
+    <None Include="Content\bootstrap\less\theme.less" />
+    <None Include="Content\bootstrap\less\thumbnails.less" />
+    <None Include="Content\bootstrap\less\tooltip.less" />
+    <None Include="Content\bootstrap\less\type.less" />
+    <None Include="Content\bootstrap\less\utilities.less" />
+    <None Include="Content\bootstrap\less\variables.less" />
+    <None Include="Content\bootstrap\less\wells.less" />
+    <None Include="Input.css.map">
+      <DependentUpon>Input.css</DependentUpon>
+    </None>
+    <None Include="Input.less" />
+    <None Include="nxkit-xforms.less.prefix" />
+    <None Include="nxkit-xforms.less.suffix" />
     <None Include="nxkit-xforms.js.prefix" />
     <None Include="nxkit-xforms.js.suffix" />
     <None Include="NXKit.Web.XForms.nuspec" />
@@ -201,6 +280,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="gulpfile.js" />
+    <Content Include="Input.css">
+      <DependentUpon>Input.less</DependentUpon>
+    </Content>
+    <Content Include="Input.min.css">
+      <DependentUpon>Input.css</DependentUpon>
+    </Content>
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>

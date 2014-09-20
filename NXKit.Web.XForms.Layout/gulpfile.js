@@ -2,6 +2,7 @@
 var util = require('gulp-util');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
+var less = require('gulp-less');
 var rename = require('gulp-rename');
 var del = require('del');
 
@@ -34,4 +35,13 @@ gulp.task('templates', ['clean'], function () {
         .pipe(gulp.dest(util.env.TargetDir));
 });
 
-gulp.task('default', ['scripts', 'templates']);
+gulp.task('less', ['clean'], function () {
+    return gulp.src([
+            '*.less',
+    ])
+        .pipe(less())
+        .pipe(concat('nxkit-xforms-layout.css'))
+        .pipe(gulp.dest(util.env.TargetDir));
+});
+
+gulp.task('default', ['scripts', 'templates', 'less']);

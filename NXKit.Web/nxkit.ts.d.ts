@@ -153,9 +153,8 @@ declare module NXKit.Web {
 }
 declare module NXKit.Web {
     class DefaultLayoutManager extends LayoutManager {
-        private templates;
+        private _templates;
         constructor(context: KnockoutBindingContext);
-        private GetTemplateElements();
         public GetTemplateOptions(valueAccessor: KnockoutObservable<any>, viewModel: any, bindingContext: KnockoutBindingContext, options: any): any;
         public GetLocalTemplates(): HTMLElement[];
     }

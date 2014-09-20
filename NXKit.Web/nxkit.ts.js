@@ -903,15 +903,7 @@ var NXKit;
             __extends(DefaultLayoutManager, _super);
             function DefaultLayoutManager(context) {
                 _super.call(this, context);
-
-                this.templates = this.GetTemplateElements();
             }
-            DefaultLayoutManager.prototype.GetTemplateElements = function () {
-                var all = $('body').find('script[type="text/html"]').addBack();
-                var top = all.slice(0, all.index($(this.Context.$data.Body))).get();
-                return top.reverse();
-            };
-
             DefaultLayoutManager.prototype.GetTemplateOptions = function (valueAccessor, viewModel, bindingContext, options) {
                 try  {
                     options = _super.prototype.GetTemplateOptions.call(this, valueAccessor, viewModel, bindingContext, options);
@@ -942,7 +934,11 @@ var NXKit;
             };
 
             DefaultLayoutManager.prototype.GetLocalTemplates = function () {
-                return this.templates;
+                if (this._templates == null) {
+                    this._templates = $('script[type="text/html"]').get();
+                }
+
+                return this._templates;
             };
             return DefaultLayoutManager;
         })(Web.LayoutManager);
