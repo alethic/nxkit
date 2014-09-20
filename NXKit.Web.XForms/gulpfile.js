@@ -4,6 +4,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var less = require('gulp-less');
 var rename = require('gulp-rename');
+var css = require('gulp-minify-css');
 var del = require('del');
 
 gulp.task('clean', function (cb) {
@@ -11,6 +12,7 @@ gulp.task('clean', function (cb) {
         util.env.TargetDir + 'nxkit-xforms.js',
         util.env.TargetDir + 'nxkit-xforms.min.js',
         util.env.TargetDir + 'nxkit-xforms.html',
+        util.env.TargetDir + 'nxkit-xforms.css',
     ], cb);
 });
 
@@ -22,7 +24,7 @@ gulp.task('scripts', ['clean'], function () {
     ])
         .pipe(concat('nxkit-xforms.js'))
         .pipe(gulp.dest(util.env.TargetDir))
-        //.pipe(uglify())
+        .pipe(uglify())
         .pipe(rename('nxkit-xforms.min.js'))
         .pipe(gulp.dest(util.env.TargetDir));
 });
@@ -42,6 +44,7 @@ gulp.task('less', ['clean'], function () {
     ])
         .pipe(less())
         .pipe(concat('nxkit-xforms.css'))
+        .pipe(css())
         .pipe(gulp.dest(util.env.TargetDir));
 });
 

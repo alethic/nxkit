@@ -13,8 +13,8 @@ module.directive('nxView', ['$compile', function ($compile) {
         },
         controller: 'nxView',
         template:
-'           <div class="nx-view">' +
-'               <div class="nx-body"></div>' +
+'           <div class="nx-ng-host">' +
+'               <div class="nx-ng-body"></div>' +
 '           </div>',
         link: function ($scope, element, attrs, ctrl) {
             ctrl.init(element, $scope.url);
@@ -30,12 +30,12 @@ module.controller('nxView', ['$scope', '$attrs', '$http', function ($scope, $att
         $scope.url = url;
         
         // locate element for view body
-        var view = $(element[0]).find('>.nx-view');
-        if (view.length == 0)
+        var host = $(element[0]).find('>.nx-ng-host');
+        if (host.length == 0)
             throw new Error("cannot find host element");
         
         // locate element for view body
-        var body = $(view).find('>.nx-body');
+        var body = $(host).find('>.nx-ng-body');
         if (body.length == 0)
             throw new Error("cannot find body element");
         
