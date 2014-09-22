@@ -10,7 +10,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the standard XForms binding attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}repeat")]
+    [Extension(typeof(RepeatAttributes), "{http://www.w3.org/2002/xforms}repeat")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class RepeatAttributes :
         AttributeAccessor

@@ -12,13 +12,13 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'delete' properties.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}delete")]
+    [Extension(typeof(DeleteProperties), "{http://www.w3.org/2002/xforms}delete")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DeleteProperties :
         ElementExtension
     {
 
-        readonly Extension<DeleteAttributes> attributes;
+        readonly DeleteAttributes attributes;
         readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<XPathExpression> at;
 
@@ -31,7 +31,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public DeleteProperties(
             XElement element,
-            Extension<DeleteAttributes> attributes,
+            DeleteAttributes attributes,
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
@@ -43,7 +43,7 @@ namespace NXKit.XForms
             this.context = context;
 
             this.at = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.Value.At) ? context.Value.Context.CompileXPath(element, attributes.Value.At) : null);
+                !string.IsNullOrEmpty(attributes.At) ? context.Value.Context.CompileXPath(element, attributes.At) : null);
         }
 
         public XPathExpression At

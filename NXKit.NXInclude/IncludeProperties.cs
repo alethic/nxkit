@@ -4,7 +4,6 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.NXInclude
 {
@@ -23,8 +22,8 @@ namespace NXKit.NXInclude
         [ImportingConstructor]
         public IncludeProperties(
             XElement element,
-            Extension<IncludeAttributes> attributes)
-            : base(element, () => attributes.Value)
+            IncludeAttributes attributes)
+            : base(element, () => attributes)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(attributes != null);

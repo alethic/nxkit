@@ -8,7 +8,7 @@ using NXKit.Composition;
 namespace NXKit.XMLEvents
 {
 
-    [Extension]
+    [Extension(typeof(EventListenerAttributes))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class EventListenerAttributes :
         AttributeAccessor

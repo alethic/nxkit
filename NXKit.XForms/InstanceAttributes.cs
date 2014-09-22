@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'instance' attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}instance")]
+    [Extension(typeof(InstanceAttributes), "{http://www.w3.org/2002/xforms}instance")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class InstanceAttributes :
         AttributeAccessor

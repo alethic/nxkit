@@ -10,7 +10,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'resource' element attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}resource")]
+    [Extension(typeof(ResourceAttributes), "{http://www.w3.org/2002/xforms}resource")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ResourceAttributes :
         AttributeAccessor

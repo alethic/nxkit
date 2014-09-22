@@ -10,7 +10,6 @@ using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
-
 namespace NXKit.XForms
 {
 
@@ -21,7 +20,7 @@ namespace NXKit.XForms
     {
 
         readonly string id;
-        readonly Extension< BindAttributes > attributes;
+        readonly BindAttributes attributes;
         readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<EvaluationContext> context;
 
@@ -32,7 +31,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Bind(
             XElement element,
-            Extension<BindAttributes> attributes,
+            BindAttributes attributes,
             Extension<IBindingNode> bindingNode,
             Extension<EvaluationContextResolver> context)
             : base(element)
@@ -46,14 +45,6 @@ namespace NXKit.XForms
             this.attributes = attributes;
             this.bindingNode = bindingNode;
             this.context = new Lazy<EvaluationContext>(() => context.Value.Context);
-        }
-
-        /// <summary>
-        /// Gets the model item property attribute collection.
-        /// </summary>
-        BindAttributes Attributes
-        {
-            get { return attributes.Value; }
         }
 
         /// <summary>
@@ -92,10 +83,10 @@ namespace NXKit.XForms
 
         XName GetModelItemType()
         {
-            if (Attributes.Type == null)
+            if (attributes.Type == null)
                 return null;
 
-            return Element.ResolvePrefixedName(attributes.Value.Type);
+            return Element.ResolvePrefixedName(attributes.Type);
         }
 
         /// <summary>
@@ -182,23 +173,23 @@ namespace NXKit.XForms
 
                 var ec = new EvaluationContext(modelItem.Model, modelItem.Instance, modelItem, i, modelItems.Length);
 
-                if (!string.IsNullOrWhiteSpace(attributes.Value.ReadOnly))
+                if (!string.IsNullOrWhiteSpace(attributes.ReadOnly))
                 {
-                    var readOnly = ParseBooleanValue(new Binding(Element, ec, attributes.Value.ReadOnly));
+                    var readOnly = ParseBooleanValue(new Binding(Element, ec, attributes.ReadOnly));
                     if (readOnly != null)
                         state.ReadOnly = readOnly;
                 }
 
-                if (!string.IsNullOrWhiteSpace(attributes.Value.Required))
+                if (!string.IsNullOrWhiteSpace(attributes.Required))
                 {
-                    var required = ParseBooleanValue(new Binding(Element, ec, attributes.Value.Required));
+                    var required = ParseBooleanValue(new Binding(Element, ec, attributes.Required));
                     if (required != null)
                         state.Required = required;
                 }
 
-                if (!string.IsNullOrWhiteSpace(attributes.Value.Relevant))
+                if (!string.IsNullOrWhiteSpace(attributes.Relevant))
                 {
-                    var relevant = ParseBooleanValue(new Binding(Element, ec, attributes.Value.Relevant));
+                    var relevant = ParseBooleanValue(new Binding(Element, ec, attributes.Relevant));
                     if (relevant != null &&
                         relevant != state.Relevant)
                     {
@@ -207,16 +198,16 @@ namespace NXKit.XForms
                     }
                 }
 
-                if (!string.IsNullOrWhiteSpace(attributes.Value.Constraint))
+                if (!string.IsNullOrWhiteSpace(attributes.Constraint))
                 {
-                    var constraint = ParseBooleanValue(new Binding(Element, ec, attributes.Value.Constraint));
+                    var constraint = ParseBooleanValue(new Binding(Element, ec, attributes.Constraint));
                     if (constraint != null)
                         state.Constraint = constraint;
                 }
 
-                if (!string.IsNullOrWhiteSpace(attributes.Value.Calculate))
+                if (!string.IsNullOrWhiteSpace(attributes.Calculate))
                 {
-                    var calculate = new Binding(Element, ec, attributes.Value.Calculate).Value;
+                    var calculate = new Binding(Element, ec, attributes.Calculate).Value;
                     if (calculate != null)
                     {
                         if (state.ReadOnly == false)

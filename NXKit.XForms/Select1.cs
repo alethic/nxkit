@@ -17,7 +17,7 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly Extension<Select1Attributes> attributes;
+        readonly Select1Attributes attributes;
         readonly Extension<IBindingNode> bindingNode;
         readonly Extension<IUIBindingNode> uiBindingNode;
 
@@ -28,7 +28,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Select1(
             XElement element,
-            Extension<Select1Attributes> attributes,
+            Select1Attributes attributes,
             Extension<IBindingNode> bindingNode,
             Extension<IUIBindingNode> uiBindingNode)
             : base(element)
@@ -44,20 +44,12 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the property collection.
-        /// </summary>
-        public Select1Attributes Attributes
-        {
-            get { return attributes.Value; }
-        }
-
-        /// <summary>
         /// Gets whether the selection is open or closed.
         /// </summary>
         [Remote]
         public bool Open
         {
-            get { return Attributes.Selection != "closed"; }
+            get { return attributes.Selection != "closed"; }
         }
 
         /// <summary>

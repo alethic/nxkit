@@ -16,8 +16,9 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Manages event listener registrations and event dispatching for a given <see cref="XNode"/>.
     /// </summary>
-    [Extension(ExtensionObjectType.Document | ExtensionObjectType.Element | ExtensionObjectType.Text)]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
+    [Extension(ExtensionObjectType.Document | ExtensionObjectType.Element | ExtensionObjectType.Text)]
+    [Extension(typeof(IRemote), ExtensionObjectType.Document | ExtensionObjectType.Element | ExtensionObjectType.Text)]
     [Remote]
     public class EventTarget :
         NodeExtension,

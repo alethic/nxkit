@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'name' element attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}name", PredicateType = typeof(HeaderNamePredicate))]
+    [Extension(typeof(HeaderNameAttributes), "{http://www.w3.org/2002/xforms}name", PredicateType = typeof(HeaderNamePredicate))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class HeaderNameAttributes :
         AttributeAccessor

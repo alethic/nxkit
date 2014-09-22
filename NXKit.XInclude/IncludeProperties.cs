@@ -26,8 +26,8 @@ namespace NXKit.XInclude
         [ImportingConstructor]
         public IncludeProperties(
             XElement element, 
-            Extension<IncludeAttributes> attributes)
-            : this(element, () => attributes.Value)
+            IncludeAttributes attributes)
+            : this(element, () => attributes)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(attributes != null);

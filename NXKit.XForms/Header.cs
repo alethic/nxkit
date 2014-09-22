@@ -15,7 +15,7 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly Extension<HeaderAttributes> attributes;
+        readonly HeaderAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
@@ -25,7 +25,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Header(
             XElement element,
-            Extension<HeaderAttributes> attributes)
+            HeaderAttributes attributes)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);

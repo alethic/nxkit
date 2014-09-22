@@ -7,17 +7,28 @@ using System.Linq;
 using System.Xml.Linq;
 
 using NXKit.Composition;
+using NXKit.Util;
 
 namespace NXKit
 {
 
     /// <summary>
-    /// Provides interface lookup using the container.
+    /// Queries for <see cref="IExtension"/> implementors.
     /// </summary>
+    [Export(typeof(ExtensionProvider))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
-    public class ExtensionProvider<T>
-        where T : class
+    public class ExtensionProvider
     {
+
+        static readonly Dictionary<Type, IExtensionPredicate> predicates;
+
+        /// <summary>
+        /// Initializes the static instance.
+        /// </summary>
+        static ExtensionProvider()
+        {
+            predicates = new Dictionary<Type, IExtensionPredicate>();
+        }
 
         readonly XObject obj;
         readonly IEnumerable<Lazy<IExtension>> extensions;
@@ -40,21 +51,11 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Exports typed extensions.
+        /// Gets the set of all available extensions for this node.
         /// </summary>
-        [Export(typeof(Extension<>))]
-        public Extension<T> Extension
+        public IEnumerable<Lazy<IExtension>> Extensions
         {
-            get { return new Extension<T>(() => extensions.Select(i => i.Value).OfType<T>().FirstOrDefault()); }
-        }
-
-        /// <summary>
-        /// Exports typed extensions.
-        /// </summary>
-        [Export(typeof(ExtensionQuery<>))]
-        public ExtensionQuery<T> ExtensionQuery
-        {
-            get { return new ExtensionQuery<T>(() => extensions.Select(i => i.Value).OfType<T>()); }
+            get { return extensions; }
         }
 
         /// <summary>
@@ -75,7 +76,7 @@ namespace NXKit
         /// <param name="obj"></param>
         /// <param name="metadata"></param>
         /// <returns></returns>
-        bool Predicate(XObject obj, IExtensionMetadata metadata)
+        internal static bool Predicate(XObject obj, IExtensionMetadata metadata)
         {
             if (!metadata.ObjectType.HasFlag(GetObjectType(obj)))
                 return false;
@@ -89,7 +90,7 @@ namespace NXKit
                     return false;
 
             // test against specified predicate type
-            var predicate = metadata.PredicateType != null ? (IExtensionPredicate)Activator.CreateInstance(metadata.PredicateType) : null;
+            var predicate = metadata.PredicateType != null ? predicates.GetOrAdd(metadata.PredicateType, _ => (IExtensionPredicate)Activator.CreateInstance(_)) : null;
             if (predicate != null)
                 if (!predicate.IsMatch(obj))
                     return false;
@@ -102,7 +103,7 @@ namespace NXKit
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        ExtensionObjectType GetObjectType(XObject obj)
+        internal static ExtensionObjectType GetObjectType(XObject obj)
         {
             if (obj is XDocument)
                 return ExtensionObjectType.Document;
@@ -116,7 +117,7 @@ namespace NXKit
             throw new NotSupportedException();
         }
 
-        bool IsMatch(XElement element, string namespaceName, string localName)
+        internal static bool IsMatch(XElement element, string namespaceName, string localName)
         {
             if (namespaceName != null &&
                 namespaceName != element.Name.NamespaceName)
@@ -129,7 +130,7 @@ namespace NXKit
             return true;
         }
 
-        bool IsMatch(XAttribute element, string namespaceName, string localName)
+        internal static bool IsMatch(XAttribute element, string namespaceName, string localName)
         {
             if (namespaceName != null &&
                 namespaceName != element.Name.NamespaceName)
@@ -140,6 +141,73 @@ namespace NXKit
                 return false;
 
             return true;
+        }
+
+    }
+
+    /// <summary>
+    /// Provides interface lookup using the container.
+    /// </summary>
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
+    public class ExtensionProvider<T>
+        where T : class
+    {
+
+        readonly XObject obj;
+        readonly ExtensionProvider provider;
+        readonly IEnumerable<Lazy<T, IDictionary<string, object>>> extensions;
+        readonly Lazy<IEnumerable<T>> query;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="provider"></param>
+        [ImportingConstructor]
+        public ExtensionProvider(
+            XObject obj,
+            ExtensionProvider provider,
+            [ImportMany] IEnumerable<Lazy<T, IDictionary<string, object>>> extensions)
+        {
+            Contract.Requires<ArgumentNullException>(provider != null);
+
+            this.obj = obj;
+            this.provider = provider;
+            this.extensions = extensions;
+            this.query = new Lazy<IEnumerable<T>>(() => GetExtensions());
+        }
+
+        /// <summary>
+        /// Gets the set of extensions implementing the given interface.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<T> GetExtensions()
+        {
+            return provider.Extensions
+                .Select(i => i.Value)
+                .OfType<T>()
+                .Concat(extensions
+                    .Where(i => ExtensionMetadata.Extract(i.Metadata).Any(j => ExtensionProvider.Predicate(obj, j)))
+                    .Select(i => i.Value))
+                .Distinct()
+                .ToList();
+        }
+
+        /// <summary>
+        /// Exports typed extensions.
+        /// </summary>
+        [Export(typeof(Extension<>))]
+        public Extension<T> Extension
+        {
+            get { return new Extension<T>(() => query.Value.FirstOrDefault()); }
+        }
+
+        /// <summary>
+        /// Exports typed extensions.
+        /// </summary>
+        [Export(typeof(ExtensionQuery<>))]
+        public ExtensionQuery<T> ExtensionQuery
+        {
+            get { return new ExtensionQuery<T>(() => query.Value); }
         }
 
     }

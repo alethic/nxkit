@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms action attributes.
     /// </summary>
-    [Extension]
+    [Extension(typeof(DispatchAttributes), "{http://www.w3.org/2002/xforms}dispatch")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DispatchAttributes :
         ActionAttributes

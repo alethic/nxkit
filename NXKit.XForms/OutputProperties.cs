@@ -13,13 +13,13 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'output' properties.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}output")]
+    [Extension(typeof(OutputProperties), "{http://www.w3.org/2002/xforms}output")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class OutputProperties :
         ElementExtension
     {
 
-        readonly Extension<OutputAttributes> attributes;
+        readonly OutputAttributes attributes;
         readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<XPathExpression> value;
         readonly MediaRange mediaType;
@@ -33,7 +33,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public OutputProperties(
             XElement element,
-            Extension<OutputAttributes> attributes,
+            OutputAttributes attributes,
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
@@ -44,7 +44,7 @@ namespace NXKit.XForms
             this.context = context;
 
             this.value = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.Value.Value) ? context.Value.Context.CompileXPath(element, attributes.Value.Value) : null);
+                !string.IsNullOrEmpty(attributes.Value) ? context.Value.Context.CompileXPath(element, attributes.Value) : null);
         }
 
         public XPathExpression Value
@@ -54,12 +54,12 @@ namespace NXKit.XForms
 
         public MediaRange MediaType
         {
-            get { return attributes.Value.MediaType; }
+            get { return attributes.MediaType; }
         }
 
         public string Appearance
         {
-            get { return attributes.Value.Appearance; }
+            get { return attributes.Appearance; }
         }
 
     }

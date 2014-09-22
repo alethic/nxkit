@@ -11,13 +11,13 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'load' properties.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}load")]
+    [Extension(typeof(LoadProperties), "{http://www.w3.org/2002/xforms}load")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class LoadProperties :
         ElementExtension
     {
 
-        readonly Extension<LoadAttributes> attributes;
+        readonly LoadAttributes attributes;
         readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<LoadShow> show;
 
@@ -30,7 +30,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public LoadProperties(
             XElement element,
-            Extension<LoadAttributes> attributes,
+            LoadAttributes attributes,
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
@@ -42,12 +42,12 @@ namespace NXKit.XForms
             this.context = context;
 
             this.show = new Lazy<LoadShow>(() =>
-                !string.IsNullOrEmpty(attributes.Value.Show) ? (LoadShow)Enum.Parse(typeof(LoadShow), attributes.Value.Show, true) : LoadShow.Replace);
+                !string.IsNullOrEmpty(attributes.Show) ? (LoadShow)Enum.Parse(typeof(LoadShow), attributes.Show, true) : LoadShow.Replace);
         }
 
         public string Resource
         {
-            get { return attributes.Value.Resource; }
+            get { return attributes.Resource; }
         }
 
         public LoadShow Show
@@ -57,7 +57,7 @@ namespace NXKit.XForms
 
         public IdRef TargetId
         {
-            get { return attributes.Value.TargetId; }
+            get { return attributes.TargetId; }
         }
 
     }

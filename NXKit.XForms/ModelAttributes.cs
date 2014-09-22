@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'model' attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}model")]
+    [Extension(typeof(ModelAttributes), "{http://www.w3.org/2002/xforms}model")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ModelAttributes :
         AttributeAccessor

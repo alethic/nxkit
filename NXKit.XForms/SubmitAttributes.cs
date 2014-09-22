@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'submit' element.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}submit")]
+    [Extension(typeof(SubmitAttributes), "{http://www.w3.org/2002/xforms}submit")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class SubmitAttributes :
         AttributeAccessor

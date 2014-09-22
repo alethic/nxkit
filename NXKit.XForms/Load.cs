@@ -17,7 +17,7 @@ namespace NXKit.XForms
         IEventHandler
     {
 
-        readonly Extension<LoadProperties> properties;
+        readonly LoadProperties properties;
 
         /// <summary>
         /// Initializes a new instance.
@@ -27,7 +27,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Load(
             XElement element,
-            Extension<LoadProperties> properties)
+            LoadProperties properties)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);

@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
 using NXKit.Composition;
 
 namespace NXKit.XForms
@@ -10,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the attributes for the bind element.
     /// </summary>
-    [Extension]
+    [Extension(typeof(BindAttributes), "{http://www.w3.org/2002/xforms}bind")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class BindAttributes :
         CommonAttributes

@@ -19,9 +19,9 @@ namespace NXKit.XForms
         IEventHandler
     {
 
-        readonly Extension<CommonProperties> commonProperties;
-        readonly Extension<BindingProperties> bindingProperties;
-        readonly Extension<SetValueProperties> setValueProperties;
+        readonly CommonProperties commonProperties;
+        readonly BindingProperties bindingProperties;
+        readonly SetValueProperties setValueProperties;
         readonly Extension<EvaluationContextResolver> context;
 
         /// <summary>
@@ -35,9 +35,9 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public SetValue(
             XElement element,
-            Extension<CommonProperties> commonProperties,
-            Extension<BindingProperties> bindingProperties,
-            Extension<SetValueProperties> setValueProperties,
+            CommonProperties commonProperties,
+            BindingProperties bindingProperties,
+            SetValueProperties setValueProperties,
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
@@ -55,9 +55,9 @@ namespace NXKit.XForms
 
         EvaluationContext GetContext()
         {
-            if (commonProperties.Value.Context != null)
+            if (commonProperties.Context != null)
             {
-                var item = new Binding(Element, context.Value.GetInScopeEvaluationContext(), commonProperties.Value.Context).ModelItems.FirstOrDefault();
+                var item = new Binding(Element, context.Value.GetInScopeEvaluationContext(), commonProperties.Context).ModelItems.FirstOrDefault();
                 if (item == null)
                     return null;
 
@@ -72,7 +72,7 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(insertContext != null);
             Contract.Ensures(Contract.Result<XObject[]>() != null);
 
-            var bindId = bindingProperties.Value.Bind;
+            var bindId = bindingProperties.Bind;
             if (bindId != null)
             {
                 var element = Element.ResolveId(bindId);
@@ -88,7 +88,7 @@ namespace NXKit.XForms
                 }
             }
 
-            var ref_ = bindingProperties.Value.Ref ?? bindingProperties.Value.NodeSet;
+            var ref_ = bindingProperties.Ref ?? bindingProperties.NodeSet;
             if (ref_ != null)
                 return new Binding(Element, insertContext, ref_).ModelItems
                     .Select(i => i.Xml)

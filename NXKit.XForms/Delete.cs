@@ -20,9 +20,9 @@ namespace NXKit.XForms
         IEventHandler
     {
 
-        readonly Extension<CommonProperties> commonProperties;
-        readonly Extension<BindingProperties> bindingProperties;
-        readonly Extension<DeleteProperties> deleteProperties;
+        readonly CommonProperties commonProperties;
+        readonly BindingProperties bindingProperties;
+        readonly DeleteProperties deleteProperties;
         readonly Extension<EvaluationContextResolver> resolver;
 
         /// <summary>
@@ -32,9 +32,9 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Delete(
             XElement element,
-            Extension<CommonProperties> commonProperties,
-            Extension<BindingProperties> bindingProperties,
-            Extension<DeleteProperties> deleteProperties,
+            CommonProperties commonProperties,
+            BindingProperties bindingProperties,
+            DeleteProperties deleteProperties,
             Extension<EvaluationContextResolver> resolver)
             : base(element)
         {
@@ -64,9 +64,9 @@ namespace NXKit.XForms
         EvaluationContext GetDeleteContext()
         {
             var deleteContext = resolver.Value.GetInScopeEvaluationContext();
-            if (commonProperties.Value.Context != null)
+            if (commonProperties.Context != null)
             {
-                var item = new Binding(Element, deleteContext, commonProperties.Value.Context).ModelItems.First();
+                var item = new Binding(Element, deleteContext, commonProperties.Context).ModelItems.First();
                 if (item == null)
                     return null;
 
@@ -87,7 +87,7 @@ namespace NXKit.XForms
             Contract.Ensures(Contract.Result<XObject[]>() != null);
 
             // If a bind attribute is present, it directly determines the Sequence Binding node-sequence.
-            var bindId = bindingProperties.Value.Bind;
+            var bindId = bindingProperties.Bind;
             if (bindId != null)
             {
                 var element = Element.ResolveId(bindId);
@@ -105,7 +105,7 @@ namespace NXKit.XForms
 
             // If a ref (or deprecated nodeset) attribute is present, it is evaluated within the insert context to
             // determine the Sequence Binding node-sequence.
-            var ref_ = bindingProperties.Value.Ref ?? bindingProperties.Value.NodeSet;
+            var ref_ = bindingProperties.Ref ?? bindingProperties.NodeSet;
             if (ref_ != null)
                 return new Binding(Element, deleteContext, ref_).ModelItems
                     .Select(i => i.Xml)
@@ -146,7 +146,7 @@ namespace NXKit.XForms
             // Otherwise, the delete location is determined by evaluating the expression specified by the at attribute
             // as follows:
             var deleteLocation = 0d;
-            if (deleteProperties.Value.At != null)
+            if (deleteProperties.At != null)
             {
                 // 1. The evaluation context node is the first node in document order from the Sequence Binding
                 // node-sequence, the context size is the size of the Sequence Binding node-sequence, and the context
@@ -154,7 +154,7 @@ namespace NXKit.XForms
                 var at = new Binding(
                     Element,
                     new EvaluationContext(ModelItem.Get(sequenceBindingNodeSequence[0]), 1, sequenceBindingNodeSequence.Length),
-                    deleteProperties.Value.At).Value;
+                    deleteProperties.At).Value;
 
                 // 2. The return value is processed according to the rules of the XPath function round(). For example,
                 // the literal 1.5 becomes 2, and the literal 'string' becomes NaN.

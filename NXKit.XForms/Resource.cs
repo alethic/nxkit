@@ -19,7 +19,7 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly Extension<ResourceAttributes> attributes;
+        readonly ResourceAttributes attributes;
         readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
@@ -32,7 +32,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Resource(
             XElement element,
-            Extension<ResourceAttributes> attributes,
+            ResourceAttributes attributes,
             Extension<IBindingNode> bindingNode)
             : base(element)
         {
@@ -42,12 +42,7 @@ namespace NXKit.XForms
 
             this.attributes = attributes;
             this.bindingNode = bindingNode;
-            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.Value.ValueAttribute));
-        }
-
-        ResourceAttributes Attributes
-        {
-            get { return attributes.Value; }
+            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
         }
 
         Binding Binding

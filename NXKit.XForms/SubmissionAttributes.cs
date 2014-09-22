@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'submission' attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}submission")]
+    [Extension(typeof(SubmissionAttributes), "{http://www.w3.org/2002/xforms}submission")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class SubmissionAttributes :
         CommonAttributes

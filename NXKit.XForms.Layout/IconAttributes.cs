@@ -11,7 +11,7 @@ namespace NXKit.XForms.Layout
     /// <summary>
     /// Makes the 'icon' attribute available.
     /// </summary>
-    [Extension("{http://schemas.nxkit.org/2014/xforms-layout}icon")]
+    [Extension(typeof(IconAttributes), "{http://schemas.nxkit.org/2014/xforms-layout}icon")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IconAttributes :
         AttributeAccessor

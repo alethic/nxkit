@@ -123,6 +123,7 @@
   <ItemGroup>
     <Compile Include="AttributeAccessor.cs" />
     <Compile Include="Composition\ContainerRef.cs" />
+    <Compile Include="Composition\FilteredCatalog.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Composition\Scope.cs" />
     <Compile Include="Composition\ScopeCatalog.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="IO\Media\IMediaConverter.cs" />
     <Compile Include="IO\Media\MediaConverterProvider.cs" />
     <Compile Include="IRefRoot.cs" />
+    <Compile Include="IRemote.cs" />
     <Compile Include="ITextExtension.cs" />
     <Compile Include="IDocumentExtension.cs" />
     <Compile Include="Serialization\IAnnotationObjectDeserializer.cs" />

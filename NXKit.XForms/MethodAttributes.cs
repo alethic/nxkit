@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'method' element attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}method")]
+    [Extension(typeof(MethodAttributes), "{http://www.w3.org/2002/xforms}method")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class MethodAttributes :
         AttributeAccessor

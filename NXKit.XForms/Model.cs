@@ -21,7 +21,7 @@ namespace NXKit.XForms
     {
 
 
-        readonly Extension<ModelAttributes> attributes;
+        readonly ModelAttributes attributes;
         readonly Lazy<ModelState> state;
         readonly Lazy<DocumentAnnotation> documentAnnotation;
 
@@ -33,7 +33,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Model(
             XElement element,
-            Extension<ModelAttributes> attributes)
+            ModelAttributes attributes)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
@@ -148,13 +148,13 @@ namespace NXKit.XForms
             State.Construct = true;
 
             // validate model version, we only support 1.0
-            if (attributes.Value.Version != null)
-                foreach (var version in attributes.Value.Version.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
+            if (attributes.Version != null)
+                foreach (var version in attributes.Version.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     if (version != "1.0")
                         throw new DOMTargetEventException(Element, Events.VersionException);
 
-            if (attributes.Value.Schema != null)
-                foreach (var item in attributes.Value.Schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
+            if (attributes.Schema != null)
+                foreach (var item in attributes.Schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     continue; // TODO
 
             // attempt to load model instance data

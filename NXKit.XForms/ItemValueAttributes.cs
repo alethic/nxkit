@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'value' element attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}value", PredicateType = typeof(ItemValuePredicate))]
+    [Extension(typeof(ItemValueAttributes), "{http://www.w3.org/2002/xforms}value", PredicateType = typeof(ItemValuePredicate))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ItemValueAttributes :
         AttributeAccessor

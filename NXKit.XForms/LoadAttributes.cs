@@ -10,7 +10,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'load' element attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}load")]
+    [Extension(typeof(LoadAttributes), "{http://www.w3.org/2002/xforms}load")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class LoadAttributes :
         ActionAttributes

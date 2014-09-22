@@ -18,7 +18,7 @@ namespace NXKit.XForms
         IEventDefaultAction
     {
 
-        readonly Extension<SubmitAttributes> attributes;
+        readonly SubmitAttributes attributes;
         readonly Extension<EvaluationContextResolver> context;
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Submit(
             XElement element,
-            Extension<SubmitAttributes> attributes,
+            SubmitAttributes attributes,
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
@@ -60,8 +60,8 @@ namespace NXKit.XForms
             // Author-optional attribute containing a reference to element submission. If this attribute is given but
             // does not identify a submission element, then activating the submit does not result in the dispatch of
             // an xforms-submit event.
-            if (attributes.Value.Submission != null)
-                return Element.ResolveId(attributes.Value.Submission);
+            if (attributes.Submission != null)
+                return Element.ResolveId(attributes.Submission);
 
             // If this attribute is omitted, then the first submission in document order from the model associated with
             // the in-scope evaluation context is used.

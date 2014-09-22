@@ -29,7 +29,7 @@ namespace NXKit.XForms
 
         }
 
-        readonly Extension<HeaderNameAttributes> attributes;
+        readonly HeaderNameAttributes attributes;
         readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
@@ -42,7 +42,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public HeaderName(
             XElement element,
-            Extension<HeaderNameAttributes> attributes,
+            HeaderNameAttributes attributes,
             Extension<IBindingNode> bindingNode)
             : base(element)
         {
@@ -50,7 +50,7 @@ namespace NXKit.XForms
 
             this.attributes = attributes;
             this.bindingNode = bindingNode;
-            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.Value.ValueAttribute));
+            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
         }
 
         Binding Binding

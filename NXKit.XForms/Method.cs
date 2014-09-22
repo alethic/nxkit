@@ -19,7 +19,7 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly Extension<MethodAttributes> attributes;
+        readonly MethodAttributes attributes;
         readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
@@ -32,7 +32,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Method(
             XElement element,
-            Extension<MethodAttributes> attributes,
+            MethodAttributes attributes,
             Extension<IBindingNode> bindingNode)
             : base(element)
         {
@@ -42,12 +42,7 @@ namespace NXKit.XForms
 
             this.attributes = attributes;
             this.bindingNode = bindingNode;
-            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.Value.ValueAttribute));
-        }
-
-        MethodAttributes Attributes
-        {
-            get { return attributes.Value; }
+            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
         }
 
         Binding Binding

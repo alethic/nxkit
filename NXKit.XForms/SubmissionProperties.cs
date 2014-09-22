@@ -15,13 +15,13 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'submission' properties.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}submission")]
+    [Extension(typeof(SubmissionProperties), "{http://www.w3.org/2002/xforms}submission")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class SubmissionProperties :
         ElementExtension
     {
 
-        readonly Extension<SubmissionAttributes> attributes;
+        readonly SubmissionAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
@@ -31,7 +31,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public SubmissionProperties(
             XElement element,
-            Extension<SubmissionAttributes> attributes)
+            SubmissionAttributes attributes)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
@@ -40,17 +40,12 @@ namespace NXKit.XForms
             this.attributes = attributes;
         }
 
-        public SubmissionAttributes Attributes
-        {
-            get { return Attributes; }
-        }
-
         /// <summary>
         /// Gets the 'ref' attribute value.
         /// </summary>
         public string Ref
         {
-            get { return Attributes.Ref ?? "/"; }
+            get { return attributes.Ref ?? "/"; }
         }
 
         /// <summary>
@@ -58,7 +53,7 @@ namespace NXKit.XForms
         /// </summary>
         public bool Relevant
         {
-            get { return Attributes.Relevant != null ? bool.Parse(Attributes.Relevant) : (Attributes.Serialization == "none" ? false : true); }
+            get { return attributes.Relevant != null ? bool.Parse(attributes.Relevant) : (attributes.Serialization == "none" ? false : true); }
         }
 
         /// <summary>
@@ -66,7 +61,7 @@ namespace NXKit.XForms
         /// </summary>
         public bool Validate
         {
-            get { return Attributes.Validate != null ? bool.Parse(Attributes.Validate) : (Attributes.Serialization == "none" ? false : true); }
+            get { return attributes.Validate != null ? bool.Parse(attributes.Validate) : (attributes.Serialization == "none" ? false : true); }
         }
 
         /// <summary>
@@ -79,7 +74,7 @@ namespace NXKit.XForms
 
         Uri GetResource()
         {
-            var uri = Attributes.Resource != null ? new Uri(Attributes.Resource, UriKind.RelativeOrAbsolute) : null;
+            var uri = attributes.Resource != null ? new Uri(attributes.Resource, UriKind.RelativeOrAbsolute) : null;
             if (uri != null)
                 return uri.IsAbsoluteUri ? uri : new Uri(Element.GetBaseUri(), uri);
 
@@ -96,7 +91,7 @@ namespace NXKit.XForms
 
         Uri GetAction()
         {
-            var uri = Attributes.Action != null ? new Uri(Attributes.Action, UriKind.RelativeOrAbsolute) : null;
+            var uri = attributes.Action != null ? new Uri(attributes.Action, UriKind.RelativeOrAbsolute) : null;
             if (uri != null)
                 return uri.IsAbsoluteUri ? uri : new Uri(Element.GetBaseUri(), uri);
 
@@ -108,7 +103,7 @@ namespace NXKit.XForms
         /// </summary>
         public SubmissionMode Mode
         {
-            get { return Attributes.Mode == "synchronous" ? SubmissionMode.Synchronous : SubmissionMode.Asynchronous; }
+            get { return attributes.Mode == "synchronous" ? SubmissionMode.Synchronous : SubmissionMode.Asynchronous; }
         }
 
         /// <summary>
@@ -116,7 +111,7 @@ namespace NXKit.XForms
         /// </summary>
         public ModelMethod Method
         {
-            get { return Attributes.Method; }
+            get { return attributes.Method; }
         }
 
         /// <summary>
@@ -129,10 +124,10 @@ namespace NXKit.XForms
 
         SubmissionSerialization GetSerialization()
         {
-            if (Attributes.Serialization == "none")
+            if (attributes.Serialization == "none")
                 return new SubmissionSerialization(true);
-            else if (!string.IsNullOrEmpty(Attributes.Serialization))
-                return new SubmissionSerialization(Attributes.Serialization);
+            else if (!string.IsNullOrEmpty(attributes.Serialization))
+                return new SubmissionSerialization(attributes.Serialization);
             else
                 return new SubmissionSerialization(false);
         }
@@ -142,7 +137,7 @@ namespace NXKit.XForms
         /// </summary>
         public MediaRange MediaType
         {
-            get { return Attributes.MediaType != "none" ? Attributes.MediaType : null; }
+            get { return attributes.MediaType != "none" ? attributes.MediaType : null; }
         }
 
         /// <summary>
@@ -150,7 +145,7 @@ namespace NXKit.XForms
         /// </summary>
         public Encoding Encoding
         {
-            get { return Encoding.GetEncoding(Attributes.Encoding ?? "UTF-8"); }
+            get { return Encoding.GetEncoding(attributes.Encoding ?? "UTF-8"); }
         }
 
         /// <summary>
@@ -163,7 +158,7 @@ namespace NXKit.XForms
 
         SubmissionReplace GetReplace()
         {
-            switch (Attributes.Replace)
+            switch (attributes.Replace)
             {
                 case "none":
                     return SubmissionReplace.None;
@@ -185,7 +180,7 @@ namespace NXKit.XForms
         /// </summary>
         public IdRef Instance
         {
-            get { return Attributes.Instance; }
+            get { return attributes.Instance; }
         }
 
         /// <summary>
@@ -193,7 +188,7 @@ namespace NXKit.XForms
         /// </summary>
         public string TargetRef
         {
-            get { return Attributes.TargetRef; }
+            get { return attributes.TargetRef; }
         }
 
         /// <summary>
@@ -206,7 +201,7 @@ namespace NXKit.XForms
 
         char GetSeparator()
         {
-            var separator = Attributes.Separator.Trim();
+            var separator = attributes.Separator.Trim();
             if (string.IsNullOrEmpty(separator))
                 return '&';
             else
@@ -218,7 +213,7 @@ namespace NXKit.XForms
         /// </summary>
         public string Version
         {
-            get { return Attributes.Version ?? "1.0"; }
+            get { return attributes.Version ?? "1.0"; }
         }
 
         /// <summary>
@@ -226,7 +221,7 @@ namespace NXKit.XForms
         /// </summary>
         public bool Indent
         {
-            get { return Attributes.Indent == "true" ? true : false; }
+            get { return attributes.Indent == "true" ? true : false; }
         }
 
         /// <summary>
@@ -234,7 +229,7 @@ namespace NXKit.XForms
         /// </summary>
         public bool OmitXmlDeclaration
         {
-            get { return Attributes.OmitXmlDeclaration == "true" ? true : false; }
+            get { return attributes.OmitXmlDeclaration == "true" ? true : false; }
         }
 
         /// <summary>
@@ -242,7 +237,7 @@ namespace NXKit.XForms
         /// </summary>
         public bool Standalone
         {
-            get { return OmitXmlDeclaration ? false : (Attributes.Standalone == "true" ? true : false); }
+            get { return OmitXmlDeclaration ? false : (attributes.Standalone == "true" ? true : false); }
         }
 
         /// <summary>
@@ -250,7 +245,7 @@ namespace NXKit.XForms
         /// </summary>
         public string CDataSectionElements
         {
-            get { return Attributes.CDataSectionElements ?? ""; }
+            get { return attributes.CDataSectionElements ?? ""; }
         }
 
         /// <summary>
@@ -258,7 +253,7 @@ namespace NXKit.XForms
         /// </summary>
         public string IncludeNamespacePrefixes
         {
-            get { return Attributes.IncludeNamespacePrefixes ?? ""; }
+            get { return attributes.IncludeNamespacePrefixes ?? ""; }
         }
 
     }

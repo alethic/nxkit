@@ -13,7 +13,7 @@ namespace NXKit.XForms
     /// 
     /// The Common Attribute Collection applies to every element in the XForms namespace.
     /// </summary>
-    [Extension]
+    [Extension(typeof(CommonAttributes))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class CommonAttributes :
         AttributeAccessor

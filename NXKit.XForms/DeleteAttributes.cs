@@ -10,7 +10,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'delete' attributes.
     /// </summary>
-    [Extension]
+    [Extension(typeof(DeleteAttributes), "{http://www.w3.org/2002/xforms}delete")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DeleteAttributes :
         CommonAttributes

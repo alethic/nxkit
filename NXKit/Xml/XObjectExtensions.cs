@@ -451,14 +451,10 @@ namespace NXKit.Xml
                 if (document == null)
                     throw new InvalidOperationException();
 
-                // provides additional exports
-                //var exports = new ExportProviderProvider();
-
                 // initialize new container
                 var container = CompositionUtil.ConfigureContainer(new CompositionContainer(
                     document.Configuration.ObjectCatalog,
                     CompositionOptions.DisableSilentRejection,
-                 //   exports,
                     document.Container));
 
                 if (self is XObject)

@@ -13,7 +13,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Describes the implicit 'repeat item' group element.
     /// </summary>
-    [Extension(typeof(RepeatItemPredicate), PredicateType = typeof(RepeatItemPredicate))]
+    [Extension(PredicateType = typeof(RepeatItemPredicate))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class RepeatItem :

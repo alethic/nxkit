@@ -15,7 +15,7 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly Extension<VarProperties> properties;
+        readonly VarProperties properties;
         readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<Binding> value;
 
@@ -28,7 +28,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Var(
             XElement element,
-            Extension<VarProperties> properties,
+            VarProperties properties,
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
@@ -38,13 +38,13 @@ namespace NXKit.XForms
 
             this.properties = properties;
             this.context = context;
-            this.value = new Lazy<Binding>(() => properties.Value.Value != null ? new Binding(Element, context.Value.Context, properties.Value.Value) : null);
+            this.value = new Lazy<Binding>(() => properties.Value != null ? new Binding(Element, context.Value.Context, properties.Value) : null);
         }
 
         [Remote]
         public string Name
         {
-            get { return properties.Value.Name; }
+            get { return properties.Name; }
         }
 
         public object Value

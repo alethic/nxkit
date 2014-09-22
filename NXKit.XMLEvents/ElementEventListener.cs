@@ -13,7 +13,7 @@ namespace NXKit.XMLEvents
     /// <summary>
     /// Listens for a given event on an element.
     /// </summary>
-    [Extension]
+    [Extension(typeof(IOnInit))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ElementEventListener :
         ElementExtension,
@@ -21,7 +21,7 @@ namespace NXKit.XMLEvents
     {
 
         readonly IInvoker invoker;
-        readonly Extension<EventListenerAttributes> attributes;
+        readonly EventListenerAttributes attributes;
         readonly Lazy<IEventHandler> handler;
         readonly Lazy<EventTarget> observer;
 
@@ -34,7 +34,7 @@ namespace NXKit.XMLEvents
         [ImportingConstructor]
         public ElementEventListener(
             XElement element,
-            Extension<EventListenerAttributes> attributes,
+            EventListenerAttributes attributes,
             IInvoker invoker)
             : base(element)
         {
@@ -48,22 +48,17 @@ namespace NXKit.XMLEvents
             this.observer = new Lazy<EventTarget>(() => GetObserver());
         }
 
-        EventListenerAttributes Attributes
-        {
-            get { return attributes.Value; }
-        }
-
         /// <summary>
         /// Gets the handler element.
         /// </summary>
         /// <returns></returns>
         XElement GetHandlerElement()
         {
-            if (Attributes.Handler != null)
-                return Element.ResolveId(Attributes.Handler);
-            else if (Attributes.Observer != null)
+            if (attributes.Handler != null)
+                return Element.ResolveId(attributes.Handler);
+            else if (attributes.Observer != null)
                 return Element;
-            else if (Attributes.Observer == null)
+            else if (attributes.Observer == null)
                 return Element;
             else
                 throw new DOMTargetEventException(Element, Events.Error);
@@ -88,11 +83,11 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         XElement GetObserverElement()
         {
-            if (Attributes.Observer != null)
-                return Element.ResolveId(Attributes.Observer);
-            else if (Attributes.Handler != null)
+            if (attributes.Observer != null)
+                return Element.ResolveId(attributes.Observer);
+            else if (attributes.Handler != null)
                 return Element;
-            else if (Attributes.Handler == null)
+            else if (attributes.Handler == null)
                 return (XElement)Element.Parent;
             else
                 throw new DOMTargetEventException(Element, Events.Error);
@@ -117,8 +112,8 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         XElement GetTargetElement()
         {
-            if (Attributes.Target != null)
-                return Element.ResolveId(Attributes.Target);
+            if (attributes.Target != null)
+                return Element.ResolveId(attributes.Target);
 
             return null;
         }
@@ -129,7 +124,7 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         public bool GetCapture()
         {
-            return Attributes.Phase == "capture";
+            return attributes.Phase == "capture";
         }
 
         /// <summary>
@@ -138,7 +133,7 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         public bool GetPropagate()
         {
-            return Attributes.Propagate != "stop";
+            return attributes.Propagate != "stop";
         }
 
         /// <summary>
@@ -147,7 +142,7 @@ namespace NXKit.XMLEvents
         /// <returns></returns>
         public bool InvokeDefaultAction()
         {
-            return Attributes.DefaultAction != "cancel";
+            return attributes.DefaultAction != "cancel";
         }
 
         /// <summary>
@@ -155,7 +150,7 @@ namespace NXKit.XMLEvents
         /// </summary>
         void Attach()
         {
-            var evt = Attributes.Event;
+            var evt = attributes.Event;
             if (evt == null)
                 return;
 

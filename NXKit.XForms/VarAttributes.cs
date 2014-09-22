@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'var' element attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}var")]
+    [Extension(typeof(VarAttributes), "{http://www.w3.org/2002/xforms}var")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class VarAttributes :
         AttributeAccessor

@@ -9,14 +9,15 @@ using NXKit.Xml;
 namespace NXKit.XForms.Layout
 {
 
-    [Extension("{http://schemas.nxkit.org/2014/xforms-layout}icon")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
+    [Extension("{http://schemas.nxkit.org/2014/xforms-layout}icon")]
+    [Extension(typeof(IRemote), "{http://schemas.nxkit.org/2014/xforms-layout}icon")]
     [Remote]
     public class Icon :
         ElementExtension
     {
 
-        readonly Extension<IconAttributes> attributes;
+        readonly IconAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
@@ -25,7 +26,7 @@ namespace NXKit.XForms.Layout
         [ImportingConstructor]
         public Icon(
             XElement element,
-            Extension<IconAttributes> attributes)
+            IconAttributes attributes)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
@@ -39,7 +40,7 @@ namespace NXKit.XForms.Layout
         [Remote]
         public string Name
         {
-            get { return attributes.Value.Name; }
+            get { return attributes.Name; }
         }
 
     }

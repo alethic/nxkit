@@ -11,7 +11,7 @@ using NXKit.Xml;
 namespace NXKit.XInclude
 {
 
-    [Extension("{http://www.w3.org/2001/XInclude}include")]
+    [Extension(typeof(IOnInit), "{http://www.w3.org/2001/XInclude}include")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Include :
         ElementExtension,
@@ -32,10 +32,10 @@ namespace NXKit.XInclude
         [ImportingConstructor]
         public Include(
             XElement element,
-            Extension<IncludeProperties> properties,
+            IncludeProperties properties,
             ITraceService trace,
             IIOService io)
-            : this(element, () => properties.Value, trace, io)
+            : this(element, () => properties, trace, io)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(properties != null);

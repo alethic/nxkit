@@ -10,7 +10,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'output' element attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}output")]
+    [Extension(typeof(OutputAttributes), "{http://www.w3.org/2002/xforms}output")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class OutputAttributes :
         AttributeAccessor

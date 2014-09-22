@@ -10,7 +10,7 @@ using NXKit.Xml;
 namespace NXKit.XForms
 {
 
-    [Extension(typeof(Predicate))]
+    [Extension(PredicateType = typeof(Predicate))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class RepeatExtension :
@@ -47,7 +47,9 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="context"></param>
         [ImportingConstructor]
-        public RepeatExtension(XElement element, Lazy<EvaluationContextResolver> context)
+        public RepeatExtension(
+            XElement element, 
+            Lazy<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);

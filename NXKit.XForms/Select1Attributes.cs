@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the attributes for the select1 element.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}select1")]
+    [Extension(typeof(Select1Attributes), "{http://www.w3.org/2002/xforms}select1")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Select1Attributes :
         CommonAttributes

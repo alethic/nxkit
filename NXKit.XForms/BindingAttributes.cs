@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the standard XForms binding attributes.
     /// </summary>
-    [Extension]
+    [Extension(typeof(BindingAttributes))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class BindingAttributes :
         AttributeAccessor

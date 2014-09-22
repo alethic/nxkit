@@ -12,13 +12,13 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'insert' properties.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}insert")]
+    [Extension(typeof(InsertProperties), "{http://www.w3.org/2002/xforms}insert")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class InsertProperties :
         ElementExtension
     {
 
-        readonly Extension<InsertAttributes> attributes;
+        readonly InsertAttributes attributes;
         readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<XPathExpression> origin;
         readonly Lazy<XPathExpression> at;
@@ -33,7 +33,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public InsertProperties(
             XElement element,
-            Extension<InsertAttributes> attributes,
+            InsertAttributes attributes,
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
@@ -45,13 +45,13 @@ namespace NXKit.XForms
             this.context = context;
 
             this.origin = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.Value.Origin) ? context.Value.Context.CompileXPath(element, attributes.Value.Origin) : null);
+                !string.IsNullOrEmpty(attributes.Origin) ? context.Value.Context.CompileXPath(element, attributes.Origin) : null);
 
             this.at = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.Value.At) ? context.Value.Context.CompileXPath(element, attributes.Value.At) : null);
+                !string.IsNullOrEmpty(attributes.At) ? context.Value.Context.CompileXPath(element, attributes.At) : null);
 
             this.position = new Lazy<InsertPosition>(() =>
-                !string.IsNullOrEmpty(attributes.Value.Postition) ? (InsertPosition)Enum.Parse(typeof(InsertPosition), attributes.Value.Postition, true) : InsertPosition.After);
+                !string.IsNullOrEmpty(attributes.Postition) ? (InsertPosition)Enum.Parse(typeof(InsertPosition), attributes.Postition, true) : InsertPosition.After);
         }
 
         public XPathExpression Origin

@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms repeat extension attributes.
     /// </summary>
-    [Extension]
+    [Extension(typeof(RepeatExtensionAttributes))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class RepeatExtensionAttributes :
         AttributeAccessor

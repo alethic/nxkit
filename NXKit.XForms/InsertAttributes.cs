@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'insert' element.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}insert")]
+    [Extension(typeof(InsertAttributes), "{http://www.w3.org/2002/xforms}insert")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class InsertAttributes :
         ActionAttributes

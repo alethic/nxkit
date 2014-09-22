@@ -18,7 +18,7 @@ namespace NXKit.XForms
         IEventHandler
     {
 
-        readonly Extension<DispatchAttributes> attributes;
+        readonly DispatchAttributes attributes;
         readonly Extension<EvaluationContextResolver> context;
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Dispatch(
             XElement element,
-            Extension<DispatchAttributes> attributes,
+            DispatchAttributes attributes,
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
@@ -53,8 +53,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         XElement GetTarget()
         {
-            if (attributes.Value.TargetId != null)
-                return Element.ResolveId(attributes.Value.TargetId);
+            if (attributes.TargetId != null)
+                return Element.ResolveId(attributes.TargetId);
             else
                 return null;
         }
@@ -78,9 +78,9 @@ namespace NXKit.XForms
 
         Event GetEvent()
         {
-            var name = attributes.Value.Name;
+            var name = attributes.Name;
             if (name != null)
-                return CreateEvent(name, attributes.Value.Bubbles == "true", attributes.Value.Cancelable == "true");
+                return CreateEvent(name, attributes.Bubbles == "true", attributes.Cancelable == "true");
 
             return null;
         }

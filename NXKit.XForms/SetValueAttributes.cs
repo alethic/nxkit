@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'setvalue' attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}setvalue")]
+    [Extension(typeof(SetValueAttributes), "{http://www.w3.org/2002/xforms}setvalue")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class SetValueAttributes :
         CommonAttributes

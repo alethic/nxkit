@@ -14,6 +14,8 @@ namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}repeat")]
+    [Extension(typeof(IOnInit), "{http://www.w3.org/2002/xforms}repeat")]
+    [Extension(typeof(IOnRefresh), "{http://www.w3.org/2002/xforms}repeat")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class Repeat :
@@ -23,7 +25,7 @@ namespace NXKit.XForms
     {
 
         readonly AnnotationSerializer serializer;
-        readonly Extension<RepeatAttributes> attributes;
+        readonly RepeatAttributes attributes;
         readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<Binding> binding;
         readonly Extension<IUIBindingNode> uiBindingNode;
@@ -44,7 +46,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Repeat(
             XElement element,
-            Extension<RepeatAttributes> attributes,
+            RepeatAttributes attributes,
             Extension<IBindingNode> bindingNode,
             Extension<IUIBindingNode> uiBindingNode,
             AnnotationSerializer serializer)

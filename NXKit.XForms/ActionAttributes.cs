@@ -10,7 +10,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms action attributes.
     /// </summary>
-    [Extension("{http://www.w3.org/2001/xml-events}action")]
+    [Extension(typeof(ActionAttributes), "{http://www.w3.org/2001/xml-events}action")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ActionAttributes :
         AttributeAccessor

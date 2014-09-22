@@ -16,8 +16,8 @@ namespace NXKit.Scripting
     public class DocumentScript :
         DocumentExtension,
         IDocumentScript,
-        IOnSave,
-        IOnLoad
+        IOnLoad,
+        IOnSave
     {
 
         readonly IScriptDispatcher dispatcher;

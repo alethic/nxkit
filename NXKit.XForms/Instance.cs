@@ -15,16 +15,17 @@ namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}instance")]
+    [Extension(typeof(IOnLoad), "{http://www.w3.org/2002/xforms}instance")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Instance :
         ElementExtension,
         IOnLoad
     {
 
+        readonly InstanceAttributes attributes;
         readonly IModelRequestService requestService;
-        readonly Extension<InstanceAttributes> attributes;
-        readonly Lazy<InstanceState> state;
         readonly IEnumerable<IXsdTypeConverter> xsdTypeConverters;
+        readonly Lazy<InstanceState> state;
 
         /// <summary>
         /// Initializes a new instance.
@@ -36,19 +37,20 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public Instance(
             XElement element,
-            Extension<InstanceAttributes> attributes,
+            InstanceAttributes attributes,
             IModelRequestService requestService,
             [ImportMany] IEnumerable<IXsdTypeConverter> xsdTypeConverters)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
             Contract.Requires<ArgumentNullException>(requestService != null);
             Contract.Requires<ArgumentNullException>(xsdTypeConverters != null);
 
             this.requestService = requestService;
             this.attributes = attributes;
-            this.state = new Lazy<InstanceState>(() => Element.AnnotationOrCreate<InstanceState>());
             this.xsdTypeConverters = xsdTypeConverters.ToList();
+            this.state = new Lazy<InstanceState>(() => Element.AnnotationOrCreate<InstanceState>());
         }
 
         /// <summary>
@@ -80,8 +82,8 @@ namespace NXKit.XForms
         /// </summary>
         internal void Load()
         {
-            if (attributes.Value.Src != null)
-                Load(attributes.Value.Src);
+            if (attributes.Src != null)
+                Load(attributes.Src);
             else
             {
                 // extract instance data model from xml

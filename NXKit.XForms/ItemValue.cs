@@ -4,7 +4,6 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -27,7 +26,7 @@ namespace NXKit.XForms
 
         }
 
-        readonly Extension<ItemValueAttributes> attributes;
+        readonly ItemValueAttributes attributes;
         readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
@@ -35,10 +34,12 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
+        /// <param name="bindingNode"></param>
         [ImportingConstructor]
         public ItemValue(
             XElement element,
-            Extension<ItemValueAttributes> attributes,
+            ItemValueAttributes attributes,
             Extension<IBindingNode> bindingNode)
             : base(element)
         {
@@ -48,15 +49,7 @@ namespace NXKit.XForms
 
             this.attributes = attributes;
             this.bindingNode = bindingNode;
-            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.Value.ValueAttribute));
-        }
-
-        /// <summary>
-        /// Gets the 'value' element attributes.
-        /// </summary>
-        ItemValueAttributes Attributes
-        {
-            get { return attributes.Value; }
+            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
         }
 
         /// <summary>

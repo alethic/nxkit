@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 
 namespace NXKit
@@ -28,11 +29,13 @@ namespace NXKit
         /// <summary>
         /// Gets the extension value.
         /// </summary>
+        [DebuggerHidden]
         public new T Value
         {
             get { return value.Value; }
         }
 
+        [DebuggerHidden]
         protected override object GetValue()
         {
             return Value;
@@ -46,6 +49,7 @@ namespace NXKit
 
         protected abstract object GetValue();
 
+        [DebuggerHidden]
         public override object Value
         {
             get { return GetValue(); }
@@ -56,6 +60,7 @@ namespace NXKit
     public abstract class Extension
     {
 
+        [DebuggerHidden]
         public abstract object Value { get; }
 
     }

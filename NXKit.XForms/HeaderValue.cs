@@ -4,7 +4,6 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -26,7 +25,7 @@ namespace NXKit.XForms
 
         }
 
-        readonly Extension<HeaderValueAttributes> attributes;
+        readonly HeaderValueAttributes attributes;
         readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
@@ -39,7 +38,7 @@ namespace NXKit.XForms
         [ImportingConstructor]
         public HeaderValue(
             XElement element,
-            Extension<HeaderValueAttributes> attributes,
+            HeaderValueAttributes attributes,
             Extension<IBindingNode> bindingNode)
             : base(element)
         {
@@ -49,15 +48,7 @@ namespace NXKit.XForms
 
             this.attributes = attributes;
             this.bindingNode = bindingNode;
-            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.Value.Value));
-        }
-
-        /// <summary>
-        /// Gets the 'value' element attributes.
-        /// </summary>
-        HeaderValueAttributes Attributes
-        {
-            get { return attributes.Value; }
+            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.Value));
         }
 
         /// <summary>

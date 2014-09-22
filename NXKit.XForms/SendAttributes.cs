@@ -11,7 +11,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'send' element.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}send")]
+    [Extension(typeof(SendAttributes), "{http://www.w3.org/2002/xforms}send")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class SendAttributes :
         ActionAttributes
