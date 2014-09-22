@@ -12,7 +12,7 @@ namespace NXKit
         ExtensionInternal
     {
 
-        readonly Func<T> value;
+        readonly Lazy<T> value;
 
         /// <summary>
         /// Initializes a new instance.
@@ -22,7 +22,7 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(value != null);
 
-            this.value = value;
+            this.value = new Lazy<T>(() => value());
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace NXKit
         /// </summary>
         public new T Value
         {
-            get { return value(); }
+            get { return value.Value; }
         }
 
         protected override object GetValue()

@@ -25,4 +25,5 @@ require([
     'app/_index'],
     function (ng, app) {
         ng.bootstrap(document, [app.name]);
-    });
+    }
+);

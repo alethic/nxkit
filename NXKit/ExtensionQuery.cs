@@ -15,7 +15,7 @@ namespace NXKit
         IEnumerable<T>
     {
 
-        readonly Func<IEnumerable<T>> values;
+        readonly Lazy<IEnumerable<T>> values;
 
         /// <summary>
         /// Initializes a new instance.
@@ -25,12 +25,12 @@ namespace NXKit
         {
             Contract.Requires<ArgumentNullException>(values != null);
 
-            this.values = values;
+            this.values = new Lazy<IEnumerable<T>>(() => values());
         }
 
         public new IEnumerator<T> GetEnumerator()
         {
-            return values().GetEnumerator();
+            return values.Value.GetEnumerator();
         }
 
         protected override IEnumerator<object> GetGetEnumerator()
