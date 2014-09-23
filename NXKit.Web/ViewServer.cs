@@ -15,7 +15,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using NXKit.Web.Serialization;
-using NXKit.Web.UI;
 using NXKit.Xml;
 
 namespace NXKit.Web
@@ -82,19 +81,19 @@ namespace NXKit.Web
         /// Loads the specified <see cref="Uri"/> into the server.
         /// </summary>
         /// <param name="uri"></param>
-        public object Load(Uri uri)
+        public ViewMessage Load(Uri uri)
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
             // load new document
-            return Save(Load(() => Document.Load(uri, catalog, exports)), ViewResponseCode.Good);
+            return Save(Load(() => Document.Load(uri, catalog, exports)), ViewMessageStatus.Good);
         }
 
         /// <summary>
         /// Loads the specified <see cref="Uri"/> into the server.
         /// </summary>
         /// <param name="uri"></param>
-        public object Load(string uri)
+        public ViewMessage Load(string uri)
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
@@ -105,53 +104,51 @@ namespace NXKit.Web
         /// Loads the docuemnt from the given <see cref="TextReader"/> into the server.
         /// </summary>
         /// <param name="reader"></param>
-        public object Load(TextReader reader)
+        public ViewMessage Load(TextReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
             // load new document
-            return Save(Load(() => Document.Load(reader, catalog, exports)), ViewResponseCode.Good);
+            return Save(Load(() => Document.Load(reader, catalog, exports)), ViewMessageStatus.Good);
         }
 
         /// <summary>
         /// Loads the docuemnt from the given <see cref="XmlReader"/> into the server.
         /// </summary>
         /// <param name="reader"></param>
-        public object Load(XmlReader reader)
+        public ViewMessage Load(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
             // load new document
-            return Save(Load(() => Document.Load(reader, catalog, exports)), ViewResponseCode.Good);
+            return Save(Load(() => Document.Load(reader, catalog, exports)), ViewMessageStatus.Good);
         }
 
         /// <summary>
         /// Loads and executes the object.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
-        public object Push(JObject args)
+        public ViewMessage Push(ViewMessage message)
         {
-            Contract.Requires<ArgumentNullException>(args != null);
+            Contract.Requires<ArgumentNullException>(message != null);
 
             // load document from args
-            var document = Load(() => LoadFromArgs(args));
+            var document = Load(() => LoadFromMessage(message));
             if (document == null)
-                return new JObject(new JProperty("Code", ViewResponseCode.NeedSave));
+                return new ViewMessage(ViewMessageStatus.NotFound);
 
             try
             {
-                Execute(document, args);
+                Execute(document, message);
             }
             catch (Exception e)
             {
-                return new JObject(
-                    new JProperty("Code", ViewResponseCode.Fail),
-                    new JProperty("Exception", e.ToString()));
+                return new ViewMessage(ViewMessageStatus.Error);
             }
 
             // save and return document
-            return Save(document, ViewResponseCode.Good);
+            return Save(document, ViewMessageStatus.Good);
         }
 
         /// <summary>
@@ -296,7 +293,7 @@ namespace NXKit.Web
         /// Returns a saved version of the currently loaded document.
         /// </summary>
         /// <returns></returns>
-        JObject Save(Document document, ViewResponseCode code)
+        ViewMessage Save(Document document, ViewMessageStatus status)
         {
             // notify any last minute interested parties
             OnDocumentUnloading(new DocumentEventArgs(document));
@@ -311,13 +308,7 @@ namespace NXKit.Web
             cache.Set(hash, save);
 
             // respond with object containing new save and JSON tree
-            return new JObject(
-                new JProperty[] {
-                        new JProperty("Code", code),
-                        save != null ? new JProperty("Save", save) : null,
-                        hash != null ? new JProperty("Hash", hash) : null,
-                        data != null ? new JProperty("Data", data) : null, }
-                    .Where(i => i != null));
+            return new ViewMessage(status, hash, save, data);
         }
 
         /// <summary>
@@ -362,21 +353,19 @@ namespace NXKit.Web
         /// <summary>
         /// Loads the document from the given input args.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
-        Document LoadFromArgs(JObject args)
+        Document LoadFromMessage(ViewMessage message)
         {
-            Contract.Requires<ArgumentNullException>(args != null);
+            Contract.Requires<ArgumentNullException>(message != null);
 
             // load save data
-            var save = (string)args["Save"];
-            if (save != null)
-                return LoadFromSave(save);
+            if (message.Save != null)
+                return LoadFromSave(message.Save);
 
             // load hash data
-            var hash = (string)args["Hash"];
-            if (hash != null)
-                return LoadFromHash(hash);
+            if (message.Hash != null)
+                return LoadFromHash(message.Hash);
 
             return null;
         }
@@ -384,33 +373,27 @@ namespace NXKit.Web
         /// <summary>
         /// Executes the commands packed in the arguments.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
-        void Execute(Document document, JObject args)
+        void Execute(Document document, ViewMessage message)
         {
-            Contract.Requires<ArgumentNullException>(args != null);
+            Contract.Requires<ArgumentNullException>(message != null);
             Contract.Requires<InvalidOperationException>(document != null);
 
-            var commands = (JArray)args["Commands"];
-            if (commands != null)
+            if (message.Commands != null)
             {
-                foreach (var command in commands)
+                foreach (var command in message.Commands)
                 {
-                    // dispatch action
-                    switch ((string)command["Action"])
+                    if (command is ViewMessageUpdateCommand)
                     {
-                        case "Update":
-                            JsonInvokeMethod(
-                                document,
-                                typeof(ViewServer).GetMethod("ClientUpdate", BindingFlags.NonPublic | BindingFlags.Instance),
-                                (JObject)command["Args"]);
-                            break;
-                        case "Invoke":
-                            JsonInvokeMethod(
-                                document,
-                                typeof(ViewServer).GetMethod("ClientInvoke", BindingFlags.NonPublic | BindingFlags.Instance),
-                                (JObject)command["Args"]);
-                            break;
+                        var cmd = (ViewMessageUpdateCommand)command;
+                        ClientUpdate(document, cmd.NodeId, cmd.Interface, cmd.Property, cmd.Value);
+                    }
+
+                    if (command is ViewMessageInvokeCommand)
+                    {
+                        var cmd = (ViewMessageInvokeCommand)command;
+                        ClientInvoke(document, cmd.NodeId, cmd.Interface, cmd.Method, cmd.Parameters);
                     }
                 }
             }
@@ -422,7 +405,7 @@ namespace NXKit.Web
         /// <param name="document"></param>
         /// <param name="method"></param>
         /// <param name="args"></param>
-        void JsonInvokeMethod(Document document, MethodInfo method, JObject args)
+        void JsonInvokeMethod(Document document, MethodInfo method, ViewCommandArg[] args)
         {
             Contract.Requires<ArgumentNullException>(document != null);
             Contract.Requires<ArgumentNullException>(method != null);
@@ -436,14 +419,14 @@ namespace NXKit.Web
             for (int i = 1; i < invoke.Length; i++)
             {
                 // submitted JSON parameter value
-                var j = args.Properties()
+                var j = args
                     .FirstOrDefault(k => string.Equals(parameters[i].Name, k.Name, StringComparison.InvariantCultureIgnoreCase));
                 if (j == null)
                     break;
 
                 // convert JObject to appropriate type
                 var t = parameters[i].ParameterType;
-                var o = j != null && j.Value != null ? j.Value.ToObject(t) : null;
+                var o = j != null && j.Value != null ? Convert.ChangeType(j.Value, t) : null;
 
                 // successful conversion
                 invoke[i] = o;

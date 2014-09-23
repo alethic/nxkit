@@ -157,7 +157,14 @@
     <TypeScriptCompile Include="LayoutOptions.ts" />
     <Compile Include="TraceMessage.cs" />
     <Compile Include="TraceSink.cs" />
-    <Compile Include="ViewResponseCode.cs" />
+    <Compile Include="ViewCommandAction.cs" />
+    <Compile Include="ViewCommandArg.cs" />
+    <Compile Include="ViewMessage.cs" />
+    <Compile Include="ViewMessageCommand.cs" />
+    <Compile Include="ViewMessageCommandJsonConverter.cs" />
+    <Compile Include="ViewMessageStatus.cs" />
+    <Compile Include="ViewMessageInvokeCommand.cs" />
+    <Compile Include="ViewMessageUpdateCommand.cs" />
     <Compile Include="ViewServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Ref.cs" />

@@ -78,10 +78,10 @@ module NXKit.Web {
         public Receive(args: any) {
             var self = this;
 
-                self._save = args['Save'] || self._save;
-                self._hash = args['Hash'] || self._hash;
+                self._save = args.Save || self._save;
+                self._hash = args.Hash || self._hash;
 
-                var data = args['Data'] || null;
+                var data = args.Data || null;
                 if (data != null) {
                     self.ReceiveData(data);
                 }
@@ -94,7 +94,7 @@ module NXKit.Web {
             var self = this;
 
                 if (data != null) {
-                    self.Apply(data['Node'] || null);
+                    self.Apply(data.Node || null);
                     //self.AppendMessages(data['Messages'] || []);
                     //self.ExecuteScripts(data['Scripts'] || []);
                 }
@@ -158,8 +158,8 @@ module NXKit.Web {
             var self = this;
             Log.Debug('View.PushUpdate');
 
-            // generate push action
-            var data = {
+            // generate update command
+            var command = {
                 Action: 'Update',
                 Args: {
                     NodeId: node.Id,
@@ -169,10 +169,10 @@ module NXKit.Web {
                 }
             };
 
-            self.Queue(data);
+            self.Queue(command);
         }
 
-        PushInvoke(node: Node, interfaceName: string, methodName: string, params: any) {
+        PushInvoke(node: Node, interfaceName: string, methodName: string, parameters: any) {
             var self = this;
             Log.Debug('View.PushInvoke');
 
@@ -183,7 +183,7 @@ module NXKit.Web {
                     NodeId: node.Id,
                     Interface: interfaceName,
                     Method: methodName,
-                    Params: params,
+                    Parameters: parameters,
                 }
             };
 
@@ -220,7 +220,7 @@ module NXKit.Web {
 
                         // callback for server response
                         var cb = (args: any) => {
-                            if (args.Code == 200) {
+                            if (args.Status == 200) {
 
                                 // receive saved state
                                 var save = args.Save || null;
@@ -238,7 +238,7 @@ module NXKit.Web {
                                 var data = args.Data || null;
                                 if (data != null) {
                                     // push new items into receive queue
-                                    node = data['Node'] || null;
+                                    node = data.Node || null;
                                     //ko.utils.arrayPushAll(scripts, <any[]>data['Scripts']);
                                     //ko.utils.arrayPushAll(messages, <any[]>data['Messages']);
 
@@ -254,14 +254,14 @@ module NXKit.Web {
 
                                 // recurse
                                 push();
-                            } else if (args.Code == 500) {
+                            } else if (args.Status == 400) {
                                 // resend with save data
                                 self._server({
                                     Save: self._save,
                                     Hash: self._hash,
                                     Commands: commands,
                                 }, cb);
-                            } else if (args.Code == 501) {
+                            } else if (args.Status == 500) {
                                 for (var i = 0; i < args.Errors.length; i++) {
                                     throw new Error(args.Errors[i].Message || "");
                                 }
