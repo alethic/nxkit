@@ -227,6 +227,9 @@ namespace NXKit.Web.UI
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
+            yield return new ScriptReference() { Name = "jquery" };
+            yield return new ScriptReference() { Name = "knockout" };
+            yield return new ScriptReference() { Name = "nxkit" };
             yield return new ScriptReference("NXKit.Web.UI.View.js", typeof(View).Assembly.FullName);
         }
 
