@@ -15,7 +15,7 @@ namespace NXKit.Web
         /// Gets the set of commands to be sent to the client.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<Command> GetCommands();
+        IEnumerable<Command> Commands { get; }
 
     }
 

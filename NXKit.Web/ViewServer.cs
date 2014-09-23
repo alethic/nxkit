@@ -296,7 +296,7 @@ namespace NXKit.Web
             OnDocumentUnloading(new DocumentEventArgs(document));
 
             // extract data from document
-            var cmds = document.Container.GetExportedValues<ICommandProvider>().SelectMany(i => i.GetCommands()).ToArray();
+            var cmds = document.Container.GetExportedValues<ICommandProvider>().SelectMany(i => i.Commands).ToArray();
             var node = GetNodeObject(document);
             var save = GetSaveString(document);
             var hash = GetMD5HashText(save);

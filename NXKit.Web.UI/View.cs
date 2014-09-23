@@ -221,7 +221,7 @@ namespace NXKit.Web.UI
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
             var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
-            d.AddProperty("push", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self") + ";");
+            d.AddProperty("sendFunc", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self") + ";");
             yield return d;
         }
 
@@ -230,7 +230,7 @@ namespace NXKit.Web.UI
             yield return new ScriptReference() { Name = "jquery" };
             yield return new ScriptReference() { Name = "knockout" };
             yield return new ScriptReference() { Name = "nxkit" };
-            yield return new ScriptReference("NXKit.Web.UI.View.js", typeof(View).Assembly.FullName);
+            yield return new ScriptReference() { Name = "nxkit-ui" };
         }
 
         /// <summary>

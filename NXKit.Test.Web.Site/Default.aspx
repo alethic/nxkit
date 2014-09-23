@@ -26,10 +26,8 @@
         <asp:ScriptManager runat="server">
             <Scripts>
                 <asp:ScriptReference Name="jquery" />
-                <asp:ScriptReference Name="jquery.ui.combined" />
                 <asp:ScriptReference Name="less" />
                 <asp:ScriptReference Name="semantic" />
-                <asp:ScriptReference Name="knockout" />
                 <asp:ScriptReference Name="nxkit" />
                 <asp:ScriptReference Name="nxkit-xforms" />
                 <asp:ScriptReference Name="nxkit-xforms-layout" />

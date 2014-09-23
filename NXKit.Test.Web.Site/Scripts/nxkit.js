@@ -1,5 +1,307 @@
-var ___init_nxkit___ = function ($, ko) {
+(function() {
+var init = function ($, ko) {
 
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var InputBindingHandler = (function () {
+                function InputBindingHandler() {
+                }
+                InputBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    ko.bindingHandlers['value'].init(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+
+                InputBindingHandler._update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    ko.bindingHandlers['value'].update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+
+                InputBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    InputBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+
+                InputBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    InputBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+                return InputBindingHandler;
+            })();
+            Knockout.InputBindingHandler = InputBindingHandler;
+
+            ko.bindingHandlers['nxkit_input'] = new InputBindingHandler();
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Util) {
+            function Observable(value) {
+                return ko.observable(value).extend({
+                    rateLimit: {
+                        timeout: 50,
+                        method: "notifyWhenChangesStop"
+                    }
+                });
+            }
+            Util.Observable = Observable;
+
+            function ObservableArray(value) {
+                return ko.observableArray(value).extend({
+                    rateLimit: {
+                        timeout: 50,
+                        method: "notifyWhenChangesStop"
+                    }
+                });
+            }
+            Util.ObservableArray = ObservableArray;
+
+            function Computed(def) {
+                return ko.computed(def).extend({
+                    rateLimit: {
+                        timeout: 50,
+                        method: "notifyWhenChangesStop"
+                    }
+                });
+            }
+            Util.Computed = Computed;
+
+            function DeepEquals(a, b, f) {
+                if (f != null) {
+                    var t = f(a, b);
+                    if (t != null) {
+                        return t;
+                    }
+                }
+
+                if (a == null && b === null)
+                    return true;
+
+                if (typeof a !== typeof b)
+                    return false;
+
+                if (typeof a === 'boolean' && typeof b === 'boolean')
+                    return a === b;
+
+                if (typeof a === 'string' && typeof b === 'string')
+                    return a === b;
+
+                if (typeof a === 'number' && typeof b === 'number')
+                    return a === b;
+
+                if (typeof a === 'function' && typeof b === 'function')
+                    return a.toString() === b.toString();
+
+                for (var i in a) {
+                    if (a.hasOwnProperty(i)) {
+                        if (!b.hasOwnProperty(i)) {
+                            if (!Util.DeepEquals(a[i], null, f)) {
+                                return false;
+                            }
+                        } else if (!Util.DeepEquals(a[i], b[i], f)) {
+                            return false;
+                        }
+                    }
+                }
+
+                for (var i in b) {
+                    if (b.hasOwnProperty(i)) {
+                        if (!a.hasOwnProperty(i)) {
+                            if (!Util.DeepEquals(null, b[i], f)) {
+                                return false;
+                            }
+                        } else if (!Util.DeepEquals(a[i], b[i], f)) {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+            Util.DeepEquals = DeepEquals;
+
+            function GenerateGuid() {
+                var s = [];
+                var d = "0123456789abcdef";
+                for (var i = 0; i < 36; i++) {
+                    s[i] = d.substr(Math.floor(Math.random() * 0x10), 1);
+                }
+                s[14] = "4";
+                s[19] = d.substr((s[19] & 0x3) | 0x8, 1);
+                s[8] = s[13] = s[18] = s[23] = "-";
+
+                return s.join("");
+            }
+            Util.GenerateGuid = GenerateGuid;
+
+            function GetContextItems(context) {
+                return [context.$data].concat(context.$parents);
+            }
+            Util.GetContextItems = GetContextItems;
+
+            function GetLayoutManager(context) {
+                return ko.utils.arrayFirst(GetContextItems(context), function (_) {
+                    return _ instanceof Web.LayoutManager;
+                });
+            }
+            Util.GetLayoutManager = GetLayoutManager;
+        })(Web.Util || (Web.Util = {}));
+        var Util = Web.Util;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var OptionsBindingHandler = (function () {
+                function OptionsBindingHandler() {
+                }
+                OptionsBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    var opts = new Web.LayoutOptions(valueAccessor());
+
+                    var ctx1 = bindingContext.createChildContext(opts, null, null);
+
+                    var ctx2 = ctx1.createChildContext(viewModel, null, null);
+
+                    ko.applyBindingsToDescendants(ctx2, element);
+
+                    return {
+                        controlsDescendantBindings: true
+                    };
+                };
+                return OptionsBindingHandler;
+            })();
+            Knockout.OptionsBindingHandler = OptionsBindingHandler;
+
+            ko.bindingHandlers['nxkit_layout'] = new OptionsBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_layout'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+$.fn.extend({
+    slideRightShow: function () {
+        return this.each(function () {
+            $(this).show('slide', { direction: 'right' }, 1000);
+        });
+    },
+    slideLeftHide: function () {
+        return this.each(function () {
+            $(this).hide('slide', { direction: 'left' }, 1000);
+        });
+    },
+    slideRightHide: function () {
+        return this.each(function () {
+            $(this).hide('slide', { direction: 'right' }, 1000);
+        });
+    },
+    slideLeftShow: function () {
+        return this.each(function () {
+            $(this).show('slide', { direction: 'left' }, 1000);
+        });
+    }
+});
+
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var HorizontalVisibleBindingHandler = (function () {
+                function HorizontalVisibleBindingHandler() {
+                }
+                HorizontalVisibleBindingHandler.prototype.init = function (element, valueAccessor) {
+                    var value = valueAccessor();
+                    $(element).toggle(ko.utils.unwrapObservable(value));
+                    ko.utils.unwrapObservable(value) ? $(element)['slideLeftShow']() : $(element)['slideLeftHide']();
+                };
+
+                HorizontalVisibleBindingHandler.prototype.update = function (element, valueAccessor) {
+                    var value = valueAccessor();
+                    ko.utils.unwrapObservable(value) ? $(element)['slideLeftShow']() : $(element)['slideLeftHide']();
+                };
+                return HorizontalVisibleBindingHandler;
+            })();
+            Knockout.HorizontalVisibleBindingHandler = HorizontalVisibleBindingHandler;
+
+            ko.bindingHandlers['nxkit_hvisible'] = new HorizontalVisibleBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_hvisible'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var LayoutManagerExportBindingHandler = (function () {
+                function LayoutManagerExportBindingHandler() {
+                }
+                LayoutManagerExportBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    var ctx = bindingContext;
+                    var mgr = NXKit.Web.ViewModelUtil.LayoutManagers;
+
+                    for (var i = 0; i < mgr.length; i++) {
+                        ctx = ctx.createChildContext(mgr[i](ctx), null, null);
+                    }
+
+                    ctx = ctx.createChildContext(viewModel);
+                    ctx = ctx.createChildContext(viewModel);
+
+                    ko.applyBindingsToDescendants(ctx, element);
+
+                    return {
+                        controlsDescendantBindings: true
+                    };
+                };
+
+                LayoutManagerExportBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    return LayoutManagerExportBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+                return LayoutManagerExportBindingHandler;
+            })();
+            Knockout.LayoutManagerExportBindingHandler = LayoutManagerExportBindingHandler;
+
+            ko.bindingHandlers['nxkit_layout_manager_export'] = new LayoutManagerExportBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_layout_manager_export'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        var LayoutOptions = (function () {
+            function LayoutOptions(args) {
+                this._args = args;
+            }
+            LayoutOptions.GetArgs = function (bindingContext) {
+                var a = {};
+                var c = Web.Util.GetContextItems(bindingContext);
+                for (var i = 0; i < c.length; i++)
+                    if (c[i] instanceof LayoutOptions)
+                        a = ko.utils.extend(a, c[i]);
+
+                return a;
+            };
+
+            Object.defineProperty(LayoutOptions.prototype, "Args", {
+                get: function () {
+                    return this._args;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return LayoutOptions;
+        })();
+        Web.LayoutOptions = LayoutOptions;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -435,124 +737,6 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
-        (function (Util) {
-            function Observable(value) {
-                return ko.observable(value).extend({
-                    rateLimit: {
-                        timeout: 50,
-                        method: "notifyWhenChangesStop"
-                    }
-                });
-            }
-            Util.Observable = Observable;
-
-            function ObservableArray(value) {
-                return ko.observableArray(value).extend({
-                    rateLimit: {
-                        timeout: 50,
-                        method: "notifyWhenChangesStop"
-                    }
-                });
-            }
-            Util.ObservableArray = ObservableArray;
-
-            function Computed(def) {
-                return ko.computed(def).extend({
-                    rateLimit: {
-                        timeout: 50,
-                        method: "notifyWhenChangesStop"
-                    }
-                });
-            }
-            Util.Computed = Computed;
-
-            function DeepEquals(a, b, f) {
-                if (f != null) {
-                    var t = f(a, b);
-                    if (t != null) {
-                        return t;
-                    }
-                }
-
-                if (a == null && b === null)
-                    return true;
-
-                if (typeof a !== typeof b)
-                    return false;
-
-                if (typeof a === 'boolean' && typeof b === 'boolean')
-                    return a === b;
-
-                if (typeof a === 'string' && typeof b === 'string')
-                    return a === b;
-
-                if (typeof a === 'number' && typeof b === 'number')
-                    return a === b;
-
-                if (typeof a === 'function' && typeof b === 'function')
-                    return a.toString() === b.toString();
-
-                for (var i in a) {
-                    if (a.hasOwnProperty(i)) {
-                        if (!b.hasOwnProperty(i)) {
-                            if (!Util.DeepEquals(a[i], null, f)) {
-                                return false;
-                            }
-                        } else if (!Util.DeepEquals(a[i], b[i], f)) {
-                            return false;
-                        }
-                    }
-                }
-
-                for (var i in b) {
-                    if (b.hasOwnProperty(i)) {
-                        if (!a.hasOwnProperty(i)) {
-                            if (!Util.DeepEquals(null, b[i], f)) {
-                                return false;
-                            }
-                        } else if (!Util.DeepEquals(a[i], b[i], f)) {
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
-            }
-            Util.DeepEquals = DeepEquals;
-
-            function GenerateGuid() {
-                var s = [];
-                var d = "0123456789abcdef";
-                for (var i = 0; i < 36; i++) {
-                    s[i] = d.substr(Math.floor(Math.random() * 0x10), 1);
-                }
-                s[14] = "4";
-                s[19] = d.substr((s[19] & 0x3) | 0x8, 1);
-                s[8] = s[13] = s[18] = s[23] = "-";
-
-                return s.join("");
-            }
-            Util.GenerateGuid = GenerateGuid;
-
-            function GetContextItems(context) {
-                return [context.$data].concat(context.$parents);
-            }
-            Util.GetContextItems = GetContextItems;
-
-            function GetLayoutManager(context) {
-                return ko.utils.arrayFirst(GetContextItems(context), function (_) {
-                    return _ instanceof Web.LayoutManager;
-                });
-            }
-            Util.GetLayoutManager = GetLayoutManager;
-        })(Web.Util || (Web.Util = {}));
-        var Util = Web.Util;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
         var LayoutManager = (function () {
             function LayoutManager(context) {
                 this._context = null;
@@ -768,50 +952,103 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
-        var DeferredExecutorItem = (function () {
-            function DeferredExecutorItem(cb) {
-                this.callback = cb;
-            }
-            Object.defineProperty(DeferredExecutorItem.prototype, "Promise", {
-                get: function () {
+        (function (Knockout) {
+            var ModalBindingHandler = (function () {
+                function ModalBindingHandler() {
+                }
+                ModalBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    var f = ko.utils.extend(allBindings(), {
+                        clickBubble: false
+                    });
+
+                    ko.bindingHandlers.click.init(element, function () {
+                        return function () {
+                            setTimeout(function () {
+                                var id = valueAccessor();
+                                if (id) {
+                                    $('#' + id).modal('show');
+                                }
+                            }, 5);
+                        };
+                    }, allBindings, viewModel, bindingContext);
+                };
+                return ModalBindingHandler;
+            })();
+            Knockout.ModalBindingHandler = ModalBindingHandler;
+
+            ko.bindingHandlers['nxkit_modal'] = new ModalBindingHandler();
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var CheckboxBindingHandler = (function () {
+                function CheckboxBindingHandler() {
+                }
+                CheckboxBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    setTimeout(function () {
+                        $(element).checkbox();
+                        $(element).checkbox('setting', {
+                            onEnable: function () {
+                                var v1 = true;
+                                var v2 = ko.unwrap(valueAccessor());
+                                if (typeof v2 === 'boolean') {
+                                    if (v1 != v2)
+                                        valueAccessor()(v1);
+                                } else if (typeof v2 === 'string') {
+                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
+                                    if (v1 != v2_)
+                                        valueAccessor()(v1 ? 'true' : 'false');
+                                }
+                            },
+                            onDisable: function () {
+                                var v1 = false;
+                                var v2 = ko.unwrap(valueAccessor());
+                                if (typeof v2 === 'boolean') {
+                                    if (v1 != v2)
+                                        valueAccessor()(v1);
+                                } else if (typeof v2 === 'string') {
+                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
+                                    if (v1 != v2_)
+                                        valueAccessor()(v1 ? 'true' : 'false');
+                                }
+                            }
+                        });
+                        CheckboxBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                    }, 2000);
+                };
+
+                CheckboxBindingHandler._update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
                     var self = this;
+                    setTimeout(function () {
+                        var v1 = ko.unwrap(valueAccessor());
+                        if (typeof v1 === 'boolean') {
+                            $(element).checkbox(v1 ? 'enable' : 'disable');
+                        } else if (typeof v1 === 'string') {
+                            var v1_ = v1.toLowerCase() === 'true' ? true : false;
+                            $(element).checkbox(v1_ ? 'enable' : 'disable');
+                        }
+                    }, 1000);
+                };
 
-                    if (self.deferred != null)
-                        return self.deferred.promise();
+                CheckboxBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    CheckboxBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
 
-                    self.deferred = $.Deferred();
-                    self.callback(self.deferred);
+                CheckboxBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    CheckboxBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+                return CheckboxBindingHandler;
+            })();
+            Knockout.CheckboxBindingHandler = CheckboxBindingHandler;
 
-                    return self.deferred.progress();
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return DeferredExecutorItem;
-        })();
-
-        var DeferredExecutor = (function () {
-            function DeferredExecutor() {
-                this._queue = new Array();
-            }
-            DeferredExecutor.prototype.Register = function (cb) {
-                var self = this;
-
-                self._queue.push(new DeferredExecutorItem(cb));
-            };
-
-            DeferredExecutor.prototype.Wait = function (cb) {
-                var self = this;
-
-                var wait = new Array();
-                for (var i = 0; i < self._queue.length; i++)
-                    wait[i] = self._queue[i].Promise;
-
-                $.when.apply($, wait).done(cb);
-            };
-            return DeferredExecutor;
-        })();
-        Web.DeferredExecutor = DeferredExecutor;
+            ko.bindingHandlers['nxkit_checkbox'] = new CheckboxBindingHandler();
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
@@ -918,418 +1155,6 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
-        var InterfaceMap = (function () {
-            function InterfaceMap() {
-            }
-            return InterfaceMap;
-        })();
-        Web.InterfaceMap = InterfaceMap;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var CheckboxBindingHandler = (function () {
-                function CheckboxBindingHandler() {
-                }
-                CheckboxBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    setTimeout(function () {
-                        $(element).checkbox();
-                        $(element).checkbox('setting', {
-                            onEnable: function () {
-                                var v1 = true;
-                                var v2 = ko.unwrap(valueAccessor());
-                                if (typeof v2 === 'boolean') {
-                                    if (v1 != v2)
-                                        valueAccessor()(v1);
-                                } else if (typeof v2 === 'string') {
-                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
-                                    if (v1 != v2_)
-                                        valueAccessor()(v1 ? 'true' : 'false');
-                                }
-                            },
-                            onDisable: function () {
-                                var v1 = false;
-                                var v2 = ko.unwrap(valueAccessor());
-                                if (typeof v2 === 'boolean') {
-                                    if (v1 != v2)
-                                        valueAccessor()(v1);
-                                } else if (typeof v2 === 'string') {
-                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
-                                    if (v1 != v2_)
-                                        valueAccessor()(v1 ? 'true' : 'false');
-                                }
-                            }
-                        });
-                        CheckboxBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
-                    }, 2000);
-                };
-
-                CheckboxBindingHandler._update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    var self = this;
-                    setTimeout(function () {
-                        var v1 = ko.unwrap(valueAccessor());
-                        if (typeof v1 === 'boolean') {
-                            $(element).checkbox(v1 ? 'enable' : 'disable');
-                        } else if (typeof v1 === 'string') {
-                            var v1_ = v1.toLowerCase() === 'true' ? true : false;
-                            $(element).checkbox(v1_ ? 'enable' : 'disable');
-                        }
-                    }, 1000);
-                };
-
-                CheckboxBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    CheckboxBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-
-                CheckboxBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    CheckboxBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-                return CheckboxBindingHandler;
-            })();
-            Knockout.CheckboxBindingHandler = CheckboxBindingHandler;
-
-            ko.bindingHandlers['nxkit_checkbox'] = new CheckboxBindingHandler();
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-$.fn.extend({
-    slideRightShow: function () {
-        return this.each(function () {
-            $(this).show('slide', { direction: 'right' }, 1000);
-        });
-    },
-    slideLeftHide: function () {
-        return this.each(function () {
-            $(this).hide('slide', { direction: 'left' }, 1000);
-        });
-    },
-    slideRightHide: function () {
-        return this.each(function () {
-            $(this).hide('slide', { direction: 'right' }, 1000);
-        });
-    },
-    slideLeftShow: function () {
-        return this.each(function () {
-            $(this).show('slide', { direction: 'left' }, 1000);
-        });
-    }
-});
-
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var HorizontalVisibleBindingHandler = (function () {
-                function HorizontalVisibleBindingHandler() {
-                }
-                HorizontalVisibleBindingHandler.prototype.init = function (element, valueAccessor) {
-                    var value = valueAccessor();
-                    $(element).toggle(ko.utils.unwrapObservable(value));
-                    ko.utils.unwrapObservable(value) ? $(element)['slideLeftShow']() : $(element)['slideLeftHide']();
-                };
-
-                HorizontalVisibleBindingHandler.prototype.update = function (element, valueAccessor) {
-                    var value = valueAccessor();
-                    ko.utils.unwrapObservable(value) ? $(element)['slideLeftShow']() : $(element)['slideLeftHide']();
-                };
-                return HorizontalVisibleBindingHandler;
-            })();
-            Knockout.HorizontalVisibleBindingHandler = HorizontalVisibleBindingHandler;
-
-            ko.bindingHandlers['nxkit_hvisible'] = new HorizontalVisibleBindingHandler();
-            ko.virtualElements.allowedBindings['nxkit_hvisible'] = true;
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var InputBindingHandler = (function () {
-                function InputBindingHandler() {
-                }
-                InputBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    ko.bindingHandlers['value'].init(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-
-                InputBindingHandler._update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    ko.bindingHandlers['value'].update(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-
-                InputBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    InputBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-
-                InputBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    InputBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-                return InputBindingHandler;
-            })();
-            Knockout.InputBindingHandler = InputBindingHandler;
-
-            ko.bindingHandlers['nxkit_input'] = new InputBindingHandler();
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var LayoutManagerExportBindingHandler = (function () {
-                function LayoutManagerExportBindingHandler() {
-                }
-                LayoutManagerExportBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    var ctx = bindingContext;
-                    var mgr = NXKit.Web.ViewModelUtil.LayoutManagers;
-
-                    for (var i = 0; i < mgr.length; i++) {
-                        ctx = ctx.createChildContext(mgr[i](ctx), null, null);
-                    }
-
-                    ctx = ctx.createChildContext(viewModel);
-                    ctx = ctx.createChildContext(viewModel);
-
-                    ko.applyBindingsToDescendants(ctx, element);
-
-                    return {
-                        controlsDescendantBindings: true
-                    };
-                };
-
-                LayoutManagerExportBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    return LayoutManagerExportBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-                return LayoutManagerExportBindingHandler;
-            })();
-            Knockout.LayoutManagerExportBindingHandler = LayoutManagerExportBindingHandler;
-
-            ko.bindingHandlers['nxkit_layout_manager_export'] = new LayoutManagerExportBindingHandler();
-            ko.virtualElements.allowedBindings['nxkit_layout_manager_export'] = true;
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var ModalBindingHandler = (function () {
-                function ModalBindingHandler() {
-                }
-                ModalBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    var f = ko.utils.extend(allBindings(), {
-                        clickBubble: false
-                    });
-
-                    ko.bindingHandlers.click.init(element, function () {
-                        return function () {
-                            setTimeout(function () {
-                                var id = valueAccessor();
-                                if (id) {
-                                    $('#' + id).modal('show');
-                                }
-                            }, 5);
-                        };
-                    }, allBindings, viewModel, bindingContext);
-                };
-                return ModalBindingHandler;
-            })();
-            Knockout.ModalBindingHandler = ModalBindingHandler;
-
-            ko.bindingHandlers['nxkit_modal'] = new ModalBindingHandler();
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var OptionsBindingHandler = (function () {
-                function OptionsBindingHandler() {
-                }
-                OptionsBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                    var opts = new Web.LayoutOptions(valueAccessor());
-
-                    var ctx1 = bindingContext.createChildContext(opts, null, null);
-
-                    var ctx2 = ctx1.createChildContext(viewModel, null, null);
-
-                    ko.applyBindingsToDescendants(ctx2, element);
-
-                    return {
-                        controlsDescendantBindings: true
-                    };
-                };
-                return OptionsBindingHandler;
-            })();
-            Knockout.OptionsBindingHandler = OptionsBindingHandler;
-
-            ko.bindingHandlers['nxkit_layout'] = new OptionsBindingHandler();
-            ko.virtualElements.allowedBindings['nxkit_layout'] = true;
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var TemplateBindingHandler = (function () {
-                function TemplateBindingHandler() {
-                }
-                TemplateBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                    return ko.bindingHandlers.template.init(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
-                };
-
-                TemplateBindingHandler.prototype.update = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                    return ko.bindingHandlers.template.update(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
-                };
-
-                TemplateBindingHandler.ConvertValueAccessor = function (valueAccessor, viewModel, bindingContext) {
-                    var _this = this;
-                    return function () {
-                        return Web.Log.Group('TemplateBindingHandler.ConvertValueAccessor', function () {
-                            Web.Log.Object({
-                                value: valueAccessor(),
-                                viewModel: viewModel
-                            });
-
-                            var data = _this.GetTemplateViewModel(valueAccessor, viewModel, bindingContext);
-                            if (data == null || Object.getOwnPropertyNames(data).length == 0) {
-                                throw new Error('unknown viewModel');
-                            }
-
-                            var opts = _this.GetTemplateOptions(valueAccessor, viewModel, bindingContext);
-                            if (opts == null || Object.getOwnPropertyNames(opts).length == 0) {
-                                throw new Error('unknown template options');
-                            }
-
-                            var name = _this.GetTemplateName(bindingContext, opts);
-                            if (name == null) {
-                                throw new Error('unknown template');
-                            }
-
-                            Web.Log.Object({
-                                data: data,
-                                opts: opts,
-                                name: name
-                            });
-
-                            return {
-                                data: data,
-                                name: name
-                            };
-                        });
-                    };
-                };
-
-                TemplateBindingHandler.GetTemplateViewModel = function (valueAccessor, viewModel, bindingContext) {
-                    var value = valueAccessor();
-
-                    if (value != null && ko.unwrap(value) instanceof Web.Node)
-                        return value;
-
-                    if (value != null && value.data != null)
-                        return value.data;
-
-                    if (value != null && value.node != null && ko.unwrap(value.node) instanceof Web.Node)
-                        return value.node;
-
-                    return viewModel;
-                };
-
-                TemplateBindingHandler.GetTemplateOptions = function (valueAccessor, viewModel, bindingContext) {
-                    return NXKit.Web.Util.GetLayoutManager(bindingContext).GetTemplateOptions_(valueAccessor, viewModel, bindingContext, {});
-                };
-
-                TemplateBindingHandler.GetTemplateName = function (bindingContext, data) {
-                    return NXKit.Web.Util.GetLayoutManager(bindingContext).GetTemplateName(data);
-                };
-                return TemplateBindingHandler;
-            })();
-            Knockout.TemplateBindingHandler = TemplateBindingHandler;
-
-            ko.bindingHandlers['nxkit_template'] = new TemplateBindingHandler();
-            ko.virtualElements.allowedBindings['nxkit_template'] = true;
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var VisibleBindingHandler = (function () {
-                function VisibleBindingHandler() {
-                }
-                VisibleBindingHandler.prototype.init = function (element, valueAccessor) {
-                    var value = valueAccessor();
-                    $(element).toggle(ko.utils.unwrapObservable(value));
-                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
-                };
-
-                VisibleBindingHandler.prototype.update = function (element, valueAccessor) {
-                    var value = valueAccessor();
-                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
-                };
-                return VisibleBindingHandler;
-            })();
-            Knockout.VisibleBindingHandler = VisibleBindingHandler;
-
-            ko.bindingHandlers['nxkit_visible'] = new VisibleBindingHandler();
-            ko.virtualElements.allowedBindings['nxkit_visible'] = true;
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        var LayoutOptions = (function () {
-            function LayoutOptions(args) {
-                this._args = args;
-            }
-            LayoutOptions.GetArgs = function (bindingContext) {
-                var a = {};
-                var c = Web.Util.GetContextItems(bindingContext);
-                for (var i = 0; i < c.length; i++)
-                    if (c[i] instanceof LayoutOptions)
-                        a = ko.utils.extend(a, c[i]);
-
-                return a;
-            };
-
-            Object.defineProperty(LayoutOptions.prototype, "Args", {
-                get: function () {
-                    return this._args;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return LayoutOptions;
-        })();
-        Web.LayoutOptions = LayoutOptions;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
         var Log = (function () {
             function Log() {
             }
@@ -1407,6 +1232,18 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
+        var InterfaceMap = (function () {
+            function InterfaceMap() {
+            }
+            return InterfaceMap;
+        })();
+        Web.InterfaceMap = InterfaceMap;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
         var NodeType = (function () {
             function NodeType(value) {
                 this._value = value;
@@ -1437,68 +1274,6 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
-        var NodeViewModel = (function () {
-            function NodeViewModel(context, node) {
-                var self = this;
-
-                if (context == null)
-                    throw new Error('context: null');
-
-                if (!(node instanceof Web.Node))
-                    throw new Error('node: null');
-
-                self._context = context;
-                self._node = node;
-            }
-            Object.defineProperty(NodeViewModel.prototype, "Context", {
-                get: function () {
-                    return this._context;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(NodeViewModel.prototype, "Node", {
-                get: function () {
-                    return this._node;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(NodeViewModel.prototype, "Contents", {
-                get: function () {
-                    return this.GetContents();
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            NodeViewModel.prototype.GetContents = function () {
-                try  {
-                    return Web.ViewModelUtil.GetContents(this.Node);
-                } catch (ex) {
-                    ex.message = 'NodeViewModel.GetContents()' + '"\nMessage: ' + ex.message;
-                    throw ex;
-                }
-            };
-
-            Object.defineProperty(NodeViewModel.prototype, "ContentsCount", {
-                get: function () {
-                    return this.Contents.length;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return NodeViewModel;
-        })();
-        Web.NodeViewModel = NodeViewModel;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
         var PropertyMap = (function () {
             function PropertyMap() {
             }
@@ -1518,6 +1293,56 @@ var NXKit;
             Severity[Severity["Error"] = 4] = "Error";
         })(Web.Severity || (Web.Severity = {}));
         var Severity = Web.Severity;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        var DeferredExecutorItem = (function () {
+            function DeferredExecutorItem(cb) {
+                this.callback = cb;
+            }
+            Object.defineProperty(DeferredExecutorItem.prototype, "Promise", {
+                get: function () {
+                    var self = this;
+
+                    if (self.deferred != null)
+                        return self.deferred.promise();
+
+                    self.deferred = $.Deferred();
+                    self.callback(self.deferred);
+
+                    return self.deferred.progress();
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return DeferredExecutorItem;
+        })();
+
+        var DeferredExecutor = (function () {
+            function DeferredExecutor() {
+                this._queue = new Array();
+            }
+            DeferredExecutor.prototype.Register = function (cb) {
+                var self = this;
+
+                self._queue.push(new DeferredExecutorItem(cb));
+            };
+
+            DeferredExecutor.prototype.Wait = function (cb) {
+                var self = this;
+
+                var wait = new Array();
+                for (var i = 0; i < self._queue.length; i++)
+                    wait[i] = self._queue[i].Promise;
+
+                $.when.apply($, wait).done(cb);
+            };
+            return DeferredExecutor;
+        })();
+        Web.DeferredExecutor = DeferredExecutor;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
@@ -1558,257 +1383,6 @@ var NXKit;
 
         TemplateManager.Default = new TemplateManager('/Content/');
         TemplateManager.Default.Register('nxkit.html');
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        var View = (function () {
-            function View(body, server) {
-                var self = this;
-
-                self._server = server;
-                self._body = body;
-                self._save = null;
-                self._hash = null;
-                self._root = null;
-                self._bind = true;
-
-                self._threshold = 3 /* Warning */;
-
-                self._queue = new Array();
-                self._queueRunning = false;
-                self._busy = ko.observable(false);
-            }
-            Object.defineProperty(View.prototype, "Busy", {
-                get: function () {
-                    return this._busy;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(View.prototype, "Body", {
-                get: function () {
-                    return this._body;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(View.prototype, "Data", {
-                get: function () {
-                    return {
-                        Save: this._save,
-                        Hash: this._hash
-                    };
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(View.prototype, "Root", {
-                get: function () {
-                    return this._root;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            Object.defineProperty(View.prototype, "Threshold", {
-                get: function () {
-                    return this._threshold;
-                },
-                set: function (threshold) {
-                    this._threshold = threshold;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-
-            View.prototype.Receive = function (args) {
-                var self = this;
-
-                self._save = args.Save || self._save;
-                self._hash = args.Hash || self._hash;
-
-                var node = args.Node || null;
-                if (node != null) {
-                    self.ReceiveNode(node);
-                }
-
-                var commands = args.Commands || null;
-                if (commands != null) {
-                    self.ReceiveCommands(commands);
-                }
-            };
-
-            View.prototype.ReceiveNode = function (node) {
-                var self = this;
-
-                if (node != null) {
-                    self.Apply(node || null);
-                }
-            };
-
-            View.prototype.ReceiveCommands = function (commands) {
-                var self = this;
-
-                for (var i = 0; i < commands.length; i++) {
-                    var command = commands[i];
-                    if (command != null) {
-                        if (command.$type === 'NXKit.Web.Commands.Script, NXKit.Web') {
-                            if (command.Code != null) {
-                                eval(command.Code);
-                            }
-                        }
-                    }
-                }
-            };
-
-            View.prototype.Apply = function (data) {
-                var self = this;
-
-                if (self._root == null) {
-                    self._root = new Web.Node(self, data);
-                } else {
-                    self._root.Apply(data);
-                }
-
-                self.ApplyBindings();
-            };
-
-            View.prototype.PushUpdate = function (node, $interface, property, value) {
-                var self = this;
-                Web.Log.Debug('View.PushUpdate');
-
-                var command = {
-                    $type: 'NXKit.Web.Commands.Update, NXKit.Web',
-                    NodeId: node.Id,
-                    Interface: $interface.Name,
-                    Property: property.Name,
-                    Value: value
-                };
-
-                self.Queue(command);
-            };
-
-            View.prototype.PushInvoke = function (node, interfaceName, methodName, parameters) {
-                var self = this;
-                Web.Log.Debug('View.PushInvoke');
-
-                var data = {
-                    $type: 'NXKit.Web.Commands.Invoke, NXKit.Web',
-                    NodeId: node.Id,
-                    Interface: interfaceName,
-                    Method: methodName,
-                    Parameters: parameters
-                };
-
-                self.Queue(data);
-            };
-
-            View.prototype.Queue = function (command) {
-                var _this = this;
-                var self = this;
-
-                self._queue.push(command);
-
-                if (self._queueRunning) {
-                    return;
-                } else {
-                    self._queueRunning = true;
-
-                    var node = {};
-                    var todo = new Array();
-
-                    setTimeout(function () {
-                        self._busy(true);
-
-                        var push = function () {
-                            var send = self._queue.splice(0);
-
-                            var cb = function (args) {
-                                if (args.Status == 200) {
-                                    var hash = args.Hash || null;
-                                    if (hash != null) {
-                                        _this._hash = hash;
-                                    }
-
-                                    var save = args.Save || null;
-                                    if (save != null) {
-                                        _this._save = save;
-                                    }
-
-                                    if (args.Node != null) {
-                                        node = args.Node;
-                                    }
-
-                                    if (args.Commands != null) {
-                                        ko.utils.arrayPushAll(todo, args.Commands);
-                                    }
-
-                                    if (self._queue.length == 0) {
-                                        self.Receive({
-                                            Hash: _this._hash,
-                                            Save: _this._save,
-                                            Node: node,
-                                            Commands: todo
-                                        });
-                                    }
-
-                                    push();
-                                } else if (args.Status == 400) {
-                                    self._server({
-                                        Save: self._save,
-                                        Hash: self._hash,
-                                        Commands: send
-                                    }, cb);
-                                } else if (args.Status == 500) {
-                                    for (var i = 0; i < args.Errors.length; i++) {
-                                        throw new Error(args.Errors[i].Message || "");
-                                    }
-                                } else {
-                                    throw new Error('unexpected response code');
-                                }
-                            };
-
-                            if (send.length > 0) {
-                                self._server({
-                                    Hash: self._hash,
-                                    Commands: send
-                                }, cb);
-                            } else {
-                                self._queueRunning = false;
-                                self._busy(false);
-                            }
-                        };
-
-                        push();
-                    }, 50);
-                }
-            };
-
-            View.prototype.ApplyBindings = function () {
-                var self = this;
-
-                if (self._bind && self._body != null && self._root != null) {
-                    ko.cleanNode(self._body);
-
-                    Web.TemplateManager.Default.Wait(function () {
-                        $(self._body).attr('data-bind', 'template: { name: \'NXKit.View\' }');
-
-                        ko.applyBindings(self, self._body);
-
-                        self._bind = false;
-                    });
-                }
-            };
-            return View;
-        })();
-        Web.View = View;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
@@ -1974,6 +1548,451 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        var View = (function () {
+            function View(body, server) {
+                var self = this;
+
+                self._server = server;
+                self._body = body;
+                self._save = null;
+                self._hash = null;
+                self._root = null;
+                self._bind = true;
+
+                self._threshold = 3 /* Warning */;
+
+                self._queue = new Array();
+                self._queueRunning = false;
+                self._busy = ko.observable(false);
+            }
+            Object.defineProperty(View.prototype, "Busy", {
+                get: function () {
+                    return this._busy;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(View.prototype, "Body", {
+                get: function () {
+                    return this._body;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(View.prototype, "Data", {
+                get: function () {
+                    return {
+                        Save: this._save,
+                        Hash: this._hash
+                    };
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(View.prototype, "Root", {
+                get: function () {
+                    return this._root;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(View.prototype, "Threshold", {
+                get: function () {
+                    return this._threshold;
+                },
+                set: function (threshold) {
+                    this._threshold = threshold;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+
+            View.prototype.Receive = function (args) {
+                var self = this;
+
+                self._save = args.Save || self._save;
+                self._hash = args.Hash || self._hash;
+
+                var node = args.Node || null;
+                if (node != null) {
+                    self.ReceiveNode(node);
+                }
+
+                var commands = args.Commands || null;
+                if (commands != null) {
+                    self.ReceiveCommands(commands);
+                }
+            };
+
+            View.prototype.ReceiveNode = function (node) {
+                var self = this;
+
+                if (node != null) {
+                    self.Apply(node || null);
+                }
+            };
+
+            View.prototype.ReceiveCommands = function (commands) {
+                var self = this;
+
+                for (var i = 0; i < commands.length; i++) {
+                    var command = commands[i];
+                    if (command != null) {
+                        if (command.$type === 'NXKit.Web.Commands.Trace, NXKit.Web') {
+                            if (command.Message != null && typeof console === 'object') {
+                                var func;
+                                if (command.Message.Severity === 'Error' && typeof console.error === 'function')
+                                    func = console.error;
+                                if (command.Message.Severity === 'Warning' && typeof console.warn === 'function')
+                                    func = console.warn;
+                                if (command.Message.Severity === 'Information' && typeof console.info === 'function')
+                                    func = console.info;
+                                if (command.Message.Severity === 'Verbose' && typeof console.log === 'function')
+                                    func = console.log;
+                                if (func == null)
+                                    func = console.log;
+
+                                func('%s : %s', command.Message.Timestamp, command.Message.Text);
+                            }
+                        }
+
+                        if (command.$type === 'NXKit.Web.Commands.Script, NXKit.Web') {
+                            if (command.Code != null) {
+                                eval(command.Code);
+                            }
+                        }
+                    }
+                }
+            };
+
+            View.prototype.Apply = function (data) {
+                var self = this;
+
+                if (self._root == null) {
+                    self._root = new Web.Node(self, data);
+                } else {
+                    self._root.Apply(data);
+                }
+
+                self.ApplyBindings();
+            };
+
+            View.prototype.PushUpdate = function (node, $interface, property, value) {
+                var self = this;
+                Web.Log.Debug('View.PushUpdate');
+
+                var command = {
+                    $type: 'NXKit.Web.Commands.Update, NXKit.Web',
+                    NodeId: node.Id,
+                    Interface: $interface.Name,
+                    Property: property.Name,
+                    Value: value
+                };
+
+                self.Queue(command);
+            };
+
+            View.prototype.PushInvoke = function (node, interfaceName, methodName, parameters) {
+                var self = this;
+                Web.Log.Debug('View.PushInvoke');
+
+                var data = {
+                    $type: 'NXKit.Web.Commands.Invoke, NXKit.Web',
+                    NodeId: node.Id,
+                    Interface: interfaceName,
+                    Method: methodName,
+                    Parameters: parameters
+                };
+
+                self.Queue(data);
+            };
+
+            View.prototype.Queue = function (command) {
+                var _this = this;
+                var self = this;
+
+                self._queue.push(command);
+
+                if (self._queueRunning) {
+                    return;
+                } else {
+                    self._queueRunning = true;
+
+                    var node = {};
+                    var todo = new Array();
+
+                    setTimeout(function () {
+                        self._busy(true);
+
+                        var push = function () {
+                            var send = self._queue.splice(0);
+
+                            var cb = function (args) {
+                                if (args.Status == 200) {
+                                    var hash = args.Hash || null;
+                                    if (hash != null) {
+                                        _this._hash = hash;
+                                    }
+
+                                    var save = args.Save || null;
+                                    if (save != null) {
+                                        _this._save = save;
+                                    }
+
+                                    if (args.Node != null) {
+                                        node = args.Node;
+                                    }
+
+                                    if (args.Commands != null) {
+                                        ko.utils.arrayPushAll(todo, args.Commands);
+                                    }
+
+                                    if (self._queue.length == 0) {
+                                        self.Receive({
+                                            Hash: _this._hash,
+                                            Save: _this._save,
+                                            Node: node,
+                                            Commands: todo
+                                        });
+                                    }
+
+                                    push();
+                                } else if (args.Status == 400) {
+                                    self._server({
+                                        Save: self._save,
+                                        Hash: self._hash,
+                                        Commands: send
+                                    }, cb);
+                                } else if (args.Status == 500) {
+                                    for (var i = 0; i < args.Errors.length; i++) {
+                                        throw new Error(args.Errors[i].Message || "");
+                                    }
+                                } else {
+                                    throw new Error('unexpected response code');
+                                }
+                            };
+
+                            if (send.length > 0) {
+                                self._server({
+                                    Hash: self._hash,
+                                    Commands: send
+                                }, cb);
+                            } else {
+                                self._queueRunning = false;
+                                self._busy(false);
+                            }
+                        };
+
+                        push();
+                    }, 50);
+                }
+            };
+
+            View.prototype.ApplyBindings = function () {
+                var self = this;
+
+                if (self._bind && self._body != null && self._root != null) {
+                    ko.cleanNode(self._body);
+
+                    Web.TemplateManager.Default.Wait(function () {
+                        $(self._body).attr('data-bind', 'template: { name: \'NXKit.View\' }');
+
+                        ko.applyBindings(self, self._body);
+
+                        self._bind = false;
+                    });
+                }
+            };
+            return View;
+        })();
+        Web.View = View;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        var NodeViewModel = (function () {
+            function NodeViewModel(context, node) {
+                var self = this;
+
+                if (context == null)
+                    throw new Error('context: null');
+
+                if (!(node instanceof Web.Node))
+                    throw new Error('node: null');
+
+                self._context = context;
+                self._node = node;
+            }
+            Object.defineProperty(NodeViewModel.prototype, "Context", {
+                get: function () {
+                    return this._context;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(NodeViewModel.prototype, "Node", {
+                get: function () {
+                    return this._node;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(NodeViewModel.prototype, "Contents", {
+                get: function () {
+                    return this.GetContents();
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            NodeViewModel.prototype.GetContents = function () {
+                try  {
+                    return Web.ViewModelUtil.GetContents(this.Node);
+                } catch (ex) {
+                    ex.message = 'NodeViewModel.GetContents()' + '"\nMessage: ' + ex.message;
+                    throw ex;
+                }
+            };
+
+            Object.defineProperty(NodeViewModel.prototype, "ContentsCount", {
+                get: function () {
+                    return this.Contents.length;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return NodeViewModel;
+        })();
+        Web.NodeViewModel = NodeViewModel;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var VisibleBindingHandler = (function () {
+                function VisibleBindingHandler() {
+                }
+                VisibleBindingHandler.prototype.init = function (element, valueAccessor) {
+                    var value = valueAccessor();
+                    $(element).toggle(ko.utils.unwrapObservable(value));
+                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
+                };
+
+                VisibleBindingHandler.prototype.update = function (element, valueAccessor) {
+                    var value = valueAccessor();
+                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
+                };
+                return VisibleBindingHandler;
+            })();
+            Knockout.VisibleBindingHandler = VisibleBindingHandler;
+
+            ko.bindingHandlers['nxkit_visible'] = new VisibleBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_visible'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var TemplateBindingHandler = (function () {
+                function TemplateBindingHandler() {
+                }
+                TemplateBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    return ko.bindingHandlers.template.init(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
+                };
+
+                TemplateBindingHandler.prototype.update = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    return ko.bindingHandlers.template.update(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
+                };
+
+                TemplateBindingHandler.ConvertValueAccessor = function (valueAccessor, viewModel, bindingContext) {
+                    var _this = this;
+                    return function () {
+                        return Web.Log.Group('TemplateBindingHandler.ConvertValueAccessor', function () {
+                            Web.Log.Object({
+                                value: valueAccessor(),
+                                viewModel: viewModel
+                            });
+
+                            var data = _this.GetTemplateViewModel(valueAccessor, viewModel, bindingContext);
+                            if (data == null || Object.getOwnPropertyNames(data).length == 0) {
+                                throw new Error('unknown viewModel');
+                            }
+
+                            var opts = _this.GetTemplateOptions(valueAccessor, viewModel, bindingContext);
+                            if (opts == null || Object.getOwnPropertyNames(opts).length == 0) {
+                                throw new Error('unknown template options');
+                            }
+
+                            var name = _this.GetTemplateName(bindingContext, opts);
+                            if (name == null) {
+                                throw new Error('unknown template');
+                            }
+
+                            Web.Log.Object({
+                                data: data,
+                                opts: opts,
+                                name: name
+                            });
+
+                            return {
+                                data: data,
+                                name: name
+                            };
+                        });
+                    };
+                };
+
+                TemplateBindingHandler.GetTemplateViewModel = function (valueAccessor, viewModel, bindingContext) {
+                    var value = valueAccessor();
+
+                    if (value != null && ko.unwrap(value) instanceof Web.Node)
+                        return value;
+
+                    if (value != null && value.data != null)
+                        return value.data;
+
+                    if (value != null && value.node != null && ko.unwrap(value.node) instanceof Web.Node)
+                        return value.node;
+
+                    return viewModel;
+                };
+
+                TemplateBindingHandler.GetTemplateOptions = function (valueAccessor, viewModel, bindingContext) {
+                    return NXKit.Web.Util.GetLayoutManager(bindingContext).GetTemplateOptions_(valueAccessor, viewModel, bindingContext, {});
+                };
+
+                TemplateBindingHandler.GetTemplateName = function (bindingContext, data) {
+                    return NXKit.Web.Util.GetLayoutManager(bindingContext).GetTemplateName(data);
+                };
+                return TemplateBindingHandler;
+            })();
+            Knockout.TemplateBindingHandler = TemplateBindingHandler;
+
+            ko.bindingHandlers['nxkit_template'] = new TemplateBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_template'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
 
 
     window.NXKit = NXKit;
@@ -1982,10 +2001,28 @@ var NXKit;
 
 if (typeof define === "function" && define.amd) {
     define("nxkit", ['jquery', 'knockout'], function ($, ko) {
-        return ___init_nxkit___($, ko);
+        return init($, ko);
     });
-} else if (typeof $ === "function" && typeof ko === "object") {
-    ___init_nxkit___($, ko);
 } else {
-    throw new Error("RequireJS missing or jQuery and knockout missing.");
+    var hold = false;
+    var loop = function () {
+        if (typeof $ === "function" && typeof ko === "object") {
+            init($, ko);
+            if (hold) {
+                $.holdReady(hold = false);
+            }
+        } else {
+            if (typeof $ === "function") {
+                $.holdReady(hold = true);
+            }
+
+            if (typeof console.warn === "function") {
+                console.warn("nxkit: RequireJS missing or jQuery and knockout missing, retrying.");
+            }
+
+            window.setTimeout(loop, 100);
+        }
+    };
+    loop();
 }
+}());

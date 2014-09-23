@@ -4,6 +4,8 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 
 using NXKit.Composition;
+using NXKit.IO.Media;
+using NXKit.Util;
 using NXKit.Web.Commands;
 using NXKit.Xml;
 
@@ -17,42 +19,23 @@ namespace NXKit.Web
         ICommandProvider
     {
 
-        class DocumentScriptState
+        class State
         {
 
-            readonly List<Script> commands;
+            internal readonly Queue<Script> scripts;
 
             /// <summary>
             /// Initializes a new instance.
             /// </summary>
-            public DocumentScriptState()
+            public State()
             {
-                commands = new List<Script>();
-            }
-
-            /// <summary>
-            /// Gets the outstanding commands.
-            /// </summary>
-            /// <returns></returns>
-            public IEnumerable<Script> GetCommands()
-            {
-                var all = commands.ToArray();
-                commands.Clear();
-                return all;
-            }
-
-            /// <summary>
-            /// Adds a new command.
-            /// </summary>
-            /// <param name="command"></param>
-            public void AddCommand(Script command)
-            {
-                commands.Add(command);
+                scripts = new Queue<Script>();
             }
 
         }
 
         readonly Func<Document> document;
+        readonly Lazy<State> state;
 
         /// <summary>
         /// Initializes a new instance.
@@ -64,11 +47,31 @@ namespace NXKit.Web
             Contract.Requires<ArgumentNullException>(document != null);
 
             this.document = document;
+            this.state = new Lazy<State>(() => document().Xml.AnnotationOrCreate<State>());
         }
 
-        public IEnumerable<Command> GetCommands()
+        /// <summary>
+        /// Adds a script to be delivered and executed on the client.
+        /// </summary>
+        /// <param name="code"></param>
+        public void Add(string code)
         {
-            return document().Root.AnnotationOrCreate<DocumentScriptState>().GetCommands();
+            state.Value.scripts.Enqueue(new Script(code));
+        }
+
+        /// <summary>
+        /// Adds a script to be delivered and executed on the client.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="code"></param>
+        public void Add(MediaRange type, string code)
+        {
+            state.Value.scripts.Enqueue(new Script(type, code));
+        }
+
+        IEnumerable<Command> ICommandProvider.Commands
+        {
+            get { return state.Value.scripts.DequeueAll(); }
         }
 
     }

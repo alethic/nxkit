@@ -220,6 +220,7 @@
     <Compile Include="IO\Media\MediaType.cs" />
     <Compile Include="IO\Media\MediaRange.cs" />
     <Compile Include="Util\ObjectExtensions.cs" />
+    <Compile Include="Util\QueueExtensions.cs" />
     <Compile Include="Util\StringExtensions.cs" />
     <Compile Include="Composition\CompositionUtil.cs" />
     <Compile Include="Xml\BaseUriAnnotation.cs" />

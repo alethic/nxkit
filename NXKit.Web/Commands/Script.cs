@@ -29,6 +29,17 @@ namespace NXKit.Web.Commands
         }
 
         /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="code"></param>
+        public Script(MediaRange language, string code)
+        {
+            Language = language;
+            Code = code;
+        }
+
+        /// <summary>
         /// Gets or sets the type of script to execute. Usually 'application/javascript'.
         /// </summary>
         public MediaRange Language { get; set; }

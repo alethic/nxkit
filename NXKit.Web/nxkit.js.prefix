@@ -1,1 +1,2 @@
-﻿var ___init_nxkit___ = function ($, ko) {
+﻿(function() {
+var init = function ($, ko) {

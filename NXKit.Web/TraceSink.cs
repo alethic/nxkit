@@ -32,7 +32,7 @@ namespace NXKit.Web
             IXmlSerializable
         {
 
-            internal Queue<TraceMessage> messages = new Queue<TraceMessage>();
+            internal readonly Queue<TraceMessage> messages = new Queue<TraceMessage>();
 
             public XmlSchema GetSchema()
             {

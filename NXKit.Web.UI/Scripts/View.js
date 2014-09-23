@@ -5,7 +5,7 @@ _NXKit.Web.UI.View = function (element) {
     _NXKit.Web.UI.View.initializeBase(self, [element]);
 
     self._view = null;
-    self._push = null;
+    self._sendFunc = null;
 };
 
 _NXKit.Web.UI.View.prototype = {
@@ -22,15 +22,15 @@ _NXKit.Web.UI.View.prototype = {
         _NXKit.Web.UI.View.callBaseMethod(self, 'dispose');
 
         self._view = null;
-        self._push = null;
+        self._send = null;
     },
 
-    get_push: function () {
-        return this._push;
+    get_sendFunc: function () {
+        return this._sendFunc;
     },
 
-    set_push: function (value) {
-        this._push = value;
+    set_sendFunc: function (value) {
+        this._sendFunc = value;
     },
 
     _onsubmit: function () {
@@ -87,15 +87,15 @@ _NXKit.Web.UI.View.prototype = {
             wh(response);
         };
 
-        self.sendEval(data, cb);
+        self._sendEval(data, cb);
     },
 
-    sendEval: function (args, cb) {
-        this.sendEvalExec(JSON.stringify(args), function (_) { cb(JSON.parse(_)); });
+    _sendEval: function (args, cb) {
+        this._sendEvalExec(JSON.stringify(args), function (_) { cb(JSON.parse(_)); });
     },
 
-    sendEvalExec: function (args, cb) {
-        eval(this._push);
+    _sendEvalExec: function (args, cb) {
+        eval(this._sendFunc);
     },
 
 };
