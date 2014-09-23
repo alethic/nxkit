@@ -12,16 +12,20 @@ namespace NXKit.Web.Ng.Test.Site.Controllers
 
         public object Get(string name)
         {
-            var nx = new NXKit.Web.ViewServer();
-            nx.Load(new Uri(Request.RequestUri, "/Examples/" + name + ".xml"));
-            return nx.Save();
+            using (var nx = new NXKit.Web.ViewServer())
+            {
+                nx.Load(new Uri(Request.RequestUri, "/Examples/" + name + ".xml"));
+                return nx.Save();
+            }
         }
 
         public object Post(string name, JObject request)
         {
-            var nx = new NXKit.Web.ViewServer();
-            nx.Load(request);
-            return nx.Save();
+            using (var nx = new NXKit.Web.ViewServer())
+            {
+                nx.Load(request);
+                return nx.Save();
+            }
         }
 
     }

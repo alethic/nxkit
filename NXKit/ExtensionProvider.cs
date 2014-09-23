@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
-
 using NXKit.Composition;
 using NXKit.Util;
 
@@ -20,14 +20,14 @@ namespace NXKit
     public class ExtensionProvider
     {
 
-        static readonly Dictionary<Type, IExtensionPredicate> predicates;
+        static readonly ConcurrentDictionary<Type, IExtensionPredicate> predicates;
 
         /// <summary>
         /// Initializes the static instance.
         /// </summary>
         static ExtensionProvider()
         {
-            predicates = new Dictionary<Type, IExtensionPredicate>();
+            predicates = new ConcurrentDictionary<Type, IExtensionPredicate>();
         }
 
         readonly XObject obj;

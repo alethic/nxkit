@@ -12,16 +12,21 @@ namespace NXKit.Web
         /// <summary>
         /// Gets a matching value from the cache if available.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
+        /// <param name="remove"></param>
         /// <returns></returns>
-        object Get(string key);
+        T Get<T>(string key, bool remove)
+            where T : class;
 
         /// <summary>
         /// Sets the value into the cache by it's key.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        void Add(string key, object value);
+        void Add<T>(string key, T value)
+            where T : class;
 
     }
 

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+
 using NXKit.Composition;
 using NXKit.Util;
 
@@ -341,6 +339,42 @@ namespace NXKit.Xml
             return value;
         }
 
+        /// <summary>
+        /// Gets the first annotation object of the specified type, or creates a new one.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object AnnotationOrCreate(this XObject self, Type type)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+
+            var value = self.Annotation(type);
+            if (value == null)
+                self.AddAnnotation(value = Activator.CreateInstance(type));
+
+            return value;
+        }
+
+        /// <summary>
+        /// Gets the first annotation object of the specified type, or creates a new one.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="type"></param>
+        /// <param name="create"></param>
+        /// <returns></returns>
+        public static object AnnotationOrCreate(this XObject self, Type type, Func<object> create)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(create != null);
+
+            var value = self.Annotation(type);
+            if (value == null)
+                self.AddAnnotation(value = create());
+
+            return value;
+        }
+
         #endregion
 
         #region NXKit
@@ -382,8 +416,7 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentNullException>(exports != null);
 
-            return exports.GetExports(typeof(ExtensionQuery<>).MakeGenericType(type), null, null)
-                .SelectMany(i => (ExtensionQuery)i.Value);
+            return (ExtensionQuery)node.AnnotationOrCreate(typeof(ExtensionQuery<>).MakeGenericType(type), () => exports.GetExportedValue(typeof(ExtensionQuery<>).MakeGenericType(type)));
         }
 
         /// <summary>
@@ -397,9 +430,7 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(exports != null);
 
-            return exports.GetExports(typeof(ExtensionQuery<>).MakeGenericType(typeof(T)), null, null)
-                .SelectMany(i => (ExtensionQuery)i.Value)
-                .OfType<T>();
+            return node.AnnotationOrCreate<ExtensionQuery<T>>(() => exports.GetExportedValue<ExtensionQuery<T>>());
         }
 
         /// <summary>

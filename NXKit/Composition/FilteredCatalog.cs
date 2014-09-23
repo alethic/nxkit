@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
-
-using NXKit.Util;
+using System.Linq.Expressions;
 
 namespace NXKit.Composition
 {
@@ -14,27 +13,27 @@ namespace NXKit.Composition
     {
 
         readonly ComposablePartCatalog parent;
-        readonly Func<ComposablePartDefinition, bool> filter;
-        readonly IEnumerable<ComposablePartDefinition> parts;
+        readonly Expression<Func<ComposablePartDefinition, bool>> filter;
+        readonly Lazy<IEnumerable<ComposablePartDefinition>> parts;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="filter"></param>
-        public FilteredCatalog(ComposablePartCatalog parent, Func<ComposablePartDefinition, bool> filter)
+        public FilteredCatalog(ComposablePartCatalog parent, Expression<Func<ComposablePartDefinition, bool>> filter)
         {
             Contract.Requires<ArgumentNullException>(parent != null);
             Contract.Requires<ArgumentNullException>(filter != null);
 
             this.parent = parent;
             this.filter = filter;
-            this.parts = parent.Parts.Where(i => filter(i)).Buffer();
+            this.parts = new Lazy<IEnumerable<ComposablePartDefinition>>(() => parent.Parts.Where(filter).ToList());
         }
 
         public override IEnumerator<ComposablePartDefinition> GetEnumerator()
         {
-            return parts.GetEnumerator();
+            return parts.Value.GetEnumerator();
         }
 
     }

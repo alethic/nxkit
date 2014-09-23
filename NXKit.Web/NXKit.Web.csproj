@@ -1,283 +1,276 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0"
-         DefaultTargets="Build"
-         xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
-            Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A296BBEA-D7B7-40E6-B107-558413A59B8C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>NXKit.Web</AssemblyName>
+    <OutputPath>bin</OutputPath>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <RootNamespace>NXKit.Web</RootNamespace>
+    <NuGetPackageImportStamp>edc32d76</NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+    <DocumentationFile>bin\Release\NXKit.Web.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DocumentEventArgs.cs" />
+    <Compile Include="DocumentLoadedEventHandler.cs" />
+    <Compile Include="DocumentUnloadingEventHandler.cs" />
+    <Compile Include="ICache.cs" />
+    <Compile Include="DefaultMemoryCache.cs" />
+    <Compile Include="Serialization\RemoteDescriptor.cs" />
+    <Compile Include="Serialization\RemoteJsonSerializer.cs" />
+    <Compile Include="Serialization\RemoteXCommentJsonConverter.cs" />
+    <Compile Include="Serialization\RemoteXTextJsonConverter.cs" />
+    <Compile Include="Serialization\RemoteXElementJsonConverter.cs" />
+    <Compile Include="Serialization\RemoteHelper.cs" />
+    <Compile Include="Serialization\RemoteObjectJsonConverter.cs" />
+    <Compile Include="Serialization\RemoteXNodeJsonConverter.cs" />
+    <Compile Include="Serialization\XNameJsonConverter.cs" />
+    <Compile Include="Severity.cs" />
+    <TypeScriptCompile Include="ICallback.ts" />
+    <TypeScriptCompile Include="IEvent.ts" />
+    <TypeScriptCompile Include="IInterfaceMap.ts" />
+    <TypeScriptCompile Include="IPropertyMap.ts" />
+    <TypeScriptCompile Include="IServerInvoke.ts" />
+    <TypeScriptCompile Include="Knockout\InputBindingHandler.ts" />
+    <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
+    <TypeScriptCompile Include="Knockout\HorizontalVisibleBindingHandler.ts" />
+    <TypeScriptCompile Include="Knockout\LayoutManagerExportBindingHandler.ts" />
+    <TypeScriptCompile Include="LayoutOptions.ts" />
+    <Compile Include="TraceMessage.cs" />
+    <Compile Include="TraceSink.cs" />
+    <Compile Include="ViewResponseCode.cs" />
+    <Compile Include="ViewServer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Ref.cs" />
+    <TypeScriptCompile Include="DefaultLayoutManager.ts" />
+    <TypeScriptCompile Include="Knockout\ModalBindingHandler.ts" />
+    <TypeScriptCompile Include="Knockout\CheckboxBindingHandler.ts" />
+    <TypeScriptCompile Include="LayoutManager.ts" />
+    <TypeScriptCompile Include="Interface.ts" />
+    <TypeScriptCompile Include="Log.ts" />
+    <TypeScriptCompile Include="Message.ts" />
+    <TypeScriptCompile Include="InterfaceMap.ts" />
+    <TypeScriptCompile Include="NodeType.ts" />
+    <TypeScriptCompile Include="PropertyMap.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
+    <TypeScriptCompile Include="Severity.ts" />
+    <TypeScriptCompile Include="TemplateManager.ts" />
+    <TypeScriptCompile Include="DeferredExecutor.ts" />
+    <TypeScriptCompile Include="Util.ts" />
+    <TypeScriptCompile Include="ViewModelUtil.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="nxkit.js.prefix" />
+    <None Include="nxkit.js.suffix" />
+    <None Include="NXKit.Web.nuspec" />
+    <None Include="package.json" />
+    <None Include="packages.config" />
+    <None Include="View.css.map">
+      <DependentUpon>View.css</DependentUpon>
+    </None>
+    <None Include="View.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="TypedEvent.ts" />
+    <TypeScriptCompile Include="Property.ts" />
+    <TypeScriptCompile Include="View.ts" />
+    <TypeScriptCompile Include="Node.ts" />
+    <TypeScriptCompile Include="NodeViewModel.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Knockout\VisibleBindingHandler.ts" />
+    <TypeScriptCompile Include="Knockout\TemplateBindingHandler.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
+      <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
+      <Name>NXKit.DOMEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit\NXKit.csproj">
+      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
+      <Name>NXKit</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Text.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="View.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="gulpfile.js" />
+    <Content Include="View.css">
+      <DependentUpon>View.less</DependentUpon>
+    </Content>
+    <Content Include="View.min.css">
+      <DependentUpon>View.css</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
+    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
+    <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptModuleKind>none</TypeScriptModuleKind>
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
+    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
+    <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptModuleKind>none</TypeScriptModuleKind>
+    <TypeScriptOutFile>nxkit.ts.js</TypeScriptOutFile>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{A296BBEA-D7B7-40E6-B107-558413A59B8C}</ProjectGuid>
-        <OutputType>Library</OutputType>
-        <AssemblyName>NXKit.Web</AssemblyName>
-        <OutputPath>bin</OutputPath>
-        <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-        <FileAlignment>512</FileAlignment>
-        <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-        <RestorePackages>true</RestorePackages>
-        <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-        <FileUpgradeFlags>
-        </FileUpgradeFlags>
-        <UpgradeBackupLocation>
-        </UpgradeBackupLocation>
-        <OldToolsVersion>4.0</OldToolsVersion>
-        <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
-        <UseIISExpress>true</UseIISExpress>
-        <IISExpressSSLPort />
-        <IISExpressAnonymousAuthentication />
-        <IISExpressWindowsAuthentication />
-        <IISExpressUseClassicPipelineMode />
-        <RootNamespace>NXKit.Web</RootNamespace>
-        <NuGetPackageImportStamp>edc32d76</NuGetPackageImportStamp>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-        <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
-        <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
-        <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
-        <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
-        <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
-        <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
-        <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
-        <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
-        <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
-        <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
-        <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
-        <CodeContractsInferRequires>True</CodeContractsInferRequires>
-        <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-        <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
-        <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
-        <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
-        <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
-        <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
-        <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
-        <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
-        <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
-        <CodeContractsCustomRewriterAssembly />
-        <CodeContractsCustomRewriterClass />
-        <CodeContractsLibPaths />
-        <CodeContractsExtraRewriteOptions />
-        <CodeContractsExtraAnalysisOptions />
-        <CodeContractsSQLServerOption />
-        <CodeContractsBaseLineFile />
-        <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
-        <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
-        <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-        <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
-        <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-        <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
-        <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
-        <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
-        <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
-        <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
-        <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
-        <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
-        <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
-        <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
-        <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
-        <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
-        <CodeContractsInferRequires>True</CodeContractsInferRequires>
-        <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-        <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
-        <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
-        <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
-        <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
-        <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
-        <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
-        <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
-        <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
-        <CodeContractsCustomRewriterAssembly />
-        <CodeContractsCustomRewriterClass />
-        <CodeContractsLibPaths />
-        <CodeContractsExtraRewriteOptions />
-        <CodeContractsExtraAnalysisOptions />
-        <CodeContractsSQLServerOption />
-        <CodeContractsBaseLineFile />
-        <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
-        <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
-        <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-        <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
-        <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-        <DocumentationFile>bin\Release\NXKit.Web.xml</DocumentationFile>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-            <SpecificVersion>False</SpecificVersion>
-            <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-        </Reference>
-        <Reference Include="System" />
-        <Reference Include="System.ComponentModel.Composition" />
-        <Reference Include="System.Core" />
-        <Reference Include="Microsoft.CSharp" />
-        <Reference Include="System.Runtime.Caching" />
-        <Reference Include="System.Runtime.Serialization" />
-        <Reference Include="System.XML" />
-        <Reference Include="System.Xml.Linq" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="DocumentEventArgs.cs" />
-        <Compile Include="DocumentLoadedEventHandler.cs" />
-        <Compile Include="DocumentUnloadingEventHandler.cs" />
-        <Compile Include="ICache.cs" />
-        <Compile Include="DefaultMemoryCache.cs" />
-        <Compile Include="Serialization\RemoteDescriptor.cs" />
-        <Compile Include="Serialization\RemoteJsonSerializer.cs" />
-        <Compile Include="Serialization\RemoteXCommentJsonConverter.cs" />
-        <Compile Include="Serialization\RemoteXTextJsonConverter.cs" />
-        <Compile Include="Serialization\RemoteXElementJsonConverter.cs" />
-        <Compile Include="Serialization\RemoteHelper.cs" />
-        <Compile Include="Serialization\RemoteObjectJsonConverter.cs" />
-        <Compile Include="Serialization\RemoteXNodeJsonConverter.cs" />
-        <Compile Include="Serialization\XNameJsonConverter.cs" />
-        <Compile Include="Severity.cs" />
-        <TypeScriptCompile Include="ICallback.ts" />
-        <TypeScriptCompile Include="IEvent.ts" />
-        <TypeScriptCompile Include="IInterfaceMap.ts" />
-        <TypeScriptCompile Include="IPropertyMap.ts" />
-        <TypeScriptCompile Include="IServerInvoke.ts" />
-        <TypeScriptCompile Include="Knockout\InputBindingHandler.ts" />
-        <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
-        <TypeScriptCompile Include="Knockout\HorizontalVisibleBindingHandler.ts" />
-        <TypeScriptCompile Include="Knockout\LayoutManagerExportBindingHandler.ts" />
-        <TypeScriptCompile Include="LayoutOptions.ts" />
-        <Compile Include="TraceMessage.cs" />
-        <Compile Include="TraceSink.cs" />
-        <Compile Include="ViewResponseCode.cs" />
-        <Compile Include="ViewServer.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Properties\Ref.cs" />
-        <TypeScriptCompile Include="DefaultLayoutManager.ts" />
-        <TypeScriptCompile Include="Knockout\ModalBindingHandler.ts" />
-        <TypeScriptCompile Include="Knockout\CheckboxBindingHandler.ts" />
-        <TypeScriptCompile Include="LayoutManager.ts" />
-        <TypeScriptCompile Include="Interface.ts" />
-        <TypeScriptCompile Include="Log.ts" />
-        <TypeScriptCompile Include="Message.ts" />
-        <TypeScriptCompile Include="InterfaceMap.ts" />
-        <TypeScriptCompile Include="NodeType.ts" />
-        <TypeScriptCompile Include="PropertyMap.ts" />
-        <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
-        <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
-        <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
-        <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
-        <TypeScriptCompile Include="Severity.ts" />
-        <TypeScriptCompile Include="TemplateManager.ts" />
-        <TypeScriptCompile Include="DeferredExecutor.ts" />
-        <TypeScriptCompile Include="Util.ts" />
-        <TypeScriptCompile Include="ViewModelUtil.ts" />
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="nxkit.js.prefix" />
-        <None Include="nxkit.js.suffix" />
-        <None Include="NXKit.Web.nuspec" />
-        <None Include="package.json" />
-        <None Include="packages.config" />
-        <None Include="View.css.map">
-            <DependentUpon>View.css</DependentUpon>
-        </None>
-        <None Include="View.less" />
-    </ItemGroup>
-    <ItemGroup>
-        <TypeScriptCompile Include="TypedEvent.ts" />
-        <TypeScriptCompile Include="Property.ts" />
-        <TypeScriptCompile Include="View.ts" />
-        <TypeScriptCompile Include="Node.ts" />
-        <TypeScriptCompile Include="NodeViewModel.ts" />
-    </ItemGroup>
-    <ItemGroup>
-        <TypeScriptCompile Include="Knockout\VisibleBindingHandler.ts" />
-        <TypeScriptCompile Include="Knockout\TemplateBindingHandler.ts" />
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
-            <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
-            <Name>NXKit.DOMEvents</Name>
-        </ProjectReference>
-        <ProjectReference Include="..\NXKit\NXKit.csproj">
-            <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
-            <Name>NXKit</Name>
-        </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-        <EmbeddedResource Include="Text.html" />
-    </ItemGroup>
-    <ItemGroup>
-        <EmbeddedResource Include="View.html" />
-    </ItemGroup>
-    <ItemGroup>
-        <Content Include="gulpfile.js" />
-        <Content Include="View.css">
-            <DependentUpon>View.less</DependentUpon>
-        </Content>
-        <Content Include="View.min.css">
-            <DependentUpon>View.css</DependentUpon>
-        </Content>
-    </ItemGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-        <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
-        <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
-        <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
-        <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
-        <TypeScriptModuleKind>none</TypeScriptModuleKind>
-        <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
-        <TypeScriptTarget>ES5</TypeScriptTarget>
-        <TypeScriptSourceMap>False</TypeScriptSourceMap>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
-        <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
-        <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
-        <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
-        <TypeScriptModuleKind>none</TypeScriptModuleKind>
-        <TypeScriptOutFile>nxkit.ts.js</TypeScriptOutFile>
-        <TypeScriptTarget>ES5</TypeScriptTarget>
-        <TypeScriptSourceMap>False</TypeScriptSourceMap>
-    </PropertyGroup>
-    <PropertyGroup>
-        <RunPostBuildEvent>Always</RunPostBuildEvent>
-    </PropertyGroup>
-    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-    <Import Project="$(SolutionDir)\.nuget\NuGet.targets"
-            Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-    <Target Name="EnsureNuGetPackageBuildImports"
-            BeforeTargets="PrepareForBuild">
-        <PropertyGroup>
-            <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-        </PropertyGroup>
-        <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')"
-               Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    </Target>
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-        <TypeScriptOutFile>nxkit.ts.js</TypeScriptOutFile>
-    </PropertyGroup>
-    <Target Name="GulpBuild">
-        <Exec Command="&quot;$(ProjectDir)node_modules/.bin/gulp&quot; --TargetDir $(TargetDir)"
-              WorkingDirectory="$(ProjectDir)" />
-    </Target>
-    <PropertyGroup>
-        <BuildDependsOn>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptOutFile>nxkit.ts.js</TypeScriptOutFile>
+  </PropertyGroup>
+  <Target Name="GulpBuild">
+    <Exec Command="&quot;$(ProjectDir)node_modules/.bin/gulp&quot; --TargetDir $(TargetDir)" WorkingDirectory="$(ProjectDir)" />
+  </Target>
+  <PropertyGroup>
+    <BuildDependsOn>
             $(BuildDependsOn);
             GulpBuild;
         </BuildDependsOn>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
-    </PropertyGroup>
-    <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
 </Project>

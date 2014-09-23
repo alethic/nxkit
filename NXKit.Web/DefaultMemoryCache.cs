@@ -10,14 +10,32 @@ namespace NXKit.Web
         ICache
     {
 
-        public object Get(string key)
+        readonly MemoryCache cache;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        [ImportingConstructor]
+        public DefaultMemoryCache()
         {
-            return MemoryCache.Default.Get(typeof(DefaultMemoryCache).FullName + ":" + key);
+            this.cache = MemoryCache.Default;
         }
 
-        public void Add(string key, object value)
+        public T Get<T>(string key, bool remove)
+            where T : class
         {
-            MemoryCache.Default.Set(typeof(DefaultMemoryCache).FullName + ":" + key, value, DateTimeOffset.UtcNow.AddMinutes(5));
+            var o = (T)cache.Get(typeof(DefaultMemoryCache).FullName + ":" + key);
+            if (o != null)
+                if (remove)
+                    cache.Remove(key);
+
+            return o;
+        }
+
+        public void Add<T>(string key, T value)
+            where T : class
+        {
+            cache.Set(typeof(DefaultMemoryCache).FullName + ":" + key, value, DateTimeOffset.UtcNow.AddMinutes(5));
         }
 
     }

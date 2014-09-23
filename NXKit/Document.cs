@@ -5,9 +5,9 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-
 using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.IO;
@@ -225,7 +225,7 @@ namespace NXKit
 
             // configure composition
             this.configuration = GetConfiguration(catalog, exports);
-            this.container = new CompositionContainer(configuration.HostCatalog, new CompositionContainer(configuration.GlobalCatalog, configuration.Exports));
+            this.container = new CompositionContainer(configuration.HostCatalog, true, new CompositionContainer(configuration.GlobalCatalog, true, configuration.Exports));
             this.container.GetExportedValue<DocumentEnvironment>().SetHost(this);
 
             // required services
@@ -235,6 +235,15 @@ namespace NXKit
             // initialize xml
             this.xml = xml(this);
             this.xml.AddAnnotation(this);
+
+            // parallel initialization of common interfaces
+            Parallel.ForEach(this.xml.DescendantNodesAndSelf(), new ParallelOptions() { MaxDegreeOfParallelism = 128 }, i =>
+            {
+                Enumerable.Empty<object>()
+                    .Concat(i.Interfaces<IOnInit>())
+                    .Concat(i.Interfaces<IOnLoad>())
+                    .ToLinkedList();
+            });
 
             // initial invocation entry
             this.invoker.Invoke(() => { });

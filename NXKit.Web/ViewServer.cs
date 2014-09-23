@@ -413,7 +413,7 @@ namespace NXKit.Web
         {
             if (hash != null)
             {
-                var save = (string)cache.Get(hash);
+                var save = cache.Get<string>(hash, false);
                 if (save != null)
                     return LoadFromSave(save);
             }
