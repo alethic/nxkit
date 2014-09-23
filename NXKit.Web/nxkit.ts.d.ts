@@ -1,77 +1,4 @@
 ﻿declare module NXKit.Web {
-    interface ICallback {
-        (result: any): void;
-    }
-}
-declare module NXKit.Web {
-    interface IEvent {
-        add(listener: () => void): void;
-        remove(listener: () => void): void;
-        trigger(...a: any[]): void;
-    }
-}
-declare module NXKit.Web {
-    interface IInterfaceMap {
-        [name: string]: Interface;
-    }
-}
-declare module NXKit.Web {
-    interface IPropertyMap {
-        [name: string]: Property;
-    }
-}
-declare module NXKit.Web {
-    interface IServerInvoke {
-        (args: any, cb: ICallback): void;
-    }
-}
-declare module NXKit.Web.Knockout {
-    class InputBindingHandler implements KnockoutBindingHandler {
-        static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-    }
-}
-declare module NXKit.Web.Util {
-    function Observable<T>(value?: T): KnockoutObservable<T>;
-    function ObservableArray<T>(value?: T[]): KnockoutObservableArray<T>;
-    function Computed<T>(def: KnockoutComputedDefine<T>): KnockoutComputed<T>;
-    function DeepEquals(a: any, b: any, f?: (a: any, b: any) => boolean): boolean;
-    function GenerateGuid(): string;
-    function GetContextItems(context: KnockoutBindingContext): any[];
-    function GetLayoutManager(context: KnockoutBindingContext): LayoutManager;
-}
-declare module NXKit.Web.Knockout {
-    class OptionsBindingHandler implements KnockoutBindingHandler {
-        public init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any;
-    }
-}
-declare module NXKit.Web.Knockout {
-    class HorizontalVisibleBindingHandler implements KnockoutBindingHandler {
-        public init(element: HTMLElement, valueAccessor: () => any): void;
-        public update(element: HTMLElement, valueAccessor: () => any): void;
-    }
-}
-declare module NXKit.Web.Knockout {
-    class LayoutManagerExportBindingHandler implements KnockoutBindingHandler {
-        static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): {
-            controlsDescendantBindings: boolean;
-        };
-        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): {
-            controlsDescendantBindings: boolean;
-        };
-    }
-}
-declare module NXKit.Web {
-    class LayoutOptions {
-        static GetArgs(bindingContext: KnockoutBindingContext): any;
-        private _args;
-        constructor(args: any);
-        public Args : any;
-    }
-}
-declare module NXKit.Web {
 }
 declare module NXKit.Web {
     class Property {
@@ -131,6 +58,15 @@ declare module NXKit.Web {
         public NodesToData(): any[];
     }
 }
+declare module NXKit.Web.Util {
+    function Observable<T>(value?: T): KnockoutObservable<T>;
+    function ObservableArray<T>(value?: T[]): KnockoutObservableArray<T>;
+    function Computed<T>(def: KnockoutComputedDefine<T>): KnockoutComputed<T>;
+    function DeepEquals(a: any, b: any, f?: (a: any, b: any) => boolean): boolean;
+    function GenerateGuid(): string;
+    function GetContextItems(context: KnockoutBindingContext): any[];
+    function GetLayoutManager(context: KnockoutBindingContext): LayoutManager;
+}
 declare module NXKit.Web {
     class LayoutManager {
         private _context;
@@ -159,17 +95,28 @@ declare module NXKit.Web {
         public GetLocalTemplates(): HTMLElement[];
     }
 }
-declare module NXKit.Web.Knockout {
-    class ModalBindingHandler implements KnockoutBindingHandler {
-        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+declare module NXKit.Web {
+    class DeferredExecutor {
+        private _queue;
+        public Register(cb: (promise: JQueryDeferred<void>) => void): void;
+        public Wait(cb: () => void): void;
     }
 }
-declare module NXKit.Web.Knockout {
-    class CheckboxBindingHandler implements KnockoutBindingHandler {
-        static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+declare module NXKit.Web {
+    interface ICallback {
+        (result: any): void;
+    }
+}
+declare module NXKit.Web {
+    interface IEvent {
+        add(listener: () => void): void;
+        remove(listener: () => void): void;
+        trigger(...a: any[]): void;
+    }
+}
+declare module NXKit.Web {
+    interface IInterfaceMap {
+        [name: string]: Interface;
     }
 }
 declare module NXKit.Web {
@@ -186,6 +133,87 @@ declare module NXKit.Web {
         public ToData(): {
             [name: string]: any;
         };
+    }
+}
+declare module NXKit.Web {
+    class InterfaceMap implements IInterfaceMap {
+        [name: string]: Interface;
+    }
+}
+declare module NXKit.Web {
+    interface IPropertyMap {
+        [name: string]: Property;
+    }
+}
+declare module NXKit.Web {
+    interface IServerInvoke {
+        (args: any, cb: ICallback): void;
+    }
+}
+declare module NXKit.Web.Knockout {
+    class CheckboxBindingHandler implements KnockoutBindingHandler {
+        static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+    }
+}
+declare module NXKit.Web.Knockout {
+    class HorizontalVisibleBindingHandler implements KnockoutBindingHandler {
+        public init(element: HTMLElement, valueAccessor: () => any): void;
+        public update(element: HTMLElement, valueAccessor: () => any): void;
+    }
+}
+declare module NXKit.Web.Knockout {
+    class InputBindingHandler implements KnockoutBindingHandler {
+        static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+    }
+}
+declare module NXKit.Web.Knockout {
+    class LayoutManagerExportBindingHandler implements KnockoutBindingHandler {
+        static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): {
+            controlsDescendantBindings: boolean;
+        };
+        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): {
+            controlsDescendantBindings: boolean;
+        };
+    }
+}
+declare module NXKit.Web.Knockout {
+    class ModalBindingHandler implements KnockoutBindingHandler {
+        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+    }
+}
+declare module NXKit.Web.Knockout {
+    class OptionsBindingHandler implements KnockoutBindingHandler {
+        public init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any;
+    }
+}
+declare module NXKit.Web.Knockout {
+    class TemplateBindingHandler implements KnockoutBindingHandler {
+        public init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public update(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        static ConvertValueAccessor(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): () => any;
+        static GetTemplateViewModel(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any;
+        static GetTemplateOptions(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any;
+        static GetTemplateName(bindingContext: KnockoutBindingContext, data: any): KnockoutObservable<string>;
+    }
+}
+declare module NXKit.Web.Knockout {
+    class VisibleBindingHandler implements KnockoutBindingHandler {
+        public init(element: HTMLElement, valueAccessor: () => any): void;
+        public update(element: HTMLElement, valueAccessor: () => any): void;
+    }
+}
+declare module NXKit.Web {
+    class LayoutOptions {
+        static GetArgs(bindingContext: KnockoutBindingContext): any;
+        private _args;
+        constructor(args: any);
+        public Args : any;
     }
 }
 declare module NXKit.Web {
@@ -206,11 +234,6 @@ declare module NXKit.Web {
     }
 }
 declare module NXKit.Web {
-    class InterfaceMap implements IInterfaceMap {
-        [name: string]: Interface;
-    }
-}
-declare module NXKit.Web {
     class NodeType {
         static Object: NodeType;
         static Text: NodeType;
@@ -219,6 +242,18 @@ declare module NXKit.Web {
         static Parse(value: string): NodeType;
         constructor(value: string);
         public ToString(): string;
+    }
+}
+declare module NXKit.Web {
+    class NodeViewModel {
+        private _context;
+        private _node;
+        constructor(context: KnockoutBindingContext, node: Node);
+        public Context : KnockoutBindingContext;
+        public Node : Node;
+        public Contents : Node[];
+        public GetContents(): Node[];
+        public ContentsCount : number;
     }
 }
 declare module NXKit.Web {
@@ -235,13 +270,6 @@ declare module NXKit.Web {
     }
 }
 declare module NXKit.Web {
-    class DeferredExecutor {
-        private _queue;
-        public Register(cb: (promise: JQueryDeferred<void>) => void): void;
-        public Wait(cb: () => void): void;
-    }
-}
-declare module NXKit.Web {
     class TemplateManager {
         static Default: TemplateManager;
         private _executor;
@@ -250,34 +278,6 @@ declare module NXKit.Web {
         public Register(name: string): void;
         public Wait(cb: () => void): void;
     }
-}
-declare module NXKit.Web.ViewModelUtil {
-    var LayoutManagers: {
-        (context: KnockoutBindingContext): LayoutManager;
-    }[];
-    var GroupNodes: string[];
-    var ControlNodes: string[];
-    var MetadataNodes: string[];
-    var TransparentNodes: string[];
-    var TransparentNodePredicates: {
-        (n: Node): boolean;
-    }[];
-    function IsEmptyTextNode(node: Node): boolean;
-    function IsIgnoredNode(node: Node): boolean;
-    function IsGroupNode(node: Node): boolean;
-    function HasGroupNode(nodes: Node[]): boolean;
-    function GetGroupNodes(nodes: Node[]): Node[];
-    function IsControlNode(node: Node): boolean;
-    function HasControlNode(nodes: Node[]): boolean;
-    function GetControlNodes(nodes: Node[]): Node[];
-    function IsMetadataNode(node: Node): boolean;
-    function HasMetadataNode(nodes: Node[]): boolean;
-    function GetMetadataNodes(nodes: Node[]): Node[];
-    function IsTransparentNode(node: Node): boolean;
-    function HasTransparentNode(nodes: Node[]): boolean;
-    function GetTransparentNodes(nodes: Node[]): Node[];
-    function GetContentNodes(nodes: Node[]): Node[];
-    function GetContents(node: Node): Node[];
 }
 declare module NXKit.Web {
     class View {
@@ -311,31 +311,31 @@ declare module NXKit.Web {
         public ApplyBindings(): void;
     }
 }
-declare module NXKit.Web {
-    class NodeViewModel {
-        private _context;
-        private _node;
-        constructor(context: KnockoutBindingContext, node: Node);
-        public Context : KnockoutBindingContext;
-        public Node : Node;
-        public Contents : Node[];
-        public GetContents(): Node[];
-        public ContentsCount : number;
-    }
-}
-declare module NXKit.Web.Knockout {
-    class VisibleBindingHandler implements KnockoutBindingHandler {
-        public init(element: HTMLElement, valueAccessor: () => any): void;
-        public update(element: HTMLElement, valueAccessor: () => any): void;
-    }
-}
-declare module NXKit.Web.Knockout {
-    class TemplateBindingHandler implements KnockoutBindingHandler {
-        public init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        public update(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        static ConvertValueAccessor(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): () => any;
-        static GetTemplateViewModel(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any;
-        static GetTemplateOptions(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any;
-        static GetTemplateName(bindingContext: KnockoutBindingContext, data: any): KnockoutObservable<string>;
-    }
+declare module NXKit.Web.ViewModelUtil {
+    var LayoutManagers: {
+        (context: KnockoutBindingContext): LayoutManager;
+    }[];
+    var GroupNodes: string[];
+    var ControlNodes: string[];
+    var MetadataNodes: string[];
+    var TransparentNodes: string[];
+    var TransparentNodePredicates: {
+        (n: Node): boolean;
+    }[];
+    function IsEmptyTextNode(node: Node): boolean;
+    function IsIgnoredNode(node: Node): boolean;
+    function IsGroupNode(node: Node): boolean;
+    function HasGroupNode(nodes: Node[]): boolean;
+    function GetGroupNodes(nodes: Node[]): Node[];
+    function IsControlNode(node: Node): boolean;
+    function HasControlNode(nodes: Node[]): boolean;
+    function GetControlNodes(nodes: Node[]): Node[];
+    function IsMetadataNode(node: Node): boolean;
+    function HasMetadataNode(nodes: Node[]): boolean;
+    function GetMetadataNodes(nodes: Node[]): Node[];
+    function IsTransparentNode(node: Node): boolean;
+    function HasTransparentNode(nodes: Node[]): boolean;
+    function GetTransparentNodes(nodes: Node[]): Node[];
+    function GetContentNodes(nodes: Node[]): Node[];
+    function GetContents(node: Node): Node[];
 }

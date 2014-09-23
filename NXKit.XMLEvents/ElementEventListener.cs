@@ -13,7 +13,7 @@ namespace NXKit.XMLEvents
     /// <summary>
     /// Listens for a given event on an element.
     /// </summary>
-    [Extension(typeof(IOnInit))]
+    [Extension]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ElementEventListener :
         ElementExtension,

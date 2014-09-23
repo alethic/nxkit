@@ -10,22 +10,16 @@ namespace NXKit.Web.Ng.Test.Site.Controllers
         ApiController
     {
 
+        static readonly ViewServer server = new ViewServer();
+
         public object Get(string name)
         {
-            using (var nx = new NXKit.Web.ViewServer())
-            {
-                nx.Load(new Uri(Request.RequestUri, "/Examples/" + name + ".xml"));
-                return nx.Save();
-            }
+            return server.Load(new Uri(Request.RequestUri, "/Examples/" + name + ".xml"));
         }
 
-        public object Post(string name, JObject request)
+        public object Post(string name, JObject args)
         {
-            using (var nx = new NXKit.Web.ViewServer())
-            {
-                nx.Load(request);
-                return nx.Save();
-            }
+            return server.Push(args);
         }
 
     }

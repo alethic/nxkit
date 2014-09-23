@@ -32,8 +32,6 @@ namespace NXKit.Web.UI
         public View()
         {
             this.server = new ViewServer();
-            this.server.DocumentLoaded += (s, a) => OnDocumentLoaded(a);
-            this.server.DocumentUnloading += (s, a) => OnHostUnloading(a);
         }
 
         /// <summary>
@@ -235,12 +233,6 @@ namespace NXKit.Web.UI
         protected override void OnUnload(EventArgs args)
         {
             base.OnUnload(args);
-
-            if (server != null)
-            {
-                server.Dispose();
-                server = null;
-            }
         }
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
@@ -268,7 +260,7 @@ namespace NXKit.Web.UI
 
             var text = postCollection[postDataKey];
             if (!string.IsNullOrWhiteSpace(text))
-                server.Execute(JObject.Parse(text));
+                server.Push(JObject.Parse(text));
 
             return false;
         }
@@ -287,7 +279,7 @@ namespace NXKit.Web.UI
         /// <param name="eventArgument"></param>
         void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
         {
-            server.Execute(JObject.Parse(eventArgument));
+            server.Push(JObject.Parse(eventArgument));
         }
 
         /// <summary>

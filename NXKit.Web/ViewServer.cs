@@ -28,19 +28,16 @@ namespace NXKit.Web
     public class ViewServer
     {
 
+        readonly IDocumentStore store;
+        readonly IDocumentCache cache;
         ComposablePartCatalog catalog;
         ExportProvider exports;
-        IDocumentCache cache;
-        Lazy<Document> document;
-        ViewResponseCode code;
-        LinkedList<Exception> errors;
-        LinkedList<string> scripts;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public ViewServer()
-            : this(null, null, null)
+            : this(null, null, null, null)
         {
 
         }
@@ -50,15 +47,18 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="catalog"></param>
         /// <param name="exports"></param>
+        /// <param name="store"></param>
         /// <param name="cache"></param>
-        ViewServer(ComposablePartCatalog catalog = null, ExportProvider exports = null, IDocumentCache cache = null)
+        ViewServer(
+            ComposablePartCatalog catalog = null,
+            ExportProvider exports = null,
+            IDocumentStore store = null,
+            IDocumentCache cache = null)
         {
             this.catalog = catalog;
             this.exports = exports;
-            this.cache = cache ?? new DefaultMemoryCache();
-            this.code = ViewResponseCode.Unknown;
-            this.errors = new LinkedList<Exception>();
-            this.scripts = new LinkedList<string>();
+            this.store = store ?? new DefaultDocumentStore();
+            this.cache = cache ?? new DefaultDocumentCache();
         }
 
         /// <summary>
@@ -80,149 +80,50 @@ namespace NXKit.Web
         }
 
         /// <summary>
-        /// Gets the currently hosted <see cref="Document"/>.
-        /// </summary>
-        public Document Document
-        {
-            get { return document != null ? document.Value : null; }
-        }
-
-        /// <summary>
-        /// Releases the current document.
-        /// </summary>
-        void Release()
-        {
-            if (document != null)
-            {
-                OnDocumentUnloading(DocumentEventArgs.Empty);
-                document = null;
-                code = ViewResponseCode.Unknown;
-            }
-        }
-
-        /// <summary>
-        /// Raised when the <see cref="Document"/> is loaded.
-        /// </summary>
-        public event DocumentLoadedEventHandler DocumentLoaded;
-
-        /// <summary>
-        /// Raises the DocumentLoaded event.
-        /// </summary>
-        /// <param name="args"></param>
-        void OnDocumentLoaded(DocumentEventArgs args)
-        {
-            Contract.Requires<ArgumentNullException>(args != null);
-            Contract.Requires<InvalidOperationException>(Document != null);
-
-            if (DocumentLoaded != null)
-                DocumentLoaded(this, args);
-        }
-
-        /// <summary>
-        /// Raised when the <see cref="Document"/> is unloading.
-        /// </summary>
-        public event DocumentLoadedEventHandler DocumentUnloading;
-
-        /// <summary>
-        /// Raises the DocumentUnloading event.
-        /// </summary>
-        /// <param name="args"></param>
-        void OnDocumentUnloading(DocumentEventArgs args)
-        {
-            Contract.Requires<ArgumentNullException>(args != null);
-            Contract.Requires<InvalidOperationException>(Document != null);
-
-            if (DocumentUnloading != null)
-                DocumentUnloading(this, args);
-        }
-
-        /// <summary>
-        /// Registers the given script snippet for execution upon return to the client.
-        /// </summary>
-        /// <param name="script"></param>
-        public void RegisterScript(string script)
-        {
-            Contract.Requires<ArgumentNullException>(script != null);
-            Contract.Requires<InvalidOperationException>(Document != null);
-
-            (scripts ?? (scripts = new LinkedList<string>())).AddLast(script);
-        }
-
-        /// <summary>
         /// Loads the specified <see cref="Uri"/> into the server.
         /// </summary>
         /// <param name="uri"></param>
-        public void Load(Uri uri)
+        public object Load(Uri uri)
         {
             Contract.Requires<ArgumentNullException>(uri != null);
-
-            // release any existing document
-            Release();
 
             // load new document
-            document = new Lazy<Document>(() => Document.Load(uri, catalog, exports));
-            OnDocumentLoaded(DocumentEventArgs.Empty);
+            return Save(Document.Load(uri, catalog, exports), ViewResponseCode.Good);
         }
 
         /// <summary>
         /// Loads the specified <see cref="Uri"/> into the server.
         /// </summary>
         /// <param name="uri"></param>
-        public void Load(string uri)
+        public object Load(string uri)
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            Load(new Uri(uri, UriKind.RelativeOrAbsolute));
+            return Load(new Uri(uri, UriKind.RelativeOrAbsolute));
         }
 
         /// <summary>
         /// Loads the docuemnt from the given <see cref="TextReader"/> into the server.
         /// </summary>
         /// <param name="reader"></param>
-        public void Load(TextReader reader)
+        public object Load(TextReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
-            // release any existing document
-            Release();
-
             // load new document
-            document = new Lazy<NXKit.Document>(() => Document.Load(reader, catalog, exports));
-            OnDocumentLoaded(DocumentEventArgs.Empty);
+            return Save(Document.Load(reader, catalog, exports), ViewResponseCode.Good);
         }
 
         /// <summary>
         /// Loads the docuemnt from the given <see cref="XmlReader"/> into the server.
         /// </summary>
         /// <param name="reader"></param>
-        public void Load(XmlReader reader)
+        public object Load(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
 
-            // release any existing document
-            Release();
-
             // load new document
-            document = new Lazy<NXKit.Document>(() => Document.Load(reader, catalog, exports));
-            OnDocumentLoaded(DocumentEventArgs.Empty);
-        }
-
-        /// <summary>
-        /// Loads the document from the given saved state string.
-        /// </summary>
-        /// <param name="save"></param>
-        /// <returns></returns>
-        void LoadSave(string save)
-        {
-            Contract.Requires<ArgumentNullException>(save != null);
-
-            using (var stm = new MemoryStream(Encoding.ASCII.GetBytes(save)))
-            using (var b64 = new CryptoStream(stm, new FromBase64Transform(), CryptoStreamMode.Read))
-            using (var cmp = new DeflateStream(b64, CompressionMode.Decompress))
-            using (var rdr = XmlDictionaryReader.CreateBinaryReader(cmp, new XmlDictionaryReaderQuotas()))
-            {
-                Load(rdr);
-            }
+            return Save(Document.Load(reader, catalog, exports), ViewResponseCode.Good);
         }
 
         /// <summary>
@@ -245,17 +146,16 @@ namespace NXKit.Web
         /// Gets the client-side save state as a string.
         /// </summary>
         /// <returns></returns>
-        string GetSaveString()
+        string GetSaveString(Document document)
         {
-            Contract.Requires<InvalidOperationException>(document != null);
-            Contract.Requires<InvalidOperationException>(document.Value != null);
+            Contract.Requires<ArgumentNullException>(document != null);
 
             using (var stream = new MemoryStream())
             using (var encode = new CryptoStream(stream, new ToBase64Transform(), CryptoStreamMode.Write))
             using (var deflate = new DeflateStream(encode, CompressionMode.Compress))
             using (var writer = XmlDictionaryWriter.CreateBinaryWriter(deflate))
             {
-                document.Value.Save(writer);
+                document.Save(writer);
 
                 // flush output
                 writer.Dispose();
@@ -270,154 +170,65 @@ namespace NXKit.Web
         /// Gets the client-side data as a <see cref="JToken"/>
         /// </summary>
         /// <returns></returns>
-        JToken CreateNodeJObject()
+        JToken CreateNodeJObject(Document document)
         {
-            Contract.Requires<InvalidOperationException>(document != null);
-            Contract.Requires<InvalidOperationException>(document.Value != null);
+            Contract.Requires<ArgumentNullException>(document != null);
 
             // serialize document state to data field
             using (var wrt = new JTokenWriter())
             {
-                RemoteHelper.GetJson(wrt, document.Value.Root);
+                RemoteHelper.GetJson(wrt, document.Root);
                 return wrt.Token;
             }
-        }
-
-        /// <summary>
-        /// Gets the client-side message data as a <see cref="JToken"/>.
-        /// </summary>
-        /// <returns></returns>
-        JToken GetMessagesObject()
-        {
-            Contract.Requires<InvalidOperationException>(document != null);
-            Contract.Requires<InvalidOperationException>(document.Value != null);
-
-            return JArray.FromObject(document.Value.Container.GetExportedValue<TraceSink>().Messages);
-        }
-
-        /// <summary>
-        /// Gets the client-side script data as a <see cref="JToken"/>.
-        /// </summary>
-        /// <returns></returns>
-        JToken GetScriptsObject()
-        {
-            Contract.Requires<InvalidOperationException>(document != null);
-            Contract.Requires<InvalidOperationException>(document.Value != null);
-
-            return new JArray(scripts);
         }
 
         /// <summary>
         /// Gets the client-side data as a <see cref="JToken"/>.
         /// </summary>
         /// <returns></returns>
-        JToken GetDataObject()
+        JToken GetDataObject(Document document)
         {
-            Contract.Requires<InvalidOperationException>(document != null);
-            Contract.Requires<InvalidOperationException>(document.Value != null);
+            Contract.Requires<ArgumentNullException>(document != null);
 
             return new JObject(
                 new JProperty("Node",
-                    CreateNodeJObject()),
-                new JProperty("Messages",
-                    GetMessagesObject()),
-                new JProperty("Scripts",
-                    GetScriptsObject()));
+                    CreateNodeJObject(document)));
         }
 
         /// <summary>
         /// Gets the client-side data as a <see cref="String"/>.
         /// </summary>
         /// <returns></returns>
-        string GetDataString()
+        string GetDataString(Document document)
         {
-            Contract.Requires<InvalidOperationException>(document != null);
-            Contract.Requires<InvalidOperationException>(document.Value != null);
+            Contract.Requires<ArgumentNullException>(document != null);
 
-            return JsonConvert.SerializeObject(GetDataObject());
+            return JsonConvert.SerializeObject(GetDataObject(document));
         }
 
         /// <summary>
         /// Returns a saved version of the currently loaded document.
         /// </summary>
         /// <returns></returns>
-        public JObject Save()
+        JObject Save(Document document, ViewResponseCode code)
         {
-            try
-            {
-                // return errors if any
-                if (code == ViewResponseCode.Fail)
-                    return SaveErrors();
+            // extract data from document
+            var data = GetDataObject(document);
+            var save = GetSaveString(document);
+            var hash = GetMD5HashText(save);
 
-                // notify any subscribers to conduct final operations
-                if (Document != null)
-                    OnDocumentUnloading(DocumentEventArgs.Empty);
+            // cache save data
+            store.Put(hash, document);
+            cache.Set(hash, save);
 
-                // extract data from document
-                var data = Document != null ? GetDataObject() : null;
-                var save = Document != null ? GetSaveString() : null;
-                var hash = save != null ? GetMD5HashText(save) : null;
-
-                // cache save data
-                if (save != null &&
-                    hash != null)
-                    cache.Set(hash, save);
-
-                // respond with object containing new save and JSON tree
-                return new JObject(
-                    new JProperty[] {
-                            new JProperty("Code", code),
-                            save != null ? new JProperty("Save", save) : null,
-                            hash != null ? new JProperty("Hash", hash) : null,
-                            data != null ? new JProperty("Data", data) : null, }
-                        .Where(i => i != null));
-            }
-            finally
-            {
-                code = ViewResponseCode.Unknown;
-            }
-        }
-
-        /// <summary>
-        /// Saves any available <see cref="Exception"/>s.
-        /// </summary>
-        /// <returns></returns>
-        JObject SaveErrors()
-        {
+            // respond with object containing new save and JSON tree
             return new JObject(
-                new JProperty("Code", code),
-                new JProperty("Errors",
-                    new JArray(errors.Select(i => SaveError(i)))));
-        }
-
-        /// <summary>
-        /// Saves an <see cref="Exception"/> to a <see cref="JObject"/>.
-        /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        JObject SaveError(Exception e)
-        {
-            return new JObject(
-                new JProperty("Type", e.GetType()),
-                new JProperty("Message", e.Message),
-                new JProperty("StackTrace", e.StackTrace));
-        }
-
-        /// <summary>
-        /// Loads the given <see cref="Document"/> from the given hash.
-        /// </summary>
-        /// <param name="hash"></param>
-        /// <returns></returns>
-        bool LoadFromHash(string hash)
-        {
-            if (hash != null)
-            {
-                var save = cache.Get(hash);
-                if (save != null)
-                    return LoadFromSave(save);
-            }
-
-            return false;
+                new JProperty[] {
+                        new JProperty("Code", code),
+                        save != null ? new JProperty("Save", save) : null,
+                        hash != null ? new JProperty("Hash", hash) : null,
+                        data != null ? new JProperty("Data", data) : null, }
+                    .Where(i => i != null));
         }
 
         /// <summary>
@@ -425,15 +236,60 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="save"></param>
         /// <returns></returns>
-        bool LoadFromSave(string save)
+        Document LoadFromSave(string save)
         {
-            if (save != null)
+            Contract.Requires<ArgumentNullException>(save != null);
+
+            using (var stm = new MemoryStream(Encoding.ASCII.GetBytes(save)))
+            using (var b64 = new CryptoStream(stm, new FromBase64Transform(), CryptoStreamMode.Read))
+            using (var cmp = new DeflateStream(b64, CompressionMode.Decompress))
+            using (var rdr = XmlDictionaryReader.CreateBinaryReader(cmp, new XmlDictionaryReaderQuotas()))
             {
-                LoadSave(save);
-                return true;
+                return Document.Load(rdr, catalog, exports);
+            }
+        }
+
+        /// <summary>
+        /// Loads the given <see cref="Document"/> from the given hash.
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <returns></returns>
+        Document LoadFromHash(string hash)
+        {
+            if (hash != null)
+            {
+                var document = store.Get(hash);
+                if (document != null)
+                    return document;
+
+                var save = cache.Get(hash);
+                if (save != null)
+                    return LoadFromSave(save);
             }
 
-            return false;
+            return null;
+        }
+
+        /// <summary>
+        /// Loads the document from the given input args.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        Document LoadFromArgs(JObject args)
+        {
+            Contract.Requires<ArgumentNullException>(args != null);
+
+            // load save data
+            var save = (string)args["Save"];
+            if (save != null)
+                return LoadFromSave(save);
+
+            // load hash data
+            var hash = (string)args["Hash"];
+            if (hash != null)
+                return LoadFromHash(hash);
+
+            return null;
         }
 
         /// <summary>
@@ -441,74 +297,28 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        ViewResponseCode LoadAndExecute(JObject args)
+        public object Push(JObject args)
         {
             Contract.Requires<ArgumentNullException>(args != null);
+
+            // load document from args
+            var document = LoadFromArgs(args);
+            if (document == null)
+                return new JObject(new JProperty("Code", ViewResponseCode.NeedSave));
 
             try
             {
-                // load save data
-                var save = (string)args["Save"];
-                if (save != null)
-                    if (LoadFromSave(save))
-                        return Execute(args, null);
-
-                // load hash data
-                var hash = (string)args["Hash"];
-                if (hash != null)
-                    if (LoadFromHash(hash))
-                        return Execute(args, hash);
-
-                // client must resend save data
-                return ViewResponseCode.NeedSave;
+                Execute(document, args);
             }
             catch (Exception e)
             {
-                // append error to errors list
-                errors.AddLast(e);
-
-                // return failure code
-                return code = ViewResponseCode.Fail;
+                return new JObject(
+                    new JProperty("Code", ViewResponseCode.Fail),
+                    new JProperty("Exception", e.ToString()));
             }
-        }
 
-        /// <summary>
-        /// Loads a saved version of the document.
-        /// </summary>
-        /// <param name="args"></param>
-        public ViewResponseCode Load(JObject args)
-        {
-            Contract.Requires<ArgumentNullException>(args != null);
-
-            return LoadAndExecute(args);
-        }
-
-        /// <summary>
-        /// Executes the incoming argument set.
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public ViewResponseCode Execute(JObject args)
-        {
-            Contract.Requires<ArgumentNullException>(args != null);
-
-            // loads and executes the document
-            return LoadAndExecute(args);
-        }
-
-        /// <summary>
-        /// Executes the incoming argument structure.
-        /// </summary>
-        /// <param name="args"></param>
-        /// <param name="saveHash"></param>
-        /// <returns></returns>
-        ViewResponseCode Execute(JObject args, string saveHash)
-        {
-            Contract.Requires<ArgumentNullException>(args != null);
-            Contract.Requires<InvalidOperationException>(document != null);
-
-            // execute any passed commands
-            return code = ExecuteCommands(args);
+            // save and return document
+            return Save(document, ViewResponseCode.Good);
         }
 
         /// <summary>
@@ -516,7 +326,7 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        ViewResponseCode ExecuteCommands(JObject args)
+        void Execute(Document document, JObject args)
         {
             Contract.Requires<ArgumentNullException>(args != null);
             Contract.Requires<InvalidOperationException>(document != null);
@@ -531,37 +341,39 @@ namespace NXKit.Web
                     {
                         case "Update":
                             JsonInvokeMethod(
+                                document,
                                 typeof(ViewServer).GetMethod("ClientUpdate", BindingFlags.NonPublic | BindingFlags.Instance),
                                 (JObject)command["Args"]);
                             break;
                         case "Invoke":
                             JsonInvokeMethod(
+                                document,
                                 typeof(ViewServer).GetMethod("ClientInvoke", BindingFlags.NonPublic | BindingFlags.Instance),
                                 (JObject)command["Args"]);
                             break;
                     }
                 }
             }
-
-            return ViewResponseCode.Good;
         }
 
         /// <summary>
         /// Invokes the given method with the specified parameter values.
         /// </summary>
+        /// <param name="document"></param>
         /// <param name="method"></param>
         /// <param name="args"></param>
-        void JsonInvokeMethod(MethodInfo method, JObject args)
+        void JsonInvokeMethod(Document document, MethodInfo method, JObject args)
         {
+            Contract.Requires<ArgumentNullException>(document != null);
             Contract.Requires<ArgumentNullException>(method != null);
             Contract.Requires<ArgumentNullException>(args != null);
-            Contract.Requires<InvalidOperationException>(document != null);
 
             // assembly invocation parameter list
             var count = 0;
             var parameters = method.GetParameters();
             var invoke = new object[parameters.Length];
-            for (int i = 0; i < invoke.Length; i++)
+            invoke[0] = document;
+            for (int i = 1; i < invoke.Length; i++)
             {
                 // submitted JSON parameter value
                 var j = args.Properties()
@@ -588,18 +400,19 @@ namespace NXKit.Web
         /// <summary>
         /// Updates the given property.
         /// </summary>
+        /// <param name="document"></param>
         /// <param name="nodeId"></param>
         /// <param name="interface"></param>
         /// <param name="property"></param>
         /// <param name="value"></param>
-        void ClientUpdate(int nodeId, string @interface, string property, JValue value)
+        void ClientUpdate(Document document, int nodeId, string @interface, string property, JValue value)
         {
+            Contract.Requires<ArgumentNullException>(document != null);
             Contract.Requires<ArgumentOutOfRangeException>(nodeId > 0);
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(@interface));
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(property));
-            Contract.Requires<InvalidOperationException>(document != null);
 
-            var node = (XNode)document.Value.Xml.ResolveObjectId(nodeId);
+            var node = (XNode)document.Xml.ResolveObjectId(nodeId);
             if (node == null)
                 return;
 
@@ -609,37 +422,23 @@ namespace NXKit.Web
         /// <summary>
         /// Invokes the given method.
         /// </summary>
+        /// <param name="document"></param>
         /// <param name="nodeId"></param>
         /// <param name="interface"></param>
         /// <param name="method"></param>
         /// <param name="params"></param>
-        void ClientInvoke(int nodeId, string @interface, string method, JObject @params)
+        void ClientInvoke(Document document, int nodeId, string @interface, string method, JObject @params)
         {
+            Contract.Requires<ArgumentNullException>(document != null);
             Contract.Requires<ArgumentOutOfRangeException>(nodeId > 0);
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(@interface));
             Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(method));
-            Contract.Requires<InvalidOperationException>(document != null);
 
-            var node = (XNode)document.Value.Xml.ResolveObjectId(nodeId);
+            var node = (XNode)document.Xml.ResolveObjectId(nodeId);
             if (node == null)
                 return;
 
             RemoteHelper.Invoke(node, @interface, method, @params);
-        }
-
-        /// <summary>
-        /// Disposes of the server.
-        /// </summary>
-        public void Dispose()
-        {
-            if (document != null)
-            {
-                // only dispose if document loaded
-                if (document.IsValueCreated)
-                    document.Value.Dispose();
-
-                document = null;
-            }
         }
 
     }

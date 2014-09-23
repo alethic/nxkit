@@ -95,8 +95,8 @@ module NXKit.Web {
 
                 if (data != null) {
                     self.Apply(data['Node'] || null);
-                    self.AppendMessages(data['Messages'] || []);
-                    self.ExecuteScripts(data['Scripts'] || []);
+                    //self.AppendMessages(data['Messages'] || []);
+                    //self.ExecuteScripts(data['Scripts'] || []);
                 }
         }
 
@@ -207,8 +207,8 @@ module NXKit.Web {
 
                 // compile buffers of incoming data
                 var node = {};
-                var scripts = new Array<any>();
-                var messages = new Array<any>();
+                //var scripts = new Array<any>();
+                //var messages = new Array<any>();
 
                 // delay processing in case of new commands
                 setTimeout(() => {
@@ -239,15 +239,15 @@ module NXKit.Web {
                                 if (data != null) {
                                     // push new items into receive queue
                                     node = data['Node'] || null;
-                                    ko.utils.arrayPushAll(scripts, <any[]>data['Scripts']);
-                                    ko.utils.arrayPushAll(messages, <any[]>data['Messages']);
+                                    //ko.utils.arrayPushAll(scripts, <any[]>data['Scripts']);
+                                    //ko.utils.arrayPushAll(messages, <any[]>data['Messages']);
 
                                     // only update node data if no outstanding commands
                                     if (self._queue.length == 0) {
                                         self.ReceiveData({
                                             Node: node,
-                                            Scripts: scripts,
-                                            Messages: messages,
+                                            //Scripts: scripts,
+                                            //Messages: messages,
                                         });
                                     }
                                 }

@@ -243,6 +243,9 @@
     <Content Include="Scripts\nxkit-xforms-layout.min.js.map">
       <DependentUpon>nxkit-xforms-layout.min.js</DependentUpon>
     </Content>
+    <Content Include="Scripts\nxkit.min.js.map">
+      <DependentUpon>nxkit.min.js</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
