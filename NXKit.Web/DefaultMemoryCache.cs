@@ -5,12 +5,13 @@ using System.Runtime.Caching;
 namespace NXKit.Web
 {
 
-    [Export(typeof(ICache))]
+    [Export(typeof(IDocumentCache))]
     public class DefaultMemoryCache :
-        ICache
+        IDocumentCache
     {
 
         readonly MemoryCache cache;
+        readonly TimeSpan cacheTime = TimeSpan.FromMinutes(5);
 
         /// <summary>
         /// Initializes a new instance.
@@ -21,21 +22,14 @@ namespace NXKit.Web
             this.cache = MemoryCache.Default;
         }
 
-        public T Get<T>(string key, bool remove)
-            where T : class
+        public string Get(string key)
         {
-            var o = (T)cache.Get(typeof(DefaultMemoryCache).FullName + ":" + key);
-            if (o != null)
-                if (remove)
-                    cache.Remove(key);
-
-            return o;
+            return (string)cache.Get(typeof(DefaultMemoryCache).FullName + ":" + key);
         }
 
-        public void Add<T>(string key, T value)
-            where T : class
+        public void Set(string key, string save)
         {
-            cache.Set(typeof(DefaultMemoryCache).FullName + ":" + key, value, DateTimeOffset.UtcNow.AddMinutes(5));
+            cache.Set(typeof(DefaultMemoryCache).FullName + ":" + key, save, DateTimeOffset.UtcNow + cacheTime);
         }
 
     }

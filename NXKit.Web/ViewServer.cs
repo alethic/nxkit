@@ -25,13 +25,12 @@ namespace NXKit.Web
     /// <summary>
     /// Hosts a <see cref="Document"/> instance and provides interaction services for the client Web UI.
     /// </summary>
-    public class ViewServer :
-        IDisposable
+    public class ViewServer
     {
 
         ComposablePartCatalog catalog;
         ExportProvider exports;
-        ICache cache;
+        IDocumentCache cache;
         Lazy<Document> document;
         ViewResponseCode code;
         LinkedList<Exception> errors;
@@ -52,7 +51,7 @@ namespace NXKit.Web
         /// <param name="catalog"></param>
         /// <param name="exports"></param>
         /// <param name="cache"></param>
-        ViewServer(ComposablePartCatalog catalog = null, ExportProvider exports = null, ICache cache = null)
+        ViewServer(ComposablePartCatalog catalog = null, ExportProvider exports = null, IDocumentCache cache = null)
         {
             this.catalog = catalog;
             this.exports = exports;
@@ -362,7 +361,7 @@ namespace NXKit.Web
                 // cache save data
                 if (save != null &&
                     hash != null)
-                    cache.Add(hash, save);
+                    cache.Set(hash, save);
 
                 // respond with object containing new save and JSON tree
                 return new JObject(
@@ -413,7 +412,7 @@ namespace NXKit.Web
         {
             if (hash != null)
             {
-                var save = cache.Get<string>(hash, false);
+                var save = cache.Get(hash);
                 if (save != null)
                     return LoadFromSave(save);
             }
