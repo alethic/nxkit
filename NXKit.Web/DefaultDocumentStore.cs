@@ -40,7 +40,7 @@ namespace NXKit.Web
 
         public void Put(string hash, Document document)
         {
-            cache.Set(hash, document, DateTimeOffset.UtcNow + cacheTime);
+            cache.Set(string.Format(KEY_FORMAT, hash), document, DateTimeOffset.UtcNow + cacheTime);
         }
 
     }

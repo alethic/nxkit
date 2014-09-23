@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
@@ -88,7 +87,7 @@ namespace NXKit.Web
             Contract.Requires<ArgumentNullException>(uri != null);
 
             // load new document
-            return Save(Document.Load(uri, catalog, exports), ViewResponseCode.Good);
+            return Save(Load(() => Document.Load(uri, catalog, exports)), ViewResponseCode.Good);
         }
 
         /// <summary>
@@ -111,7 +110,7 @@ namespace NXKit.Web
             Contract.Requires<ArgumentNullException>(reader != null);
 
             // load new document
-            return Save(Document.Load(reader, catalog, exports), ViewResponseCode.Good);
+            return Save(Load(() => Document.Load(reader, catalog, exports)), ViewResponseCode.Good);
         }
 
         /// <summary>
@@ -123,7 +122,94 @@ namespace NXKit.Web
             Contract.Requires<ArgumentNullException>(reader != null);
 
             // load new document
-            return Save(Document.Load(reader, catalog, exports), ViewResponseCode.Good);
+            return Save(Load(() => Document.Load(reader, catalog, exports)), ViewResponseCode.Good);
+        }
+
+        /// <summary>
+        /// Loads and executes the object.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public object Push(JObject args)
+        {
+            Contract.Requires<ArgumentNullException>(args != null);
+
+            // load document from args
+            var document = Load(() => LoadFromArgs(args));
+            if (document == null)
+                return new JObject(new JProperty("Code", ViewResponseCode.NeedSave));
+
+            try
+            {
+                Execute(document, args);
+            }
+            catch (Exception e)
+            {
+                return new JObject(
+                    new JProperty("Code", ViewResponseCode.Fail),
+                    new JProperty("Exception", e.ToString()));
+            }
+
+            // save and return document
+            return Save(document, ViewResponseCode.Good);
+        }
+
+        /// <summary>
+        /// Raises the DocumentLoaded event.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
+        Document Load(Func<Document> func)
+        {
+            var document = func();
+            OnDocumentLoaded(new DocumentEventArgs(document));
+            return document;
+        }
+
+        /// <summary>
+        /// Raised when the <see cref="Document"/> is loaded.
+        /// </summary>
+        public event DocumentLoadedEventHandler DocumentLoaded;
+
+        /// <summary>
+        /// Raises the DocumentLoaded event.
+        /// </summary>
+        /// <param name="args"></param>
+        void OnDocumentLoaded(DocumentEventArgs args)
+        {
+            Contract.Requires<ArgumentNullException>(args != null);
+
+            if (DocumentLoaded != null)
+                DocumentLoaded(this, args);
+        }
+
+        /// <summary>
+        /// Raised when the <see cref="Document"/> is unloading.
+        /// </summary>
+        public event DocumentLoadedEventHandler DocumentUnloading;
+
+        /// <summary>
+        /// Raises the DocumentLoaded event.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
+        Document Load(Document document)
+        {
+            OnDocumentLoaded(new DocumentEventArgs(document));
+
+            return document;
+        }
+
+        /// <summary>
+        /// Raises the DocumentUnloading event.
+        /// </summary>
+        /// <param name="args"></param>
+        void OnDocumentUnloading(DocumentEventArgs args)
+        {
+            Contract.Requires<ArgumentNullException>(args != null);
+
+            if (DocumentUnloading != null)
+                DocumentUnloading(this, args);
         }
 
         /// <summary>
@@ -212,6 +298,9 @@ namespace NXKit.Web
         /// <returns></returns>
         JObject Save(Document document, ViewResponseCode code)
         {
+            // notify any last minute interested parties
+            OnDocumentUnloading(new DocumentEventArgs(document));
+
             // extract data from document
             var data = GetDataObject(document);
             var save = GetSaveString(document);
@@ -290,35 +379,6 @@ namespace NXKit.Web
                 return LoadFromHash(hash);
 
             return null;
-        }
-
-        /// <summary>
-        /// Loads and executes the object.
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public object Push(JObject args)
-        {
-            Contract.Requires<ArgumentNullException>(args != null);
-
-            // load document from args
-            var document = LoadFromArgs(args);
-            if (document == null)
-                return new JObject(new JProperty("Code", ViewResponseCode.NeedSave));
-
-            try
-            {
-                Execute(document, args);
-            }
-            catch (Exception e)
-            {
-                return new JObject(
-                    new JProperty("Code", ViewResponseCode.Fail),
-                    new JProperty("Exception", e.ToString()));
-            }
-
-            // save and return document
-            return Save(document, ViewResponseCode.Good);
         }
 
         /// <summary>

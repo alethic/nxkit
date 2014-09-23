@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace NXKit.Web
 {
@@ -7,7 +8,26 @@ namespace NXKit.Web
         EventArgs
     {
 
-        public static new readonly DocumentEventArgs Empty = new DocumentEventArgs();
+        readonly Document document;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="document"></param>
+        public DocumentEventArgs(Document document)
+        {
+            Contract.Requires<ArgumentNullException>(document != null);
+
+            this.document = document;
+        }
+
+        /// <summary>
+        /// Gets the effected <see cref="Document"/>.
+        /// </summary>
+        public Document Document
+        {
+            get { return document; }
+        }
 
     }
 
