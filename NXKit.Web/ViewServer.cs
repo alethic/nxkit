@@ -5,7 +5,6 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
@@ -269,13 +268,11 @@ namespace NXKit.Web
         /// Gets the client-side data as a <see cref="JToken"/>.
         /// </summary>
         /// <returns></returns>
-        JToken GetDataObject(Document document)
+        object GetNodeObject(Document document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
-            return new JObject(
-                new JProperty("Node",
-                    CreateNodeJObject(document)));
+            return CreateNodeJObject(document);
         }
 
         /// <summary>
@@ -286,7 +283,7 @@ namespace NXKit.Web
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
-            return JsonConvert.SerializeObject(GetDataObject(document));
+            return JsonConvert.SerializeObject(GetNodeObject(document));
         }
 
         /// <summary>
@@ -299,7 +296,8 @@ namespace NXKit.Web
             OnDocumentUnloading(new DocumentEventArgs(document));
 
             // extract data from document
-            var data = GetDataObject(document);
+            var cmds = document.Container.GetExportedValues<ICommandProvider>().SelectMany(i => i.GetCommands()).ToArray();
+            var node = GetNodeObject(document);
             var save = GetSaveString(document);
             var hash = GetMD5HashText(save);
 
@@ -308,7 +306,10 @@ namespace NXKit.Web
             cache.Set(hash, save);
 
             // respond with object containing new save and JSON tree
-            return new ViewMessage(status, hash, save, data);
+            return new ViewMessage(status, hash, save, node)
+            {
+                Commands = cmds,
+            };
         }
 
         /// <summary>
@@ -384,60 +385,19 @@ namespace NXKit.Web
             {
                 foreach (var command in message.Commands)
                 {
-                    if (command is ViewMessageUpdateCommand)
+                    if (command is Commands.Update)
                     {
-                        var cmd = (ViewMessageUpdateCommand)command;
+                        var cmd = (Commands.Update)command;
                         ClientUpdate(document, cmd.NodeId, cmd.Interface, cmd.Property, cmd.Value);
                     }
 
-                    if (command is ViewMessageInvokeCommand)
+                    if (command is Commands.Invoke)
                     {
-                        var cmd = (ViewMessageInvokeCommand)command;
+                        var cmd = (Commands.Invoke)command;
                         ClientInvoke(document, cmd.NodeId, cmd.Interface, cmd.Method, cmd.Parameters);
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Invokes the given method with the specified parameter values.
-        /// </summary>
-        /// <param name="document"></param>
-        /// <param name="method"></param>
-        /// <param name="args"></param>
-        void JsonInvokeMethod(Document document, MethodInfo method, ViewCommandArg[] args)
-        {
-            Contract.Requires<ArgumentNullException>(document != null);
-            Contract.Requires<ArgumentNullException>(method != null);
-            Contract.Requires<ArgumentNullException>(args != null);
-
-            // assembly invocation parameter list
-            var count = 0;
-            var parameters = method.GetParameters();
-            var invoke = new object[parameters.Length];
-            invoke[0] = document;
-            for (int i = 1; i < invoke.Length; i++)
-            {
-                // submitted JSON parameter value
-                var j = args
-                    .FirstOrDefault(k => string.Equals(parameters[i].Name, k.Name, StringComparison.InvariantCultureIgnoreCase));
-                if (j == null)
-                    break;
-
-                // convert JObject to appropriate type
-                var t = parameters[i].ParameterType;
-                var o = j != null && j.Value != null ? Convert.ChangeType(j.Value, t) : null;
-
-                // successful conversion
-                invoke[i] = o;
-                count = i + 1;
-            }
-
-            // unsuccessful parameter count
-            if (count != parameters.Length)
-                throw new MissingMethodException();
-
-            method.Invoke(this, invoke);
         }
 
         /// <summary>

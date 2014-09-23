@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace NXKit.Web
+namespace NXKit.Web.Commands
 {
 
-    public class ViewMessageInvokeCommand :
-        ViewMessageCommand
+    public class Invoke :
+        Command
     {
 
         /// <summary>

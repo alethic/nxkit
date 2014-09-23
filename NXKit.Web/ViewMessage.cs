@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using NXKit.Web.Commands;
+
+using Newtonsoft.Json;
+
 namespace NXKit.Web
 {
 
@@ -28,13 +31,13 @@ namespace NXKit.Web
         /// <param name="status"></param>
         /// <param name="hash"></param>
         /// <param name="save"></param>
-        /// <param name="data"></param>
-        public ViewMessage(ViewMessageStatus status, string hash, string save, object data)
+        /// <param name="node"></param>
+        public ViewMessage(ViewMessageStatus status, string hash, string save, object node)
         {
             Status = status;
             Hash = hash;
             Save = save;
-            Data = data;
+            Node = node;
         }
 
         /// <summary>
@@ -55,13 +58,13 @@ namespace NXKit.Web
         /// <summary>
         /// Gets or sets the root remote node.
         /// </summary>
-        public object Data { get; set; }
+        public object Node { get; set; }
 
         /// <summary>
-        /// Set of <see cref="ViewMessageCommand"/>'s to be executed.
+        /// Set of <see cref="ViewCommand"/>'s to be executed.
         /// </summary>
-        [JsonProperty(ItemConverterType = typeof(ViewMessageCommandJsonConverter))]
-        public ViewMessageCommand[] Commands { get; set; }
+        [JsonProperty(ItemTypeNameHandling = TypeNameHandling.Objects)]
+        public Command[] Commands { get; set; }
 
     }
 

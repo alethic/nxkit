@@ -15,7 +15,6 @@ module NXKit.Web {
         private _hash: string;
         private _root: Node;
         private _bind: boolean;
-        private _messages: KnockoutObservableArray<Message>;
         private _threshold: Severity;
 
         private _queue: any[];
@@ -33,7 +32,6 @@ module NXKit.Web {
             self._root = null;
             self._bind = true;
 
-            self._messages = Util.ObservableArray<Message>();
             self._threshold = Severity.Warning;
 
             self._queue = new Array<any>();
@@ -60,10 +58,6 @@ module NXKit.Web {
             return this._root;
         }
 
-        public get Messages(): KnockoutObservableArray<Message> {
-            return this._messages;
-        }
-
         public get Threshold(): Severity {
             return this._threshold;
         }
@@ -78,59 +72,49 @@ module NXKit.Web {
         public Receive(args: any) {
             var self = this;
 
-                self._save = args.Save || self._save;
-                self._hash = args.Hash || self._hash;
+            self._save = args.Save || self._save;
+            self._hash = args.Hash || self._hash;
 
-                var data = args.Data || null;
-                if (data != null) {
-                    self.ReceiveData(data);
-                }
+            var node = args.Node || null;
+            if (node != null) {
+                self.ReceiveNode(node);
+            }
+
+            var commands = args.Commands || null;
+            if (commands != null) {
+                self.ReceiveCommands(commands);
+            }
         }
 
         /**
          * Updates the view in response to a received data package.
          */
-        public ReceiveData(data: any) {
+        public ReceiveNode(node: any) {
             var self = this;
 
-                if (data != null) {
-                    self.Apply(data.Node || null);
-                    //self.AppendMessages(data['Messages'] || []);
-                    //self.ExecuteScripts(data['Scripts'] || []);
-                }
+            if (node != null) {
+                self.Apply(node || null);
+            }
         }
 
         /**
          * Updates the messages of the view with the specified items.
          */
-        private AppendMessages(messages: any[]) {
+        public ReceiveCommands(commands: any[]) {
             var self = this;
 
-            for (var i = 0; i < messages.length; i++) {
+            for (var i = 0; i < commands.length; i++) {
+                var command = commands[i];
+                if (command != null) {
 
-                var severity = <Severity>((<any>Severity)[<string>(messages[i].Severity)]);
-                var text = messages[i].Text || '';
-                if (severity >= self._threshold)
-                    self._messages.push(new Message(severity, text));
+                    if (command.$type === 'NXKit.Web.Commands.Script, NXKit.Web') {
+                        if (command.Code != null) {
+                            eval(command.Code);
+                        }
+                    }
+
+                }
             }
-        }
-
-        /**
-         * Executes the given scripts.
-         */
-        private ExecuteScripts(scripts: string[]) {
-            for (var i = 0; i < scripts.length; i++) {
-                var script = scripts[i];
-                if (script != null)
-                    eval(script);
-            }
-        }
-
-        /**
-         * Removes the current message from the set of messages.
-         */
-        public RemoveMessage(message: Message) {
-            this._messages.remove(message);
         }
 
         /**
@@ -160,13 +144,11 @@ module NXKit.Web {
 
             // generate update command
             var command = {
-                Action: 'Update',
-                Args: {
-                    NodeId: node.Id,
-                    Interface: $interface.Name,
-                    Property: property.Name,
-                    Value: value,
-                }
+                $type: 'NXKit.Web.Commands.Update, NXKit.Web',
+                NodeId: node.Id,
+                Interface: $interface.Name,
+                Property: property.Name,
+                Value: value,
             };
 
             self.Queue(command);
@@ -178,13 +160,11 @@ module NXKit.Web {
 
             // generate push action
             var data = {
-                Action: 'Invoke',
-                Args: {
-                    NodeId: node.Id,
-                    Interface: interfaceName,
-                    Method: methodName,
-                    Parameters: parameters,
-                }
+                $type: 'NXKit.Web.Commands.Invoke, NXKit.Web',
+                NodeId: node.Id,
+                Interface: interfaceName,
+                Method: methodName,
+                Parameters: parameters,
             };
 
             self.Queue(data);
@@ -207,8 +187,7 @@ module NXKit.Web {
 
                 // compile buffers of incoming data
                 var node = {};
-                //var scripts = new Array<any>();
-                //var messages = new Array<any>();
+                var todo = new Array<any>();
 
                 // delay processing in case of new commands
                 setTimeout(() => {
@@ -216,17 +195,11 @@ module NXKit.Web {
 
                     // recursive call to work queue
                     var push = () => {
-                        var commands = self._queue.splice(0);
+                        var send = self._queue.splice(0);
 
                         // callback for server response
                         var cb = (args: any) => {
                             if (args.Status == 200) {
-
-                                // receive saved state
-                                var save = args.Save || null;
-                                if (save != null) {
-                                    this._save = save;
-                                }
 
                                 // receive saved state hash
                                 var hash = args.Hash || null;
@@ -234,22 +207,30 @@ module NXKit.Web {
                                     this._hash = hash;
                                 }
 
-                                // receive data response
-                                var data = args.Data || null;
-                                if (data != null) {
-                                    // push new items into receive queue
-                                    node = data.Node || null;
-                                    //ko.utils.arrayPushAll(scripts, <any[]>data['Scripts']);
-                                    //ko.utils.arrayPushAll(messages, <any[]>data['Messages']);
+                                // receive saved state
+                                var save = args.Save || null;
+                                if (save != null) {
+                                    this._save = save;
+                                }
 
-                                    // only update node data if no outstanding commands
-                                    if (self._queue.length == 0) {
-                                        self.ReceiveData({
-                                            Node: node,
-                                            //Scripts: scripts,
-                                            //Messages: messages,
-                                        });
-                                    }
+                                // buffer application of node
+                                if (args.Node != null) {
+                                    node = args.Node;
+                                }
+
+                                // buffer commands
+                                if (args.Commands != null) {
+                                    ko.utils.arrayPushAll(todo, <any[]>args.Commands);
+                                }
+
+                                // only update node data if no outstanding commands
+                                if (self._queue.length == 0) {
+                                    self.Receive({
+                                        Hash: this._hash,
+                                        Save: this._save,
+                                        Node: node,
+                                        Commands: todo,
+                                    });
                                 }
 
                                 // recurse
@@ -259,7 +240,7 @@ module NXKit.Web {
                                 self._server({
                                     Save: self._save,
                                     Hash: self._hash,
-                                    Commands: commands,
+                                    Commands: send,
                                 }, cb);
                             } else if (args.Status == 500) {
                                 for (var i = 0; i < args.Errors.length; i++) {
@@ -270,11 +251,11 @@ module NXKit.Web {
                             }
                         };
 
-                        if (commands.length > 0) {
+                        if (send.length > 0) {
                             // send commands
                             self._server({
                                 Hash: self._hash,
-                                Commands: commands,
+                                Commands: send,
                             }, cb);
                         } else {
                             // no commands, exit
