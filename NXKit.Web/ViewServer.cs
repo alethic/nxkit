@@ -133,13 +133,13 @@ namespace NXKit.Web
             Contract.Requires<ArgumentNullException>(message != null);
 
             // load document from args
-            var document = Load(() => LoadFromMessage(message));
+            var document = LoadFromMessage(message);
             if (document == null)
                 return new ViewMessage(ViewMessageStatus.NotFound);
 
             try
             {
-                Execute(document, message);
+                Execute(Load(() => document), message);
             }
             catch (Exception e)
             {
@@ -183,18 +183,6 @@ namespace NXKit.Web
         /// Raised when the <see cref="Document"/> is unloading.
         /// </summary>
         public event DocumentLoadedEventHandler DocumentUnloading;
-
-        /// <summary>
-        /// Raises the DocumentLoaded event.
-        /// </summary>
-        /// <param name="document"></param>
-        /// <returns></returns>
-        Document Load(Document document)
-        {
-            OnDocumentLoaded(new DocumentEventArgs(document));
-
-            return document;
-        }
 
         /// <summary>
         /// Raises the DocumentUnloading event.
