@@ -129,7 +129,7 @@ namespace NXKit.Web
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public ViewMessage Push(ViewMessage message)
+        public ViewMessage Load(ViewMessage message)
         {
             Contract.Requires<ArgumentNullException>(message != null);
 

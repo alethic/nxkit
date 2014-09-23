@@ -17,9 +17,9 @@ namespace NXKit.Web.Ng.Test.Site.Controllers
             return server.Load(new Uri(Request.RequestUri, "/Examples/" + name + ".xml"));
         }
 
-        public object Post(string name, JObject args)
+        public object Post(string name, ViewMessage message)
         {
-            return server.Push(args);
+            return server.Load(message);
         }
 
     }

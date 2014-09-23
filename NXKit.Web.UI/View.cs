@@ -25,6 +25,7 @@ namespace NXKit.Web.UI
         string cssClass;
         string validationGroup;
         ViewServer server;
+        ViewMessage message;
 
         /// <summary>
         /// Initializes a new instance.
@@ -32,6 +33,8 @@ namespace NXKit.Web.UI
         public View()
         {
             this.server = new ViewServer();
+            this.server.DocumentLoaded += (s, a) => OnDocumentLoaded(a);
+            this.server.DocumentUnloading += (s, a) => OnDocumentUnloading(a);
         }
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets or sets the additional set of exports to introduce to the document.
+        /// Gets or sets the additional set of exports to introduce to newly generated documents.
         /// </summary>
         public ExportProvider Exports
         {
@@ -64,20 +67,12 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Gets or sets the additional set of parts to introduce to the document.
+        /// Gets or sets the additional set of parts to introduce to newly generated documents.
         /// </summary>
         public ComposablePartCatalog Catalog
         {
             get { return server.Catalog; }
             set { server.Catalog = value; }
-        }
-
-        /// <summary>
-        /// Gets a reference to the <see cref="Document"/>.
-        /// </summary>
-        public Document Document
-        {
-            get { return server.Document; }
         }
 
         /// <summary>
@@ -104,20 +99,10 @@ namespace NXKit.Web.UI
         /// Raises the DocumentUnloading event.
         /// </summary>
         /// <param name="args"></param>
-        void OnHostUnloading(DocumentEventArgs args)
+        void OnDocumentUnloading(DocumentEventArgs args)
         {
             if (DocumentUnloading != null)
                 DocumentUnloading(this, args);
-        }
-
-        /// <summary>
-        /// Registers the given script snippet for execution upon completion of the current page request or client
-        /// callback.
-        /// </summary>
-        /// <param name="script"></param>
-        public void RegisterScript(string script)
-        {
-            server.RegisterScript(script);
         }
 
         /// <summary>
@@ -128,7 +113,7 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            server.Load(uri);
+            message = server.Load(uri);
         }
 
         /// <summary>
@@ -139,7 +124,7 @@ namespace NXKit.Web.UI
         {
             Contract.Requires<ArgumentNullException>(uri != null);
 
-            server.Load(uri);
+            message = server.Load(uri);
         }
 
         /// <summary>
@@ -160,7 +145,7 @@ namespace NXKit.Web.UI
         {
             base.OnPreRender(args);
 
-            if (server.Document != null)
+            if (message != null)
             {
                 ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
                 Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"')._onsubmit();");
@@ -175,7 +160,7 @@ namespace NXKit.Web.UI
         {
             var o = (object[])savedState;
             if ((string)o[0] != null)
-                server.Load(JObject.Parse((string)o[0]));
+                message = server.Load(JsonConvert.DeserializeObject<ViewMessage>(((string)o[0])));
             cssClass = (string)o[1];
             validationGroup = (string)o[2];
         }
@@ -188,7 +173,7 @@ namespace NXKit.Web.UI
         {
             return new object[] 
             {
-                !Visible && server.Document != null ? server.Save().ToString(Formatting.None) : null,
+                !Visible && message != null ? JsonConvert.SerializeObject(message) : null,
                 cssClass,
                 validationGroup,
             };
@@ -208,7 +193,7 @@ namespace NXKit.Web.UI
             writer.RenderEndTag();
             writer.WriteLine();
 
-            if (server.Document != null)
+            if (message != null)
             {
                 ScriptManager.GetCurrent(Page).RegisterScriptDescriptors(this);
 
@@ -216,7 +201,7 @@ namespace NXKit.Web.UI
                 writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID);
                 writer.AddAttribute(HtmlTextWriterAttribute.Class, "data");
                 writer.AddAttribute(HtmlTextWriterAttribute.Type, "hidden");
-                writer.AddAttribute(HtmlTextWriterAttribute.Value, server.Save().ToString(Formatting.None));
+                writer.AddAttribute(HtmlTextWriterAttribute.Value, JsonConvert.SerializeObject(message));
                 writer.RenderBeginTag(HtmlTextWriterTag.Input);
                 writer.RenderEndTag();
                 writer.WriteLine();
@@ -260,7 +245,7 @@ namespace NXKit.Web.UI
 
             var text = postCollection[postDataKey];
             if (!string.IsNullOrWhiteSpace(text))
-                server.Push(JObject.Parse(text));
+                message = server.Load(JsonConvert.DeserializeObject<ViewMessage>(text));
 
             return false;
         }
@@ -279,7 +264,7 @@ namespace NXKit.Web.UI
         /// <param name="eventArgument"></param>
         void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
         {
-            server.Push(JObject.Parse(eventArgument));
+            message = server.Load(JsonConvert.DeserializeObject<ViewMessage>(eventArgument));
         }
 
         /// <summary>
@@ -288,7 +273,7 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         string ICallbackEventHandler.GetCallbackResult()
         {
-            return server.Save().ToString(Formatting.None);
+            return JsonConvert.SerializeObject(message);
         }
 
     }
