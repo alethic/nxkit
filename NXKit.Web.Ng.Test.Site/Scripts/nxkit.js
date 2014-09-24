@@ -1,4 +1,5 @@
-var ___init_nxkit___ = function ($, ko) {
+(function() {
+var init = function ($, ko) {
 
 var NXKit;
 (function (NXKit) {
@@ -1561,7 +1562,6 @@ var NXKit;
                 self._root = null;
                 self._bind = true;
 
-                self._messages = Web.Util.ObservableArray();
                 self._threshold = 3 /* Warning */;
 
                 self._queue = new Array();
@@ -1603,14 +1603,6 @@ var NXKit;
                 configurable: true
             });
 
-            Object.defineProperty(View.prototype, "Messages", {
-                get: function () {
-                    return this._messages;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
             Object.defineProperty(View.prototype, "Threshold", {
                 get: function () {
                     return this._threshold;
@@ -1629,41 +1621,56 @@ var NXKit;
                 self._save = args.Save || self._save;
                 self._hash = args.Hash || self._hash;
 
-                var data = args.Data || null;
-                if (data != null) {
-                    self.ReceiveData(data);
+                var node = args.Node || null;
+                if (node != null) {
+                    self.ReceiveNode(node);
+                }
+
+                var commands = args.Commands || null;
+                if (commands != null) {
+                    self.ReceiveCommands(commands);
                 }
             };
 
-            View.prototype.ReceiveData = function (data) {
+            View.prototype.ReceiveNode = function (node) {
                 var self = this;
 
-                if (data != null) {
-                    self.Apply(data.Node || null);
+                if (node != null) {
+                    self.Apply(node || null);
                 }
             };
 
-            View.prototype.AppendMessages = function (messages) {
+            View.prototype.ReceiveCommands = function (commands) {
                 var self = this;
 
-                for (var i = 0; i < messages.length; i++) {
-                    var severity = (Web.Severity[(messages[i].Severity)]);
-                    var text = messages[i].Text || '';
-                    if (severity >= self._threshold)
-                        self._messages.push(new Web.Message(severity, text));
-                }
-            };
+                for (var i = 0; i < commands.length; i++) {
+                    var command = commands[i];
+                    if (command != null) {
+                        if (command.$type === 'NXKit.Web.Commands.Trace, NXKit.Web') {
+                            if (command.Message != null && typeof console === 'object') {
+                                var func;
+                                if (command.Message.Severity === 'Error' && typeof console.error === 'function')
+                                    func = console.error;
+                                if (command.Message.Severity === 'Warning' && typeof console.warn === 'function')
+                                    func = console.warn;
+                                if (command.Message.Severity === 'Information' && typeof console.info === 'function')
+                                    func = console.info;
+                                if (command.Message.Severity === 'Verbose' && typeof console.log === 'function')
+                                    func = console.log;
+                                if (func == null)
+                                    func = console.log;
 
-            View.prototype.ExecuteScripts = function (scripts) {
-                for (var i = 0; i < scripts.length; i++) {
-                    var script = scripts[i];
-                    if (script != null)
-                        eval(script);
-                }
-            };
+                                func('%s : %s', command.Message.Timestamp, command.Message.Text);
+                            }
+                        }
 
-            View.prototype.RemoveMessage = function (message) {
-                this._messages.remove(message);
+                        if (command.$type === 'NXKit.Web.Commands.Script, NXKit.Web') {
+                            if (command.Code != null) {
+                                eval(command.Code);
+                            }
+                        }
+                    }
+                }
             };
 
             View.prototype.Apply = function (data) {
@@ -1683,13 +1690,11 @@ var NXKit;
                 Web.Log.Debug('View.PushUpdate');
 
                 var command = {
-                    Action: 'Update',
-                    Args: {
-                        NodeId: node.Id,
-                        Interface: $interface.Name,
-                        Property: property.Name,
-                        Value: value
-                    }
+                    $type: 'NXKit.Web.Commands.Update, NXKit.Web',
+                    NodeId: node.Id,
+                    Interface: $interface.Name,
+                    Property: property.Name,
+                    Value: value
                 };
 
                 self.Queue(command);
@@ -1700,13 +1705,11 @@ var NXKit;
                 Web.Log.Debug('View.PushInvoke');
 
                 var data = {
-                    Action: 'Invoke',
-                    Args: {
-                        NodeId: node.Id,
-                        Interface: interfaceName,
-                        Method: methodName,
-                        Parameters: parameters
-                    }
+                    $type: 'NXKit.Web.Commands.Invoke, NXKit.Web',
+                    NodeId: node.Id,
+                    Interface: interfaceName,
+                    Method: methodName,
+                    Parameters: parameters
                 };
 
                 self.Queue(data);
@@ -1724,34 +1727,41 @@ var NXKit;
                     self._queueRunning = true;
 
                     var node = {};
+                    var todo = new Array();
 
                     setTimeout(function () {
                         self._busy(true);
 
                         var push = function () {
-                            var commands = self._queue.splice(0);
+                            var send = self._queue.splice(0);
 
                             var cb = function (args) {
                                 if (args.Status == 200) {
-                                    var save = args.Save || null;
-                                    if (save != null) {
-                                        _this._save = save;
-                                    }
-
                                     var hash = args.Hash || null;
                                     if (hash != null) {
                                         _this._hash = hash;
                                     }
 
-                                    var data = args.Data || null;
-                                    if (data != null) {
-                                        node = data.Node || null;
+                                    var save = args.Save || null;
+                                    if (save != null) {
+                                        _this._save = save;
+                                    }
 
-                                        if (self._queue.length == 0) {
-                                            self.ReceiveData({
-                                                Node: node
-                                            });
-                                        }
+                                    if (args.Node != null) {
+                                        node = args.Node;
+                                    }
+
+                                    if (args.Commands != null) {
+                                        ko.utils.arrayPushAll(todo, args.Commands);
+                                    }
+
+                                    if (self._queue.length == 0) {
+                                        self.Receive({
+                                            Hash: _this._hash,
+                                            Save: _this._save,
+                                            Node: node,
+                                            Commands: todo
+                                        });
                                     }
 
                                     push();
@@ -1759,7 +1769,7 @@ var NXKit;
                                     self._server({
                                         Save: self._save,
                                         Hash: self._hash,
-                                        Commands: commands
+                                        Commands: send
                                     }, cb);
                                 } else if (args.Status == 500) {
                                     for (var i = 0; i < args.Errors.length; i++) {
@@ -1770,10 +1780,10 @@ var NXKit;
                                 }
                             };
 
-                            if (commands.length > 0) {
+                            if (send.length > 0) {
                                 self._server({
                                     Hash: self._hash,
-                                    Commands: commands
+                                    Commands: send
                                 }, cb);
                             } else {
                                 self._queueRunning = false;
@@ -1991,10 +2001,28 @@ var NXKit;
 
 if (typeof define === "function" && define.amd) {
     define("nxkit", ['jquery', 'knockout'], function ($, ko) {
-        return ___init_nxkit___($, ko);
+        return init($, ko);
     });
-} else if (typeof $ === "function" && typeof ko === "object") {
-    ___init_nxkit___($, ko);
 } else {
-    throw new Error("RequireJS missing or jQuery and knockout missing.");
+    var hold = false;
+    var loop = function () {
+        if (typeof $ === "function" && typeof ko === "object") {
+            init($, ko);
+            if (hold) {
+                $.holdReady(hold = false);
+            }
+        } else {
+            if (typeof $ === "function") {
+                $.holdReady(hold = true);
+            }
+
+            if (typeof console.warn === "function") {
+                console.warn("nxkit: RequireJS missing or jQuery and knockout missing, retrying.");
+            }
+
+            window.setTimeout(loop, 100);
+        }
+    };
+    loop();
 }
+}());

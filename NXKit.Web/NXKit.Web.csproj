@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AssemblyName>NXKit.Web</AssemblyName>
     <OutputPath>bin</OutputPath>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -26,6 +26,7 @@
     <IISExpressUseClassicPipelineMode />
     <RootNamespace>NXKit.Web</RootNamespace>
     <NuGetPackageImportStamp>edc32d76</NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -69,6 +70,7 @@
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -112,11 +114,12 @@
     <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
     <DocumentationFile>bin\Release\NXKit.Web.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -196,9 +199,6 @@
     <None Include="NXKit.Web.nuspec" />
     <None Include="package.json" />
     <None Include="packages.config" />
-    <None Include="View.css.map">
-      <DependentUpon>View.css</DependentUpon>
-    </None>
     <None Include="View.less" />
   </ItemGroup>
   <ItemGroup>
@@ -230,12 +230,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="gulpfile.js" />
-    <Content Include="View.css">
-      <DependentUpon>View.less</DependentUpon>
-    </Content>
-    <Content Include="View.min.css">
-      <DependentUpon>View.css</DependentUpon>
-    </Content>
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
@@ -271,17 +265,35 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptOutFile>nxkit.ts.js</TypeScriptOutFile>
   </PropertyGroup>
-  <Target Name="GulpBuild">
-    <Exec Command="&quot;$(ProjectDir)node_modules/.bin/gulp&quot; --TargetDir $(TargetDir)" WorkingDirectory="$(ProjectDir)" />
+  <Target Name="GulpClean">
+    <Exec Command="&quot;$(ProjectDir)node_modules/.bin/gulp&quot; --OutputPath $(ProjectDir)$(IntermediateOutputPath) clean" WorkingDirectory="$(ProjectDir)" />
   </Target>
-  <PropertyGroup>
-    <BuildDependsOn>
-            $(BuildDependsOn);
-            GulpBuild;
-        </BuildDependsOn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
-  </PropertyGroup>
+  <Target Name="GulpBuild" DependsOnTargets="CompileTypeScript">
+    <Exec Command="&quot;$(ProjectDir)node_modules/.bin/gulp&quot; --OutputPath $(ProjectDir)$(IntermediateOutputPath)" WorkingDirectory="$(ProjectDir)" />
+      <ItemGroup>
+          <EmbeddedResource Include="$(ProjectDir)$(IntermediateOutputPath)\nxkit.js">
+              <LogicalName>NXKit.Web.nxkit.js</LogicalName>
+          </EmbeddedResource>
+          <EmbeddedResource Include="$(ProjectDir)$(IntermediateOutputPath)\nxkit.min.js">
+              <LogicalName>NXKit.Web.nxkit.min.js</LogicalName>
+          </EmbeddedResource>
+          <EmbeddedResource Include="$(ProjectDir)$(IntermediateOutputPath)\nxkit.html">
+              <LogicalName>NXKit.Web.nxkit.html</LogicalName>
+          </EmbeddedResource>
+          <EmbeddedResource Include="$(ProjectDir)$(IntermediateOutputPath)\nxkit.css">
+              <LogicalName>NXKit.Web.nxkit.css</LogicalName>
+          </EmbeddedResource>
+      </ItemGroup>
+  </Target>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
+  <PropertyGroup>
+    <CleanDependsOn>
+            $(CleanDependsOn);
+            GulpClean;
+        </CleanDependsOn>
+    <CompileDependsOn>
+            GulpBuild;
+            $(CompileDependsOn);
+        </CompileDependsOn>
+  </PropertyGroup>
 </Project>

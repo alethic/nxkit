@@ -5,6 +5,9 @@ using System.Runtime.Caching;
 namespace NXKit.Web
 {
 
+    /// <summary>
+    /// Caches document state in a memory cache to later be reconstituted.
+    /// </summary>
     [Export(typeof(IDocumentCache))]
     public class DefaultDocumentCache :
         IDocumentCache

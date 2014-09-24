@@ -5,7 +5,7 @@ module NXKit.Web.Knockout {
     export class TemplateBindingHandler
         implements KnockoutBindingHandler {
 
-        public init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): void {
+        public init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: KnockoutAllBindingsAccessor, viewModel: any, bindingContext: KnockoutBindingContext): void {
             return ko.bindingHandlers.template.init(
                 element,
                 TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext),
@@ -14,7 +14,7 @@ module NXKit.Web.Knockout {
                 bindingContext);
         }
 
-        public update(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): void {
+        public update(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: KnockoutAllBindingsAccessor, viewModel: any, bindingContext: KnockoutBindingContext): void {
             return ko.bindingHandlers.template.update(
                 element,
                 TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext),
