@@ -140,6 +140,10 @@
     <Content Include="Content\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\normalize.css" />
+    <Content Include="Content\nxkit-xforms.css" />
+    <Content Include="Content\nxkit-xforms.html" />
+    <Content Include="Content\nxkit.css" />
+    <Content Include="Content\nxkit.html" />
     <Content Include="Content\semantic\less\collections\breadcrumb.less" />
     <Content Include="Content\semantic\less\collections\form.less" />
     <Content Include="Content\semantic\less\collections\grid.less" />
@@ -237,25 +241,14 @@
     <Content Include="Content\semantic\packaged\images\loader-small.gif" />
     <Content Include="Content\semantic\packaged\javascript\semantic.js" />
     <Content Include="Content\semantic\packaged\javascript\semantic.min.js" />
-    <Content Include="Content\xforms-layout.css">
-      <DependentUpon>xforms-layout.less</DependentUpon>
-    </Content>
-    <Content Include="Content\xforms.css">
-      <DependentUpon>xforms.less</DependentUpon>
-    </Content>
     <Content Include="Default.aspx" />
     <Content Include="Content\styles.less" />
     <Content Include="Global.asax" />
     <Content Include="Content\semantic.less" />
     <Content Include="Examples\Post.ashx" />
-    <Content Include="Content\xforms-layout.less" />
-    <Content Include="Content\xforms.css.map">
-      <DependentUpon>xforms.css</DependentUpon>
-    </Content>
-    <Content Include="Content\xforms-layout.css.map">
-      <DependentUpon>xforms-layout.css</DependentUpon>
-    </Content>
     <Content Include="packages.config" />
+    <Content Include="Content\xforms-layout.less" />
+    <Content Include="Content\xforms.less" />
     <None Include="Properties\PublishProfiles\nxkit.pubxml" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
@@ -264,6 +257,10 @@
     <Content Include="Scripts\knockout-3.1.0.js" />
     <Content Include="Scripts\less-1.7.0.js" />
     <Content Include="Scripts\less-1.7.0.min.js" />
+    <Content Include="Scripts\nxkit-xforms.js" />
+    <Content Include="Scripts\nxkit-xforms.min.js" />
+    <Content Include="Scripts\nxkit.js" />
+    <Content Include="Scripts\nxkit.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -284,7 +281,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\xforms.less" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
@@ -335,6 +331,7 @@
     <ProjectReference Include="..\NXKit.XForms.Layout.View.Js\NXKit.XForms.Layout.View.Js.csproj">
       <Project>{9499152c-156e-4005-a01f-4d6f1c480c63}</Project>
       <Name>NXKit.XForms.Layout.View.Js</Name>
+        <WebContent>true</WebContent>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
       <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
