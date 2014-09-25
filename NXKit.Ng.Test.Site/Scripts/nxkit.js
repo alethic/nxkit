@@ -4,316 +4,19 @@ var init = function ($, ko) {
 var NXKit;
 (function (NXKit) {
     (function (Web) {
-        (function (Knockout) {
-            var InputBindingHandler = (function () {
-                function InputBindingHandler() {
-                }
-                InputBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    ko.bindingHandlers['value'].init(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-
-                InputBindingHandler._update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    ko.bindingHandlers['value'].update(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-
-                InputBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    InputBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-
-                InputBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    InputBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-                return InputBindingHandler;
-            })();
-            Knockout.InputBindingHandler = InputBindingHandler;
-
-            ko.bindingHandlers['nxkit_input'] = new InputBindingHandler();
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Util) {
-            function Observable(value) {
-                return ko.observable(value).extend({
-                    rateLimit: {
-                        timeout: 50,
-                        method: "notifyWhenChangesStop"
-                    }
-                });
-            }
-            Util.Observable = Observable;
-
-            function ObservableArray(value) {
-                return ko.observableArray(value).extend({
-                    rateLimit: {
-                        timeout: 50,
-                        method: "notifyWhenChangesStop"
-                    }
-                });
-            }
-            Util.ObservableArray = ObservableArray;
-
-            function Computed(def) {
-                return ko.computed(def).extend({
-                    rateLimit: {
-                        timeout: 50,
-                        method: "notifyWhenChangesStop"
-                    }
-                });
-            }
-            Util.Computed = Computed;
-
-            function DeepEquals(a, b, f) {
-                if (f != null) {
-                    var t = f(a, b);
-                    if (t != null) {
-                        return t;
-                    }
-                }
-
-                if (a == null && b === null)
-                    return true;
-
-                if (typeof a !== typeof b)
-                    return false;
-
-                if (typeof a === 'boolean' && typeof b === 'boolean')
-                    return a === b;
-
-                if (typeof a === 'string' && typeof b === 'string')
-                    return a === b;
-
-                if (typeof a === 'number' && typeof b === 'number')
-                    return a === b;
-
-                if (typeof a === 'function' && typeof b === 'function')
-                    return a.toString() === b.toString();
-
-                for (var i in a) {
-                    if (a.hasOwnProperty(i)) {
-                        if (!b.hasOwnProperty(i)) {
-                            if (!Util.DeepEquals(a[i], null, f)) {
-                                return false;
-                            }
-                        } else if (!Util.DeepEquals(a[i], b[i], f)) {
-                            return false;
-                        }
-                    }
-                }
-
-                for (var i in b) {
-                    if (b.hasOwnProperty(i)) {
-                        if (!a.hasOwnProperty(i)) {
-                            if (!Util.DeepEquals(null, b[i], f)) {
-                                return false;
-                            }
-                        } else if (!Util.DeepEquals(a[i], b[i], f)) {
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
-            }
-            Util.DeepEquals = DeepEquals;
-
-            function GenerateGuid() {
-                var s = [];
-                var d = "0123456789abcdef";
-                for (var i = 0; i < 36; i++) {
-                    s[i] = d.substr(Math.floor(Math.random() * 0x10), 1);
-                }
-                s[14] = "4";
-                s[19] = d.substr((s[19] & 0x3) | 0x8, 1);
-                s[8] = s[13] = s[18] = s[23] = "-";
-
-                return s.join("");
-            }
-            Util.GenerateGuid = GenerateGuid;
-
-            function GetContextItems(context) {
-                return [context.$data].concat(context.$parents);
-            }
-            Util.GetContextItems = GetContextItems;
-
-            function GetLayoutManager(context) {
-                return ko.utils.arrayFirst(GetContextItems(context), function (_) {
-                    return _ instanceof Web.LayoutManager;
-                });
-            }
-            Util.GetLayoutManager = GetLayoutManager;
-        })(Web.Util || (Web.Util = {}));
-        var Util = Web.Util;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var OptionsBindingHandler = (function () {
-                function OptionsBindingHandler() {
-                }
-                OptionsBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                    var opts = new Web.LayoutOptions(valueAccessor());
-
-                    var ctx1 = bindingContext.createChildContext(opts, null, null);
-
-                    var ctx2 = ctx1.createChildContext(viewModel, null, null);
-
-                    ko.applyBindingsToDescendants(ctx2, element);
-
-                    return {
-                        controlsDescendantBindings: true
-                    };
-                };
-                return OptionsBindingHandler;
-            })();
-            Knockout.OptionsBindingHandler = OptionsBindingHandler;
-
-            ko.bindingHandlers['nxkit_layout'] = new OptionsBindingHandler();
-            ko.virtualElements.allowedBindings['nxkit_layout'] = true;
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-$.fn.extend({
-    slideRightShow: function () {
-        return this.each(function () {
-            $(this).show('slide', { direction: 'right' }, 1000);
-        });
-    },
-    slideLeftHide: function () {
-        return this.each(function () {
-            $(this).hide('slide', { direction: 'left' }, 1000);
-        });
-    },
-    slideRightHide: function () {
-        return this.each(function () {
-            $(this).hide('slide', { direction: 'right' }, 1000);
-        });
-    },
-    slideLeftShow: function () {
-        return this.each(function () {
-            $(this).show('slide', { direction: 'left' }, 1000);
-        });
-    }
-});
-
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var HorizontalVisibleBindingHandler = (function () {
-                function HorizontalVisibleBindingHandler() {
-                }
-                HorizontalVisibleBindingHandler.prototype.init = function (element, valueAccessor) {
-                    var value = valueAccessor();
-                    $(element).toggle(ko.utils.unwrapObservable(value));
-                    ko.utils.unwrapObservable(value) ? $(element)['slideLeftShow']() : $(element)['slideLeftHide']();
-                };
-
-                HorizontalVisibleBindingHandler.prototype.update = function (element, valueAccessor) {
-                    var value = valueAccessor();
-                    ko.utils.unwrapObservable(value) ? $(element)['slideLeftShow']() : $(element)['slideLeftHide']();
-                };
-                return HorizontalVisibleBindingHandler;
-            })();
-            Knockout.HorizontalVisibleBindingHandler = HorizontalVisibleBindingHandler;
-
-            ko.bindingHandlers['nxkit_hvisible'] = new HorizontalVisibleBindingHandler();
-            ko.virtualElements.allowedBindings['nxkit_hvisible'] = true;
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var LayoutManagerExportBindingHandler = (function () {
-                function LayoutManagerExportBindingHandler() {
-                }
-                LayoutManagerExportBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    var ctx = bindingContext;
-                    var mgr = NXKit.Web.ViewModelUtil.LayoutManagers;
-
-                    for (var i = 0; i < mgr.length; i++) {
-                        ctx = ctx.createChildContext(mgr[i](ctx), null, null);
-                    }
-
-                    ctx = ctx.createChildContext(viewModel);
-                    ctx = ctx.createChildContext(viewModel);
-
-                    ko.applyBindingsToDescendants(ctx, element);
-
-                    return {
-                        controlsDescendantBindings: true
-                    };
-                };
-
-                LayoutManagerExportBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    return LayoutManagerExportBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-                return LayoutManagerExportBindingHandler;
-            })();
-            Knockout.LayoutManagerExportBindingHandler = LayoutManagerExportBindingHandler;
-
-            ko.bindingHandlers['nxkit_layout_manager_export'] = new LayoutManagerExportBindingHandler();
-            ko.virtualElements.allowedBindings['nxkit_layout_manager_export'] = true;
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        var LayoutOptions = (function () {
-            function LayoutOptions(args) {
-                this._args = args;
-            }
-            LayoutOptions.GetArgs = function (bindingContext) {
-                var a = {};
-                var c = Web.Util.GetContextItems(bindingContext);
-                for (var i = 0; i < c.length; i++)
-                    if (c[i] instanceof LayoutOptions)
-                        a = ko.utils.extend(a, c[i]);
-
-                return a;
-            };
-
-            Object.defineProperty(LayoutOptions.prototype, "Args", {
-                get: function () {
-                    return this._args;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return LayoutOptions;
-        })();
-        Web.LayoutOptions = LayoutOptions;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
         var TypedEvent = (function () {
             function TypedEvent() {
                 this._listeners = [];
             }
             TypedEvent.prototype.add = function (listener) {
+                /// <summary>Registers a new listener for the event.</summary>
+                /// <param name="listener">The callback function to register.</param>
                 this._listeners.push(listener);
             };
 
             TypedEvent.prototype.remove = function (listener) {
+                /// <summary>Unregisters a listener from the event.</summary>
+                /// <param name="listener">The callback function that was registered. If missing then all listeners will be removed.</param>
                 if (typeof listener === 'function') {
                     for (var i = 0, l = this._listeners.length; i < l; l++) {
                         if (this._listeners[i] === listener) {
@@ -331,6 +34,8 @@ var NXKit;
                 for (var _i = 0; _i < (arguments.length - 0); _i++) {
                     a[_i] = arguments[_i + 0];
                 }
+                /// <summary>Invokes all of the listeners for this event.</summary>
+                /// <param name="args">Optional set of arguments to pass to listners.</param>
                 var context = {};
                 var listeners = this._listeners.slice(0);
                 for (var i = 0, l = listeners.length; i < l; i++) {
@@ -342,6 +47,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="TypedEvent.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -515,10 +221,15 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="TypedEvent.ts" />
+/// <reference path="Property.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
         var Node = (function () {
+            /**
+            * Initializes a new instance from the given initial data.
+            */
             function Node(view, source) {
                 this._view = view;
                 this._id = -1;
@@ -529,6 +240,7 @@ var NXKit;
                 this._intfs = new Web.InterfaceMap();
                 this._nodes = ko.observableArray();
 
+                // update from source data
                 if (source != null)
                     this.Apply(source);
             }
@@ -549,6 +261,9 @@ var NXKit;
             });
 
             Object.defineProperty(Node.prototype, "Data", {
+                /**
+                * Gets the data of this node.
+                */
                 get: function () {
                     return this._data;
                 },
@@ -557,6 +272,9 @@ var NXKit;
             });
 
             Object.defineProperty(Node.prototype, "Id", {
+                /**
+                * Gets the unique ID of this node.
+                */
                 get: function () {
                     return this._id;
                 },
@@ -565,6 +283,9 @@ var NXKit;
             });
 
             Object.defineProperty(Node.prototype, "Type", {
+                /**
+                * Gets the type of this node.
+                */
                 get: function () {
                     return this._type;
                 },
@@ -573,6 +294,9 @@ var NXKit;
             });
 
             Object.defineProperty(Node.prototype, "Name", {
+                /**
+                * Gets the name of this node.
+                */
                 get: function () {
                     return this._name;
                 },
@@ -581,6 +305,9 @@ var NXKit;
             });
 
             Object.defineProperty(Node.prototype, "Value", {
+                /**
+                * Gets the value of this node.
+                */
                 get: function () {
                     return this._value;
                 },
@@ -589,6 +316,9 @@ var NXKit;
             });
 
             Object.defineProperty(Node.prototype, "Interfaces", {
+                /**
+                * Gets the exposed interfaces of this node.
+                */
                 get: function () {
                     return this._intfs;
                 },
@@ -597,6 +327,9 @@ var NXKit;
             });
 
             Object.defineProperty(Node.prototype, "Nodes", {
+                /**
+                * Gets the content of this node.
+                */
                 get: function () {
                     return this._nodes;
                 },
@@ -604,6 +337,9 @@ var NXKit;
                 configurable: true
             });
 
+            /**
+            * Gets the named property on the named interface.
+            */
             Node.prototype.Property = function (interfaceName, propertyName) {
                 try  {
                     var i = this._intfs[interfaceName];
@@ -621,10 +357,16 @@ var NXKit;
                 }
             };
 
+            /**
+            * Invokes a named method on the specified interface.
+            */
             Node.prototype.Invoke = function (interfaceName, methodName, params) {
                 this.View.PushInvoke(this, interfaceName, methodName, params);
             };
 
+            /**
+            * Integrates the data given by the node parameter into this node.
+            */
             Node.prototype.Apply = function (source) {
                 try  {
                     this._data = source;
@@ -640,22 +382,37 @@ var NXKit;
                 }
             };
 
+            /**
+            * Updates the type of this node with the new value.
+            */
             Node.prototype.ApplyId = function (id) {
                 this._id = id;
             };
 
+            /**
+            * Updates the type of this node with the new value.
+            */
             Node.prototype.ApplyType = function (type) {
                 this._type = Web.NodeType.Parse(type);
             };
 
+            /**
+            * Updates the name of this node with the new value.
+            */
             Node.prototype.ApplyName = function (name) {
                 this._name = name;
             };
 
+            /**
+            * Updates the value of this node with the new value.
+            */
             Node.prototype.ApplyValue = function (value) {
                 this._value(value);
             };
 
+            /**
+            * Integrates the set of interfaces given with this node.
+            */
             Node.prototype.ApplyInterfaces = function (source) {
                 try  {
                     var self = this;
@@ -669,6 +426,9 @@ var NXKit;
                 }
             };
 
+            /**
+            * Updates the property given by the specified name with the specified value.
+            */
             Node.prototype.UpdateInterface = function (name, source) {
                 try  {
                     var self = this;
@@ -684,10 +444,14 @@ var NXKit;
                 }
             };
 
+            /**
+            * Integrates the set of content nodes with the given object values.
+            */
             Node.prototype.ApplyNodes = function (sources) {
                 try  {
                     var self = this;
 
+                    // clear nodes if none
                     if (sources == null) {
                         self._nodes.removeAll();
                         return;
@@ -702,6 +466,7 @@ var NXKit;
                         }
                     }
 
+                    // delete trailing values
                     if (self._nodes().length > sources.length)
                         self._nodes.splice(sources.length);
                 } catch (ex) {
@@ -710,6 +475,9 @@ var NXKit;
                 }
             };
 
+            /**
+            * Transforms the node and its hierarchy into JSON data.
+            */
             Node.prototype.ToData = function () {
                 var self = this;
 
@@ -723,6 +491,9 @@ var NXKit;
                 return r;
             };
 
+            /**
+            * Transforms the given Property array into a list of data to push.
+            */
             Node.prototype.NodesToData = function () {
                 return ko.utils.arrayMap(this._nodes(), function (v) {
                     return v.ToData();
@@ -737,6 +508,140 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
+        (function (Util) {
+            function Observable(value) {
+                return ko.observable(value).extend({
+                    rateLimit: {
+                        timeout: 50,
+                        method: "notifyWhenChangesStop"
+                    }
+                });
+            }
+            Util.Observable = Observable;
+
+            function ObservableArray(value) {
+                return ko.observableArray(value).extend({
+                    rateLimit: {
+                        timeout: 50,
+                        method: "notifyWhenChangesStop"
+                    }
+                });
+            }
+            Util.ObservableArray = ObservableArray;
+
+            function Computed(def) {
+                return ko.computed(def).extend({
+                    rateLimit: {
+                        timeout: 50,
+                        method: "notifyWhenChangesStop"
+                    }
+                });
+            }
+            Util.Computed = Computed;
+
+            /**
+            * Tests two objects for equality.
+            */
+            function DeepEquals(a, b, f) {
+                // allow overrides
+                if (f != null) {
+                    var t = f(a, b);
+                    if (t != null) {
+                        return t;
+                    }
+                }
+
+                if (a == null && b === null)
+                    return true;
+
+                if (typeof a !== typeof b)
+                    return false;
+
+                if (typeof a === 'boolean' && typeof b === 'boolean')
+                    return a === b;
+
+                if (typeof a === 'string' && typeof b === 'string')
+                    return a === b;
+
+                if (typeof a === 'number' && typeof b === 'number')
+                    return a === b;
+
+                if (typeof a === 'function' && typeof b === 'function')
+                    return a.toString() === b.toString();
+
+                for (var i in a) {
+                    if (a.hasOwnProperty(i)) {
+                        if (!b.hasOwnProperty(i)) {
+                            if (!Util.DeepEquals(a[i], null, f)) {
+                                return false;
+                            }
+                        } else if (!Util.DeepEquals(a[i], b[i], f)) {
+                            return false;
+                        }
+                    }
+                }
+
+                for (var i in b) {
+                    if (b.hasOwnProperty(i)) {
+                        if (!a.hasOwnProperty(i)) {
+                            if (!Util.DeepEquals(null, b[i], f)) {
+                                return false;
+                            }
+                        } else if (!Util.DeepEquals(a[i], b[i], f)) {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+            Util.DeepEquals = DeepEquals;
+
+            /**
+            * Generates a unique identifier.
+            */
+            function GenerateGuid() {
+                // http://www.ietf.org/rfc/rfc4122.txt
+                var s = [];
+                var d = "0123456789abcdef";
+                for (var i = 0; i < 36; i++) {
+                    s[i] = d.substr(Math.floor(Math.random() * 0x10), 1);
+                }
+                s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+                s[19] = d.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+                s[8] = s[13] = s[18] = s[23] = "-";
+
+                return s.join("");
+            }
+            Util.GenerateGuid = GenerateGuid;
+
+            /**
+            * Returns the entire context item chain from the specified context upwards.
+            */
+            function GetContextItems(context) {
+                return [context.$data].concat(context.$parents);
+            }
+            Util.GetContextItems = GetContextItems;
+
+            /**
+            * Gets the layout manager in scope of the given binding context.
+            */
+            function GetLayoutManager(context) {
+                return ko.utils.arrayFirst(GetContextItems(context), function (_) {
+                    return _ instanceof Web.LayoutManager;
+                });
+            }
+            Util.GetLayoutManager = GetLayoutManager;
+        })(Web.Util || (Web.Util = {}));
+        var Util = Web.Util;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="Node.ts" />
+/// <reference path="Util.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
         var LayoutManager = (function () {
             function LayoutManager(context) {
                 this._context = null;
@@ -748,6 +653,7 @@ var NXKit;
 
                 self._context = context;
 
+                // calculates the parent layout manager
                 self._parent = ko.computed(function () {
                     var l = [self._context.$data].concat(self._context.$parents);
                     for (var i in l) {
@@ -760,6 +666,9 @@ var NXKit;
                 });
             }
             Object.defineProperty(LayoutManager.prototype, "Context", {
+                /**
+                * Gets the context inside which this layout manager was created.
+                */
                 get: function () {
                     return this._context;
                 },
@@ -768,6 +677,9 @@ var NXKit;
             });
 
             Object.defineProperty(LayoutManager.prototype, "Parent", {
+                /**
+                * Gets the parent layout manager.
+                */
                 get: function () {
                     return this._parent();
                 },
@@ -775,25 +687,43 @@ var NXKit;
                 configurable: true
             });
 
+            /**
+            * Parses the given template binding information for a data structure to pass to the template lookup procedures.
+            */
             LayoutManager.prototype.GetTemplateOptions_ = function (valueAccessor, viewModel, bindingContext, options) {
                 return this.GetTemplateOptions(valueAccessor, viewModel, bindingContext, options);
             };
 
+            /**
+            * Parses the given template binding information for a data structure to pass to the template lookup procedures.
+            */
             LayoutManager.prototype.GetTemplateOptions = function (valueAccessor, viewModel, bindingContext, options) {
                 return this.Parent != null ? this.Parent.GetTemplateOptions(valueAccessor, viewModel, bindingContext, options || {}) : options || {};
             };
 
+            /**
+            * Gets the templates provided by this layout manager for the given data.
+            */
             LayoutManager.prototype.GetLocalTemplates = function () {
                 return new Array();
             };
 
+            /**
+            * Gets the set of available templates for the given data.
+            */
             LayoutManager.prototype.GetTemplates = function () {
+                // append parent templates to local templates
                 return this.GetLocalTemplates().concat(this.Parent != null ? this.Parent.GetTemplates() : new Array());
             };
 
+            /**
+            * Helper method for resolving a node given a Knockout context.
+            */
             LayoutManager.prototype.GetNode = function (valueAccessor, viewModel, bindingContext) {
+                // extract data to be used to search for a template
                 var value = ko.unwrap(valueAccessor());
 
+                // node specified as existing view model
                 if (viewModel != null) {
                     var viewModel_ = ko.unwrap(viewModel);
                     if (viewModel_ instanceof Web.Node) {
@@ -801,15 +731,20 @@ var NXKit;
                     }
                 }
 
+                // node specified explicitely as value
                 if (value != null && value instanceof Web.Node) {
                     return value;
                 }
 
+                // node specified as value.node
                 if (value != null && value.node != null) {
                     return ko.unwrap(value.node);
                 }
             };
 
+            /**
+            * Gets the fallback template for the given data.
+            */
             LayoutManager.prototype.GetUnknownTemplate = function (data) {
                 return $('<script />', {
                     'type': 'text/html',
@@ -817,11 +752,16 @@ var NXKit;
                 }).appendTo('body')[0];
             };
 
+            /**
+            * Extracts a JSON representation of a template node's data-nxkit bindings.
+            */
             LayoutManager.GetTemplateNodeData = function (node) {
+                // check whether we've already cached the node data
                 var d = $(node).data('nxkit');
                 if (d != null)
                     return d;
 
+                // begin collecting data from node attributes
                 d = {};
                 for (var i = 0; i < node.attributes.length; i++) {
                     var a = node.attributes.item(i);
@@ -831,18 +771,25 @@ var NXKit;
                     }
                 }
 
+                // store new data on the node, and return
                 return $(node).data('nxkit', d).data('nxkit');
             };
 
+            /**
+            * Tests whether a template node matches the given data.
+            */
             LayoutManager.TemplatePredicate = function (node, opts) {
                 return Web.Log.Group('TemplatePredicate', function () {
+                    // data has no properties
                     if (opts != null && Object.getOwnPropertyNames(opts).length == 0) {
                         Web.Log.Debug('opts: empty');
                         return false;
                     }
 
+                    // extract data-nxkit attributes from template node
                     var tmpl = LayoutManager.GetTemplateNodeData(node);
 
+                    // template has no properties, should not correspond with anything
                     if (Object.getOwnPropertyNames(tmpl).length == 0) {
                         Web.Log.Debug('tmpl: empty');
                         return false;
@@ -859,16 +806,25 @@ var NXKit;
                 });
             };
 
+            /**
+            * Tests each given node against the predicate function.
+            */
             LayoutManager.TemplateFilter = function (nodes, data) {
                 return nodes.filter(function (_) {
                     return LayoutManager.TemplatePredicate(_, data);
                 });
             };
 
+            /**
+            * Gets the appropriate template for the given data.
+            */
             LayoutManager.prototype.GetTemplate = function (data) {
                 return LayoutManager.TemplateFilter(this.GetTemplates(), data)[0] || this.GetUnknownTemplate(data);
             };
 
+            /**
+            * Gets the template that applies for the given data.
+            */
             LayoutManager.prototype.GetTemplateName = function (data) {
                 var _this = this;
                 return Web.Log.Group('LayoutManager.GetTemplateName', function () {
@@ -876,14 +832,17 @@ var NXKit;
                     if (node == null)
                         throw new Error('LayoutManager.GetTemplate: no template located');
 
+                    // ensure the node has a valid and unique id
                     if (node.id == '')
                         node.id = 'NXKit.Web__' + Web.Util.GenerateGuid().replace(/-/g, '');
 
+                    // log result
                     Web.Log.Object({
                         id: node.id,
                         data: LayoutManager.GetTemplateNodeData(node)
                     });
 
+                    // caller expects the id
                     return ko.observable(node.id);
                 });
             };
@@ -893,6 +852,8 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="Node.ts" />
+/// <reference path="LayoutManager.ts" />
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -907,24 +868,31 @@ var NXKit;
             function DefaultLayoutManager(context) {
                 _super.call(this, context);
             }
+            /**
+            * Parses the given template binding information for a data structure to pass to the template lookup procedures.
+            */
             DefaultLayoutManager.prototype.GetTemplateOptions = function (valueAccessor, viewModel, bindingContext, options) {
                 try  {
                     options = _super.prototype.GetTemplateOptions.call(this, valueAccessor, viewModel, bindingContext, options);
                     var node = _super.prototype.GetNode.call(this, valueAccessor, viewModel, bindingContext);
                     var value = ko.unwrap(valueAccessor());
 
+                    // find element types by element name
                     if (node != null && node.Type == Web.NodeType.Element) {
                         options.name = node.Name;
                     }
 
+                    // find text node by type
                     if (node != null && node.Type == Web.NodeType.Text) {
                         options.type = Web.NodeType.Text.ToString();
                     }
 
+                    // name specified explicitely
                     if (value != null && value.name != null) {
                         options.name = ko.unwrap(value.name);
                     }
 
+                    // extract layout binding
                     if (value != null && value.layout != null) {
                         options.layout = ko.unwrap(value.layout);
                     }
@@ -936,6 +904,9 @@ var NXKit;
                 }
             };
 
+            /**
+            * Gets all available templates currently in the document.
+            */
             DefaultLayoutManager.prototype.GetLocalTemplates = function () {
                 if (this._templates == null) {
                     this._templates = $('script[type="text/html"]').get();
@@ -952,106 +923,70 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
-        (function (Knockout) {
-            var ModalBindingHandler = (function () {
-                function ModalBindingHandler() {
-                }
-                ModalBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    var f = ko.utils.extend(allBindings(), {
-                        clickBubble: false
-                    });
-
-                    ko.bindingHandlers.click.init(element, function () {
-                        return function () {
-                            setTimeout(function () {
-                                var id = valueAccessor();
-                                if (id) {
-                                    $('#' + id).modal('show');
-                                }
-                            }, 5);
-                        };
-                    }, allBindings, viewModel, bindingContext);
-                };
-                return ModalBindingHandler;
-            })();
-            Knockout.ModalBindingHandler = ModalBindingHandler;
-
-            ko.bindingHandlers['nxkit_modal'] = new ModalBindingHandler();
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var CheckboxBindingHandler = (function () {
-                function CheckboxBindingHandler() {
-                }
-                CheckboxBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    setTimeout(function () {
-                        $(element).checkbox();
-                        $(element).checkbox('setting', {
-                            onEnable: function () {
-                                var v1 = true;
-                                var v2 = ko.unwrap(valueAccessor());
-                                if (typeof v2 === 'boolean') {
-                                    if (v1 != v2)
-                                        valueAccessor()(v1);
-                                } else if (typeof v2 === 'string') {
-                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
-                                    if (v1 != v2_)
-                                        valueAccessor()(v1 ? 'true' : 'false');
-                                }
-                            },
-                            onDisable: function () {
-                                var v1 = false;
-                                var v2 = ko.unwrap(valueAccessor());
-                                if (typeof v2 === 'boolean') {
-                                    if (v1 != v2)
-                                        valueAccessor()(v1);
-                                } else if (typeof v2 === 'string') {
-                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
-                                    if (v1 != v2_)
-                                        valueAccessor()(v1 ? 'true' : 'false');
-                                }
-                            }
-                        });
-                        CheckboxBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
-                    }, 2000);
-                };
-
-                CheckboxBindingHandler._update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var DeferredExecutorItem = (function () {
+            function DeferredExecutorItem(cb) {
+                this.callback = cb;
+            }
+            Object.defineProperty(DeferredExecutorItem.prototype, "Promise", {
+                get: function () {
                     var self = this;
-                    setTimeout(function () {
-                        var v1 = ko.unwrap(valueAccessor());
-                        if (typeof v1 === 'boolean') {
-                            $(element).checkbox(v1 ? 'enable' : 'disable');
-                        } else if (typeof v1 === 'string') {
-                            var v1_ = v1.toLowerCase() === 'true' ? true : false;
-                            $(element).checkbox(v1_ ? 'enable' : 'disable');
-                        }
-                    }, 1000);
-                };
 
-                CheckboxBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    CheckboxBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
+                    // promise already generated
+                    if (self.deferred != null)
+                        return self.deferred.promise();
 
-                CheckboxBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    CheckboxBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-                return CheckboxBindingHandler;
-            })();
-            Knockout.CheckboxBindingHandler = CheckboxBindingHandler;
+                    // generate promise and begin execution
+                    self.deferred = $.Deferred();
+                    self.callback(self.deferred);
 
-            ko.bindingHandlers['nxkit_checkbox'] = new CheckboxBindingHandler();
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
+                    // return new promise
+                    return self.deferred.progress();
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return DeferredExecutorItem;
+        })();
+
+        /**
+        * Executes a series of callbacks once for the first waiter.
+        * @class NXKit.Web.DeferredExecutor
+        */
+        var DeferredExecutor = (function () {
+            function DeferredExecutor() {
+                this._queue = new Array();
+            }
+            /**
+            * Registers a callback to be executed. The callback is passed a JQueryDeferred that it can resolve upon
+            * completion.
+            * @method Register
+            */
+            DeferredExecutor.prototype.Register = function (cb) {
+                var self = this;
+
+                self._queue.push(new DeferredExecutorItem(cb));
+            };
+
+            /**
+            * Invokes the given callback when the registered callbacks are completed.
+            * @method Wait
+            */
+            DeferredExecutor.prototype.Wait = function (cb) {
+                var self = this;
+
+                var wait = new Array();
+                for (var i = 0; i < self._queue.length; i++)
+                    wait[i] = self._queue[i].Promise;
+
+                $.when.apply($, wait).done(cb);
+            };
+            return DeferredExecutor;
+        })();
+        Web.DeferredExecutor = DeferredExecutor;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="TypedEvent.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -1155,10 +1090,455 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
+        var InterfaceMap = (function () {
+            function InterfaceMap() {
+            }
+            return InterfaceMap;
+        })();
+        Web.InterfaceMap = InterfaceMap;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var CheckboxBindingHandler = (function () {
+                function CheckboxBindingHandler() {
+                }
+                CheckboxBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    setTimeout(function () {
+                        $(element).checkbox();
+                        $(element).checkbox('setting', {
+                            onEnable: function () {
+                                var v1 = true;
+                                var v2 = ko.unwrap(valueAccessor());
+                                if (typeof v2 === 'boolean') {
+                                    if (v1 != v2)
+                                        valueAccessor()(v1);
+                                } else if (typeof v2 === 'string') {
+                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
+                                    if (v1 != v2_)
+                                        valueAccessor()(v1 ? 'true' : 'false');
+                                }
+                            },
+                            onDisable: function () {
+                                var v1 = false;
+                                var v2 = ko.unwrap(valueAccessor());
+                                if (typeof v2 === 'boolean') {
+                                    if (v1 != v2)
+                                        valueAccessor()(v1);
+                                } else if (typeof v2 === 'string') {
+                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
+                                    if (v1 != v2_)
+                                        valueAccessor()(v1 ? 'true' : 'false');
+                                }
+                            }
+                        });
+                        CheckboxBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                    }, 2000);
+                };
+
+                CheckboxBindingHandler._update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    var self = this;
+                    setTimeout(function () {
+                        var v1 = ko.unwrap(valueAccessor());
+                        if (typeof v1 === 'boolean') {
+                            $(element).checkbox(v1 ? 'enable' : 'disable');
+                        } else if (typeof v1 === 'string') {
+                            var v1_ = v1.toLowerCase() === 'true' ? true : false;
+                            $(element).checkbox(v1_ ? 'enable' : 'disable');
+                        }
+                    }, 1000);
+                };
+
+                CheckboxBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    CheckboxBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+
+                CheckboxBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    CheckboxBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+                return CheckboxBindingHandler;
+            })();
+            Knockout.CheckboxBindingHandler = CheckboxBindingHandler;
+
+            ko.bindingHandlers['nxkit_checkbox'] = new CheckboxBindingHandler();
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+$.fn.extend({
+    slideRightShow: function () {
+        return this.each(function () {
+            $(this).show('slide', { direction: 'right' }, 1000);
+        });
+    },
+    slideLeftHide: function () {
+        return this.each(function () {
+            $(this).hide('slide', { direction: 'left' }, 1000);
+        });
+    },
+    slideRightHide: function () {
+        return this.each(function () {
+            $(this).hide('slide', { direction: 'right' }, 1000);
+        });
+    },
+    slideLeftShow: function () {
+        return this.each(function () {
+            $(this).show('slide', { direction: 'left' }, 1000);
+        });
+    }
+});
+
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var HorizontalVisibleBindingHandler = (function () {
+                function HorizontalVisibleBindingHandler() {
+                }
+                HorizontalVisibleBindingHandler.prototype.init = function (element, valueAccessor) {
+                    var value = valueAccessor();
+                    $(element).toggle(ko.utils.unwrapObservable(value));
+                    ko.utils.unwrapObservable(value) ? $(element)['slideLeftShow']() : $(element)['slideLeftHide']();
+                };
+
+                HorizontalVisibleBindingHandler.prototype.update = function (element, valueAccessor) {
+                    var value = valueAccessor();
+                    ko.utils.unwrapObservable(value) ? $(element)['slideLeftShow']() : $(element)['slideLeftHide']();
+                };
+                return HorizontalVisibleBindingHandler;
+            })();
+            Knockout.HorizontalVisibleBindingHandler = HorizontalVisibleBindingHandler;
+
+            ko.bindingHandlers['nxkit_hvisible'] = new HorizontalVisibleBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_hvisible'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var InputBindingHandler = (function () {
+                function InputBindingHandler() {
+                }
+                InputBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    ko.bindingHandlers['value'].init(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+
+                InputBindingHandler._update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    ko.bindingHandlers['value'].update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+
+                InputBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    InputBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+
+                InputBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    InputBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+                return InputBindingHandler;
+            })();
+            Knockout.InputBindingHandler = InputBindingHandler;
+
+            ko.bindingHandlers['nxkit_input'] = new InputBindingHandler();
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var LayoutManagerExportBindingHandler = (function () {
+                function LayoutManagerExportBindingHandler() {
+                }
+                LayoutManagerExportBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    var ctx = bindingContext;
+                    var mgr = NXKit.Web.ViewModelUtil.LayoutManagers;
+
+                    for (var i = 0; i < mgr.length; i++) {
+                        ctx = ctx.createChildContext(mgr[i](ctx), null, null);
+                    }
+
+                    // replace context data item with original value
+                    ctx = ctx.createChildContext(viewModel);
+                    ctx = ctx.createChildContext(viewModel);
+
+                    // apply new child context to element
+                    ko.applyBindingsToDescendants(ctx, element);
+
+                    return {
+                        controlsDescendantBindings: true
+                    };
+                };
+
+                LayoutManagerExportBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    return LayoutManagerExportBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+                return LayoutManagerExportBindingHandler;
+            })();
+            Knockout.LayoutManagerExportBindingHandler = LayoutManagerExportBindingHandler;
+
+            ko.bindingHandlers['nxkit_layout_manager_export'] = new LayoutManagerExportBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_layout_manager_export'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var ModalBindingHandler = (function () {
+                function ModalBindingHandler() {
+                }
+                ModalBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    var f = ko.utils.extend(allBindings(), {
+                        clickBubble: false
+                    });
+
+                    ko.bindingHandlers.click.init(element, // inject click handler that shows modal
+                    function () {
+                        return function () {
+                            setTimeout(function () {
+                                var id = valueAccessor();
+                                if (id) {
+                                    $('#' + id).modal('show');
+                                }
+                            }, 5);
+                        };
+                    }, allBindings, viewModel, bindingContext);
+                };
+                return ModalBindingHandler;
+            })();
+            Knockout.ModalBindingHandler = ModalBindingHandler;
+
+            ko.bindingHandlers['nxkit_modal'] = new ModalBindingHandler();
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="../Util.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var OptionsBindingHandler = (function () {
+                function OptionsBindingHandler() {
+                }
+                OptionsBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    var opts = new Web.LayoutOptions(valueAccessor());
+
+                    // inject context containing options
+                    var ctx1 = bindingContext.createChildContext(opts, null, null);
+
+                    // inject context containing initial view model
+                    var ctx2 = ctx1.createChildContext(viewModel, null, null);
+
+                    // apply to descendants
+                    ko.applyBindingsToDescendants(ctx2, element);
+
+                    // prevent built-in application
+                    return {
+                        controlsDescendantBindings: true
+                    };
+                };
+                return OptionsBindingHandler;
+            })();
+            Knockout.OptionsBindingHandler = OptionsBindingHandler;
+
+            ko.bindingHandlers['nxkit_layout'] = new OptionsBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_layout'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="../Util.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var TemplateBindingHandler = (function () {
+                function TemplateBindingHandler() {
+                }
+                TemplateBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    return ko.bindingHandlers.template.init(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
+                };
+
+                TemplateBindingHandler.prototype.update = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    return ko.bindingHandlers.template.update(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
+                };
+
+                /**
+                * Converts the given value accessor into a value accessor compatible with the default template implementation.
+                */
+                TemplateBindingHandler.ConvertValueAccessor = function (valueAccessor, viewModel, bindingContext) {
+                    var _this = this;
+                    return function () {
+                        return Web.Log.Group('TemplateBindingHandler.ConvertValueAccessor', function () {
+                            Web.Log.Object({
+                                value: valueAccessor(),
+                                viewModel: viewModel
+                            });
+
+                            // resolve the view model to be passed to the template
+                            var data = _this.GetTemplateViewModel(valueAccessor, viewModel, bindingContext);
+                            if (data == null || Object.getOwnPropertyNames(data).length == 0) {
+                                throw new Error('unknown viewModel');
+                            }
+
+                            // resolve the options to use to look up the template
+                            var opts = _this.GetTemplateOptions(valueAccessor, viewModel, bindingContext);
+                            if (opts == null || Object.getOwnPropertyNames(opts).length == 0) {
+                                throw new Error('unknown template options');
+                            }
+
+                            // resolve the template name from the options
+                            var name = _this.GetTemplateName(bindingContext, opts);
+                            if (name == null) {
+                                throw new Error('unknown template');
+                            }
+
+                            Web.Log.Object({
+                                data: data,
+                                opts: opts,
+                                name: name
+                            });
+
+                            return {
+                                data: data,
+                                name: name
+                            };
+                        });
+                    };
+                };
+
+                /**
+                * Gets the recommended view model for the given binding information.
+                */
+                TemplateBindingHandler.GetTemplateViewModel = function (valueAccessor, viewModel, bindingContext) {
+                    var value = valueAccessor();
+
+                    // value itself is a node
+                    if (value != null && ko.unwrap(value) instanceof Web.Node)
+                        return value;
+
+                    // specified data value
+                    if (value != null && value.data != null)
+                        return value.data;
+
+                    // specified node value
+                    if (value != null && value.node != null && ko.unwrap(value.node) instanceof Web.Node)
+                        return value.node;
+
+                    // default to existing view model
+                    return viewModel;
+                };
+
+                /**
+                * Extracts template index data from the given binding information.
+                */
+                TemplateBindingHandler.GetTemplateOptions = function (valueAccessor, viewModel, bindingContext) {
+                    return NXKit.Web.Util.GetLayoutManager(bindingContext).GetTemplateOptions_(valueAccessor, viewModel, bindingContext, {});
+                };
+
+                /**
+                * Determines the named template from the given extracted data and context.
+                */
+                TemplateBindingHandler.GetTemplateName = function (bindingContext, data) {
+                    return NXKit.Web.Util.GetLayoutManager(bindingContext).GetTemplateName(data);
+                };
+                return TemplateBindingHandler;
+            })();
+            Knockout.TemplateBindingHandler = TemplateBindingHandler;
+
+            ko.bindingHandlers['nxkit_template'] = new TemplateBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_template'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        (function (Knockout) {
+            var VisibleBindingHandler = (function () {
+                function VisibleBindingHandler() {
+                }
+                VisibleBindingHandler.prototype.init = function (element, valueAccessor) {
+                    var value = valueAccessor();
+                    $(element).toggle(ko.utils.unwrapObservable(value));
+                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
+                };
+
+                VisibleBindingHandler.prototype.update = function (element, valueAccessor) {
+                    var value = valueAccessor();
+                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
+                };
+                return VisibleBindingHandler;
+            })();
+            Knockout.VisibleBindingHandler = VisibleBindingHandler;
+
+            ko.bindingHandlers['nxkit_visible'] = new VisibleBindingHandler();
+            ko.virtualElements.allowedBindings['nxkit_visible'] = true;
+        })(Web.Knockout || (Web.Knockout = {}));
+        var Knockout = Web.Knockout;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="Util.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        var LayoutOptions = (function () {
+            function LayoutOptions(args) {
+                this._args = args;
+            }
+            /**
+            * Gets the full set of currently applied layout option args for the given context.
+            */
+            LayoutOptions.GetArgs = function (bindingContext) {
+                var a = {};
+                var c = Web.Util.GetContextItems(bindingContext);
+                for (var i = 0; i < c.length; i++)
+                    if (c[i] instanceof LayoutOptions)
+                        a = ko.utils.extend(a, c[i]);
+
+                return a;
+            };
+
+            Object.defineProperty(LayoutOptions.prototype, "Args", {
+                get: function () {
+                    return this._args;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return LayoutOptions;
+        })();
+        Web.LayoutOptions = LayoutOptions;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
         var Log = (function () {
             function Log() {
             }
             Log.Group = function (title, func) {
+                // start group
                 if (typeof console.group === 'function')
                     if (Log.Verbose)
                         console.group(title);
@@ -1167,6 +1547,7 @@ var NXKit;
                 if (Log.Verbose)
                     console.dir(result);
 
+                // end group
                 if (typeof console.groupEnd === 'function')
                     if (Log.Verbose)
                         console.groupEnd();
@@ -1198,6 +1579,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="TypedEvent.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -1232,18 +1614,6 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
-        var InterfaceMap = (function () {
-            function InterfaceMap() {
-            }
-            return InterfaceMap;
-        })();
-        Web.InterfaceMap = InterfaceMap;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
         var NodeType = (function () {
             function NodeType(value) {
                 this._value = value;
@@ -1268,6 +1638,81 @@ var NXKit;
             return NodeType;
         })();
         Web.NodeType = NodeType;
+    })(NXKit.Web || (NXKit.Web = {}));
+    var Web = NXKit.Web;
+})(NXKit || (NXKit = {}));
+/// <reference path="Node.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (Web) {
+        /**
+        * Base view model class for wrapping a node.
+        */
+        var NodeViewModel = (function () {
+            function NodeViewModel(context, node) {
+                var self = this;
+
+                if (context == null)
+                    throw new Error('context: null');
+
+                if (!(node instanceof Web.Node))
+                    throw new Error('node: null');
+
+                self._context = context;
+                self._node = node;
+            }
+            Object.defineProperty(NodeViewModel.prototype, "Context", {
+                /**
+                * Gets the binding context available at the time the view model was created.
+                */
+                get: function () {
+                    return this._context;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(NodeViewModel.prototype, "Node", {
+                /**
+                * Gets the node that is wrapped by this view model.
+                */
+                get: function () {
+                    return this._node;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            Object.defineProperty(NodeViewModel.prototype, "Contents", {
+                /**
+                * Gets the content nodes of the current node.
+                */
+                get: function () {
+                    return this.GetContents();
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            NodeViewModel.prototype.GetContents = function () {
+                try  {
+                    return Web.ViewModelUtil.GetContents(this.Node);
+                } catch (ex) {
+                    ex.message = 'NodeViewModel.GetContents()' + '"\nMessage: ' + ex.message;
+                    throw ex;
+                }
+            };
+
+            Object.defineProperty(NodeViewModel.prototype, "ContentsCount", {
+                get: function () {
+                    return this.Contents.length;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return NodeViewModel;
+        })();
+        Web.NodeViewModel = NodeViewModel;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
@@ -1296,66 +1741,28 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="DeferredExecutor.ts"/>
 var NXKit;
 (function (NXKit) {
     (function (Web) {
-        var DeferredExecutorItem = (function () {
-            function DeferredExecutorItem(cb) {
-                this.callback = cb;
-            }
-            Object.defineProperty(DeferredExecutorItem.prototype, "Promise", {
-                get: function () {
-                    var self = this;
-
-                    if (self.deferred != null)
-                        return self.deferred.promise();
-
-                    self.deferred = $.Deferred();
-                    self.callback(self.deferred);
-
-                    return self.deferred.progress();
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return DeferredExecutorItem;
-        })();
-
-        var DeferredExecutor = (function () {
-            function DeferredExecutor() {
-                this._queue = new Array();
-            }
-            DeferredExecutor.prototype.Register = function (cb) {
-                var self = this;
-
-                self._queue.push(new DeferredExecutorItem(cb));
-            };
-
-            DeferredExecutor.prototype.Wait = function (cb) {
-                var self = this;
-
-                var wait = new Array();
-                for (var i = 0; i < self._queue.length; i++)
-                    wait[i] = self._queue[i].Promise;
-
-                $.when.apply($, wait).done(cb);
-            };
-            return DeferredExecutor;
-        })();
-        Web.DeferredExecutor = DeferredExecutor;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
+        /**
+        * Manages a set of templates that are injected into the document upon request.
+        * @class NXKit.Web.TemplateManager
+        */
         var TemplateManager = (function () {
+            /**
+            * Initializes a new instance.
+            */
             function TemplateManager(baseUrl) {
                 this._executor = new Web.DeferredExecutor();
                 var self = this;
 
                 self._baseUrl = baseUrl;
             }
+            /**
+            * Registers a given template name to be retrieved and injected into the page when required.
+            * @method Register
+            */
             TemplateManager.prototype.Register = function (name) {
                 var self = this;
 
@@ -1372,6 +1779,10 @@ var NXKit;
                 });
             };
 
+            /**
+            * Ensures the templates are registered before invoking the callback.
+            * @method Register
+            */
             TemplateManager.prototype.Wait = function (cb) {
                 var self = this;
 
@@ -1386,171 +1797,14 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="Node.ts" />
+/// <reference path="TypedEvent.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
-        (function (ViewModelUtil) {
-            ViewModelUtil.LayoutManagers = [
-                function (c) {
-                    return new Web.DefaultLayoutManager(c);
-                }
-            ];
-
-            ViewModelUtil.GroupNodes = [];
-
-            ViewModelUtil.ControlNodes = [];
-
-            ViewModelUtil.MetadataNodes = [];
-
-            ViewModelUtil.TransparentNodes = [];
-
-            ViewModelUtil.TransparentNodePredicates = [
-                function (n) {
-                    return ViewModelUtil.TransparentNodes.some(function (_) {
-                        return _ === n.Name;
-                    });
-                }
-            ];
-
-            function IsEmptyTextNode(node) {
-                return node.Type == Web.NodeType.Text && (node.Value() || '').trim() === '';
-            }
-            ViewModelUtil.IsEmptyTextNode = IsEmptyTextNode;
-
-            function IsIgnoredNode(node) {
-                return node == null || IsEmptyTextNode(node);
-            }
-            ViewModelUtil.IsIgnoredNode = IsIgnoredNode;
-
-            function IsGroupNode(node) {
-                return !IsIgnoredNode(node) && ViewModelUtil.GroupNodes.some(function (_) {
-                    return node.Name == _;
-                });
-            }
-            ViewModelUtil.IsGroupNode = IsGroupNode;
-
-            function HasGroupNode(nodes) {
-                return nodes.some(function (_) {
-                    return IsGroupNode(_);
-                });
-            }
-            ViewModelUtil.HasGroupNode = HasGroupNode;
-
-            function GetGroupNodes(nodes) {
-                return nodes.filter(function (_) {
-                    return IsGroupNode(_);
-                });
-            }
-            ViewModelUtil.GetGroupNodes = GetGroupNodes;
-
-            function IsControlNode(node) {
-                return !IsIgnoredNode(node) && ViewModelUtil.ControlNodes.some(function (_) {
-                    return node.Name == _;
-                });
-            }
-            ViewModelUtil.IsControlNode = IsControlNode;
-
-            function HasControlNode(nodes) {
-                return nodes.some(function (_) {
-                    return IsControlNode(_);
-                });
-            }
-            ViewModelUtil.HasControlNode = HasControlNode;
-
-            function GetControlNodes(nodes) {
-                return nodes.filter(function (_) {
-                    return IsControlNode(_);
-                });
-            }
-            ViewModelUtil.GetControlNodes = GetControlNodes;
-
-            function IsMetadataNode(node) {
-                return !IsIgnoredNode(node) && ViewModelUtil.MetadataNodes.some(function (_) {
-                    return node.Name == _;
-                });
-            }
-            ViewModelUtil.IsMetadataNode = IsMetadataNode;
-
-            function HasMetadataNode(nodes) {
-                return nodes.some(function (_) {
-                    return IsMetadataNode(_);
-                });
-            }
-            ViewModelUtil.HasMetadataNode = HasMetadataNode;
-
-            function GetMetadataNodes(nodes) {
-                return nodes.filter(function (_) {
-                    return IsMetadataNode(_);
-                });
-            }
-            ViewModelUtil.GetMetadataNodes = GetMetadataNodes;
-
-            function IsTransparentNode(node) {
-                return IsIgnoredNode(node) || ViewModelUtil.TransparentNodePredicates.some(function (_) {
-                    return _(node);
-                });
-            }
-            ViewModelUtil.IsTransparentNode = IsTransparentNode;
-
-            function HasTransparentNode(nodes) {
-                return nodes.some(function (_) {
-                    return IsTransparentNode(_);
-                });
-            }
-            ViewModelUtil.HasTransparentNode = HasTransparentNode;
-
-            function GetTransparentNodes(nodes) {
-                return nodes.filter(function (_) {
-                    return IsControlNode(_);
-                });
-            }
-            ViewModelUtil.GetTransparentNodes = GetTransparentNodes;
-
-            function GetContentNodes(nodes) {
-                try  {
-                    var l = nodes.filter(function (_) {
-                        return !IsMetadataNode(_);
-                    });
-                    var r = new Array();
-                    for (var i = 0; i < l.length; i++) {
-                        var v = l[i];
-                        if (v == null) {
-                            throw new Error('ViewModelUtil.GetContentNodes(): prospective Node is null');
-                        }
-                        if (IsTransparentNode(v)) {
-                            var s = GetContentNodes(v.Nodes());
-                            for (var j = 0; j < s.length; j++)
-                                r.push(s[j]);
-                        } else {
-                            r.push(v);
-                        }
-                    }
-
-                    return r;
-                } catch (ex) {
-                    ex.message = 'ViewModelUtil.GetContentNodes()' + '"\nMessage: ' + ex.message;
-                    throw ex;
-                }
-            }
-            ViewModelUtil.GetContentNodes = GetContentNodes;
-
-            function GetContents(node) {
-                try  {
-                    return GetContentNodes(node.Nodes());
-                } catch (ex) {
-                    ex.message = 'ViewModelUtil.GetContents()' + '"\nMessage: ' + ex.message;
-                    throw ex;
-                }
-            }
-            ViewModelUtil.GetContents = GetContents;
-        })(Web.ViewModelUtil || (Web.ViewModelUtil = {}));
-        var ViewModelUtil = Web.ViewModelUtil;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
+        /**
+        * Main NXKit client-side view class. Injects the view interface into a set of HTML elements.
+        */
         var View = (function () {
             function View(body, server) {
                 var self = this;
@@ -1615,6 +1869,9 @@ var NXKit;
             });
 
 
+            /**
+            * Updates the view in response to a received message.
+            */
             View.prototype.Receive = function (args) {
                 var self = this;
 
@@ -1632,6 +1889,9 @@ var NXKit;
                 }
             };
 
+            /**
+            * Updates the view in response to a received data package.
+            */
             View.prototype.ReceiveNode = function (node) {
                 var self = this;
 
@@ -1640,13 +1900,16 @@ var NXKit;
                 }
             };
 
+            /**
+            * Updates the messages of the view with the specified items.
+            */
             View.prototype.ReceiveCommands = function (commands) {
                 var self = this;
 
                 for (var i = 0; i < commands.length; i++) {
                     var command = commands[i];
                     if (command != null) {
-                        if (command.$type === 'NXKit.Web.Commands.Trace, NXKit.Web') {
+                        if (command.$type === 'NXKit.Server.Commands.Trace, NXKit.Server') {
                             if (command.Message != null && typeof console === 'object') {
                                 var func;
                                 if (command.Message.Severity === 'Error' && typeof console.error === 'function')
@@ -1664,7 +1927,7 @@ var NXKit;
                             }
                         }
 
-                        if (command.$type === 'NXKit.Web.Commands.Script, NXKit.Web') {
+                        if (command.$type === 'NXKit.Server.Commands.Script, NXKit.Server') {
                             if (command.Code != null) {
                                 eval(command.Code);
                             }
@@ -1673,24 +1936,33 @@ var NXKit;
                 }
             };
 
+            /**
+            * Initiates a refresh of the view model.
+            */
             View.prototype.Apply = function (data) {
                 var self = this;
 
                 if (self._root == null) {
+                    // generate new node tree
                     self._root = new Web.Node(self, data);
                 } else {
+                    // update existing node tree
                     self._root.Apply(data);
                 }
 
                 self.ApplyBindings();
             };
 
+            /**
+            * Invoked when the view model initiates a request to push an update to a node.
+            */
             View.prototype.PushUpdate = function (node, $interface, property, value) {
                 var self = this;
                 Web.Log.Debug('View.PushUpdate');
 
+                // generate update command
                 var command = {
-                    $type: 'NXKit.Web.Commands.Update, NXKit.Web',
+                    $type: 'NXKit.Server.Commands.Update, NXKit.Server',
                     NodeId: node.Id,
                     Interface: $interface.Name,
                     Property: property.Name,
@@ -1704,8 +1976,9 @@ var NXKit;
                 var self = this;
                 Web.Log.Debug('View.PushInvoke');
 
+                // generate push action
                 var data = {
-                    $type: 'NXKit.Web.Commands.Invoke, NXKit.Web',
+                    $type: 'NXKit.Server.Commands.Invoke, NXKit.Server',
                     NodeId: node.Id,
                     Interface: interfaceName,
                     Method: methodName,
@@ -1715,46 +1988,60 @@ var NXKit;
                 self.Queue(data);
             };
 
+            /**
+            * Queues the given data to be sent to the server.
+            */
             View.prototype.Queue = function (command) {
                 var _this = this;
                 var self = this;
 
+                // pushes a new action onto the queue
                 self._queue.push(command);
 
+                // only one runner at a time
                 if (self._queueRunning) {
                     return;
                 } else {
                     self._queueRunning = true;
 
+                    // compile buffers of incoming data
                     var node = {};
                     var todo = new Array();
 
+                    // delay processing in case of new commands
                     setTimeout(function () {
                         self._busy(true);
 
+                        // recursive call to work queue
                         var push = function () {
                             var send = self._queue.splice(0);
 
+                            // callback for server response
                             var cb = function (args) {
                                 if (args.Status == 200) {
+                                    // receive saved state hash
                                     var hash = args.Hash || null;
                                     if (hash != null) {
                                         _this._hash = hash;
                                     }
 
+                                    // receive saved state
                                     var save = args.Save || null;
                                     if (save != null) {
                                         _this._save = save;
                                     }
 
+                                    // buffer application of node
                                     if (args.Node != null) {
                                         node = args.Node;
                                     }
 
+                                    // buffer commands
                                     if (args.Commands != null) {
                                         ko.utils.arrayPushAll(todo, args.Commands);
                                     }
 
+                                    // only update node data if no outstanding commands
                                     if (self._queue.length == 0) {
                                         self.Receive({
                                             Hash: _this._hash,
@@ -1764,8 +2051,10 @@ var NXKit;
                                         });
                                     }
 
+                                    // recurse
                                     push();
                                 } else if (args.Status == 400) {
+                                    // resend with save data
                                     self._server({
                                         Save: self._save,
                                         Hash: self._hash,
@@ -1781,30 +2070,41 @@ var NXKit;
                             };
 
                             if (send.length > 0) {
+                                // send commands
                                 self._server({
                                     Hash: self._hash,
                                     Commands: send
                                 }, cb);
                             } else {
+                                // no commands, exit
                                 self._queueRunning = false;
                                 self._busy(false);
                             }
                         };
 
+                        // begin processing queue
                         push();
                     }, 50);
                 }
             };
 
+            /**
+            * Applies the bindings to the view if possible.
+            */
             View.prototype.ApplyBindings = function () {
                 var self = this;
 
+                // apply bindings to our element and our view model
                 if (self._bind && self._body != null && self._root != null) {
+                    // clear existing bindings
                     ko.cleanNode(self._body);
 
+                    // execute after deferral
                     Web.TemplateManager.Default.Wait(function () {
+                        // ensure body is to render template
                         $(self._body).attr('data-bind', 'template: { name: \'NXKit.View\' }');
 
+                        // apply knockout to view node
                         ko.applyBindings(self, self._body);
 
                         self._bind = false;
@@ -1820,179 +2120,232 @@ var NXKit;
 var NXKit;
 (function (NXKit) {
     (function (Web) {
-        var NodeViewModel = (function () {
-            function NodeViewModel(context, node) {
-                var self = this;
+        (function (ViewModelUtil) {
+            /**
+            * Set of functions to inject layout managers at the top of the hierarchy.
+            */
+            ViewModelUtil.LayoutManagers = [
+                function (c) {
+                    return new Web.DefaultLayoutManager(c);
+                }
+            ];
 
-                if (context == null)
-                    throw new Error('context: null');
+            /**
+            * Nodes which represent a grouping element.
+            */
+            ViewModelUtil.GroupNodes = [];
 
-                if (!(node instanceof Web.Node))
-                    throw new Error('node: null');
+            /**
+            * Nodes which are considered to be control elements.
+            */
+            ViewModelUtil.ControlNodes = [];
 
-                self._context = context;
-                self._node = node;
+            /**
+            * Nodes which are considered to be metadata elements for their parents.
+            */
+            ViewModelUtil.MetadataNodes = [];
+
+            /**
+            * Nodes which are considered to be transparent, and ignored when calculating content membership.
+            */
+            ViewModelUtil.TransparentNodes = [];
+
+            /**
+            * Nodes which are considered to be transparent, and ignored when calculating content membership.
+            */
+            ViewModelUtil.TransparentNodePredicates = [
+                function (n) {
+                    return ViewModelUtil.TransparentNodes.some(function (_) {
+                        return _ === n.Name;
+                    });
+                }
+            ];
+
+            /**
+            * Returns true of the given node is an empty text node.
+            */
+            function IsEmptyTextNode(node) {
+                return node.Type == Web.NodeType.Text && (node.Value() || '').trim() === '';
             }
-            Object.defineProperty(NodeViewModel.prototype, "Context", {
-                get: function () {
-                    return this._context;
-                },
-                enumerable: true,
-                configurable: true
-            });
+            ViewModelUtil.IsEmptyTextNode = IsEmptyTextNode;
 
-            Object.defineProperty(NodeViewModel.prototype, "Node", {
-                get: function () {
-                    return this._node;
-                },
-                enumerable: true,
-                configurable: true
-            });
+            /**
+            * Returns true if the current node is one that should be completely ignored.
+            */
+            function IsIgnoredNode(node) {
+                return node == null || IsEmptyTextNode(node);
+            }
+            ViewModelUtil.IsIgnoredNode = IsIgnoredNode;
 
-            Object.defineProperty(NodeViewModel.prototype, "Contents", {
-                get: function () {
-                    return this.GetContents();
-                },
-                enumerable: true,
-                configurable: true
-            });
+            /**
+            * Returns true if the given node is a control node.
+            */
+            function IsGroupNode(node) {
+                return !IsIgnoredNode(node) && ViewModelUtil.GroupNodes.some(function (_) {
+                    return node.Name == _;
+                });
+            }
+            ViewModelUtil.IsGroupNode = IsGroupNode;
 
-            NodeViewModel.prototype.GetContents = function () {
+            /**
+            * Returns true if the given node set contains a control node.
+            */
+            function HasGroupNode(nodes) {
+                return nodes.some(function (_) {
+                    return IsGroupNode(_);
+                });
+            }
+            ViewModelUtil.HasGroupNode = HasGroupNode;
+
+            /**
+            * Filters out the given node set for control nodes.
+            */
+            function GetGroupNodes(nodes) {
+                return nodes.filter(function (_) {
+                    return IsGroupNode(_);
+                });
+            }
+            ViewModelUtil.GetGroupNodes = GetGroupNodes;
+
+            /**
+            * Returns true if the given node is a control node.
+            */
+            function IsControlNode(node) {
+                return !IsIgnoredNode(node) && ViewModelUtil.ControlNodes.some(function (_) {
+                    return node.Name == _;
+                });
+            }
+            ViewModelUtil.IsControlNode = IsControlNode;
+
+            /**
+            * Returns true if the given node set contains a control node.
+            */
+            function HasControlNode(nodes) {
+                return nodes.some(function (_) {
+                    return IsControlNode(_);
+                });
+            }
+            ViewModelUtil.HasControlNode = HasControlNode;
+
+            /**
+            * Filters out the given node set for control nodes.
+            */
+            function GetControlNodes(nodes) {
+                return nodes.filter(function (_) {
+                    return IsControlNode(_);
+                });
+            }
+            ViewModelUtil.GetControlNodes = GetControlNodes;
+
+            /**
+            * Returns true if the given node is a transparent node.
+            */
+            function IsMetadataNode(node) {
+                return !IsIgnoredNode(node) && ViewModelUtil.MetadataNodes.some(function (_) {
+                    return node.Name == _;
+                });
+            }
+            ViewModelUtil.IsMetadataNode = IsMetadataNode;
+
+            /**
+            * Returns true if the given node set contains a metadata node.
+            */
+            function HasMetadataNode(nodes) {
+                return nodes.some(function (_) {
+                    return IsMetadataNode(_);
+                });
+            }
+            ViewModelUtil.HasMetadataNode = HasMetadataNode;
+
+            /**
+            * Filters out the given node set for control nodes.
+            */
+            function GetMetadataNodes(nodes) {
+                return nodes.filter(function (_) {
+                    return IsMetadataNode(_);
+                });
+            }
+            ViewModelUtil.GetMetadataNodes = GetMetadataNodes;
+
+            /**
+            * Returns true if the given node is a transparent node.
+            */
+            function IsTransparentNode(node) {
+                return IsIgnoredNode(node) || ViewModelUtil.TransparentNodePredicates.some(function (_) {
+                    return _(node);
+                });
+            }
+            ViewModelUtil.IsTransparentNode = IsTransparentNode;
+
+            /**
+            * Returns true if the given node set contains a transparent node.
+            */
+            function HasTransparentNode(nodes) {
+                return nodes.some(function (_) {
+                    return IsTransparentNode(_);
+                });
+            }
+            ViewModelUtil.HasTransparentNode = HasTransparentNode;
+
+            /**
+            * Filters out the given node set for transparent nodes.
+            */
+            function GetTransparentNodes(nodes) {
+                return nodes.filter(function (_) {
+                    return IsControlNode(_);
+                });
+            }
+            ViewModelUtil.GetTransparentNodes = GetTransparentNodes;
+
+            /**
+            * Filters out the given node set for content nodes. This descends through transparent nodes.
+            */
+            function GetContentNodes(nodes) {
                 try  {
-                    return Web.ViewModelUtil.GetContents(this.Node);
+                    var l = nodes.filter(function (_) {
+                        return !IsMetadataNode(_);
+                    });
+                    var r = new Array();
+                    for (var i = 0; i < l.length; i++) {
+                        var v = l[i];
+                        if (v == null) {
+                            throw new Error('ViewModelUtil.GetContentNodes(): prospective Node is null');
+                        }
+                        if (IsTransparentNode(v)) {
+                            var s = GetContentNodes(v.Nodes());
+                            for (var j = 0; j < s.length; j++)
+                                r.push(s[j]);
+                        } else {
+                            r.push(v);
+                        }
+                    }
+
+                    return r;
                 } catch (ex) {
-                    ex.message = 'NodeViewModel.GetContents()' + '"\nMessage: ' + ex.message;
+                    ex.message = 'ViewModelUtil.GetContentNodes()' + '"\nMessage: ' + ex.message;
                     throw ex;
                 }
-            };
+            }
+            ViewModelUtil.GetContentNodes = GetContentNodes;
 
-            Object.defineProperty(NodeViewModel.prototype, "ContentsCount", {
-                get: function () {
-                    return this.Contents.length;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return NodeViewModel;
-        })();
-        Web.NodeViewModel = NodeViewModel;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var VisibleBindingHandler = (function () {
-                function VisibleBindingHandler() {
+            /**
+            * Gets the content nodes of the given node. This descends through transparent nodes.
+            */
+            function GetContents(node) {
+                try  {
+                    return GetContentNodes(node.Nodes());
+                } catch (ex) {
+                    ex.message = 'ViewModelUtil.GetContents()' + '"\nMessage: ' + ex.message;
+                    throw ex;
                 }
-                VisibleBindingHandler.prototype.init = function (element, valueAccessor) {
-                    var value = valueAccessor();
-                    $(element).toggle(ko.utils.unwrapObservable(value));
-                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
-                };
-
-                VisibleBindingHandler.prototype.update = function (element, valueAccessor) {
-                    var value = valueAccessor();
-                    ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
-                };
-                return VisibleBindingHandler;
-            })();
-            Knockout.VisibleBindingHandler = VisibleBindingHandler;
-
-            ko.bindingHandlers['nxkit_visible'] = new VisibleBindingHandler();
-            ko.virtualElements.allowedBindings['nxkit_visible'] = true;
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
+            }
+            ViewModelUtil.GetContents = GetContents;
+        })(Web.ViewModelUtil || (Web.ViewModelUtil = {}));
+        var ViewModelUtil = Web.ViewModelUtil;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (Web) {
-        (function (Knockout) {
-            var TemplateBindingHandler = (function () {
-                function TemplateBindingHandler() {
-                }
-                TemplateBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                    return ko.bindingHandlers.template.init(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
-                };
-
-                TemplateBindingHandler.prototype.update = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                    return ko.bindingHandlers.template.update(element, TemplateBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
-                };
-
-                TemplateBindingHandler.ConvertValueAccessor = function (valueAccessor, viewModel, bindingContext) {
-                    var _this = this;
-                    return function () {
-                        return Web.Log.Group('TemplateBindingHandler.ConvertValueAccessor', function () {
-                            Web.Log.Object({
-                                value: valueAccessor(),
-                                viewModel: viewModel
-                            });
-
-                            var data = _this.GetTemplateViewModel(valueAccessor, viewModel, bindingContext);
-                            if (data == null || Object.getOwnPropertyNames(data).length == 0) {
-                                throw new Error('unknown viewModel');
-                            }
-
-                            var opts = _this.GetTemplateOptions(valueAccessor, viewModel, bindingContext);
-                            if (opts == null || Object.getOwnPropertyNames(opts).length == 0) {
-                                throw new Error('unknown template options');
-                            }
-
-                            var name = _this.GetTemplateName(bindingContext, opts);
-                            if (name == null) {
-                                throw new Error('unknown template');
-                            }
-
-                            Web.Log.Object({
-                                data: data,
-                                opts: opts,
-                                name: name
-                            });
-
-                            return {
-                                data: data,
-                                name: name
-                            };
-                        });
-                    };
-                };
-
-                TemplateBindingHandler.GetTemplateViewModel = function (valueAccessor, viewModel, bindingContext) {
-                    var value = valueAccessor();
-
-                    if (value != null && ko.unwrap(value) instanceof Web.Node)
-                        return value;
-
-                    if (value != null && value.data != null)
-                        return value.data;
-
-                    if (value != null && value.node != null && ko.unwrap(value.node) instanceof Web.Node)
-                        return value.node;
-
-                    return viewModel;
-                };
-
-                TemplateBindingHandler.GetTemplateOptions = function (valueAccessor, viewModel, bindingContext) {
-                    return NXKit.Web.Util.GetLayoutManager(bindingContext).GetTemplateOptions_(valueAccessor, viewModel, bindingContext, {});
-                };
-
-                TemplateBindingHandler.GetTemplateName = function (bindingContext, data) {
-                    return NXKit.Web.Util.GetLayoutManager(bindingContext).GetTemplateName(data);
-                };
-                return TemplateBindingHandler;
-            })();
-            Knockout.TemplateBindingHandler = TemplateBindingHandler;
-
-            ko.bindingHandlers['nxkit_template'] = new TemplateBindingHandler();
-            ko.virtualElements.allowedBindings['nxkit_template'] = true;
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
-})(NXKit || (NXKit = {}));
+//# sourceMappingURL=nxkit.ts.js.map
 
 
     window.NXKit = NXKit;

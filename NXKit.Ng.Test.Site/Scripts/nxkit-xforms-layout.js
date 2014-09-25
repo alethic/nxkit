@@ -24,6 +24,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="LayoutNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -57,6 +58,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="LayoutNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -85,6 +87,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="LayoutNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -130,6 +133,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="LayoutNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -159,6 +163,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="LayoutNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -179,6 +184,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="LayoutNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -199,6 +205,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="LayoutNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -219,6 +226,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="LayoutNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -232,6 +240,7 @@ var NXKit;
                     TableCellViewModel.prototype.Activate = function () {
                         var self = this;
 
+                        // ensure property changes or non-focus events flush first
                         setTimeout(function () {
                             return self.Node.Invoke('NXKit.DOMEvents.EventTarget', 'Dispatch', {
                                 type: 'DOMActivate'
@@ -248,6 +257,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="LayoutNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -268,6 +278,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="LayoutNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
