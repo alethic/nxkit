@@ -1,0 +1,687 @@
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}setfocus"
+        data-nxkit-data-type="*">
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}toggle"
+        data-nxkit-data-type="*">
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}setindex"
+        data-nxkit-data-type="*">
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}dispatch"
+        data-nxkit-data-type="*">
+</script>
+
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}rebuild"
+        data-nxkit-data-type="*">
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}recalculate"
+        data-nxkit-data-type="*">
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}revalidate"
+        data-nxkit-data-type="*">
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}refresh"
+        data-nxkit-data-type="*">
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}reset"
+        data-nxkit-data-type="*">
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}insert"
+        data-nxkit-data-type="*">
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}delete"
+        data-nxkit-data-type="*">
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}setvalue"
+        data-nxkit-data-type="*">
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}alert">
+    <!-- ko with: new NXKit.Web.XForms.AlertViewModel($context, $data) -->
+    <div class="xforms-alert">
+        <!-- ko if: Text -->
+        <span data-bind="text: Text" />
+        <!-- /ko -->
+        <!-- ko ifnot: Text -->
+        <!-- ko foreach: Contents -->
+        <!-- ko nxkit_template -->
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
+        data-nxkit-data-type="*">
+    <!-- ko with: new NXKit.Web.XForms.GroupViewModel($context, $parent) -->
+    <div class="xforms-group"
+         data-bind="
+nxkit_visible: Relevant,
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-label-appearance': LabelAppearance,
+}">
+        <!-- ko with: Label -->
+        <div class="label"
+             data-bind="
+attr : {
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data),
+}">
+            <!-- ko nxkit_template -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nxkit_template -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nxkit_template -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <div class="contents" data-bind="
+attr: {
+    'data-nx-xforms-count': $data.Count,
+    'data-nx-xforms-count-enabled': $data.CountEnabled,
+}">
+            <!-- ko foreach: Contents -->
+            <div class="item"
+                 data-bind="
+attr: {
+    'data-nx-name': Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data),
+}">
+                <!-- ko nxkit_template -->
+                <!-- /ko -->
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}help">
+    <!-- ko with: new NXKit.Web.XForms.HelpViewModel($context, $data) -->
+    <div class="xforms-help">
+        <!-- ko if: Text -->
+        <span data-bind="text: Text" />
+        <!-- /ko -->
+        <!-- ko ifnot: Text -->
+        <!-- ko foreach: Contents -->
+        <!-- ko nxkit_template -->
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}hint">
+    <!-- ko with: new NXKit.Web.XForms.HintViewModel($context, $data) -->
+    <div class="xforms-hint">
+        <!-- ko if: Text -->
+        <span data-bind="text: Text" />
+        <!-- /ko -->
+        <!-- ko ifnot: Text -->
+        <!-- ko foreach: Contents -->
+        <!-- ko nxkit_template -->
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}input">
+    <!-- ko nxkit_template: {
+        'data-type': '{http://www.w3.org/2001/XMLSchema}string',
+    } -->
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}input"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}string">
+    <!-- ko with: new NXKit.Web.XForms.InputViewModel($context, $data) -->
+    <div class="xforms-input"
+         data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+}">
+        <!-- ko with: Label -->
+        <label>
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <input type="text"
+               data-bind="
+nxkit_input: ValueAsString,
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}" />
+    </div>
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}input"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean">
+    <!-- ko with: new NXKit.Web.XForms.InputViewModel($context, $data) -->
+    <div class="xforms-input"
+         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean"
+         data-bind="
+nxkit_xforms_input_boolean: ValueAsBoolean,
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+}">
+
+        <input type="checkbox" />
+
+        <!-- ko with: Label -->
+        <label>
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </div>
+
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}input"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}date">
+    <!-- ko with: new NXKit.Web.XForms.InputViewModel($context, $data) -->
+    <div class="xforms-input"
+         data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+}">
+        <!-- ko with: Label -->
+        <label>
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <input type="date"
+               data-bind="
+nxkit_input: ValueAsString,
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}" />
+    </div>
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}input"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}int">
+    <!-- ko nxkit_template: {
+        'data-type': '{http://www.w3.org/2001/XMLSchema}integer',
+    } -->
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}input"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}integer">
+    <!-- ko with: new NXKit.Web.XForms.InputViewModel($context, $data) -->
+    <div class="xforms-input"
+         data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+}">
+        <!-- ko with: Label -->
+        <label>
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <input type="number"
+               data-bind="
+nxkit_input: ValueAsNumber,
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}" />
+    </div>
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}label"   
+        data-nxkit-data-type="*">
+    <!-- ko with: new NXKit.Web.XForms.LabelViewModel($context, $data) -->
+    <span class="xforms-label">
+        <!-- ko if: Text -->
+        <span data-bind="text: Text" />
+        <!-- /ko -->
+        <!-- ko ifnot: Text -->
+        <!-- ko foreach: Contents -->
+        <!-- ko nxkit_template -->
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </span>
+    <!-- /ko -->
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}model">
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}output"
+        data-nxkit-data-type="*">
+    <!-- ko with: new NXKit.Web.XForms.OutputViewModel($context, $data) -->
+    <span class="xforms-output">
+        <!-- ko if: Text -->
+        <span data-bind="text: Text" />
+        <!-- /ko -->
+    </span>
+    <!-- /ko -->
+</script>
+    
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}range">
+    <!-- ko nxkit_template: {
+        node: Node,
+        data: $data,
+        'data-type': '{http://www.w3.org/2001/XMLSchema}integer',
+    } -->
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}range"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}int">
+    <!-- ko nxkit_template: {
+        node: Node,
+        data: $data,
+        'data-type': '{http://www.w3.org/2001/XMLSchema}integer',
+    } -->
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}range"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}integer">
+    <!-- ko with: new NXKit.Web.XForms.RangeViewModel($context, $data) -->
+    <div class="xforms-range"
+         data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+}">
+        <!-- ko with: Label -->
+        <label class="label">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <input type="number"
+               data-bind="
+value: ValueAsNumber,
+attr: {
+    min: Start,
+    max: End,
+    step: Step,
+}" />
+    </div>
+    <!-- /ko -->
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}repeat"
+        data-nxkit-data-type="*">
+    <!-- ko with: new NXKit.Web.XForms.RepeatViewModel($context, $data) -->
+    <div class="xforms-repeat" data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+}">
+        <!-- ko foreach: Node.Nodes -->
+        <div class="item" data-bind="
+attr : {
+    'data-nx-xforms-name': $data.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data),
+},
+css: {
+    'current': $data.Property('NXKit.XForms.RepeatItem', 'Index').ValueAsNumber() === $parent.Node.Property('NXKit.XForms.Repeat', 'Index').ValueAsNumber(),
+}">
+            <!-- ko foreach: NXKit.Web.ViewModelUtil.GetContents($data) -->
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}select1">
+    <!-- ko nxkit_template: {
+        'data-type': '{http://www.w3.org/2001/XMLSchema}string',
+    } -->
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}select1"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}string">
+    <!-- ko with: new NXKit.Web.XForms.Select1ViewModel($context, $data) -->
+
+    <div class="xforms-select1" data-bind="
+nxkit_xforms_select1: $data.SelectedId,
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+},
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}">
+        <!-- ko with: Label -->
+        <label class="label">
+            <!-- ko nxkit_template -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+
+        <div class="body">
+            <input type="hidden" />
+            <div class="text">
+                <!-- ko if: Selected -->
+                <!-- ko with: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nxkit_template -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko ifnot: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nxkit_template -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu" data-bind="foreach: Selectables">
+                <div class="item" data-bind="attr: { 'data-value': Id }">
+                    <!-- ko with: Label -->
+                    <!-- ko nxkit_template -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}select1"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}integer">
+    <!-- ko with: new NXKit.Web.XForms.Select1ViewModel($context, $data) -->
+
+    <div class="xforms-select1" data-bind="
+nxkit_xforms_select1: $data.SelectedId,
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+},
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}">
+        <!-- ko with: Label -->
+        <label class="label">
+            <!-- ko nxkit_template -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+
+        <div class="body">
+            <input type="hidden" />
+            <div class="text">
+                <!-- ko if: Selected -->
+                <!-- ko with: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nxkit_template -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko ifnot: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nxkit_template -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu" data-bind="foreach: Selectables">
+                <div class="item" data-bind="attr: { 'data-value': Id }">
+                    <!-- ko with: Label -->
+                    <!-- ko nxkit_template -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}select1"
+        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean">
+    <!-- ko with: new NXKit.Web.XForms.Select1ViewModel($context, $data) -->
+
+    <div class="xforms-select1" data-bind="
+nxkit_xforms_select1: $data.SelectedId,
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+},
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}">
+        <!-- ko with: Label -->
+        <label class="label">
+            <!-- ko nxkit_template -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+
+        <div class="body">
+            <input type="hidden" />
+            <div class="text">
+                <!-- ko if: Selected -->
+                <!-- ko with: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nxkit_template -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko ifnot: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nxkit_template -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu" data-bind="foreach: Selectables">
+                <div class="item" data-bind="attr: { 'data-value': Id }">
+                    <!-- ko with: Label -->
+                    <!-- ko nxkit_template -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /ko -->
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}submit">
+    <!-- ko with: new NXKit.Web.XForms.SubmitViewModel($context, $data) -->
+    <div 
+         class="xforms-submit ui button"
+         data-bind="event: { click: Activate }">
+        <!-- ko with: Label -->
+        <!-- ko nxkit_template -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}textarea">
+    <!-- ko with: new NXKit.Web.XForms.TextAreaViewModel($context, $data) -->
+    <!-- ko nxkit_template: {
+        node: Node,
+        type: Type,
+    } -->
+    <!-- /ko -->
+    <!-- /ko -->
+</script>
+
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}textarea"
+        data-nxkit-type="{http://www.w3.org/2001/XMLSchema}string">
+    <textarea class="xforms-textarea"
+              data-bind="value: ValueAsString" />
+</script>
+<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}trigger">
+    <!-- ko with: new NXKit.Web.XForms.TriggerViewModel($context, $data) -->
+    <div class="xforms-trigger" data-bind="event: { click: Activate }">
+        <!-- ko with: Label -->
+        <div class="label">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+</script>

@@ -110,23 +110,6 @@ module NXKit.Web {
                     if (command.$type === 'NXKit.Server.Commands.Trace, NXKit.Server') {
                         if (command.Message != null &&
                             typeof console === 'object') {
-                            var func: (message?: any, ...params: any[]) => void;
-                            if (command.Message.Severity === 'Error' &&
-                                typeof console.error === 'function')
-                                func = console.error;
-                            if (command.Message.Severity === 'Warning' &&
-                                typeof console.warn === 'function')
-                                func = console.warn;
-                            if (command.Message.Severity === 'Information' &&
-                                typeof console.info === 'function')
-                                func = console.info;
-                            if (command.Message.Severity === 'Verbose' &&
-                                typeof console.log === 'function')
-                                func = console.log;
-                            if (func == null)
-                                func = console.log;
-
-                            func('%s : %s', command.Message.Timestamp, command.Message.Text);
                         }
                     }
 
