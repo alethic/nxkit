@@ -252,9 +252,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\NXKit.Client.JS\NXKit.Client.JS.csproj">
+    <ProjectReference Include="..\NXKit.View.Js\NXKit.View.Js.csproj">
       <Project>{c7aedb60-a136-4356-9c04-35aa344d857e}</Project>
-      <Name>NXKit.Client.JS</Name>
+      <Name>NXKit.View.Js</Name>
       <WebContent>true</WebContent>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.DOMEvents.Tests\NXKit.DOMEvents.Tests.csproj">
@@ -281,16 +281,16 @@
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
       <Name>NXKit.Server</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.XForms.Client.JS\NXKit.XForms.Client.JS.csproj">
+    <ProjectReference Include="..\NXKit.XForms.View.Js\NXKit.XForms.View.Js.csproj">
       <Project>{f106499b-42cc-41cf-9824-39755e25993f}</Project>
-      <Name>NXKit.XForms.Client.JS</Name>
+      <Name>NXKit.XForms.View.Js</Name>
       <WebContent>true</WebContent>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Json\NXKit.XForms.Json.csproj">
       <Project>{fda6d401-d67e-4dac-80b4-4fe0aa4ce338}</Project>
       <Name>NXKit.XForms.Json</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.XForms.Layout.Client.JS\NXKit.XForms.Layout.View.Js.csproj">
+    <ProjectReference Include="..\NXKit.XForms.Layout.View.Js\NXKit.XForms.Layout.View.Js.csproj">
       <Project>{9499152c-156e-4005-a01f-4d6f1c480c63}</Project>
       <Name>NXKit.XForms.Layout.View.Js</Name>
       <WebContent>true</WebContent>

@@ -54,9 +54,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6076674D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Server", "NXKit.Server\NXKit.Server.csproj", "{A296BBEA-D7B7-40E6-B107-558413A59B8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Client.JS", "NXKit.View.Js\NXKit.Client.JS.csproj", "{C7AEDB60-A136-4356-9C04-35AA344D857E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.View.Js", "NXKit.View.Js\NXKit.View.Js.csproj", "{C7AEDB60-A136-4356-9C04-35AA344D857E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Client.JS", "NXKit.XForms.View.Js\NXKit.XForms.Client.JS.csproj", "{F106499B-42CC-41CF-9824-39755E25993F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.View.Js", "NXKit.XForms.View.Js\NXKit.XForms.View.Js.csproj", "{F106499B-42CC-41CF-9824-39755E25993F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Layout.View.Js", "NXKit.XForms.Layout.View.Js\NXKit.XForms.Layout.View.Js.csproj", "{9499152C-156E-4005-A01F-4D6F1C480C63}"
 EndProject

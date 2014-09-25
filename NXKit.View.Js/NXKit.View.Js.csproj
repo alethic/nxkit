@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
-    <Import Project="$(ProjectDir)..\NXKit.Gulp.props" />
+  <Import Project="$(ProjectDir)..\NXKit.Gulp.props" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <ProjectGuid>{C7AEDB60-A136-4356-9C04-35AA344D857E}</ProjectGuid>
@@ -15,9 +15,9 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <RootNamespace>NXKit.Client.JS</RootNamespace>
-    <AssemblyName>NXKit.Client.JS</AssemblyName>
-      <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
+    <RootNamespace>NXKit.View.Js</RootNamespace>
+    <AssemblyName>NXKit.View.Js</AssemblyName>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="DefaultLayoutManager.ts" />
@@ -65,9 +65,9 @@
     <None Include="View.less" />
   </ItemGroup>
   <ItemGroup>
-      <None Include="gulpfile.js" />
-      <None Include="Text.html" />
-      <None Include="View.html" />
+    <None Include="gulpfile.js" />
+    <None Include="Text.html" />
+    <None Include="View.html" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
@@ -84,8 +84,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-    <Import Project="$(ProjectDir)..\NXKit.targets"
-            Condition="Exists('$(ProjectDir)..\NXKit.targets')" />
+  <Import Project="$(ProjectDir)..\NXKit.targets" Condition="Exists('$(ProjectDir)..\NXKit.targets')" />
   <Import Project="$(ProjectDir)..\NXKit.Gulp.targets" Condition="Exists('$(ProjectDir)..\NXKit.Gulp.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -93,22 +92,21 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
-    <Target Name="AfterBuild">
-        <ItemGroup>
-            <WebContentOutputItems Include="$(OutputPath)nxkit.js">
-                <TargetPath>Scripts\nxkit.js</TargetPath>
-            </WebContentOutputItems>
-            <WebContentOutputItems Include="$(OutputPath)nxkit.min.js">
-                <TargetPath>Scripts\nxkit.min.js</TargetPath>
-            </WebContentOutputItems>
-            <WebContentOutputItems Include="$(OutputPath)nxkit.html">
-                <TargetPath>Content\nxkit.html</TargetPath>
-            </WebContentOutputItems>
-            <WebContentOutputItems Include="$(OutputPath)nxkit.css">
-                <TargetPath>Content\nxkit.css</TargetPath>
-            </WebContentOutputItems>
-        </ItemGroup>
-        <Copy SourceFiles="$(IntermediateOutputPath)nxkit.ts.d.ts"
-              DestinationFiles="$(OutputPath)nxkit.d.ts" />
-    </Target>
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <WebContentOutputItems Include="$(OutputPath)nxkit.js">
+        <TargetPath>Scripts\nxkit.js</TargetPath>
+      </WebContentOutputItems>
+      <WebContentOutputItems Include="$(OutputPath)nxkit.min.js">
+        <TargetPath>Scripts\nxkit.min.js</TargetPath>
+      </WebContentOutputItems>
+      <WebContentOutputItems Include="$(OutputPath)nxkit.html">
+        <TargetPath>Content\nxkit.html</TargetPath>
+      </WebContentOutputItems>
+      <WebContentOutputItems Include="$(OutputPath)nxkit.css">
+        <TargetPath>Content\nxkit.css</TargetPath>
+      </WebContentOutputItems>
+    </ItemGroup>
+    <Copy SourceFiles="$(IntermediateOutputPath)nxkit.ts.d.ts" DestinationFiles="$(OutputPath)nxkit.d.ts" />
+  </Target>
 </Project>
