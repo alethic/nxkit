@@ -1,0 +1,27 @@
+﻿<script type="text/html"
+        data-nxkit-name="{http://www.w3.org/2002/xforms}repeat"
+        data-nxkit-data-type="*">
+    <!-- ko with: new NXKit.Web.XForms.RepeatViewModel($context, $data) -->
+    <div class="xforms-repeat" data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+}">
+        <!-- ko foreach: Node.Nodes -->
+        <div class="item" data-bind="
+attr : {
+    'data-nx-xforms-name': $data.Name,
+    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data),
+},
+css: {
+    'current': $data.Property('NXKit.XForms.RepeatItem', 'Index').ValueAsNumber() === $parent.Node.Property('NXKit.XForms.Repeat', 'Index').ValueAsNumber(),
+}">
+            <!-- ko foreach: NXKit.Web.ViewModelUtil.GetContents($data) -->
+            <!-- ko nxkit_template: $data -->
+            <!-- /ko -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+</script>

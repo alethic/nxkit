@@ -1,0 +1,32 @@
+﻿
+    window.NXKit = NXKit;
+    return NXKit;
+};
+
+if (typeof define === "function" && define.amd) {
+    define("nxkit", ['jquery', 'knockout'], function ($, ko) {
+        return init($, ko);
+    });
+} else {
+    var hold = false;
+    var loop = function () {
+        if (typeof $ === "function" && typeof ko === "object") {
+            init($, ko);
+            if (hold) {
+                $.holdReady(hold = false);
+            }
+        } else {
+            if (typeof $ === "function") {
+                $.holdReady(hold = true);
+            }
+
+            if (typeof console.warn === "function") {
+                console.warn("nxkit: RequireJS missing or jQuery and knockout missing, retrying.");
+            }
+
+            window.setTimeout(loop, 100);
+        }
+    };
+    loop();
+}
+}());
