@@ -158,6 +158,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -167,6 +168,9 @@ var NXKit;
                 function DefaultLayoutManager(context) {
                     _super.call(this, context);
                 }
+                /**
+                * Applies the 'level' and 'layout' bindings to the template search.
+                */
                 DefaultLayoutManager.prototype.GetTemplateOptions = function (valueAccessor, viewModel, bindingContext, options) {
                     options = _super.prototype.GetTemplateOptions.call(this, valueAccessor, viewModel, bindingContext, options);
                     var node = _super.prototype.GetNode.call(this, valueAccessor, viewModel, bindingContext);
@@ -179,10 +183,12 @@ var NXKit;
                         }
                     }
 
+                    // specified data type
                     if (value != null && value['data-type'] != null) {
                         options['data-type'] = ko.unwrap(value['data-type']);
                     }
 
+                    // extract level binding
                     var value = valueAccessor();
                     if (value != null && value.level != null) {
                         options.level = ko.unwrap(value.level);
@@ -208,6 +214,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -217,10 +224,14 @@ var NXKit;
                 function GroupLayoutManager(context) {
                     _super.call(this, context);
                 }
+                /**
+                * Applies the 'level' and 'layout' bindings to the template search.
+                */
                 GroupLayoutManager.prototype.GetTemplateOptions = function (valueAccessor, viewModel, bindingContext, options) {
                     options = _super.prototype.GetTemplateOptions.call(this, valueAccessor, viewModel, bindingContext, options);
                     var value = ko.unwrap(valueAccessor());
 
+                    // extract level binding
                     if (value != null && value.level != null)
                         options.level = ko.unwrap(value.level);
 
@@ -234,6 +245,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -261,6 +273,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -403,6 +416,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -425,6 +439,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -437,6 +452,7 @@ var NXKit;
                 TriggerViewModel.prototype.Activate = function () {
                     var self = this;
 
+                    // ensure property changes or non-focus events flush first
                     setTimeout(function () {
                         return self.Node.Invoke('NXKit.DOMEvents.EventTarget', 'Dispatch', {
                             type: 'DOMActivate'
@@ -516,6 +532,9 @@ var NXKit;
                 })();
                 SelectUtil.Selectable = Selectable;
 
+                /**
+                * Gets the select item-set. This consists of the item nodes of the given select node.
+                */
                 function GetSelectables(viewModel, node, level) {
                     try  {
                         return node.Nodes().filter(function (_) {
@@ -661,6 +680,9 @@ var NXKit;
                 })();
                 GroupUtil.Item = Item;
 
+                /**
+                * Describes an item that will render a raw node.
+                */
                 var NodeItem = (function (_super) {
                     __extends(NodeItem, _super);
                     function NodeItem(viewModel, itemNode, level) {
@@ -706,6 +728,7 @@ var NXKit;
                     NodeItem.prototype.GetLabel = function () {
                         var self = this;
                         if (self._itemNode.Name == '{http://www.w3.org/2002/xforms}input' && XForms.ViewModelUtil.GetDataType(self._itemNode)() == '{http://www.w3.org/2001/XMLSchema}boolean')
+                            // boolean inputs provide their own label
                             return null;
                         else
                             return XForms.ViewModelUtil.GetLabelNode(self._itemNode);
@@ -727,6 +750,9 @@ var NXKit;
                 })(Item);
                 GroupUtil.NodeItem = NodeItem;
 
+                /**
+                * Describes a sub-item of a top-level group which will render a row of items.
+                */
                 var Row = (function (_super) {
                     __extends(Row, _super);
                     function Row(viewModel, level) {
@@ -888,6 +914,9 @@ var NXKit;
                 }
                 GroupUtil.GetGroupItem = GetGroupItem;
 
+                /**
+                * Gets the group item-set. This consists of the content nodes of the group organized by row.
+                */
                 function GetItems(viewModel, node, level) {
                     try  {
                         var list = new Array();
@@ -895,6 +924,7 @@ var NXKit;
                         for (var i = 0; i < cnts.length; i++) {
                             var v = cnts[i];
 
+                            // nested group obtains single child
                             if (v.Name == '{http://www.w3.org/2002/xforms}group') {
                                 var groupItem = GetGroupItem(viewModel, v, level);
                                 list.push(groupItem);
@@ -906,18 +936,22 @@ var NXKit;
                                 continue;
                             }
 
+                            // check if last inserted item was a single item, if so, replace with a double item
                             var item = list.pop();
                             if (item instanceof Row && !item.Done) {
                                 var item_ = item;
                                 item_.Items.push(new NodeItem(viewModel, v, level));
                                 list.push(item_);
 
+                                // end row
                                 if (item_.Items.length >= 2)
                                     item_.Done = true;
                             } else {
+                                // put previous item back into list
                                 if (item != null)
                                     list.push(item);
 
+                                // insert new row
                                 var item_ = new Row(viewModel, level);
                                 item_.Items.push(new NodeItem(viewModel, v, level));
                                 list.push(item_);
@@ -938,6 +972,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -980,6 +1015,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -1004,6 +1040,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -1028,6 +1065,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -1052,6 +1090,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -1138,6 +1177,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -1162,6 +1202,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -1202,6 +1243,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -1288,6 +1330,7 @@ var NXKit;
     })(NXKit.Web || (NXKit.Web = {}));
     var Web = NXKit.Web;
 })(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
     (function (Web) {
@@ -1309,6 +1352,13 @@ NXKit.Web.ViewModelUtil.ControlNodes.push('{http://www.w3.org/2002/xforms}input'
 
 NXKit.Web.ViewModelUtil.MetadataNodes.push('{http://www.w3.org/2002/xforms}label', '{http://www.w3.org/2002/xforms}help', '{http://www.w3.org/2002/xforms}hint', '{http://www.w3.org/2002/xforms}alert');
 
+//NXKit.Web.ViewModelUtil.TransparentNodes.push(
+//    '{http://www.w3.org/2002/xforms}repeat');
+//NXKit.Web.ViewModelUtil.TransparentNodePredicates.push(
+//    // repeat items are transparent
+//    (n: NXKit.Web.Node) =>
+//        n.Interfaces['NXKit.XForms.RepeatItem'] != null &&
+//        n.Property('NXKit.XForms.RepeatItem', 'IsRepeatItem').ValueAsBoolean() == true);
 NXKit.Web.ViewModelUtil.LayoutManagers.push(function (c) {
     return new NXKit.Web.XForms.DefaultLayoutManager(c);
 });

@@ -3,10 +3,11 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Web.UI;
 
-namespace NXKit.Test.Web.Site
+namespace NXKit.Web.UI.Test.Site
 {
 
-    public class Global : System.Web.HttpApplication
+    public class Global : 
+        System.Web.HttpApplication
     {
 
         protected void Application_Start(object sender, EventArgs e)

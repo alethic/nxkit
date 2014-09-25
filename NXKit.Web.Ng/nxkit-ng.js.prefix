@@ -1,6 +1,0 @@
-﻿define([
-    'jquery',
-    'angular',
-    'nxkit',
-    'knockout',
-], function ($, ng, nx, ko) {

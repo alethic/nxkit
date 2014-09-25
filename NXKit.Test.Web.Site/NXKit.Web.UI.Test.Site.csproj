@@ -1,0 +1,424 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{606CFC52-D06A-4B21-B295-A52C5D8C979E}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NXKit.Web.UI.Test.Site</RootNamespace>
+    <AssemblyName>NXKit.Web.UI.Test.Site</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+    <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
+    <NuGetPackageImportStamp>2a4f4a8d</NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AspNet.ScriptManager.jQuery, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AspNet.ScriptManager.jQuery.2.1.1\lib\net45\AspNet.ScriptManager.jQuery.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\default.less" />
+    <Content Include="Content\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\normalize.css" />
+    <Content Include="Content\semantic\less\collections\breadcrumb.less" />
+    <Content Include="Content\semantic\less\collections\form.less" />
+    <Content Include="Content\semantic\less\collections\grid.less" />
+    <Content Include="Content\semantic\less\collections\menu.less" />
+    <Content Include="Content\semantic\less\collections\message.less" />
+    <Content Include="Content\semantic\less\collections\table.less" />
+    <Content Include="Content\semantic\less\elements\basic.icon.less" />
+    <Content Include="Content\semantic\less\elements\button.less" />
+    <Content Include="Content\semantic\less\elements\divider.less" />
+    <Content Include="Content\semantic\less\elements\header.less" />
+    <Content Include="Content\semantic\less\elements\icon.less" />
+    <Content Include="Content\semantic\less\elements\image.less" />
+    <Content Include="Content\semantic\less\elements\input.less" />
+    <Content Include="Content\semantic\less\elements\label.less" />
+    <Content Include="Content\semantic\less\elements\loader.less" />
+    <Content Include="Content\semantic\less\elements\progress.less" />
+    <Content Include="Content\semantic\less\elements\reveal.less" />
+    <Content Include="Content\semantic\less\elements\segment.less" />
+    <Content Include="Content\semantic\less\elements\step.less" />
+    <Content Include="Content\semantic\less\fonts\basic.icons.eot" />
+    <Content Include="Content\semantic\less\fonts\basic.icons.svg" />
+    <Content Include="Content\semantic\less\fonts\basic.icons.ttf" />
+    <Content Include="Content\semantic\less\fonts\basic.icons.woff" />
+    <Content Include="Content\semantic\less\fonts\icons.eot" />
+    <Content Include="Content\semantic\less\fonts\icons.otf" />
+    <Content Include="Content\semantic\less\fonts\icons.svg" />
+    <Content Include="Content\semantic\less\fonts\icons.ttf" />
+    <Content Include="Content\semantic\less\fonts\icons.woff" />
+    <Content Include="Content\semantic\less\images\loader-large-inverted.gif" />
+    <Content Include="Content\semantic\less\images\loader-large.gif" />
+    <Content Include="Content\semantic\less\images\loader-medium-inverted.gif" />
+    <Content Include="Content\semantic\less\images\loader-medium.gif" />
+    <Content Include="Content\semantic\less\images\loader-mini-inverted.gif" />
+    <Content Include="Content\semantic\less\images\loader-mini.gif" />
+    <Content Include="Content\semantic\less\images\loader-small-inverted.gif" />
+    <Content Include="Content\semantic\less\images\loader-small.gif" />
+    <Content Include="Content\semantic\less\modules\accordion.js" />
+    <Content Include="Content\semantic\less\modules\accordion.less" />
+    <Content Include="Content\semantic\less\modules\behavior\api.js" />
+    <Content Include="Content\semantic\less\modules\behavior\colorize.js" />
+    <Content Include="Content\semantic\less\modules\behavior\form.js" />
+    <Content Include="Content\semantic\less\modules\behavior\state.js" />
+    <Content Include="Content\semantic\less\modules\chatroom.js" />
+    <Content Include="Content\semantic\less\modules\chatroom.less" />
+    <Content Include="Content\semantic\less\modules\checkbox.js" />
+    <Content Include="Content\semantic\less\modules\checkbox.less" />
+    <Content Include="Content\semantic\less\modules\dimmer.js" />
+    <Content Include="Content\semantic\less\modules\dimmer.less" />
+    <Content Include="Content\semantic\less\modules\dropdown.js" />
+    <Content Include="Content\semantic\less\modules\dropdown.less" />
+    <Content Include="Content\semantic\less\modules\modal.js" />
+    <Content Include="Content\semantic\less\modules\modal.less" />
+    <Content Include="Content\semantic\less\modules\nag.js" />
+    <Content Include="Content\semantic\less\modules\nag.less" />
+    <Content Include="Content\semantic\less\modules\popup.js" />
+    <Content Include="Content\semantic\less\modules\popup.less" />
+    <Content Include="Content\semantic\less\modules\rating.js" />
+    <Content Include="Content\semantic\less\modules\rating.less" />
+    <Content Include="Content\semantic\less\modules\search.js" />
+    <Content Include="Content\semantic\less\modules\search.less" />
+    <Content Include="Content\semantic\less\modules\shape.js" />
+    <Content Include="Content\semantic\less\modules\shape.less" />
+    <Content Include="Content\semantic\less\modules\sidebar.js" />
+    <Content Include="Content\semantic\less\modules\sidebar.less" />
+    <Content Include="Content\semantic\less\modules\tab.js" />
+    <Content Include="Content\semantic\less\modules\tab.less" />
+    <Content Include="Content\semantic\less\modules\transition.js" />
+    <Content Include="Content\semantic\less\modules\transition.less" />
+    <Content Include="Content\semantic\less\modules\video.js" />
+    <Content Include="Content\semantic\less\modules\video.less" />
+    <Content Include="Content\semantic\less\semantic.config" />
+    <Content Include="Content\semantic\less\views\comment.less" />
+    <Content Include="Content\semantic\less\views\feed.less" />
+    <Content Include="Content\semantic\less\views\item.less" />
+    <Content Include="Content\semantic\less\views\list.less" />
+    <Content Include="Content\semantic\less\views\statistic.less" />
+    <Content Include="Content\semantic\packaged\css\semantic.css" />
+    <Content Include="Content\semantic\packaged\css\semantic.min.css" />
+    <Content Include="Content\semantic\packaged\fonts\basic.icons.eot" />
+    <Content Include="Content\semantic\packaged\fonts\basic.icons.svg" />
+    <Content Include="Content\semantic\packaged\fonts\basic.icons.ttf" />
+    <Content Include="Content\semantic\packaged\fonts\basic.icons.woff" />
+    <Content Include="Content\semantic\packaged\fonts\icons.eot" />
+    <Content Include="Content\semantic\packaged\fonts\icons.otf" />
+    <Content Include="Content\semantic\packaged\fonts\icons.svg" />
+    <Content Include="Content\semantic\packaged\fonts\icons.ttf" />
+    <Content Include="Content\semantic\packaged\fonts\icons.woff" />
+    <Content Include="Content\semantic\packaged\images\loader-large-inverted.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-large.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-medium-inverted.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-medium.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-mini-inverted.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-mini.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-small-inverted.gif" />
+    <Content Include="Content\semantic\packaged\images\loader-small.gif" />
+    <Content Include="Content\semantic\packaged\javascript\semantic.js" />
+    <Content Include="Content\semantic\packaged\javascript\semantic.min.js" />
+    <Content Include="Content\xforms-layout.css">
+      <DependentUpon>xforms-layout.less</DependentUpon>
+    </Content>
+    <Content Include="Content\xforms.css">
+      <DependentUpon>xforms.less</DependentUpon>
+    </Content>
+    <Content Include="Default.aspx" />
+    <Content Include="Content\styles.less" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\semantic.less" />
+    <Content Include="Examples\Post.ashx" />
+    <Content Include="Content\xforms-layout.less" />
+    <Content Include="Content\xforms.css.map">
+      <DependentUpon>xforms.css</DependentUpon>
+    </Content>
+    <Content Include="Content\xforms-layout.css.map">
+      <DependentUpon>xforms-layout.css</DependentUpon>
+    </Content>
+    <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\nxkit.pubxml" />
+    <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.1.js" />
+    <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <Content Include="Scripts\knockout-3.1.0.debug.js" />
+    <Content Include="Scripts\knockout-3.1.0.js" />
+    <Content Include="Scripts\less-1.7.0.js" />
+    <Content Include="Scripts\less-1.7.0.min.js" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ExampleHttpHandler.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Examples\Post.ashx.cs">
+      <DependentUpon>Post.ashx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\xforms.less" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Scripts\jquery-2.1.1.min.map" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NXKit.Client.JS\NXKit.Client.JS.csproj">
+      <Project>{c7aedb60-a136-4356-9c04-35aa344d857e}</Project>
+      <Name>NXKit.Client.JS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
+      <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
+      <Name>NXKit.DOMEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj">
+      <Project>{075ba36b-f95a-4563-bbe9-20d4405e9c9e}</Project>
+      <Name>NXKit.DOM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.NXInclude\NXKit.NXInclude.csproj">
+      <Project>{8d43ba5c-df3f-4ad8-bf28-6dda74a0a2a1}</Project>
+      <Name>NXKit.NXInclude</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Server\NXKit.Server.csproj">
+      <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
+      <Name>NXKit.Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Web.UI\NXKit.Web.UI.csproj">
+      <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
+      <Name>NXKit.Web.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Client.JS\NXKit.XForms.Client.JS.csproj">
+      <Project>{f106499b-42cc-41cf-9824-39755e25993f}</Project>
+      <Name>NXKit.XForms.Client.JS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Examples\NXKit.XForms.Examples.csproj">
+      <Project>{564c13be-ab20-49fd-9bc4-44fe701e3ac2}</Project>
+      <Name>NXKit.XForms.Examples</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Layout.Client.JS\NXKit.XForms.Layout.Client.JS.csproj">
+      <Project>{9499152c-156e-4005-a01f-4d6f1c480c63}</Project>
+      <Name>NXKit.XForms.Layout.Client.JS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
+      <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
+      <Name>NXKit.XForms.Layout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
+      <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
+      <Name>NXKit.XForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XInclude\NXKit.XInclude.csproj">
+      <Project>{9742529e-8881-4aa3-91ef-1a474cb38ac4}</Project>
+      <Name>NXKit.XInclude</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XMLEvents\NXKit.XMLEvents.csproj">
+      <Project>{db71b395-df60-470a-b761-b083d7acafe8}</Project>
+      <Name>NXKit.XMLEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XPath2\NXKit.XPath2.csproj">
+      <Project>{4fc0495c-b8e7-407a-9505-fba9e973ba4c}</Project>
+      <Name>NXKit.XPath2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XPath\NXKit.XPath.csproj">
+      <Project>{a91bc0e8-18cc-41f6-b00d-07e91b1593be}</Project>
+      <Name>NXKit.XPath</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit\NXKit.csproj">
+      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
+      <Name>NXKit</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Knockout\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES3</TypeScriptTarget>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
+    <TypeScriptOutFile>NXKit.Test.Web.Site.js</TypeScriptOutFile>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:57479/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="CopySourceFiles">
+    <ItemGroup>
+      <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Client.JS\bin\nxkit.js" />
+      <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Client.JS\bin\nxkit.min.js" />
+      <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.XForms.Client.JS\bin\nxkit-xforms.js" />
+      <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.XForms.Client.JS\bin\nxkit-xforms.min.js" />
+      <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.XForms.Layout.Client.JS\bin\nxkit-xforms-layout.js" />
+      <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.XForms.Layout.Client.JS\bin\nxkit-xforms-layout.min.js" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ScriptSourceFiles)" DestinationFiles="@(ScriptSourceFiles->'$(ProjectDir)\Scripts\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+  <Target Name="CopyContentFiles">
+    <ItemGroup>
+      <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Client.JS\bin\nxkit.html" />
+      <ContentSourceFiles Include="$(ProjectDir)..\NXKit.XForms.Client.JS\bin\nxkit-xforms.html" />
+      <ContentSourceFiles Include="$(ProjectDir)..\NXKit.XForms.Layout.Client.JS\bin\nxkit-xforms-layout.html" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ContentSourceFiles)" DestinationFiles="@(ContentSourceFiles->'$(ProjectDir)\Content\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+  <Target Name="BeforeBuild" DependsOnTargets="CopySourceFiles;CopyContentFiles" />
+</Project>

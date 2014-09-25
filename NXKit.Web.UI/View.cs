@@ -8,6 +8,8 @@ using System.Web.UI;
 
 using Newtonsoft.Json;
 
+using NXKit.Server;
+
 namespace NXKit.Web.UI
 {
 

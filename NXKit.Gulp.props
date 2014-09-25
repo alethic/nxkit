@@ -1,0 +1,7 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <GulpPropertiesImported>true</GulpPropertiesImported>
+        <NpmExe>npm</NpmExe>
+        <GulpExe>$(ProjectDir)node_modules/.bin/gulp</GulpExe>
+    </PropertyGroup>
+</Project>

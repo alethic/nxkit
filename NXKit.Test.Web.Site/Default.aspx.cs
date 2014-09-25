@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Web.UI;
 
-using NXKit.Web.UI;
+using NXKit.Server;
 
-namespace NXKit.Test.Web.Site
+namespace NXKit.Web.UI.Test.Site
 {
 
     public partial class Default :
