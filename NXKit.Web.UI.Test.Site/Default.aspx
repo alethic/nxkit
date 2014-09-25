@@ -10,7 +10,6 @@
     <title></title>
 
     <link rel="stylesheet" type="text/css" href="Content/normalize.css" />
-    <%--<link rel="stylesheet/less" type="text/css" href="Content/semantic/packaged/css/semantic.css" />--%>
     <link rel="stylesheet/less" type="text/css" href="Content/styles.less" />
 
     <style type="text/css">
@@ -28,9 +27,6 @@
                 <asp:ScriptReference Name="jquery" />
                 <asp:ScriptReference Name="less" />
                 <asp:ScriptReference Name="semantic" />
-                <asp:ScriptReference Name="nxkit" />
-                <asp:ScriptReference Name="nxkit-xforms" />
-                <asp:ScriptReference Name="nxkit-xforms-layout" />
             </Scripts>
         </asp:ScriptManager>
 

@@ -122,9 +122,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Content\Resources.cs" />
+    <Compile Include="IViewInjector.cs" />
+    <Compile Include="IViewModuleDependencyResolver.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\Resources.cs" />
+    <Compile Include="ViewModuleDependencyResolver.cs" />
+    <Compile Include="ViewModuleInjector.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
@@ -134,6 +139,11 @@
     <ProjectReference Include="..\NXKit.Server\NXKit.Server.csproj">
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
       <Name>NXKit.Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.View.Js\NXKit.View.Js.csproj">
+      <Project>{c7aedb60-a136-4356-9c04-35aa344d857e}</Project>
+      <Name>NXKit.View.Js</Name>
+      <WebContent>true</WebContent>
     </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
@@ -147,8 +157,25 @@
   <ItemGroup>
     <EmbeddedResource Include="Scripts\View.js" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\jquery-2.1.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\knockout-3.2.0.debug.js" />
+    <EmbeddedResource Include="Scripts\knockout-3.2.0.js" />
+    <EmbeddedResource Include="Scripts\nxkit.js" />
+    <EmbeddedResource Include="Scripts\nxkit.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Content\nxkit.css" />
+    <EmbeddedResource Include="Content\nxkit.html" />
+    <Content Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.1.js" />
+    <Content Include="Scripts\jquery-2.1.1.min.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\NXKit.targets" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
@@ -162,4 +189,5 @@
     <TypeScriptSourceMap>false</TypeScriptSourceMap>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
+  <Target Name="BeforeBuild" DependsOnTargets="CopyWebContentItems" />
 </Project>

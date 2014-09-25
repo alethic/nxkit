@@ -15,9 +15,9 @@ namespace NXKit
         ExportAttribute
     {
 
-        readonly ExtensionObjectType objectType;
-        readonly string namespaceName;
-        readonly string localName;
+        ExtensionObjectType objectType;
+        string namespaceName;
+        string localName;
         Type predicateType;
 
         /// <summary>
@@ -163,6 +163,7 @@ namespace NXKit
         public string NamespaceName
         {
             get { return namespaceName; }
+            set { namespaceName = value; }
         }
 
         /// <summary>

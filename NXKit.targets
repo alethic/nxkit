@@ -16,4 +16,13 @@
     <Target Name="CopyWebContentItems" DependsOnTargets="GetWebContentItems" Inputs="@(WebContentItems)" Outputs="@(WebContentItems->'%(TargetPath)')">
         <Copy SourceFiles="@(WebContentItems)" DestinationFiles="@(WebContentItems->'%(TargetPath)')" />
     </Target>
+    <Target Name="CleanWebContentItems" DependsOnTargets="GetWebContentItems">
+        <Delete Files="@(WebContentItems->'%(TargetPath)')" />
+    </Target>
+    <PropertyGroup>
+        <CleanDependsOn>
+            $(CleanDependsOn);
+            CleanWebContentItems;
+        </CleanDependsOn>
+    </PropertyGroup>
 </Project>

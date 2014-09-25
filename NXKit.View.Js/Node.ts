@@ -120,18 +120,36 @@ module NXKit.View {
          * Integrates the data given by the node parameter into this node.
          */
         public Apply(source: any) {
-            try {
-                this._data = source;
-                this.ApplyId(source.Id);
-                this.ApplyType(source.Type);
-                this.ApplyName(source.Name);
-                this.ApplyValue(source.Value);
-                this.ApplyInterfaces(source);
-                this.ApplyNodes(source.Nodes);
-            } catch (ex) {
-                ex.message = "Node.Apply()" + '\nMessage: ' + ex.message;
-                throw ex;
+            var self = this;
+
+            var next = function () {
+                try {
+                    self._data = source;
+                    self.ApplyId(source.Id);
+                    self.ApplyType(source.Type);
+                    self.ApplyName(source.Name);
+                    self.ApplyValue(source.Value);
+                    self.ApplyInterfaces(source);
+                    self.ApplyNodes(source.Nodes);
+                } catch (ex) {
+                    ex.message = "Node.Apply()" + '\nMessage: ' + ex.message;
+                    throw ex;
+                }
+            };
+
+            // check if any modules are required, if so dispatch to require framework
+            for (var i in source) {
+                if (i === 'NXKit.View.Js.ViewModule') {
+                    var deps = source[i]['Require'];
+                    if (deps != null) {
+                        self._view.Require(deps, next);
+                        return;
+                    }
+                }
             }
+
+            // no requirements, continue
+            next();
         }
 
         /**

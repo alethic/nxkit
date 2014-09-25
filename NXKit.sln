@@ -73,6 +73,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Web.UI.Test.Site", "N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.View.Ng", "NXKit.View.Ng\NXKit.View.Ng.csproj", "{6C3A6F17-7383-459E-8D29-773192521FE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.View.Web.UI", "NXKit.XForms.View.Web.UI\NXKit.XForms.View.Web.UI.csproj", "{7278EE22-DB62-4681-A822-5E0DD29BD7F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Layout.View.Web.UI", "NXKit.XForms.Layout.View.Web.UI\NXKit.XForms.Layout.View.Web.UI.csproj", "{38A49F91-54FA-47C7-B046-71D9FEF16F3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -187,6 +191,14 @@ Global
 		{6C3A6F17-7383-459E-8D29-773192521FE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C3A6F17-7383-459E-8D29-773192521FE2}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{6C3A6F17-7383-459E-8D29-773192521FE2}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{7278EE22-DB62-4681-A822-5E0DD29BD7F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7278EE22-DB62-4681-A822-5E0DD29BD7F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7278EE22-DB62-4681-A822-5E0DD29BD7F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7278EE22-DB62-4681-A822-5E0DD29BD7F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38A49F91-54FA-47C7-B046-71D9FEF16F3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38A49F91-54FA-47C7-B046-71D9FEF16F3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38A49F91-54FA-47C7-B046-71D9FEF16F3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38A49F91-54FA-47C7-B046-71D9FEF16F3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

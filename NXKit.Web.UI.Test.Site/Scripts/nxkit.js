@@ -368,18 +368,35 @@ var NXKit;
             * Integrates the data given by the node parameter into this node.
             */
             Node.prototype.Apply = function (source) {
-                try  {
-                    this._data = source;
-                    this.ApplyId(source.Id);
-                    this.ApplyType(source.Type);
-                    this.ApplyName(source.Name);
-                    this.ApplyValue(source.Value);
-                    this.ApplyInterfaces(source);
-                    this.ApplyNodes(source.Nodes);
-                } catch (ex) {
-                    ex.message = "Node.Apply()" + '\nMessage: ' + ex.message;
-                    throw ex;
+                var self = this;
+
+                var next = function () {
+                    try  {
+                        self._data = source;
+                        self.ApplyId(source.Id);
+                        self.ApplyType(source.Type);
+                        self.ApplyName(source.Name);
+                        self.ApplyValue(source.Value);
+                        self.ApplyInterfaces(source);
+                        self.ApplyNodes(source.Nodes);
+                    } catch (ex) {
+                        ex.message = "Node.Apply()" + '\nMessage: ' + ex.message;
+                        throw ex;
+                    }
+                };
+
+                for (var i in source) {
+                    if (i === 'NXKit.View.Js.ViewModule') {
+                        var deps = source[i]['Require'];
+                        if (deps != null) {
+                            self._view.Require(deps, next);
+                            return;
+                        }
+                    }
                 }
+
+                // no requirements, continue
+                next();
             };
 
             /**
@@ -1806,10 +1823,11 @@ var NXKit;
         * Main NXKit client-side view class. Injects the view interface into a set of HTML elements.
         */
         var View = (function () {
-            function View(body, server) {
+            function View(body, require, server) {
                 var self = this;
 
                 self._server = server;
+                self._require = require;
                 self._body = body;
                 self._save = null;
                 self._hash = null;
@@ -1868,6 +1886,13 @@ var NXKit;
                 configurable: true
             });
 
+
+            /**
+            * Dispatches a request to the current require framework.
+            */
+            View.prototype.Require = function (deps, cb) {
+                this._require(deps, cb);
+            };
 
             /**
             * Updates the view in response to a received message.

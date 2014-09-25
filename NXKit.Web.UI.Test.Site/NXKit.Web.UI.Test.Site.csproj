@@ -253,14 +253,14 @@
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
-    <Content Include="Scripts\knockout-3.1.0.debug.js" />
-    <Content Include="Scripts\knockout-3.1.0.js" />
     <Content Include="Scripts\less-1.7.0.js" />
     <Content Include="Scripts\less-1.7.0.min.js" />
     <Content Include="Scripts\nxkit-xforms.js" />
     <Content Include="Scripts\nxkit-xforms.min.js" />
     <Content Include="Scripts\nxkit.js" />
     <Content Include="Scripts\nxkit.min.js" />
+    <Content Include="Scripts\r.js" />
+    <Content Include="Scripts\require.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +322,10 @@
       <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
       <Name>NXKit.Web.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Layout.View.Web.UI\NXKit.XForms.Layout.View.Web.UI.csproj">
+      <Project>{38a49f91-54fa-47c7-b046-71d9fef16f3e}</Project>
+      <Name>NXKit.XForms.Layout.View.Web.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.View.Js\NXKit.XForms.View.Js.csproj">
       <Project>{f106499b-42cc-41cf-9824-39755e25993f}</Project>
       <Name>NXKit.XForms.View.Js</Name>
@@ -339,6 +343,10 @@
     <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
       <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
       <Name>NXKit.XForms.Layout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.View.Web.UI\NXKit.XForms.View.Web.UI.csproj">
+      <Project>{7278ee22-db62-4681-a822-5e0dd29bd7f8}</Project>
+      <Name>NXKit.XForms.View.Web.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
       <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
@@ -401,6 +409,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Import Project="$(ProjectDir)..\NXKit.targets" Condition="Exists('$(ProjectDir)..\NXKit.targets')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\NXKit.targets" Condition="Exists('$(MSBuildProjectDirectory)\..\NXKit.targets')" />
   <Target Name="BeforeBuild" DependsOnTargets="CopyWebContentItems" />
 </Project>

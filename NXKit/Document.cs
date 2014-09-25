@@ -237,7 +237,7 @@ namespace NXKit
             this.xml.AddAnnotation(this);
 
             // parallel initialization of common interfaces
-            Parallel.ForEach(this.xml.DescendantNodesAndSelf(), new ParallelOptions() { MaxDegreeOfParallelism = 128 }, i =>
+            Parallel.ForEach(this.xml.DescendantNodesAndSelf(), i =>
             {
                 Enumerable.Empty<object>()
                     .Concat(i.Interfaces<IOnInit>())

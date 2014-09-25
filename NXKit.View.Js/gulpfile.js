@@ -19,7 +19,7 @@ gulp.task('clean', function (cb) {
     ], cb);
 });
 
-gulp.task('scripts', [], function () {
+gulp.task('scripts', ['clean'], function () {
     return gulp.src([
             'nxkit.js.prefix',
             util.env.IntermediateOutputPath + 'nxkit.ts.js',
@@ -32,7 +32,7 @@ gulp.task('scripts', [], function () {
         .pipe(gulp.dest(util.env.IntermediateOutputPath));
 });
 
-gulp.task('templates', [], function () {
+gulp.task('templates', ['clean'], function () {
     return gulp.src([
             '*.html',
         ])
@@ -40,7 +40,7 @@ gulp.task('templates', [], function () {
         .pipe(gulp.dest(util.env.IntermediateOutputPath));
 });
 
-gulp.task('less', [], function () {
+gulp.task('less', ['clean'], function () {
     return gulp.src([
             '*.less',
     ])

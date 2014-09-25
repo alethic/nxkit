@@ -1,34 +1,75 @@
 ﻿Type.registerNamespace('_NXKit.Web.UI');
 
+_NXKit.Web.UI.defines = {};
+
 _NXKit.Web.UI.View = function (element) {
     var self = this;
     _NXKit.Web.UI.View.initializeBase(self, [element]);
 
     self._view = null;
     self._sendFunc = null;
+    self._enableScriptManager = true;
+    self._enableAMD = false;
 };
 
 _NXKit.Web.UI.View.prototype = {
 
-    _require: function (cb) {
+    require: function (deps, cb) {
         var self = this;
 
-        if (typeof require === 'function') {
-            require(['nxkit'], function (nx) {
-                $(document).ready(function () {
-                    cb(nx);
-                })
-            });
-        } else if (typeof NXKit === 'object' && typeof NXKit.View === 'object' && typeof NXKit.View.View === 'function') {
-            $(document).ready(function () {
-                cb(NXKit);
-            });
-        } else {
-            if (typeof console.warn === 'function') {
-                console.warn('NXKit.Web.UI component delayed waiting for NXKit');
+        if (self._enableAMD) {
+            if (typeof require === 'function' && define['amd']) {
+                require(deps, cb);
             }
+        } else {
+            for (var i in deps) {
+                if (!Object.prototype.hasOwnProperty.call(_NXKit.Web.UI.defines, deps[i])) {
+                    self.send({ Type: 'Require', Require: deps[i] }, function (response) {
+                        console.log(response);
+                    })
+                }
+            }
+        }
 
-            setTimeout(function () { self._require(cb) }, 1000);
+        if (self._enableScriptManager) {
+            self.require = function (modules, cb) {
+                $(document).ready(function () {
+                    cb();
+                });
+            }
+        }
+
+    },
+
+    _wait: function (cb) {
+        var self = this;
+
+        if (self._enableScriptManager) {
+            if (typeof NXKit === 'object' &&
+                typeof NXKit.View === 'object' &&
+                typeof NXKit.View.View === 'function') {
+                $(document).ready(function () {
+                    cb(NXKit);
+                });
+            } else {
+                if (typeof console.warn === 'function') {
+                    console.warn('NXKit.Web.UI component delayed waiting ScriptManager initialization of NXKit.');
+                }
+
+                setTimeout(function () { self._wait(cb) }, 1000);
+            }
+        }
+
+        if (self._enableAMD) {
+            if (typeof require === 'function' && define['amd']) {
+                require(['nxkit'], function (nx) {
+                    $(document).ready(function () {
+                        cb(nx);
+                    })
+                });
+            } else {
+                console.error('EnableAMD specified, but AMD not found.');
+            }
         }
     },
 
@@ -45,6 +86,22 @@ _NXKit.Web.UI.View.prototype = {
 
         self._view = null;
         self._send = null;
+    },
+
+    get_enableScriptManager: function () {
+        return this._enableScriptManager;
+    },
+
+    set_enableScriptManager: function (value) {
+        this._enableScriptManager = value;
+    },
+
+    get_enableAMD: function () {
+        return this._enableAMD;
+    },
+
+    set_enableAMD: function (value) {
+        this._enableAMD = value;
     },
 
     get_sendFunc: function () {
@@ -89,13 +146,17 @@ _NXKit.Web.UI.View.prototype = {
             self._onsubmit();
         });
 
-        self._require(function (nx) {
+        self._wait(function (nx) {
 
             // initialize view
             if (self._view == null) {
-                self._view = new nx.View.View(body[0], function (data, cb) {
-                    self.send(data, cb);
-                });
+                self._view = new nx.View.View(body[0],
+                    function (modules, cb) {
+                        self.require(modules, cb);
+                    },
+                    function (data, cb) {
+                        self.send({ Type: 'Message', Data: data }, cb);
+                    });
             }
 
             // update view with initial data set

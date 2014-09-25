@@ -30,30 +30,6 @@ namespace NXKit.View.UI.Test.Site
                 Path = "~/Content/bootstrap/dist/js/bootstrap.min.js",
                 DebugPath = "~/Content/bootstrap/dist/js/bootstrap.js",
             });
-
-            ScriptManager.ScriptResourceMapping.AddDefinition("knockout", new ScriptResourceDefinition
-            {
-                Path = "~/Scripts/knockout-3.1.0.js",
-                DebugPath = "~/Scripts/knockout-3.1.0.debug.js",
-            });
-
-            ScriptManager.ScriptResourceMapping.AddDefinition("nxkit", new ScriptResourceDefinition
-            {
-                Path = "~/Scripts/nxkit.min.js",
-                DebugPath = "~/Scripts/nxkit.js",
-            });
-
-            ScriptManager.ScriptResourceMapping.AddDefinition("nxkit-xforms", new ScriptResourceDefinition
-            {
-                Path = "~/Scripts/nxkit-xforms.min.js",
-                DebugPath = "~/Scripts/nxkit-xforms.js",
-            });
-
-            ScriptManager.ScriptResourceMapping.AddDefinition("nxkit-xforms-layout", new ScriptResourceDefinition
-            {
-                Path = "~/Scripts/nxkit-xforms-layout.min.js",
-                DebugPath = "~/Scripts/nxkit-xforms-layout.js",
-            });
         }
 
     }

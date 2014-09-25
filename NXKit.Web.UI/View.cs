@@ -4,11 +4,13 @@ using System.Collections.Specialized;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Web.UI;
-
 using Newtonsoft.Json;
-
+using Newtonsoft.Json.Linq;
+using NXKit.Composition;
 using NXKit.Server;
+using NXKit.View.Js;
 
 namespace NXKit.Web.UI
 {
@@ -24,17 +26,29 @@ namespace NXKit.Web.UI
 
         string cssClass;
         string validationGroup;
+        bool enableScriptManager;
+        bool enableAMD;
+        bool enableEmbeddedStyles;
+        CompositionContainer container;
         ViewServer server;
         ViewMessage message;
+        object response;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         public View()
         {
+            this.container = CompositionUtil.CreateContainer(CompositionUtil.DefaultGlobalCatalog);
+
             this.server = new ViewServer();
             this.server.DocumentLoaded += (s, a) => OnDocumentLoaded(a);
             this.server.DocumentUnloading += (s, a) => OnDocumentUnloading(a);
+
+            // by default use ScriptManager
+            this.enableScriptManager = true;
+            this.enableAMD = false;
+            this.enableEmbeddedStyles = true;
         }
 
         /// <summary>
@@ -55,6 +69,33 @@ namespace NXKit.Web.UI
         {
             get { return validationGroup; }
             set { validationGroup = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets whether the ScriptManager should be used.
+        /// </summary>
+        public bool EnableScriptManager
+        {
+            get { return enableScriptManager; }
+            set { enableScriptManager = value; enableAMD = !enableScriptManager; }
+        }
+
+        /// <summary>
+        /// Gets or sets whether the AMD module loader should be used.
+        /// </summary>
+        public bool EnableAMD
+        {
+            get { return enableAMD; }
+            set { enableAMD = value; enableScriptManager = !enableAMD; }
+        }
+
+        /// <summary>
+        /// Gets or sets whether embedded style sheets are injected into the document.
+        /// </summary>
+        public bool EnableEmbeddedStyles
+        {
+            get { return enableEmbeddedStyles; }
+            set { enableEmbeddedStyles = value; }
         }
 
         /// <summary>
@@ -138,21 +179,6 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Raises the PreRender event.
-        /// </summary>
-        /// <param name="args"></param>
-        protected override void OnPreRender(EventArgs args)
-        {
-            base.OnPreRender(args);
-
-            if (message != null)
-            {
-                ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
-                Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"')._onsubmit();");
-            }
-        }
-
-        /// <summary>
         /// Loads view state information.
         /// </summary>
         /// <param name="savedState"></param>
@@ -177,6 +203,25 @@ namespace NXKit.Web.UI
                 cssClass,
                 validationGroup,
             };
+        }
+
+        /// <summary>
+        /// Raises the PreRender event.
+        /// </summary>
+        /// <param name="args"></param>
+        protected override void OnPreRender(EventArgs args)
+        {
+            base.OnPreRender(args);
+
+            if (message != null)
+            {
+                ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
+                Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"')._onsubmit();");
+
+                // allow injectors to intercept
+                foreach (var injector in container.GetExportedValues<IViewInjector>())
+                    injector.OnPreRender(this);
+            }
         }
 
         /// <summary>
@@ -212,26 +257,41 @@ namespace NXKit.Web.UI
         }
 
         /// <summary>
-        /// Raises the Unload event.
+        /// Loads the given dependency.
         /// </summary>
-        /// <param name="args"></param>
-        protected override void OnUnload(EventArgs args)
+        /// <param name="dependency"></param>
+        /// <returns></returns>
+        object LoadRequire(ViewModuleDependency dependency)
         {
-            base.OnUnload(args);
+            return container.GetExportedValues<IViewModuleDependencyResolver>()
+                .Select(i => i.Resolve(dependency))
+                .FirstOrDefault(i => i != null);
         }
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
             var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
+            d.AddProperty("enableScriptManager", enableScriptManager);
+            d.AddProperty("enableAMD", enableAMD);
             d.AddProperty("sendFunc", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self") + ";");
             yield return d;
         }
 
         IEnumerable<ScriptReference> IScriptControl.GetScriptReferences()
         {
-            yield return new ScriptReference() { Name = "jquery" };
-            yield return new ScriptReference() { Name = "knockout" };
-            yield return new ScriptReference() { Name = "nxkit" };
+            // optionally depend on ScriptManager to load dependencies
+            if (enableScriptManager)
+            {
+                yield return new ScriptReference() { Name = "jquery" };
+                yield return new ScriptReference() { Name = "knockout" };
+
+                // yield any script references
+                foreach (var injector in container.GetExportedValues<IViewInjector>())
+                    foreach (var reference in injector.GetScriptReferences(this))
+                        yield return reference;
+            }
+
+            // ScriptManager is always used to register the Web UI type
             yield return new ScriptReference() { Name = "nxkit-ui" };
         }
 
@@ -267,7 +327,11 @@ namespace NXKit.Web.UI
         /// <param name="eventArgument"></param>
         void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
         {
-            message = server.Load(JsonConvert.DeserializeObject<ViewMessage>(eventArgument));
+            var jobj = JObject.Parse(eventArgument);
+            if (jobj["Type"].Value<string>() == "Message")
+                response = new { Type = "Messasge", Message = message = server.Load(jobj["Data"].ToObject<ViewMessage>()) };
+            if (jobj["Type"].Value<string>() == "Require")
+                response = new { Type = "Require", Define = LoadRequire(jobj["Require"].ToObject<ViewModuleDependency>()) };
         }
 
         /// <summary>
@@ -276,7 +340,7 @@ namespace NXKit.Web.UI
         /// <returns></returns>
         string ICallbackEventHandler.GetCallbackResult()
         {
-            return JsonConvert.SerializeObject(message);
+            return JsonConvert.SerializeObject(response);
         }
 
     }
