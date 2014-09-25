@@ -301,6 +301,7 @@
     <ProjectReference Include="..\NXKit.Client.JS\NXKit.Client.JS.csproj">
       <Project>{c7aedb60-a136-4356-9c04-35aa344d857e}</Project>
       <Name>NXKit.Client.JS</Name>
+      <WebContent>true</WebContent>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
       <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
@@ -325,6 +326,7 @@
     <ProjectReference Include="..\NXKit.XForms.Client.JS\NXKit.XForms.Client.JS.csproj">
       <Project>{f106499b-42cc-41cf-9824-39755e25993f}</Project>
       <Name>NXKit.XForms.Client.JS</Name>
+      <WebContent>true</WebContent>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Examples\NXKit.XForms.Examples.csproj">
       <Project>{564c13be-ab20-49fd-9bc4-44fe701e3ac2}</Project>
@@ -401,24 +403,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="CopySourceFiles">
-    <ItemGroup>
-      <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Client.JS\bin\nxkit.js" />
-      <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.Client.JS\bin\nxkit.min.js" />
-      <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.XForms.Client.JS\bin\nxkit-xforms.js" />
-      <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.XForms.Client.JS\bin\nxkit-xforms.min.js" />
-      <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.XForms.Layout.Client.JS\bin\nxkit-xforms-layout.js" />
-      <ScriptSourceFiles Include="$(ProjectDir)..\NXKit.XForms.Layout.Client.JS\bin\nxkit-xforms-layout.min.js" />
-    </ItemGroup>
-    <Copy SourceFiles="@(ScriptSourceFiles)" DestinationFiles="@(ScriptSourceFiles->'$(ProjectDir)\Scripts\%(RecursiveDir)%(Filename)%(Extension)')" />
-  </Target>
-  <Target Name="CopyContentFiles">
-    <ItemGroup>
-      <ContentSourceFiles Include="$(ProjectDir)..\NXKit.Client.JS\bin\nxkit.html" />
-      <ContentSourceFiles Include="$(ProjectDir)..\NXKit.XForms.Client.JS\bin\nxkit-xforms.html" />
-      <ContentSourceFiles Include="$(ProjectDir)..\NXKit.XForms.Layout.Client.JS\bin\nxkit-xforms-layout.html" />
-    </ItemGroup>
-    <Copy SourceFiles="@(ContentSourceFiles)" DestinationFiles="@(ContentSourceFiles->'$(ProjectDir)\Content\%(RecursiveDir)%(Filename)%(Extension)')" />
-  </Target>
-  <Target Name="BeforeBuild" DependsOnTargets="CopySourceFiles;CopyContentFiles" />
+  <Import Project="$(ProjectDir)..\NXKit.targets" Condition="Exists('$(ProjectDir)..\NXKit.targets')" />
+  <Target Name="BeforeBuild" DependsOnTargets="CopyWebContentItems" />
 </Project>
