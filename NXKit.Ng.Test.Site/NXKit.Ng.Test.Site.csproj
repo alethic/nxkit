@@ -290,9 +290,9 @@
       <Project>{fda6d401-d67e-4dac-80b4-4fe0aa4ce338}</Project>
       <Name>NXKit.XForms.Json</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.XForms.Layout.Client.JS\NXKit.XForms.Layout.Client.JS.csproj">
+    <ProjectReference Include="..\NXKit.XForms.Layout.Client.JS\NXKit.XForms.Layout.View.Js.csproj">
       <Project>{9499152c-156e-4005-a01f-4d6f1c480c63}</Project>
-      <Name>NXKit.XForms.Layout.Client.JS</Name>
+      <Name>NXKit.XForms.Layout.View.Js</Name>
       <WebContent>true</WebContent>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">

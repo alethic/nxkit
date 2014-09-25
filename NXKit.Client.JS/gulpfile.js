@@ -50,7 +50,6 @@ gulp.task('less', [], function () {
 });
 
 gulp.task('compile', ['scripts', 'templates', 'less']);
-
 gulp.task('build', ['compile'], function () {
     return gulp.src([
         util.env.IntermediateOutputPath + 'nxkit.js',
@@ -61,4 +60,4 @@ gulp.task('build', ['compile'], function () {
         .pipe(gulp.dest(util.env.OutputPath));
 });
 
-gulp.task('default', ['scripts', 'templates', 'less', 'build']);
+gulp.task('default', ['build']);

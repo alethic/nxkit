@@ -7,21 +7,20 @@
     <PropertyGroup Condition="'$(GulpCommand)' == ''">
         <GulpCommand>$(GulpExe) --IntermediateOutputPath $(IntermediateOutputPath) --OutputPath $(OutputPath)</GulpCommand>
     </PropertyGroup>
-    <Target Name="NpmInstall" Condition="!Exists('$(ProjectDir)node_modules')">
-        <Error Condition="!Exists('$(NpmExe)')" Text="Could not located npm command. Node installation could have failed." />
-        <Exec Command="$(NpmCommand) install" WorkingDirectory="$(ProjectDir)" />
+    <Target Name="NpmInstall" Condition="!Exists('$(MSBuildProjectDirectory)\node_modules')">
+        <Exec Command="$(NpmCommand) install" WorkingDirectory="$(MSBuildProjectDirectory)" />
     </Target>
     <Target Name="GulpClean" DependsOnTargets="NpmInstall">
-        <Error Condition="!Exists('$(GulpExe)')" Text="Could not located gulp command. Node installation could have failed." />
-        <Exec Command="$(GulpCommand) clean" WorkingDirectory="$(ProjectDir)" />
+        <Error Condition="!Exists('$(GulpExe)')" Text="Could not locate gulp command. Node installation could have failed." />
+        <Exec Command="$(GulpCommand) clean" WorkingDirectory="$(MSBuildProjectDirectory)" />
     </Target>
-    <Target Name="GulpCompile" DependsOnTargets="CompileTypeScript;NpmInstall">
-        <Error Condition="!Exists('$(GulpExe)')" Text="Could not located gulp command. Node installation could have failed." />
-        <Exec Command="$(GulpCommand) compile" WorkingDirectory="$(ProjectDir)" />
+    <Target Name="GulpCompile" DependsOnTargets="NpmInstall" AfterTargets="CompileDependsOn">
+        <Error Condition="!Exists('$(GulpExe)')" Text="Could not locate gulp command. Node installation could have failed." />
+        <Exec Command="$(GulpCommand) compile" WorkingDirectory="$(MSBuildProjectDirectory)" />
     </Target>
-    <Target Name="GulpBuild" DependsOnTargets="CompileTypeScript;NpmInstall">
-        <Error Condition="!Exists('$(GulpExe)')" Text="Could not located gulp command. Node installation could have failed." />
-        <Exec Command="$(GulpCommand)" WorkingDirectory="$(ProjectDir)" />
+    <Target Name="GulpBuild" DependsOnTargets="NpmInstall" AfterTargets="CompileDependsOn">
+        <Error Condition="!Exists('$(GulpExe)')" Text="Could not locate gulp command. Node installation could have failed." />
+        <Exec Command="$(GulpCommand)" WorkingDirectory="$(MSBuildProjectDirectory)" />
     </Target>
     <PropertyGroup>
         <CleanDependsOn>

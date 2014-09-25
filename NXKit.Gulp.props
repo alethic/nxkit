@@ -3,6 +3,6 @@
     <PropertyGroup>
         <GulpPropertiesImported>true</GulpPropertiesImported>
         <NpmExe>npm</NpmExe>
-        <GulpExe>$(ProjectDir)node_modules\.bin\gulp</GulpExe>
+        <GulpExe>$(MSBuildProjectDirectory)\node_modules\.bin\gulp</GulpExe>
     </PropertyGroup>
 </Project>
