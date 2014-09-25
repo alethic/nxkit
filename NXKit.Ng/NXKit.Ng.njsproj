@@ -1,22 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0"
+         DefaultTargets="Build"
+         xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(ProjectDir)..\NXKit.Gulp.props" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{6c3a6f17-7383-459e-8d29-773192521fe2}</ProjectGuid>
-    <ProjectView>ShowAllFiles</ProjectView>
-    <StartupFile />
-    <WorkingDirectory>.</WorkingDirectory>
-    <OutputPath>.</OutputPath>
-    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <StartWebBrowser>False</StartWebBrowser>
-    <ProjectHome />
-    <Name>NXKit.Ng</Name>
+      <ProjectTypeGuids>{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+      <OutputType>Library</OutputType>
+      <OutputPath>bin</OutputPath>
+      <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+      <DebugType>full</DebugType>
+      <DebugSymbols>true</DebugSymbols>
+      <OldToolsVersion>4.0</OldToolsVersion>
+      <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+      <RestorePackages>true</RestorePackages>
+      <RootNamespace>NXKit.Client.Ng</RootNamespace>
+      <AssemblyName>NXKit.Client.Ng</AssemblyName>
+      <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Content Include="nxkit-ng.js.suffix" />
     <Content Include="nxkit-ng.js.prefix" />
@@ -32,52 +34,19 @@
     <Folder Include="src\js\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
-  <Target Name="GulpBuild">
-    <Exec Command="$(ProjectDir)node_modules/.bin/gulp --TargetDir $(TargetDir)\bin\$(Configuration)" WorkingDirectory="$(ProjectDir)" />
-  </Target>
-  <PropertyGroup>
-    <BuildDependsOn>
-            $(BuildDependsOn);
-            GulpBuild;
-        </BuildDependsOn>
-  </PropertyGroup>
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-        <WebProjectProperties>
-          <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:48022/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>True</UseCustomServer>
-          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-        </WebProjectProperties>
-      </FlavorProperties>
-      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
-        <WebProjectProperties>
-          <StartPageUrl>
-          </StartPageUrl>
-          <StartAction>CurrentPage</StartAction>
-          <AspNetDebugging>True</AspNetDebugging>
-          <SilverlightDebugging>False</SilverlightDebugging>
-          <NativeDebugging>False</NativeDebugging>
-          <SQLDebugging>False</SQLDebugging>
-          <ExternalProgram>
-          </ExternalProgram>
-          <StartExternalURL>
-          </StartExternalURL>
-          <StartCmdLineArguments>
-          </StartCmdLineArguments>
-          <StartWorkingDirectory>
-          </StartWorkingDirectory>
-          <EnableENC>False</EnableENC>
-          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
-        </WebProjectProperties>
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
+  <Import Project="$(ProjectDir)..\NXKit.targets" />
+  <Import Project="$(ProjectDir)..\NXKit.Gulp.targets" />
+    <Target Name="AfterBuild">
+        <ItemGroup>
+            <WebContentOutputItems Include="$(OutputPath)nxkit-ng.js">
+                <TargetPath>Scripts\nxkit-ng.js</TargetPath>
+            </WebContentOutputItems>
+            <WebContentOutputItems Include="$(OutputPath)nxkit-ng.min.js">
+                <TargetPath>Scripts\nxkit-ng.min.js</TargetPath>
+            </WebContentOutputItems>
+            <WebContentOutputItems Include="$(OutputPath)nxkit-ng.html">
+                <TargetPath>Content\nxkit-ng.html</TargetPath>
+            </WebContentOutputItems>
+        </ItemGroup>
+    </Target>
 </Project>
