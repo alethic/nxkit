@@ -90,6 +90,20 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <Target Name="AfterBuild">
+      <ItemGroup>
+          <WebContentOutputItems Include="$(OutputPath)nxkit-xforms-layout.js">
+              <TargetPath>Scripts\nxkit-xforms-layout.js</TargetPath>
+          </WebContentOutputItems>
+          <WebContentOutputItems Include="$(OutputPath)nxkit-xforms-layout.min.js">
+              <TargetPath>Scripts\nxkit-xforms-layout.min.js</TargetPath>
+          </WebContentOutputItems>
+          <WebContentOutputItems Include="$(OutputPath)nxkit-xforms-layout.html">
+              <TargetPath>Content\nxkit-xforms-layout.html</TargetPath>
+          </WebContentOutputItems>
+          <WebContentOutputItems Include="$(OutputPath)nxkit-xforms-layout.css">
+              <TargetPath>Content\nxkit-xforms-layout.css</TargetPath>
+          </WebContentOutputItems>
+      </ItemGroup>
     <Copy SourceFiles="$(IntermediateOutputPath)nxkit-xforms-layout.ts.d.ts" DestinationFiles="$(OutputPath)nxkit-xforms-layout.d.ts" />
   </Target>
 </Project>

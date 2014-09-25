@@ -85,6 +85,8 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+    <Import Project="$(ProjectDir)..\NXKit.targets"
+            Condition="Exists('$(ProjectDir)..\NXKit.targets')" />
   <Import Project="$(ProjectDir)..\NXKit.Gulp.targets" Condition="Exists('$(ProjectDir)..\NXKit.Gulp.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -93,6 +95,20 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
     <Target Name="AfterBuild">
+        <ItemGroup>
+            <WebContentOutputItems Include="$(OutputPath)nxkit.js">
+                <TargetPath>Scripts\nxkit.js</TargetPath>
+            </WebContentOutputItems>
+            <WebContentOutputItems Include="$(OutputPath)nxkit.min.js">
+                <TargetPath>Scripts\nxkit.min.js</TargetPath>
+            </WebContentOutputItems>
+            <WebContentOutputItems Include="$(OutputPath)nxkit.html">
+                <TargetPath>Content\nxkit.html</TargetPath>
+            </WebContentOutputItems>
+            <WebContentOutputItems Include="$(OutputPath)nxkit.css">
+                <TargetPath>Content\nxkit.css</TargetPath>
+            </WebContentOutputItems>
+        </ItemGroup>
         <Copy SourceFiles="$(IntermediateOutputPath)nxkit.ts.d.ts"
               DestinationFiles="$(OutputPath)nxkit.d.ts" />
     </Target>

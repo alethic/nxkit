@@ -1,15 +1,26 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <Import Project="NXKit.Gulp.props" Condition="'$(GulpPropertiesImported)' != 'true'" />
+    <PropertyGroup Condition="'$(NpmCommand)' == ''">
+        <NpmCommand>$(NpmExe)</NpmCommand>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(GulpCommand)' == ''">
         <GulpCommand>$(GulpExe) --IntermediateOutputPath $(IntermediateOutputPath) --OutputPath $(OutputPath)</GulpCommand>
     </PropertyGroup>
-    <Target Name="GulpClean">
+    <Target Name="NpmInstall" Condition="!Exists('$(ProjectDir)node_modules')">
+        <Error Condition="!Exists('$(NpmExe)')" Text="Could not located npm command. Node installation could have failed." />
+        <Exec Command="$(NpmCommand) install" WorkingDirectory="$(ProjectDir)" />
+    </Target>
+    <Target Name="GulpClean" DependsOnTargets="NpmInstall">
+        <Error Condition="!Exists('$(GulpExe)')" Text="Could not located gulp command. Node installation could have failed." />
         <Exec Command="$(GulpCommand) clean" WorkingDirectory="$(ProjectDir)" />
     </Target>
-    <Target Name="GulpCompile" DependsOnTargets="CompileTypeScript">
+    <Target Name="GulpCompile" DependsOnTargets="CompileTypeScript;NpmInstall">
+        <Error Condition="!Exists('$(GulpExe)')" Text="Could not located gulp command. Node installation could have failed." />
         <Exec Command="$(GulpCommand) compile" WorkingDirectory="$(ProjectDir)" />
     </Target>
-    <Target Name="GulpBuild" DependsOnTargets="CompileTypeScript">
+    <Target Name="GulpBuild" DependsOnTargets="CompileTypeScript;NpmInstall">
+        <Error Condition="!Exists('$(GulpExe)')" Text="Could not located gulp command. Node installation could have failed." />
         <Exec Command="$(GulpCommand)" WorkingDirectory="$(ProjectDir)" />
     </Target>
     <PropertyGroup>

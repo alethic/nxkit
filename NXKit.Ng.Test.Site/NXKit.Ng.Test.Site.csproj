@@ -275,10 +275,6 @@
       <Project>{f509df8d-af13-468d-8381-028835a79dec}</Project>
       <Name>NXKit.Scripting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.Test.Web.Site\NXKit.Web.UI.Test.Site.csproj">
-      <Project>{606cfc52-d06a-4b21-b295-a52c5d8c979e}</Project>
-      <Name>NXKit.Web.UI.Test.Site</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Json\NXKit.XForms.Json.csproj">
       <Project>{fda6d401-d67e-4dac-80b4-4fe0aa4ce338}</Project>
       <Name>NXKit.XForms.Json</Name>

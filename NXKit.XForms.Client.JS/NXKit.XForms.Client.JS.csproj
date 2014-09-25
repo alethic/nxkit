@@ -95,6 +95,8 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+    <Import Project="$(ProjectDir)..\NXKit.targets"
+            Condition="Exists('$(ProjectDir)..\NXKit.targets')" />
   <Import Project="$(ProjectDir)..\NXKit.Gulp.targets" Condition="Exists('$(ProjectDir)..\NXKit.Gulp.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -103,6 +105,20 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <Target Name="AfterBuild">
+          <ItemGroup>
+              <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.js">
+                  <TargetPath>Scripts\nxkit-xforms.js</TargetPath>
+              </WebContentOutputItems>
+              <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.min.js">
+                  <TargetPath>Scripts\nxkit-xforms.min.js</TargetPath>
+              </WebContentOutputItems>
+              <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.html">
+                  <TargetPath>Content\nxkit-xforms.html</TargetPath>
+              </WebContentOutputItems>
+              <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.css">
+                  <TargetPath>Content\nxkit-xforms.css</TargetPath>
+              </WebContentOutputItems>
+          </ItemGroup>
     <Copy SourceFiles="$(IntermediateOutputPath)nxkit-xforms.ts.d.ts" DestinationFiles="$(OutputPath)nxkit-xforms.d.ts" />
   </Target>
 </Project>
