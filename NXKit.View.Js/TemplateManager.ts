@@ -1,6 +1,6 @@
 ﻿/// <reference path="DeferredExecutor.ts"/>
 
-module NXKit.Web {
+module NXKit.View {
 
     /**
     * Manages a set of templates that are injected into the document upon request.

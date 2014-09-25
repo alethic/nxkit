@@ -1,4 +1,4 @@
-﻿module NXKit.Web.ViewModelUtil {
+﻿module NXKit.View.ViewModelUtil {
 
     /**
       * Set of functions to inject layout managers at the top of the hierarchy.

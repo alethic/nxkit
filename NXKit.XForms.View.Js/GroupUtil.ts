@@ -1,4 +1,4 @@
-﻿module NXKit.Web.XForms.GroupUtil {
+﻿module NXKit.View.XForms.GroupUtil {
 
     export class Item {
 
@@ -283,7 +283,7 @@
     export function GetItems(viewModel: NodeViewModel, node: Node, level: number): Item[] {
         try {
             var list = new Array<Item>();
-            var cnts = NXKit.Web.ViewModelUtil.GetContents(node);
+            var cnts = NXKit.View.ViewModelUtil.GetContents(node);
             for (var i = 0; i < cnts.length; i++) {
                 var v = cnts[i];
 

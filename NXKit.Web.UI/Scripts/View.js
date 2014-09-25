@@ -10,6 +10,28 @@ _NXKit.Web.UI.View = function (element) {
 
 _NXKit.Web.UI.View.prototype = {
 
+    _require: function (cb) {
+        var self = this;
+
+        if (typeof require === 'function') {
+            require(['nxkit'], function (nx) {
+                $(document).ready(function () {
+                    cb(nx);
+                })
+            });
+        } else if (typeof NXKit === 'object' && typeof NXKit.View === 'object' && typeof NXKit.View.View === 'function') {
+            $(document).ready(function () {
+                cb(NXKit);
+            });
+        } else {
+            if (typeof console.warn === 'function') {
+                console.warn('NXKit.Web.UI component delayed waiting for NXKit');
+            }
+
+            setTimeout(function () { self._require(cb) }, 1000);
+        }
+    },
+
     initialize: function () {
         var self = this;
         _NXKit.Web.UI.View.callBaseMethod(self, 'initialize');
@@ -40,10 +62,12 @@ _NXKit.Web.UI.View.prototype = {
         if (data.length == 0)
             throw new Error("cannot find data element");
 
-        // update the hidden data field value before submit
-        if (self._view != null) {
-            $(data).val(JSON.stringify(self._view.Data));
-        }
+        self._require(function (nx) {
+            // update the hidden data field value before submit
+            if (self._view != null) {
+                $(data).val(JSON.stringify(self._view.Data));
+            }
+        });
     },
 
     _init: function () {
@@ -65,18 +89,19 @@ _NXKit.Web.UI.View.prototype = {
             self._onsubmit();
         });
 
-        $(document).ready(function () {
-            // generate new view
+        self._require(function (nx) {
+
+            // initialize view
             if (self._view == null) {
-                self._view = new NXKit.Web.View(body[0], function (data, cb) {
+                self._view = new nx.View.View(body[0], function (data, cb) {
                     self.send(data, cb);
                 });
             }
 
-            // update view with data, and remove data from resubmission
+            // update view with initial data set
             self._view.Receive(JSON.parse($(data).val()));
             $(data).val('');
-        });
+        })
     },
 
     send: function (data, wh) {

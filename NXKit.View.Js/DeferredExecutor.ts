@@ -1,4 +1,4 @@
-﻿module NXKit.Web {
+﻿module NXKit.View {
 
     class DeferredExecutorItem {
 

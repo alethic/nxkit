@@ -1,16 +1,16 @@
 ﻿/// <reference path="XFormsNodeViewModel.ts" />
 
-module NXKit.Web.XForms {
+module NXKit.View.XForms {
 
     export class InputViewModel
-        extends NXKit.Web.XForms.XFormsNodeViewModel {
+        extends NXKit.View.XForms.XFormsNodeViewModel {
 
         constructor(context: KnockoutBindingContext, node: Node) {
             super(context, node);
         }
 
         public get ShowLabel(): boolean {
-            return !NXKit.Web.LayoutOptions.GetArgs(this.Context).SuppressLabel;
+            return !NXKit.View.LayoutOptions.GetArgs(this.Context).SuppressLabel;
         }
 
         GetHintText(): string {

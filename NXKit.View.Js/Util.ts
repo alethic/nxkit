@@ -1,4 +1,4 @@
-﻿module NXKit.Web.Util {
+﻿module NXKit.View.Util {
 
     export function Observable<T>(value?: T): KnockoutObservable<T> {
         return ko.observable<T>(value)

@@ -1,6 +1,6 @@
 ﻿/// <reference path="TypedEvent.ts" />
 
-module NXKit.Web {
+module NXKit.View {
 
     export class Interface {
 

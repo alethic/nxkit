@@ -1,5 +1,5 @@
-﻿module NXKit.Web.XForms.Layout {
+﻿module NXKit.View.XForms.Layout {
 
-    NXKit.Web.TemplateManager.Default.Register('nxkit-xforms-layout.html');
+    NXKit.View.TemplateManager.Default.Register('nxkit-xforms-layout.html');
 
 }

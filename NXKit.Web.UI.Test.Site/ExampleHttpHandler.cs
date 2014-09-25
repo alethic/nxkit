@@ -5,7 +5,7 @@ using System.Web;
 
 using NXKit.XForms.Examples;
 
-namespace NXKit.Web.UI.Test.Site
+namespace NXKit.View.UI.Test.Site
 {
 
     public class ExampleHttpHandler :

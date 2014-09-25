@@ -24,7 +24,7 @@ if (typeof define === "function" && define.amd) {
                 console.warn("nxkit: RequireJS missing or jQuery and knockout missing, retrying.");
             }
 
-            window.setTimeout(loop, 100);
+            window.setTimeout(loop, 1000);
         }
     };
     loop();

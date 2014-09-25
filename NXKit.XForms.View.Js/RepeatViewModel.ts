@@ -1,9 +1,9 @@
 ﻿/// <reference path="XFormsNodeViewModel.ts" />
 
-module NXKit.Web.XForms {
+module NXKit.View.XForms {
 
     export class RepeatViewModel
-        extends NXKit.Web.XForms.XFormsNodeViewModel {
+        extends NXKit.View.XForms.XFormsNodeViewModel {
 
         private _items: KnockoutComputed<Node[]>;
 

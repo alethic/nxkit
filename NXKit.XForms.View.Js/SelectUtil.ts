@@ -1,4 +1,4 @@
-﻿module NXKit.Web.XForms.SelectUtil {
+﻿module NXKit.View.XForms.SelectUtil {
 
     export class Selectable {
 

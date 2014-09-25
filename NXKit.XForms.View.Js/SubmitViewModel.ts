@@ -1,9 +1,9 @@
 ﻿/// <reference path="XFormsNodeViewModel.ts" />
 
-module NXKit.Web.XForms {
+module NXKit.View.XForms {
 
     export class SubmitViewModel
-        extends NXKit.Web.XForms.XFormsNodeViewModel {
+        extends NXKit.View.XForms.XFormsNodeViewModel {
 
         constructor(context: KnockoutBindingContext, node: Node) {
             super(context, node);

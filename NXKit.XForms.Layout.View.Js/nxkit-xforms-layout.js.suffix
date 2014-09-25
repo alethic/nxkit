@@ -12,8 +12,8 @@ if (typeof define === "function" && define.amd) {
         if (typeof $ === "function" && 
             typeof ko === "object" && 
             typeof NXKit === "object" && 
-            typeof NXKit.Web === "object" && 
-            typeof NXKit.Web.XForms === "object") {
+            typeof NXKit.View === "object" && 
+            typeof NXKit.View.XForms === "object") {
             init($, ko, NXKit);
             if (hold) {
                 $.holdReady(hold = false);
@@ -27,7 +27,7 @@ if (typeof define === "function" && define.amd) {
                 console.warn("nxkit-xforms-layout: RequireJS missing or jquery, knockout, nxkit or nxkit-xforms missing, retrying.");
             }
 
-            window.setTimeout(loop, 100);
+            window.setTimeout(loop, 1000);
         }
     };
     loop();

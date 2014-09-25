@@ -1,6 +1,6 @@
 ﻿/// <reference path="Util.ts" />
 
-module NXKit.Web {
+module NXKit.View {
 
     export class LayoutOptions {
 

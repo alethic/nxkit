@@ -1,4 +1,4 @@
-﻿module NXKit.Web.XForms.Layout.FormUtil {
+﻿module NXKit.View.XForms.Layout.FormUtil {
 
 
 

@@ -1,6 +1,6 @@
 ﻿/// <reference path="XFormsNodeViewModel.ts" />
 
-module NXKit.Web.XForms {
+module NXKit.View.XForms {
 
     export class GroupViewModel
         extends XFormsNodeViewModel {

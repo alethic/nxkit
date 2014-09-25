@@ -1,6 +1,6 @@
 ﻿/// <reference path="LayoutNodeViewModel.ts" />
 
-module NXKit.Web.XForms.Layout {
+module NXKit.View.XForms.Layout {
 
     export class FormViewModel
         extends LayoutNodeViewModel {

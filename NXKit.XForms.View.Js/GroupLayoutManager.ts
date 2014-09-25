@@ -1,9 +1,9 @@
 ﻿/// <reference path="XFormsNodeViewModel.ts" />
 
-module NXKit.Web.XForms {
+module NXKit.View.XForms {
 
     export class GroupLayoutManager
-        extends NXKit.Web.LayoutManager {
+        extends NXKit.View.LayoutManager {
 
         constructor(context: KnockoutBindingContext) {
             super(context);

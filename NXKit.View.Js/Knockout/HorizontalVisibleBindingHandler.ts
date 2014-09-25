@@ -21,7 +21,7 @@
     }
 });
 
-module NXKit.Web.Knockout {
+module NXKit.View.Knockout {
 
     export class HorizontalVisibleBindingHandler
         implements KnockoutBindingHandler {

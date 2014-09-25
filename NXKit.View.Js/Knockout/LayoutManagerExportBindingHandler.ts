@@ -1,11 +1,11 @@
-﻿module NXKit.Web.Knockout {
+﻿module NXKit.View.Knockout {
 
     export class LayoutManagerExportBindingHandler
         implements KnockoutBindingHandler {
 
         static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext) {
             var ctx = bindingContext;
-            var mgr = NXKit.Web.ViewModelUtil.LayoutManagers;
+            var mgr = NXKit.View.ViewModelUtil.LayoutManagers;
 
             // generate a context tree from managers
             for (var i = 0; i < mgr.length; i++) {

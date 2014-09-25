@@ -28,7 +28,7 @@
                 id="NXKit.Web"
                 version="[$version$]"/>
             <dependency
-                id="NXKit.Web.XForms"
+                id="NXKit.View.XForms"
                 version="[$version$]"/>
         </dependencies>
     </metadata>

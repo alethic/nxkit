@@ -1,4 +1,4 @@
-﻿module NXKit.Web.XForms.Knockout {
+﻿module NXKit.View.XForms.Knockout {
 
     export class Select1BindingHandler
         implements KnockoutBindingHandler {

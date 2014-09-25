@@ -3,7 +3,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Web.UI;
 
-namespace NXKit.Web.UI.Test.Site
+namespace NXKit.View.UI.Test.Site
 {
 
     public class Global : 

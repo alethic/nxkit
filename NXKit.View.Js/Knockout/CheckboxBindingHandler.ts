@@ -1,4 +1,4 @@
-﻿module NXKit.Web.Knockout {
+﻿module NXKit.View.Knockout {
 
     export class CheckboxBindingHandler
         implements KnockoutBindingHandler {

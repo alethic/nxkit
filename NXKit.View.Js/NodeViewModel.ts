@@ -1,6 +1,6 @@
 ﻿/// <reference path="Node.ts" />
 
-module NXKit.Web {
+module NXKit.View {
 
     /**
       * Base view model class for wrapping a node.

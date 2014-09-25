@@ -1,7 +1,7 @@
 ﻿/// <reference path="Node.ts" />
 /// <reference path="LayoutManager.ts" />
 
-module NXKit.Web {
+module NXKit.View {
 
     export class DefaultLayoutManager
         extends LayoutManager {

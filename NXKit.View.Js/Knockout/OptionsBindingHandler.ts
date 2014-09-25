@@ -1,6 +1,6 @@
 ﻿/// <reference path="../Util.ts" />
 
-module NXKit.Web.Knockout {
+module NXKit.View.Knockout {
 
     export class OptionsBindingHandler
         implements KnockoutBindingHandler {

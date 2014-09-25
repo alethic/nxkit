@@ -1,4 +1,4 @@
-﻿module NXKit.Web {
+﻿module NXKit.View {
 
     export interface IEvent {
         add(listener: () => void): void;

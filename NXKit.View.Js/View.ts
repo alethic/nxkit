@@ -1,7 +1,7 @@
 ﻿/// <reference path="Node.ts" />
 /// <reference path="TypedEvent.ts" />
 
-module NXKit.Web {
+module NXKit.View {
 
     /**
      * Main NXKit client-side view class. Injects the view interface into a set of HTML elements.

@@ -1,7 +1,7 @@
-﻿module NXKit.Web.XForms {
+﻿module NXKit.View.XForms {
 
     export class XFormsNodeViewModel
-        extends NXKit.Web.NodeViewModel {
+        extends NXKit.View.NodeViewModel {
 
         constructor(context: KnockoutBindingContext, node: Node) {
             super(context, node);

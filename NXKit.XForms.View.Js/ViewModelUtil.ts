@@ -1,29 +1,29 @@
-﻿NXKit.Web.ViewModelUtil.ControlNodes.push(
+﻿NXKit.View.ViewModelUtil.ControlNodes.push(
     '{http://www.w3.org/2002/xforms}input',
     '{http://www.w3.org/2002/xforms}range',
     '{http://www.w3.org/2002/xforms}select1',
     '{http://www.w3.org/2002/xforms}select',
     '{http://www.w3.org/2002/xforms}textarea');
 
-NXKit.Web.ViewModelUtil.MetadataNodes.push(
+NXKit.View.ViewModelUtil.MetadataNodes.push(
     '{http://www.w3.org/2002/xforms}label',
     '{http://www.w3.org/2002/xforms}help',
     '{http://www.w3.org/2002/xforms}hint',
     '{http://www.w3.org/2002/xforms}alert');
 
-//NXKit.Web.ViewModelUtil.TransparentNodes.push(
+//NXKit.View.ViewModelUtil.TransparentNodes.push(
 //    '{http://www.w3.org/2002/xforms}repeat');
 
-//NXKit.Web.ViewModelUtil.TransparentNodePredicates.push(
+//NXKit.View.ViewModelUtil.TransparentNodePredicates.push(
 //    // repeat items are transparent
-//    (n: NXKit.Web.Node) =>
+//    (n: NXKit.View.Node) =>
 //        n.Interfaces['NXKit.XForms.RepeatItem'] != null &&
 //        n.Property('NXKit.XForms.RepeatItem', 'IsRepeatItem').ValueAsBoolean() == true);
 
-NXKit.Web.ViewModelUtil.LayoutManagers.push(
-    (c) => new NXKit.Web.XForms.DefaultLayoutManager(c));
+NXKit.View.ViewModelUtil.LayoutManagers.push(
+    (c) => new NXKit.View.XForms.DefaultLayoutManager(c));
 
-module NXKit.Web.XForms {
+module NXKit.View.XForms {
 
     export class Constants {
 
@@ -34,7 +34,7 @@ module NXKit.Web.XForms {
 
 }
 
-module NXKit.Web.XForms.ViewModelUtil {
+module NXKit.View.XForms.ViewModelUtil {
 
     export function GetValue(node: Node): KnockoutObservable<string> {
         return node.Value;

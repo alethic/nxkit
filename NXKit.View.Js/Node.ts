@@ -1,7 +1,7 @@
 ﻿/// <reference path="TypedEvent.ts" />
 /// <reference path="Property.ts" />
 
-module NXKit.Web {
+module NXKit.View {
 
     export class Node {
 

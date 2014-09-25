@@ -1,13 +1,13 @@
 ﻿<script type="text/html"
         data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}p">
-    <!-- ko with: new NXKit.Web.XForms.Layout.ParagraphViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.Layout.ParagraphViewModel($context, $data) -->
     <p class="xforms-layout-paragraph"
        data-bind="
 nxkit_visible: Relevant,
 attr : {
     'data-nx-name': $data.Node.Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
-    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
     'data-nx-xforms-label-appearance': LabelAppearance,
 }">
         <!-- ko foreach: Contents -->
