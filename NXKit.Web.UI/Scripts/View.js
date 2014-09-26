@@ -1,5 +1,6 @@
 ﻿Type.registerNamespace('_NXKit.Web.UI');
 
+// loaded internal AMD modules
 _NXKit.Web.UI.defines = {};
 
 _NXKit.Web.UI.View = function (element) {
@@ -26,23 +27,33 @@ _NXKit.Web.UI.View.prototype = {
             var defs = [];
             var wait = 0;
 
-            // invoked when all requires are collected
-            var done = function (index, define) {
-                defs[index] = _NXKit.Web.UI.defines[deps[index]] = define;
+            // invoked upon each require
+            var done = function (index, define, type, name) {
+                defs[index] = _NXKit.Web.UI.defines[name] = define;
+
+                // are we done?
                 if (++wait === deps.length) {
                     cb.apply(this, defs);
                 }
             };
 
+            // cycle thought dependencies
             for (var i = 0; i < deps.length; i++) {
-                var j = i;
-                if (!Object.prototype.hasOwnProperty.call(_NXKit.Web.UI.defines, deps[j])) {
-                    self.send({ Type: 'Require', Require: deps[j] }, function (response) {
-                        done(j, response['Define']);
-                    });
-                } else {
-                    done(j, _NXKit.Web.UI.defines[deps[j]]);
-                }
+                (function (j) {
+                    // extract module parts
+                    var p = deps[j].indexOf('!');
+                    var type = p === -1 ? 'js' : deps[j].substring(0, p);
+                    var name = p === -1 ? deps[j] : deps[j].substring(p + 1);
+                    var file = type === 'js' ? name + '.js' : name;
+
+                    if (!Object.prototype.hasOwnProperty.call(_NXKit.Web.UI.defines, name)) {
+                        $.get(self._requireUrl + '?m=' + file, function (response) {
+                            done(j, response, type, name);
+                        });
+                    } else {
+                        done(j, _NXKit.Web.UI.defines[name], type, name);
+                    }
+                })(i);
             }
         }
 
@@ -125,6 +136,14 @@ _NXKit.Web.UI.View.prototype = {
 
     set_sendFunc: function (value) {
         this._sendFunc = value;
+    },
+
+    get_requireUrl: function () {
+        return this._requireUrl;
+    },
+
+    set_requireUrl: function (value) {
+        this._requireUrl = value;
     },
 
     _onsubmit: function () {
