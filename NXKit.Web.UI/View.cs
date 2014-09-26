@@ -256,24 +256,13 @@ namespace NXKit.Web.UI
             writer.WriteLine();
         }
 
-        /// <summary>
-        /// Loads the given dependency.
-        /// </summary>
-        /// <param name="dependency"></param>
-        /// <returns></returns>
-        object LoadRequire(ViewModuleDependency dependency)
-        {
-            return container.GetExportedValues<IViewModuleDependencyResolver>()
-                .Select(i => i.Resolve(dependency))
-                .FirstOrDefault(i => i != null);
-        }
-
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
             var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
             d.AddProperty("enableScriptManager", enableScriptManager);
             d.AddProperty("enableAMD", enableAMD);
             d.AddProperty("sendFunc", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self") + ";");
+            d.AddProperty("requireUrl", ResolveUrl("~/NXKit.axd/Module"));
             yield return d;
         }
 
@@ -330,8 +319,6 @@ namespace NXKit.Web.UI
             var jobj = JObject.Parse(eventArgument);
             if (jobj["Type"].Value<string>() == "Message")
                 response = new { Type = "Messasge", Message = message = server.Load(jobj["Data"].ToObject<ViewMessage>()) };
-            if (jobj["Type"].Value<string>() == "Require")
-                response = new { Type = "Require", Define = LoadRequire(jobj["Require"].ToObject<ViewModuleDependency>()) };
         }
 
         /// <summary>

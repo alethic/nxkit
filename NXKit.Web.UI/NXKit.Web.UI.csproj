@@ -124,12 +124,13 @@
   <ItemGroup>
     <Compile Include="Content\Resources.cs" />
     <Compile Include="IViewInjector.cs" />
-    <Compile Include="IViewModuleDependencyResolver.cs" />
+    <Compile Include="IViewModuleResolver.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\Resources.cs" />
-    <Compile Include="ViewModuleDependencyResolver.cs" />
+    <Compile Include="ViewModuleResolver.cs" />
     <Compile Include="ViewModuleInjector.cs" />
+    <Compile Include="ViewModuleHttpModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">

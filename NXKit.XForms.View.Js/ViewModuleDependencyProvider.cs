@@ -16,7 +16,7 @@ namespace NXKit.XForms.View.Js
         {
             if (element.Name.Namespace == Constants.XForms_1_0)
             {
-                yield return new ViewModuleDependency(ViewModuleType.Script, "nxkit-xforms.js");
+                yield return new ViewModuleDependency(ViewModuleType.Script, "nxkit-xforms");
                 yield return new ViewModuleDependency(ViewModuleType.Css, "nxkit-xforms.css");
                 yield return new ViewModuleDependency(ViewModuleType.View, "nxkit-xforms.html");
             }

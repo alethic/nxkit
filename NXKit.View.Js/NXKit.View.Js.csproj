@@ -72,7 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IViewModuleDependencyProvider.cs" />
-    <Compile Include="ViewModule.cs" />
+    <Compile Include="ViewModuleExtension.cs" />
     <Compile Include="ViewModuleDependency.cs" />
     <Compile Include="ViewModuleDependencyJsonConverter.cs" />
     <Compile Include="ViewModuleDependencyProvider.cs" />

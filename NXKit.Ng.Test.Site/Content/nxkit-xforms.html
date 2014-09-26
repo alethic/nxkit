@@ -52,7 +52,7 @@
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}alert">
-    <!-- ko with: new NXKit.Web.XForms.AlertViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.AlertViewModel($context, $data) -->
     <div class="xforms-alert">
         <!-- ko if: Text -->
         <span data-bind="text: Text" />
@@ -70,22 +70,22 @@
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}group"
         data-nxkit-data-type="*">
-    <!-- ko with: new NXKit.Web.XForms.GroupViewModel($context, $parent) -->
+    <!-- ko with: new NXKit.View.XForms.GroupViewModel($context, $parent) -->
     <div class="xforms-group"
          data-bind="
 nxkit_visible: Relevant,
 attr : {
     'data-nx-name': $data.Node.Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
-    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
     'data-nx-xforms-label-appearance': LabelAppearance,
 }">
         <!-- ko with: Label -->
         <div class="label"
              data-bind="
 attr : {
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data),
-    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
 }">
             <!-- ko nxkit_template -->
             <!-- /ko -->
@@ -113,8 +113,8 @@ attr: {
                  data-bind="
 attr: {
     'data-nx-name': Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data),
-    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
 }">
                 <!-- ko nxkit_template -->
                 <!-- /ko -->
@@ -127,7 +127,7 @@ attr: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}help">
-    <!-- ko with: new NXKit.Web.XForms.HelpViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.HelpViewModel($context, $data) -->
     <div class="xforms-help">
         <!-- ko if: Text -->
         <span data-bind="text: Text" />
@@ -143,7 +143,7 @@ attr: {
 </script>
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}hint">
-    <!-- ko with: new NXKit.Web.XForms.HintViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.HintViewModel($context, $data) -->
     <div class="xforms-hint">
         <!-- ko if: Text -->
         <span data-bind="text: Text" />
@@ -168,13 +168,13 @@ attr: {
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}input"
         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}string">
-    <!-- ko with: new NXKit.Web.XForms.InputViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.InputViewModel($context, $data) -->
     <div class="xforms-input"
          data-bind="
 attr : {
     'data-nx-name': $data.Node.Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
-    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
 }">
         <!-- ko with: Label -->
         <label>
@@ -208,15 +208,15 @@ event: {
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}input"
         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean">
-    <!-- ko with: new NXKit.Web.XForms.InputViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.InputViewModel($context, $data) -->
     <div class="xforms-input"
          data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean"
          data-bind="
 nxkit_xforms_input_boolean: ValueAsBoolean,
 attr : {
     'data-nx-name': $data.Node.Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
-    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
 }">
 
         <input type="checkbox" />
@@ -247,13 +247,13 @@ attr : {
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}input"
         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}date">
-    <!-- ko with: new NXKit.Web.XForms.InputViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.InputViewModel($context, $data) -->
     <div class="xforms-input"
          data-bind="
 attr : {
     'data-nx-name': $data.Node.Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
-    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
 }">
         <!-- ko with: Label -->
         <label>
@@ -296,13 +296,13 @@ event: {
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}input"
         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}integer">
-    <!-- ko with: new NXKit.Web.XForms.InputViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.InputViewModel($context, $data) -->
     <div class="xforms-input"
          data-bind="
 attr : {
     'data-nx-name': $data.Node.Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
-    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
 }">
         <!-- ko with: Label -->
         <label>
@@ -336,7 +336,7 @@ event: {
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}label"   
         data-nxkit-data-type="*">
-    <!-- ko with: new NXKit.Web.XForms.LabelViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.LabelViewModel($context, $data) -->
     <span class="xforms-label">
         <!-- ko if: Text -->
         <span data-bind="text: Text" />
@@ -356,7 +356,7 @@ event: {
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}output"
         data-nxkit-data-type="*">
-    <!-- ko with: new NXKit.Web.XForms.OutputViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.OutputViewModel($context, $data) -->
     <span class="xforms-output">
         <!-- ko if: Text -->
         <span data-bind="text: Text" />
@@ -389,13 +389,13 @@ event: {
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}range"
         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}integer">
-    <!-- ko with: new NXKit.Web.XForms.RangeViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.RangeViewModel($context, $data) -->
     <div class="xforms-range"
          data-bind="
 attr : {
     'data-nx-name': $data.Node.Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
-    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
 }">
         <!-- ko with: Label -->
         <label class="label">
@@ -429,22 +429,22 @@ attr: {
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}repeat"
         data-nxkit-data-type="*">
-    <!-- ko with: new NXKit.Web.XForms.RepeatViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.RepeatViewModel($context, $data) -->
     <div class="xforms-repeat" data-bind="
 attr : {
     'data-nx-name': $data.Node.Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
 }">
         <!-- ko foreach: Node.Nodes -->
         <div class="item" data-bind="
 attr : {
     'data-nx-xforms-name': $data.Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
 },
 css: {
     'current': $data.Property('NXKit.XForms.RepeatItem', 'Index').ValueAsNumber() === $parent.Node.Property('NXKit.XForms.Repeat', 'Index').ValueAsNumber(),
 }">
-            <!-- ko foreach: NXKit.Web.ViewModelUtil.GetContents($data) -->
+            <!-- ko foreach: NXKit.View.ViewModelUtil.GetContents($data) -->
             <!-- ko nxkit_template: $data -->
             <!-- /ko -->
             <!-- /ko -->
@@ -465,14 +465,14 @@ css: {
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}select1"
         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}string">
-    <!-- ko with: new NXKit.Web.XForms.Select1ViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.Select1ViewModel($context, $data) -->
 
     <div class="xforms-select1" data-bind="
 nxkit_xforms_select1: $data.SelectedId,
 attr : {
     'data-nx-name': $data.Node.Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
-    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
 },
 event: {
     focusin: FocusIn,
@@ -521,14 +521,14 @@ event: {
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}select1"
         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}integer">
-    <!-- ko with: new NXKit.Web.XForms.Select1ViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.Select1ViewModel($context, $data) -->
 
     <div class="xforms-select1" data-bind="
 nxkit_xforms_select1: $data.SelectedId,
 attr : {
     'data-nx-name': $data.Node.Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
-    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
 },
 event: {
     focusin: FocusIn,
@@ -577,14 +577,14 @@ event: {
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}select1"
         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean">
-    <!-- ko with: new NXKit.Web.XForms.Select1ViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.Select1ViewModel($context, $data) -->
 
     <div class="xforms-select1" data-bind="
 nxkit_xforms_select1: $data.SelectedId,
 attr : {
     'data-nx-name': $data.Node.Name,
-    'data-nx-xforms-data': NXKit.Web.XForms.ViewModelUtil.GetDataItem($data.Node),
-    'data-nx-xforms-appearance': NXKit.Web.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
 },
 event: {
     focusin: FocusIn,
@@ -631,7 +631,7 @@ event: {
 </script>
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}submit">
-    <!-- ko with: new NXKit.Web.XForms.SubmitViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.SubmitViewModel($context, $data) -->
     <div 
          class="xforms-submit ui button"
          data-bind="event: { click: Activate }">
@@ -645,7 +645,7 @@ event: {
 
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}textarea">
-    <!-- ko with: new NXKit.Web.XForms.TextAreaViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.TextAreaViewModel($context, $data) -->
     <!-- ko nxkit_template: {
         node: Node,
         type: Type,
@@ -662,7 +662,7 @@ event: {
 </script>
 <script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}trigger">
-    <!-- ko with: new NXKit.Web.XForms.TriggerViewModel($context, $data) -->
+    <!-- ko with: new NXKit.View.XForms.TriggerViewModel($context, $data) -->
     <div class="xforms-trigger" data-bind="event: { click: Activate }">
         <!-- ko with: Label -->
         <div class="label">

@@ -9,7 +9,7 @@ var __extends = this.__extends || function (d, b) {
 };
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var XFormsNodeViewModel = (function (_super) {
                 __extends(XFormsNodeViewModel, _super);
@@ -151,17 +151,17 @@ var NXKit;
                     configurable: true
                 });
                 return XFormsNodeViewModel;
-            })(NXKit.Web.NodeViewModel);
+            })(NXKit.View.NodeViewModel);
             XForms.XFormsNodeViewModel = XFormsNodeViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var DefaultLayoutManager = (function (_super) {
                 __extends(DefaultLayoutManager, _super);
@@ -176,7 +176,7 @@ var NXKit;
                     var node = _super.prototype.GetNode.call(this, valueAccessor, viewModel, bindingContext);
                     var value = ko.unwrap(valueAccessor());
 
-                    if (node != null && node.Type == Web.NodeType.Element) {
+                    if (node != null && node.Type == View.NodeType.Element) {
                         var dataType = XForms.ViewModelUtil.GetDataType(node)();
                         if (dataType != null) {
                             options['data-type'] = dataType;
@@ -197,27 +197,27 @@ var NXKit;
                     return options;
                 };
                 return DefaultLayoutManager;
-            })(NXKit.Web.LayoutManager);
+            })(NXKit.View.LayoutManager);
             XForms.DefaultLayoutManager = DefaultLayoutManager;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
-            NXKit.Web.TemplateManager.Default.Register('nxkit-xforms.html');
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+            NXKit.View.TemplateManager.Default.Register('nxkit-xforms.html');
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var GroupLayoutManager = (function (_super) {
                 __extends(GroupLayoutManager, _super);
@@ -238,17 +238,17 @@ var NXKit;
                     return options;
                 };
                 return GroupLayoutManager;
-            })(NXKit.Web.LayoutManager);
+            })(NXKit.View.LayoutManager);
             XForms.GroupLayoutManager = GroupLayoutManager;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var OutputViewModel = (function (_super) {
                 __extends(OutputViewModel, _super);
@@ -266,17 +266,17 @@ var NXKit;
                     configurable: true
                 });
                 return OutputViewModel;
-            })(NXKit.Web.XForms.XFormsNodeViewModel);
+            })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.OutputViewModel = OutputViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var RepeatViewModel = (function (_super) {
                 __extends(RepeatViewModel, _super);
@@ -284,16 +284,16 @@ var NXKit;
                     _super.call(this, context, node);
                 }
                 return RepeatViewModel;
-            })(NXKit.Web.XForms.XFormsNodeViewModel);
+            })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.RepeatViewModel = RepeatViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (Knockout) {
             var InputBooleanBindingHandler = (function () {
                 function InputBooleanBindingHandler() {
@@ -359,14 +359,14 @@ var NXKit;
             Knockout.InputBooleanBindingHandler = InputBooleanBindingHandler;
 
             ko.bindingHandlers['nxkit_xforms_input_boolean'] = new InputBooleanBindingHandler();
-        })(Web.Knockout || (Web.Knockout = {}));
-        var Knockout = Web.Knockout;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.Knockout || (View.Knockout = {}));
+        var Knockout = View.Knockout;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             (function (Knockout) {
                 var Select1BindingHandler = (function () {
@@ -411,15 +411,15 @@ var NXKit;
                 ko.bindingHandlers['nxkit_xforms_select1'] = new Select1BindingHandler();
             })(XForms.Knockout || (XForms.Knockout = {}));
             var Knockout = XForms.Knockout;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var SubmitViewModel = (function (_super) {
                 __extends(SubmitViewModel, _super);
@@ -432,17 +432,17 @@ var NXKit;
                     });
                 };
                 return SubmitViewModel;
-            })(NXKit.Web.XForms.XFormsNodeViewModel);
+            })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.SubmitViewModel = SubmitViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var TriggerViewModel = (function (_super) {
                 __extends(TriggerViewModel, _super);
@@ -460,16 +460,16 @@ var NXKit;
                     }, 50);
                 };
                 return TriggerViewModel;
-            })(NXKit.Web.XForms.XFormsNodeViewModel);
+            })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.TriggerViewModel = TriggerViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             (function (SelectUtil) {
                 var Selectable = (function () {
@@ -550,14 +550,14 @@ var NXKit;
                 SelectUtil.GetSelectables = GetSelectables;
             })(XForms.SelectUtil || (XForms.SelectUtil = {}));
             var SelectUtil = XForms.SelectUtil;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             (function (GroupUtil) {
                 var Item = (function () {
@@ -920,7 +920,7 @@ var NXKit;
                 function GetItems(viewModel, node, level) {
                     try  {
                         var list = new Array();
-                        var cnts = NXKit.Web.ViewModelUtil.GetContents(node);
+                        var cnts = NXKit.View.ViewModelUtil.GetContents(node);
                         for (var i = 0; i < cnts.length; i++) {
                             var v = cnts[i];
 
@@ -967,15 +967,15 @@ var NXKit;
                 GroupUtil.GetItems = GetItems;
             })(XForms.GroupUtil || (XForms.GroupUtil = {}));
             var GroupUtil = XForms.GroupUtil;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var GroupViewModel = (function (_super) {
                 __extends(GroupViewModel, _super);
@@ -1010,15 +1010,15 @@ var NXKit;
                 return GroupViewModel;
             })(XForms.XFormsNodeViewModel);
             XForms.GroupViewModel = GroupViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var HelpViewModel = (function (_super) {
                 __extends(HelpViewModel, _super);
@@ -1033,17 +1033,17 @@ var NXKit;
                     configurable: true
                 });
                 return HelpViewModel;
-            })(NXKit.Web.XForms.XFormsNodeViewModel);
+            })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.HelpViewModel = HelpViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var AlertViewModel = (function (_super) {
                 __extends(AlertViewModel, _super);
@@ -1058,17 +1058,17 @@ var NXKit;
                     configurable: true
                 });
                 return AlertViewModel;
-            })(NXKit.Web.XForms.XFormsNodeViewModel);
+            })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.AlertViewModel = AlertViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var HintViewModel = (function (_super) {
                 __extends(HintViewModel, _super);
@@ -1083,17 +1083,17 @@ var NXKit;
                     configurable: true
                 });
                 return HintViewModel;
-            })(NXKit.Web.XForms.XFormsNodeViewModel);
+            })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.HintViewModel = HintViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var InputViewModel = (function (_super) {
                 __extends(InputViewModel, _super);
@@ -1102,7 +1102,7 @@ var NXKit;
                 }
                 Object.defineProperty(InputViewModel.prototype, "ShowLabel", {
                     get: function () {
-                        return !NXKit.Web.LayoutOptions.GetArgs(this.Context).SuppressLabel;
+                        return !NXKit.View.LayoutOptions.GetArgs(this.Context).SuppressLabel;
                     },
                     enumerable: true,
                     configurable: true
@@ -1116,7 +1116,7 @@ var NXKit;
                     var s = '';
                     var l = n.Nodes();
                     for (var i = 0; i < l.length; i++)
-                        if (l[i].Type === Web.NodeType.Text)
+                        if (l[i].Type === View.NodeType.Text)
                             s += l[i].Value;
                     return s;
                 };
@@ -1170,17 +1170,17 @@ var NXKit;
                     });
                 };
                 return InputViewModel;
-            })(NXKit.Web.XForms.XFormsNodeViewModel);
+            })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.InputViewModel = InputViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var LabelViewModel = (function (_super) {
                 __extends(LabelViewModel, _super);
@@ -1195,17 +1195,17 @@ var NXKit;
                     configurable: true
                 });
                 return LabelViewModel;
-            })(NXKit.Web.XForms.XFormsNodeViewModel);
+            })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.LabelViewModel = LabelViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var RangeViewModel = (function (_super) {
                 __extends(RangeViewModel, _super);
@@ -1236,17 +1236,17 @@ var NXKit;
                     configurable: true
                 });
                 return RangeViewModel;
-            })(NXKit.Web.XForms.XFormsNodeViewModel);
+            })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.RangeViewModel = RangeViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var Select1ViewModel = (function (_super) {
                 __extends(Select1ViewModel, _super);
@@ -1323,17 +1323,17 @@ var NXKit;
                     });
                 };
                 return Select1ViewModel;
-            })(NXKit.Web.XForms.XFormsNodeViewModel);
+            })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.Select1ViewModel = Select1ViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var TextAreaViewModel = (function (_super) {
                 __extends(TextAreaViewModel, _super);
@@ -1341,31 +1341,31 @@ var NXKit;
                     _super.call(this, context, node);
                 }
                 return TextAreaViewModel;
-            })(NXKit.Web.XForms.XFormsNodeViewModel);
+            })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.TextAreaViewModel = TextAreaViewModel;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
-NXKit.Web.ViewModelUtil.ControlNodes.push('{http://www.w3.org/2002/xforms}input', '{http://www.w3.org/2002/xforms}range', '{http://www.w3.org/2002/xforms}select1', '{http://www.w3.org/2002/xforms}select', '{http://www.w3.org/2002/xforms}textarea');
+NXKit.View.ViewModelUtil.ControlNodes.push('{http://www.w3.org/2002/xforms}input', '{http://www.w3.org/2002/xforms}range', '{http://www.w3.org/2002/xforms}select1', '{http://www.w3.org/2002/xforms}select', '{http://www.w3.org/2002/xforms}textarea');
 
-NXKit.Web.ViewModelUtil.MetadataNodes.push('{http://www.w3.org/2002/xforms}label', '{http://www.w3.org/2002/xforms}help', '{http://www.w3.org/2002/xforms}hint', '{http://www.w3.org/2002/xforms}alert');
+NXKit.View.ViewModelUtil.MetadataNodes.push('{http://www.w3.org/2002/xforms}label', '{http://www.w3.org/2002/xforms}help', '{http://www.w3.org/2002/xforms}hint', '{http://www.w3.org/2002/xforms}alert');
 
-//NXKit.Web.ViewModelUtil.TransparentNodes.push(
+//NXKit.View.ViewModelUtil.TransparentNodes.push(
 //    '{http://www.w3.org/2002/xforms}repeat');
-//NXKit.Web.ViewModelUtil.TransparentNodePredicates.push(
+//NXKit.View.ViewModelUtil.TransparentNodePredicates.push(
 //    // repeat items are transparent
-//    (n: NXKit.Web.Node) =>
+//    (n: NXKit.View.Node) =>
 //        n.Interfaces['NXKit.XForms.RepeatItem'] != null &&
 //        n.Property('NXKit.XForms.RepeatItem', 'IsRepeatItem').ValueAsBoolean() == true);
-NXKit.Web.ViewModelUtil.LayoutManagers.push(function (c) {
-    return new NXKit.Web.XForms.DefaultLayoutManager(c);
+NXKit.View.ViewModelUtil.LayoutManagers.push(function (c) {
+    return new NXKit.View.XForms.DefaultLayoutManager(c);
 });
 
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             var Constants = (function () {
                 function Constants() {
@@ -1375,15 +1375,15 @@ var NXKit;
                 return Constants;
             })();
             XForms.Constants = Constants;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 
 var NXKit;
 (function (NXKit) {
-    (function (Web) {
+    (function (View) {
         (function (XForms) {
             (function (ViewModelUtil) {
                 function GetValue(node) {
@@ -1510,10 +1510,10 @@ var NXKit;
                 ViewModelUtil.GetValueNode = GetValueNode;
             })(XForms.ViewModelUtil || (XForms.ViewModelUtil = {}));
             var ViewModelUtil = XForms.ViewModelUtil;
-        })(Web.XForms || (Web.XForms = {}));
-        var XForms = Web.XForms;
-    })(NXKit.Web || (NXKit.Web = {}));
-    var Web = NXKit.Web;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 
 
@@ -1530,7 +1530,7 @@ if (typeof define === "function" && define.amd) {
         if (typeof $ === "function" && 
             typeof ko === "object" && 
             typeof NXKit === "object" && 
-            typeof NXKit.Web === "object") {
+            typeof NXKit.View === "object") {
             init($, ko, NXKit);
             if (hold) {
                 $.holdReady(hold = false);
@@ -1544,7 +1544,7 @@ if (typeof define === "function" && define.amd) {
                 console.warn("nxkit-xforms: RequireJS missing or jQuery, knockout or NXKit missing, retrying.");
             }
 
-            window.setTimeout(loop, 100);
+            window.setTimeout(loop, 1000);
         }
     };
     loop();
