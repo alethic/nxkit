@@ -22,11 +22,26 @@ _NXKit.Web.UI.View.prototype = {
                 require(deps, cb);
             }
         } else {
-            for (var i in deps) {
-                if (!Object.prototype.hasOwnProperty.call(_NXKit.Web.UI.defines, deps[i])) {
-                    self.send({ Type: 'Require', Require: deps[i] }, function (response) {
-                        console.log(response);
-                    })
+            // build resulting list
+            var defs = [];
+            var wait = 0;
+
+            // invoked when all requires are collected
+            var done = function (index, define) {
+                defs[index] = _NXKit.Web.UI.defines[deps[index]] = define;
+                if (++wait === deps.length) {
+                    cb.apply(this, defs);
+                }
+            };
+
+            for (var i = 0; i < deps.length; i++) {
+                var j = i;
+                if (!Object.prototype.hasOwnProperty.call(_NXKit.Web.UI.defines, deps[j])) {
+                    self.send({ Type: 'Require', Require: deps[j] }, function (response) {
+                        done(j, response['Define']);
+                    });
+                } else {
+                    done(j, _NXKit.Web.UI.defines[deps[j]]);
                 }
             }
         }
