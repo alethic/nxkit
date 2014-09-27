@@ -7,6 +7,10 @@ if (typeof define === "function" && define.amd) {
     define("nxkit", ['jquery', 'knockout'], function ($, ko) {
         return init($, ko);
     });
+} else if (typeof NXKit === "object" && typeof NXKit.define === "function") {
+    NXKit.define("nxkit", ["jquery", "knockout" ], function ($, ko) {
+        return init($, ko);
+    });
 } else {
     var hold = false;
     var loop = function () {

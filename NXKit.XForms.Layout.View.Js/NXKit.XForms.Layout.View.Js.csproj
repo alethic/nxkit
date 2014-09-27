@@ -21,7 +21,6 @@
       <Link>Scripts\typings\nxkit\nxkit-xforms.d.ts</Link>
     </TypeScriptCompile>
     <TypeScriptCompile Include="FormViewModel.ts" />
-    <TypeScriptCompile Include="DefaultTemplates.ts" />
     <TypeScriptCompile Include="IconViewModel.ts" />
     <TypeScriptCompile Include="ItemViewModel.ts" />
     <TypeScriptCompile Include="ListViewModel.ts" />

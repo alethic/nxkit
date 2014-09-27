@@ -204,16 +204,6 @@ var NXKit;
     })(NXKit.View || (NXKit.View = {}));
     var View = NXKit.View;
 })(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        (function (XForms) {
-            NXKit.View.TemplateManager.Default.Register('nxkit-xforms.html');
-        })(View.XForms || (View.XForms = {}));
-        var XForms = View.XForms;
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {

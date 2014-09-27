@@ -4,13 +4,11 @@ using System.Collections.Specialized;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Web.UI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NXKit.Composition;
 using NXKit.Server;
-using NXKit.View.Js;
 
 namespace NXKit.Web.UI
 {
@@ -28,6 +26,7 @@ namespace NXKit.Web.UI
         string validationGroup;
         bool enableScriptManager;
         bool enableAMD;
+        bool enableModuleScriptManagerScripts;
         bool enableEmbeddedStyles;
         CompositionContainer container;
         ViewServer server;
@@ -48,6 +47,7 @@ namespace NXKit.Web.UI
             // by default use ScriptManager
             this.enableScriptManager = true;
             this.enableAMD = false;
+            this.enableModuleScriptManagerScripts = true;
             this.enableEmbeddedStyles = true;
         }
 
@@ -77,7 +77,7 @@ namespace NXKit.Web.UI
         public bool EnableScriptManager
         {
             get { return enableScriptManager; }
-            set { enableScriptManager = value; enableAMD = !enableScriptManager; }
+            set { enableScriptManager = value; if (enableScriptManager) enableAMD = false; }
         }
 
         /// <summary>
@@ -86,7 +86,16 @@ namespace NXKit.Web.UI
         public bool EnableAMD
         {
             get { return enableAMD; }
-            set { enableAMD = value; enableScriptManager = !enableAMD; }
+            set { enableAMD = value; if (enableAMD) enableScriptManager = false; }
+        }
+
+        /// <summary>
+        /// Gets or sets whether the NXKit module scripts should be added to the <see cref="ScriptManager"/>.
+        /// </summary>
+        public bool EnableModuleScriptManagerScripts
+        {
+            get { return enableModuleScriptManagerScripts; }
+            set { enableModuleScriptManagerScripts = value; }
         }
 
         /// <summary>
@@ -262,7 +271,7 @@ namespace NXKit.Web.UI
             d.AddProperty("enableScriptManager", enableScriptManager);
             d.AddProperty("enableAMD", enableAMD);
             d.AddProperty("sendFunc", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self") + ";");
-            d.AddProperty("requireUrl", ResolveUrl("~/NXKit.axd/Module"));
+            d.AddProperty("handlerUrl", ResolveUrl("~/NXKit.axd/"));
             yield return d;
         }
 
@@ -274,10 +283,12 @@ namespace NXKit.Web.UI
                 yield return new ScriptReference() { Name = "jquery" };
                 yield return new ScriptReference() { Name = "knockout" };
 
-                // yield any script references
-                foreach (var injector in container.GetExportedValues<IViewInjector>())
-                    foreach (var reference in injector.GetScriptReferences(this))
-                        yield return reference;
+                if (enableModuleScriptManagerScripts)
+                {
+                    foreach (var injector in container.GetExportedValues<IViewInjector>())
+                        foreach (var reference in injector.GetScriptReferences(this))
+                            yield return reference;
+                }
             }
 
             // ScriptManager is always used to register the Web UI type

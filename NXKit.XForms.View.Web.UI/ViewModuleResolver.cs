@@ -31,7 +31,7 @@ namespace NXKit.XForms.View.Web.UI
 
         public Action<HttpResponse> Resolve(string name)
         {
-            if (name == "nxkit-xforms.js")
+            if (name == "nxkit-xforms")
                 return nxkit_xforms_js;
             if (name == "nxkit-xforms.css")
                 return nxkit_xforms_css;

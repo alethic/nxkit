@@ -14,7 +14,7 @@ namespace NXKit.View.Js
         {
             yield return new ViewModuleDependency(ViewModuleType.Script, "nxkit");
             yield return new ViewModuleDependency(ViewModuleType.Css, "nxkit.css");
-            yield return new ViewModuleDependency(ViewModuleType.View, "nxkit.html");
+            yield return new ViewModuleDependency(ViewModuleType.Template, "nxkit.html");
         }
 
     }

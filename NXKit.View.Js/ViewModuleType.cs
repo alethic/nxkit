@@ -6,7 +6,7 @@
 
         Script,
         Css,
-        View,
+        Template,
 
     }
 

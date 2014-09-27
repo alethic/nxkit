@@ -45,19 +45,6 @@ var NXKit;
     })(NXKit.View || (NXKit.View = {}));
     var View = NXKit.View;
 })(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        (function (XForms) {
-            (function (Layout) {
-                NXKit.View.TemplateManager.Default.Register('nxkit-xforms-layout.html');
-            })(XForms.Layout || (XForms.Layout = {}));
-            var Layout = XForms.Layout;
-        })(View.XForms || (View.XForms = {}));
-        var XForms = View.XForms;
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
 /// <reference path="LayoutNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {

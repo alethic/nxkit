@@ -32,7 +32,7 @@ namespace NXKit.Web.XForms.Layout.View.UI
 
         public Action<HttpResponse> Resolve(string name)
         {
-            if (name == "nxkit-xforms-layout.js")
+            if (name == "nxkit-xforms-layout")
                 return nxkit_xforms_layout_js;
             if (name == "nxkit-xforms-layout.css")
                 return nxkit_xforms_layout_css;

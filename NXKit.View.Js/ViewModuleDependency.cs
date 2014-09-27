@@ -26,8 +26,8 @@ namespace NXKit.View.Js
                     return "";
                 case ViewModuleType.Css:
                     return "css!";
-                case ViewModuleType.View:
-                    return "view!";
+                case ViewModuleType.Template:
+                    return "nx-template!";
                 default:
                     throw new InvalidOperationException();
             }
@@ -44,8 +44,8 @@ namespace NXKit.View.Js
                 return ViewModuleType.Script;
             if (value.StartsWith("css!"))
                 return ViewModuleType.Css;
-            if (value.StartsWith("view!"))
-                return ViewModuleType.View;
+            if (value.StartsWith("nx-template!"))
+                return ViewModuleType.Template;
 
             throw new InvalidOperationException();
         }

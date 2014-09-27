@@ -1,7 +1,15 @@
 ﻿Type.registerNamespace('_NXKit.Web.UI');
 
-// loaded internal AMD modules
-_NXKit.Web.UI.defines = {};
+NXKit = NXKit || {};
+NXKit.module = NXKit.module || {};
+
+NXKit.define = function (name, deps, cb) {
+
+};
+
+NXKit.require = function (deps, cb) {
+
+};
 
 _NXKit.Web.UI.View = function (element) {
     var self = this;
@@ -25,78 +33,66 @@ _NXKit.Web.UI.View.prototype = {
         } else {
             // build resulting list
             var defs = [];
-            var wait = 0;
 
-            // invoked upon each require
-            var done = function (index, define, type, name) {
-                defs[index] = _NXKit.Web.UI.defines[name] = define;
-
-                // are we done?
-                if (++wait === deps.length) {
-                    cb.apply(this, defs);
-                }
-            };
-
-            // cycle thought dependencies
+            // build dependency output list
             for (var i = 0; i < deps.length; i++) {
-                (function (j) {
-                    // extract module parts
-                    var p = deps[j].indexOf('!');
-                    var type = p === -1 ? 'js' : deps[j].substring(0, p);
-                    var name = p === -1 ? deps[j] : deps[j].substring(p + 1);
-                    var file = type === 'js' ? name + '.js' : name;
 
-                    if (!Object.prototype.hasOwnProperty.call(_NXKit.Web.UI.defines, name)) {
-                        $.get(self._requireUrl + '?m=' + file, function (response) {
-                            done(j, response, type, name);
+                // extract module parts
+                var p = deps[i].indexOf('!');
+                var type = p === -1 ? 'js' : deps[i].substring(0, p);
+                var name = p === -1 ? deps[i] : deps[i].substring(p + 1);
+
+                var deferred = _NXKit.Web.UI.defines[name];
+                if (deferred == null) {
+                    deferred = _NXKit.Web.UI.defines[name] = $.Deferred();
+
+                    // url to retrieve module
+                    var url = self._handlerUrl + '?m=' + name;
+
+                    if (type === 'js') {
+                        $.getScript(url, function (data, status, jqxhr) {
+                            deferred.resolve(true);
                         });
+                    } else if (type === 'css') {
+                        var link = $(document.createElement('link'))
+                            .attr('data-nx-require', name)
+                            .attr('rel', 'stylesheet')
+                            .attr('type', 'text/css')
+                            .attr('href', url)
+                            .appendTo($('head'))
+                            .bind('load', function () {
+                                deferred.resolve(link.get(0));
+                            });
+                    } else if (type === 'nx-template') {
+                        var div1 = $('body>*[data-nx-template-host]');
+                        if (div1.length == 0)
+                            div1 = $(document.createElement('div'))
+                                .attr('data-nx-template-host', '')
+                                .css('display', 'none')
+                                .prependTo('body');
+                        var div2 = $(document.createElement('div'))
+                            .attr('data-nx-require', name)
+                            .appendTo(div1)
+                            .load(url, function () {
+                                deferred.resolve(div2.get(0));
+                            });
                     } else {
-                        done(j, _NXKit.Web.UI.defines[name], type, name);
+                        throw new Error('Unknown module type.');
                     }
-                })(i);
-            }
-        }
-
-        if (self._enableScriptManager) {
-            self.require = function (modules, cb) {
-                $(document).ready(function () {
-                    cb();
-                });
-            }
-        }
-
-    },
-
-    _wait: function (cb) {
-        var self = this;
-
-        if (self._enableScriptManager) {
-            if (typeof NXKit === 'object' &&
-                typeof NXKit.View === 'object' &&
-                typeof NXKit.View.View === 'function') {
-                $(document).ready(function () {
-                    cb(NXKit);
-                });
-            } else {
-                if (typeof console.warn === 'function') {
-                    console.warn('NXKit.Web.UI component delayed waiting ScriptManager initialization of NXKit.');
                 }
 
-                setTimeout(function () { self._wait(cb) }, 1000);
+                // add to output list
+                defs[i] = deferred;
             }
+
+            // invoke call back when all dependencies are resolved
+            $.when.apply($, defs)
+                .always(function () {
+                    console.log(deps);
+                })
+                .always(cb);
         }
 
-        if (self._enableAMD) {
-            if (typeof require === 'function' && define['amd']) {
-                require(['nxkit'], function (nx) {
-                    $(document).ready(function () {
-                        cb(nx);
-                    })
-                });
-            } else {
-                console.error('EnableAMD specified, but AMD not found.');
-            }
-        }
     },
 
     initialize: function () {
@@ -138,12 +134,12 @@ _NXKit.Web.UI.View.prototype = {
         this._sendFunc = value;
     },
 
-    get_requireUrl: function () {
-        return this._requireUrl;
+    get_handlerUrl: function () {
+        return this._handlerUrl;
     },
 
-    set_requireUrl: function (value) {
-        this._requireUrl = value;
+    set_handlerUrl: function (value) {
+        this._handlerUrl = value;
     },
 
     _onsubmit: function () {
@@ -153,7 +149,7 @@ _NXKit.Web.UI.View.prototype = {
         if (data.length == 0)
             throw new Error("cannot find data element");
 
-        self._require(function (nx) {
+        self.require(function (nx) {
             // update the hidden data field value before submit
             if (self._view != null) {
                 $(data).val(JSON.stringify(self._view.Data));
@@ -180,17 +176,13 @@ _NXKit.Web.UI.View.prototype = {
             self._onsubmit();
         });
 
-        self._wait(function (nx) {
+        self.require(['nxkit'], function (nx) {
 
             // initialize view
             if (self._view == null) {
-                self._view = new nx.View.View(body[0],
-                    function (modules, cb) {
-                        self.require(modules, cb);
-                    },
-                    function (data, cb) {
-                        self.send({ Type: 'Message', Data: data }, cb);
-                    });
+                self._view = new nx.View.View(body[0], function (deps, cb) { self.require(deps, cb); }, function (data, cb) {
+                    self.send({ Type: 'Message', Data: data }, cb);
+                });
             }
 
             // update view with initial data set

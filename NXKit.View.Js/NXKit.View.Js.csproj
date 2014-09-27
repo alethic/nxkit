@@ -52,7 +52,6 @@
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
     <TypeScriptCompile Include="Severity.ts" />
-    <TypeScriptCompile Include="TemplateManager.ts" />
     <TypeScriptCompile Include="TypedEvent.ts" />
     <TypeScriptCompile Include="Util.ts" />
     <TypeScriptCompile Include="View.ts" />

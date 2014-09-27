@@ -18,7 +18,7 @@ namespace NXKit.XForms.Layout.View.Js
             {
                 yield return new ViewModuleDependency(ViewModuleType.Script, "nxkit-xforms-layout");
                 yield return new ViewModuleDependency(ViewModuleType.Css, "nxkit-xforms-layout.css");
-                yield return new ViewModuleDependency(ViewModuleType.View, "nxkit-xforms-layout.html");
+                yield return new ViewModuleDependency(ViewModuleType.Template, "nxkit-xforms-layout.html");
             }
         }
 

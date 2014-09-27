@@ -30,7 +30,7 @@ namespace NXKit.Web.UI
 
         public Action<HttpResponse> Resolve(string name)
         {
-            if (name == "nxkit.js")
+            if (name == "nxkit")
                 return nxkit_js;
             if (name == "nxkit.css")
                 return nxkit_css;

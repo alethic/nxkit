@@ -13,7 +13,7 @@ namespace NXKit.Web.UI
         IHttpModule
     {
 
-        static readonly string PREFIX = @"~/NXKit.axd/Module";
+        static readonly string PREFIX = @"~/NXKit.axd/";
 
         public static void Start()
         {
@@ -42,12 +42,12 @@ namespace NXKit.Web.UI
                 {
                     context.Response.StatusCode = 200;
                     file(context.Response);
-                    context.Response.End();
+                    context.Context.Response.End();
                 }
                 else
                 {
                     context.Response.StatusCode = 404;
-                    context.Response.End();
+                    context.Context.Response.End();
                 }
             }
         }

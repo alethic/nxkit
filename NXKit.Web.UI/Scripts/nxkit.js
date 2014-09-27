@@ -1758,62 +1758,6 @@ var NXKit;
     })(NXKit.View || (NXKit.View = {}));
     var View = NXKit.View;
 })(NXKit || (NXKit = {}));
-/// <reference path="DeferredExecutor.ts"/>
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        /**
-        * Manages a set of templates that are injected into the document upon request.
-        * @class NXKit.Web.TemplateManager
-        */
-        var TemplateManager = (function () {
-            /**
-            * Initializes a new instance.
-            */
-            function TemplateManager(baseUrl) {
-                this._executor = new View.DeferredExecutor();
-                var self = this;
-
-                self._baseUrl = baseUrl;
-            }
-            /**
-            * Registers a given template name to be retrieved and injected into the page when required.
-            * @method Register
-            */
-            TemplateManager.prototype.Register = function (name) {
-                var self = this;
-
-                self._executor.Register(function (promise) {
-                    $(document).ready(function () {
-                        var div1 = $('body>*[nx-template-container]');
-                        if (div1.length == 0)
-                            div1 = $(document.createElement('div')).attr('nx-template-container', '').css('display', 'none').prependTo('body');
-                        var div2 = $(document.createElement('div')).attr('nx-template-url', self._baseUrl + name).load(self._baseUrl + name, function () {
-                            $(div1).append(div2);
-                            promise.resolve();
-                        });
-                    });
-                });
-            };
-
-            /**
-            * Ensures the templates are registered before invoking the callback.
-            * @method Register
-            */
-            TemplateManager.prototype.Wait = function (cb) {
-                var self = this;
-
-                self._executor.Wait(cb);
-            };
-            return TemplateManager;
-        })();
-        View.TemplateManager = TemplateManager;
-
-        TemplateManager.Default = new TemplateManager('/Content/');
-        TemplateManager.Default.Register('nxkit.html');
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
 /// <reference path="Node.ts" />
 /// <reference path="TypedEvent.ts" />
 var NXKit;
@@ -2112,7 +2056,7 @@ var NXKit;
                     ko.cleanNode(self._body);
 
                     // execute after deferral
-                    _View.TemplateManager.Default.Wait(function () {
+                    self.Require(['nx-view!nxkit.html'], function () {
                         // ensure body is to render template
                         $(self._body).attr('data-bind', 'template: { name: \'NXKit.View\' }');
 

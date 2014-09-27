@@ -301,7 +301,7 @@ module NXKit.View {
                     self._body);
 
                 // execute after deferral
-                TemplateManager.Default.Wait(() => {
+                self.Require(['nx-view!nxkit.html'], () => {
 
                     // ensure body is to render template
                     $(self._body)

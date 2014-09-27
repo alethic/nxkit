@@ -16,26 +16,26 @@ namespace NXKit.Web.UI
         {
             var sb = new StringBuilder();
 
-            if (view.EnableScriptManager)
+            if (view.EnableScriptManager &&
+                view.EnableModuleScriptManagerScripts)
             {
-                sb.AppendLine(@"_NXKit.Web.UI.defines['nxkit'] = window['NXKit'];");
+                sb.AppendLine(@"(_NXKit.Web.UI.defines['nxkit'] = $.Deferred()).resolve(window['NXKit']);");
             }
 
             if (view.EnableEmbeddedStyles)
             {
                 var link = new HtmlLink();
-                link.Href = view.Page.ClientScript.GetWebResourceUrl(typeof(ViewModuleInjector), "NXKit.Web.UI.Scripts.nxkit.css");
+                link.Href = view.Page.ClientScript.GetWebResourceUrl(typeof(ViewModuleInjector), "NXKit.XForms.View.Web.UI.Scripts.nxkit.css");
                 link.Attributes["rel"] = "stylesheet";
                 link.Attributes["type"] = "text/css";
                 link.Attributes["data-nx-require"] = "css!nxkit.css";
                 view.Page.Header.Controls.Add(link);
 
-                sb.AppendLine(@"_NXKit.Web.UI.defines['nxkit.css'] = $('"+ link.ClientID + @"')[0];");
+                sb.AppendLine(@"(_NXKit.Web.UI.defines['nxkit.css'] = $.Deferred()).resolve($('" + link.ClientID + @"')[0]);");
             }
 
-            var cd = sb.ToString();
-            if (cd != "")
-                view.Page.ClientScript.RegisterStartupScript(typeof(ViewModuleInjector), "nxkit-define", cd, true);
+            if (!string.IsNullOrWhiteSpace(sb.ToString()))
+                view.Page.ClientScript.RegisterStartupScript(typeof(ViewModuleInjector), typeof(ViewModuleInjector).FullName, sb.ToString(), true);
         }
 
         public void OnRender(View view, HtmlTextWriter writer)
