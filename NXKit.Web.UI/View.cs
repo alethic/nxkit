@@ -25,9 +25,6 @@ namespace NXKit.Web.UI
         string cssClass;
         string validationGroup;
         bool enableScriptManager;
-        bool enableAMD;
-        bool enableModuleScriptManagerScripts;
-        bool enableEmbeddedStyles;
         CompositionContainer container;
         ViewServer server;
         ViewMessage message;
@@ -46,9 +43,6 @@ namespace NXKit.Web.UI
 
             // by default use ScriptManager
             this.enableScriptManager = true;
-            this.enableAMD = false;
-            this.enableModuleScriptManagerScripts = true;
-            this.enableEmbeddedStyles = true;
         }
 
         /// <summary>
@@ -77,34 +71,7 @@ namespace NXKit.Web.UI
         public bool EnableScriptManager
         {
             get { return enableScriptManager; }
-            set { enableScriptManager = value; if (enableScriptManager) enableAMD = false; }
-        }
-
-        /// <summary>
-        /// Gets or sets whether the AMD module loader should be used.
-        /// </summary>
-        public bool EnableAMD
-        {
-            get { return enableAMD; }
-            set { enableAMD = value; if (enableAMD) enableScriptManager = false; }
-        }
-
-        /// <summary>
-        /// Gets or sets whether the NXKit module scripts should be added to the <see cref="ScriptManager"/>.
-        /// </summary>
-        public bool EnableModuleScriptManagerScripts
-        {
-            get { return enableModuleScriptManagerScripts; }
-            set { enableModuleScriptManagerScripts = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets whether embedded style sheets are injected into the document.
-        /// </summary>
-        public bool EnableEmbeddedStyles
-        {
-            get { return enableEmbeddedStyles; }
-            set { enableEmbeddedStyles = value; }
+            set { enableScriptManager = value; }
         }
 
         /// <summary>
@@ -225,11 +192,8 @@ namespace NXKit.Web.UI
             if (message != null)
             {
                 ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
-                Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"')._onsubmit();");
-
-                // allow injectors to intercept
-                foreach (var injector in container.GetExportedValues<IViewInjector>())
-                    injector.OnPreRender(this);
+                Page.ClientScript.RegisterStartupScript(typeof(View), GetHashCode().ToString(), @"_NXKit.Web.UI.handlerUrl = '" + ResolveUrl("~/NXKit.axd/") + @"'", true);
+                Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"').onsubmit();");
             }
         }
 
@@ -268,10 +232,7 @@ namespace NXKit.Web.UI
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
             var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
-            d.AddProperty("enableScriptManager", enableScriptManager);
-            d.AddProperty("enableAMD", enableAMD);
             d.AddProperty("sendFunc", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self") + ";");
-            d.AddProperty("handlerUrl", ResolveUrl("~/NXKit.axd/"));
             yield return d;
         }
 
@@ -282,16 +243,10 @@ namespace NXKit.Web.UI
             {
                 yield return new ScriptReference() { Name = "jquery" };
                 yield return new ScriptReference() { Name = "knockout" };
-
-                if (enableModuleScriptManagerScripts)
-                {
-                    foreach (var injector in container.GetExportedValues<IViewInjector>())
-                        foreach (var reference in injector.GetScriptReferences(this))
-                            yield return reference;
-                }
             }
 
             // ScriptManager is always used to register the Web UI type
+            yield return new ScriptReference() { Name = "nx-require" };
             yield return new ScriptReference() { Name = "nxkit-ui" };
         }
 

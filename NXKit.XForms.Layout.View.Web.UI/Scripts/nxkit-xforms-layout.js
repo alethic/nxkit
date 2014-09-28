@@ -1,5 +1,5 @@
 (function () {
-var init = function ($, ko, NXKit) {
+	var init = function ($, ko, NXKit) {
 
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -288,37 +288,10 @@ var NXKit;
 })(NXKit || (NXKit = {}));
 
 
-    return NXKit;
-};
+        return NXKit;
+    };
 
-if (typeof define === "function" && define.amd) {
-    define("nxkit-xforms-layout", ['jquery', 'knockout', 'nxkit', 'nxkit-xforms'], function ($, ko, NXKit) {
+    NXKit.define("nxkit-xforms-layout", ['jquery', 'knockout', 'nxkit', 'nxkit-xforms'], function ($, ko, NXKit) {
         return init($, ko, NXKit);
     });
-} else {
-    var hold = false;
-    var loop = function () {
-        if (typeof $ === "function" && 
-            typeof ko === "object" && 
-            typeof NXKit === "object" && 
-            typeof NXKit.View === "object" && 
-            typeof NXKit.View.XForms === "object") {
-            init($, ko, NXKit);
-            if (hold) {
-                $.holdReady(hold = false);
-            }
-        } else {
-            if (typeof $ === "function") {
-                $.holdReady(hold = true);
-            }
-
-            if (typeof console.warn === "function") {
-                console.warn("nxkit-xforms-layout: RequireJS missing or jquery, knockout, nxkit or nxkit-xforms missing, retrying.");
-            }
-
-            window.setTimeout(loop, 1000);
-        }
-    };
-    loop();
-}
 })();

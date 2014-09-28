@@ -1,0 +1,16 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ output extension=".js" #>
+
+var NXKit = NXKit || {};
+NXKit.global = {};
+
+(function () {
+
+<#@ include file="require.js" #>
+
+NXKit.requirejs = requirejs;
+NXKit.require = require;
+NXKit.define = define;
+
+}).call(NXKit.global);

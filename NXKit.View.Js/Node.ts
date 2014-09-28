@@ -138,13 +138,12 @@ module NXKit.View {
             };
 
             // check if any modules are required, if so dispatch to require framework
-            for (var i in source) {
-                if (i === 'NXKit.View.Js.ViewModule') {
-                    var deps = source[i]['Require'];
-                    if (deps != null) {
-                        self._view.Require(deps, next);
-                        return;
-                    }
+            var vmod = source['NXKit.View.Js.ViewModule']
+            if (vmod != null) {
+                var deps = vmod['Require'];
+                if (deps != null) {
+                    NXKit.require(deps, next);
+                    return;
                 }
             }
 

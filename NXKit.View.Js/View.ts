@@ -10,7 +10,6 @@ module NXKit.View {
 
         private _body: HTMLElement;
         private _server: IServerInvoke;
-        private _require: (deps: string[], cb: () => void) => void;
 
         private _save: string;
         private _hash: string;
@@ -23,11 +22,10 @@ module NXKit.View {
 
         private _busy: KnockoutObservable<boolean>;
 
-        constructor(body: HTMLElement, require: (deps: string[], cb: () => void) => void, server: IServerInvoke) {
+        constructor(body: HTMLElement, server: IServerInvoke) {
             var self = this;
 
             self._server = server;
-            self._require = require;
             self._body = body;
             self._save = null;
             self._hash = null;
@@ -68,13 +66,6 @@ module NXKit.View {
             this._threshold = threshold;
         }
         
-        /**
-         * Dispatches a request to the current require framework.
-         */
-        public Require(deps: string[], cb: () => void) {
-            this._require(deps, cb);
-        }
-
         /**
          * Updates the view in response to a received message.
          */
@@ -301,7 +292,7 @@ module NXKit.View {
                     self._body);
 
                 // execute after deferral
-                self.Require(['nx-view!nxkit.html'], () => {
+                NXKit.require(['nx-template!nxkit.html'], () => {
 
                     // ensure body is to render template
                     $(self._body)

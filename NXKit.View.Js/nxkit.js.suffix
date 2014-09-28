@@ -1,36 +1,13 @@
 ﻿
-    window.NXKit = NXKit;
-    return NXKit;
-};
+		return NXKit;
+	};
 
-if (typeof define === "function" && define.amd) {
-    define("nxkit", ['jquery', 'knockout'], function ($, ko) {
-        return init($, ko);
-    });
-} else if (typeof NXKit === "object" && typeof NXKit.define === "function") {
-    NXKit.define("nxkit", ["jquery", "knockout" ], function ($, ko) {
-        return init($, ko);
-    });
-} else {
-    var hold = false;
-    var loop = function () {
-        if (typeof $ === "function" && typeof ko === "object") {
-            init($, ko);
-            if (hold) {
-                $.holdReady(hold = false);
-            }
-        } else {
-            if (typeof $ === "function") {
-                $.holdReady(hold = true);
-            }
+	NXKit.requirejs = NXKit.requirejs || requirejs;
+	NXKit.require = NXKit.require || require;
+	NXKit.define = NXKit.define || define;
 
-            if (typeof console.warn === "function") {
-                console.warn("nxkit: RequireJS missing or jQuery and knockout missing, retrying.");
-            }
+	NXKit.define('nxkit', ['jquery', 'knockout'], function ($, ko) {
+		return init($, ko, NXKit);
+	});
 
-            window.setTimeout(loop, 1000);
-        }
-    };
-    loop();
-}
-}());
+}(window['NXKit'] || (window['NXKit'] = {})));

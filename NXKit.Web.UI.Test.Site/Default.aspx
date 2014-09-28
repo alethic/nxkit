@@ -45,9 +45,7 @@
         <div class="main container" style="padding-top: 64px;">
             <xforms:View ID="View" runat="server"
                 CssClass="FormView"
-                OnLoad="View_Load"
-                EnableModuleScriptManagerScripts="false"
-                EnableEmbeddedStyles="false" />
+                OnLoad="View_Load" />
         </div>
     </form>
 </body>

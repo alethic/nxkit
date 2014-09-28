@@ -1,5 +1,5 @@
-(function() {
-var init = function ($, ko) {
+(function (NXKit) {
+	var init = function ($, ko, NXKit) {
 
 var NXKit;
 (function (NXKit) {
@@ -385,13 +385,13 @@ var NXKit;
                     }
                 };
 
-                for (var i in source) {
-                    if (i === 'NXKit.View.Js.ViewModule') {
-                        var deps = source[i]['Require'];
-                        if (deps != null) {
-                            self._view.Require(deps, next);
-                            return;
-                        }
+                // check if any modules are required, if so dispatch to require framework
+                var vmod = source['NXKit.View.Js.ViewModule'];
+                if (vmod != null) {
+                    var deps = vmod['Require'];
+                    if (deps != null) {
+                        NXKit.require(deps, next);
+                        return;
                     }
                 }
 
@@ -1767,11 +1767,10 @@ var NXKit;
         * Main NXKit client-side view class. Injects the view interface into a set of HTML elements.
         */
         var View = (function () {
-            function View(body, require, server) {
+            function View(body, server) {
                 var self = this;
 
                 self._server = server;
-                self._require = require;
                 self._body = body;
                 self._save = null;
                 self._hash = null;
@@ -1830,13 +1829,6 @@ var NXKit;
                 configurable: true
             });
 
-
-            /**
-            * Dispatches a request to the current require framework.
-            */
-            View.prototype.Require = function (deps, cb) {
-                this._require(deps, cb);
-            };
 
             /**
             * Updates the view in response to a received message.
@@ -2056,7 +2048,7 @@ var NXKit;
                     ko.cleanNode(self._body);
 
                     // execute after deferral
-                    self.Require(['nx-view!nxkit.html'], function () {
+                    NXKit.require(['nx-template!nxkit.html'], function () {
                         // ensure body is to render template
                         $(self._body).attr('data-bind', 'template: { name: \'NXKit.View\' }');
 
@@ -2304,34 +2296,15 @@ var NXKit;
 //# sourceMappingURL=nxkit.ts.js.map
 
 
-    window.NXKit = NXKit;
-    return NXKit;
-};
+		return NXKit;
+	};
 
-if (typeof define === "function" && define.amd) {
-    define("nxkit", ['jquery', 'knockout'], function ($, ko) {
-        return init($, ko);
-    });
-} else {
-    var hold = false;
-    var loop = function () {
-        if (typeof $ === "function" && typeof ko === "object") {
-            init($, ko);
-            if (hold) {
-                $.holdReady(hold = false);
-            }
-        } else {
-            if (typeof $ === "function") {
-                $.holdReady(hold = true);
-            }
+	NXKit.requirejs = NXKit.requirejs || requirejs;
+	NXKit.require = NXKit.require || require;
+	NXKit.define = NXKit.define || define;
 
-            if (typeof console.warn === "function") {
-                console.warn("nxkit: RequireJS missing or jQuery and knockout missing, retrying.");
-            }
+	NXKit.define('nxkit', ['jquery', 'knockout'], function ($, ko) {
+		return init($, ko, NXKit);
+	});
 
-            window.setTimeout(loop, 1000);
-        }
-    };
-    loop();
-}
-}());
+}(window['NXKit'] || (window['NXKit'] = {})));
