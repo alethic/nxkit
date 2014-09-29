@@ -5,8 +5,8 @@ using System.Diagnostics.Contracts;
 
 using NXKit.Composition;
 using NXKit.IO.Media;
-using NXKit.Util;
 using NXKit.Server.Commands;
+using NXKit.Util;
 using NXKit.Xml;
 
 namespace NXKit.Server
