@@ -160,7 +160,17 @@ _NXKit.Web.UI.View.prototype = {
             self.onsubmit();
         });
 
-        NXKit.require(['nxkit'], function (nx) {
+        NXKit.require([
+                'nxkit',
+                'css!nxkit.css',
+                'nx-template!nxkit.html',
+                'nxkit-xforms',
+                'css!nxkit-xforms.css',
+                'nx-template!nxkit-xforms.html',
+                'nxkit-xforms-layout',
+                'css!nxkit-xforms-layout.css',
+                'nx-template!nxkit-xforms-layout.html'],
+            function (nx) {
 
             // initialize view
             if (self._view == null) {

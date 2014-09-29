@@ -390,7 +390,8 @@ var NXKit;
                 if (vmod != null) {
                     var deps = vmod['Require'];
                     if (deps != null) {
-                        NXKit.require(deps, next);
+                        //NXKit.require(deps, next);
+                        next();
                         return;
                     }
                 }
