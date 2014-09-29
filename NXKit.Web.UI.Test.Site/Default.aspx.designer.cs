@@ -37,6 +37,6 @@ namespace NXKit.View.UI.Test.Site {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::NXKit.Web.UI.View View;
+        protected global::NXKit.View.Web.UI.View View;
     }
 }

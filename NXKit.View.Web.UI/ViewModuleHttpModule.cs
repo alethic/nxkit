@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
-using System.ComponentModel.Composition.Hosting;
 using System.Web;
+
 using NXKit.Composition;
 
-[assembly: PreApplicationStartMethod(typeof(NXKit.Web.UI.ViewModuleHttpModule), "Start")]
+[assembly: PreApplicationStartMethod(typeof(NXKit.View.Web.UI.ViewModuleHttpModule), "Start")]
 
-namespace NXKit.Web.UI
+namespace NXKit.View.Web.UI
 {
 
     public class ViewModuleHttpModule :

@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("NXKit.Web.UI")]
+[assembly: AssemblyTitle("NXKit.View.Web.UI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NXKit.Web.UI")]
+[assembly: AssemblyProduct("NXKit.View.Web.UI")]
 [assembly: AssemblyCopyright("Copyright © Jerome Haltom 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="NXKit.View.UI.Test.Site.Default" %>
 
-<%@ Register Assembly="NXKit.Web.UI" Namespace="NXKit.Web.UI" TagPrefix="xforms" %>
+<%@ Register Assembly="NXKit.View.Web.UI" Namespace="NXKit.View.Web.UI" TagPrefix="xforms" %>
 
 <!DOCTYPE html>
 

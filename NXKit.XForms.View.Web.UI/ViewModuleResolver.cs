@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Web;
-using NXKit.Web.UI;
+
+using NXKit.View.Web.UI;
 
 namespace NXKit.XForms.View.Web.UI
 {

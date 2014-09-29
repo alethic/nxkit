@@ -50,9 +50,9 @@
       <Project>{c7aedb60-a136-4356-9c04-35aa344d857e}</Project>
       <Name>NXKit.View.Js</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.Web.UI\NXKit.Web.UI.csproj">
+    <ProjectReference Include="..\NXKit.View.Web.UI\NXKit.View.Web.UI.csproj">
       <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
-      <Name>NXKit.Web.UI</Name>
+      <Name>NXKit.View.Web.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.View.Js\NXKit.XForms.View.Js.csproj">
       <Project>{f106499b-42cc-41cf-9824-39755e25993f}</Project>

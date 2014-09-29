@@ -2,9 +2,9 @@
 using System.ComponentModel.Composition;
 using System.Web;
 
-using NXKit.Web.UI;
+using NXKit.View.Web.UI;
 
-namespace NXKit.Web.XForms.Layout.View.UI
+namespace NXKit.XForms.Layout.View.Web.UI
 {
 
     [Export(typeof(IViewModuleResolver))]

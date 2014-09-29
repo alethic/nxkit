@@ -318,9 +318,9 @@
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
       <Name>NXKit.Server</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.Web.UI\NXKit.Web.UI.csproj">
+    <ProjectReference Include="..\NXKit.View.Web.UI\NXKit.View.Web.UI.csproj">
       <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
-      <Name>NXKit.Web.UI</Name>
+      <Name>NXKit.View.Web.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Layout.View.Web.UI\NXKit.XForms.Layout.View.Web.UI.csproj">
       <Project>{38a49f91-54fa-47c7-b046-71d9fef16f3e}</Project>

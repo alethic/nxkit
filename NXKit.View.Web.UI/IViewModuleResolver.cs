@@ -3,7 +3,7 @@ using System.Web;
 
 using NXKit.View.Js;
 
-namespace NXKit.Web.UI
+namespace NXKit.View.Web.UI
 {
 
     /// <summary>

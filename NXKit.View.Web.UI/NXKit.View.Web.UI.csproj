@@ -7,8 +7,8 @@
     <ProjectGuid>{434F4E74-1BA0-4579-AB27-B0DC7DF4166C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NXKit.Web.UI</RootNamespace>
-    <AssemblyName>NXKit.Web.UI</AssemblyName>
+    <RootNamespace>NXKit.View.Web.UI</RootNamespace>
+    <AssemblyName>NXKit.View.Web.UI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -104,7 +104,7 @@
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-    <DocumentationFile>bin\Release\NXKit.Web.UI.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\NXKit.View.Web.UI.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

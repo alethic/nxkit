@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Web;
 
-namespace NXKit.Web.UI
+namespace NXKit.View.Web.UI
 {
 
     [Export(typeof(IViewModuleResolver))]
@@ -13,19 +13,19 @@ namespace NXKit.Web.UI
         static readonly Action<HttpResponse> nxkit_js = req =>
         {
             req.ContentType = "application/javascript";
-            typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.Web.UI.Scripts.nxkit.js").CopyTo(req.OutputStream);
+            typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Web.UI.Scripts.nxkit.js").CopyTo(req.OutputStream);
         };
 
         static readonly Action<HttpResponse> nxkit_css = req =>
         {
             req.ContentType = "text/css";
-            typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.Web.UI.Content.nxkit.css").CopyTo(req.OutputStream);
+            typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Web.UI.Content.nxkit.css").CopyTo(req.OutputStream);
         };
 
         static readonly Action<HttpResponse> nxkit_html = req =>
         {
             req.ContentType = "text/html";
-            typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.Web.UI.Content.nxkit.html").CopyTo(req.OutputStream);
+            typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Web.UI.Content.nxkit.html").CopyTo(req.OutputStream);
         };
 
         public Action<HttpResponse> Resolve(string name)

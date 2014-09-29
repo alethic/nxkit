@@ -12,7 +12,7 @@
         <description>
             NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
 
-            NXKit.Web.UI provides the basic model for rendering a NXKit hosted document in ASP.Net. The View control forms the basis of the implementation which can be extended by including other NXKit.*.Web.UI packages.
+            NXKit.View.Web.UI provides the basic model for rendering a NXKit hosted document in ASP.Net. The View control forms the basis of the implementation which can be extended by including other NXKit.*.Web.UI packages.
         </description>
         <releaseNotes />
         <copyright>Copyright © 2013 Jerome Haltom</copyright>

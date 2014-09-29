@@ -1,9 +1,9 @@
 ﻿using System.Web.UI;
 
-[assembly: WebResource("NXKit.Web.UI.Scripts.jquery-2.1.1.js", "text/javascript")]
-[assembly: WebResource("NXKit.Web.UI.Scripts.knockout-3.2.0.js", "text/javascript")]
-[assembly: WebResource("NXKit.Web.UI.Scripts.nx-require.js", "text/javascript")]
-[assembly: WebResource("NXKit.Web.UI.Scripts.View.js", "text/javascript")]
+[assembly: WebResource("NXKit.View.Web.UI.Scripts.jquery-2.1.1.js", "text/javascript")]
+[assembly: WebResource("NXKit.View.Web.UI.Scripts.knockout-3.2.0.js", "text/javascript")]
+[assembly: WebResource("NXKit.View.Web.UI.Scripts.nx-require.js", "text/javascript")]
+[assembly: WebResource("NXKit.View.Web.UI.Scripts.View.js", "text/javascript")]
 
 [assembly: System.Web.PreApplicationStartMethod(typeof(NXKit.View.Web.UI.PreApplication), "Start")]
 
@@ -19,7 +19,7 @@ namespace NXKit.View.Web.UI
                 ScriptManager.ScriptResourceMapping.AddDefinition("nx-require", new ScriptResourceDefinition()
                 {
                     ResourceAssembly = typeof(PreApplication).Assembly,
-                    ResourceName = "NXKit.Web.UI.Scripts.nx-require.js",
+                    ResourceName = "NXKit.View.Web.UI.Scripts.nx-require.js",
                     CdnSupportsSecureConnection = true,
                     LoadSuccessExpression = "NXKit.require"
                 });
@@ -28,7 +28,7 @@ namespace NXKit.View.Web.UI
                 ScriptManager.ScriptResourceMapping.AddDefinition("jquery", new ScriptResourceDefinition()
                 {
                     ResourceAssembly = typeof(PreApplication).Assembly,
-                    ResourceName = "NXKit.Web.UI.Scripts.jquery-2.1.1.js",
+                    ResourceName = "NXKit.View.Web.UI.Scripts.jquery-2.1.1.js",
                     CdnPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js",
                     CdnDebugPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.js",
                     CdnSupportsSecureConnection = true,
@@ -39,7 +39,7 @@ namespace NXKit.View.Web.UI
                 ScriptManager.ScriptResourceMapping.AddDefinition("knockout", new ScriptResourceDefinition()
                 {
                     ResourceAssembly = typeof(PreApplication).Assembly,
-                    ResourceName = "NXKit.Web.UI.Scripts.knockout-3.2.0.js",
+                    ResourceName = "NXKit.View.Web.UI.Scripts.knockout-3.2.0.js",
                     CdnPath = "//cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js",
                     CdnDebugPath = "//cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout.js",
                     CdnSupportsSecureConnection = true,
@@ -50,7 +50,7 @@ namespace NXKit.View.Web.UI
                 ScriptManager.ScriptResourceMapping.AddDefinition("nxkit-ui", new ScriptResourceDefinition()
                 {
                     ResourceAssembly = typeof(PreApplication).Assembly,
-                    ResourceName = "NXKit.Web.UI.Scripts.View.js",
+                    ResourceName = "NXKit.View.Web.UI.Scripts.View.js",
                     LoadSuccessExpression = "window._NXKit",
                 });
         }

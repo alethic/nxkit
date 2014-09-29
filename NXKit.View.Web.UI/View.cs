@@ -5,12 +5,14 @@ using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Web.UI;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using NXKit.Composition;
 using NXKit.Server;
 
-namespace NXKit.Web.UI
+namespace NXKit.View.Web.UI
 {
 
     [ToolboxData("<{0}:View runat=\"server\"></{0}:View>")]
@@ -192,7 +194,7 @@ namespace NXKit.Web.UI
             if (message != null)
             {
                 ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
-                Page.ClientScript.RegisterStartupScript(typeof(View), GetHashCode().ToString(), @"_NXKit.Web.UI.handlerUrl = '" + ResolveUrl("~/NXKit.axd/") + @"'", true);
+                Page.ClientScript.RegisterStartupScript(typeof(View), GetHashCode().ToString(), @"_NXKit.View.Web.UI.handlerUrl = '" + ResolveUrl("~/NXKit.axd/") + @"'", true);
                 Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"').onsubmit();");
             }
         }
@@ -231,7 +233,7 @@ namespace NXKit.Web.UI
 
         IEnumerable<ScriptDescriptor> IScriptControl.GetScriptDescriptors()
         {
-            var d = new ScriptControlDescriptor("_NXKit.Web.UI.View", ClientID);
+            var d = new ScriptControlDescriptor("_NXKit.View.Web.UI.View", ClientID);
             d.AddProperty("sendFunc", Page.ClientScript.GetCallbackEventReference(this, "args", "cb", "self") + ";");
             yield return d;
         }
@@ -284,7 +286,7 @@ namespace NXKit.Web.UI
         {
             var jobj = JObject.Parse(eventArgument);
             if (jobj["Type"].Value<string>() == "Message")
-                response = new { Type = "Messasge", Message = message = server.Load(jobj["Data"].ToObject<ViewMessage>()) };
+                response = new { Type = "Message", Message = message = server.Load(jobj["Data"].ToObject<ViewMessage>()) };
         }
 
         /// <summary>

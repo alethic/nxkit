@@ -1,4 +1,4 @@
-﻿Type.registerNamespace('_NXKit.Web.UI');
+﻿Type.registerNamespace('_NXKit.View.Web.UI');
 
 (function () {
     var requirejs = NXKit.requirejs;
@@ -12,7 +12,7 @@
             for (var i in err.requireModules) {
                 var failedId = err.requireModules[i];
                 if (failedId != null) {
-                    var url = _NXKit.Web.UI.handlerUrl + '?m=' + failedId;
+                    var url = _NXKit.View.Web.UI.handlerUrl + '?m=' + failedId;
 
                     // check for whether we've already failed here
                     var paths = requirejs.s.contexts._.config.paths || {};
@@ -66,7 +66,7 @@
                         var div2 = $(document.createElement('div'))
                             .attr('data-nx-require', name)
                             .appendTo(div1)
-                            .load(_NXKit.Web.UI.handlerUrl + '?m=' + name, function () {
+                            .load(_NXKit.View.Web.UI.handlerUrl + '?m=' + name, function () {
                                 onload(div2.get(0));
                             });
                     }
@@ -86,7 +86,7 @@
                             .attr('data-nx-require', name)
                             .attr('rel', 'stylesheet')
                             .attr('type', 'text/css')
-                            .attr('href', _NXKit.Web.UI.handlerUrl + '?m=' + name)
+                            .attr('href', _NXKit.View.Web.UI.handlerUrl + '?m=' + name)
                             .appendTo($('head'))
                             .bind('load', function () {
                                 onload(link.get(0));
@@ -99,23 +99,23 @@
     });
 })();
 
-_NXKit.Web.UI.View = function (element) {
+_NXKit.View.Web.UI.View = function (element) {
     var self = this;
-    _NXKit.Web.UI.View.initializeBase(self, [element]);
+    _NXKit.View.Web.UI.View.initializeBase(self, [element]);
 };
 
-_NXKit.Web.UI.View.prototype = {
+_NXKit.View.Web.UI.View.prototype = {
 
     initialize: function () {
         var self = this;
-        _NXKit.Web.UI.View.callBaseMethod(self, 'initialize');
+        _NXKit.View.Web.UI.View.callBaseMethod(self, 'initialize');
 
         self.init();
     },
 
     dispose: function () {
         var self = this;
-        _NXKit.Web.UI.View.callBaseMethod(self, 'dispose');
+        _NXKit.View.Web.UI.View.callBaseMethod(self, 'dispose');
     },
 
     get_sendFunc: function () {
@@ -174,7 +174,7 @@ _NXKit.Web.UI.View.prototype = {
 
             // initialize view
             if (self._view == null) {
-                self._view = new nx.View.View(body[0], function (deps, cb) { self.require(deps, cb); }, function (data, cb) {
+                self._view = new nx.View.View(body[0], function (data, cb) {
                     self.send({ Type: 'Message', Data: data }, cb);
                 });
             }
@@ -190,7 +190,9 @@ _NXKit.Web.UI.View.prototype = {
 
         // initiate server request
         var cb = function (response) {
-            wh(response);
+            if (response.Type === 'Message') {
+                wh(response.Message);
+            }
         };
 
         self.sendEval(data, cb);
@@ -206,4 +208,4 @@ _NXKit.Web.UI.View.prototype = {
 
 };
 
-_NXKit.Web.UI.View.registerClass('_NXKit.Web.UI.View', Sys.UI.Control);
+_NXKit.View.Web.UI.View.registerClass('_NXKit.View.Web.UI.View', Sys.UI.Control);
