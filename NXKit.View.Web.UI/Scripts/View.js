@@ -152,12 +152,14 @@ _NXKit.View.Web.UI.View.prototype = {
         if (data.length == 0)
             throw new Error("cannot find data element");
 
-        NXKit.require(['nxkit'], function (nx) {
-            // update the hidden data field value before submit
-            if (self._view != null) {
-                $(data).val(JSON.stringify(self._view.Data));
-            }
-        });
+        NXKit.require([
+            'nxkit'],
+            function (nx) {
+                // update the hidden data field value before submit
+                if (self._view != null) {
+                    $(data).val(JSON.stringify(self._view.Data));
+                }
+            });
     },
 
     init: function () {
@@ -175,33 +177,28 @@ _NXKit.View.Web.UI.View.prototype = {
         if (body.length == 0)
             throw new Error("cannot find body element");
 
+        // hook into submission life cycle
         Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(function (s, a) {
             self.onsubmit();
         });
 
+        // load NXKit implementation
         NXKit.require([
                 'nxkit',
-                'css!nxkit.css',
-                'nx-html!nxkit.html',
-                'nxkit-xforms',
-                'css!nxkit-xforms.css',
-                'nx-html!nxkit-xforms.html',
-                'nxkit-xforms-layout',
-                'css!nxkit-xforms-layout.css',
-                'nx-html!nxkit-xforms-layout.html'],
+                'nx-html!nxkit.html'],
             function (nx) {
 
-            // initialize view
-            if (self._view == null) {
-                self._view = new nx.View.View(body[0], function (data, cb) {
-                    self.send({ Type: 'Message', Data: data }, cb);
-                });
-            }
+                // initialize view
+                if (self._view == null) {
+                    self._view = new nx.View.View(body[0], function (data, cb) {
+                        self.send({ Type: 'Message', Data: data }, cb);
+                    });
+                }
 
-            // update view with initial data set
-            self._view.Receive(JSON.parse($(data).val()));
-            $(data).val('');
-        })
+                // update view with initial data set
+                self._view.Receive(JSON.parse($(data).val()));
+                $(data).val('');
+            })
     },
 
     send: function (data, wh) {

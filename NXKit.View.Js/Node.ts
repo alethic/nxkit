@@ -158,16 +158,24 @@ module NXKit.View {
             };
 
             var work = (data: any) => {
-                if (data.Name)
-                    if (data.Name !== self.Name)
-                        return false;
 
+                // check for node name
+                if (data.Name) {
+                    if (data.Name !== self.Name) {
+                        return false;
+                    }
+                }
+
+                // check for node type
+                if (data.Type) {
+                    if ((<string>data.Type).toLowerCase() !== self.Type.ToString().toLowerCase()) {
+                        return false;
+                    }
+                }
+
+                // process interface specifications
                 for (var name in data) {
-                    if (name === 'Name') {
-                        if (data[name] !== self.Name) {
-                            return false;
-                        }
-                    } else {
+                    if ((<string>name).indexOf('.') >= 0) {
                         var dataInterface = data[name];
                         var nodeInterface = self.Interfaces[name];
                         if (nodeInterface) {

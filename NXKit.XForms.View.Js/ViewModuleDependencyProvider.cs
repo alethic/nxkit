@@ -12,9 +12,12 @@ namespace NXKit.XForms.View.Js
         IViewModuleDependencyProvider
     {
 
-        public IEnumerable<ViewModuleDependency> GetDependencies(XElement element)
+        public IEnumerable<ViewModuleDependency> GetDependencies(XObject obj)
         {
-            if (element.Name.Namespace == Constants.XForms_1_0)
+            var element = obj as XElement;
+
+            if (element != null &&
+                element.Name.Namespace == Constants.XForms_1_0)
             {
                 yield return new ViewModuleDependency(ViewModuleType.Script, "nxkit-xforms");
                 yield return new ViewModuleDependency(ViewModuleType.Css, "nxkit-xforms.css");

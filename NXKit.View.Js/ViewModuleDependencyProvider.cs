@@ -10,7 +10,7 @@ namespace NXKit.View.Js
         IViewModuleDependencyProvider
     {
 
-        public IEnumerable<ViewModuleDependency> GetDependencies(XElement element)
+        public IEnumerable<ViewModuleDependency> GetDependencies(XObject obj)
         {
             yield return new ViewModuleDependency(ViewModuleType.Script, "nxkit");
             yield return new ViewModuleDependency(ViewModuleType.Css, "nxkit.css");

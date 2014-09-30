@@ -14,10 +14,10 @@ namespace NXKit.View.Js
     /// Attachs an <see cref="IViewModule"/> instance to each element.
     /// </summary>
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
-    [Extension]
+    [Extension(ExtensionObjectType.Element | ExtensionObjectType.Text)]
     [Remote]
     public class ViewModule :
-        ElementExtension
+        NodeExtension
     {
 
         readonly IEnumerable<IViewModuleDependencyProvider> providers;
@@ -25,15 +25,15 @@ namespace NXKit.View.Js
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="element"></param>
+        /// <param name="node"></param>
         /// <param name="providers"></param>
         [ImportingConstructor]
         public ViewModule(
-            XElement element,
+            XNode node,
             [ImportMany] IEnumerable<IViewModuleDependencyProvider> providers)
-            : base(element)
+            : base(node)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(providers != null);
 
             this.providers = providers;
@@ -42,7 +42,7 @@ namespace NXKit.View.Js
         [Remote]
         public IEnumerable<ViewModuleDependency> Require
         {
-            get { return providers.SelectMany(i => i.GetDependencies(Element)); }
+            get { return providers.SelectMany(i => i.GetDependencies(Node)); }
         }
 
     }

@@ -6,18 +6,26 @@ module NXKit.View.Knockout {
         implements KnockoutBindingHandler {
 
         public init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: KnockoutAllBindingsAccessor, viewModel: any, bindingContext: KnockoutBindingContext): void {
-            return ko.bindingHandlers.template.init(
+            var value = NodeBindingHandler.ConvertValueAccessor(element, valueAccessor, viewModel, bindingContext);
+            if (value == null)
+                return;
+            
+            ko.bindingHandlers.template.init(
                 element,
-                NodeBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext),
+                () => value,
                 allBindingsAccessor,
                 viewModel,
                 bindingContext);
         }
 
         public update(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: KnockoutAllBindingsAccessor, viewModel: any, bindingContext: KnockoutBindingContext): void {
-            return ko.bindingHandlers.template.update(
+            var value = NodeBindingHandler.ConvertValueAccessor(element, valueAccessor, viewModel, bindingContext);
+            if (value == null)
+                return;
+
+            ko.bindingHandlers.template.update(
                 element,
-                NodeBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext),
+                () => value,
                 allBindingsAccessor,
                 viewModel,
                 bindingContext);
@@ -26,11 +34,16 @@ module NXKit.View.Knockout {
         /**
           * Converts the given value accessor into a value accessor compatible with the default template implementation.
           */
-        static ConvertValueAccessor(valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): () => any {
+        static ConvertValueAccessor(element: HTMLElement, valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any {
+
+            // determine bound node
             var node = <Node>valueAccessor() || <Node>viewModel;
-            var name = ko.observable<string>(null);
+            var name = ko.observable<string>('NXKit.View.Loading');
             if (node == null) {
-                return;
+                return {
+                    data: <any>null,
+                    name: name,
+                };
             }
 
             // parse JSON and ignore errors
@@ -45,7 +58,7 @@ module NXKit.View.Knockout {
 
             // node specifies required modules
             var modulesProperty = node.Property('NXKit.View.Js.ViewModule', 'Require');
-            var modules = modulesProperty != null ? (<string[]>modulesProperty.Value() || []) : [];
+            var modules = modulesProperty != null ? (<string[]>modulesProperty.Value.peek() || []) : [];
 
             // wait for required modules
             NXKit.require(modules, (...deps: any[]) => {
@@ -59,8 +72,8 @@ module NXKit.View.Knockout {
 
                         // search script elements from bottom up, so that overloads can come after
                         var elements = $(host).find('script[type="text/html"]').get().reverse();
-                        for (var i in elements) {
-                            var html = $(elements[i]);
+                        for (var j in elements) {
+                            var html = $(elements[j]);
                             var data = html.data('nx-node-view-data');
                             if (data == null) {
                                 var attr = html.attr('data-nx-node-view');
@@ -81,7 +94,10 @@ module NXKit.View.Knockout {
                                     }
 
                                     // successful update of template
-                                    name(id);
+                                    if (name() != id) {
+                                        name(id);
+                                    }
+
                                     return;
                                 }
                             }
@@ -94,10 +110,10 @@ module NXKit.View.Knockout {
             });
 
             // template object with dynamic name
-            return () => ({
+            return {
                 data: node,
                 name: name,
-            });
+            };
         }
 
     }

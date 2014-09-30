@@ -10,7 +10,7 @@ namespace NXKit.View.Js
     public interface IViewModuleDependencyProvider
     {
 
-        IEnumerable<ViewModuleDependency> GetDependencies(XElement element);
+        IEnumerable<ViewModuleDependency> GetDependencies(XObject obj);
 
     }
 

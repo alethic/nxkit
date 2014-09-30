@@ -1,9 +1,9 @@
 <script type="text/html" data-nx-node-view='
 {
-    "Type": "Text",
+    "Type": "Text"
 }'>
-    <!-- ko if: Value -->
-    <span data-bind="text: Value" />
+    <!-- ko with: Value -->
+    <span data-bind="text: $data" />
     <!-- /ko -->
 </script>
 <script type="text/html" id="NXKit.View">
@@ -32,7 +32,11 @@ css: {
 
 <script type="text/html" id="NXKit.View.Unknown">
     <span class="ui red label">
-        <!-- ko text: JSON.stringify($data) -->
+        <!-- ko text: JSON.stringify($data.Name) -->
         <!-- /ko -->
     </span>
+</script>
+
+<script type="text/html" id="NXKit.View.Loading">
+
 </script>
