@@ -292,7 +292,7 @@ module NXKit.View {
                     self._body);
 
                 // execute after deferral
-                NXKit.require(['nx-template!nxkit.html'], () => {
+                NXKit.require(['nx-html!nxkit.html'], () => {
 
                     // ensure body is to render template
                     $(self._body)

@@ -1,4 +1,7 @@
-<script type="text/html" data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}form">
+<script type="text/html" data-nx-node-view='
+{
+        "Name": "{http://schemas.nxkit.org/2014/xforms-layout}form"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.FormViewModel($context, $data) -->
     <div class="xforms-layout-form" data-bind="
 attr : {
@@ -15,7 +18,7 @@ attr : {
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
     'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
 }">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
@@ -33,7 +36,7 @@ attr: {
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
     'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
 }">
-                <!-- ko nxkit_template -->
+                <!-- ko nx_node -->
                 <!-- /ko -->
             </div>
             <!-- /ko -->
@@ -41,11 +44,13 @@ attr: {
     </div>
     <!-- /ko -->
 </script>
-<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}icon">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}icon"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.IconViewModel($context, $data) -->
     <i class="xforms-layout-icon icon"
-         data-bind="
+       data-bind="
 attr : {
     'data-nx-name': $data.Node.Name,
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
@@ -56,9 +61,10 @@ css: $data.Name">
     </i>
     <!-- /ko -->
 </script>
-
-<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}item">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}item"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.ItemViewModel($context, $data) -->
     <div class="xforms-layout-item"
          data-bind="
@@ -69,15 +75,17 @@ attr : {
     'data-nx-xforms-label-appearance': LabelAppearance,
 }">
         <!-- ko foreach: Contents -->
-        <!-- ko nxkit_template -->
+        <!-- ko nx_node -->
         <!-- /ko -->
         <!-- /ko -->
     </div>
     <!-- /ko -->
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}list">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}list"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.ListViewModel($context, $data) -->
     <div class="xforms-layout-list"
          data-bind="
@@ -95,7 +103,7 @@ attr : {
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
     'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
 }">
-            <!-- ko nxkit_template -->
+            <!-- ko nx_node -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
@@ -106,7 +114,7 @@ attr: {
 }">
             <!-- ko foreach: Items -->
             <li class="item">
-                <!-- ko nxkit_template -->
+                <!-- ko nx_node -->
                 <!-- /ko -->
             </li>
             <!-- /ko -->
@@ -115,8 +123,10 @@ attr: {
     <!-- /ko -->
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}p">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}p"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.ParagraphViewModel($context, $data) -->
     <p class="xforms-layout-paragraph"
        data-bind="
@@ -128,15 +138,17 @@ attr : {
     'data-nx-xforms-label-appearance': LabelAppearance,
 }">
         <!-- ko foreach: Contents -->
-        <!-- ko nxkit_template -->
+        <!-- ko nx_node -->
         <!-- /ko -->
         <!-- /ko -->
     </p>
     <!-- /ko -->
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}section">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}section"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.SectionViewModel($context, $data) -->
     <section class="xforms-layout-section" data-bind="
 attr : {
@@ -144,27 +156,27 @@ attr : {
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
     'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
     'data-nx-xforms-label-appearance': LabelAppearance,
-}">        
+}">
         <!-- ko with: Label -->
         <header class="label"
-             data-bind="
+                data-bind="
 attr : {
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
     'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
 }">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </header>
         <!-- /ko -->
         <!-- ko with: Hint -->
         <div class="hint">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko with: Help -->
         <div class="help">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
@@ -181,7 +193,7 @@ attr: {
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
     'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
 }">
-                <!-- ko nxkit_template -->
+                <!-- ko nx_node -->
                 <!-- /ko -->
             </div>
             <!-- /ko -->
@@ -189,8 +201,10 @@ attr: {
     </section>
     <!-- /ko -->
 </script>
-<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}segment">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}segment"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.SegmentViewModel($context, $data) -->
     <section class="xforms-layout-segment" data-bind="
 attr : {
@@ -198,27 +212,27 @@ attr : {
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
     'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
     'data-nx-xforms-label-appearance': LabelAppearance,
-}">        
+}">
         <!-- ko with: Label -->
         <header class="label"
-             data-bind="
+                data-bind="
 attr : {
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
     'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
 }">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </header>
         <!-- /ko -->
         <!-- ko with: Hint -->
         <div class="hint">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko with: Help -->
         <div class="help">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
@@ -235,7 +249,7 @@ attr: {
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
     'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
 }">
-                <!-- ko nxkit_template -->
+                <!-- ko nx_node -->
                 <!-- /ko -->
             </div>
             <!-- /ko -->
@@ -243,24 +257,28 @@ attr: {
     </section>
     <!-- /ko -->
 </script>
-<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}strong">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}strong"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.StrongViewModel($context, $data) -->
     <strong class="xforms-layout-strong"
-       data-bind="
+            data-bind="
 attr : {
     'data-nx-name': $data.Node.Name,
 }">
         <!-- ko foreach: Contents -->
-        <!-- ko nxkit_template -->
+        <!-- ko nx_node -->
         <!-- /ko -->
         <!-- /ko -->
     </strong>
     <!-- /ko -->
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}table">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}table"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.TableViewModel($context, $data) -->
     <table class="xforms-layout-table" data-bind="
 attr : {
@@ -271,7 +289,7 @@ attr : {
 }">
         <tbody>
             <!-- ko foreach: Contents -->
-            <!-- ko nxkit_template -->
+            <!-- ko nx_node -->
             <!-- /ko -->
             <!-- /ko -->
         </tbody>
@@ -279,22 +297,26 @@ attr : {
     <!-- /ko -->
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}table-row">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}table-row"
+}'>
     <tr>
         <!-- ko foreach: Nodes -->
-        <!-- ko nxkit_template -->
+        <!-- ko nx_node -->
         <!-- /ko -->
         <!-- /ko -->
     </tr>
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}table-cell">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}table-cell"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.TableCellViewModel($context, $data) -->
     <td data-bind="event: { click: Activate }">
         <!-- ko foreach: Contents -->
-        <!-- ko nxkit_template -->
+        <!-- ko nx_node -->
         <!-- /ko -->
         <!-- /ko -->
     </td>

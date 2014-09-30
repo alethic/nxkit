@@ -1,14 +1,16 @@
 ﻿<script type="text/html"
         data-nxkit-name="{http://www.w3.org/2002/xforms}input">
-    <!-- ko nxkit_template: {
-        'data-type': '{http://www.w3.org/2001/XMLSchema}string',
-    } -->
+    <!-- ko nx_node: $data -->
     <!-- /ko -->
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}input"
-        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}string">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}input",
+    "NXKit.XForms.DataNode" : {
+        "DataType" : "{http://www.w3.org/2001/XMLSchema}string"
+    }
+}'>
     <!-- ko with: new NXKit.View.XForms.InputViewModel($context, $data) -->
     <div class="xforms-input"
          data-bind="
@@ -19,19 +21,19 @@ attr : {
 }">
         <!-- ko with: Label -->
         <label>
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </label>
         <!-- /ko -->
         <!-- ko with: Hint -->
         <div class="hint">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko with: Help -->
         <div class="help">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
@@ -46,9 +48,13 @@ event: {
     <!-- /ko -->
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}input"
-        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}input",
+    "NXKit.XForms.DataNode" : {
+        "DataType" : "{http://www.w3.org/2001/XMLSchema}boolean"
+    }
+}'>
     <!-- ko with: new NXKit.View.XForms.InputViewModel($context, $data) -->
     <div class="xforms-input"
          data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean"
@@ -64,19 +70,19 @@ attr : {
 
         <!-- ko with: Label -->
         <label>
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </label>
         <!-- /ko -->
         <!-- ko with: Hint -->
         <div class="hint">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko with: Help -->
         <div class="help">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
@@ -85,9 +91,13 @@ attr : {
     <!-- /ko -->
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}input"
-        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}date">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}input",
+    "NXKit.XForms.DataNode" : {
+        "DataType" : "{http://www.w3.org/2001/XMLSchema}date"
+    }
+}'>
     <!-- ko with: new NXKit.View.XForms.InputViewModel($context, $data) -->
     <div class="xforms-input"
          data-bind="
@@ -98,19 +108,19 @@ attr : {
 }">
         <!-- ko with: Label -->
         <label>
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </label>
         <!-- /ko -->
         <!-- ko with: Hint -->
         <div class="hint">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko with: Help -->
         <div class="help">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
@@ -125,18 +135,21 @@ event: {
     <!-- /ko -->
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}input"
-        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}int">
-    <!-- ko nxkit_template: {
-        'data-type': '{http://www.w3.org/2001/XMLSchema}integer',
-    } -->
-    <!-- /ko -->
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}input"
-        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}integer">
+<script type="text/html" data-nx-node-view='
+[
+    {
+        "Name": "{http://www.w3.org/2002/xforms}input",
+        "NXKit.XForms.DataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}int"
+        }
+    },
+    {
+        "Name": "{http://www.w3.org/2002/xforms}input",
+        "NXKit.XForms.DataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}integer"
+        }
+    }
+]'>
     <!-- ko with: new NXKit.View.XForms.InputViewModel($context, $data) -->
     <div class="xforms-input"
          data-bind="
@@ -147,19 +160,19 @@ attr : {
 }">
         <!-- ko with: Label -->
         <label>
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </label>
         <!-- /ko -->
         <!-- ko with: Hint -->
         <div class="hint">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko with: Help -->
         <div class="help">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->

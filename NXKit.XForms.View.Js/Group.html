@@ -1,6 +1,7 @@
-﻿<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}group"
-        data-nxkit-data-type="*">
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}group"
+}'>
     <!-- ko with: new NXKit.View.XForms.GroupViewModel($context, $parent) -->
     <div class="xforms-group"
          data-bind="
@@ -18,19 +19,19 @@ attr : {
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
     'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
 }">
-            <!-- ko nxkit_template -->
+            <!-- ko nx_node -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko with: Hint -->
         <div class="hint">
-            <!-- ko nxkit_template -->
+            <!-- ko nx_node -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko with: Help -->
         <div class="help">
-            <!-- ko nxkit_template -->
+            <!-- ko nx_node -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
@@ -47,7 +48,7 @@ attr: {
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
     'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
 }">
-                <!-- ko nxkit_template -->
+                <!-- ko nx_node -->
                 <!-- /ko -->
             </div>
             <!-- /ko -->

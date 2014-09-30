@@ -1,5 +1,7 @@
-﻿<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}alert">
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}alert"
+}'>
     <!-- ko with: new NXKit.View.XForms.AlertViewModel($context, $data) -->
     <div class="xforms-alert">
         <!-- ko if: Text -->
@@ -7,7 +9,7 @@
         <!-- /ko -->
         <!-- ko ifnot: Text -->
         <!-- ko foreach: Contents -->
-        <!-- ko nxkit_template -->
+        <!-- ko nx_node -->
         <!-- /ko -->
         <!-- /ko -->
         <!-- /ko -->

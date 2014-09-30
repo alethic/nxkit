@@ -90,19 +90,23 @@ module NXKit.View {
             return this._name;
         }
 
-        public get ValueAsString(): KnockoutComputed<string> {
+        public get Value(): KnockoutObservable<any> {
+            return this._value;
+        }
+
+        public get ValueAsString(): KnockoutObservable<string> {
             return this._valueAsString;
         }
 
-        public get ValueAsBoolean(): KnockoutComputed<boolean> {
+        public get ValueAsBoolean(): KnockoutObservable<boolean> {
             return this._valueAsBoolean;
         }
 
-        public get ValueAsNumber(): KnockoutComputed<number> {
+        public get ValueAsNumber(): KnockoutObservable<number> {
             return this._valueAsNumber;
         }
 
-        public get ValueAsDate(): KnockoutComputed<Date> {
+        public get ValueAsDate(): KnockoutObservable<Date> {
             return this._valueAsDate;
         }
 

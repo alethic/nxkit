@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IViewModuleDependencyProvider.cs" />
+    <TypeScriptCompile Include="Knockout\NodeBindingHandler.ts" />
     <Compile Include="ViewModuleExtension.cs" />
     <Compile Include="ViewModuleDependency.cs" />
     <Compile Include="ViewModuleDependencyJsonConverter.cs" />

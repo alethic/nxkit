@@ -1,4 +1,7 @@
-<script type="text/html" data-nxkit-type="text">
+<script type="text/html" data-nx-node-view='
+{
+    "Type": "Text",
+}'>
     <!-- ko if: Value -->
     <span data-bind="text: Value" />
     <!-- /ko -->
@@ -21,10 +24,15 @@ css: {
         </div>
         <!-- /ko -->
 
-        <!-- ko nxkit_layout_manager_export -->
-        <!-- ko nxkit_template: $data.Root -->
-        <!-- /ko -->
+        <!-- ko nx_node: $data.Root -->
         <!-- /ko -->
 
     </div>
+</script>
+
+<script type="text/html" id="NXKit.View.Unknown">
+    <span class="ui red label">
+        <!-- ko text: JSON.stringify($data) -->
+        <!-- /ko -->
+    </span>
 </script>

@@ -1,5 +1,7 @@
-﻿<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}table">
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}table"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.TableViewModel($context, $data) -->
     <table class="xforms-layout-table" data-bind="
 attr : {
@@ -10,7 +12,7 @@ attr : {
 }">
         <tbody>
             <!-- ko foreach: Contents -->
-            <!-- ko nxkit_template -->
+            <!-- ko nx_node -->
             <!-- /ko -->
             <!-- /ko -->
         </tbody>
@@ -18,22 +20,26 @@ attr : {
     <!-- /ko -->
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}table-row">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}table-row"
+}'>
     <tr>
         <!-- ko foreach: Nodes -->
-        <!-- ko nxkit_template -->
+        <!-- ko nx_node -->
         <!-- /ko -->
         <!-- /ko -->
     </tr>
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}table-cell">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}table-cell"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.TableCellViewModel($context, $data) -->
     <td data-bind="event: { click: Activate }">
         <!-- ko foreach: Contents -->
-        <!-- ko nxkit_template -->
+        <!-- ko nx_node -->
         <!-- /ko -->
         <!-- /ko -->
     </td>

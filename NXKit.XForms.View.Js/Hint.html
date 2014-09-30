@@ -1,5 +1,7 @@
-﻿<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}hint">
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}hint"
+}'>
     <!-- ko with: new NXKit.View.XForms.HintViewModel($context, $data) -->
     <div class="xforms-hint">
         <!-- ko if: Text -->
@@ -7,7 +9,7 @@
         <!-- /ko -->
         <!-- ko ifnot: Text -->
         <!-- ko foreach: Contents -->
-        <!-- ko nxkit_template -->
+        <!-- ko nx_node -->
         <!-- /ko -->
         <!-- /ko -->
         <!-- /ko -->

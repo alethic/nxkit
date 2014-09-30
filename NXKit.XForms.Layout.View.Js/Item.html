@@ -1,5 +1,7 @@
-﻿<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}item">
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}item"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.ItemViewModel($context, $data) -->
     <div class="xforms-layout-item"
          data-bind="
@@ -10,7 +12,7 @@ attr : {
     'data-nx-xforms-label-appearance': LabelAppearance,
 }">
         <!-- ko foreach: Contents -->
-        <!-- ko nxkit_template -->
+        <!-- ko nx_node -->
         <!-- /ko -->
         <!-- /ko -->
     </div>

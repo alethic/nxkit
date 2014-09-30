@@ -144,6 +144,14 @@ var NXKit;
                 configurable: true
             });
 
+            Object.defineProperty(Property.prototype, "Value", {
+                get: function () {
+                    return this._value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
             Object.defineProperty(Property.prototype, "ValueAsString", {
                 get: function () {
                     return this._valueAsString;
@@ -365,39 +373,106 @@ var NXKit;
             };
 
             /**
+            * Checks whether the given data matches this node.
+            */
+            Node.prototype.Match = function (data) {
+                var self = this;
+
+                var test = function (a, b) {
+                    if (a == null && b == null)
+                        return true;
+
+                    if (typeof a !== typeof b)
+                        return false;
+
+                    if (typeof a === 'boolean' && typeof b === 'boolean')
+                        return a === b;
+
+                    if (typeof a === 'string' && typeof b === 'string')
+                        return a === b;
+
+                    if (typeof a === 'number' && typeof b === 'number')
+                        return a === b;
+
+                    if (typeof a === 'function' && typeof b === 'function')
+                        return a.toString() === b.toString();
+
+                    for (var i in a) {
+                        if (!b.hasOwnProperty(i)) {
+                            return false;
+                        } else {
+                            if (!test(a[i], b[i])) {
+                                return false;
+                            }
+                        }
+                    }
+                };
+
+                var work = function (data) {
+                    if (data.Name)
+                        if (data.Name !== self.Name)
+                            return false;
+
+                    for (var name in data) {
+                        if (name === 'Name') {
+                            if (data[name] !== self.Name) {
+                                return false;
+                            }
+                        } else {
+                            var dataInterface = data[name];
+                            var nodeInterface = self.Interfaces[name];
+                            if (nodeInterface) {
+                                for (var propertyName in dataInterface) {
+                                    var dataProperty = dataInterface[propertyName];
+                                    var nodeProperty = nodeInterface.Properties[propertyName];
+                                    if (nodeProperty) {
+                                        if (!test(dataProperty, nodeProperty.Value())) {
+                                            return false;
+                                        }
+                                    } else {
+                                        return false;
+                                    }
+                                }
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+
+                    return true;
+                };
+
+                if (Array.isArray(data)) {
+                    for (var i in data) {
+                        if (work(data[i])) {
+                            return true;
+                        }
+                    }
+                } else if (work(data)) {
+                    return true;
+                }
+
+                return false;
+            };
+
+            /**
             * Integrates the data given by the node parameter into this node.
             */
             Node.prototype.Apply = function (source) {
                 var self = this;
 
-                var next = function () {
-                    try  {
-                        self._data = source;
-                        self.ApplyId(source.Id);
-                        self.ApplyType(source.Type);
-                        self.ApplyName(source.Name);
-                        self.ApplyValue(source.Value);
-                        self.ApplyInterfaces(source);
-                        self.ApplyNodes(source.Nodes);
-                    } catch (ex) {
-                        ex.message = "Node.Apply()" + '\nMessage: ' + ex.message;
-                        throw ex;
-                    }
-                };
-
-                // check if any modules are required, if so dispatch to require framework
-                var vmod = source['NXKit.View.Js.ViewModule'];
-                if (vmod != null) {
-                    var deps = vmod['Require'];
-                    if (deps != null) {
-                        //NXKit.require(deps, next);
-                        next();
-                        return;
-                    }
+                try  {
+                    self._data = source;
+                    self.ApplyId(source.Id);
+                    self.ApplyType(source.Type);
+                    self.ApplyName(source.Name);
+                    self.ApplyValue(source.Value);
+                    self.ApplyInterfaces(source);
+                    self.ApplyNodes(source.Nodes);
+                } catch (ex) {
+                    ex.message = "Node.Apply()" + '\nMessage: ' + ex.message;
+                    throw ex;
                 }
-
-                // no requirements, continue
-                next();
             };
 
             /**
@@ -2049,7 +2124,7 @@ var NXKit;
                     ko.cleanNode(self._body);
 
                     // execute after deferral
-                    NXKit.require(['nx-template!nxkit.html'], function () {
+                    NXKit.require(['nx-html!nxkit.html'], function () {
                         // ensure body is to render template
                         $(self._body).attr('data-bind', 'template: { name: \'NXKit.View\' }');
 
@@ -2291,6 +2366,110 @@ var NXKit;
             ViewModelUtil.GetContents = GetContents;
         })(View.ViewModelUtil || (View.ViewModelUtil = {}));
         var ViewModelUtil = View.ViewModelUtil;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
+})(NXKit || (NXKit = {}));
+/// <reference path="../Util.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (View) {
+        (function (Knockout) {
+            var NodeBindingHandler = (function () {
+                function NodeBindingHandler() {
+                }
+                NodeBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    return ko.bindingHandlers.template.init(element, NodeBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
+                };
+
+                NodeBindingHandler.prototype.update = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    return ko.bindingHandlers.template.update(element, NodeBindingHandler.ConvertValueAccessor(valueAccessor, viewModel, bindingContext), allBindingsAccessor, viewModel, bindingContext);
+                };
+
+                /**
+                * Converts the given value accessor into a value accessor compatible with the default template implementation.
+                */
+                NodeBindingHandler.ConvertValueAccessor = function (valueAccessor, viewModel, bindingContext) {
+                    var node = valueAccessor() || viewModel;
+                    var name = ko.observable(null);
+                    if (node == null) {
+                        return;
+                    }
+
+                    // parse JSON and ignore errors
+                    var json = function (s) {
+                        try  {
+                            return JSON.parse(s);
+                        } catch (e) {
+                            console.error(e);
+                            return null;
+                        }
+                    };
+
+                    // node specifies required modules
+                    var modulesProperty = node.Property('NXKit.View.Js.ViewModule', 'Require');
+                    var modules = modulesProperty != null ? (modulesProperty.Value() || []) : [];
+
+                    // wait for required modules
+                    NXKit.require(modules, function () {
+                        var deps = [];
+                        for (var _i = 0; _i < (arguments.length - 0); _i++) {
+                            deps[_i] = arguments[_i + 0];
+                        }
+                        for (var i = deps.length - 1; i >= 0; i--) {
+                            // dependency must be HTML tag
+                            var host = deps[i];
+                            if (host instanceof HTMLElement) {
+                                // search script elements from bottom up, so that overloads can come after
+                                var elements = $(host).find('script[type="text/html"]').get().reverse();
+                                for (var i in elements) {
+                                    var html = $(elements[i]);
+                                    var data = html.data('nx-node-view-data');
+                                    if (data == null) {
+                                        var attr = html.attr('data-nx-node-view');
+                                        if (attr) {
+                                            // cache data result
+                                            data = html.data('nx-node-view-data', json(attr)).data('nx-node-view-data');
+                                        }
+                                    }
+
+                                    // match data to node
+                                    if (data != null) {
+                                        if (node.Match(data)) {
+                                            // generate unique id if not available
+                                            var id = html.attr('id');
+                                            if (id == null || id == '') {
+                                                html.attr('id', id = 'NXKit.View__' + View.Util.GenerateGuid().replace(/-/g, ''));
+                                            }
+
+                                            // successful update of template
+                                            name(id);
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // display unknown template
+                        name('NXKit.View.Unknown');
+                    });
+
+                    // template object with dynamic name
+                    return function () {
+                        return ({
+                            data: node,
+                            name: name
+                        });
+                    };
+                };
+                return NodeBindingHandler;
+            })();
+            Knockout.NodeBindingHandler = NodeBindingHandler;
+
+            ko.bindingHandlers['nx_node'] = new NodeBindingHandler();
+            ko.virtualElements.allowedBindings['nx_node'] = true;
+        })(View.Knockout || (View.Knockout = {}));
+        var Knockout = View.Knockout;
     })(NXKit.View || (NXKit.View = {}));
     var View = NXKit.View;
 })(NXKit || (NXKit = {}));

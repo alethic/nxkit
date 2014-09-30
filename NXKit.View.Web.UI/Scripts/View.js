@@ -51,15 +51,15 @@
     NXKit.define('jquery', [], function () { return $; });
     NXKit.define('knockout', [], function () { return ko; });
 
-    NXKit.define('nx-template', [], function () {
+    NXKit.define('nx-html', [], function () {
         return {
 
             load: function (name, parentRequire, onload, config) {
                 parentRequire(['jquery'], function ($) {
-                    var div1 = $('body>*[data-nx-template-host]');
+                    var div1 = $('body>*[data-nx-html-host]');
                     if (div1.length == 0)
                         div1 = $(document.createElement('div'))
-                            .attr('data-nx-template-host', '')
+                            .attr('data-nx-html-host', '')
                             .css('display', 'none')
                             .prependTo('body');
                     if (div1.children("[data-nx-require='" + name + "']").length == 0) {
@@ -71,6 +71,16 @@
                             });
                     }
                 });
+            },
+
+        }
+    });
+
+    NXKit.define('nx-node', [], function () {
+        return {
+
+            load: function (name, parentRequire, onload, config) {
+                // select script node 
             },
 
         }
@@ -98,6 +108,15 @@
         }
     });
 })();
+
+NXKit.require(['jquery'], function ($) {
+    NXKit.require(['nx-html!' + $.param({
+        Id: '{http://www.domain.com/foo}tagname',
+        Type: '{http://www.domain.com/foo}int',
+    })], function (v) {
+        console.log(v);
+    });
+});
 
 _NXKit.View.Web.UI.View = function (element) {
     var self = this;
@@ -163,13 +182,13 @@ _NXKit.View.Web.UI.View.prototype = {
         NXKit.require([
                 'nxkit',
                 'css!nxkit.css',
-                'nx-template!nxkit.html',
+                'nx-html!nxkit.html',
                 'nxkit-xforms',
                 'css!nxkit-xforms.css',
-                'nx-template!nxkit-xforms.html',
+                'nx-html!nxkit-xforms.html',
                 'nxkit-xforms-layout',
                 'css!nxkit-xforms-layout.css',
-                'nx-template!nxkit-xforms-layout.html'],
+                'nx-html!nxkit-xforms-layout.html'],
             function (nx) {
 
             // initialize view

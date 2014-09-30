@@ -1,5 +1,7 @@
-﻿<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}list">
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}list"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.ListViewModel($context, $data) -->
     <div class="xforms-layout-list"
          data-bind="
@@ -17,7 +19,7 @@ attr : {
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
     'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
 }">
-            <!-- ko nxkit_template -->
+            <!-- ko nx_node -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
@@ -28,7 +30,7 @@ attr: {
 }">
             <!-- ko foreach: Items -->
             <li class="item">
-                <!-- ko nxkit_template -->
+                <!-- ko nx_node -->
                 <!-- /ko -->
             </li>
             <!-- /ko -->

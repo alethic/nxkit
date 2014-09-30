@@ -1,14 +1,10 @@
-﻿<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}select1">
-    <!-- ko nxkit_template: {
-        'data-type': '{http://www.w3.org/2001/XMLSchema}string',
-    } -->
-    <!-- /ko -->
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}select1"
-        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}string">
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}select1",
+    "NXKit.XForms.DataNode" : {
+        "DataType" : "{http://www.w3.org/2001/XMLSchema}string"
+    }
+}'>
     <!-- ko with: new NXKit.View.XForms.Select1ViewModel($context, $data) -->
 
     <div class="xforms-select1" data-bind="
@@ -24,7 +20,7 @@ event: {
 }">
         <!-- ko with: Label -->
         <label class="label">
-            <!-- ko nxkit_template -->
+            <!-- ko nx_node -->
             <!-- /ko -->
         </label>
         <!-- /ko -->
@@ -35,14 +31,14 @@ event: {
                 <!-- ko if: Selected -->
                 <!-- ko with: Selected -->
                 <!-- ko with: Label -->
-                <!-- ko nxkit_template -->
+                <!-- ko nx_node -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- ko ifnot: Selected -->
                 <!-- ko with: Label -->
-                <!-- ko nxkit_template -->
+                <!-- ko nx_node -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
@@ -51,7 +47,7 @@ event: {
             <div class="menu" data-bind="foreach: Selectables">
                 <div class="item" data-bind="attr: { 'data-value': Id }">
                     <!-- ko with: Label -->
-                    <!-- ko nxkit_template -->
+                    <!-- ko nx_node -->
                     <!-- /ko -->
                     <!-- /ko -->
                 </div>
@@ -62,9 +58,21 @@ event: {
     <!-- /ko -->
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}select1"
-        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}integer">
+<script type="text/html" data-nx-node-view='
+[
+    {
+        "Name": "{http://www.w3.org/2002/xforms}select1",
+        "NXKit.XForms.DataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}int"
+        }
+    },
+    {
+        "Name": "{http://www.w3.org/2002/xforms}select1",
+        "NXKit.XForms.DataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}integer"
+        }
+    }
+]'>
     <!-- ko with: new NXKit.View.XForms.Select1ViewModel($context, $data) -->
 
     <div class="xforms-select1" data-bind="
@@ -80,7 +88,7 @@ event: {
 }">
         <!-- ko with: Label -->
         <label class="label">
-            <!-- ko nxkit_template -->
+            <!-- ko nx_node -->
             <!-- /ko -->
         </label>
         <!-- /ko -->
@@ -91,14 +99,14 @@ event: {
                 <!-- ko if: Selected -->
                 <!-- ko with: Selected -->
                 <!-- ko with: Label -->
-                <!-- ko nxkit_template -->
+                <!-- ko nx_node -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- ko ifnot: Selected -->
                 <!-- ko with: Label -->
-                <!-- ko nxkit_template -->
+                <!-- ko nx_node -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
@@ -107,7 +115,7 @@ event: {
             <div class="menu" data-bind="foreach: Selectables">
                 <div class="item" data-bind="attr: { 'data-value': Id }">
                     <!-- ko with: Label -->
-                    <!-- ko nxkit_template -->
+                    <!-- ko nx_node -->
                     <!-- /ko -->
                     <!-- /ko -->
                 </div>
@@ -118,9 +126,13 @@ event: {
     <!-- /ko -->
 </script>
 
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}select1"
-        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean">
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}select1",
+    "NXKit.XForms.DataNode" : {
+        "DataType" : "{http://www.w3.org/2001/XMLSchema}boolean"
+    }
+}'>
     <!-- ko with: new NXKit.View.XForms.Select1ViewModel($context, $data) -->
 
     <div class="xforms-select1" data-bind="
@@ -136,7 +148,7 @@ event: {
 }">
         <!-- ko with: Label -->
         <label class="label">
-            <!-- ko nxkit_template -->
+            <!-- ko nx_node -->
             <!-- /ko -->
         </label>
         <!-- /ko -->
@@ -147,14 +159,14 @@ event: {
                 <!-- ko if: Selected -->
                 <!-- ko with: Selected -->
                 <!-- ko with: Label -->
-                <!-- ko nxkit_template -->
+                <!-- ko nx_node -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- ko ifnot: Selected -->
                 <!-- ko with: Label -->
-                <!-- ko nxkit_template -->
+                <!-- ko nx_node -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
@@ -163,7 +175,7 @@ event: {
             <div class="menu" data-bind="foreach: Selectables">
                 <div class="item" data-bind="attr: { 'data-value': Id }">
                     <!-- ko with: Label -->
-                    <!-- ko nxkit_template -->
+                    <!-- ko nx_node -->
                     <!-- /ko -->
                     <!-- /ko -->
                 </div>

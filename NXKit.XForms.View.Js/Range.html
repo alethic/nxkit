@@ -1,27 +1,18 @@
-﻿<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}range">
-    <!-- ko nxkit_template: {
-        node: Node,
-        data: $data,
-        'data-type': '{http://www.w3.org/2001/XMLSchema}integer',
-    } -->
-    <!-- /ko -->
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}range"
-        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}int">
-    <!-- ko nxkit_template: {
-        node: Node,
-        data: $data,
-        'data-type': '{http://www.w3.org/2001/XMLSchema}integer',
-    } -->
-    <!-- /ko -->
-</script>
-
-<script type="text/html"
-        data-nxkit-name="{http://www.w3.org/2002/xforms}range"
-        data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}integer">
+﻿<script type="text/html" data-nx-node-view='
+[
+    {
+        "Name": "{http://www.w3.org/2002/xforms}range",
+        "NXKit.XForms.DataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}int"
+        }
+    },
+    {
+        "Name": "{http://www.w3.org/2002/xforms}range",
+        "NXKit.XForms.DataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}integer"
+        }
+    }
+]'>
     <!-- ko with: new NXKit.View.XForms.RangeViewModel($context, $data) -->
     <div class="xforms-range"
          data-bind="
@@ -32,19 +23,19 @@ attr : {
 }">
         <!-- ko with: Label -->
         <label class="label">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </label>
         <!-- /ko -->
         <!-- ko with: Hint -->
         <div class="hint">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko with: Help -->
         <div class="help">
-            <!-- ko nxkit_template: $data -->
+            <!-- ko nx_node: $data -->
             <!-- /ko -->
         </div>
         <!-- /ko -->

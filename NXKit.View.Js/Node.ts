@@ -117,39 +117,111 @@ module NXKit.View {
         }
 
         /**
+         * Checks whether the given data matches this node.
+         */
+        public Match(data: any): boolean {
+            var self = this;
+
+            var test = (a: any, b: any) => {
+                if (a == null &&
+                    b == null)
+                    return true;
+
+                if (typeof a !== typeof b)
+                    return false;
+
+                if (typeof a === 'boolean' &&
+                    typeof b === 'boolean')
+                    return a === b;
+
+                if (typeof a === 'string' &&
+                    typeof b === 'string')
+                    return a === b;
+
+                if (typeof a === 'number' &&
+                    typeof b === 'number')
+                    return a === b;
+
+                if (typeof a === 'function' &&
+                    typeof b === 'function')
+                    return a.toString() === b.toString();
+
+                for (var i in a) {
+                    if (!b.hasOwnProperty(i)) {
+                        return false;
+                    } else {
+                        if (!test(a[i], b[i])) {
+                            return false;
+                        }
+                    }
+                }
+            };
+
+            var work = (data: any) => {
+                if (data.Name)
+                    if (data.Name !== self.Name)
+                        return false;
+
+                for (var name in data) {
+                    if (name === 'Name') {
+                        if (data[name] !== self.Name) {
+                            return false;
+                        }
+                    } else {
+                        var dataInterface = data[name];
+                        var nodeInterface = self.Interfaces[name];
+                        if (nodeInterface) {
+                            for (var propertyName in dataInterface) {
+                                var dataProperty = dataInterface[propertyName];
+                                var nodeProperty = nodeInterface.Properties[propertyName];
+                                if (nodeProperty) {
+                                    if (!test(dataProperty, nodeProperty.Value())) {
+                                        return false;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            if (Array.isArray(data)) {
+                for (var i in <any[]>data) {
+                    if (work(data[i])) {
+                        return true;
+                    }
+                }
+            } else if (work(data)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        /**
          * Integrates the data given by the node parameter into this node.
          */
         public Apply(source: any) {
             var self = this;
 
-            var next = function () {
-                try {
-                    self._data = source;
-                    self.ApplyId(source.Id);
-                    self.ApplyType(source.Type);
-                    self.ApplyName(source.Name);
-                    self.ApplyValue(source.Value);
-                    self.ApplyInterfaces(source);
-                    self.ApplyNodes(source.Nodes);
-                } catch (ex) {
-                    ex.message = "Node.Apply()" + '\nMessage: ' + ex.message;
-                    throw ex;
-                }
-            };
-
-            // check if any modules are required, if so dispatch to require framework
-            var vmod = source['NXKit.View.Js.ViewModule']
-            if (vmod != null) {
-                var deps = vmod['Require'];
-                if (deps != null) {
-                    //NXKit.require(deps, next);
-                    next();
-                    return;
-                }
+            try {
+                self._data = source;
+                self.ApplyId(source.Id);
+                self.ApplyType(source.Type);
+                self.ApplyName(source.Name);
+                self.ApplyValue(source.Value);
+                self.ApplyInterfaces(source);
+                self.ApplyNodes(source.Nodes);
+            } catch (ex) {
+                ex.message = "Node.Apply()" + '\nMessage: ' + ex.message;
+                throw ex;
             }
-
-            // no requirements, continue
-            next();
         }
 
         /**

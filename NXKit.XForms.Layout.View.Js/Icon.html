@@ -1,8 +1,10 @@
-﻿<script type="text/html"
-        data-nxkit-name="{http://schemas.nxkit.org/2014/xforms-layout}icon">
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}icon"
+}'>
     <!-- ko with: new NXKit.View.XForms.Layout.IconViewModel($context, $data) -->
     <i class="xforms-layout-icon icon"
-         data-bind="
+       data-bind="
 attr : {
     'data-nx-name': $data.Node.Name,
     'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
