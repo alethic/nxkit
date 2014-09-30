@@ -2,6 +2,8 @@
 using System.ComponentModel.Composition;
 using System.Web;
 
+using NXKit.IO.Media;
+
 namespace NXKit.View.Web.UI
 {
 
@@ -10,32 +12,30 @@ namespace NXKit.View.Web.UI
         IViewModuleResolver
     {
 
-        static readonly Action<HttpResponse> nxkit_js = req =>
+        static readonly Action<HttpResponse> GetResourceResponse(string relativePath, MediaType mediaType)
         {
-            req.ContentType = "application/javascript";
-            typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Web.UI.Scripts.nxkit.js").CopyTo(req.OutputStream);
-        };
+            var name = "NXKit.View.Web.UI." + relativePath;
+            var file = typeof(ViewModuleResolver).Assembly.GetManifestResourceStream(name);
+            if (file != null)
+            {
+                return req =>
+                {
+                    req.ContentType = mediaType;
+                    file.CopyTo(req.OutputStream);
+                };
+            }
 
-        static readonly Action<HttpResponse> nxkit_css = req =>
-        {
-            req.ContentType = "text/css";
-            typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Web.UI.Content.nxkit.css").CopyTo(req.OutputStream);
-        };
-
-        static readonly Action<HttpResponse> nxkit_html = req =>
-        {
-            req.ContentType = "text/html";
-            typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Web.UI.Content.nxkit.html").CopyTo(req.OutputStream);
-        };
+            return null;
+        }
 
         public Action<HttpResponse> Resolve(string name)
         {
             if (name == "nxkit")
-                return nxkit_js;
+                return GetResourceResponse("Scripts.nxkit.js", "application/javascript");
             if (name == "nxkit.css")
-                return nxkit_css;
+                return GetResourceResponse("Content.nxkit.css", "text/css");
             if (name == "nxkit.html")
-                return nxkit_html;
+                return GetResourceResponse("Content.nxkit.html", "text/html");
 
             return null;
         }

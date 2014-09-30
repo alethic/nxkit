@@ -96,6 +96,12 @@
       <Name>NXKit</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="RequireJS\nx-css.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="RequireJS\nx-html.js" />
+  </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptOutFile>obj\Debug\nxkit.ts.js</TypeScriptOutFile>

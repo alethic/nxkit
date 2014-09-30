@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Linq;
+
 using Newtonsoft.Json;
 
 namespace NXKit.View.Js
@@ -25,7 +26,7 @@ namespace NXKit.View.Js
                 case ViewModuleType.Script:
                     return "";
                 case ViewModuleType.Css:
-                    return "css!";
+                    return "nx-css!";
                 case ViewModuleType.Template:
                     return "nx-html!";
                 default:
@@ -42,7 +43,7 @@ namespace NXKit.View.Js
         {
             if (!value.Contains("!"))
                 return ViewModuleType.Script;
-            if (value.StartsWith("css!"))
+            if (value.StartsWith("nx-css!"))
                 return ViewModuleType.Css;
             if (value.StartsWith("nx-html!"))
                 return ViewModuleType.Template;
