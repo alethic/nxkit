@@ -178,6 +178,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>nx-require.tt</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\NXKit.View.Js\nx-css.js">
+      <Link>Scripts\nx-css.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\NXKit.View.Js\nx-html.js">
+      <Link>Scripts\nx-html.js</Link>
+    </EmbeddedResource>
     <Content Include="Scripts\r.js" />
     <EmbeddedResource Include="Scripts\require.js" />
     <EmbeddedResource Include="Content\nxkit.css" />

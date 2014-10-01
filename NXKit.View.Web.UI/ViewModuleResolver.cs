@@ -12,7 +12,7 @@ namespace NXKit.View.Web.UI
         IViewModuleResolver
     {
 
-        static readonly Action<HttpResponse> GetResourceResponse(string relativePath, MediaType mediaType)
+        static Action<HttpResponse> GetResourceResponse(string relativePath, MediaType mediaType)
         {
             var name = "NXKit.View.Web.UI." + relativePath;
             var file = typeof(ViewModuleResolver).Assembly.GetManifestResourceStream(name);
@@ -36,6 +36,10 @@ namespace NXKit.View.Web.UI
                 return GetResourceResponse("Content.nxkit.css", "text/css");
             if (name == "nxkit.html")
                 return GetResourceResponse("Content.nxkit.html", "text/html");
+            if (name == "nx-html")
+                return GetResourceResponse("Scripts.nx-html.js", "application/javascript");
+            if (name == "nx-css")
+                return GetResourceResponse("Scripts.nx-css.js", "application/javascript");
 
             return null;
         }

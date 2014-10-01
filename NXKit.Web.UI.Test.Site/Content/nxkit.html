@@ -32,7 +32,9 @@ css: {
 
 <script type="text/html" id="NXKit.View.Unknown">
     <span class="ui red label">
-        <!-- ko text: JSON.stringify($data.Name) -->
+        <!-- ko with: $data.Name -->
+        <!-- ko text: $data -->
+        <!-- /ko -->
         <!-- /ko -->
     </span>
 </script>

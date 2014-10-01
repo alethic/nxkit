@@ -24,7 +24,6 @@ gulp.task('scripts', ['clean'], function () {
             'nxkit.js.prefix',
             util.env.IntermediateOutputPath + 'nxkit.ts.js',
             'nxkit.js.suffix',
-            'RequireJS/*.js',
         ])
         .pipe(concat('nxkit.js'))
         .pipe(gulp.dest(util.env.IntermediateOutputPath))

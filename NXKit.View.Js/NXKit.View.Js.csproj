@@ -97,10 +97,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="RequireJS\nx-css.js" />
+    <EmbeddedResource Include="nx-css.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="RequireJS\nx-html.js" />
+    <EmbeddedResource Include="nx-html.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RequireJS\" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
