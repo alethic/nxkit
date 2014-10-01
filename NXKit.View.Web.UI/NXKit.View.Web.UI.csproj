@@ -173,10 +173,17 @@
     <EmbeddedResource Include="Scripts\nxkit.min.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\text.js" />
     <EmbeddedResource Include="Scripts\nx-require.js">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>nx-require.tt</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\NXKit.View.Js\RequireJS\nx-css.js">
+      <Link>Scripts\nx-css.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\NXKit.View.Js\RequireJS\nx-html.js">
+      <Link>Scripts\nx-html.js</Link>
     </EmbeddedResource>
     <Content Include="Scripts\r.js" />
     <EmbeddedResource Include="Scripts\require.js" />

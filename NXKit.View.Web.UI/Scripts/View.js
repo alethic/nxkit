@@ -120,8 +120,7 @@ _NXKit.View.Web.UI.View.prototype = {
 
         // load NXKit implementation
         NXKit.require([
-                'nxkit',
-                'nx-html!nxkit.html'],
+                'nxkit'],
             function (nx) {
 
                 // initialize view
@@ -134,7 +133,7 @@ _NXKit.View.Web.UI.View.prototype = {
                 // update view with initial data set
                 self._view.Receive(JSON.parse($(data).val()));
                 $(data).val('');
-            })
+            });
     },
 
     send: function (data, wh) {
