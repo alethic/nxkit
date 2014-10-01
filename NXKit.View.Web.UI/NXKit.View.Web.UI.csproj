@@ -173,6 +173,7 @@
     <EmbeddedResource Include="Scripts\nxkit.min.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\text.js" />
     <EmbeddedResource Include="Scripts\nx-require.js">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
