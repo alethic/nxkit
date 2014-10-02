@@ -1,6 +1,5 @@
 ﻿NXKit.define(['require', 'jquery'], function (require, $) {
     return {
-
         load: function (name, parentRequire, onload, config) {
             // find or create host container
             var host = $('body>*[data-nx-html-host]').get(0);
