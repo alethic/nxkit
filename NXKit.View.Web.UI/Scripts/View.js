@@ -35,15 +35,12 @@
                 }
             }
 
+            // reinitiate request for any failed and remapped modules
             if (modules.length > 0) {
-                require(modules, function () {
-                    console.log('fixed');
-                });
+                require(modules, function () { });
                 return;
             }
         }
-
-        console.error(err);
 
         // send to original function
         onError(err);
