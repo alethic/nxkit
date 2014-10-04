@@ -277,7 +277,7 @@
       <Project>{f509df8d-af13-468d-8381-028835a79dec}</Project>
       <Name>NXKit.Scripting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.Server\NXKit.View.Server.csproj">
+    <ProjectReference Include="..\NXKit.View.Server\NXKit.View.Server.csproj">
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
       <Name>NXKit.View.Server</Name>
     </ProjectReference>

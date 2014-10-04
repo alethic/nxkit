@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 
-namespace NXKit.Server.Ng.Test.Site
+namespace NXKit.View.Server.Ng.Test.Site
 {
 
     public class WebApiApplication : 

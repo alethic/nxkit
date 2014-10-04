@@ -3,7 +3,7 @@ using System.Web.Http;
 
 using Newtonsoft.Json.Linq;
 
-namespace NXKit.Server.Ng.Test.Site.Controllers
+namespace NXKit.View.Server.Ng.Test.Site.Controllers
 {
 
     public class ViewController :
