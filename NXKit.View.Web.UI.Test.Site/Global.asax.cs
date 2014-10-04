@@ -1,9 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 using System.Web.UI;
 
-namespace NXKit.View.UI.Test.Site
+namespace NXKit.View.Web.UI.Test.Site
 {
 
     public class Global : 

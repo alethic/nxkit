@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NXKit.View.UI.Test.Site {
+namespace NXKit.View.Web.UI.Test.Site {
     
     
     public partial class Default {

@@ -12,8 +12,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NXKit.Web.UI.Test.Site</RootNamespace>
-    <AssemblyName>NXKit.Web.UI.Test.Site</AssemblyName>
+    <RootNamespace>NXKit.View.Web.UI.Test.Site</RootNamespace>
+    <AssemblyName>NXKit.View.Web.UI.Test.Site</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -314,9 +314,9 @@
       <Project>{8d43ba5c-df3f-4ad8-bf28-6dda74a0a2a1}</Project>
       <Name>NXKit.NXInclude</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.Server\NXKit.Server.csproj">
+    <ProjectReference Include="..\NXKit.Server\NXKit.View.Server.csproj">
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
-      <Name>NXKit.Server</Name>
+      <Name>NXKit.View.Server</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.View.Web.UI\NXKit.View.Web.UI.csproj">
       <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
