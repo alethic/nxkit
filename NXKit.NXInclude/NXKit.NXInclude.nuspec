@@ -21,6 +21,9 @@
             <dependency
                 id="NXKit"
                 version="[$version$]" />
+            <dependency
+                id="NXKit.XInclude"
+                version="[$version$]" />
         </dependencies>
     </metadata>
 </package>

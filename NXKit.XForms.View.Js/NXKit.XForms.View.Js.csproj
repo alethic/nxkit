@@ -13,6 +13,7 @@
     <RootNamespace>NXKit.XForms.View.Js</RootNamespace>
     <AssemblyName>NXKit.XForms.View.Js</AssemblyName>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+    <NuGetPackageImportStamp>d26b7c50</NuGetPackageImportStamp>
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="..\NXKit.View.Js\bin\nxkit.d.ts">
@@ -44,6 +45,7 @@
     <TypeScriptCompile Include="XFormsNodeViewModel.ts" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="NXKit.XForms.View.Js.nuspec" />
     <None Include="Submit.html" />
     <None Include="Group.html" />
     <None Include="Model.html" />
@@ -71,7 +73,6 @@
     <None Include="nxkit-xforms.js.suffix" />
     <None Include="nxkit-xforms.less.prefix" />
     <None Include="nxkit-xforms.less.suffix" />
-    <None Include="NXKit.XForms.Client.JS.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NXKit.View.Js\NXKit.View.Js.csproj">
@@ -149,6 +150,11 @@
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Package'">
+    <OutputPath>bin\Package\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
@@ -159,6 +165,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets'))" />
   </Target>
   <Target Name="AfterBuild">
     <ItemGroup>
@@ -177,4 +184,5 @@
     </ItemGroup>
     <Copy SourceFiles="$(IntermediateOutputPath)nxkit-xforms.ts.d.ts" DestinationFiles="$(OutputPath)nxkit-xforms.d.ts" />
   </Target>
+  <Import Project="..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" />
 </Project>

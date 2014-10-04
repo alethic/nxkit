@@ -15,7 +15,7 @@
             NXKit.XPath2 
         </description>
         <releaseNotes />
-        <copyright>Copyright © 2013 Jerome Haltom</copyright>
+        <copyright>Copyright © 2014 Jerome Haltom</copyright>
         <tags>xml xforms xpath2</tags>
         <dependencies>
             <dependency
