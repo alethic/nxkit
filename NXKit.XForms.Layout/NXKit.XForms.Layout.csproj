@@ -142,7 +142,6 @@
     <Compile Include="Form.cs" />
     <Compile Include="ITableColumnGroupContainer.cs" />
     <Compile Include="Paragraph.cs" />
-    <Compile Include="SchemaPackage.cs" />
     <Compile Include="TableCell.cs" />
     <Compile Include="TableColumnGroup.cs" />
     <Compile Include="TableColumn.cs" />

@@ -57,8 +57,6 @@ namespace NXKit.XPath2.Functions
 
         public object Invoke(XsltContext xsltContext, object[] args, XPathNavigator docContext)
         {
-            Contract.Requires(args.Length >= 2);
-
             var input = GetXPathValue(args[0]);
             var pattern = GetXPathValue(args[1]);
 

@@ -141,7 +141,7 @@ namespace NXKit.View.Server
             {
                 Execute(Load(() => document), message);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return new ViewMessage(ViewMessageStatus.Error);
             }
