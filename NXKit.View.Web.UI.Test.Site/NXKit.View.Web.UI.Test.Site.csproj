@@ -285,10 +285,10 @@
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\font-awesome\fonts\FontAwesome.otf" />
-    <Content Include="Scripts\jquery-2.1.1.min.map" />
     <Content Include="Scripts\nxkit.min.js.map">
       <DependentUpon>nxkit.min.js</DependentUpon>
     </Content>
+    <Content Include="Scripts\jquery-2.1.1.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
