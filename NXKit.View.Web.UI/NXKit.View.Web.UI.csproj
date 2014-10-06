@@ -188,7 +188,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\View.js" />
+    <EmbeddedResource Include="Scripts\nxkit-ui.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\jquery-2.1.1.min.map" />

@@ -3,7 +3,7 @@
 [assembly: WebResource("NXKit.View.Web.UI.Scripts.jquery-2.1.1.js", "text/javascript")]
 [assembly: WebResource("NXKit.View.Web.UI.Scripts.knockout-3.2.0.js", "text/javascript")]
 [assembly: WebResource("NXKit.View.Web.UI.Scripts.nx-require.js", "text/javascript")]
-[assembly: WebResource("NXKit.View.Web.UI.Scripts.View.js", "text/javascript")]
+[assembly: WebResource("NXKit.View.Web.UI.Scripts.nxkit-ui.js", "text/javascript")]
 
 [assembly: System.Web.PreApplicationStartMethod(typeof(NXKit.View.Web.UI.PreApplication), "Start")]
 
