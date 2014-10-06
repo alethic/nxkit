@@ -191,7 +191,7 @@
     <EmbeddedResource Include="Scripts\View.js" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\jquery-2.1.1.min.map" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\knockout-3.2.0.debug.js" />
@@ -212,13 +212,13 @@
     <EmbeddedResource Include="..\NXKit.View.Js\nx-html.js">
       <Link>Scripts\nx-html.js</Link>
     </EmbeddedResource>
-    <Content Include="Scripts\r.js" />
+    <None Include="Scripts\r.js" />
     <EmbeddedResource Include="Scripts\require.js" />
     <EmbeddedResource Include="Content\nxkit.css" />
     <EmbeddedResource Include="Content\nxkit.html" />
-    <Content Include="Scripts\jquery-2.1.1.intellisense.js" />
-    <Content Include="Scripts\jquery-2.1.1.js" />
-    <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.1.js" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.1.min.js" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
