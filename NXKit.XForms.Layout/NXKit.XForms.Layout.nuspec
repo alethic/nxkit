@@ -15,7 +15,7 @@
             NXKit.XForms.Layout contains the processing model for a basic page/section/category interface model that can be used along side XForms, without requiring XForms to be hosted inside of an HTML document.
         </description>
         <releaseNotes />
-        <copyright>Copyright © 2013 Jerome Haltom</copyright>
+        <copyright>Copyright © 2014 Jerome Haltom</copyright>
         <tags>xml xforms</tags>
         <dependencies>
             <dependency
