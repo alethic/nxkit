@@ -1431,127 +1431,6 @@ var NXKit;
 (function (NXKit) {
     (function (View) {
         (function (Knockout) {
-            var NodeBindingHandler = (function () {
-                function NodeBindingHandler() {
-                }
-                NodeBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                    var value = NodeBindingHandler.ConvertValueAccessor(element, valueAccessor, viewModel, bindingContext);
-                    if (value == null)
-                        return;
-
-                    ko.bindingHandlers.template.init(element, function () {
-                        return value;
-                    }, allBindingsAccessor, viewModel, bindingContext);
-                };
-
-                NodeBindingHandler.prototype.update = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                    var value = NodeBindingHandler.ConvertValueAccessor(element, valueAccessor, viewModel, bindingContext);
-                    if (value == null)
-                        return;
-
-                    ko.bindingHandlers.template.update(element, function () {
-                        return value;
-                    }, allBindingsAccessor, viewModel, bindingContext);
-                };
-
-                /**
-                * Converts the given value accessor into a value accessor compatible with the default template implementation.
-                */
-                NodeBindingHandler.ConvertValueAccessor = function (element, valueAccessor, viewModel, bindingContext) {
-                    // determine bound node
-                    var node = valueAccessor() || viewModel;
-                    var name = ko.observable('NXKit.View.Loading');
-                    if (node == null) {
-                        return {
-                            data: null,
-                            name: name
-                        };
-                    }
-
-                    // parse JSON and ignore errors
-                    var json = function (s) {
-                        try  {
-                            return JSON.parse(s);
-                        } catch (e) {
-                            console.error(e);
-                            return null;
-                        }
-                    };
-
-                    // node specifies required modules
-                    var modulesProperty = node.Property('NXKit.View.Js.ViewModule', 'Require');
-                    var modules = modulesProperty != null ? (modulesProperty.Value.peek() || []) : [];
-
-                    // wait for required modules
-                    NXKit.require(modules, function () {
-                        var deps = [];
-                        for (var _i = 0; _i < (arguments.length - 0); _i++) {
-                            deps[_i] = arguments[_i + 0];
-                        }
-                        for (var i = deps.length - 1; i >= 0; i--) {
-                            // dependency must be HTML tag
-                            var host = deps[i];
-                            if (host instanceof HTMLElement) {
-                                // search script elements from bottom up, so that overloads can come after
-                                var elements = $(host).find('script[type="text/html"]').get().reverse();
-                                for (var j in elements) {
-                                    var html = $(elements[j]);
-                                    var data = html.data('nx-node-view-data');
-                                    if (data == null) {
-                                        var attr = html.attr('data-nx-node-view');
-                                        if (attr) {
-                                            // cache data result
-                                            data = html.data('nx-node-view-data', json(attr)).data('nx-node-view-data');
-                                        }
-                                    }
-
-                                    // match data to node
-                                    if (data != null) {
-                                        if (node.Match(data)) {
-                                            // generate unique id if not available
-                                            var id = html.attr('id');
-                                            if (id == null || id == '') {
-                                                html.attr('id', id = 'NXKit.View__' + View.Util.GenerateGuid().replace(/-/g, ''));
-                                            }
-
-                                            // successful update of template
-                                            if (name() != id) {
-                                                name(id);
-                                            }
-
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // display unknown template
-                        name('NXKit.View.Unknown');
-                    });
-
-                    // template object with dynamic name
-                    return {
-                        data: node,
-                        name: name
-                    };
-                };
-                return NodeBindingHandler;
-            })();
-            Knockout.NodeBindingHandler = NodeBindingHandler;
-
-            ko.bindingHandlers['nx_node'] = new NodeBindingHandler();
-            ko.virtualElements.allowedBindings['nx_node'] = true;
-        })(View.Knockout || (View.Knockout = {}));
-        var Knockout = View.Knockout;
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
-/// <reference path="../Util.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        (function (Knockout) {
             var OptionsBindingHandler = (function () {
                 function OptionsBindingHandler() {
                 }
@@ -2493,6 +2372,127 @@ var NXKit;
             ViewModelUtil.GetContents = GetContents;
         })(View.ViewModelUtil || (View.ViewModelUtil = {}));
         var ViewModelUtil = View.ViewModelUtil;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
+})(NXKit || (NXKit = {}));
+/// <reference path="../Util.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (View) {
+        (function (Knockout) {
+            var NodeBindingHandler = (function () {
+                function NodeBindingHandler() {
+                }
+                NodeBindingHandler.prototype.init = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    var value = NodeBindingHandler.ConvertValueAccessor(element, valueAccessor, viewModel, bindingContext);
+                    if (value == null)
+                        return;
+
+                    ko.bindingHandlers.template.init(element, function () {
+                        return value;
+                    }, allBindingsAccessor, viewModel, bindingContext);
+                };
+
+                NodeBindingHandler.prototype.update = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                    var value = NodeBindingHandler.ConvertValueAccessor(element, valueAccessor, viewModel, bindingContext);
+                    if (value == null)
+                        return;
+
+                    ko.bindingHandlers.template.update(element, function () {
+                        return value;
+                    }, allBindingsAccessor, viewModel, bindingContext);
+                };
+
+                /**
+                * Converts the given value accessor into a value accessor compatible with the default template implementation.
+                */
+                NodeBindingHandler.ConvertValueAccessor = function (element, valueAccessor, viewModel, bindingContext) {
+                    // determine bound node
+                    var node = valueAccessor() || viewModel;
+                    var name = ko.observable('NXKit.View.Loading');
+                    if (node == null) {
+                        return {
+                            data: null,
+                            name: name
+                        };
+                    }
+
+                    // parse JSON and ignore errors
+                    var json = function (s) {
+                        try  {
+                            return JSON.parse(s);
+                        } catch (e) {
+                            console.error(e);
+                            return null;
+                        }
+                    };
+
+                    // node specifies required modules
+                    var modulesProperty = node.Property('NXKit.View.Js.ViewModule', 'Require');
+                    var modules = modulesProperty != null ? (modulesProperty.Value.peek() || []) : [];
+
+                    // wait for required modules
+                    NXKit.require(modules, function () {
+                        var deps = [];
+                        for (var _i = 0; _i < (arguments.length - 0); _i++) {
+                            deps[_i] = arguments[_i + 0];
+                        }
+                        for (var i = deps.length - 1; i >= 0; i--) {
+                            // dependency must be HTML tag
+                            var host = deps[i];
+                            if (host instanceof HTMLElement) {
+                                // search script elements from bottom up, so that overloads can come after
+                                var elements = $(host).find('script[type="text/html"]').get().reverse();
+                                for (var j in elements) {
+                                    var html = $(elements[j]);
+                                    var data = html.data('nx-node-view-data');
+                                    if (data == null) {
+                                        var attr = html.attr('data-nx-node-view');
+                                        if (attr) {
+                                            // cache data result
+                                            data = html.data('nx-node-view-data', json(attr)).data('nx-node-view-data');
+                                        }
+                                    }
+
+                                    // match data to node
+                                    if (data != null) {
+                                        if (node.Match(data)) {
+                                            // generate unique id if not available
+                                            var id = html.attr('id');
+                                            if (id == null || id == '') {
+                                                html.attr('id', id = 'NXKit.View__' + View.Util.GenerateGuid().replace(/-/g, ''));
+                                            }
+
+                                            // successful update of template
+                                            if (name() != id) {
+                                                name(id);
+                                            }
+
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // display unknown template
+                        name('NXKit.View.Unknown');
+                    });
+
+                    // template object with dynamic name
+                    return {
+                        data: node,
+                        name: name
+                    };
+                };
+                return NodeBindingHandler;
+            })();
+            Knockout.NodeBindingHandler = NodeBindingHandler;
+
+            ko.bindingHandlers['nx_node'] = new NodeBindingHandler();
+            ko.virtualElements.allowedBindings['nx_node'] = true;
+        })(View.Knockout || (View.Knockout = {}));
+        var Knockout = View.Knockout;
     })(NXKit.View || (NXKit.View = {}));
     var View = NXKit.View;
 })(NXKit || (NXKit = {}));
