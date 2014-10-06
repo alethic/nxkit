@@ -159,7 +159,7 @@
     <Compile Include="IRemote.cs" />
     <Compile Include="ITextExtension.cs" />
     <Compile Include="IDocumentExtension.cs" />
-    <Compile Include="Reflection\ssssssssssssssssss.cs" />
+    <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Serialization\IAnnotationObjectDeserializer.cs" />
     <Compile Include="Serialization\IAnnotationObjectSerializer.cs" />
     <Compile Include="Serialization\ISerializableAnnotation.cs" />

@@ -16,6 +16,8 @@ namespace NXKit.Reflection
         /// <returns></returns>
         public static IEnumerable<Type> GetTypes(this Type type)
         {
+            Contract.Requires<ArgumentNullException>(type != null);
+
             while (type != null)
             {
                 yield return type;
