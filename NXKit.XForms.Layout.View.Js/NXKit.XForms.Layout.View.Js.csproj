@@ -53,7 +53,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="package.json" />
-    <Content Include="gulpfile.js" />
+    <None Include="gulpfile.js" />
     <None Include="nxkit-xforms-layout.js.prefix" />
     <None Include="nxkit-xforms-layout.js.suffix" />
     <None Include="NXKit.XForms.Layout.View.Js.nuspec" />
