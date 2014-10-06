@@ -12,7 +12,7 @@
     <RootNamespace>NXKit.XForms.Layout.View.Js</RootNamespace>
     <AssemblyName>NXKit.XForms.Layout.View.Js</AssemblyName>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <NuGetPackageImportStamp>573f23e8</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>8d9db905</NuGetPackageImportStamp>
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="..\NXKit.View.Js\bin\nxkit.d.ts">

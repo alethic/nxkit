@@ -16,7 +16,7 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
     <RootNamespace>NXKit.View.Server</RootNamespace>
-    <NuGetPackageImportStamp>6ac39a01</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>dd40be61</NuGetPackageImportStamp>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

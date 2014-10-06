@@ -19,7 +19,7 @@
     <AssemblyName>NXKit.View.Js</AssemblyName>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <NuGetPackageImportStamp>bfef8d13</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>e1b4691f</NuGetPackageImportStamp>
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="DefaultLayoutManager.ts" />
