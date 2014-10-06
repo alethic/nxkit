@@ -12,7 +12,7 @@
         <description>
             NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
 
-            NXKit.XForms.View.Js provides the client-side functionality for XForms.
+            NXKit.XForms.Layout.View.Web.UI provides the client-side functionality for the XForms Layout schema.
         </description>
         <releaseNotes />
         <copyright>Copyright © 2014 Jerome Haltom</copyright>
