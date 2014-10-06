@@ -127,6 +127,7 @@
     <Compile Include="View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\Resources.cs" />
+    <Compile Include="ViewModuleHttpHandler.cs" />
     <Compile Include="ViewModuleResolver.cs" />
     <Compile Include="ViewModuleHttpModule.cs" />
   </ItemGroup>
