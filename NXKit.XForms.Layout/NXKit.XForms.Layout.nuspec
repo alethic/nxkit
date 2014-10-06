@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>$id$</id>
-        <version>$version$</version>
+        <version>$NuGetVersion$</version>
         <title>$id$</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
@@ -20,13 +20,13 @@
         <dependencies>
             <dependency
                 id="NXKit"
-                version="[$version$]" />
+                version="[$NuGetVersion$]" />
             <dependency
                 id="NXKit.DOMEvents"
-                version="[$version$]" />
+                version="[$NuGetVersion$]" />
             <dependency
                 id="NXKit.XForms"
-                version="[$version$]" />
+                version="[$NuGetVersion$]" />
         </dependencies>
     </metadata>
 </package>
