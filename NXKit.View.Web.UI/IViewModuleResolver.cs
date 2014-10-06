@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web;
+﻿using System.Collections.Generic;
 
 using NXKit.View.Js;
 
@@ -17,7 +16,7 @@ namespace NXKit.View.Web.UI
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        Action<HttpResponse> Resolve(string name);
+        IEnumerable<ViewModuleInfo> Resolve(string name);
 
     }
 

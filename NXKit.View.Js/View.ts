@@ -150,7 +150,7 @@ module NXKit.View {
 
             // generate update command
             var command = {
-                $type: 'NXKit.Server.Commands.Update, NXKit.Server',
+                $type: 'NXKit.View.Server.Commands.Update, NXKit.View.Server',
                 NodeId: node.Id,
                 Interface: $interface.Name,
                 Property: property.Name,
@@ -166,7 +166,8 @@ module NXKit.View {
 
             // generate push action
             var data = {
-                $type: 'NXKit.Server.Commands.Invoke, NXKit.Server',
+                $type: 'NXKit.View.Server.Commands.Invoke, NXKit.View.Server',
+                 
                 NodeId: node.Id,
                 Interface: interfaceName,
                 Method: methodName,

@@ -160,6 +160,10 @@
       <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
       <Name>NXKit.XForms.Layout</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NXKit\NXKit.csproj">
+      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
+      <Name>NXKit</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Content\nxkit-xforms-layout.css" />

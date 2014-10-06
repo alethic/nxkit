@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Web;
-
+using System.Linq;
 using NXKit.View.Web.UI;
+using System.IO;
 
 namespace NXKit.XForms.Layout.View.Web.UI
 {
@@ -12,34 +14,47 @@ namespace NXKit.XForms.Layout.View.Web.UI
         IViewModuleResolver
     {
 
-        static readonly Action<HttpResponse> nxkit_xforms_layout_js = req =>
+        static DateTime GetLastModifiedTime()
         {
-            req.ContentType = "application/javascript";
-            typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.XForms.Layout.View.Web.UI.Scripts.nxkit-xforms-layout.js").CopyTo(req.OutputStream);
+            var file = new FileInfo(typeof(ViewModuleResolver).Assembly.Location);
+            if (file.Exists)
+                return file.LastWriteTimeUtc;
+
+            return DateTime.UtcNow;
+        }
+
+        static string GetETag()
+        {
+            return Math.Abs(typeof(ViewModuleResolver).Assembly.GetName().GetHashCode()).ToString();
+        }
+
+        static readonly ViewModuleInfo[] infos = new[]
+        {
+            new ViewModuleInfo(
+                "nxkit-xforms-layout", 
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.XForms.Layout.View.Web.UI.Scripts.nxkit-xforms-layout.js").CopyTo(_), 
+                "application/javascript",
+                GetLastModifiedTime(),
+                GetETag()),
+
+            new ViewModuleInfo(
+                "nxkit-xforms-layout.css",
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.XForms.Layout.View.Web.UI.Content.nxkit-xforms-layout.css").CopyTo(_), 
+                "text/css",
+                GetLastModifiedTime(),
+                GetETag()),
+
+            new ViewModuleInfo(
+                "nxkit-xforms-layout.html",
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.XForms.Layout.View.Web.UI.Content.nxkit-xforms-layout.html").CopyTo(_), 
+                "text/html",
+                GetLastModifiedTime(),
+                GetETag()),
         };
 
-        static readonly Action<HttpResponse> nxkit_xforms_layout_css = req =>
+        public IEnumerable<ViewModuleInfo> Resolve(string name)
         {
-            req.ContentType = "text/css";
-            typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.XForms.Layout.View.Web.UI.Content.nxkit-xforms-layout.css").CopyTo(req.OutputStream);
-        };
-
-        static readonly Action<HttpResponse> nxkit_xforms_layout_html = req =>
-        {
-            req.ContentType = "text/html";
-            typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.XForms.Layout.View.Web.UI.Content.nxkit-xforms-layout.html").CopyTo(req.OutputStream);
-        };
-
-        public Action<HttpResponse> Resolve(string name)
-        {
-            if (name == "nxkit-xforms-layout")
-                return nxkit_xforms_layout_js;
-            if (name == "nxkit-xforms-layout.css")
-                return nxkit_xforms_layout_css;
-            if (name == "nxkit-xforms-layout.html")
-                return nxkit_xforms_layout_html;
-
-            return null;
+            return infos.Where(i => i.Name == name);
         }
 
     }

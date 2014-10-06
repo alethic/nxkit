@@ -30,14 +30,16 @@ namespace NXKit.View.Web.UI
             var name = context.Request.QueryString["m"];
             var file = CompositionUtil.CreateContainer(CompositionUtil.DefaultGlobalCatalog)
                 .GetExportedValues<IViewModuleResolver>()
-                .Select(i => i.Resolve(name))
+                .SelectMany(i => i.Resolve(name))
                 .FirstOrDefault(i => i != null);
 
             if (file != null)
             {
-                // send module data
                 context.Response.StatusCode = 200;
-                file(context.Response);
+                context.Response.ContentType = file.ContentType;
+                context.Response.Cache.SetLastModified(file.LastModifiedTime);
+                context.Response.Cache.SetETag(file.ETag);
+                file.Writer(context.Response.OutputStream);
             }
         }
 

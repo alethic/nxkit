@@ -50,7 +50,7 @@ namespace NXKit.View.Web.UI
                 ScriptManager.ScriptResourceMapping.AddDefinition("nxkit-ui", new ScriptResourceDefinition()
                 {
                     ResourceAssembly = typeof(PreApplication).Assembly,
-                    ResourceName = "NXKit.View.Web.UI.Scripts.View.js",
+                    ResourceName = "NXKit.View.Web.UI.Scripts.nxkit-ui.js",
                     LoadSuccessExpression = "window._NXKit",
                 });
         }

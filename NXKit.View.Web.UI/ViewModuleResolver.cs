@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Web;
-
-using NXKit.IO.Media;
+using System.IO;
+using System.Linq;
 
 namespace NXKit.View.Web.UI
 {
@@ -12,36 +12,61 @@ namespace NXKit.View.Web.UI
         IViewModuleResolver
     {
 
-        static Action<HttpResponse> GetResourceResponse(string relativePath, MediaType mediaType)
+        static DateTime GetLastModifiedTime()
         {
-            var name = "NXKit.View.Web.UI." + relativePath;
-            var file = typeof(ViewModuleResolver).Assembly.GetManifestResourceStream(name);
-            if (file != null)
-            {
-                return req =>
-                {
-                    req.ContentType = mediaType;
-                    file.CopyTo(req.OutputStream);
-                };
-            }
+            var file = new FileInfo(typeof(ViewModuleResolver).Assembly.Location);
+            if (file.Exists)
+                return file.LastWriteTimeUtc;
 
-            return null;
+            return DateTime.UtcNow;
         }
 
-        public Action<HttpResponse> Resolve(string name)
+        static string GetETag()
         {
-            if (name == "nxkit")
-                return GetResourceResponse("Scripts.nxkit.js", "application/javascript");
-            if (name == "nxkit.css")
-                return GetResourceResponse("Content.nxkit.css", "text/css");
-            if (name == "nxkit.html")
-                return GetResourceResponse("Content.nxkit.html", "text/html");
-            if (name == "nx-html")
-                return GetResourceResponse("Scripts.nx-html.js", "application/javascript");
-            if (name == "nx-css")
-                return GetResourceResponse("Scripts.nx-css.js", "application/javascript");
+            return Math.Abs(typeof(ViewModuleResolver).Assembly.GetName().GetHashCode()).ToString();
+        }
 
-            return null;
+        static readonly ViewModuleInfo[] infos = new[]
+        {
+            new ViewModuleInfo(
+                "nx-html",
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Web.UI.Scripts.nx-html.js").CopyTo(_), 
+                "application/javascript",
+                GetLastModifiedTime(),
+                GetETag()),
+
+            new ViewModuleInfo(
+                "nx-css",
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Web.UI.Scripts.nx-css.js").CopyTo(_), 
+                "application/javascript",
+                GetLastModifiedTime(),
+                GetETag()),
+
+            new ViewModuleInfo(
+                "nxkit", 
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Web.UI.Scripts.nxkit.js").CopyTo(_), 
+                "application/javascript",
+                GetLastModifiedTime(),
+                GetETag()),
+
+            new ViewModuleInfo(
+                "nxkit.css",
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Web.UI.Content.nxkit.css").CopyTo(_), 
+                "text/css",
+                GetLastModifiedTime(),
+                GetETag()),
+
+            new ViewModuleInfo(
+                "nxkit.html",
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Web.UI.Content.nxkit.html").CopyTo(_), 
+                "text/html",
+                GetLastModifiedTime(),
+                GetETag()),
+        };
+
+        public IEnumerable<ViewModuleInfo> Resolve(string name)
+        {
+            return infos.Where(i => i.Name == name);
         }
 
     }
