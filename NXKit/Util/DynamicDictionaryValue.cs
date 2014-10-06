@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq.Expressions;
-
 using Microsoft.CSharp.RuntimeBinder;
 
 namespace NXKit.Util
@@ -125,16 +125,18 @@ namespace NXKit.Util
 
         public static bool operator ==(DynamicDictionaryValue dynamicValue, object compareValue)
         {
-            if (dynamicValue.value == null && compareValue == null)
-            {
-                return true;
-            }
+            Contract.Requires<ArgumentNullException>(dynamicValue != null);
 
-            return dynamicValue.value != null && dynamicValue.value.Equals(compareValue);
+            if (dynamicValue.value == null && compareValue == null)
+                return true;
+            else
+                return dynamicValue.value != null && dynamicValue.value.Equals(compareValue);
         }
 
         public static bool operator !=(DynamicDictionaryValue dynamicValue, object compareValue)
         {
+            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+
             return !(dynamicValue == compareValue);
         }
 
@@ -147,11 +149,9 @@ namespace NXKit.Util
         public bool Equals(DynamicDictionaryValue compareValue)
         {
             if (ReferenceEquals(null, compareValue))
-            {
                 return false;
-            }
-
-            return ReferenceEquals(this, compareValue) || Equals(compareValue.value, this.value);
+            else
+                return ReferenceEquals(this, compareValue) || Equals(compareValue.value, value);
         }
 
         /// <summary>
@@ -162,16 +162,13 @@ namespace NXKit.Util
         public override bool Equals(object compareValue)
         {
             if (ReferenceEquals(null, compareValue))
-            {
                 return false;
-            }
+
 
             if (ReferenceEquals(this, compareValue))
-            {
                 return true;
-            }
 
-            return compareValue.GetType() == typeof(DynamicDictionaryValue) && this.Equals((DynamicDictionaryValue)compareValue);
+            return compareValue.GetType() == typeof(DynamicDictionaryValue) && Equals((DynamicDictionaryValue)compareValue);
         }
 
         /// <summary>
@@ -180,7 +177,7 @@ namespace NXKit.Util
         /// <returns>A hash code for the current instance.</returns>
         public override int GetHashCode()
         {
-            return (this.value != null ? this.value.GetHashCode() : 0);
+            return (value != null ? this.value.GetHashCode() : 0);
         }
 
         /// <summary>
@@ -288,94 +285,93 @@ namespace NXKit.Util
 
         public static implicit operator bool(DynamicDictionaryValue dynamicValue)
         {
+            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+
             if (!dynamicValue.HasValue)
-            {
                 return false;
-            }
 
             if (dynamicValue.value.GetType().IsValueType)
-            {
                 return (Convert.ToBoolean(dynamicValue.value));
-            }
+
 
             bool result;
             if (bool.TryParse(dynamicValue.ToString(), out result))
-            {
                 return result;
-            }
 
             return true;
         }
 
         public static implicit operator string(DynamicDictionaryValue dynamicValue)
         {
-            return dynamicValue.HasValue
-                       ? Convert.ToString(dynamicValue.value)
-                       : null;
+            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+
+            return dynamicValue.HasValue ? Convert.ToString(dynamicValue.value) : null;
         }
 
         public static implicit operator int(DynamicDictionaryValue dynamicValue)
         {
-            if (dynamicValue.value.GetType().IsValueType)
-            {
-                return Convert.ToInt32(dynamicValue.value);
-            }
+            Contract.Requires<ArgumentNullException>(dynamicValue != null);
 
-            return int.Parse(dynamicValue.ToString());
+            if (dynamicValue.value.GetType().IsValueType)
+                return Convert.ToInt32(dynamicValue.value);
+            else
+                return int.Parse(dynamicValue.ToString());
         }
 
         public static implicit operator Guid(DynamicDictionaryValue dynamicValue)
         {
-            if (dynamicValue.value is Guid)
-            {
-                return (Guid)dynamicValue.value;
-            }
+            Contract.Requires<ArgumentNullException>(dynamicValue != null);
 
-            return Guid.Parse(dynamicValue.ToString());
+            if (dynamicValue.value is Guid)
+                return (Guid)dynamicValue.value;
+            else
+                return Guid.Parse(dynamicValue.ToString());
         }
 
         public static implicit operator DateTime(DynamicDictionaryValue dynamicValue)
         {
-            if (dynamicValue.value is DateTime)
-            {
-                return (DateTime)dynamicValue.value;
-            }
+            Contract.Requires<ArgumentNullException>(dynamicValue != null);
 
-            return DateTime.Parse(dynamicValue.ToString());
+            if (dynamicValue.value is DateTime)
+                return (DateTime)dynamicValue.value;
+            else
+                return DateTime.Parse(dynamicValue.ToString());
         }
 
         public static implicit operator TimeSpan(DynamicDictionaryValue dynamicValue)
         {
-            if (dynamicValue.value is TimeSpan)
-            {
-                return (TimeSpan)dynamicValue.value;
-            }
+            Contract.Requires<ArgumentNullException>(dynamicValue != null);
 
-            return TimeSpan.Parse(dynamicValue.ToString());
+            if (dynamicValue.value is TimeSpan)
+                return (TimeSpan)dynamicValue.value;
+            else
+                return TimeSpan.Parse(dynamicValue.ToString());
         }
 
         public static implicit operator long(DynamicDictionaryValue dynamicValue)
         {
-            if (dynamicValue.value.GetType().IsValueType)
-            {
-                return Convert.ToInt64(dynamicValue.value);
-            }
+            Contract.Requires<ArgumentNullException>(dynamicValue != null);
 
-            return long.Parse(dynamicValue.ToString());
+            if (dynamicValue.value.GetType().IsValueType)
+                return Convert.ToInt64(dynamicValue.value);
+            else
+                return long.Parse(dynamicValue.ToString());
         }
 
         public static implicit operator float(DynamicDictionaryValue dynamicValue)
         {
-            if (dynamicValue.value.GetType().IsValueType)
-            {
-                return Convert.ToSingle(dynamicValue.value);
-            }
+            Contract.Requires<ArgumentNullException>(dynamicValue != null);
 
-            return float.Parse(dynamicValue.ToString());
+            if (dynamicValue.value.GetType().IsValueType)
+                return Convert.ToSingle(dynamicValue.value);
+            else
+                return float.Parse(dynamicValue.ToString());
         }
 
         public static implicit operator decimal(DynamicDictionaryValue dynamicValue)
         {
+            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+
             if (dynamicValue.value.GetType().IsValueType)
             {
                 return Convert.ToDecimal(dynamicValue.value);
@@ -386,6 +382,8 @@ namespace NXKit.Util
 
         public static implicit operator double(DynamicDictionaryValue dynamicValue)
         {
+            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+
             if (dynamicValue.value.GetType().IsValueType)
             {
                 return Convert.ToDouble(dynamicValue.value);

@@ -30,6 +30,8 @@ namespace NXKit
 
         public new IEnumerator<T> GetEnumerator()
         {
+            Contract.Assume(values.Value != null);
+
             return values.Value.GetEnumerator();
         }
 

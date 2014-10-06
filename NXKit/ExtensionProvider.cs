@@ -6,8 +6,8 @@ using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+
 using NXKit.Composition;
-using NXKit.Util;
 
 namespace NXKit
 {
@@ -29,6 +29,89 @@ namespace NXKit
         {
             predicates = new ConcurrentDictionary<Type, IExtensionPredicate>();
         }
+
+        /// <summary>
+        /// Tests a given extension metadata set against the given object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="metadata"></param>
+        /// <returns></returns>
+        internal static bool Predicate(XObject obj, IExtensionMetadata metadata)
+        {
+            Contract.Requires<ArgumentNullException>(obj != null);
+            Contract.Requires<ArgumentNullException>(metadata != null);
+
+            if (!metadata.ObjectType.HasFlag(GetObjectType(obj)))
+                return false;
+
+            if (obj is XElement)
+                if (!IsMatch((XElement)obj, metadata.NamespaceName, metadata.LocalName))
+                    return false;
+
+            if (obj is XAttribute)
+                if (!IsMatch((XAttribute)obj, metadata.NamespaceName, metadata.LocalName))
+                    return false;
+
+            // test against specified predicate type
+            var predicate = metadata.PredicateType != null ? predicates.GetOrAdd(metadata.PredicateType, _ => (IExtensionPredicate)Activator.CreateInstance(_)) : null;
+            if (predicate != null)
+                if (!predicate.IsMatch(obj))
+                    return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ExtensionObjectType"/> for a given <see cref="XObject"/>.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        internal static ExtensionObjectType GetObjectType(XObject obj)
+        {
+            Contract.Requires<ArgumentNullException>(obj != null);
+
+            if (obj is XDocument)
+                return ExtensionObjectType.Document;
+            if (obj is XElement)
+                return ExtensionObjectType.Element;
+            if (obj is XText)
+                return ExtensionObjectType.Text;
+            if (obj is XAttribute)
+                return ExtensionObjectType.Attribute;
+
+            throw new NotSupportedException();
+        }
+
+        internal static bool IsMatch(XElement element, string namespaceName, string localName)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+
+            if (namespaceName != null &&
+                namespaceName != element.Name.NamespaceName)
+                return false;
+
+            if (localName != null &&
+                localName != element.Name.LocalName)
+                return false;
+
+            return true;
+        }
+
+        internal static bool IsMatch(XAttribute attribute, string namespaceName, string localName)
+        {
+            Contract.Requires<ArgumentNullException>(attribute != null);
+
+            if (namespaceName != null &&
+                namespaceName != attribute.Name.NamespaceName)
+                return false;
+
+            if (localName != null &&
+                localName != attribute.Name.LocalName)
+                return false;
+
+            return true;
+        }
+
 
         readonly XObject obj;
         readonly IEnumerable<Lazy<IExtension>> extensions;
@@ -64,83 +147,12 @@ namespace NXKit
         /// <returns></returns>
         IEnumerable<Lazy<IExtension>> GetExtensions(IEnumerable<Lazy<IExtension, IDictionary<string, object>>> extensions)
         {
+            Contract.Requires<ArgumentNullException>(extensions != null);
+
             foreach (var extension in extensions)
                 foreach (var metadata in ExtensionMetadata.Extract(extension.Metadata))
                     if (Predicate(obj, metadata))
                         yield return extension;
-        }
-
-        /// <summary>
-        /// Tests a given extension metadata set against the given object.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="metadata"></param>
-        /// <returns></returns>
-        internal static bool Predicate(XObject obj, IExtensionMetadata metadata)
-        {
-            if (!metadata.ObjectType.HasFlag(GetObjectType(obj)))
-                return false;
-
-            if (obj is XElement)
-                if (!IsMatch((XElement)obj, metadata.NamespaceName, metadata.LocalName))
-                    return false;
-
-            if (obj is XAttribute)
-                if (!IsMatch((XAttribute)obj, metadata.NamespaceName, metadata.LocalName))
-                    return false;
-
-            // test against specified predicate type
-            var predicate = metadata.PredicateType != null ? predicates.GetOrAdd(metadata.PredicateType, _ => (IExtensionPredicate)Activator.CreateInstance(_)) : null;
-            if (predicate != null)
-                if (!predicate.IsMatch(obj))
-                    return false;
-
-            return true;
-        }
-
-        /// <summary>
-        /// Gets the <see cref="ExtensionObjectType"/> for a given <see cref="XObject"/>.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        internal static ExtensionObjectType GetObjectType(XObject obj)
-        {
-            if (obj is XDocument)
-                return ExtensionObjectType.Document;
-            if (obj is XElement)
-                return ExtensionObjectType.Element;
-            if (obj is XText)
-                return ExtensionObjectType.Text;
-            if (obj is XAttribute)
-                return ExtensionObjectType.Attribute;
-
-            throw new NotSupportedException();
-        }
-
-        internal static bool IsMatch(XElement element, string namespaceName, string localName)
-        {
-            if (namespaceName != null &&
-                namespaceName != element.Name.NamespaceName)
-                return false;
-
-            if (localName != null &&
-                localName != element.Name.LocalName)
-                return false;
-
-            return true;
-        }
-
-        internal static bool IsMatch(XAttribute element, string namespaceName, string localName)
-        {
-            if (namespaceName != null &&
-                namespaceName != element.Name.NamespaceName)
-                return false;
-
-            if (localName != null &&
-                localName != element.Name.LocalName)
-                return false;
-
-            return true;
         }
 
     }
@@ -168,7 +180,9 @@ namespace NXKit
             ExtensionProvider provider,
             [ImportMany] IEnumerable<Lazy<T, IDictionary<string, object>>> extensions)
         {
+            Contract.Requires<ArgumentNullException>(obj != null);
             Contract.Requires<ArgumentNullException>(provider != null);
+            Contract.Requires<ArgumentNullException>(extensions != null);
 
             this.obj = obj;
             this.provider = provider;

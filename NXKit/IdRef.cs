@@ -9,7 +9,7 @@ namespace NXKit
 
         public static implicit operator string(IdRef idRef)
         {
-            return idRef.Id;
+            return idRef != null ? idRef.Id : null;
         }
 
         public static implicit operator IdRef(string id)
@@ -27,7 +27,7 @@ namespace NXKit
         public IdRef(string id)
         {
             Contract.Requires<ArgumentNullException>(id != null);
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(id));
+            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(id));
 
             this.id = id;
         }

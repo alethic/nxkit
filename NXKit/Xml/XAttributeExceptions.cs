@@ -20,6 +20,7 @@ namespace NXKit.Xml
         {
             Contract.Requires<ArgumentNullException>(self != null);
             Contract.Requires<ArgumentNullException>(self.Parent != null);
+            Contract.Requires<ArgumentNullException>(id != null);
 
             return self.Parent.ResolveId(id);
         }

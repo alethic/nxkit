@@ -23,6 +23,8 @@ namespace NXKit.IO.Media
             [ImportMany] IEnumerable<IMediaConverter> converters)
         {
             Contract.Requires<ArgumentNullException>(converters != null);
+
+            this.converters = converters;
         }
 
         /// <summary>

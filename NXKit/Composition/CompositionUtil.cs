@@ -104,6 +104,8 @@ namespace NXKit.Composition
         /// <returns></returns>
         public static CompositionContainer CreateContainer(ComposablePartCatalog catalog)
         {
+            Contract.Requires<ArgumentNullException>(catalog != null);
+            
             return ConfigureContainer(new CompositionContainer(catalog));
         }
 
@@ -114,6 +116,8 @@ namespace NXKit.Composition
         /// <returns></returns>
         public static CompositionContainer ConfigureContainer(CompositionContainer container)
         {
+            Contract.Requires<ArgumentNullException>(container != null);
+
             if (container.GetExportedValueOrDefault<ContainerRef>() == null)
                 container.WithExport<ContainerRef>(new ContainerRef(container));
 

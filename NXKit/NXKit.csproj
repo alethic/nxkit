@@ -159,6 +159,7 @@
     <Compile Include="IRemote.cs" />
     <Compile Include="ITextExtension.cs" />
     <Compile Include="IDocumentExtension.cs" />
+    <Compile Include="Reflection\ssssssssssssssssss.cs" />
     <Compile Include="Serialization\IAnnotationObjectDeserializer.cs" />
     <Compile Include="Serialization\IAnnotationObjectSerializer.cs" />
     <Compile Include="Serialization\ISerializableAnnotation.cs" />
@@ -197,7 +198,6 @@
     <Compile Include="NodeExtension.cs" />
     <Compile Include="ObjectExtensionAttribute.cs" />
     <Compile Include="Priority.cs" />
-    <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="RemoteAttribute.cs" />
     <Compile Include="Serialization\SerializableAnnotationAttribute.cs" />
     <Compile Include="Serialization\AnnotationSerializer.cs" />
@@ -234,9 +234,6 @@
     <Compile Include="Xml\XObjectExtensions.cs" />
     <Compile Include="PriorityAttribute.cs" />
     <Compile Include="XmlSchemaConstants.cs" />
-    <Compile Include="XmlSchemaPackage.cs" />
-    <Compile Include="SchemaPackage.cs" />
-    <Compile Include="SchemaContainer.cs" />
     <Compile Include="IRefScope.cs" />
     <Compile Include="Document.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

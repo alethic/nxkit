@@ -65,8 +65,6 @@ namespace NXKit.IO.Media
         /// </summary>
         MediaRange(MediaType type, MediaType subtype, MediaRangeParameters parameters)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(subtype != null);
             Contract.Requires<ArgumentNullException>(parameters != null);
 
             this.type = type;

@@ -348,6 +348,7 @@ namespace NXKit.Xml
         public static object AnnotationOrCreate(this XObject self, Type type)
         {
             Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(type != null);
 
             var value = self.Annotation(type);
             if (value == null)
@@ -366,6 +367,7 @@ namespace NXKit.Xml
         public static object AnnotationOrCreate(this XObject self, Type type, Func<object> create)
         {
             Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentNullException>(create != null);
 
             var value = self.Annotation(type);
