@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using NXKit.Composition;
-using NXKit.Server;
+using NXKit.View.Server;
 
 namespace NXKit.View.Web.UI
 {

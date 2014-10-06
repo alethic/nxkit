@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="NXKit.Server.Ng.Test.Site.WebApiApplication" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="NXKit.View.Server.Ng.Test.Site.WebApiApplication" Language="C#" %>
