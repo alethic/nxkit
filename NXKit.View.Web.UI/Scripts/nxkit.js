@@ -373,95 +373,6 @@ var NXKit;
             };
 
             /**
-            * Checks whether the given data matches this node.
-            */
-            Node.prototype.Match = function (data) {
-                var self = this;
-
-                var test = function (a, b) {
-                    if (a == null && b == null)
-                        return true;
-
-                    if (typeof a !== typeof b)
-                        return false;
-
-                    if (typeof a === 'boolean' && typeof b === 'boolean')
-                        return a === b;
-
-                    if (typeof a === 'string' && typeof b === 'string')
-                        return a === b;
-
-                    if (typeof a === 'number' && typeof b === 'number')
-                        return a === b;
-
-                    if (typeof a === 'function' && typeof b === 'function')
-                        return a.toString() === b.toString();
-
-                    for (var i in a) {
-                        if (!b.hasOwnProperty(i)) {
-                            return false;
-                        } else {
-                            if (!test(a[i], b[i])) {
-                                return false;
-                            }
-                        }
-                    }
-                };
-
-                var work = function (data) {
-                    // check for node name
-                    if (data.Name) {
-                        if (data.Name !== self.Name) {
-                            return false;
-                        }
-                    }
-
-                    // check for node type
-                    if (data.Type) {
-                        if (data.Type.toLowerCase() !== self.Type.ToString().toLowerCase()) {
-                            return false;
-                        }
-                    }
-
-                    for (var name in data) {
-                        if (name.indexOf('.') >= 0) {
-                            var dataInterface = data[name];
-                            var nodeInterface = self.Interfaces[name];
-                            if (nodeInterface) {
-                                for (var propertyName in dataInterface) {
-                                    var dataProperty = dataInterface[propertyName];
-                                    var nodeProperty = nodeInterface.Properties[propertyName];
-                                    if (nodeProperty) {
-                                        if (!test(dataProperty, nodeProperty.Value())) {
-                                            return false;
-                                        }
-                                    } else {
-                                        return false;
-                                    }
-                                }
-                            } else {
-                                return false;
-                            }
-                        }
-                    }
-
-                    return true;
-                };
-
-                if (Array.isArray(data)) {
-                    for (var i in data) {
-                        if (work(data[i])) {
-                            return true;
-                        }
-                    }
-                } else if (work(data)) {
-                    return true;
-                }
-
-                return false;
-            };
-
-            /**
             * Integrates the data given by the node parameter into this node.
             */
             Node.prototype.Apply = function (source) {
@@ -2456,7 +2367,7 @@ var NXKit;
 
                                     // match data to node
                                     if (data != null) {
-                                        if (node.Match(data)) {
+                                        if (NodeBindingHandler.Match(node, data)) {
                                             // generate unique id if not available
                                             var id = html.attr('id');
                                             if (id == null || id == '') {
@@ -2484,6 +2395,96 @@ var NXKit;
                         data: node,
                         name: name
                     };
+                };
+
+                /**
+                * Checks whether the given data matches this node.
+                */
+                NodeBindingHandler.Match = function (node, data) {
+                    var test = function (a, b) {
+                        if (a == null && b == null)
+                            return true;
+
+                        if (typeof a !== typeof b)
+                            return false;
+
+                        if (typeof a === 'boolean' && typeof b === 'boolean')
+                            return a === b;
+
+                        if (typeof a === 'string' && typeof b === 'string')
+                            return a === b;
+
+                        if (typeof a === 'number' && typeof b === 'number')
+                            return a === b;
+
+                        if (typeof a === 'function' && typeof b === 'function')
+                            return a.toString() === b.toString();
+
+                        for (var i in a) {
+                            if (!b.hasOwnProperty(i)) {
+                                return false;
+                            } else {
+                                if (!test(a[i], b[i])) {
+                                    return false;
+                                }
+                            }
+                        }
+                    };
+
+                    var work = function (data) {
+                        // check for node name
+                        if (data.Name) {
+                            if (data.Name !== node.Name) {
+                                return false;
+                            }
+                        }
+
+                        // check for node type
+                        if (data.Type) {
+                            if (data.Type.toLowerCase() !== node.Type.ToString().toLowerCase()) {
+                                return false;
+                            }
+                        }
+
+                        for (var name in data) {
+                            if (name.indexOf('.') >= 0) {
+                                var dataInterface = data[name];
+                                var nodeInterface = node.Interfaces[name];
+                                if (nodeInterface) {
+                                    for (var propertyName in dataInterface) {
+                                        var dataProperty = dataInterface[propertyName];
+                                        var nodeProperty = nodeInterface.Properties[propertyName];
+                                        if (nodeProperty) {
+                                            var dataValue = dataProperty;
+                                            var nodeValue = nodeProperty.Value();
+                                            if (!test(dataValue, nodeValue)) {
+                                                return false;
+                                            }
+                                        } else {
+                                            return false;
+                                        }
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }
+                        }
+
+                        return true;
+                    };
+
+                    if (Array.isArray(data)) {
+                        var datas = data.reverse();
+                        for (var i in datas) {
+                            if (work(datas[i])) {
+                                return true;
+                            }
+                        }
+                    } else if (work(data)) {
+                        return true;
+                    }
+
+                    return false;
                 };
                 return NodeBindingHandler;
             })();

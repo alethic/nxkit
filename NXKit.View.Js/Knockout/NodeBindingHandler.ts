@@ -9,7 +9,7 @@ module NXKit.View.Knockout {
             var value = NodeBindingHandler.ConvertValueAccessor(element, valueAccessor, viewModel, bindingContext);
             if (value == null)
                 return;
-            
+
             ko.bindingHandlers.template.init(
                 element,
                 () => value,
@@ -85,7 +85,7 @@ module NXKit.View.Knockout {
 
                             // match data to node
                             if (data != null) {
-                                if (node.Match(data)) {
+                                if (NodeBindingHandler.Match(node, data)) {
 
                                     // generate unique id if not available
                                     var id = html.attr('id');
@@ -114,6 +114,104 @@ module NXKit.View.Knockout {
                 data: node,
                 name: name,
             };
+        }
+
+        /**
+         * Checks whether the given data matches this node.
+         */
+        static Match(node: Node, data: any): boolean {
+
+            var test = (a: any, b: any) => {
+                if (a == null &&
+                    b == null)
+                    return true;
+
+                if (typeof a !== typeof b)
+                    return false;
+
+                if (typeof a === 'boolean' &&
+                    typeof b === 'boolean')
+                    return a === b;
+
+                if (typeof a === 'string' &&
+                    typeof b === 'string')
+                    return a === b;
+
+                if (typeof a === 'number' &&
+                    typeof b === 'number')
+                    return a === b;
+
+                if (typeof a === 'function' &&
+                    typeof b === 'function')
+                    return a.toString() === b.toString();
+
+                for (var i in a) {
+                    if (!b.hasOwnProperty(i)) {
+                        return false;
+                    } else {
+                        if (!test(a[i], b[i])) {
+                            return false;
+                        }
+                    }
+                }
+            };
+
+            var work = (data: any) => {
+
+                // check for node name
+                if (data.Name) {
+                    if (data.Name !== node.Name) {
+                        return false;
+                    }
+                }
+
+                // check for node type
+                if (data.Type) {
+                    if ((<string>data.Type).toLowerCase() !== node.Type.ToString().toLowerCase()) {
+                        return false;
+                    }
+                }
+
+                // process interface specifications
+                for (var name in data) {
+                    if ((<string>name).indexOf('.') >= 0) {
+                        var dataInterface = data[name];
+                        var nodeInterface = node.Interfaces[name];
+                        if (nodeInterface) {
+                            for (var propertyName in dataInterface) {
+                                var dataProperty = dataInterface[propertyName];
+                                var nodeProperty = nodeInterface.Properties[propertyName];
+                                if (nodeProperty) {
+                                    var dataValue = dataProperty;
+                                    var nodeValue = nodeProperty.Value();
+                                    if (!test(dataValue, nodeValue)) {
+                                        return false;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            if (Array.isArray(data)) {
+                var datas = (<any[]>data).reverse(); // reverse to search from bottom up
+                for (var i in datas) {
+                    if (work(datas[i])) {
+                        return true;
+                    }
+                }
+            } else if (work(data)) {
+                return true;
+            }
+
+            return false;
         }
 
     }

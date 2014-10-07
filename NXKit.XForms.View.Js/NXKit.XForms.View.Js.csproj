@@ -14,6 +14,7 @@
     <AssemblyName>NXKit.XForms.View.Js</AssemblyName>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <NuGetPackageImportStamp>42843112</NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="..\NXKit.View.Js\bin\nxkit.d.ts">
@@ -75,6 +76,14 @@
     <None Include="nxkit-xforms.less.suffix" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModuleDependencyProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\NXKit.View.Js\NXKit.View.Js.csproj">
       <Project>{c7aedb60-a136-4356-9c04-35aa344d857e}</Project>
       <Name>NXKit.View.Js</Name>
@@ -87,14 +96,6 @@
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
       <Name>NXKit</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ViewModuleDependencyProvider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>

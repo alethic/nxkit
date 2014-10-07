@@ -17,7 +17,7 @@
       <xf:bind ref="d:weight" required="true()" type="xsd:integer" constraint=". &gt;= 20 and . &lt;= 1000" />
       <xf:bind ref="d:gender" required="true()" type="xsd:string" />
       <xf:bind ref="d:smokerstatus" calculate="instance('primaryquestions')/d:question[1]/d:answer='true' " />
-      <xf:bind ref="d:dateofbirth" required="true()" type="xsd:date" />
+      <xf:bind ref="d:dateofbirth" required="true()" type="xsd:date" constraint="instance('primaryelections')/d:age &gt;= 18 and instance('primaryelections')/d:age &lt;= 85" />
       <xf:bind ref="d:socialsecuritynumber" required="true()" constraint="matches(., '^(\d{3}-\d{2}-\d{4})|(\d{9})$')" />
       <xf:bind ref="d:telephone1" required="true()" constraint="string-length()&gt;=10" />
       <xf:bind ref="d:telephone2" required="false()" constraint=".='' or string-length()&gt;=10" />
@@ -29,6 +29,7 @@
       <xf:bind ref="d:heightinches" required="true()" type="xsd:integer" />
       <xf:bind ref="d:weight" required="true()" type="xsd:integer" />
       <xf:bind ref="d:dateofbirth" type="xsd:date" required="true()" />
+      <xf:bind ref="d:socialsecuritynumber" required="true()" constraint="matches(., '^(\d{3}-\d{2}-\d{4})|(\d{9})$')" />
       <xf:bind ref="d:smokerstatus" calculate="instance('secondaryquestions')/d:question[1]/d:answer='true' " />
     </xf:bind>
     <xf:instance id="primaryelections" src="primaryelections.xml" />
@@ -52,6 +53,10 @@
       <xf:bind ref="d:question/d:answer" required="true()" type="xsd:boolean" />
       <xf:bind ref="d:question/d:healthinfo" relevant="../d:answer='true' and ./@enable='true'">
         <xf:bind ref="./*" type="xsd:string" />
+        <xf:bind ref="d:condition" required="true()" />
+        <xf:bind ref="d:physicianname" required="true()" />
+        <xf:bind ref="d:physicianaddress" required="true()" />
+        <xf:bind ref="d:physicianphonenumber" required="true()" />
       </xf:bind>
     </xf:bind>
     <xf:instance id="secondaryquestions" src="secondaryquestions.xml" />
@@ -60,6 +65,10 @@
       <xf:bind ref="d:question/d:answer" required="true()" type="xsd:boolean" />
       <xf:bind ref="d:question/d:healthinfo" relevant="../d:answer='true' and ./@enable='true'">
         <xf:bind ref="./*" type="xsd:string" />
+        <xf:bind ref="d:condition" required="true()" />
+        <xf:bind ref="d:physicianname" required="true()" />
+        <xf:bind ref="d:physicianaddress" required="true()" />
+        <xf:bind ref="d:physicianphonenumber" required="true()" />
       </xf:bind>
     </xf:bind>
     <xf:instance id="relationships" src="relationships.xml" />
@@ -72,6 +81,7 @@
         <xf:bind ref="d:socialsecuritynumber" constraint="matches(., '^(\d{3}-\d{2}-\d{4})|(\d{9})$')" />
         <xf:bind ref="d:telephone1" required="false()" constraint="string-length()&gt;=10" />
         <xf:bind ref="d:telephone2" required="false()" constraint=".='' or string-length()&gt;=10" />
+        <xf:bind ref="d:dateofbirth" required="true()" type="xsd:date" />
       </xf:bind>
     </xf:bind>
     <xf:submission id="primaryperson_submission" ref="instance('primaryperson')" method="put" action="primaryperson.xml">
@@ -97,16 +107,39 @@
     </xf:submission>
   </xf:model>
   <f:section>
-    <xf:label>Apply Online for Term Life Coverage, TODAY!</xf:label>
+    <xf:label>Term Life Request For Coverage Form</xf:label>
     <f:segment>
-      <f:p>Ready to take the next step in securing your family's financial future? Your credit union has made it easy by offering group term life insurance at competitive rates through The Prudential Insurance Company of America. </f:p>
-      <f:list>
-        <xf:label>The online application process is quick and easy. Through this site, you may:</xf:label>
-        <f:item>Review all the features of your plan</f:item>
-        <f:item>Calculate premium for various amounts of coverage</f:item>
-      </f:list>
-      <f:p>Before beginning, please take a few minutes to gather personal health information like your doctor's name and address, details of current or past medical conditions and personal information about those you wish to name as a beneficiary.</f:p>
-      <f:p>At Prudential, we know this is a big life decision and we look forward to providing you the best coverage with the least amount of effort.</f:p>
+      <f:segment>
+        <xf:label>Protect What Matters Most Today</xf:label>
+        <f:p>Ready to take the next step in securing your family's financial future? Alaska USA Federal Credit Union and The Prudential Insurance Company of America have made it easy by offering group term life insurance at competitive rates.</f:p>
+      </f:segment>
+      <f:segment>
+        <xf:label>What Is Term Life Insurance?</xf:label>
+        <f:p>Term life insurance is often the most affordable coverage because it offers protection for a specific number of years. You may want to purchase a term life insurance policy to:</f:p>
+        <f:list>
+          <f:item>Get maximum coverage at an affordable price</f:item>
+          <f:item>Cover specific financial responsibilities like a mortgage or college expenses</f:item>
+          <f:item>Supplement a permanent policy or work policy</f:item>
+        </f:list>
+      </f:segment>
+      <f:segment>
+        <xf:label>Simplified Issue Term Life Insurance</xf:label>
+        <f:p>For coverage amounts up to $250,000, we offer simplified issue term life insurance, with a streamlined application and expedited approval process.  No physical examination or medical tests are required, in most cases—acceptance is based on your answers to four health questions along with other information you provide or give us permission to obtain.</f:p>
+      </f:segment>
+      <f:segment>
+        <xf:label>Features and Benefits</xf:label>
+        <f:list>
+          <f:item>Up to $250,000 in life insurance coverage</f:item>
+          <f:item>Valuable protection you can keep until age 75</f:item>
+          <f:item>Supplement an existing policy or use as your main source of coverage</f:item>
+          <f:item>No Medical Exam or Lab Work, in most cases</f:item>
+        </f:list>
+      </f:segment>
+      <f:segment>
+        <xf:label>Apply Now!</xf:label>
+        <f:p>The online application process is quick and easy. After confirming your name, address and identifying details, you will be able to review the features and pricing of the plan, choose a coverage amount, and designate your beneficiaries.</f:p>
+        <f:p>Before beginning, please take a few minutes to gather personal health information like your doctor's name and address, details of current or past medical conditions and personal information about those you wish to name as a beneficiary.</f:p>
+      </f:segment>
     </f:segment>
   </f:section>
   <f:section>
@@ -161,11 +194,13 @@
     <xf:group ref="instance('primaryelections')/d:term-life">
       <xf:label>Coverage Election</xf:label>
       <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
-      <f:p>The rates shown are available to eligible accountholders and spouses under age 70, subject to evidence of insurability acceptable to the insurer.
-                Rates increase at age 30 and as you enter each 5-year age band thereafter. Coverage reduces at age 65 to 50% of the previous amount and again by 50% at age 70.
-                Insurance coverage terminates at age 75. Male rates apply for both accountholders and spouses in MT.</f:p>
+      <f:p>Choose the type of coverage and amounts for which you are applying.</f:p>
       <xf:select1 ref="d:coverage-amount" appearance="full">
-        <xf:label>Coverage Amount</xf:label>
+        <xf:label>Select Your Coverage Amount</xf:label>
+        <xf:item>
+          <xf:label>$50,000</xf:label>
+          <xf:value>50000</xf:value>
+        </xf:item>
         <xf:item>
           <xf:label>$75,000</xf:label>
           <xf:value>75000</xf:value>
@@ -178,15 +213,23 @@
           <xf:label>$150,000</xf:label>
           <xf:value>150000</xf:value>
         </xf:item>
+        <xf:item>
+          <xf:label>$200,000</xf:label>
+          <xf:value>200000</xf:value>
+        </xf:item>
+        <xf:item>
+          <xf:label>$250,000</xf:label>
+          <xf:value>250000</xf:value>
+        </xf:item>
       </xf:select1>
       <f:table>
         <xf:label>Monthly Rates per $10,000 of coverage</xf:label>
         <f:table-row>
           <f:table-cell>Age</f:table-cell>
-          <f:table-cell>Non-Tobacco</f:table-cell>
-          <f:table-cell>Tobacco</f:table-cell>
-          <f:table-cell>Non-Tobacco</f:table-cell>
-          <f:table-cell>Tobacco</f:table-cell>
+          <f:table-cell>Non-Tobacco (Male)</f:table-cell>
+          <f:table-cell>Tobacco (Female)</f:table-cell>
+          <f:table-cell>Non-Tobacco (Female)</f:table-cell>
+          <f:table-cell>Tobacco (Female)</f:table-cell>
         </f:table-row>
         <f:table-row>
           <f:table-cell>Under 30</f:table-cell>
@@ -259,6 +302,9 @@
           <f:table-cell>$ 29.93</f:table-cell>
         </f:table-row>
       </f:table>
+      <f:p>The rates shown are available to eligible accountholders and spouses under age 70, subject to evidence of insurability acceptable to the insurer.
+                Rates increase at age 30 and as you enter each 5-year age band thereafter. Coverage reduces at age 65 to 50% of the previous amount and again by 50% at age 70.
+                Insurance coverage terminates at age 75. Male rates apply for both accountholders and spouses in MT.</f:p>
       <f:p>* Renewal rates only</f:p>
     </xf:group>
     <xf:group ref="instance('primaryquestions')">
@@ -309,8 +355,9 @@
   <f:section>
     <xf:label appearance="compact">Spousal Enrollment</xf:label>
     <xf:input ref="instance('misc')/d:secondary">
-      <xf:label>Yes, I'd like to take advantage of this offer for my spouse or other partner or whatever and stuff and we will fill in the contents of the rest of this text later.</xf:label>
+      <xf:label>Yes, I'd like to take advantage of this offer for my spouse or domestic partner!</xf:label>
     </xf:input>
+    <f:p>Please complete the following sections with information about your spouse or partner.</f:p>
     <xf:group ref="instance('misc')/d:secondary_relevant">
       <xf:label>Spouse Information</xf:label>
       <xf:group context="instance('secondaryperson')">
@@ -356,13 +403,15 @@
       </xf:input>
     </xf:group>
     <xf:group ref="instance('misc')/d:secondary_relevant">
-      <xf:label>Coverage Election</xf:label>
+      <xf:label>Spouse Coverage Election</xf:label>
       <xf:hint>Choose the type of coverage and amounts for which you are applying.</xf:hint>
-      <f:p>The rates shown are available to eligible accountholders and spouses under age 70, subject to evidence of insurability acceptable to the insurer.
-                Rates increase at age 30 and as you enter each 5-year age band thereafter. Coverage reduces at age 65 to 50% of the previous amount and again by 50% at age 70.
-                Insurance coverage terminates at age 75. Male rates apply for both accountholders and spouses in MT.</f:p>
+      <f:p>Spouse/Partner coverage amount cannot be greater than that of the primary insured.</f:p>
       <xf:select1 context="instance('secondaryelections')/d:term-life" ref="d:coverage-amount">
         <xf:label>Coverage Amount</xf:label>
+        <xf:item>
+          <xf:label>$50,000</xf:label>
+          <xf:value>50000</xf:value>
+        </xf:item>
         <xf:item>
           <xf:label>$75,000</xf:label>
           <xf:value>75000</xf:value>
@@ -374,6 +423,14 @@
         <xf:item>
           <xf:label>$150,000</xf:label>
           <xf:value>150000</xf:value>
+        </xf:item>
+        <xf:item>
+          <xf:label>$200,000</xf:label>
+          <xf:value>200000</xf:value>
+        </xf:item>
+        <xf:item>
+          <xf:label>$250,000</xf:label>
+          <xf:value>250000</xf:value>
         </xf:item>
       </xf:select1>
       <f:table>
@@ -455,9 +512,13 @@
           <f:table-cell>$ 29.93</f:table-cell>
         </f:table-row>
       </f:table>
+      <f:p>The rates shown are available to eligible accountholders and spouses under age 70, subject to evidence of insurability acceptable to the insurer.
+                Rates increase at age 30 and as you enter each 5-year age band thereafter. Coverage reduces at age 65 to 50% of the previous amount and again by 50% at age 70.
+                Insurance coverage terminates at age 75. Male rates apply for both accountholders and spouses in MT.</f:p>
+      <f:p>* Renewal rates only</f:p>
     </xf:group>
     <xf:group ref="instance('misc')/d:secondary_relevant">
-      <xf:label>Health Questions</xf:label>
+      <xf:label>Spouse Health Questions</xf:label>
       <xf:hint>Please answer the following questions by checking “Yes” or “No.”</xf:hint>
       <xf:repeat ref="instance('secondaryquestions')/d:question">
         <xf:group>
@@ -503,12 +564,7 @@
   <f:section>
     <xf:label>Beneficiaries</xf:label>
     <f:p>You may name anyone or any entity as your beneficiary. Common designations include individuals, estates, corporation/organizations and trust.
-        <f:strong>Payment will be made to the named beneficiary. If there is no named beneficiary, or the named beneficiary predeceased the insured, settlement will be made in accordance with the terms of your Group Contract</f:strong></f:p>
-    <xf:trigger>
-      <xf:label>
-        <f:icon name="add" /> Add New Benericiary</xf:label>
-      <xf:insert context="instance('beneficiaries')" ref="d:beneficiary" origin="d:template/d:beneficiary" at="index('repeatBeneficiaries')" position="after" ev:event="DOMActivate" />
-    </xf:trigger>
+        <f:strong>Payment will be made to the named beneficiary. If there is no named beneficiary, or the named beneficiary predeceased the insured, settlement will be made in accordance with the terms of your Group Contract.</f:strong></f:p>
     <xf:repeat context="instance('beneficiaries')" ref="d:beneficiary">
       <xf:group>
         <xf:label>Beneficiary #<xf:output value="position()" /></xf:label>
@@ -524,6 +580,27 @@
             <xf:label>Last</xf:label>
           </xf:input>
         </xf:group>
+        <xf:group ref="d:address">
+          <xf:label appearance="compact">Address</xf:label>
+          <xf:input ref="line1">
+            <xf:label>Line 1</xf:label>
+          </xf:input>
+          <xf:input ref="line2">
+            <xf:label>Line 2</xf:label>
+          </xf:input>
+          <xf:input ref="city" appearance="minimal">
+            <xf:label>City</xf:label>
+          </xf:input>
+          <xf:input ref="stateorprovince" appearance="minimal">
+            <xf:label>State or Province</xf:label>
+          </xf:input>
+          <xf:input ref="postalcode" appearance="minimal">
+            <xf:label>Postal Code</xf:label>
+          </xf:input>
+        </xf:group>
+        <xf:input ref="d:dateofbirth">
+          <xf:label>Date of Birth</xf:label>
+        </xf:input>
         <xf:input ref="d:socialsecuritynumber">
           <xf:label>Social Security Number</xf:label>
         </xf:input>
@@ -543,6 +620,11 @@
         </xf:trigger>
       </xf:group>
     </xf:repeat>
+    <xf:trigger>
+      <xf:label>
+        <f:icon name="add" /> Add New Beneficiary</xf:label>
+      <xf:insert context="instance('beneficiaries')" ref="d:beneficiary" origin="d:template/d:beneficiary" at="index('repeatBeneficiaries')" position="after" ev:event="DOMActivate" />
+    </xf:trigger>
   </f:section>
   <xf:trigger>
     <xf:label>
