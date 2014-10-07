@@ -34,10 +34,7 @@
     <TypeScriptCompile Include="Knockout\CheckboxBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\HorizontalVisibleBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\InputBindingHandler.ts" />
-    <TypeScriptCompile Include="Knockout\LayoutManagerExportBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\ModalBindingHandler.ts" />
-    <TypeScriptCompile Include="Knockout\OptionsBindingHandler.ts" />
-    <TypeScriptCompile Include="Knockout\TemplateBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\VisibleBindingHandler.ts" />
     <TypeScriptCompile Include="LayoutManager.ts" />
     <TypeScriptCompile Include="LayoutOptions.ts" />
