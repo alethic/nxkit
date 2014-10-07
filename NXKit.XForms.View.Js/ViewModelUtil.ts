@@ -20,9 +20,6 @@ NXKit.View.ViewModelUtil.MetadataNodes.push(
 //        n.Interfaces['NXKit.XForms.RepeatItem'] != null &&
 //        n.Property('NXKit.XForms.RepeatItem', 'IsRepeatItem').ValueAsBoolean() == true);
 
-NXKit.View.ViewModelUtil.LayoutManagers.push(
-    (c) => new NXKit.View.XForms.DefaultLayoutManager(c));
-
 module NXKit.View.XForms {
 
     export class Constants {

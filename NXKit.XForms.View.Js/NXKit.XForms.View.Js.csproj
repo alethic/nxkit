@@ -20,8 +20,6 @@
     <TypeScriptCompile Include="..\NXKit.View.Js\bin\nxkit.d.ts">
       <Link>Scripts\typings\nxkit\nxkit.d.ts</Link>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="DefaultLayoutManager.ts" />
-    <TypeScriptCompile Include="GroupLayoutManager.ts" />
     <TypeScriptCompile Include="OutputViewModel.ts" />
     <TypeScriptCompile Include="RepeatViewModel.ts" />
     <TypeScriptCompile Include="Scripts\InputBooleanBindingHandler.ts" />

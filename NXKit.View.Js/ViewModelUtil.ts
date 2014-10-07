@@ -1,12 +1,5 @@
 ﻿module NXKit.View.ViewModelUtil {
-
-    /**
-      * Set of functions to inject layout managers at the top of the hierarchy.
-      */
-    export var LayoutManagers: Array<(context: KnockoutBindingContext) => LayoutManager> = [
-        (c) => new DefaultLayoutManager(c),
-    ];
-
+    
     /**
       * Nodes which represent a grouping element.
       */

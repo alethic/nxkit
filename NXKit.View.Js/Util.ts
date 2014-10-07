@@ -120,11 +120,4 @@
         return [context.$data].concat(context.$parents);
     }
 
-    /**
-     * Gets the layout manager in scope of the given binding context.
-     */
-    export function GetLayoutManager(context: KnockoutBindingContext): LayoutManager {
-        return <LayoutManager>ko.utils.arrayFirst(GetContextItems(context), _ => _ instanceof LayoutManager);
-    }
-
 }

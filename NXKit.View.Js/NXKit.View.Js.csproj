@@ -22,7 +22,6 @@
     <NuGetPackageImportStamp>e1b4691f</NuGetPackageImportStamp>
   </PropertyGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="DefaultLayoutManager.ts" />
     <TypeScriptCompile Include="DeferredExecutor.ts" />
     <TypeScriptCompile Include="ICallback.ts" />
     <TypeScriptCompile Include="IEvent.ts" />
@@ -36,7 +35,6 @@
     <TypeScriptCompile Include="Knockout\InputBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\ModalBindingHandler.ts" />
     <TypeScriptCompile Include="Knockout\VisibleBindingHandler.ts" />
-    <TypeScriptCompile Include="LayoutManager.ts" />
     <TypeScriptCompile Include="LayoutOptions.ts" />
     <TypeScriptCompile Include="Log.ts" />
     <TypeScriptCompile Include="Message.ts" />
