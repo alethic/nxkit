@@ -163,21 +163,306 @@ var NXKit;
 (function (NXKit) {
     (function (View) {
         (function (XForms) {
-            var AlertViewModel = (function (_super) {
-                __extends(AlertViewModel, _super);
-                function AlertViewModel(context, node) {
+            var OutputViewModel = (function (_super) {
+                __extends(OutputViewModel, _super);
+                function OutputViewModel(context, node) {
                     _super.call(this, context, node);
                 }
-                Object.defineProperty(AlertViewModel.prototype, "Text", {
+                Object.defineProperty(OutputViewModel.prototype, "Text", {
                     get: function () {
-                        return this.ValueAsString;
+                        var _this = this;
+                        return ko.computed(function () {
+                            return _this.ValueAsString() || _this.Node.Property('NXKit.XForms.Output', 'Value').ValueAsString();
+                        });
                     },
                     enumerable: true,
                     configurable: true
                 });
-                return AlertViewModel;
+                return OutputViewModel;
             })(NXKit.View.XForms.XFormsNodeViewModel);
-            XForms.AlertViewModel = AlertViewModel;
+            XForms.OutputViewModel = OutputViewModel;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
+})(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (View) {
+        (function (XForms) {
+            var RepeatViewModel = (function (_super) {
+                __extends(RepeatViewModel, _super);
+                function RepeatViewModel(context, node) {
+                    _super.call(this, context, node);
+                }
+                return RepeatViewModel;
+            })(NXKit.View.XForms.XFormsNodeViewModel);
+            XForms.RepeatViewModel = RepeatViewModel;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (View) {
+        (function (Knockout) {
+            var InputBooleanBindingHandler = (function () {
+                function InputBooleanBindingHandler() {
+                }
+                InputBooleanBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    var self = this;
+                    var checkbox = $(element);
+                    setTimeout(function () {
+                        $(checkbox).checkbox();
+                        $(checkbox).checkbox('setting', {
+                            onEnable: function () {
+                                var v1 = true;
+                                var v2 = ko.unwrap(valueAccessor());
+                                if (typeof v2 === 'boolean') {
+                                    if (v1 != v2)
+                                        valueAccessor()(v1);
+                                } else if (typeof v2 === 'string') {
+                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
+                                    if (v1 != v2_)
+                                        valueAccessor()(v1 ? 'true' : 'false');
+                                }
+                            },
+                            onDisable: function () {
+                                var v1 = false;
+                                var v2 = ko.unwrap(valueAccessor());
+                                if (typeof v2 === 'boolean') {
+                                    if (v1 != v2)
+                                        valueAccessor()(v1);
+                                } else if (typeof v2 === 'string') {
+                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
+                                    if (v1 != v2_)
+                                        valueAccessor()(v1 ? 'true' : 'false');
+                                }
+                            }
+                        });
+                        InputBooleanBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                    }, 2000);
+                };
+
+                InputBooleanBindingHandler._update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    var self = this;
+                    var checkbox = $(element);
+                    setTimeout(function () {
+                        var v1 = ko.unwrap(valueAccessor());
+                        if (typeof v1 === 'boolean') {
+                            $(checkbox).checkbox(v1 ? 'enable' : 'disable');
+                        } else if (typeof v1 === 'string') {
+                            var v1_ = v1.toLowerCase() === 'true' ? true : false;
+                            $(checkbox).checkbox(v1_ ? 'enable' : 'disable');
+                        }
+                    }, 1000);
+                };
+
+                InputBooleanBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    InputBooleanBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+
+                InputBooleanBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    InputBooleanBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                };
+                return InputBooleanBindingHandler;
+            })();
+            Knockout.InputBooleanBindingHandler = InputBooleanBindingHandler;
+
+            ko.bindingHandlers['nxkit_xforms_input_boolean'] = new InputBooleanBindingHandler();
+        })(View.Knockout || (View.Knockout = {}));
+        var Knockout = View.Knockout;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (View) {
+        (function (XForms) {
+            (function (Knockout) {
+                var Select1BindingHandler = (function () {
+                    function Select1BindingHandler() {
+                    }
+                    Select1BindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                        var body = $(element).find('.body');
+                        setTimeout(function () {
+                            $(body).dropdown();
+                            $(body).dropdown({
+                                onChange: function (value) {
+                                    var v1 = $(body).dropdown('get value') || null;
+                                    var v2 = ko.unwrap(valueAccessor()) || null;
+                                    if (v1 != v2) {
+                                        valueAccessor()(v1);
+                                    }
+                                }
+                            });
+                            Select1BindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                        }, 1000);
+                    };
+
+                    Select1BindingHandler._update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                        var body = $(element).find('.body');
+                        setTimeout(function () {
+                            var v1 = ko.unwrap(valueAccessor()) || null;
+                            $(body).dropdown('set value', v1);
+                        }, 2000);
+                    };
+
+                    Select1BindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                        Select1BindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
+                    };
+
+                    Select1BindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                        Select1BindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
+                    };
+                    return Select1BindingHandler;
+                })();
+                Knockout.Select1BindingHandler = Select1BindingHandler;
+
+                ko.bindingHandlers['nxkit_xforms_select1'] = new Select1BindingHandler();
+            })(XForms.Knockout || (XForms.Knockout = {}));
+            var Knockout = XForms.Knockout;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
+})(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (View) {
+        (function (XForms) {
+            var SubmitViewModel = (function (_super) {
+                __extends(SubmitViewModel, _super);
+                function SubmitViewModel(context, node) {
+                    _super.call(this, context, node);
+                }
+                SubmitViewModel.prototype.Activate = function () {
+                    this.Node.Invoke('NXKit.DOMEvents.EventTarget', 'Dispatch', {
+                        type: 'DOMActivate'
+                    });
+                };
+                return SubmitViewModel;
+            })(NXKit.View.XForms.XFormsNodeViewModel);
+            XForms.SubmitViewModel = SubmitViewModel;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
+})(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (View) {
+        (function (XForms) {
+            var TriggerViewModel = (function (_super) {
+                __extends(TriggerViewModel, _super);
+                function TriggerViewModel(context, node) {
+                    _super.call(this, context, node);
+                }
+                TriggerViewModel.prototype.Activate = function () {
+                    var self = this;
+
+                    // ensure property changes or non-focus events flush first
+                    setTimeout(function () {
+                        return self.Node.Invoke('NXKit.DOMEvents.EventTarget', 'Dispatch', {
+                            type: 'DOMActivate'
+                        });
+                    }, 50);
+                };
+                return TriggerViewModel;
+            })(NXKit.View.XForms.XFormsNodeViewModel);
+            XForms.TriggerViewModel = TriggerViewModel;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
+})(NXKit || (NXKit = {}));
+var NXKit;
+(function (NXKit) {
+    (function (View) {
+        (function (XForms) {
+            (function (SelectUtil) {
+                var Selectable = (function () {
+                    function Selectable(viewModel, node) {
+                        this._viewModel = viewModel;
+                        this._node = node;
+                    }
+                    Object.defineProperty(Selectable.prototype, "ViewModel", {
+                        get: function () {
+                            return this._viewModel;
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+
+                    Object.defineProperty(Selectable.prototype, "Node", {
+                        get: function () {
+                            return this._node;
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+
+                    Object.defineProperty(Selectable.prototype, "Id", {
+                        get: function () {
+                            return this.GetId();
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+
+                    Selectable.prototype.GetId = function () {
+                        return this._node.Property('NXKit.XForms.ISelectable', 'Id').ValueAsString();
+                    };
+
+                    Object.defineProperty(Selectable.prototype, "Label", {
+                        get: function () {
+                            return this.GetLabelNode();
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+
+                    Selectable.prototype.GetLabelNode = function () {
+                        return XForms.ViewModelUtil.GetLabelNode(this._node);
+                    };
+
+                    Object.defineProperty(Selectable.prototype, "Value", {
+                        get: function () {
+                            return this.GetValueNode();
+                        },
+                        enumerable: true,
+                        configurable: true
+                    });
+
+                    Selectable.prototype.GetValueNode = function () {
+                        return XForms.ViewModelUtil.GetValueNode(this._node);
+                    };
+                    return Selectable;
+                })();
+                SelectUtil.Selectable = Selectable;
+
+                /**
+                * Gets the select item-set. This consists of the item nodes of the given select node.
+                */
+                function GetSelectables(viewModel, node, level) {
+                    try  {
+                        return node.Nodes().filter(function (_) {
+                            return _.Interfaces['NXKit.XForms.ISelectable'] != null;
+                        }).map(function (_) {
+                            return new Selectable(viewModel, _);
+                        });
+                    } catch (ex) {
+                        ex.message = 'SelectUtil.GetSelectables()' + '"\nMessage: ' + ex.message;
+                        throw ex;
+                    }
+                }
+                SelectUtil.GetSelectables = GetSelectables;
+            })(XForms.SelectUtil || (XForms.SelectUtil = {}));
+            var SelectUtil = XForms.SelectUtil;
         })(View.XForms || (View.XForms = {}));
         var XForms = View.XForms;
     })(NXKit.View || (NXKit.View = {}));
@@ -673,6 +958,31 @@ var NXKit;
 (function (NXKit) {
     (function (View) {
         (function (XForms) {
+            var AlertViewModel = (function (_super) {
+                __extends(AlertViewModel, _super);
+                function AlertViewModel(context, node) {
+                    _super.call(this, context, node);
+                }
+                Object.defineProperty(AlertViewModel.prototype, "Text", {
+                    get: function () {
+                        return this.ValueAsString;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                return AlertViewModel;
+            })(NXKit.View.XForms.XFormsNodeViewModel);
+            XForms.AlertViewModel = AlertViewModel;
+        })(View.XForms || (View.XForms = {}));
+        var XForms = View.XForms;
+    })(NXKit.View || (NXKit.View = {}));
+    var View = NXKit.View;
+})(NXKit || (NXKit = {}));
+/// <reference path="XFormsNodeViewModel.ts" />
+var NXKit;
+(function (NXKit) {
+    (function (View) {
+        (function (XForms) {
             var HintViewModel = (function (_super) {
                 __extends(HintViewModel, _super);
                 function HintViewModel(context, node) {
@@ -810,34 +1120,6 @@ var NXKit;
 (function (NXKit) {
     (function (View) {
         (function (XForms) {
-            var OutputViewModel = (function (_super) {
-                __extends(OutputViewModel, _super);
-                function OutputViewModel(context, node) {
-                    _super.call(this, context, node);
-                }
-                Object.defineProperty(OutputViewModel.prototype, "Text", {
-                    get: function () {
-                        var _this = this;
-                        return ko.computed(function () {
-                            return _this.ValueAsString() || _this.Node.Property('NXKit.XForms.Output', 'Value').ValueAsString();
-                        });
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                return OutputViewModel;
-            })(NXKit.View.XForms.XFormsNodeViewModel);
-            XForms.OutputViewModel = OutputViewModel;
-        })(View.XForms || (View.XForms = {}));
-        var XForms = View.XForms;
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
-/// <reference path="XFormsNodeViewModel.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        (function (XForms) {
             var RangeViewModel = (function (_super) {
                 __extends(RangeViewModel, _super);
                 function RangeViewModel(context, node) {
@@ -869,149 +1151,6 @@ var NXKit;
                 return RangeViewModel;
             })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.RangeViewModel = RangeViewModel;
-        })(View.XForms || (View.XForms = {}));
-        var XForms = View.XForms;
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
-/// <reference path="XFormsNodeViewModel.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        (function (XForms) {
-            var RepeatViewModel = (function (_super) {
-                __extends(RepeatViewModel, _super);
-                function RepeatViewModel(context, node) {
-                    _super.call(this, context, node);
-                }
-                return RepeatViewModel;
-            })(NXKit.View.XForms.XFormsNodeViewModel);
-            XForms.RepeatViewModel = RepeatViewModel;
-        })(View.XForms || (View.XForms = {}));
-        var XForms = View.XForms;
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        (function (Knockout) {
-            var InputBooleanBindingHandler = (function () {
-                function InputBooleanBindingHandler() {
-                }
-                InputBooleanBindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    var self = this;
-                    var checkbox = $(element);
-                    setTimeout(function () {
-                        $(checkbox).checkbox();
-                        $(checkbox).checkbox('setting', {
-                            onEnable: function () {
-                                var v1 = true;
-                                var v2 = ko.unwrap(valueAccessor());
-                                if (typeof v2 === 'boolean') {
-                                    if (v1 != v2)
-                                        valueAccessor()(v1);
-                                } else if (typeof v2 === 'string') {
-                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
-                                    if (v1 != v2_)
-                                        valueAccessor()(v1 ? 'true' : 'false');
-                                }
-                            },
-                            onDisable: function () {
-                                var v1 = false;
-                                var v2 = ko.unwrap(valueAccessor());
-                                if (typeof v2 === 'boolean') {
-                                    if (v1 != v2)
-                                        valueAccessor()(v1);
-                                } else if (typeof v2 === 'string') {
-                                    var v2_ = v2.toLowerCase() === 'true' ? true : false;
-                                    if (v1 != v2_)
-                                        valueAccessor()(v1 ? 'true' : 'false');
-                                }
-                            }
-                        });
-                        InputBooleanBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
-                    }, 2000);
-                };
-
-                InputBooleanBindingHandler._update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    var self = this;
-                    var checkbox = $(element);
-                    setTimeout(function () {
-                        var v1 = ko.unwrap(valueAccessor());
-                        if (typeof v1 === 'boolean') {
-                            $(checkbox).checkbox(v1 ? 'enable' : 'disable');
-                        } else if (typeof v1 === 'string') {
-                            var v1_ = v1.toLowerCase() === 'true' ? true : false;
-                            $(checkbox).checkbox(v1_ ? 'enable' : 'disable');
-                        }
-                    }, 1000);
-                };
-
-                InputBooleanBindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    InputBooleanBindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-
-                InputBooleanBindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                    InputBooleanBindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
-                };
-                return InputBooleanBindingHandler;
-            })();
-            Knockout.InputBooleanBindingHandler = InputBooleanBindingHandler;
-
-            ko.bindingHandlers['nxkit_xforms_input_boolean'] = new InputBooleanBindingHandler();
-        })(View.Knockout || (View.Knockout = {}));
-        var Knockout = View.Knockout;
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        (function (XForms) {
-            (function (Knockout) {
-                var Select1BindingHandler = (function () {
-                    function Select1BindingHandler() {
-                    }
-                    Select1BindingHandler._init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                        var body = $(element).find('.body');
-                        setTimeout(function () {
-                            $(body).dropdown();
-                            $(body).dropdown({
-                                onChange: function (value) {
-                                    var v1 = $(body).dropdown('get value') || null;
-                                    var v2 = ko.unwrap(valueAccessor()) || null;
-                                    if (v1 != v2) {
-                                        valueAccessor()(v1);
-                                    }
-                                }
-                            });
-                            Select1BindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
-                        }, 1000);
-                    };
-
-                    Select1BindingHandler._update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                        var body = $(element).find('.body');
-                        setTimeout(function () {
-                            var v1 = ko.unwrap(valueAccessor()) || null;
-                            $(body).dropdown('set value', v1);
-                        }, 2000);
-                    };
-
-                    Select1BindingHandler.prototype.init = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                        Select1BindingHandler._init(element, valueAccessor, allBindings, viewModel, bindingContext);
-                    };
-
-                    Select1BindingHandler.prototype.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-                        Select1BindingHandler._update(element, valueAccessor, allBindings, viewModel, bindingContext);
-                    };
-                    return Select1BindingHandler;
-                })();
-                Knockout.Select1BindingHandler = Select1BindingHandler;
-
-                ko.bindingHandlers['nxkit_xforms_select1'] = new Select1BindingHandler();
-            })(XForms.Knockout || (XForms.Knockout = {}));
-            var Knockout = XForms.Knockout;
         })(View.XForms || (View.XForms = {}));
         var XForms = View.XForms;
     })(NXKit.View || (NXKit.View = {}));
@@ -1104,117 +1243,6 @@ var NXKit;
     })(NXKit.View || (NXKit.View = {}));
     var View = NXKit.View;
 })(NXKit || (NXKit = {}));
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        (function (XForms) {
-            (function (SelectUtil) {
-                var Selectable = (function () {
-                    function Selectable(viewModel, node) {
-                        this._viewModel = viewModel;
-                        this._node = node;
-                    }
-                    Object.defineProperty(Selectable.prototype, "ViewModel", {
-                        get: function () {
-                            return this._viewModel;
-                        },
-                        enumerable: true,
-                        configurable: true
-                    });
-
-                    Object.defineProperty(Selectable.prototype, "Node", {
-                        get: function () {
-                            return this._node;
-                        },
-                        enumerable: true,
-                        configurable: true
-                    });
-
-                    Object.defineProperty(Selectable.prototype, "Id", {
-                        get: function () {
-                            return this.GetId();
-                        },
-                        enumerable: true,
-                        configurable: true
-                    });
-
-                    Selectable.prototype.GetId = function () {
-                        return this._node.Property('NXKit.XForms.ISelectable', 'Id').ValueAsString();
-                    };
-
-                    Object.defineProperty(Selectable.prototype, "Label", {
-                        get: function () {
-                            return this.GetLabelNode();
-                        },
-                        enumerable: true,
-                        configurable: true
-                    });
-
-                    Selectable.prototype.GetLabelNode = function () {
-                        return XForms.ViewModelUtil.GetLabelNode(this._node);
-                    };
-
-                    Object.defineProperty(Selectable.prototype, "Value", {
-                        get: function () {
-                            return this.GetValueNode();
-                        },
-                        enumerable: true,
-                        configurable: true
-                    });
-
-                    Selectable.prototype.GetValueNode = function () {
-                        return XForms.ViewModelUtil.GetValueNode(this._node);
-                    };
-                    return Selectable;
-                })();
-                SelectUtil.Selectable = Selectable;
-
-                /**
-                * Gets the select item-set. This consists of the item nodes of the given select node.
-                */
-                function GetSelectables(viewModel, node, level) {
-                    try  {
-                        return node.Nodes().filter(function (_) {
-                            return _.Interfaces['NXKit.XForms.ISelectable'] != null;
-                        }).map(function (_) {
-                            return new Selectable(viewModel, _);
-                        });
-                    } catch (ex) {
-                        ex.message = 'SelectUtil.GetSelectables()' + '"\nMessage: ' + ex.message;
-                        throw ex;
-                    }
-                }
-                SelectUtil.GetSelectables = GetSelectables;
-            })(XForms.SelectUtil || (XForms.SelectUtil = {}));
-            var SelectUtil = XForms.SelectUtil;
-        })(View.XForms || (View.XForms = {}));
-        var XForms = View.XForms;
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
-/// <reference path="XFormsNodeViewModel.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        (function (XForms) {
-            var SubmitViewModel = (function (_super) {
-                __extends(SubmitViewModel, _super);
-                function SubmitViewModel(context, node) {
-                    _super.call(this, context, node);
-                }
-                SubmitViewModel.prototype.Activate = function () {
-                    this.Node.Invoke('NXKit.DOMEvents.EventTarget', 'Dispatch', {
-                        type: 'DOMActivate'
-                    });
-                };
-                return SubmitViewModel;
-            })(NXKit.View.XForms.XFormsNodeViewModel);
-            XForms.SubmitViewModel = SubmitViewModel;
-        })(View.XForms || (View.XForms = {}));
-        var XForms = View.XForms;
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
 /// <reference path="XFormsNodeViewModel.ts" />
 var NXKit;
 (function (NXKit) {
@@ -1228,34 +1256,6 @@ var NXKit;
                 return TextAreaViewModel;
             })(NXKit.View.XForms.XFormsNodeViewModel);
             XForms.TextAreaViewModel = TextAreaViewModel;
-        })(View.XForms || (View.XForms = {}));
-        var XForms = View.XForms;
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
-/// <reference path="XFormsNodeViewModel.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        (function (XForms) {
-            var TriggerViewModel = (function (_super) {
-                __extends(TriggerViewModel, _super);
-                function TriggerViewModel(context, node) {
-                    _super.call(this, context, node);
-                }
-                TriggerViewModel.prototype.Activate = function () {
-                    var self = this;
-
-                    // ensure property changes or non-focus events flush first
-                    setTimeout(function () {
-                        return self.Node.Invoke('NXKit.DOMEvents.EventTarget', 'Dispatch', {
-                            type: 'DOMActivate'
-                        });
-                    }, 50);
-                };
-                return TriggerViewModel;
-            })(NXKit.View.XForms.XFormsNodeViewModel);
-            XForms.TriggerViewModel = TriggerViewModel;
         })(View.XForms || (View.XForms = {}));
         var XForms = View.XForms;
     })(NXKit.View || (NXKit.View = {}));
