@@ -163,83 +163,6 @@ var NXKit;
 (function (NXKit) {
     (function (View) {
         (function (XForms) {
-            var DefaultLayoutManager = (function (_super) {
-                __extends(DefaultLayoutManager, _super);
-                function DefaultLayoutManager(context) {
-                    _super.call(this, context);
-                }
-                /**
-                * Applies the 'level' and 'layout' bindings to the template search.
-                */
-                DefaultLayoutManager.prototype.GetTemplateOptions = function (valueAccessor, viewModel, bindingContext, options) {
-                    options = _super.prototype.GetTemplateOptions.call(this, valueAccessor, viewModel, bindingContext, options);
-                    var node = _super.prototype.GetNode.call(this, valueAccessor, viewModel, bindingContext);
-                    var value = ko.unwrap(valueAccessor());
-
-                    if (node != null && node.Type == View.NodeType.Element) {
-                        var dataType = XForms.ViewModelUtil.GetDataType(node)();
-                        if (dataType != null) {
-                            options['data-type'] = dataType;
-                        }
-                    }
-
-                    // specified data type
-                    if (value != null && value['data-type'] != null) {
-                        options['data-type'] = ko.unwrap(value['data-type']);
-                    }
-
-                    // extract level binding
-                    var value = valueAccessor();
-                    if (value != null && value.level != null) {
-                        options.level = ko.unwrap(value.level);
-                    }
-
-                    return options;
-                };
-                return DefaultLayoutManager;
-            })(NXKit.View.LayoutManager);
-            XForms.DefaultLayoutManager = DefaultLayoutManager;
-        })(View.XForms || (View.XForms = {}));
-        var XForms = View.XForms;
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
-/// <reference path="XFormsNodeViewModel.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        (function (XForms) {
-            var GroupLayoutManager = (function (_super) {
-                __extends(GroupLayoutManager, _super);
-                function GroupLayoutManager(context) {
-                    _super.call(this, context);
-                }
-                /**
-                * Applies the 'level' and 'layout' bindings to the template search.
-                */
-                GroupLayoutManager.prototype.GetTemplateOptions = function (valueAccessor, viewModel, bindingContext, options) {
-                    options = _super.prototype.GetTemplateOptions.call(this, valueAccessor, viewModel, bindingContext, options);
-                    var value = ko.unwrap(valueAccessor());
-
-                    // extract level binding
-                    if (value != null && value.level != null)
-                        options.level = ko.unwrap(value.level);
-
-                    return options;
-                };
-                return GroupLayoutManager;
-            })(NXKit.View.LayoutManager);
-            XForms.GroupLayoutManager = GroupLayoutManager;
-        })(View.XForms || (View.XForms = {}));
-        var XForms = View.XForms;
-    })(NXKit.View || (NXKit.View = {}));
-    var View = NXKit.View;
-})(NXKit || (NXKit = {}));
-/// <reference path="XFormsNodeViewModel.ts" />
-var NXKit;
-(function (NXKit) {
-    (function (View) {
-        (function (XForms) {
             var OutputViewModel = (function (_super) {
                 __extends(OutputViewModel, _super);
                 function OutputViewModel(context, node) {
@@ -1342,20 +1265,16 @@ NXKit.View.ViewModelUtil.ControlNodes.push('{http://www.w3.org/2002/xforms}input
 
 NXKit.View.ViewModelUtil.MetadataNodes.push('{http://www.w3.org/2002/xforms}label', '{http://www.w3.org/2002/xforms}help', '{http://www.w3.org/2002/xforms}hint', '{http://www.w3.org/2002/xforms}alert');
 
-//NXKit.View.ViewModelUtil.TransparentNodes.push(
-//    '{http://www.w3.org/2002/xforms}repeat');
-//NXKit.View.ViewModelUtil.TransparentNodePredicates.push(
-//    // repeat items are transparent
-//    (n: NXKit.View.Node) =>
-//        n.Interfaces['NXKit.XForms.RepeatItem'] != null &&
-//        n.Property('NXKit.XForms.RepeatItem', 'IsRepeatItem').ValueAsBoolean() == true);
-NXKit.View.ViewModelUtil.LayoutManagers.push(function (c) {
-    return new NXKit.View.XForms.DefaultLayoutManager(c);
-});
-
 var NXKit;
 (function (NXKit) {
     (function (View) {
+        //NXKit.View.ViewModelUtil.TransparentNodes.push(
+        //    '{http://www.w3.org/2002/xforms}repeat');
+        //NXKit.View.ViewModelUtil.TransparentNodePredicates.push(
+        //    // repeat items are transparent
+        //    (n: NXKit.View.Node) =>
+        //        n.Interfaces['NXKit.XForms.RepeatItem'] != null &&
+        //        n.Property('NXKit.XForms.RepeatItem', 'IsRepeatItem').ValueAsBoolean() == true);
         (function (XForms) {
             var Constants = (function () {
                 function Constants() {
