@@ -3,16 +3,14 @@
     <metadata>
         <id>$id$</id>
         <version>$NuGetVersion$</version>
-        <title>$id$</title>
+        <title>NXKit XForms Layout View for JavaScript</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
         <licenseUrl>http://www.gnu.org/licenses/gpl.txt</licenseUrl>
         <projectUrl>https://github.com/nxkit</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
         <description>
-            NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
-
-            Schema support is available in other NXKit packages.
+            XForms Layout additions to the NXKit View for JavaScript.
         </description>
         <releaseNotes />
         <copyright>Copyright © 2014 Jerome Haltom</copyright>

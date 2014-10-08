@@ -3,16 +3,14 @@
     <metadata>
         <id>$id$</id>
         <version>$NuGetVersion$</version>
-        <title>$id$</title>
+        <title>NXKit NXInclude</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
         <licenseUrl>http://www.gnu.org/licenses/gpl.txt</licenseUrl>
         <projectUrl>https://github.com/nxkit</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
         <description>
-            NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
-
-            Implements the NXInclude specification. The NXInclude specification is an extension of the XInclude specification.
+            Extension of the NXKit implementation of the W3C XInclude specification.
         </description>
         <releaseNotes />
         <copyright>$copyright$</copyright>
