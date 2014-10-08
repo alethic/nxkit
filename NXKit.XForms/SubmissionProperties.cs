@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Text;
 using System.Xml.Linq;
 
-using NXKit.Util;
+using NXKit.Composition;
+using NXKit.IO.Media;
 using NXKit.XForms.IO;
 using NXKit.Xml;
 
@@ -13,10 +15,12 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'submission' properties.
     /// </summary>
-    public class SubmissionProperties
+    [Extension(typeof(SubmissionProperties), "{http://www.w3.org/2002/xforms}submission")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
+    public class SubmissionProperties :
+        ElementExtension
     {
 
-        readonly XElement element;
         readonly SubmissionAttributes attributes;
 
         /// <summary>
@@ -24,12 +28,15 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="attributes"></param>
-        public SubmissionProperties(XElement element, SubmissionAttributes attributes)
+        [ImportingConstructor]
+        public SubmissionProperties(
+            XElement element,
+            SubmissionAttributes attributes)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(attributes != null);
 
-            this.element = element;
             this.attributes = attributes;
         }
 
@@ -69,7 +76,7 @@ namespace NXKit.XForms
         {
             var uri = attributes.Resource != null ? new Uri(attributes.Resource, UriKind.RelativeOrAbsolute) : null;
             if (uri != null)
-                return uri.IsAbsoluteUri ? uri : new Uri(element.GetBaseUri(), uri);
+                return uri.IsAbsoluteUri ? uri : new Uri(Element.GetBaseUri(), uri);
 
             return null;
         }
@@ -86,7 +93,7 @@ namespace NXKit.XForms
         {
             var uri = attributes.Action != null ? new Uri(attributes.Action, UriKind.RelativeOrAbsolute) : null;
             if (uri != null)
-                return uri.IsAbsoluteUri ? uri : new Uri(element.GetBaseUri(), uri);
+                return uri.IsAbsoluteUri ? uri : new Uri(Element.GetBaseUri(), uri);
 
             return null;
         }

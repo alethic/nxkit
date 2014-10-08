@@ -5,7 +5,6 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -13,14 +12,14 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'insert' properties.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}insert")]
+    [Extension(typeof(InsertProperties), "{http://www.w3.org/2002/xforms}insert")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class InsertProperties :
         ElementExtension
     {
 
         readonly InsertAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<XPathExpression> origin;
         readonly Lazy<XPathExpression> at;
         readonly Lazy<InsertPosition> position;
@@ -29,25 +28,29 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         /// <param name="context"></param>
+        [ImportingConstructor]
         public InsertProperties(
             XElement element,
-            Lazy<EvaluationContextResolver> context)
+            InsertAttributes attributes,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
             Contract.Requires<ArgumentNullException>(context != null);
 
-            this.attributes = element.AnnotationOrCreate<InsertAttributes>(() => new InsertAttributes(element));
+            this.attributes = attributes;
             this.context = context;
 
-            this.origin = new Lazy<XPathExpression>(() => 
+            this.origin = new Lazy<XPathExpression>(() =>
                 !string.IsNullOrEmpty(attributes.Origin) ? context.Value.Context.CompileXPath(element, attributes.Origin) : null);
 
-            this.at = new Lazy<XPathExpression>(() => 
+            this.at = new Lazy<XPathExpression>(() =>
                 !string.IsNullOrEmpty(attributes.At) ? context.Value.Context.CompileXPath(element, attributes.At) : null);
 
-            this.position = new Lazy<InsertPosition>(() => 
+            this.position = new Lazy<InsertPosition>(() =>
                 !string.IsNullOrEmpty(attributes.Postition) ? (InsertPosition)Enum.Parse(typeof(InsertPosition), attributes.Postition, true) : InsertPosition.After);
         }
 

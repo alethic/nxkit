@@ -29,15 +29,21 @@ namespace NXKit.XMLEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         /// <param name="invoker"></param>
-        public ElementEventListener(XElement element, IInvoker invoker)
+        [ImportingConstructor]
+        public ElementEventListener(
+            XElement element,
+            EventListenerAttributes attributes,
+            IInvoker invoker)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
             Contract.Requires<ArgumentNullException>(invoker != null);
 
             this.invoker = invoker;
-            this.attributes = new EventListenerAttributes(element);
+            this.attributes = attributes;
             this.handler = new Lazy<IEventHandler>(() => GetHandler());
             this.observer = new Lazy<EventTarget>(() => GetObserver());
         }
@@ -164,7 +170,7 @@ namespace NXKit.XMLEvents
         {
             Contract.Requires<ArgumentNullException>(evt != null);
 
-            invoker.Invoke(() => 
+            invoker.Invoke(() =>
                 handler.Value.HandleEvent(evt));
         }
 

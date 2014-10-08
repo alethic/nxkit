@@ -7,7 +7,7 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-using NXKit.Util;
+using NXKit.IO.Media;
 using NXKit.XForms.Serialization;
 
 namespace NXKit.XForms.Json.Serialization

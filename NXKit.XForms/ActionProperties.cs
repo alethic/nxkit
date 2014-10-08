@@ -5,7 +5,6 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -13,14 +12,14 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms common properties.
     /// </summary>
-    [Extension("{http://www.w3.org/2001/xml-events}action")]
+    [Extension(typeof(ActionProperties), "{http://www.w3.org/2001/xml-events}action")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ActionProperties :
         ElementExtension
     {
 
         readonly ActionAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> contextResolver;
+        readonly Extension<EvaluationContextResolver> contextResolver;
         readonly Lazy<XPathExpression> while_;
         readonly Lazy<XPathExpression> if_;
         readonly Lazy<XPathExpression> iterate;
@@ -29,16 +28,19 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         /// <param name="contextResolver"></param>
+        [ImportingConstructor]
         public ActionProperties(
             XElement element,
-            Lazy<EvaluationContextResolver> contextResolver)
+            ActionAttributes attributes,
+            Extension<EvaluationContextResolver> contextResolver)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(contextResolver != null);
 
-            this.attributes = element.AnnotationOrCreate<ActionAttributes>(() => new ActionAttributes(element));
+            this.attributes = attributes;
             this.contextResolver = contextResolver;
 
             this.while_ = new Lazy<XPathExpression>(() =>

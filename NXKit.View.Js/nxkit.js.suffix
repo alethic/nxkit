@@ -1,0 +1,13 @@
+﻿
+		return NXKit;
+	};
+
+	NXKit.requirejs = NXKit.requirejs || requirejs;
+	NXKit.require = NXKit.require || require;
+	NXKit.define = NXKit.define || define;
+
+	NXKit.define('nxkit', ['jquery', 'knockout'], function ($, ko) {
+		return init($, ko, NXKit);
+	});
+
+}(window['NXKit'] || (window['NXKit'] = {})));

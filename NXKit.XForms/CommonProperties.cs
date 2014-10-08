@@ -5,7 +5,6 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -13,34 +12,34 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms common properties.
     /// </summary>
-    [Extension]
+    [Extension(typeof(CommonProperties))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class CommonProperties :
         ElementExtension
     {
 
         readonly CommonAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> contextResolver;
-        readonly IdRef model;
+        readonly Extension<EvaluationContextResolver> contextResolver;
         readonly Lazy<XPathExpression> context;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         /// <param name="contextResolver"></param>
+        [ImportingConstructor]
         public CommonProperties(
             XElement element,
-            Lazy<EvaluationContextResolver> contextResolver)
+            CommonAttributes attributes,
+            Extension<EvaluationContextResolver> contextResolver)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(contextResolver != null);
 
-            this.attributes = element.AnnotationOrCreate<CommonAttributes>(() => new CommonAttributes(element));
+            this.attributes = attributes;
             this.contextResolver = contextResolver;
-
-            this.model = attributes.Model;
 
             this.context = new Lazy<XPathExpression>(() =>
                 !string.IsNullOrEmpty(attributes.Context) ? contextResolver.Value.Context.CompileXPath(element, attributes.Context) : null);
@@ -48,7 +47,7 @@ namespace NXKit.XForms
 
         public IdRef Model
         {
-            get { return model; }
+            get { return attributes.Model; }
         }
 
         public XPathExpression Context

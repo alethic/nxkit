@@ -1,9 +1,10 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-using NXKit.Xml;
+using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -11,30 +12,34 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms binding properties.
     /// </summary>
+    [Extension(typeof(BindingProperties))]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class BindingProperties :
         ElementExtension
     {
 
         readonly BindingAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<XPathExpression> ref_;
         readonly Lazy<XPathExpression> nodeset;
-        readonly IdRef bind;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         /// <param name="context"></param>
+        [ImportingConstructor]
         public BindingProperties(
             XElement element,
-            Lazy<EvaluationContextResolver> context)
+            BindingAttributes attributes,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(context != null);
 
-            this.attributes = element.AnnotationOrCreate<BindingAttributes>(() => new BindingAttributes(element));
+            this.attributes = attributes;
             this.context = context;
 
             this.ref_ = new Lazy<XPathExpression>(() =>
@@ -42,8 +47,6 @@ namespace NXKit.XForms
 
             this.nodeset = new Lazy<XPathExpression>(() =>
                 !string.IsNullOrEmpty(attributes.NodeSet) ? context.Value.Context.CompileXPath(element, attributes.NodeSet) : null);
-
-            this.bind = attributes.Bind;
         }
 
         public XPathExpression Ref
@@ -58,7 +61,7 @@ namespace NXKit.XForms
 
         public IdRef Bind
         {
-            get { return bind; }
+            get { return attributes.Bind; }
         }
 
     }

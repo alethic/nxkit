@@ -1,0 +1,52 @@
+﻿<script type="text/html" data-nx-node-view='
+[
+    {
+        "Name": "{http://www.w3.org/2002/xforms}range",
+        "NXKit.XForms.IDataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}int"
+        }
+    },
+    {
+        "Name": "{http://www.w3.org/2002/xforms}range",
+        "NXKit.XForms.IDataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}integer"
+        }
+    }
+]'>
+    <!-- ko with: new NXKit.View.XForms.RangeViewModel($context, $data) -->
+    <div class="xforms-range"
+         data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
+}">
+        <!-- ko with: Label -->
+        <label class="label">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <input type="number"
+               data-bind="
+value: ValueAsNumber,
+attr: {
+    min: Start,
+    max: End,
+    step: Step,
+}" />
+    </div>
+    <!-- /ko -->
+</script>

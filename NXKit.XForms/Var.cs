@@ -15,8 +15,8 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly Lazy<VarProperties> properties;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly VarProperties properties;
+        readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<Binding> value;
 
         /// <summary>
@@ -25,10 +25,11 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="properties"></param>
         /// <param name="context"></param>
+        [ImportingConstructor]
         public Var(
             XElement element,
-            Lazy<VarProperties> properties,
-            Lazy<EvaluationContextResolver> context)
+            VarProperties properties,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
@@ -37,13 +38,13 @@ namespace NXKit.XForms
 
             this.properties = properties;
             this.context = context;
-            this.value = new Lazy<Binding>(() => properties.Value.Value != null ? new Binding(Element, context.Value.Context, properties.Value.Value) : null);
+            this.value = new Lazy<Binding>(() => properties.Value != null ? new Binding(Element, context.Value.Context, properties.Value) : null);
         }
 
         [Remote]
         public string Name
         {
-            get { return properties.Value.Name; }
+            get { return properties.Name; }
         }
 
         public object Value

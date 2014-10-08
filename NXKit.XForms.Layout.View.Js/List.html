@@ -1,0 +1,40 @@
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}list"
+}'>
+    <!-- ko with: new NXKit.View.XForms.Layout.ListViewModel($context, $data) -->
+    <div class="xforms-layout-list"
+         data-bind="
+nxkit_visible: Relevant,
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-label-appearance': LabelAppearance,
+}">
+        <!-- ko with: Label -->
+        <div class="label"
+             data-bind="
+attr : {
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data),
+}">
+            <!-- ko nx_node -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <ul class="contents" data-bind="
+attr: {
+    'data-nx-xforms-count': $data.Count,
+    'data-nx-xforms-count-enabled': $data.CountEnabled,
+}">
+            <!-- ko foreach: Items -->
+            <li class="item">
+                <!-- ko nx_node -->
+                <!-- /ko -->
+            </li>
+            <!-- /ko -->
+        </ul>
+    </div>
+    <!-- /ko -->
+</script>

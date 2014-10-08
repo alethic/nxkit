@@ -11,13 +11,11 @@ namespace NXKit
     {
 
         /// <summary>
-        /// Returns <c>true</c> if the interface type specified by <paramref name="type"/> should be applied to the
-        /// <see cref="XObject"/>.
+        /// Returns <c>true</c> if the extension should be applied to the <see cref="XObject"/>.
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="type"></param>
         /// <returns></returns>
-        bool IsMatch(XObject obj, Type type);
+        bool IsMatch(XObject obj);
 
     }
 

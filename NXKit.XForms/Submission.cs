@@ -125,22 +125,29 @@ namespace NXKit.XForms
 
         readonly IModelRequestService requestService;
         readonly SubmissionProperties properties;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<EvaluationContextResolver> context;
         bool submissionInProgress = false;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Submission(XElement element, IModelRequestService requestService)
+        [ImportingConstructor]
+        public Submission(
+            XElement element,
+            SubmissionProperties properties,
+            Extension<EvaluationContextResolver> context,
+            IModelRequestService requestService)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(properties != null);
+            Contract.Requires<ArgumentNullException>(context != null);
             Contract.Requires<ArgumentNullException>(requestService != null);
 
             this.requestService = requestService;
-            this.properties = new SubmissionProperties(element, new SubmissionAttributes(element));
-            this.context = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
+            this.properties = properties;
+            this.context = context;
         }
 
         void IEventDefaultAction.DefaultAction(Event evt)

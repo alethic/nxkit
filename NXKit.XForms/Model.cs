@@ -29,12 +29,17 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Model(XElement element)
+        /// <param name="attributes"></param>
+        [ImportingConstructor]
+        public Model(
+            XElement element,
+            ModelAttributes attributes)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
 
-            this.attributes = new ModelAttributes(Element);
+            this.attributes = attributes;
             this.state = new Lazy<ModelState>(() => Element.AnnotationOrCreate<ModelState>());
             this.documentAnnotation = new Lazy<DocumentAnnotation>(() => Element.Document.AnnotationOrCreate<DocumentAnnotation>());
         }

@@ -18,23 +18,26 @@ namespace NXKit.XForms
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ElementEvaluationContextResolver :
         EvaluationContextResolver,
-        IEvaluationContextScope
+        IEvaluationContextScope,
+        IExtension
     {
 
-        readonly Lazy<CommonAttributes> attributes;
+        readonly Extension<CommonAttributes> attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public ElementEvaluationContextResolver(XElement element)
+        [ImportingConstructor]
+        public ElementEvaluationContextResolver(
+            XElement element,
+            Extension<CommonAttributes> attributes)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
 
-            this.attributes = new Lazy<CommonAttributes>(() =>
-                element.AnnotationOrCreate<CommonAttributes>(() =>
-                    new CommonAttributes((XElement)element)));
+            this.attributes = attributes;
         }
 
         /// <summary>

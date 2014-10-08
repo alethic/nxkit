@@ -10,7 +10,7 @@ using NXKit.Xml;
 namespace NXKit.XForms
 {
 
-    [Extension(typeof(Predicate))]
+    [Extension(PredicateType = typeof(Predicate))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class RepeatExtension :
@@ -23,7 +23,7 @@ namespace NXKit.XForms
             IExtensionPredicate
         {
 
-            public bool IsMatch(XObject obj, Type type)
+            public bool IsMatch(XObject obj)
             {
                 var element = obj as XElement;
                 if (element != null &&
@@ -46,7 +46,10 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="context"></param>
-        public RepeatExtension(XElement element, Lazy<EvaluationContextResolver> context)
+        [ImportingConstructor]
+        public RepeatExtension(
+            XElement element, 
+            Lazy<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);

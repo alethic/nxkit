@@ -23,24 +23,31 @@ namespace NXKit.XForms
         readonly CommonProperties commonProperties;
         readonly BindingProperties bindingProperties;
         readonly DeleteProperties deleteProperties;
-        readonly Lazy<EvaluationContextResolver> contextResolver;
+        readonly Extension<EvaluationContextResolver> resolver;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        [ImportingConstructor]
         public Delete(
             XElement element,
-            Lazy<EvaluationContextResolver> contextResolver)
+            CommonProperties commonProperties,
+            BindingProperties bindingProperties,
+            DeleteProperties deleteProperties,
+            Extension<EvaluationContextResolver> resolver)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(contextResolver != null);
+            Contract.Requires<ArgumentNullException>(commonProperties != null);
+            Contract.Requires<ArgumentNullException>(bindingProperties != null);
+            Contract.Requires<ArgumentNullException>(deleteProperties != null);
+            Contract.Requires<ArgumentNullException>(resolver != null);
 
-            this.contextResolver = contextResolver;
-            this.commonProperties = element.AnnotationOrCreate(() => new CommonProperties(element, contextResolver));
-            this.bindingProperties = element.AnnotationOrCreate(() => new BindingProperties(element, contextResolver));
-            this.deleteProperties = element.AnnotationOrCreate(() => new DeleteProperties(element, contextResolver));
+            this.commonProperties = commonProperties;
+            this.bindingProperties = bindingProperties;
+            this.deleteProperties = deleteProperties;
+            this.resolver = resolver;
         }
 
         public void HandleEvent(Event ev)
@@ -56,7 +63,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         EvaluationContext GetDeleteContext()
         {
-            var deleteContext = contextResolver.Value.GetInScopeEvaluationContext();
+            var deleteContext = resolver.Value.GetInScopeEvaluationContext();
             if (commonProperties.Context != null)
             {
                 var item = new Binding(Element, deleteContext, commonProperties.Context).ModelItems.First();

@@ -85,10 +85,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NXKit.Web\NXKit.Web.csproj">
-      <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
-      <Name>NXKit.Web</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
       <Name>NXKit</Name>

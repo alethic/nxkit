@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
@@ -341,6 +339,44 @@ namespace NXKit.Xml
             return value;
         }
 
+        /// <summary>
+        /// Gets the first annotation object of the specified type, or creates a new one.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object AnnotationOrCreate(this XObject self, Type type)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+
+            var value = self.Annotation(type);
+            if (value == null)
+                self.AddAnnotation(value = Activator.CreateInstance(type));
+
+            return value;
+        }
+
+        /// <summary>
+        /// Gets the first annotation object of the specified type, or creates a new one.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="type"></param>
+        /// <param name="create"></param>
+        /// <returns></returns>
+        public static object AnnotationOrCreate(this XObject self, Type type, Func<object> create)
+        {
+            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(create != null);
+
+            var value = self.Annotation(type);
+            if (value == null)
+                self.AddAnnotation(value = create());
+
+            return value;
+        }
+
         #endregion
 
         #region NXKit
@@ -371,20 +407,6 @@ namespace NXKit.Xml
         }
 
         /// <summary>
-        /// Static <see cref="ContractBasedImportDefinition"/> for the <see cref="IExtensionProvider"/> interface.
-        /// Prevents recreation.
-        /// </summary>
-        static readonly ContractBasedImportDefinition InterfaceProviderImportDefinition =
-            new ContractBasedImportDefinition(
-                AttributedModelServices.GetContractName(typeof(IExtensionProvider)),
-                AttributedModelServices.GetTypeIdentity(typeof(IExtensionProvider)),
-                null,
-                ImportCardinality.ZeroOrMore,
-                false,
-                false,
-                CreationPolicy.Any);
-
-        /// <summary>
         /// Implements Interfaces, allowing the specification of an export provider.
         /// </summary>
         /// <param name="node"></param>
@@ -396,15 +418,7 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentNullException>(type != null);
             Contract.Requires<ArgumentNullException>(exports != null);
 
-            //return node.AnnotationOrCreate(() =>
-            //    exports
-            //        .GetExports(InterfaceProviderImportDefinition)
-            //        .Select(i => i.Value)
-            //        .Cast<IInterfaceProvider>()
-            //        .ToLinkedList())
-            //    .SelectMany(i => i.GetInterfaces(node, type));
-
-            return exports.GetExports(type);
+            return (ExtensionQuery)node.AnnotationOrCreate(typeof(ExtensionQuery<>).MakeGenericType(type), () => exports.GetExportedValue(typeof(ExtensionQuery<>).MakeGenericType(type)));
         }
 
         /// <summary>
@@ -418,15 +432,7 @@ namespace NXKit.Xml
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(exports != null);
 
-            return exports.GetExportedValues<T>();
-
-            //return node.AnnotationOrCreate(() =>
-            //    exports
-            //        .GetExports(InterfaceProviderImportDefinition)
-            //        .Select(i => i.Value)
-            //        .Cast<IInterfaceProvider>()
-            //        .ToLinkedList())
-            //    .SelectMany(i => i.GetInterfaces<T>(node));
+            return node.AnnotationOrCreate<ExtensionQuery<T>>(() => exports.GetExportedValue<ExtensionQuery<T>>());
         }
 
         /// <summary>
@@ -478,18 +484,11 @@ namespace NXKit.Xml
                 if (document == null)
                     throw new InvalidOperationException();
 
-                // provides additional exports
-                var exports = new ExportProviderProvider();
-
                 // initialize new container
-                var container = new CompositionContainer(
+                var container = CompositionUtil.ConfigureContainer(new CompositionContainer(
                     document.Configuration.ObjectCatalog,
                     CompositionOptions.DisableSilentRejection,
-                    exports,
-                    document.Container);
-
-                // point to container to complete resolution
-                exports.Source = container;
+                    document.Container));
 
                 if (self is XObject)
                     container.WithExport<XObject>(self);

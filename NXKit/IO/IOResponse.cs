@@ -2,7 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.IO;
 
-using NXKit.Util;
+using NXKit.IO.Media;
 
 namespace NXKit.IO
 {

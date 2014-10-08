@@ -2,28 +2,26 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>$id$</id>
-        <version>$version$</version>
-        <title>$id$</title>
+        <version>$NuGetVersion$</version>
+        <title>NXKit XPath 2</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
-        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.txt</licenseUrl>
+        <licenseUrl>http://www.gnu.org/licenses/gpl.txt</licenseUrl>
         <projectUrl>https://github.com/nxkit</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
         <description>
-            NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
-
-            NXKit.XPath2 
+            NXKit XPath 2 support.
         </description>
         <releaseNotes />
-        <copyright>Copyright © 2013 Jerome Haltom</copyright>
+        <copyright>Copyright © 2014 Jerome Haltom</copyright>
         <tags>xml xforms xpath2</tags>
         <dependencies>
             <dependency
                 id="NXKit"
-                version="[$version$]" />
+                version="[$NuGetVersion$]" />
             <dependency
                 id="NXKit.XPath"
-                version="[$version$]" />
+                version="[$NuGetVersion$]" />
         </dependencies>
     </metadata>
 </package>

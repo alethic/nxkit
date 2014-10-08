@@ -1,0 +1,8 @@
+﻿
+        return NXKit;
+    };
+
+    NXKit.define("nxkit-xforms", ['jquery', 'knockout', 'nxkit'], function ($, ko, NXKit) {
+        return init($, ko, NXKit);
+    });
+})();

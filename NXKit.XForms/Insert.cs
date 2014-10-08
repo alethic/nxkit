@@ -84,28 +84,35 @@ namespace NXKit.XForms
         }
 
 
-        readonly Lazy<EvaluationContextResolver> context;
         readonly CommonProperties commonProperties;
         readonly BindingProperties bindingProperties;
         readonly InsertProperties insertProperties;
+        readonly Extension<EvaluationContextResolver> context;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         /// <param name="context"></param>
+        [ImportingConstructor]
         public Insert(
             XElement element,
-            Lazy<EvaluationContextResolver> context)
+            CommonProperties commonProperties,
+            BindingProperties bindingProperties,
+            InsertProperties insertProperties,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(commonProperties != null);
+            Contract.Requires<ArgumentNullException>(bindingProperties != null);
+            Contract.Requires<ArgumentNullException>(insertProperties != null);
             Contract.Requires<ArgumentNullException>(context != null);
 
+            this.commonProperties = commonProperties;
+            this.bindingProperties = bindingProperties;
+            this.insertProperties = insertProperties;
             this.context = context;
-            this.commonProperties = element.AnnotationOrCreate(() => new CommonProperties(element, context));
-            this.bindingProperties = element.AnnotationOrCreate(() => new BindingProperties(element, context));
-            this.insertProperties = element.AnnotationOrCreate(() => new InsertProperties(element, context));
         }
 
         public void HandleEvent(Event ev)

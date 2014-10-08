@@ -6,3 +6,7 @@ obj
 */bin/*
 */obj/*
 *.nupkg
+*.ide
+node_modules
+bower_components
+*.dat

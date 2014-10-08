@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Xml.Linq;
 
 using NXKit.Composition;
 
@@ -15,7 +16,8 @@ namespace NXKit.DOMEvents
     [Extension(ExtensionObjectType.Document)]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DocumentEvent :
-         IDocumentEvent
+        DocumentExtension,
+        IDocumentEvent
     {
 
         readonly IEnumerable<IEventInstanceProvider> providers;
@@ -23,10 +25,15 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="document"></param>
         /// <param name="providers"></param>
+        [ImportingConstructor]
         public DocumentEvent(
-            IEnumerable<IEventInstanceProvider> providers)
+            XDocument document,
+            [ImportMany] IEnumerable<IEventInstanceProvider> providers)
+            : base (document)
         {
+            Contract.Requires<ArgumentNullException>(document != null);
             Contract.Requires<ArgumentNullException>(providers != null);
 
             this.providers = providers;

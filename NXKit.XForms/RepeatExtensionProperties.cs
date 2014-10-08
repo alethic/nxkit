@@ -1,8 +1,8 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
-
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -26,7 +26,10 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="context"></param>
-        public RepeatExtensionProperties(XElement element, EvaluationContext context)
+        [ImportingConstructor]
+        public RepeatExtensionProperties(
+            XElement element, 
+            EvaluationContext context)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(context != null);

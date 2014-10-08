@@ -10,7 +10,6 @@ using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
-
 namespace NXKit.XForms
 {
 
@@ -22,30 +21,30 @@ namespace NXKit.XForms
 
         readonly string id;
         readonly BindAttributes attributes;
-        readonly Lazy<IBindingNode> nodeBinding;
+        readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<EvaluationContext> context;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Bind(XElement element)
+        [ImportingConstructor]
+        public Bind(
+            XElement element,
+            BindAttributes attributes,
+            Extension<IBindingNode> bindingNode,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
+            Contract.Requires<ArgumentNullException>(bindingNode != null);
+            Contract.Requires<ArgumentNullException>(context != null);
 
             this.id = (string)element.Attribute("id");
-            this.attributes = new BindAttributes(Element);
-            this.nodeBinding = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
-            this.context = new Lazy<EvaluationContext>(() => Element.Interface<EvaluationContextResolver>().Context);
-        }
-
-        /// <summary>
-        /// Gets the model item property attribute collection.
-        /// </summary>
-        BindAttributes Attributes
-        {
-            get { return attributes; }
+            this.attributes = attributes;
+            this.bindingNode = bindingNode;
+            this.context = new Lazy<EvaluationContext>(() => context.Value.Context);
         }
 
         /// <summary>
@@ -61,7 +60,7 @@ namespace NXKit.XForms
         /// </summary>
         Binding Binding
         {
-            get { return nodeBinding.Value != null ? nodeBinding.Value.Binding : null; }
+            get { return bindingNode.Value != null ? bindingNode.Value.Binding : null; }
         }
 
         IEnumerable<ModelItem> ModelItems
@@ -84,7 +83,7 @@ namespace NXKit.XForms
 
         XName GetModelItemType()
         {
-            if (Attributes.Type == null)
+            if (attributes.Type == null)
                 return null;
 
             return Element.ResolvePrefixedName(attributes.Type);
@@ -115,9 +114,8 @@ namespace NXKit.XForms
         /// </summary>
         public void Recalculate()
         {
-            if (nodeBinding.IsValueCreated &&
-                nodeBinding.Value != null)
-                nodeBinding.Value.Binding.Recalculate();
+            if (bindingNode.Value != null)
+                bindingNode.Value.Binding.Recalculate();
         }
 
         internal ModelItem[] GetBoundNodes()

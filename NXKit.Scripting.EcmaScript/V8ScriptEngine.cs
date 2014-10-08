@@ -3,7 +3,7 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 
 using NXKit.Composition;
-using NXKit.Util;
+using NXKit.IO.Media;
 
 namespace NXKit.Scripting.EcmaScript
 {

@@ -4,7 +4,6 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -12,30 +11,34 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'load' properties.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}load")]
+    [Extension(typeof(LoadProperties), "{http://www.w3.org/2002/xforms}load")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class LoadProperties :
         ElementExtension
     {
 
         readonly LoadAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<LoadShow> show;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         /// <param name="context"></param>
+        [ImportingConstructor]
         public LoadProperties(
             XElement element,
-            Lazy<EvaluationContextResolver> context)
+            LoadAttributes attributes,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
             Contract.Requires<ArgumentNullException>(context != null);
 
-            this.attributes = element.AnnotationOrCreate<LoadAttributes>(() => new LoadAttributes(element));
+            this.attributes = attributes;
             this.context = context;
 
             this.show = new Lazy<LoadShow>(() =>

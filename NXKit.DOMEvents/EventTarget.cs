@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
-
+using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.DOM;
 using NXKit.Util;
@@ -16,9 +16,12 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Manages event listener registrations and event dispatching for a given <see cref="XNode"/>.
     /// </summary>
-    [Extension]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
+    [Extension(ExtensionObjectType.Document | ExtensionObjectType.Element | ExtensionObjectType.Text)]
+    [Extension(typeof(IRemote), ExtensionObjectType.Document | ExtensionObjectType.Element | ExtensionObjectType.Text)]
     [Remote]
     public class EventTarget :
+        NodeExtension,
         IEventTarget
     {
 
@@ -32,9 +35,16 @@ namespace NXKit.DOMEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="node"></param>
+        /// <param name="events"></param>
         /// <param name="trace"></param>
         /// <param name="invoker"></param>
-        public EventTarget(XNode node, IEventFactory events, ITraceService trace, IInvoker invoker)
+        [ImportingConstructor]
+        public EventTarget(
+            XNode node,
+            IEventFactory events,
+            ITraceService trace,
+            IInvoker invoker)
+            : base(node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
             Contract.Requires<ArgumentNullException>(events != null);

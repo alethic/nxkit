@@ -1,0 +1,47 @@
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}table"
+}'>
+    <!-- ko with: new NXKit.View.XForms.Layout.TableViewModel($context, $data) -->
+    <table class="xforms-layout-table" data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
+    'data-nx-xforms-label-appearance': LabelAppearance,
+}">
+        <tbody>
+            <!-- ko foreach: Contents -->
+            <!-- ko nx_node -->
+            <!-- /ko -->
+            <!-- /ko -->
+        </tbody>
+    </table>
+    <!-- /ko -->
+</script>
+
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}table-row"
+}'>
+    <tr>
+        <!-- ko foreach: Nodes -->
+        <!-- ko nx_node -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </tr>
+</script>
+
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}table-cell"
+}'>
+    <!-- ko with: new NXKit.View.XForms.Layout.TableCellViewModel($context, $data) -->
+    <td data-bind="event: { click: Activate }">
+        <!-- ko foreach: Contents -->
+        <!-- ko nx_node -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </td>
+    <!-- /ko -->
+</script>

@@ -1,0 +1,18 @@
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}help"
+}'>
+    <!-- ko with: new NXKit.View.XForms.HelpViewModel($context, $data) -->
+    <div class="xforms-help">
+        <!-- ko if: Text -->
+        <span data-bind="text: Text" />
+        <!-- /ko -->
+        <!-- ko ifnot: Text -->
+        <!-- ko foreach: Contents -->
+        <!-- ko nx_node -->
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+</script>

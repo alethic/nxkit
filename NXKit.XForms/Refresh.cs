@@ -5,7 +5,6 @@ using System.Xml.Linq;
 
 using NXKit.Composition;
 using NXKit.DOMEvents;
-using NXKit.Xml;
 using NXKit.XMLEvents;
 
 namespace NXKit.XForms
@@ -18,12 +17,11 @@ namespace NXKit.XForms
         IEventHandler
     {
 
-        readonly AttributeAccessor attributes;
-
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        [ImportingConstructor]
         public Refresh(XElement element)
             : base(element)
         {
@@ -32,18 +30,7 @@ namespace NXKit.XForms
 
         public void HandleEvent(Event ev)
         {
-            var modelAttr = attributes.GetAttributeValue("model");
-            if (modelAttr != null)
-            {
-                var model = Element.ResolveId(modelAttr);
-                if (model != null)
-                    model.Interface<Model>().OnRefresh();
-                else
-                {
-                    Element.Interface<EventTarget>().Dispatch(Events.BindingException);
-                    return;
-                }
-            }
+            throw new NotImplementedException();
         }
 
     }

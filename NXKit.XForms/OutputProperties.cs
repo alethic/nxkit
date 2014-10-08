@@ -5,8 +5,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 
 using NXKit.Composition;
-using NXKit.Util;
-using NXKit.Xml;
+using NXKit.IO.Media;
 
 namespace NXKit.XForms
 {
@@ -14,14 +13,14 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides the XForms 'output' properties.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}output")]
+    [Extension(typeof(OutputProperties), "{http://www.w3.org/2002/xforms}output")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class OutputProperties :
         ElementExtension
     {
 
         readonly OutputAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<EvaluationContextResolver> context;
         readonly Lazy<XPathExpression> value;
         readonly MediaRange mediaType;
 
@@ -29,19 +28,22 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
         /// <param name="context"></param>
+        [ImportingConstructor]
         public OutputProperties(
             XElement element,
-            Lazy<EvaluationContextResolver> context)
+            OutputAttributes attributes,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(context != null);
 
-            this.attributes = element.AnnotationOrCreate<OutputAttributes>(() => new OutputAttributes(element));
+            this.attributes = attributes;
             this.context = context;
 
-            this.value = new Lazy<XPathExpression>(() => 
+            this.value = new Lazy<XPathExpression>(() =>
                 !string.IsNullOrEmpty(attributes.Value) ? context.Value.Context.CompileXPath(element, attributes.Value) : null);
         }
 

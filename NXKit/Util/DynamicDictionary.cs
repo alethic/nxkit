@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Dynamic;
 
 namespace NXKit.Util
@@ -35,8 +36,9 @@ namespace NXKit.Util
         /// <returns>An <see cref="DynamicDictionary"/> instance.</returns>
         public static DynamicDictionary Create(IDictionary<string, object> values)
         {
-            var instance = new DynamicDictionary();
+            Contract.Requires<ArgumentNullException>(values != null);
 
+            var instance = new DynamicDictionary();
             foreach (var key in values.Keys)
                 instance[key] = values[key];
 
@@ -102,6 +104,8 @@ namespace NXKit.Util
         {
             get
             {
+                Contract.Requires<ArgumentNullException>(name != null);
+
                 name = GetNeutralKey(name);
 
                 dynamic member;
@@ -128,7 +132,7 @@ namespace NXKit.Util
             if (ReferenceEquals(null, other))
                 return false;
 
-            return ReferenceEquals(this, other) || Equals(other.dictionary, this.dictionary);
+            return ReferenceEquals(this, other) || Equals(other.dictionary, dictionary);
         }
 
         /// <summary>
@@ -144,7 +148,7 @@ namespace NXKit.Util
             if (ReferenceEquals(this, obj))
                 return true;
 
-            return obj.GetType() == typeof(DynamicDictionary) && this.Equals((DynamicDictionary)obj);
+            return obj.GetType() == typeof(DynamicDictionary) && Equals((DynamicDictionary)obj);
         }
 
         /// <summary>
@@ -153,7 +157,7 @@ namespace NXKit.Util
         /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.</returns>
         IEnumerator<KeyValuePair<string, dynamic>> IEnumerable<KeyValuePair<string, object>>.GetEnumerator()
         {
-            return this.dictionary.GetEnumerator();
+            return dictionary.GetEnumerator();
         }
 
         /// <summary>
@@ -192,7 +196,7 @@ namespace NXKit.Util
         /// <param name="key">The key to locate in the <see cref="DynamicDictionary"/>.</param>
         public bool ContainsKey(string key)
         {
-            return this.dictionary.ContainsKey(key);
+            return dictionary.ContainsKey(key);
         }
 
         /// <summary>
@@ -201,7 +205,7 @@ namespace NXKit.Util
         /// <returns>An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the keys of the <see cref="DynamicDictionary"/>.</returns>
         public ICollection<string> Keys
         {
-            get { return this.dictionary.Keys; }
+            get { return dictionary.Keys; }
         }
 
         /// <summary>
@@ -212,7 +216,7 @@ namespace NXKit.Util
         /// <param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value"/> parameter. This parameter is passed uninitialized.</param>
         public bool TryGetValue(string key, out dynamic value)
         {
-            return this.dictionary.TryGetValue(key, out value);
+            return dictionary.TryGetValue(key, out value);
         }
 
         /// <summary>
@@ -220,7 +224,7 @@ namespace NXKit.Util
         /// </summary>
         public void Clear()
         {
-            this.dictionary.Clear();
+            dictionary.Clear();
         }
 
         /// <summary>
@@ -229,7 +233,7 @@ namespace NXKit.Util
         /// <returns>The number of elements contained in the <see cref="DynamicDictionary"/>.</returns>
         public int Count
         {
-            get { return this.dictionary.Count; }
+            get { return dictionary.Count; }
         }
 
         /// <summary>
@@ -240,10 +244,7 @@ namespace NXKit.Util
         /// <param name="item">The object to locate in the <see cref="DynamicDictionary"/>.</param>
         public bool Contains(KeyValuePair<string, dynamic> item)
         {
-            var dynamicValueKeyValuePair =
-                GetDynamicKeyValuePair(item);
-
-            return this.dictionary.Contains(dynamicValueKeyValuePair);
+            return dictionary.Contains(GetDynamicKeyValuePair(item));
         }
 
         /// <summary>
@@ -253,7 +254,7 @@ namespace NXKit.Util
         /// <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
         public void CopyTo(KeyValuePair<string, dynamic>[] array, int arrayIndex)
         {
-            this.dictionary.CopyTo(array, arrayIndex);
+            dictionary.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -272,8 +273,7 @@ namespace NXKit.Util
         /// <param name="key">The key of the element to remove.</param>
         public bool Remove(string key)
         {
-            key = GetNeutralKey(key);
-            return this.dictionary.Remove(key);
+            return dictionary.Remove(GetNeutralKey(key));
         }
 
         /// <summary>
@@ -283,10 +283,7 @@ namespace NXKit.Util
         /// <param name="item">The object to remove from the <see cref="DynamicDictionary"/>.</param>
         public bool Remove(KeyValuePair<string, dynamic> item)
         {
-            var dynamicValueKeyValuePair =
-                GetDynamicKeyValuePair(item);
-
-            return this.dictionary.Remove(dynamicValueKeyValuePair);
+            return dictionary.Remove(GetDynamicKeyValuePair(item));
         }
 
         /// <summary>
@@ -295,20 +292,21 @@ namespace NXKit.Util
         /// <returns>An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values in the <see cref="DynamicDictionary"/>.</returns>
         public ICollection<dynamic> Values
         {
-            get { return this.dictionary.Values; }
+            get { return dictionary.Values; }
         }
 
         static KeyValuePair<string, dynamic> GetDynamicKeyValuePair(KeyValuePair<string, dynamic> item)
         {
-            var dynamicValueKeyValuePair =
-                new KeyValuePair<string, dynamic>(item.Key, new DynamicDictionaryValue(item.Value));
-            return dynamicValueKeyValuePair;
+            return new KeyValuePair<string, dynamic>(item.Key, new DynamicDictionaryValue(item.Value));
         }
 
         static string GetNeutralKey(string key)
         {
+            Contract.Requires<ArgumentNullException>(key != null);
+
             return key.Replace("-", string.Empty);
         }
 
     }
+
 }

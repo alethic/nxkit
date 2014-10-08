@@ -14,14 +14,17 @@ namespace NXKit.XForms
     [Extension(ExtensionObjectType.Attribute)]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class AttributeEvaluationContextResolver :
-        EvaluationContextResolver
+        EvaluationContextResolver,
+        IExtension
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="attribute"></param>
-        public AttributeEvaluationContextResolver(XAttribute attribute)
+        [ImportingConstructor]
+        public AttributeEvaluationContextResolver(
+            XAttribute attribute)
             : base(attribute)
         {
             Contract.Requires<ArgumentNullException>(attribute != null);

@@ -20,27 +20,29 @@ namespace NXKit.XForms
     {
 
         readonly ResourceAttributes attributes;
-        readonly Lazy<IBindingNode> bindingNode;
+        readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Resource(XElement element)
+        /// <param name="attributes"></param>
+        /// <param name="bindingNode"></param>
+        [ImportingConstructor]
+        public Resource(
+            XElement element,
+            ResourceAttributes attributes,
+            Extension<IBindingNode> bindingNode)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(element.Name == Constants.XForms_1_0 + "resource");
+            Contract.Requires<ArgumentNullException>(attributes != null);
+            Contract.Requires<ArgumentNullException>(bindingNode != null);
 
-            this.attributes = new ResourceAttributes(element);
-            this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
+            this.attributes = attributes;
+            this.bindingNode = bindingNode;
             this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
-        }
-
-        ResourceAttributes Attributes
-        {
-            get { return attributes; }
         }
 
         Binding Binding

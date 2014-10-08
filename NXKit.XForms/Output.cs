@@ -8,15 +8,16 @@ using NXKit.Composition;
 namespace NXKit.XForms
 {
 
-    [Extension("{http://www.w3.org/2002/xforms}output")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
+    [Extension("{http://www.w3.org/2002/xforms}output")]
+    [Extension(typeof(IRemote), "{http://www.w3.org/2002/xforms}output")]
     [Remote]
     public class Output :
         ElementExtension
     {
 
-        readonly Lazy<EvaluationContextResolver> context;
-        readonly Lazy<OutputProperties> properties;
+        readonly Extension<EvaluationContextResolver> context;
+        readonly OutputProperties properties;
         readonly Lazy<Binding> value;
 
         /// <summary>
@@ -25,10 +26,11 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="context"></param>
         /// <param name="properties"></param>
+        [ImportingConstructor]
         public Output(
             XElement element,
-            Lazy<EvaluationContextResolver> context,
-            Lazy<OutputProperties> properties)
+            Extension<EvaluationContextResolver> context,
+            OutputProperties properties)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
@@ -37,7 +39,7 @@ namespace NXKit.XForms
 
             this.properties = properties;
             this.context = context;
-            this.value = new Lazy<Binding>(() => properties.Value.Value != null ? new Binding(Element, context.Value.Context, properties.Value.Value) : null);
+            this.value = new Lazy<Binding>(() => properties.Value != null ? new Binding(Element, context.Value.Context, properties.Value) : null);
         }
 
         [Remote]

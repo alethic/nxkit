@@ -1,0 +1,18 @@
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}label"
+}'>
+    <!-- ko with: new NXKit.View.XForms.LabelViewModel($context, $data) -->
+    <span class="xforms-label">
+        <!-- ko if: Text -->
+        <span data-bind="text: Text" />
+        <!-- /ko -->
+        <!-- ko ifnot: Text -->
+        <!-- ko foreach: Contents -->
+        <!-- ko nx_node -->
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </span>
+    <!-- /ko -->
+</script>

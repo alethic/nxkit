@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Target Name="GetWebContentOutputItems" DependsOnTargets="Build" Returns="@(_WebContentOutputItems)">
+        <ItemGroup>
+            <_WebContentOutputItems Include="@(WebContentOutputItems->'%(FullPath)')" />
+        </ItemGroup>
+    </Target>
+    <Target Name="GetWebContentItems">
+        <ItemGroup>
+            <WebContentProjectReference Include="@(ProjectReference)" Condition="'%(ProjectReference.WebContent)' == 'true'" />
+        </ItemGroup>
+        <MSBuild Projects="@(WebContentProjectReference)" Targets="GetWebContentOutputItems">
+            <Output ItemName="WebContentItems" TaskParameter="TargetOutputs" />
+        </MSBuild>
+    </Target>
+    <Target Name="CopyWebContentItems" DependsOnTargets="GetWebContentItems" Inputs="@(WebContentItems)" Outputs="@(WebContentItems->'%(TargetPath)')">
+        <Copy SourceFiles="@(WebContentItems)" DestinationFiles="@(WebContentItems->'%(TargetPath)')" />
+    </Target>
+    <Target Name="CleanWebContentItems" DependsOnTargets="GetWebContentItems">
+        <Delete Files="@(WebContentItems->'%(TargetPath)')" />
+    </Target>
+    <PropertyGroup>
+        <CleanDependsOn>
+            $(CleanDependsOn);
+            CleanWebContentItems;
+        </CleanDependsOn>
+    </PropertyGroup>
+</Project>

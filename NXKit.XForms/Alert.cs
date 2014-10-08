@@ -18,6 +18,7 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        [ImportingConstructor]
         public Alert(XElement element)
             : base(element)
         {

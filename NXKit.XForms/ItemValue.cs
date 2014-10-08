@@ -4,7 +4,6 @@ using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms
 {
@@ -20,7 +19,7 @@ namespace NXKit.XForms
             IExtensionPredicate
         {
 
-            public bool IsMatch(XObject obj, Type type)
+            public bool IsMatch(XObject obj)
             {
                 return obj.Parent != null && obj.Parent.Name == Constants.XForms_1_0 + "item";
             }
@@ -28,29 +27,29 @@ namespace NXKit.XForms
         }
 
         readonly ItemValueAttributes attributes;
-        readonly Lazy<IBindingNode> bindingNode;
+        readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public ItemValue(XElement element)
+        /// <param name="attributes"></param>
+        /// <param name="bindingNode"></param>
+        [ImportingConstructor]
+        public ItemValue(
+            XElement element,
+            ItemValueAttributes attributes,
+            Extension<IBindingNode> bindingNode)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
+            Contract.Requires<ArgumentNullException>(bindingNode != null);
 
-            this.attributes = new ItemValueAttributes(Element);
-            this.bindingNode = new Lazy<IBindingNode>(() => Element.Interface<IBindingNode>());
+            this.attributes = attributes;
+            this.bindingNode = bindingNode;
             this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
-        }
-
-        /// <summary>
-        /// Gets the 'value' element attributes.
-        /// </summary>
-        ItemValueAttributes Attributes
-        {
-            get { return attributes; }
         }
 
         /// <summary>

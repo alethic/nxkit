@@ -25,7 +25,7 @@ namespace NXKit.XInclude
         /// <param name="element"></param>
         /// <param name="defaultNamespace"></param>
         public IncludeAttributes(XElement element, XNamespace defaultNamespace)
-            :base(element, defaultNamespace)
+            : base(element, defaultNamespace)
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }

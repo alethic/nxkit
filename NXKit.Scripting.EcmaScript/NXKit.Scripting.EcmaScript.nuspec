@@ -2,17 +2,15 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>$id$</id>
-        <version>$version$</version>
-        <title>$id$</title>
+        <version>$NuGetVersion$</version>
+        <title>NXKit Scripting: ECMAScript (V8)</title>
         <authors>Jerome Haltom</authors>
         <owners>Jerome Haltom</owners>
-        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.txt</licenseUrl>
+        <licenseUrl>http://www.gnu.org/licenses/gpl.txt</licenseUrl>
         <projectUrl>https://github.com/nxkit</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
         <description>
-            NXKit forms the basis of an XML processing engine that can be used to implement other XML based models, such as XForms, or theoritically a full web browser user agent.
-
-            Schema support is available in other NXKit packages.
+            NXKit scripting support for ECMAScript using the V8 engine.
         </description>
         <releaseNotes />
         <copyright>$copyright$</copyright>
@@ -20,10 +18,10 @@
         <dependencies>
             <dependency
                 id="NXKit"
-                version="[$version$]"/>
+                version="[$NuGetVersion$]"/>
             <dependency
                 id="NXKit.Scripting"
-                version="[$version$]"/>
+                version="[$NuGetVersion$]"/>
         </dependencies>
     </metadata>
 </package>

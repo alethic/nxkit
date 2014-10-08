@@ -21,12 +21,17 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Range(XElement element)
+        /// <param name="attributes"></param>
+        [ImportingConstructor]
+        public Range(
+            XElement element,
+            RangeAttributes attributes)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
 
-            this.attributes = new RangeAttributes(Element);
+            this.attributes = attributes;
         }
 
         [Remote]

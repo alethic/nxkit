@@ -1,0 +1,27 @@
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}trigger"
+}'>
+    <!-- ko with: new NXKit.View.XForms.TriggerViewModel($context, $data) -->
+    <div class="xforms-trigger" data-bind="event: { click: Activate }">
+        <!-- ko with: Label -->
+        <div class="label">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+</script>

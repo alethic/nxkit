@@ -13,7 +13,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Describes the implicit 'repeat item' group element.
     /// </summary>
-    [Extension(typeof(RepeatItemPredicate), PredicateType = typeof(RepeatItemPredicate))]
+    [Extension(PredicateType = typeof(RepeatItemPredicate))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class RepeatItem :
@@ -26,9 +26,9 @@ namespace NXKit.XForms
             ExtensionPredicateBase
         {
 
-            public override bool IsMatch(XObject obj, Type type)
+            public override bool IsMatch(XObject obj)
             {
-                return type == typeof(RepeatItem) && obj.Annotation<RepeatItemState>() != null;
+                return obj.Annotation<RepeatItemState>() != null;
             }
 
         }
@@ -39,10 +39,11 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        [ImportingConstructor]
         public RepeatItem(XElement element)
             : base(element)
         {
-            Contract.Requires<System.ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(element != null);
 
             this.state = element.AnnotationOrCreate<RepeatItemState>();
         }

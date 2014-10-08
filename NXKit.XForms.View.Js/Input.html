@@ -1,0 +1,196 @@
+﻿<script type="text/html" data-nx-node-view='
+[
+    {
+        "Name": "{http://www.w3.org/2002/xforms}input",
+        "NXKit.XForms.IDataNode" : {
+            "DataType" : null
+        }
+    },
+    {
+        "Name": "{http://www.w3.org/2002/xforms}input",
+        "NXKit.XForms.IDataNode" : {
+            "DataType" : ""
+        }
+    },
+    {
+        "Name": "{http://www.w3.org/2002/xforms}input",
+        "NXKit.XForms.IDataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}string"
+        }
+    }
+]'>
+    <!-- ko with: new NXKit.View.XForms.InputViewModel($context, $data) -->
+    <div class="xforms-input"
+         data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
+}">
+        <!-- ko with: Label -->
+        <label>
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <input type="text"
+               data-bind="
+nxkit_input: ValueAsString,
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}" />
+    </div>
+    <!-- /ko -->
+</script>
+
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}input",
+    "NXKit.XForms.IDataNode" : {
+        "DataType" : "{http://www.w3.org/2001/XMLSchema}boolean"
+    }
+}'>
+    <!-- ko with: new NXKit.View.XForms.InputViewModel($context, $data) -->
+    <div class="xforms-input"
+         data-nxkit-data-type="{http://www.w3.org/2001/XMLSchema}boolean"
+         data-bind="
+nxkit_xforms_input_boolean: ValueAsBoolean,
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
+}">
+
+        <input type="checkbox" />
+
+        <!-- ko with: Label -->
+        <label>
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </div>
+
+    <!-- /ko -->
+</script>
+
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}input",
+    "NXKit.XForms.IDataNode" : {
+        "DataType" : "{http://www.w3.org/2001/XMLSchema}date"
+    }
+}'>
+    <!-- ko with: new NXKit.View.XForms.InputViewModel($context, $data) -->
+    <div class="xforms-input"
+         data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
+}">
+        <!-- ko with: Label -->
+        <label>
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <input type="date"
+               data-bind="
+nxkit_input: ValueAsString,
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}" />
+    </div>
+    <!-- /ko -->
+</script>
+
+<script type="text/html" data-nx-node-view='
+[
+    {
+        "Name": "{http://www.w3.org/2002/xforms}input",
+        "NXKit.XForms.IDataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}int"
+        }
+    },
+    {
+        "Name": "{http://www.w3.org/2002/xforms}input",
+        "NXKit.XForms.IDataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}integer"
+        }
+    }
+]'>
+    <!-- ko with: new NXKit.View.XForms.InputViewModel($context, $data) -->
+    <div class="xforms-input"
+         data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
+}">
+        <!-- ko with: Label -->
+        <label>
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+        <!-- ko with: Hint -->
+        <div class="hint">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: Help -->
+        <div class="help">
+            <!-- ko nx_node: $data -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <input type="number"
+               data-bind="
+nxkit_input: ValueAsNumber,
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}" />
+    </div>
+    <!-- /ko -->
+</script>

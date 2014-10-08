@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
-using System.Linq;
-
-using NXKit.Util;
+using System.Linq.Expressions;
 
 namespace NXKit.Composition
 {
@@ -27,25 +24,16 @@ namespace NXKit.Composition
         /// </summary>
         /// <param name="scope"></param>
         /// <returns></returns>
-        static Func<ComposablePartDefinition, bool> GetFilter(Scope scope)
+        static Expression<Func<ComposablePartDefinition, bool>> GetFilter(Scope scope)
         {
-            return i => Filter(i, scope);
-        }
-
-        /// <summary>
-        /// Returns <c>true</c> if the given <see cref="ComposablePartDefinition"/> describes a part for the given
-        /// <see cref="Scope"/>.
-        /// </summary>
-        /// <param name="definition"></param>
-        /// <returns></returns>
-        static bool Filter(ComposablePartDefinition definition, Scope scope)
-        {
-            if (definition.ContainsPartMetadata(ScopeMetadataKey, scope))
-                return true;
-            else if (scope == Scope.Global && !definition.ContainsPartMetadataWithKey(ScopeMetadataKey))
-                return true;
+            if (scope == Scope.Global)
+                return d => d.ContainsPartMetadata(ScopeMetadataKey, Scope.Global) || !d.ContainsPartMetadataWithKey(ScopeMetadataKey);
+            else if (scope == Scope.Host)
+                return d => d.ContainsPartMetadata(ScopeMetadataKey, Scope.Host);
+            else if (scope == Scope.Object)
+                return d => d.ContainsPartMetadata(ScopeMetadataKey, Scope.Object);
             else
-                return false;
+                return d => false;
         }
 
         readonly Scope scope;
@@ -56,7 +44,7 @@ namespace NXKit.Composition
         /// <param name="parent"></param>
         /// <param name="scope"></param>
         public ScopeCatalog(ComposablePartCatalog parent, Scope scope)
-            :base(parent, GetFilter(scope))
+            : base(parent, GetFilter(scope))
         {
             Contract.Requires<ArgumentNullException>(parent != null);
 

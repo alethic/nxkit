@@ -8,7 +8,7 @@ using NXKit.Composition;
 namespace NXKit.NXInclude
 {
 
-    [Extension(typeof(IncludeScopePredicate))]
+    [Extension(PredicateType = typeof(IncludeScopePredicate))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IncludeScope :
         ElementExtension,
@@ -19,7 +19,7 @@ namespace NXKit.NXInclude
             IExtensionPredicate
         {
 
-            public bool IsMatch(XObject obj, Type type)
+            public bool IsMatch(XObject obj)
             {
                 return obj.Annotation<IncludeScopeAnnotation>() != null;
             }
@@ -29,6 +29,7 @@ namespace NXKit.NXInclude
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        [ImportingConstructor]
         public IncludeScope(XElement element)
             : base(element)
         {

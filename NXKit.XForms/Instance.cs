@@ -15,35 +15,42 @@ namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}instance")]
+    [Extension(typeof(IOnLoad), "{http://www.w3.org/2002/xforms}instance")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Instance :
         ElementExtension,
         IOnLoad
     {
 
-        readonly IModelRequestService requestService;
         readonly InstanceAttributes attributes;
-        readonly Lazy<InstanceState> state;
+        readonly IModelRequestService requestService;
         readonly IEnumerable<IXsdTypeConverter> xsdTypeConverters;
+        readonly Lazy<InstanceState> state;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
+        /// <param name="requestService"></param>
+        /// <param name="xsdTypeConverters"></param>
+        [ImportingConstructor]
         public Instance(
-            XElement element, 
+            XElement element,
+            InstanceAttributes attributes,
             IModelRequestService requestService,
             [ImportMany] IEnumerable<IXsdTypeConverter> xsdTypeConverters)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
             Contract.Requires<ArgumentNullException>(requestService != null);
             Contract.Requires<ArgumentNullException>(xsdTypeConverters != null);
 
             this.requestService = requestService;
-            this.attributes = new InstanceAttributes(Element);
-            this.state = new Lazy<InstanceState>(() => Element.AnnotationOrCreate<InstanceState>());
+            this.attributes = attributes;
             this.xsdTypeConverters = xsdTypeConverters.ToList();
+            this.state = new Lazy<InstanceState>(() => Element.AnnotationOrCreate<InstanceState>());
         }
 
         /// <summary>
@@ -61,7 +68,7 @@ namespace NXKit.XForms
         {
             get { return state.Value; }
         }
-        
+
         /// <summary>
         /// Gets the available <see cref="IXsdTypeConverter"/>s for this instance.
         /// </summary>

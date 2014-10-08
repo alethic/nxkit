@@ -19,19 +19,27 @@ namespace NXKit.XForms
     {
 
         readonly SubmitAttributes attributes;
-        readonly Lazy<EvaluationContextResolver> context;
+        readonly Extension<EvaluationContextResolver> context;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Submit(XElement element)
+        /// <param name="attributes"></param>
+        /// <param name="context"></param>
+        [ImportingConstructor]
+        public Submit(
+            XElement element,
+            SubmitAttributes attributes,
+            Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
+            Contract.Requires<ArgumentNullException>(context != null);
 
-            this.attributes = new SubmitAttributes(element);
-            this.context = new Lazy<EvaluationContextResolver>(() => element.Interface<EvaluationContextResolver>());
+            this.attributes = attributes;
+            this.context = context;
         }
 
         void OnDOMActivate()

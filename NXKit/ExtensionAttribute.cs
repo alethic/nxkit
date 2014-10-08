@@ -15,10 +15,20 @@ namespace NXKit
         ExportAttribute
     {
 
-        readonly ExtensionObjectType objectType;
-        readonly string namespaceName;
-        readonly string localName;
+        ExtensionObjectType objectType;
+        string namespaceName;
+        string localName;
         Type predicateType;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="contractType"></param>
+        public ExtensionAttribute(Type contractType)
+            : this(contractType, ExtensionObjectType.Element)
+        {
+            Contract.Requires<ArgumentNullException>(contractType != null);
+        }
 
         /// <summary>
         /// Initializes a new instance.
@@ -32,13 +42,14 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="predicateType"></param>
-        public ExtensionAttribute(Type predicateType)
-            : this(ExtensionObjectType.Element)
+        /// <param name="contractType"></param>
+        /// <param name="objectType"></param>
+        public ExtensionAttribute(Type contractType, ExtensionObjectType objectType)
+            : base(contractType)
         {
-            Contract.Requires<ArgumentNullException>(predicateType != null);
+            Contract.Requires<ArgumentNullException>(contractType != null);
 
-            this.predicateType = predicateType;
+            this.objectType = objectType;
         }
 
         /// <summary>
@@ -46,9 +57,21 @@ namespace NXKit
         /// </summary>
         /// <param name="objectType"></param>
         public ExtensionAttribute(ExtensionObjectType objectType)
-            :base(typeof(IExtension))
+            : base(typeof(IExtension))
         {
             this.objectType = objectType;
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="contractType"></param>
+        /// <param name="name"></param>
+        public ExtensionAttribute(Type contractType, XName name)
+            : this(contractType, name.NamespaceName, name.LocalName)
+        {
+            Contract.Requires<ArgumentNullException>(contractType != null);
+            Contract.Requires<ArgumentNullException>(name != null);
         }
 
         /// <summary>
@@ -64,11 +87,38 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="contractType"></param>
+        /// <param name="expandedName"></param>
+        public ExtensionAttribute(Type contractType, string expandedName)
+            : this(contractType, XName.Get(expandedName))
+        {
+            Contract.Requires<ArgumentNullException>(contractType != null);
+            Contract.Requires<ArgumentNullException>(expandedName != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
         /// <param name="expandedName"></param>
         public ExtensionAttribute(string expandedName)
             : this(XName.Get(expandedName))
         {
             Contract.Requires<ArgumentNullException>(expandedName != null);
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="contractType"></param>
+        /// <param name="namespaceName"></param>
+        /// <param name="localName"></param>
+        public ExtensionAttribute(Type contractType, string namespaceName, string localName)
+            : this(contractType, ExtensionObjectType.Element)
+        {
+            Contract.Requires<ArgumentNullException>(contractType != null);
+
+            this.namespaceName = namespaceName;
+            this.localName = localName;
         }
 
         /// <summary>
@@ -113,6 +163,7 @@ namespace NXKit
         public string NamespaceName
         {
             get { return namespaceName; }
+            set { namespaceName = value; }
         }
 
         /// <summary>

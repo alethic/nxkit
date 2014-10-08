@@ -50,6 +50,8 @@ namespace NXKit
 
         R Invoke<R>(Func<R> func, LinkedListNode<Lazy<IInvokerLayer>> next)
         {
+            Contract.Requires<ArgumentException>(next != null || func != null);
+
             if (next != null)
                 return next.Value.Value.Invoke<R>(() => Invoke<R>(func, next.Next));
             else

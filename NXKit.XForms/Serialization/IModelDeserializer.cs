@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Xml.Linq;
 
-using NXKit.Util;
+using NXKit.IO.Media;
 
 namespace NXKit.XForms.Serialization
 {

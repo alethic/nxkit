@@ -9,8 +9,9 @@ using NXKit.Xml;
 namespace NXKit.XForms.Layout
 {
 
-    [Extension("{http://schemas.nxkit.org/2014/xforms-layout}icon")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
+    [Extension("{http://schemas.nxkit.org/2014/xforms-layout}icon")]
+    [Extension(typeof(IRemote), "{http://schemas.nxkit.org/2014/xforms-layout}icon")]
     [Remote]
     public class Icon :
         ElementExtension
@@ -22,12 +23,15 @@ namespace NXKit.XForms.Layout
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public Icon(XElement element)
+        [ImportingConstructor]
+        public Icon(
+            XElement element,
+            IconAttributes attributes)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            this.attributes = element.AnnotationOrCreate(() => new IconAttributes(element));
+            this.attributes = attributes;
         }
 
         /// <summary>

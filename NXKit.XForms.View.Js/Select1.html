@@ -1,0 +1,187 @@
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}select1",
+    "NXKit.XForms.IDataNode" : {
+        "DataType" : "{http://www.w3.org/2001/XMLSchema}string"
+    }
+}'>
+    <!-- ko with: new NXKit.View.XForms.Select1ViewModel($context, $data) -->
+
+    <div class="xforms-select1" data-bind="
+nxkit_xforms_select1: $data.SelectedId,
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
+},
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}">
+        <!-- ko with: Label -->
+        <label class="label">
+            <!-- ko nx_node -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+
+        <div class="body">
+            <input type="hidden" />
+            <div class="text">
+                <!-- ko if: Selected -->
+                <!-- ko with: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nx_node -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko ifnot: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nx_node -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu" data-bind="foreach: Selectables">
+                <div class="item" data-bind="attr: { 'data-value': Id }">
+                    <!-- ko with: Label -->
+                    <!-- ko nx_node -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /ko -->
+</script>
+
+<script type="text/html" data-nx-node-view='
+[
+    {
+        "Name": "{http://www.w3.org/2002/xforms}select1",
+        "NXKit.XForms.IDataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}int"
+        }
+    },
+    {
+        "Name": "{http://www.w3.org/2002/xforms}select1",
+        "NXKit.XForms.IDataNode" : {
+            "DataType" : "{http://www.w3.org/2001/XMLSchema}integer"
+        }
+    }
+]'>
+    <!-- ko with: new NXKit.View.XForms.Select1ViewModel($context, $data) -->
+
+    <div class="xforms-select1" data-bind="
+nxkit_xforms_select1: $data.SelectedId,
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
+},
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}">
+        <!-- ko with: Label -->
+        <label class="label">
+            <!-- ko nx_node -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+
+        <div class="body">
+            <input type="hidden" />
+            <div class="text">
+                <!-- ko if: Selected -->
+                <!-- ko with: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nx_node -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko ifnot: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nx_node -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu" data-bind="foreach: Selectables">
+                <div class="item" data-bind="attr: { 'data-value': Id }">
+                    <!-- ko with: Label -->
+                    <!-- ko nx_node -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /ko -->
+</script>
+
+<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://www.w3.org/2002/xforms}select1",
+    "NXKit.XForms.IDataNode" : {
+        "DataType" : "{http://www.w3.org/2001/XMLSchema}boolean"
+    }
+}'>
+    <!-- ko with: new NXKit.View.XForms.Select1ViewModel($context, $data) -->
+
+    <div class="xforms-select1" data-bind="
+nxkit_xforms_select1: $data.SelectedId,
+attr : {
+    'data-nx-name': $data.Node.Name,
+    'data-nx-xforms-data': NXKit.View.XForms.ViewModelUtil.GetDataItem($data.Node),
+    'data-nx-xforms-appearance': NXKit.View.XForms.ViewModelUtil.GetAppearance($data.Node),
+},
+event: {
+    focusin: FocusIn,
+    focusout: FocusOut,
+}">
+        <!-- ko with: Label -->
+        <label class="label">
+            <!-- ko nx_node -->
+            <!-- /ko -->
+        </label>
+        <!-- /ko -->
+
+        <div class="body">
+            <input type="hidden" />
+            <div class="text">
+                <!-- ko if: Selected -->
+                <!-- ko with: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nx_node -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko ifnot: Selected -->
+                <!-- ko with: Label -->
+                <!-- ko nx_node -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu" data-bind="foreach: Selectables">
+                <div class="item" data-bind="attr: { 'data-value': Id }">
+                    <!-- ko with: Label -->
+                    <!-- ko nx_node -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /ko -->
+</script>

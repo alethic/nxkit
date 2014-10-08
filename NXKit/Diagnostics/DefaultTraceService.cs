@@ -36,6 +36,8 @@ namespace NXKit.Diagnostics
 
         object GetProxy(object input)
         {
+            Contract.Requires<ArgumentNullException>(input != null);
+
             return proxies
                 .Where(i => i.Metadata.Type.IsInstanceOfType(input))
                 .Select(i => i.Value)
@@ -45,6 +47,8 @@ namespace NXKit.Diagnostics
 
         object[] GetProxies(params object[] inputs)
         {
+            Contract.Requires<ArgumentNullException>(inputs != null);
+
             return inputs
                 .Select(i => GetProxy(i))
                 .ToArray();

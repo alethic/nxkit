@@ -7,7 +7,6 @@ using System.Xml.Linq;
 using NXKit.Composition;
 using NXKit.Xml;
 
-
 namespace NXKit.XForms
 {
 
@@ -21,18 +20,23 @@ namespace NXKit.XForms
         IUINode
     {
 
-        readonly CommonAttributes attributes;
+        readonly Extension<CommonAttributes> attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        public UINode(XElement element)
-            :base(element)
+        /// <param name="attributes"></param>
+        [ImportingConstructor]
+        public UINode(
+            XElement element,
+            Extension<CommonAttributes> attributes)
+            : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(attributes != null);
 
-            this.attributes = new CommonAttributes(Element);
+            this.attributes = attributes;
         }
 
         /// <summary>
@@ -136,7 +140,7 @@ namespace NXKit.XForms
         /// </summary>
         public XName Appearance
         {
-            get { return attributes.Appearance; }
+            get { return attributes.Value.Appearance; }
         }
 
     }

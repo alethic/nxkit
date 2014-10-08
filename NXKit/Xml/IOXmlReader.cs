@@ -4,7 +4,7 @@ using System.IO;
 using System.Xml;
 
 using NXKit.IO;
-using NXKit.Util;
+using NXKit.IO.Media;
 
 namespace NXKit.Xml
 {
@@ -19,6 +19,7 @@ namespace NXKit.Xml
         static readonly MediaRangeList XML_MEDIA_RANGES = new[] {
             "text/xml",
             "application/xml",
+            "application/octet-stream",
         };
 
         /// <summary>
