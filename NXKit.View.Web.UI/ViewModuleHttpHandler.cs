@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Net;
 using System.Web;
+
 using NXKit.Composition;
+using NXKit.View.Js;
 
 namespace NXKit.View.Web.UI
 {

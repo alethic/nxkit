@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using NXKit.View.Js;
-
-namespace NXKit.View.Web.UI
+namespace NXKit.View.Js
 {
 
     /// <summary>

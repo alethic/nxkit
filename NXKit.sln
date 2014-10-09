@@ -62,8 +62,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Layout.View.Js
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0A932E54-3C41-42B3-A5FB-EBA7C6E9F8CF}"
 	ProjectSection(SolutionItems) = preProject
-		NXKit.Gulp.props = NXKit.Gulp.props
-		NXKit.Gulp.targets = NXKit.Gulp.targets
+		NXKit.Node.props = NXKit.Node.props
+		NXKit.Node.targets = NXKit.Node.targets
 		NXKit.targets = NXKit.targets
 	EndProjectSection
 EndProject

@@ -4,6 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <ProjectGuid>{9499152C-156E-4005-A01F-4D6F1C480C63}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <OutputPath>bin</OutputPath>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -13,6 +14,7 @@
     <AssemblyName>NXKit.XForms.Layout.View.Js</AssemblyName>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
     <NuGetPackageImportStamp>8d9db905</NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="..\NXKit.View.Js\bin\nxkit.d.ts">
@@ -37,6 +39,8 @@
     <TypeScriptCompile Include="FormUtil.ts" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="nxkit-xforms-layout.js.prefix" />
+    <None Include="nxkit-xforms-layout.js.suffix" />
     <None Include="Segment.html" />
     <None Include="List.html" />
     <None Include="Section.html" />
@@ -53,9 +57,6 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="package.json" />
-    <None Include="gulpfile.js" />
-    <None Include="nxkit-xforms-layout.js.prefix" />
-    <None Include="nxkit-xforms-layout.js.suffix" />
     <None Include="NXKit.XForms.Layout.View.Js.nuspec" />
   </ItemGroup>
   <ItemGroup>
@@ -78,10 +79,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ViewModuleDependencyProvider.cs" />
+    <Compile Include="ViewModuleResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.XML" />
+    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -184,7 +186,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="$(ProjectDir)..\NXKit.targets" Condition="Exists('$(ProjectDir)..\NXKit.targets')" />
-  <Import Project="$(ProjectDir)..\NXKit.Gulp.targets" Condition="Exists('$(ProjectDir)..\NXKit.Gulp.targets')" />
+  <Import Project="$(ProjectDir)..\NXKit.Node.targets" Condition="Exists('$(ProjectDir)..\NXKit.Node.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
@@ -192,21 +194,48 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets'))" />
   </Target>
-  <Target Name="AfterBuild">
+  <Target Name="BuildJs" DependsOnTargets="CompileTypeScript">
     <ItemGroup>
-      <WebContentOutputItems Include="$(OutputPath)nxkit-xforms-layout.js">
-        <TargetPath>Scripts\nxkit-xforms-layout.js</TargetPath>
-      </WebContentOutputItems>
-      <WebContentOutputItems Include="$(OutputPath)nxkit-xforms-layout.min.js">
-        <TargetPath>Scripts\nxkit-xforms-layout.min.js</TargetPath>
-      </WebContentOutputItems>
-      <WebContentOutputItems Include="$(OutputPath)nxkit-xforms-layout.html">
-        <TargetPath>Content\nxkit-xforms-layout.html</TargetPath>
-      </WebContentOutputItems>
-      <WebContentOutputItems Include="$(OutputPath)nxkit-xforms-layout.css">
-        <TargetPath>Content\nxkit-xforms-layout.css</TargetPath>
-      </WebContentOutputItems>
+      <BuildJsInputPaths Include="nxkit-xforms-layout.js.prefix" />
+      <BuildJsInputPaths Include="$(IntermediateOutputPath)nxkit-xforms-layout.ts.js" />
+      <BuildJsInputPaths Include="nxkit-xforms-layout.js.suffix" />
     </ItemGroup>
+    <ConcatinateTask InputPaths="@(BuildJsInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit-xforms-layout.js" />
+    <UglifyJsTask InputPath="$(IntermediateOutputPath)nxkit-xforms-layout.js" OutputPath="$(IntermediateOutputPath)nxkit-xforms-layout.min.js" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms-layout.js">
+        <LogicalName>$(RootNamespace).nxkit-xforms-layout.js</LogicalName>
+      </EmbeddedResource>
+      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms-layout.min.js">
+        <LogicalName>$(RootNamespace).nxkit-xforms-layout.min.js</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+  <Target Name="BuildHtml">
+    <ItemGroup>
+      <BuildHtmlInputPaths Include="*.html" />
+    </ItemGroup>
+    <ConcatinateTask InputPaths="@(BuildHtmlInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit-xforms-layout.html" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms-layout.html">
+        <LogicalName>$(RootNamespace).nxkit-xforms-layout.html</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+  <Target Name="BuildLess">
+    <ItemGroup>
+      <BuildLessInputPaths Include="*.less" />
+    </ItemGroup>
+    <LessTask InputPaths="@(BuildLessInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit-xforms-layout.css" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms-layout.css">
+        <LogicalName>$(RootNamespace).nxkit-xforms-layout.css</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+  <Target Name="AfterResolveReferences" DependsOnTargets="BuildJs;BuildHtml;BuildLess">
+  </Target>
+  <Target Name="AfterBuild">
     <Copy SourceFiles="$(IntermediateOutputPath)nxkit-xforms-layout.ts.d.ts" DestinationFiles="$(OutputPath)nxkit-xforms-layout.d.ts" />
   </Target>
   <Import Project="..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" />
