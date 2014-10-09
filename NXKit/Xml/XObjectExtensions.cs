@@ -116,7 +116,7 @@ namespace NXKit.Xml
         public static string GetPrefixOfNamespace(this XObject self, XNamespace ns)
         {
             Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self is XAttribute || self is XNode);
+            Contract.Requires<ArgumentException>(self is XAttribute || self is XNode);
             Contract.Requires<ArgumentException>(self.Parent != null);
             Contract.Requires<ArgumentNullException>(ns != null);
 

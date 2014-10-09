@@ -4,7 +4,7 @@ using System.IO;
 
 using NXKit.IO.Media;
 
-namespace NXKit.View.Web.UI
+namespace NXKit.View.Js
 {
 
     public class ViewModuleInfo

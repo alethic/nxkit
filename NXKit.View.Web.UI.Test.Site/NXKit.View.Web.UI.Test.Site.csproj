@@ -140,10 +140,6 @@
     <Content Include="Content\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\normalize.css" />
-    <Content Include="Content\nxkit-xforms.css" />
-    <Content Include="Content\nxkit-xforms.html" />
-    <Content Include="Content\nxkit.css" />
-    <Content Include="Content\nxkit.html" />
     <Content Include="Content\semantic\less\collections\breadcrumb.less" />
     <Content Include="Content\semantic\less\collections\form.less" />
     <Content Include="Content\semantic\less\collections\grid.less" />
@@ -255,10 +251,6 @@
     <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\less-1.7.0.js" />
     <Content Include="Scripts\less-1.7.0.min.js" />
-    <Content Include="Scripts\nxkit-xforms.js" />
-    <Content Include="Scripts\nxkit-xforms.min.js" />
-    <Content Include="Scripts\nxkit.js" />
-    <Content Include="Scripts\nxkit.min.js" />
     <Content Include="Scripts\r.js" />
     <Content Include="Scripts\require.js" />
     <Content Include="Web.config" />
@@ -285,9 +277,6 @@
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\font-awesome\fonts\FontAwesome.otf" />
-    <Content Include="Scripts\nxkit.min.js.map">
-      <DependentUpon>nxkit.min.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\jquery-2.1.1.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -410,5 +399,4 @@
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="$(MSBuildProjectDirectory)\..\NXKit.targets" Condition="Exists('$(MSBuildProjectDirectory)\..\NXKit.targets')" />
-  <Target Name="BeforeBuild" DependsOnTargets="CopyWebContentItems" />
 </Project>

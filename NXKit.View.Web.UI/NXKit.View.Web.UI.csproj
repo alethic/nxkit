@@ -138,14 +138,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Content\Resources.cs" />
-    <Compile Include="IViewModuleResolver.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\Resources.cs" />
     <Compile Include="ViewModuleHttpHandler.cs" />
-    <Compile Include="ViewModuleInfo.cs" />
-    <Compile Include="ViewModuleResolver.cs" />
     <Compile Include="ViewModuleHttpModule.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -153,14 +149,13 @@
       <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
       <Name>NXKit.DOMEvents</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.View.Server\NXKit.View.Server.csproj">
-      <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
-      <Name>NXKit.View.Server</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NXKit.View.Js\NXKit.View.Js.csproj">
       <Project>{c7aedb60-a136-4356-9c04-35aa344d857e}</Project>
       <Name>NXKit.View.Js</Name>
-      <WebContent>true</WebContent>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.View.Server\NXKit.View.Server.csproj">
+      <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
+      <Name>NXKit.View.Server</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
@@ -174,9 +169,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>nx-require.js</LastGenOutput>
     </None>
-    <None Include="Scripts\nxkit.min.js.map">
-      <DependentUpon>nxkit.min.js</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\nxkit-ui.js" />
@@ -187,8 +179,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Scripts\knockout-3.2.0.debug.js" />
     <EmbeddedResource Include="Scripts\knockout-3.2.0.js" />
-    <EmbeddedResource Include="Scripts\nxkit.js" />
-    <EmbeddedResource Include="Scripts\nxkit.min.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\text.js" />
@@ -197,16 +187,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>nx-require.tt</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\NXKit.View.Js\nx-css.js">
-      <Link>Scripts\nx-css.js</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\NXKit.View.Js\nx-html.js">
-      <Link>Scripts\nx-html.js</Link>
-    </EmbeddedResource>
     <None Include="Scripts\r.js" />
     <EmbeddedResource Include="Scripts\require.js" />
-    <EmbeddedResource Include="Content\nxkit.css" />
-    <EmbeddedResource Include="Content\nxkit.html" />
     <EmbeddedResource Include="Scripts\jquery-2.1.1.intellisense.js" />
     <EmbeddedResource Include="Scripts\jquery-2.1.1.js" />
     <EmbeddedResource Include="Scripts\jquery-2.1.1.min.js" />
@@ -230,7 +212,6 @@
     <TypeScriptSourceMap>false</TypeScriptSourceMap>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
-  <Target Name="BeforeBuild" DependsOnTargets="CopyWebContentItems" />
   <Import Project="..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

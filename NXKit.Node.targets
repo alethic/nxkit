@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">$(MSBuildProjectDirectory)\..\</SolutionDir>
+        <RestoreNodePackages Condition=" '$(RestoreNodePackages)' == '' ">true</RestoreNodePackages>
+        <RequireRestoreConsent Condition=" '$(RequireRestoreConsent)' != 'false' ">true</RequireRestoreConsent>
+        <DownloadNode Condition=" '$(DownloadNode)' == '' ">true</DownloadNode>
+        <DownloadNpm Condition=" '$(DownloadNpm)' == '' ">true</DownloadNpm>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(OS)' == 'Windows_NT'">
+        <NodeToolsPath>$([System.IO.Path]::Combine("$(SolutionDir)", ".node"))</NodeToolsPath>
+        <NodePackagesConfig>$([System.IO.Path]::Combine("$(ProjectDir)", "package.json"))</NodePackagesConfig>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(OS)' != 'Windows_NT'">
+        <NodeToolsPath>$(SolutionDir).node</NodeToolsPath>
+        <NodePackagesConfig>package.json</NodePackagesConfig>
+    </PropertyGroup>
+    <PropertyGroup>
+        <NodeExePath Condition=" '$(NodeExePath)' == '' ">$([System.IO.Path]::Combine("$(NodeToolsPath)", "Node.exe"))</NodeExePath>
+        <NodeModulesPath Condition=" '$(NodeModulesPath)' == '' ">$([System.IO.Path]::Combine("$(NodeToolsPath)", "node_modules"))</NodeModulesPath>
+        <NodePackageManagerPath Condition=" '$(NodePackageManagerPath)' == '' ">$([System.IO.Path]::Combine("$(NodeModulesPath)", "npm\bin\npm-cli.js"))</NodePackageManagerPath>
+        <NodeCommand Condition=" '$(OS)' == 'Windows_NT'">"$(NodeExePath)"</NodeCommand>
+        <NodePackageManagerCommand Condition=" '$(OS)' == 'Windows_NT'">"$(NodeExePath)" "$(NodePackageManagerPath)"</NodePackageManagerCommand>
+        <RestoreNodeCommand>$(NodePackageManagerCommand) install</RestoreNodeCommand>
+        <BuildDependsOn Condition="$(RestoreNodePackages) == 'true'">
+            RestoreNodePackages;
+            $(BuildDependsOn);
+        </BuildDependsOn>
+    </PropertyGroup>
+    <Target Name="CheckNodePrerequisites">
+        <!--  Raise an error if we're unable to locate node.exe   -->
+        <Message Text="NodeExePath: $(NodeExePath)" />
+        <Error Condition="'$(DownloadNode)' != 'true' AND !Exists('$(NodeExePath)')" Text="Unable to locate '$(NodeExePath)'"/>
+        <Error Condition="'$(DownloadNpm)' != 'true' AND !Exists('$(NodePackageManagerPath)')" Text="Unable to locate '$(NodePackageManagerPath)'"/>
+        <!--
+
+        Take advantage of MsBuild's build dependency tracking to make sure that we only ever download node.exe once.
+        This effectively acts as a lock that makes sure that the download operation will only happen once and all
+        parallel builds will have to wait for it to complete.
+        
+        -->
+        <MsBuild Targets="_DownloadNode"
+                 Projects="$(MSBuildThisFileFullPath)"
+                 Properties="Configuration=NOT_IMPORTANT;DownloadNode=$(DownloadNode)"/>
+        <MsBuild Targets="_DownloadNpm"
+                 Projects="$(MSBuildThisFileFullPath)"
+                 Properties="Configuration=NOT_IMPORTANT;DownloadNpm=$(DownloadNpm)"/>
+    </Target>
+    <Target Name="_DownloadNode">
+        <DownloadNode OutputFilename="$(NodeExePath)" Condition=" '$(DownloadNode)' == 'true' AND !Exists('$(NodeExePath)')"/>
+    </Target>
+    <Target Name="_DownloadNpm">
+        <DownloadNpm NodeModulesPath="$(NodeModulesPath)" Condition=" '$(DownloadNpm)' == 'true' AND !Exists('$(NodePackageManagerPath)')"/>
+    </Target>
+    <Target Name="RestoreNodePackages"
+            DependsOnTargets="CheckNodePrerequisites">
+        <Exec Command="$(RestoreNodeCommand)"
+              ContinueOnError="true"
+              Condition="'$(OS)' != 'Windows_NT' And Exists('$(NodePackagesConfig)')"
+              WorkingDirectory="$(ProjectDir)"/>
+        <Exec Command="$(RestoreNodeCommand)"
+              ContinueOnError="true"
+              Condition="'$(OS)' == 'Windows_NT' And Exists('$(NodePackagesConfig)')"
+              WorkingDirectory="$(ProjectDir)"/>
+    </Target>
+    <UsingTask TaskName="DownloadNode"
+               TaskFactory="CodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+            <OutputFilename ParameterType="System.String" Required="true"/>
+        </ParameterGroup>
+        <Task>
+            <Reference Include="System.Core"/>
+            <Using Namespace="System"/>
+            <Using Namespace="System.IO"/>
+            <Using Namespace="System.Net"/>
+            <Using Namespace="Microsoft.Build.Framework"/>
+            <Using Namespace="Microsoft.Build.Utilities"/>
+            <Code Type="Fragment" Language="cs">
+            <![CDATA[
+                try {
+                    OutputFilename = Path.GetFullPath(OutputFilename);
+                    Directory.CreateDirectory(Path.GetDirectoryName(OutputFilename));
+ 
+                    Log.LogMessage("Downloading version 0.10.32 x64 of Node.exe...");
+                    WebClient webClient = new WebClient();
+                    webClient.DownloadFile(@"http://nodejs.org/dist/v0.10.32/x64/node.exe", OutputFilename);
+ 
+                    return true;
+                }
+                catch (Exception ex) {
+                    Log.LogErrorFromException(ex);
+                    return false;
+                }
+            ]]>
+            </Code>
+        </Task>
+    </UsingTask>
+    <UsingTask TaskName="DownloadNpm"
+               TaskFactory="CodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+            <NodeModulesPath ParameterType="System.String" Required="true"/>
+        </ParameterGroup>
+        <Task>
+            <Reference Include="System.Core"/>
+            <Reference Include="System.IO.Compression"/>
+            <Reference Include="System.IO.Compression.FileSystem"/>
+            <Using Namespace="System"/>
+            <Using Namespace="System.IO"/>
+            <Using Namespace="System.IO.Compression"/>
+            <Using Namespace="System.Net"/>
+            <Using Namespace="Microsoft.Build.Framework"/>
+            <Using Namespace="Microsoft.Build.Utilities"/>
+            <Code Type="Fragment" Language="CS">
+                <![CDATA[
+                try {
+                    NodeModulesPath = Path.GetFullPath(NodeModulesPath);
+ 
+                    Log.LogMessage("Downloading version 1.4.12 of NPM...");
+                    WebClient webClient = new WebClient();
+                    using (var zip = new ZipArchive(webClient.OpenRead(@"http://nodejs.org/dist/npm/npm-1.4.12.zip")))
+                        zip.ExtractToDirectory(Directory.CreateDirectory(NodeModulesPath).Parent.FullName);
+ 
+                    return true;
+                }
+                catch (Exception ex) {
+                    Log.LogErrorFromException(ex);
+                    return false;
+                }
+            ]]>
+            </Code>
+        </Task>
+    </UsingTask>
+
+    <UsingTask TaskName="UglifyJsTask"
+               TaskFactory="CodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+            <InputPath ParameterType="System.String" Required="true" />
+            <OutputPath ParameterType="System.String" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Reference Include="System.Core" />
+            <Using Namespace="System" />
+            <Using Namespace="System.Diagnostics" />
+            <Using Namespace="System.IO" />
+            <Using Namespace="System.Linq" />
+            <Using Namespace="System.Net" />
+            <Using Namespace="Microsoft.Build.Framework" />
+            <Using Namespace="Microsoft.Build.Utilities" />
+            <Code Type="Fragment" Language="CS">
+                <![CDATA[
+                try {
+                    InputPath = Path.GetFullPath(InputPath);
+                    OutputPath = Path.GetFullPath(OutputPath);
+                    
+                    var args = new List<string>();
+                    args.Add("\"" + InputPath + "\"");
+                    args.Add("-o");
+                    args.Add("\"" + OutputPath + "\"");
+                    
+                    var process = new Process();
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    process.StartInfo.FileName = @".\node_modules\.bin\uglifyjs";
+                    process.StartInfo.Arguments = string.Join(" ", args);
+                    
+                    Log.LogMessage(process.StartInfo.FileName + " " + process.StartInfo.Arguments);
+                    process.Start();
+                    
+                    return true;
+                }
+                catch (Exception ex) {
+                    Log.LogErrorFromException(ex);
+                    return false;
+                }
+            ]]>
+            </Code>
+        </Task>
+    </UsingTask>
+
+    <UsingTask TaskName="LessTask"
+               TaskFactory="CodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+            <InputPaths ParameterType="System.String[]"
+                        Required="true" />
+            <OutputPath ParameterType="System.String"
+                        Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Reference Include="System.Core" />
+            <Using Namespace="System" />
+            <Using Namespace="System.Diagnostics" />
+            <Using Namespace="System.IO" />
+            <Using Namespace="System.Linq" />
+            <Using Namespace="System.Net" />
+            <Using Namespace="Microsoft.Build.Framework" />
+            <Using Namespace="Microsoft.Build.Utilities" />
+            <Code Type="Fragment" Language="CS">
+                <![CDATA[
+                try {
+                    InputPaths = InputPaths.Select(Path.GetFullPath).ToArray();
+                    OutputPath = Path.GetFullPath(OutputPath);
+                    
+                    var args = new List<string>(InputPaths.Select(i => "\"" + i + "\""));
+                    args.Add("\"" + OutputPath + "\"");
+                    
+                    var process = new Process();
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    process.StartInfo.FileName = @".\node_modules\.bin\lessc";
+                    process.StartInfo.Arguments = string.Join(" ", args);
+                    
+                    Log.LogMessage(process.StartInfo.FileName + " " + process.StartInfo.Arguments);
+                    process.Start();
+                    
+                    return true;
+                }
+                catch (Exception ex) {
+                    Log.LogErrorFromException(ex);
+                    return false;
+                }
+            ]]>
+            </Code>
+        </Task>
+    </UsingTask>
+</Project>

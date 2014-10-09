@@ -4,9 +4,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 
-using NXKit.View.Web.UI;
-
-namespace NXKit.XForms.View.Web.UI
+namespace NXKit.View.Js
 {
 
     [Export(typeof(IViewModuleResolver))]
@@ -31,22 +29,36 @@ namespace NXKit.XForms.View.Web.UI
         static readonly ViewModuleInfo[] infos = new[]
         {
             new ViewModuleInfo(
-                "nxkit-xforms", 
-                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.XForms.View.Web.UI.Scripts.nxkit-xforms.js").CopyTo(_), 
+                "nx-html",
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Js.nx-html.js").CopyTo(_), 
                 "application/javascript",
                 GetLastModifiedTime(),
                 GetETag()),
 
             new ViewModuleInfo(
-                "nxkit-xforms.css",
-                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.XForms.View.Web.UI.Content.nxkit-xforms.css").CopyTo(_), 
+                "nx-css",
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Js.nx-css.js").CopyTo(_), 
+                "application/javascript",
+                GetLastModifiedTime(),
+                GetETag()),
+
+            new ViewModuleInfo(
+                "nxkit", 
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Js.nxkit.js").CopyTo(_), 
+                "application/javascript",
+                GetLastModifiedTime(),
+                GetETag()),
+
+            new ViewModuleInfo(
+                "nxkit.css",
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Js.nxkit.css").CopyTo(_), 
                 "text/css",
                 GetLastModifiedTime(),
                 GetETag()),
 
             new ViewModuleInfo(
-                "nxkit-xforms.html",
-                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.XForms.View.Web.UI.Content.nxkit-xforms.html").CopyTo(_), 
+                "nxkit.html",
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Js.nxkit.html").CopyTo(_), 
                 "text/html",
                 GetLastModifiedTime(),
                 GetETag()),
