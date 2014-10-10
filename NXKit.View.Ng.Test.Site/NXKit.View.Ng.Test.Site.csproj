@@ -258,10 +258,6 @@
       <Name>NXKit.View.Js</Name>
       <WebContent>true</WebContent>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.DOMEvents.Tests\NXKit.DOMEvents.Tests.csproj">
-      <Project>{c0fc2477-6735-4962-9e7c-5e8acce9b3df}</Project>
-      <Name>NXKit.DOMEvents.Tests</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
       <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
       <Name>NXKit.DOMEvents</Name>
@@ -277,6 +273,10 @@
     <ProjectReference Include="..\NXKit.Scripting\NXKit.Scripting.csproj">
       <Project>{f509df8d-af13-468d-8381-028835a79dec}</Project>
       <Name>NXKit.Scripting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.View.Ng\NXKit.View.Ng.csproj">
+      <Project>{6c3a6f17-7383-459e-8d29-773192521fe2}</Project>
+      <Name>NXKit.View.Ng</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.View.Server\NXKit.View.Server.csproj">
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
@@ -370,5 +370,4 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
-  <Target Name="BeforeBuild" DependsOnTargets="CopyWebContentItems" />
 </Project>
