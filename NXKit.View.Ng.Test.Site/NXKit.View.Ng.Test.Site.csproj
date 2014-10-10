@@ -213,10 +213,6 @@
     <Content Include="Scripts\knockout-3.2.0.js" />
     <Content Include="Scripts\nxkit-ng.js" />
     <Content Include="Scripts\nxkit-ng.min.js" />
-    <Content Include="Scripts\nxkit-xforms-layout.js" />
-    <Content Include="Scripts\nxkit-xforms-layout.min.js" />
-    <Content Include="Scripts\nxkit-xforms.js" />
-    <Content Include="Scripts\nxkit-xforms.min.js" />
     <Content Include="Scripts\nxkit.js" />
     <Content Include="Scripts\nxkit.min.js" />
     <Content Include="Scripts\r.js" />
@@ -235,12 +231,6 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="Scripts\angular.min.js.map" />
-    <Content Include="Scripts\nxkit-xforms.min.js.map">
-      <DependentUpon>nxkit-xforms.min.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\nxkit-xforms-layout.min.js.map">
-      <DependentUpon>nxkit-xforms-layout.min.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\nxkit.min.js.map">
       <DependentUpon>nxkit.min.js</DependentUpon>
     </Content>
@@ -369,5 +359,17 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <Target Name="BeforeBuild">
+    <Copy SourceFiles="..\NXKit.View.Js\nx-html.js" DestinationFolder="Scripts" />
+    <Copy SourceFiles="..\NXKit.View.Js\nx-css.js" DestinationFolder="Scripts" />
+    <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.js" DestinationFolder="Scripts" />
+    <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.min.js" DestinationFolder="Scripts" />
+      <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.html"
+            DestinationFolder="Content" />
+      <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.css"
+            DestinationFolder="Content" />
+    <Copy SourceFiles="..\NXKit.View.Ng\bin\Debug\nxkit-ng.js" DestinationFolder="Scripts" />
+    <Copy SourceFiles="..\NXKit.View.Ng\bin\Debug\nxkit-ng.min.js" DestinationFolder="Scripts" />
   </Target>
 </Project>

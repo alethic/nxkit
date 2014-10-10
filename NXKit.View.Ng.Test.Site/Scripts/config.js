@@ -4,6 +4,8 @@
         'jquery': 'jquery-2.1.1',
         'knockout': 'knockout-3.2.0',
         'semantic': '../Content/semantic/packaged/javascript/semantic',
+        'nxkit.html': '../Content/nxkit.html',
+        'nxkit.css': '../Content/nxkit.css',
     },
     shim: {
         'semantic': {

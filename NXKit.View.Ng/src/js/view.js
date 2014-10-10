@@ -36,7 +36,7 @@ module.controller('nxView', ['$scope', '$attrs', '$http', function ($scope, $att
 
             // generate new view
             if ($scope.view == null) {
-                $scope.view = new nx.Web.View(body[0], function (data, cb) {
+                $scope.view = new nx.View.View(body[0], function (data, cb) {
                     self.send(data, cb);
                 });
             }

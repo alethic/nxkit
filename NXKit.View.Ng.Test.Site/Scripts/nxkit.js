@@ -1,6 +1,5 @@
 (function (NXKit) {
 	var init = function ($, ko, NXKit) {
-
 var NXKit;
 (function (NXKit) {
     (function (View) {
@@ -2013,7 +2012,6 @@ var NXKit;
     var View = NXKit.View;
 })(NXKit || (NXKit = {}));
 //# sourceMappingURL=nxkit.ts.js.map
-
 
 		return NXKit;
 	};
