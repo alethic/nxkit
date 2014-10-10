@@ -168,6 +168,7 @@
                     
                     Log.LogMessage(process.StartInfo.FileName + " " + process.StartInfo.Arguments);
                     process.Start();
+                    process.WaitForExit();
                     
                     return true;
                 }
@@ -215,6 +216,7 @@
                     
                     Log.LogMessage(process.StartInfo.FileName + " " + process.StartInfo.Arguments);
                     process.Start();
+                    process.WaitForExit();
                     
                     return true;
                 }

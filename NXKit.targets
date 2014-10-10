@@ -22,6 +22,7 @@
                 try {
                     InputPaths = InputPaths.Select(i => Path.GetFullPath(i)).ToArray();
                     OutputPath = Path.GetFullPath(OutputPath);
+                    Directory.CreateDirectory(Path.GetDirectoryName(OutputPath));
 
                     File.WriteAllLines(OutputPath, InputPaths.SelectMany(File.ReadLines));
                     return true;

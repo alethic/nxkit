@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="$(ProjectDir)..\NXKit.Gulp.props" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <ProjectGuid>{6C3A6F17-7383-459E-8D29-773192521FE2}</ProjectGuid>
@@ -69,34 +68,26 @@
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="nxkit-ng.js.suffix" />
     <None Include="nxkit-ng.js.prefix" />
     <None Include="package.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="gulpfile.js" />
     <None Include="packages.config" />
     <None Include="src\js\view.js" />
-    <None Include="src\js\_module.js" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(ProjectDir)..\NXKit.targets" />
-  <Import Project="$(ProjectDir)..\NXKit.Gulp.targets" />
-  <Target Name="AfterBuild">
-    <ItemGroup>
-      <WebContentOutputItems Include="$(OutputPath)nxkit-ng.js">
-        <TargetPath>Scripts\nxkit-ng.js</TargetPath>
-      </WebContentOutputItems>
-      <WebContentOutputItems Include="$(OutputPath)nxkit-ng.min.js">
-        <TargetPath>Scripts\nxkit-ng.min.js</TargetPath>
-      </WebContentOutputItems>
-      <WebContentOutputItems Include="$(OutputPath)nxkit-ng.html">
-        <TargetPath>Content\nxkit-ng.html</TargetPath>
-      </WebContentOutputItems>
-    </ItemGroup>
-  </Target>
+  <Import Project="$(ProjectDir)..\NXKit.Node.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -106,4 +97,14 @@
     <Error Condition="!Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets'))" />
   </Target>
   <Import Project="..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" />
+  <Target Name="BeforeBuild">
+    <ItemGroup>
+      <JsSourceFiles Include="nxkit-ng.js.prefix" />
+      <JsSourceFiles Include="src\js\**\*.js" />
+      <JsSourceFiles Include="nxkit-ng.js.suffix" />
+    </ItemGroup>
+    <ConcatinateTask InputPaths="@(JsSourceFiles)" OutputPath="$(IntermediateOutputPath)nxkit-ng.js" />
+    <UglifyJsTask InputPath="$(IntermediateOutputPath)nxkit-ng.js" OutputPath="$(IntermediateOutputPath)nxkit-ng.min.js" />
+    <Copy SourceFiles="$(IntermediateOutputPath)nxkit-ng.js;$(IntermediateOutputPath)nxkit-ng.min.js" DestinationFolder="$(OutputPath)" />
+  </Target>
 </Project>

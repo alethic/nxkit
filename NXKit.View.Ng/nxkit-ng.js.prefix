@@ -4,3 +4,4 @@
     'nxkit',
     'knockout',
 ], function ($, ng, nx, ko) {
+    var module = ng.module('nx', []);
