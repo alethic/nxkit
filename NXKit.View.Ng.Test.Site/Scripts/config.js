@@ -19,6 +19,9 @@
             deps: ['knockout'],
         }
     },
+    nxkit: {
+        paths: '/Content/',
+    },
     deps: ['semantic'],
 });
 

@@ -194,8 +194,9 @@ namespace NXKit.View.Web.UI
             if (message != null)
             {
                 ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
-                Page.ClientScript.RegisterStartupScript(typeof(View), GetHashCode().ToString(), @"_NXKit.View.Web.UI.handlerUrl = '" + ResolveUrl("~/NXKit.axd/") + @"'", true);
-                Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"').onsubmit();");
+                Page.ClientScript.RegisterStartupScript(typeof(View), GetHashCode().ToString(), @"_NXKit.View.Web.UI.handlerUrl = '" + ResolveUrl("~/NXKit.axd/") + @"';", true);
+                Page.ClientScript.RegisterStartupScript(typeof(View), (GetHashCode() + 1).ToString(), @"NXKit.require.config({ nxkit: { paths: '" + ResolveUrl("~/NXKit.axd/") + @"?m=' } });", true);
+                Page.ClientScript.RegisterOnSubmitStatement(typeof(View), (GetHashCode() + 2).ToString(), @"$find('" + ClientID + @"').onsubmit();");
             }
         }
 
