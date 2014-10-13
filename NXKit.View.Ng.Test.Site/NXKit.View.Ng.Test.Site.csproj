@@ -272,6 +272,10 @@
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
       <Name>NXKit.View.Server</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NXKit.View.Web.UI.Test.Site\NXKit.View.Web.UI.Test.Site.csproj">
+      <Project>{606cfc52-d06a-4b21-b295-a52c5d8c979e}</Project>
+      <Name>NXKit.View.Web.UI.Test.Site</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.View.Js\NXKit.XForms.View.Js.csproj">
       <Project>{f106499b-42cc-41cf-9824-39755e25993f}</Project>
       <Name>NXKit.XForms.View.Js</Name>
@@ -365,10 +369,8 @@
     <Copy SourceFiles="..\NXKit.View.Js\nx-css.js" DestinationFolder="Scripts" />
     <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.js" DestinationFolder="Scripts" />
     <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.min.js" DestinationFolder="Scripts" />
-      <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.html"
-            DestinationFolder="Content" />
-      <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.css"
-            DestinationFolder="Content" />
+    <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.html" DestinationFolder="Content" />
+    <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.css" DestinationFolder="Content" />
     <Copy SourceFiles="..\NXKit.View.Ng\bin\Debug\nxkit-ng.js" DestinationFolder="Scripts" />
     <Copy SourceFiles="..\NXKit.View.Ng\bin\Debug\nxkit-ng.min.js" DestinationFolder="Scripts" />
   </Target>

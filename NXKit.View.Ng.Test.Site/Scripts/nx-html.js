@@ -1,6 +1,15 @@
 ﻿NXKit.define(['require', 'jquery'], function (require, $) {
     return {
         load: function (name, parentRequire, onload, config) {
+
+            // obtain search paths
+            var paths = (config['nxkit'] || {})['paths'] || [];
+            if (typeof paths === 'string') {
+                paths = [paths];
+            } else if (paths.length == 0) {
+                paths.push('');
+            }
+
             // find or create host container
             var host = $('body>*[data-nx-html-host]').get(0);
             if (host == null)
@@ -13,8 +22,20 @@
             // find or begin load
             var div = $(host).children("[data-nx-html='" + name + "']").get(0);
             if (div == null) {
-                var url = require.toUrl(name);
-                if (url) {
+                var func = function (index) {
+                    var url = paths[index];
+
+                    // are we out of paths?
+                    if (url == null) {
+                        var msg = 'no paths available to search';
+                        onload.error(require.makeError('nx-html', msg, new Error(msg), [name]));
+                        return;
+                    }
+
+                    // append name
+                    url = url + name;
+
+                    // generate and load new element
                     div = $(document.createElement('div'))
                         .attr('data-nx-html', name)
                         .load(url, function (response, status) {
@@ -26,12 +47,14 @@
                                 // notify of load
                                 onload(div);
                             } else {
-                                // notify of error
-                                onload.error(require.makeError('nx-html', status, new Error(status), [name]));
+                                // try next path
+                                func(index + 1);
                             }
                         })
                         .get(0);
-                }
+                };
+
+                func(0);
             } else {
                 onload(div);
             }
