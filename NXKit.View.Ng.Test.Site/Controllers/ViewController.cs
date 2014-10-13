@@ -19,6 +19,7 @@ namespace NXKit.View.Server.Ng.Test.Site.Controllers
 
         public object Post(string name, ViewMessage message)
         {
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All;
             return server.Load(message);
         }
 

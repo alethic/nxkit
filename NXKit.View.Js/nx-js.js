@@ -1,4 +1,4 @@
-﻿NXKit.define([], function () {
+﻿NXKit.define(['jquery'], function () {
     return {
 
         load: function (name, parentRequire, onload, config) {
@@ -36,5 +36,5 @@
                 });
         },
 
-    }
+    };
 });

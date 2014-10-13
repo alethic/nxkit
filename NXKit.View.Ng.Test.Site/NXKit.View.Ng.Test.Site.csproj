@@ -48,32 +48,27 @@
     </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.2\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Net.Http.Formatting">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.0\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Content\normalize.css" />
-    <Content Include="Content\nxkit-xforms-layout.css" />
-    <Content Include="Content\nxkit-xforms-layout.html" />
-    <Content Include="Content\nxkit-xforms.css" />
-    <Content Include="Content\nxkit-xforms.html" />
-    <Content Include="Content\nxkit.css" />
-    <Content Include="Content\nxkit.html" />
     <Content Include="Content\semantic\less\fonts\basic.icons.svg" />
     <Content Include="Content\semantic\less\fonts\icons.svg" />
     <Content Include="Content\semantic\less\images\loader-large-inverted.gif" />
@@ -122,12 +117,6 @@
     </Content>
     <Content Include="Content\styles.min.css">
       <DependentUpon>styles.css</DependentUpon>
-    </Content>
-    <Content Include="Content\xforms-layout.css">
-      <DependentUpon>xforms-layout.less</DependentUpon>
-    </Content>
-    <Content Include="Content\xforms.css">
-      <DependentUpon>xforms.less</DependentUpon>
     </Content>
     <Content Include="Global.asax" />
     <Content Include="index.html" />
@@ -195,14 +184,6 @@
     <Content Include="Content\default.less" />
     <Content Include="Content\styles.less" />
     <Content Include="Content\semantic.less" />
-    <Content Include="Content\xforms-layout.less" />
-    <Content Include="Content\xforms-layout.css.map">
-      <DependentUpon>xforms-layout.css</DependentUpon>
-    </Content>
-    <Content Include="Content\xforms.less" />
-    <Content Include="Content\xforms.css.map">
-      <DependentUpon>xforms.css</DependentUpon>
-    </Content>
     <Content Include="Content\styles.css.map">
       <DependentUpon>styles.css</DependentUpon>
     </Content>
@@ -213,8 +194,6 @@
     <Content Include="Scripts\knockout-3.2.0.js" />
     <Content Include="Scripts\nxkit-ng.js" />
     <Content Include="Scripts\nxkit-ng.min.js" />
-    <Content Include="Scripts\nxkit.js" />
-    <Content Include="Scripts\nxkit.min.js" />
     <Content Include="Scripts\r.js" />
     <Content Include="Scripts\require.js" />
     <Content Include="Web.config" />
@@ -231,9 +210,6 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="Scripts\angular.min.js.map" />
-    <Content Include="Scripts\nxkit.min.js.map">
-      <DependentUpon>nxkit.min.js</DependentUpon>
-    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -275,6 +251,10 @@
     <ProjectReference Include="..\NXKit.View.Web.UI.Test.Site\NXKit.View.Web.UI.Test.Site.csproj">
       <Project>{606cfc52-d06a-4b21-b295-a52c5d8c979e}</Project>
       <Name>NXKit.View.Web.UI.Test.Site</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.View.Web.UI\NXKit.View.Web.UI.csproj">
+      <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
+      <Name>NXKit.View.Web.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.View.Js\NXKit.XForms.View.Js.csproj">
       <Project>{f106499b-42cc-41cf-9824-39755e25993f}</Project>
@@ -365,12 +345,6 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <Target Name="BeforeBuild">
-    <Copy SourceFiles="..\NXKit.View.Js\nx-html.js" DestinationFolder="Scripts" />
-    <Copy SourceFiles="..\NXKit.View.Js\nx-css.js" DestinationFolder="Scripts" />
-    <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.js" DestinationFolder="Scripts" />
-    <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.min.js" DestinationFolder="Scripts" />
-    <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.html" DestinationFolder="Content" />
-    <Copy SourceFiles="..\NXKit.View.Js\obj\Debug\nxkit.css" DestinationFolder="Content" />
     <Copy SourceFiles="..\NXKit.View.Ng\bin\Debug\nxkit-ng.js" DestinationFolder="Scripts" />
     <Copy SourceFiles="..\NXKit.View.Ng\bin\Debug\nxkit-ng.min.js" DestinationFolder="Scripts" />
   </Target>

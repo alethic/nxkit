@@ -140,6 +140,7 @@
     <Compile Include="IDocumentStore.cs" />
     <Compile Include="IDocumentCache.cs" />
     <Compile Include="DefaultDocumentCache.cs" />
+    <Compile Include="ViewMessageJsonConverter.cs" />
     <Compile Include="TraceCommandProvider.cs" />
     <Compile Include="ScriptCommandProvider.cs" />
     <Compile Include="Serialization\RemoteDescriptor.cs" />

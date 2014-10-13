@@ -1,14 +1,12 @@
+// import existing AMD
+var NXKit;
+NXKit = window['NXKit'] || {};
+NXKit.require = require;
+NXKit.define = define;
+
 (function (root, factory) {
-
-    if (typeof define === 'function' && define.amd) {
-        define(['jquery', 'angular', 'nxkit', 'knockout'], factory);
-    } else if (typeof modle === 'object' && module.exports) {
-        module.exports = factory(require('jquery'), require('angular'), require('nxkit'), require('knockout'));
-    } else {
-        root['nxkit-ng'] = factory(root['jQuery'], root['angular'], root['NXKit'], root['ko']);
-    }
-
-})(this, function ($, ng, nx, ko) {
+    define(['jquery', 'angular', 'knockout', 'nx-js!nxkit'], factory);
+})(this, function ($, ng, ko, nx) {
 
     var module = ng.module('nx', []);
 

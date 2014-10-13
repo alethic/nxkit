@@ -4,8 +4,9 @@
         'jquery': 'jquery-2.1.1',
         'knockout': 'knockout-3.2.0',
         'semantic': '../Content/semantic/packaged/javascript/semantic',
-        'nxkit.html': '../Content/nxkit.html',
-        'nxkit.css': '../Content/nxkit.css',
+        'nx-js': ['/NXKit.axd/?m=nx-js'],
+        'nx-html': ['/NXKit.axd/?m=nx-html'],
+        'nx-css': ['/NXKit.axd/?m=nx-css']
     },
     shim: {
         'semantic': {
@@ -15,12 +16,9 @@
         'angular': {
             exports: 'angular',
         },
-        'nxkit': {
-            deps: ['knockout'],
-        }
     },
     nxkit: {
-        paths: '/Content/',
+        paths: ['/NXKit.axd/?m='],
     },
     deps: ['semantic'],
 });
