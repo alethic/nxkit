@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace NXKit.View.Js
@@ -10,11 +12,20 @@ namespace NXKit.View.Js
         IViewModuleDependencyProvider
     {
 
+        static readonly ViewModuleDependency[] DEPENDENCIES = new[]
+        {
+            new ViewModuleDependency(ViewModuleType.Script, "nxkit"),
+            new ViewModuleDependency(ViewModuleType.Css, "nxkit.css"),
+            new ViewModuleDependency(ViewModuleType.Template, "nxkit.html"),
+        };
+
         public IEnumerable<ViewModuleDependency> GetDependencies(XObject obj)
         {
-            yield return new ViewModuleDependency(ViewModuleType.Script, "nxkit");
-            yield return new ViewModuleDependency(ViewModuleType.Css, "nxkit.css");
-            yield return new ViewModuleDependency(ViewModuleType.Template, "nxkit.html");
+            if (obj.Document.Root == obj ||
+                obj.NodeType == XmlNodeType.Text)
+                return DEPENDENCIES;
+            else
+                return Enumerable.Empty<ViewModuleDependency>();
         }
 
     }

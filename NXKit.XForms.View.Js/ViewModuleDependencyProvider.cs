@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Xml.Linq;
 
 using NXKit.View.Js;
@@ -12,17 +13,22 @@ namespace NXKit.XForms.View.Js
         IViewModuleDependencyProvider
     {
 
+        static readonly ViewModuleDependency[] DEPENDENCIES = new[]
+        {
+            new ViewModuleDependency(ViewModuleType.Script, "nxkit-xforms"),
+            new ViewModuleDependency(ViewModuleType.Css, "nxkit-xforms.css"),
+            new ViewModuleDependency(ViewModuleType.Template, "nxkit-xforms.html"),
+        };
+
         public IEnumerable<ViewModuleDependency> GetDependencies(XObject obj)
         {
             var element = obj as XElement;
 
             if (element != null &&
                 element.Name.Namespace == Constants.XForms_1_0)
-            {
-                yield return new ViewModuleDependency(ViewModuleType.Script, "nxkit-xforms");
-                yield return new ViewModuleDependency(ViewModuleType.Css, "nxkit-xforms.css");
-                yield return new ViewModuleDependency(ViewModuleType.Template, "nxkit-xforms.html");
-            }
+                return DEPENDENCIES;
+
+            return Enumerable.Empty<ViewModuleDependency>();
         }
 
     }
