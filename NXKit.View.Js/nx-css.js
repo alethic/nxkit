@@ -41,7 +41,7 @@
                             func(index + 1);
                         }
                     });
-                }
+                };
 
                 func(0);
             } else {

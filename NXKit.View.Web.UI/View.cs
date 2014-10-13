@@ -194,8 +194,24 @@ namespace NXKit.View.Web.UI
             if (message != null)
             {
                 ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
-                Page.ClientScript.RegisterStartupScript(typeof(View), GetHashCode().ToString(), @"_NXKit.View.Web.UI.handlerUrl = '" + ResolveUrl("~/NXKit.axd/") + @"';", true);
-                Page.ClientScript.RegisterStartupScript(typeof(View), (GetHashCode() + 1).ToString(), @"NXKit.require.config({ nxkit: { paths: '" + ResolveUrl("~/NXKit.axd/") + @"?m=' } });", true);
+
+                // startup script block
+                Page.ClientScript.RegisterStartupScript(typeof(View), GetHashCode().ToString(), @"
+<script type=""application/javascript"">
+NXKit.require.config({ 
+    paths: { 
+        'nx-js': '" + ResolveUrl("~/NXKit.axd/") + @"?m=nx-js',
+        'nx-html': '" + ResolveUrl("~/NXKit.axd/") + @"?m=nx-html',
+        'nx-css': '" + ResolveUrl("~/NXKit.axd/") + @"?m=nx-css',
+    },
+    nxkit: {
+        'paths': '" + ResolveUrl("~/NXKit.axd/") + @"?m='
+    }
+});
+</script>
+");
+
+                // hook up page submit statement
                 Page.ClientScript.RegisterOnSubmitStatement(typeof(View), (GetHashCode() + 2).ToString(), @"$find('" + ClientID + @"').onsubmit();");
             }
         }

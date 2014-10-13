@@ -5,46 +5,46 @@
     var require = NXKit.require;
     var define = NXKit.define;
 
-    // handle RequireJS errors by dispatching to the NXKit.axd module for a second try
-    var onError = requirejs.onError;
-    requirejs.onError = function (err) {
-        if (err.requireModules) {
-            var modules = [];
-            for (var i in err.requireModules) {
-                var failedId = err.requireModules[i];
-                if (failedId != null) {
-                    var url = _NXKit.View.Web.UI.handlerUrl + '?m=' + failedId;
+    //// handle RequireJS errors by dispatching to the NXKit.axd module for a second try
+    //var onError = requirejs.onError;
+    //requirejs.onError = function (err) {
+    //    if (err.requireModules) {
+    //        var modules = [];
+    //        for (var i in err.requireModules) {
+    //            var failedId = err.requireModules[i];
+    //            if (failedId != null) {
+    //                var url = _NXKit.View.Web.UI.handlerUrl + '?m=' + failedId;
 
-                    // check for whether we've already failed here
-                    var paths = requirejs.s.contexts._.config.paths || {};
-                    var mpath = paths[failedId] || (paths[failedId] = []);
-                    if (mpath.indexOf(url) > -1)
-                        continue;
+    //                // check for whether we've already failed here
+    //                var paths = requirejs.s.contexts._.config.paths || {};
+    //                var mpath = paths[failedId] || (paths[failedId] = []);
+    //                if (mpath.indexOf(url) > -1)
+    //                    continue;
 
-                    // add new fall back url
-                    requirejs.undef(failedId);
-                    mpath.push(url);
+    //                // add new fall back url
+    //                requirejs.undef(failedId);
+    //                mpath.push(url);
 
-                    // redirect to NXKit service
-                    requirejs.config({
-                        paths: paths,
-                    });
+    //                // redirect to NXKit service
+    //                requirejs.config({
+    //                    paths: paths,
+    //                });
 
-                    // retry
-                    modules.push(failedId);
-                }
-            }
+    //                // retry
+    //                modules.push(failedId);
+    //            }
+    //        }
 
-            // reinitiate request for any failed and remapped modules
-            if (modules.length > 0) {
-                require(modules, function () { });
-                return;
-            }
-        }
+    //        // reinitiate request for any failed and remapped modules
+    //        if (modules.length > 0) {
+    //            require(modules, function () { });
+    //            return;
+    //        }
+    //    }
 
-        // send to original function
-        onError(err);
-    };
+    //    // send to original function
+    //    onError(err);
+    //};
 
     // import ScriptManager scripts to RequireJS
     NXKit.define('jquery', [], function () { return $; });
@@ -86,7 +86,7 @@ _NXKit.View.Web.UI.View.prototype = {
             throw new Error("cannot find data element");
 
         NXKit.require([
-            'nxkit'],
+            'nx-js!nxkit'],
             function (nx) {
                 // update the hidden data field value before submit
                 if (self._view != null) {
@@ -117,7 +117,7 @@ _NXKit.View.Web.UI.View.prototype = {
 
         // load NXKit implementation
         NXKit.require([
-                'nxkit'],
+                'nx-js!nxkit'],
             function (nx) {
 
                 // initialize view

@@ -29,6 +29,13 @@ namespace NXKit.View.Js
         static readonly ViewModuleInfo[] infos = new[]
         {
             new ViewModuleInfo(
+                "nx-js",
+                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Js.nx-js.js").CopyTo(_), 
+                "application/javascript",
+                GetLastModifiedTime(),
+                GetETag()),
+
+            new ViewModuleInfo(
                 "nx-html",
                 _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.View.Js.nx-html.js").CopyTo(_), 
                 "application/javascript",
@@ -62,6 +69,7 @@ namespace NXKit.View.Js
                 "text/html",
                 GetLastModifiedTime(),
                 GetETag()),
+
         };
 
         public IEnumerable<ViewModuleInfo> Resolve(string name)
