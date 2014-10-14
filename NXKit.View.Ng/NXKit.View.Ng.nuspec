@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>$id$</id>
+        <version>$NuGetVersion$</version>
+        <title>NXKit View for AngularJS</title>
+        <authors>Jerome Haltom</authors>
+        <owners>Jerome Haltom</owners>
+        <licenseUrl>http://www.gnu.org/licenses/gpl.txt</licenseUrl>
+        <projectUrl>https://github.com/nxkit</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>
+            NXKit view directive for AngularJS.
+        </description>
+        <releaseNotes />
+        <copyright>Copyright © 2014 Jerome Haltom</copyright>
+        <tags>xml xforms</tags>
+        <dependencies>
+            <dependency
+                id="NXKit.View.Js"
+                version="[$NuGetVersion$]"/>
+            <dependency
+                id="NXKit.View.Server"
+                version="[$NuGetVersion$]"/>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="bin\Release\nxkit-ng.js" target="content/Scripts" />
+        <file src="bin\Release\nxkit-ng.min.js" target="content/Scripts" />
+        <file src="bin\Release\*.dll" exclude="**\*.dll" target="lib\net45" />
+    </files>
+</package>
