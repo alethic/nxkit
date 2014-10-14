@@ -196,7 +196,8 @@ namespace NXKit.View.Web.UI
                 ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
 
                 // startup script block
-                Page.ClientScript.RegisterStartupScript(typeof(View), GetHashCode().ToString(), @"
+                if (Page.ClientScript.IsStartupScriptRegistered(typeof(View), typeof(View).FullName) == false)
+                    Page.ClientScript.RegisterStartupScript(typeof(View), typeof(View).FullName, @"
 <script type=""application/javascript"">
 
 // import ScriptManager scripts to RequireJS
@@ -208,7 +209,7 @@ NXKit.require.config({
     paths: { 
         'nx-js': '" + ResolveUrl("~/NXKit.axd/") + @"?m=nx-js',
         'nx-html': '" + ResolveUrl("~/NXKit.axd/") + @"?m=nx-html',
-        'nx-css': '" + ResolveUrl("~/NXKit.axd/") + @"?m=nx-css',
+        'nx-css': '" + ResolveUrl("~/NXKit.axd/") + @"?m=nx-css'
     },
     nxkit: {
         'paths': '" + ResolveUrl("~/NXKit.axd/") + @"?m='
@@ -218,7 +219,10 @@ NXKit.require.config({
 ");
 
                 // hook up page submit statement
-                Page.ClientScript.RegisterOnSubmitStatement(typeof(View), (GetHashCode() + 2).ToString(), @"$find('" + ClientID + @"').onsubmit();");
+                if (Page.ClientScript.IsOnSubmitStatementRegistered(typeof(View), typeof(View).FullName) == false)
+                    Page.ClientScript.RegisterOnSubmitStatement(typeof(View), typeof(View).FullName, @"
+$find('" + ClientID + @"').onsubmit();
+");
             }
         }
 
