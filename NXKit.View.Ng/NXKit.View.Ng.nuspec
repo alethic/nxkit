@@ -27,6 +27,5 @@
     <files>
         <file src="bin\Release\nxkit-ng.js" target="content/Scripts" />
         <file src="bin\Release\nxkit-ng.min.js" target="content/Scripts" />
-        <file src="bin\Release\*.dll" exclude="**\*.dll" target="lib\net45" />
     </files>
 </package>
