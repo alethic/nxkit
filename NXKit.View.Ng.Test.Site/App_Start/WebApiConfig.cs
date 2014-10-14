@@ -11,7 +11,7 @@ namespace NXKit.View.Server.Ng.Test.Site
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{name}",
-                defaults: new { id = RouteParameter.Optional }
+                defaults: new { name = RouteParameter.Optional }
             );
         }
 
