@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Http;
-
-using Newtonsoft.Json.Linq;
 
 namespace NXKit.View.Server.Ng.Test.Site.Controllers
 {
@@ -12,15 +11,14 @@ namespace NXKit.View.Server.Ng.Test.Site.Controllers
 
         static readonly ViewServer server = new ViewServer();
 
-        public object Get(string name)
+        public Task<ViewMessage> Get(string name)
         {
-            return server.Load(new Uri(Request.RequestUri, "/Examples/" + name + ".xml"));
+            return Task.FromResult(server.Load(new Uri(Request.RequestUri, "/Examples/" + name + ".xml")));
         }
 
-        public object Post(string name, ViewMessage message)
+        public Task<ViewMessage> Post(string name, ViewMessage message)
         {
-            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All;
-            return server.Load(message);
+            return Task.FromResult(server.Load(message));
         }
 
     }

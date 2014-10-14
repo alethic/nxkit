@@ -32,28 +32,25 @@ module.controller('nxView', ['$scope', '$attrs', '$http', function ($scope, $att
         if (body.length == 0)
             throw new Error("cannot find body element");
 
-        $(document).ready(function () {
+        // generate new view
+        if ($scope.view == null) {
+            $scope.view = new nx.View.View(body[0], function (data, cb) {
+                self.send(data, cb);
+            });
+        }
 
-            // generate new view
-            if ($scope.view == null) {
-                $scope.view = new nx.View.View(body[0], function (data, cb) {
-                    self.send(data, cb);
-                });
-            }
-
-            // get initial data
-            $http.get($scope.url)
-                .success(function (result) {
-                    $scope.view.Receive(result);
-                })
-                .error(function (result) {
-                    console.log(result);
-                });
-        });
+        // get initial data
+        $http.get($scope.url)
+            .success(function (result) {
+                $scope.view.Receive(result);
+            })
+            .error(function (result) {
+                console.log(result);
+            });
     };
 
     this.send = function (data, cb) {
-        $http.post($scope.url, data)
+        $http.post($scope.url, JSON.stringify(data))
             .success(function (result) {
                 cb(result);
             })
