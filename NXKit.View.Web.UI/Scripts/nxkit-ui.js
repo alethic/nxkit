@@ -1,56 +1,5 @@
 ﻿Type.registerNamespace('_NXKit.View.Web.UI');
 
-(function () {
-    var requirejs = NXKit.requirejs;
-    var require = NXKit.require;
-    var define = NXKit.define;
-
-    //// handle RequireJS errors by dispatching to the NXKit.axd module for a second try
-    //var onError = requirejs.onError;
-    //requirejs.onError = function (err) {
-    //    if (err.requireModules) {
-    //        var modules = [];
-    //        for (var i in err.requireModules) {
-    //            var failedId = err.requireModules[i];
-    //            if (failedId != null) {
-    //                var url = _NXKit.View.Web.UI.handlerUrl + '?m=' + failedId;
-
-    //                // check for whether we've already failed here
-    //                var paths = requirejs.s.contexts._.config.paths || {};
-    //                var mpath = paths[failedId] || (paths[failedId] = []);
-    //                if (mpath.indexOf(url) > -1)
-    //                    continue;
-
-    //                // add new fall back url
-    //                requirejs.undef(failedId);
-    //                mpath.push(url);
-
-    //                // redirect to NXKit service
-    //                requirejs.config({
-    //                    paths: paths,
-    //                });
-
-    //                // retry
-    //                modules.push(failedId);
-    //            }
-    //        }
-
-    //        // reinitiate request for any failed and remapped modules
-    //        if (modules.length > 0) {
-    //            require(modules, function () { });
-    //            return;
-    //        }
-    //    }
-
-    //    // send to original function
-    //    onError(err);
-    //};
-
-    // import ScriptManager scripts to RequireJS
-    NXKit.define('jquery', [], function () { return $; });
-    NXKit.define('knockout', [], function () { return ko; });
-})();
-
 _NXKit.View.Web.UI.View = function (element) {
     var self = this;
     _NXKit.View.Web.UI.View.initializeBase(self, [element]);

@@ -198,6 +198,12 @@ namespace NXKit.View.Web.UI
                 // startup script block
                 Page.ClientScript.RegisterStartupScript(typeof(View), GetHashCode().ToString(), @"
 <script type=""application/javascript"">
+
+// import ScriptManager scripts to RequireJS
+NXKit.define('jquery', [], function () { return $; });
+NXKit.define('knockout', [], function () { return ko; });
+
+// configure NXKit
 NXKit.require.config({ 
     paths: { 
         'nx-js': '" + ResolveUrl("~/NXKit.axd/") + @"?m=nx-js',

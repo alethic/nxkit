@@ -1,6 +1,6 @@
-﻿using NXKit.View.Server.Commands;
+﻿using Newtonsoft.Json;
 
-using Newtonsoft.Json;
+using NXKit.View.Server.Commands;
 
 namespace NXKit.View.Server
 {
