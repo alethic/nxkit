@@ -11,7 +11,7 @@ namespace NXKit.View.Js
     {
 
         readonly string name;
-        readonly Action<Stream> writer;
+        readonly Action<Stream> write;
         readonly MediaRange contentType;
         readonly DateTime lastModifiedTime;
         readonly string etag;
@@ -20,16 +20,16 @@ namespace NXKit.View.Js
         /// Initializes a new instance.
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="writer"></param>
+        /// <param name="write"></param>
         /// <param name="contentType"></param>
-        public ViewModuleInfo(string name, Action<Stream> writer, MediaRange contentType)
+        public ViewModuleInfo(string name, Action<Stream> write, MediaRange contentType)
         {
             Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(writer != null);
+            Contract.Requires<ArgumentNullException>(write != null);
             Contract.Requires<ArgumentNullException>(contentType != null);
 
             this.name = name;
-            this.writer = writer;
+            this.write = write;
             this.contentType = contentType;
             this.lastModifiedTime = DateTime.UtcNow;
             this.etag = null;
@@ -58,9 +58,9 @@ namespace NXKit.View.Js
             get { return name; }
         }
 
-        public virtual Action<Stream> Writer
+        public virtual Action<Stream> Write
         {
-            get { return writer; }
+            get { return write; }
         }
 
         public MediaRange ContentType

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 
 namespace NXKit.View.Js
 {
@@ -6,7 +6,7 @@ namespace NXKit.View.Js
     /// <summary>
     /// Provides resolution of <see cref="ViewModuleDependency"/> items.
     /// </summary>
-    public interface IViewModuleResolver
+    public interface IViewModuleProvider
     {
 
         /// <summary>
@@ -14,7 +14,7 @@ namespace NXKit.View.Js
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        IEnumerable<ViewModuleInfo> Resolve(string name);
+        IQueryable<ViewModuleInfo> GetViewModules();
 
     }
 

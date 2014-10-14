@@ -8,11 +8,7 @@ namespace NXKit.View.Server.Ng.Test.Site
 
         public static void Register(HttpConfiguration config)
         {
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{name}",
-                defaults: new { name = RouteParameter.Optional }
-            );
+            config.MapHttpAttributeRoutes();
         }
 
     }

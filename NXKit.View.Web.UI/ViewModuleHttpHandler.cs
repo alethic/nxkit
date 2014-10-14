@@ -5,6 +5,7 @@ using System.Web;
 
 using NXKit.Composition;
 using NXKit.View.Js;
+using NXKit.View.Server;
 
 namespace NXKit.View.Web.UI
 {
@@ -29,12 +30,7 @@ namespace NXKit.View.Web.UI
             context.Response.StatusCode = (int)HttpStatusCode.NotFound;
 
             // look up module by name
-            var name = context.Request.QueryString["m"];
-            var file = CompositionUtil.CreateContainer(CompositionUtil.DefaultGlobalCatalog)
-                .GetExportedValues<IViewModuleResolver>()
-                .SelectMany(i => i.Resolve(name))
-                .FirstOrDefault(i => i != null);
-
+            var file = ViewModuleProvider.ResolveViewModule(context.Request.QueryString["m"]);
             if (file != null)
             {
                 var ifNoneMatch = context.Request.Headers["If-None-Match"];
@@ -70,7 +66,7 @@ namespace NXKit.View.Web.UI
                 context.Response.ContentType = file.ContentType;
                 context.Response.Cache.SetLastModified(file.LastModifiedTime);
                 context.Response.Cache.SetETag(file.ETag);
-                file.Writer(context.Response.OutputStream);
+                file.Write(context.Response.OutputStream);
             }
         }
 

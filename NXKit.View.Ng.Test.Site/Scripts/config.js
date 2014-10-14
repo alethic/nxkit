@@ -4,9 +4,9 @@
         'jquery': 'jquery-2.1.1',
         'knockout': 'knockout-3.2.0',
         'semantic': '../Content/semantic/packaged/javascript/semantic',
-        'nx-js': ['/NXKit.axd/?m=nx-js'],
-        'nx-html': ['/NXKit.axd/?m=nx-html'],
-        'nx-css': ['/NXKit.axd/?m=nx-css']
+        'nx-js': ['/api/view/module/nx-js'],
+        'nx-html': ['/api/view/module/nx-html'],
+        'nx-css': ['/api/view/module/nx-css']
     },
     shim: {
         'semantic': {
@@ -18,7 +18,7 @@
         },
     },
     nxkit: {
-        paths: ['/NXKit.axd/?m='],
+        paths: ['/api/view/module/'],
     },
     deps: ['semantic'],
 });

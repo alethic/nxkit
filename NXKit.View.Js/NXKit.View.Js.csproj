@@ -69,13 +69,13 @@
   <ItemGroup>
     <Compile Include="IViewModuleDependencyProvider.cs" />
     <TypeScriptCompile Include="Knockout\NodeBindingHandler.ts" />
-    <Compile Include="IViewModuleResolver.cs" />
+    <Compile Include="IViewModuleProvider.cs" />
     <Compile Include="ViewModuleExtension.cs" />
     <Compile Include="ViewModuleDependency.cs" />
     <Compile Include="ViewModuleDependencyJsonConverter.cs" />
     <Compile Include="ViewModuleDependencyProvider.cs" />
     <Compile Include="ViewModuleInfo.cs" />
-    <Compile Include="ViewModuleResolver.cs" />
+    <Compile Include="ViewModuleProvider.cs" />
     <Compile Include="ViewModuleType.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +90,10 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NXKit.View.Server\NXKit.View.Server.csproj">
+      <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
+      <Name>NXKit.View.Server</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
       <Name>NXKit</Name>

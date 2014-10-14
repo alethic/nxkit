@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.IO;
+using System.Linq;
 
 using NXKit.View.Js;
 
 namespace NXKit.XForms.Layout.View.Js
 {
 
-    [Export(typeof(IViewModuleResolver))]
-    public class ViewModuleResolver :
-        IViewModuleResolver
+    [Export(typeof(IViewModuleProvider))]
+    public class ViewModuleProvider :
+        IViewModuleProvider
     {
 
         static DateTime GetLastModifiedTime()
         {
-            var file = new FileInfo(typeof(ViewModuleResolver).Assembly.Location);
+            var file = new FileInfo(typeof(ViewModuleProvider).Assembly.Location);
             if (file.Exists)
                 return file.LastWriteTimeUtc;
 
@@ -25,36 +24,36 @@ namespace NXKit.XForms.Layout.View.Js
 
         static string GetETag()
         {
-            return Math.Abs(typeof(ViewModuleResolver).Assembly.GetName().GetHashCode()).ToString();
+            return Math.Abs(typeof(ViewModuleProvider).Assembly.GetName().GetHashCode()).ToString();
         }
 
         static readonly ViewModuleInfo[] infos = new[]
         {
             new ViewModuleInfo(
                 "nxkit-xforms-layout", 
-                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.XForms.Layout.View.Js.nxkit-xforms-layout.js").CopyTo(_), 
+                _ => typeof(ViewModuleProvider).Assembly.GetManifestResourceStream("NXKit.XForms.Layout.View.Js.nxkit-xforms-layout.js").CopyTo(_), 
                 "application/javascript",
                 GetLastModifiedTime(),
                 GetETag()),
 
             new ViewModuleInfo(
                 "nxkit-xforms-layout.css",
-                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.XForms.Layout.View.Js.nxkit-xforms-layout.css").CopyTo(_), 
+                _ => typeof(ViewModuleProvider).Assembly.GetManifestResourceStream("NXKit.XForms.Layout.View.Js.nxkit-xforms-layout.css").CopyTo(_), 
                 "text/css",
                 GetLastModifiedTime(),
                 GetETag()),
 
             new ViewModuleInfo(
                 "nxkit-xforms-layout.html",
-                _ => typeof(ViewModuleResolver).Assembly.GetManifestResourceStream("NXKit.XForms.Layout.View.Js.nxkit-xforms-layout.html").CopyTo(_), 
+                _ => typeof(ViewModuleProvider).Assembly.GetManifestResourceStream("NXKit.XForms.Layout.View.Js.nxkit-xforms-layout.html").CopyTo(_), 
                 "text/html",
                 GetLastModifiedTime(),
                 GetETag()),
         };
 
-        public IEnumerable<ViewModuleInfo> Resolve(string name)
+        public IQueryable<ViewModuleInfo> GetViewModules()
         {
-            return infos.Where(i => i.Name == name);
+            return infos.AsQueryable();
         }
 
     }

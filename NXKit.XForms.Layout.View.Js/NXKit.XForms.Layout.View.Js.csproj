@@ -79,7 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ViewModuleDependencyProvider.cs" />
-    <Compile Include="ViewModuleResolver.cs" />
+    <Compile Include="ViewModuleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.Composition" />
