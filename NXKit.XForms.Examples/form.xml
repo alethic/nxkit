@@ -582,19 +582,19 @@
         </xf:group>
         <xf:group ref="d:address">
           <xf:label appearance="compact">Address</xf:label>
-          <xf:input ref="line1">
+          <xf:input ref="d:line1">
             <xf:label>Line 1</xf:label>
           </xf:input>
-          <xf:input ref="line2">
+          <xf:input ref="d:line2">
             <xf:label>Line 2</xf:label>
           </xf:input>
-          <xf:input ref="city" appearance="minimal">
+          <xf:input ref="d:city" appearance="minimal">
             <xf:label>City</xf:label>
           </xf:input>
-          <xf:input ref="stateorprovince" appearance="minimal">
+          <xf:input ref="d:stateorprovince" appearance="minimal">
             <xf:label>State or Province</xf:label>
           </xf:input>
-          <xf:input ref="postalcode" appearance="minimal">
+          <xf:input ref="d:postalcode" appearance="minimal">
             <xf:label>Postal Code</xf:label>
           </xf:input>
         </xf:group>
