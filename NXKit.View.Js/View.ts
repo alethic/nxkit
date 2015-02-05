@@ -107,13 +107,13 @@ module NXKit.View {
                 var command = commands[i];
                 if (command != null) {
 
-                    if (command.$type === 'NXKit.Server.Commands.Trace, NXKit.Server') {
-                        if (command.Message != null &&
-                            typeof console === 'object') {
+                    if (command.$type === 'NXKit.View.Server.Commands.Trace, NXKit.View.Server') {
+                        if (command.Message != null && typeof console === 'object') {
+                            console.log(command.Message);
                         }
                     }
 
-                    if (command.$type === 'NXKit.Server.Commands.Script, NXKit.Server') {
+                    if (command.$type === 'NXKit.View.Server.Commands.Script, NXKit.View.Server') {
                         if (command.Code != null) {
                             eval(command.Code);
                         }

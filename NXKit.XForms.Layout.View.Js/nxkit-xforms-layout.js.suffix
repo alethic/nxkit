@@ -2,7 +2,7 @@
         return NXKit;
     };
 
-    NXKit.define("nxkit-xforms-layout", ['jquery', 'knockout', 'nxkit', 'nxkit-xforms'], function ($, ko, NXKit) {
+    NXKit.define(['jquery', 'knockout', 'nx-js!nxkit', 'nx-js!nxkit-xforms'], function ($, ko, NXKit) {
         return init($, ko, NXKit);
     });
 })();

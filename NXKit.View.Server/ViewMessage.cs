@@ -1,10 +1,11 @@
-﻿using NXKit.View.Server.Commands;
+﻿using Newtonsoft.Json;
 
-using Newtonsoft.Json;
+using NXKit.View.Server.Commands;
 
 namespace NXKit.View.Server
 {
 
+    [JsonObject]
     public class ViewMessage
     {
 
@@ -43,28 +44,28 @@ namespace NXKit.View.Server
         /// <summary>
         /// Gets or sets the message status.
         /// </summary>
-        public ViewMessageStatus Status { get; set; }
+        public virtual ViewMessageStatus Status { get; set; }
 
         /// <summary>
         /// Gets or sets the SHA256 hash of the <see cref="Document"/> in the <see cref="IDocumentStore"/>.
         /// </summary>
-        public string Hash { get; set; }
+        public virtual string Hash { get; set; }
 
         /// <summary>
         /// Gets or sets the serialized <see cref="Document"/> state.
         /// </summary>
-        public string Save { get; set; }
+        public virtual string Save { get; set; }
 
         /// <summary>
         /// Gets or sets the root remote node.
         /// </summary>
-        public object Node { get; set; }
+        public virtual object Node { get; set; }
 
         /// <summary>
         /// Set of <see cref="ViewCommand"/>'s to be executed.
         /// </summary>
         [JsonProperty(ItemTypeNameHandling = TypeNameHandling.Objects)]
-        public Command[] Commands { get; set; }
+        public virtual Command[] Commands { get; set; }
 
     }
 

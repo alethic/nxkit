@@ -15,5 +15,10 @@ Remove-Item "$OutputDirectory\*.nupkg"
 
 foreach ($i in get-item *\*.nuspec) {
     $ProjectFile=( $i.FullName -replace '\.nuspec$','.csproj' )
-    & $NuGetExe pack $ProjectFile -Version $NuGetVersion -Properties $Properties -OutputDirectory $OutputDirectory
+    $PackFile=( $i.FullName -replace '\.nuspec$', '.nuspec.ps1' )
+    if (Test-Path $PackFile) {
+        & $PackFile -NuGetDirectory $NuGetDirectory -NuGetExe $NuGetExe -Version $NuGetVersion -Properties $Properties -OutputDirectory $OutputDirectory
+    } else {
+        & $NuGetExe pack $ProjectFile -Version $NuGetVersion -Properties $Properties -OutputDirectory $OutputDirectory
+    }
 }

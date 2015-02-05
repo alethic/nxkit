@@ -1,4 +1,16 @@
-﻿module.directive('nxView', ['$compile', function ($compile) {
+// import existing AMD
+var NXKit;
+NXKit = window['NXKit'] || {};
+NXKit.require = require;
+NXKit.define = define;
+
+(function (root, factory) {
+    define(['jquery', 'angular', 'knockout', 'nx-js!nxkit'], factory);
+})(this, function ($, ng, ko, nx) {
+
+    var module = ng.module('nx', []);
+
+module.directive('nxView', ['$compile', function ($compile) {
     return {
         restrict: 'E',
         scope: {
@@ -60,3 +72,5 @@ module.controller('nxView', ['$scope', '$attrs', '$http', function ($scope, $att
     };
 
 }]);
+
+});

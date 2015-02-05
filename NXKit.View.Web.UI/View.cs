@@ -194,8 +194,35 @@ namespace NXKit.View.Web.UI
             if (message != null)
             {
                 ScriptManager.GetCurrent(Page).RegisterScriptControl(this);
-                Page.ClientScript.RegisterStartupScript(typeof(View), GetHashCode().ToString(), @"_NXKit.View.Web.UI.handlerUrl = '" + ResolveUrl("~/NXKit.axd/") + @"'", true);
-                Page.ClientScript.RegisterOnSubmitStatement(typeof(View), GetHashCode().ToString(), @"$find('" + ClientID + @"').onsubmit();");
+
+                // startup script block
+                if (Page.ClientScript.IsStartupScriptRegistered(typeof(View), typeof(View).FullName) == false)
+                    Page.ClientScript.RegisterStartupScript(typeof(View), typeof(View).FullName, @"
+<script type=""application/javascript"">
+
+// import ScriptManager scripts to RequireJS
+NXKit.define('jquery', [], function () { return $; });
+NXKit.define('knockout', [], function () { return ko; });
+
+// configure NXKit
+NXKit.require.config({ 
+    paths: { 
+        'nx-js': '" + ResolveUrl("~/NXKit.axd/") + @"?m=nx-js',
+        'nx-html': '" + ResolveUrl("~/NXKit.axd/") + @"?m=nx-html',
+        'nx-css': '" + ResolveUrl("~/NXKit.axd/") + @"?m=nx-css'
+    },
+    nxkit: {
+        'paths': '" + ResolveUrl("~/NXKit.axd/") + @"?m='
+    }
+});
+</script>
+");
+
+                // hook up page submit statement
+                if (Page.ClientScript.IsOnSubmitStatementRegistered(typeof(View), typeof(View).FullName) == false)
+                    Page.ClientScript.RegisterOnSubmitStatement(typeof(View), typeof(View).FullName, @"
+$find('" + ClientID + @"').onsubmit();
+");
             }
         }
 

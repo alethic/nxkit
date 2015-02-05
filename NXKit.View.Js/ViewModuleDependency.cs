@@ -24,7 +24,7 @@ namespace NXKit.View.Js
             switch (type)
             {
                 case ViewModuleType.Script:
-                    return "";
+                    return "nx-js!";
                 case ViewModuleType.Css:
                     return "nx-css!";
                 case ViewModuleType.Template:
@@ -41,7 +41,7 @@ namespace NXKit.View.Js
         /// <returns></returns>
         static ViewModuleType ParseType(string value)
         {
-            if (!value.Contains("!"))
+            if (value.StartsWith("nx-js!"))
                 return ViewModuleType.Script;
             if (value.StartsWith("nx-css!"))
                 return ViewModuleType.Css;

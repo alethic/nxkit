@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
-  <Import Project="$(ProjectDir)..\NXKit.Gulp.props" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <ProjectGuid>{C7AEDB60-A136-4356-9C04-35AA344D857E}</ProjectGuid>
@@ -64,20 +63,23 @@
     <None Include="View.less" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="gulpfile.js" />
     <None Include="Text.html" />
     <None Include="View.html" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IViewModuleDependencyProvider.cs" />
     <TypeScriptCompile Include="Knockout\NodeBindingHandler.ts" />
+    <Compile Include="IViewModuleProvider.cs" />
     <Compile Include="ViewModuleExtension.cs" />
     <Compile Include="ViewModuleDependency.cs" />
     <Compile Include="ViewModuleDependencyJsonConverter.cs" />
     <Compile Include="ViewModuleDependencyProvider.cs" />
+    <Compile Include="ViewModuleInfo.cs" />
+    <Compile Include="ViewModuleProvider.cs" />
     <Compile Include="ViewModuleType.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -88,6 +90,10 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NXKit.View.Server\NXKit.View.Server.csproj">
+      <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
+      <Name>NXKit.View.Server</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
       <Name>NXKit</Name>
@@ -99,7 +105,9 @@
   <ItemGroup>
     <EmbeddedResource Include="nx-html.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="nx-js.js" />
+  </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptOutFile>obj\Debug\nxkit.ts.js</TypeScriptOutFile>
@@ -197,10 +205,18 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="$(ProjectDir)..\NXKit.targets" Condition="Exists('$(ProjectDir)..\NXKit.targets')" />
-  <Import Project="$(ProjectDir)..\NXKit.Gulp.targets" Condition="Exists('$(ProjectDir)..\NXKit.Gulp.targets')" />
+  <Import Project="$(ProjectDir)..\NXKit.Node.targets" Condition="Exists('$(ProjectDir)..\NXKit.Node.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
@@ -208,18 +224,59 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets'))" />
   </Target>
+  <Target Name="BuildJs" DependsOnTargets="CompileTypeScript">
+    <ItemGroup>
+      <BuildJsInputPaths Include="nxkit.js.prefix" />
+      <BuildJsInputPaths Include="$(IntermediateOutputPath)nxkit.ts.js" />
+      <BuildJsInputPaths Include="nxkit.js.suffix" />
+    </ItemGroup>
+    <ConcatinateTask InputPaths="@(BuildJsInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit.js" />
+    <UglifyJsTask InputPath="$(IntermediateOutputPath)nxkit.js" OutputPath="$(IntermediateOutputPath)nxkit.min.js" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit.js">
+        <LogicalName>$(RootNamespace).nxkit.js</LogicalName>
+      </EmbeddedResource>
+      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit.min.js">
+        <LogicalName>$(RootNamespace).nxkit.min.js</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+  <Target Name="BuildHtml">
+    <ItemGroup>
+      <BuildHtmlInputPaths Include="*.html" />
+    </ItemGroup>
+    <ConcatinateTask InputPaths="@(BuildHtmlInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit.html" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit.html">
+        <LogicalName>$(RootNamespace).nxkit.html</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+  <Target Name="BuildLess">
+    <ItemGroup>
+      <BuildLessInputPaths Include="*.less" />
+    </ItemGroup>
+    <LessTask InputPaths="@(BuildLessInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit.css" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit.css">
+        <LogicalName>$(RootNamespace).nxkit.css</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+  <Target Name="AfterResolveReferences" DependsOnTargets="BuildJs;BuildHtml;BuildLess">
+  </Target>
   <Target Name="AfterBuild">
     <ItemGroup>
-      <WebContentOutputItems Include="$(OutputPath)nxkit.js">
+      <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.js">
         <TargetPath>Scripts\nxkit.js</TargetPath>
       </WebContentOutputItems>
-      <WebContentOutputItems Include="$(OutputPath)nxkit.min.js">
+      <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.min.js">
         <TargetPath>Scripts\nxkit.min.js</TargetPath>
       </WebContentOutputItems>
-      <WebContentOutputItems Include="$(OutputPath)nxkit.html">
+      <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.html">
         <TargetPath>Content\nxkit.html</TargetPath>
       </WebContentOutputItems>
-      <WebContentOutputItems Include="$(OutputPath)nxkit.css">
+      <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.css">
         <TargetPath>Content\nxkit.css</TargetPath>
       </WebContentOutputItems>
     </ItemGroup>

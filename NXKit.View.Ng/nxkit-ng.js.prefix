@@ -1,6 +1,12 @@
-﻿define([
-    'jquery',
-    'angular',
-    'nxkit',
-    'knockout',
-], function ($, ng, nx, ko) {
+﻿// import existing AMD
+var NXKit;
+NXKit = window['NXKit'] || {};
+NXKit.require = require;
+NXKit.define = define;
+
+(function (root, factory) {
+    define(['jquery', 'angular', 'knockout', 'nx-js!nxkit'], factory);
+})(this, function ($, ng, ko, nx) {
+
+    var module = ng.module('nx', []);
+

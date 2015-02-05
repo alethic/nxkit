@@ -67,7 +67,6 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="package.json" />
-    <None Include="gulpfile.js" />
     <None Include="nxkit-xforms.js.prefix" />
     <None Include="nxkit-xforms.js.suffix" />
     <None Include="nxkit-xforms.less.prefix" />
@@ -75,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ViewModuleDependencyProvider.cs" />
+    <Compile Include="ViewModuleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.Composition" />
@@ -145,7 +145,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptOutFile>obj\Release\nxkit-xforms.ts.js</TypeScriptOutFile>
+    <TypeScriptOutFile>obj\Release\nxkit-xforms-layout.ts.js</TypeScriptOutFile>
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
@@ -192,10 +192,18 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="$(ProjectDir)..\NXKit.targets" Condition="Exists('$(ProjectDir)..\NXKit.targets')" />
-  <Import Project="$(ProjectDir)..\NXKit.Gulp.targets" Condition="Exists('$(ProjectDir)..\NXKit.Gulp.targets')" />
+  <Import Project="$(ProjectDir)..\NXKit.Node.targets" Condition="Exists('$(ProjectDir)..\NXKit.Node.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
@@ -203,21 +211,48 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets'))" />
   </Target>
-  <Target Name="AfterBuild">
+  <Target Name="BuildJs" DependsOnTargets="CompileTypeScript">
     <ItemGroup>
-      <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.js">
-        <TargetPath>Scripts\nxkit-xforms.js</TargetPath>
-      </WebContentOutputItems>
-      <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.min.js">
-        <TargetPath>Scripts\nxkit-xforms.min.js</TargetPath>
-      </WebContentOutputItems>
-      <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.html">
-        <TargetPath>Content\nxkit-xforms.html</TargetPath>
-      </WebContentOutputItems>
-      <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.css">
-        <TargetPath>Content\nxkit-xforms.css</TargetPath>
-      </WebContentOutputItems>
+      <BuildJsInputPaths Include="nxkit-xforms.js.prefix" />
+      <BuildJsInputPaths Include="$(IntermediateOutputPath)nxkit-xforms.ts.js" />
+      <BuildJsInputPaths Include="nxkit-xforms.js.suffix" />
     </ItemGroup>
+    <ConcatinateTask InputPaths="@(BuildJsInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit-xforms.js" />
+    <UglifyJsTask InputPath="$(IntermediateOutputPath)nxkit-xforms.js" OutputPath="$(IntermediateOutputPath)nxkit-xforms.min.js" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms.js">
+        <LogicalName>$(RootNamespace).nxkit-xforms.js</LogicalName>
+      </EmbeddedResource>
+      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms.min.js">
+        <LogicalName>$(RootNamespace).nxkit-xforms.min.js</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+  <Target Name="BuildHtml">
+    <ItemGroup>
+      <BuildHtmlInputPaths Include="*.html" />
+    </ItemGroup>
+    <ConcatinateTask InputPaths="@(BuildHtmlInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit-xforms.html" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms.html">
+        <LogicalName>$(RootNamespace).nxkit-xforms.html</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+  <Target Name="BuildLess">
+    <ItemGroup>
+      <BuildLessInputPaths Include="*.less" />
+    </ItemGroup>
+    <LessTask InputPaths="@(BuildLessInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit-xforms.css" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms.css">
+        <LogicalName>$(RootNamespace).nxkit-xforms.css</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+  <Target Name="AfterResolveReferences" DependsOnTargets="BuildJs;BuildHtml;BuildLess">
+  </Target>
+  <Target Name="AfterBuild">
     <Copy SourceFiles="$(IntermediateOutputPath)nxkit-xforms.ts.d.ts" DestinationFiles="$(OutputPath)nxkit-xforms.d.ts" />
   </Target>
   <Import Project="..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" />
