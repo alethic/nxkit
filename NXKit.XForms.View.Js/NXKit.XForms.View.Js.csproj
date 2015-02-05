@@ -145,7 +145,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptOutFile>obj\Release\nxkit-xforms-layout.ts.js</TypeScriptOutFile>
+    <TypeScriptOutFile>obj\Release\nxkit-xforms.ts.js</TypeScriptOutFile>
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
