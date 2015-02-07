@@ -16,6 +16,18 @@ NXKit.XForms.Layout
 NXKit.XForms.Layout contains a basic layout module supporting pages and sections.
 
 
+NXKit.View.Server
+----------
+
+Provides a server side object model for assisting in running a NXKit view on a server.
+
+
+NXKit.View.Js
+----------
+
+Base implementation of the NXKit View in JavaScript using Knockout.
+
+
 NXKit.View.Web.UI
 ----------
 
