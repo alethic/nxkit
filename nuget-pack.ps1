@@ -3,7 +3,7 @@ $NuGetExe="$NuGetDirectory\NuGet.exe"
 
 & $NuGetExe restore "$NuGetDirectory\packages.config" -PackagesDirectory ".\packages"
 
-$NuGetVersion=((packages\GitVersion.CommandLine.1.2.1\Tools\GitVersion.exe /output json) -join ' ' | ConvertFrom-Json).NuGetVersionV2
+$NuGetVersion=((packages\GitVersion.CommandLine.2.0.1\Tools\GitVersion.exe /output json) -join ' ' | ConvertFrom-Json).NuGetVersionV2
 $Properties="Configuration=Release;VisualStudioVersion=12.0;CodeContractsRunCodeAnalysis=false;NuGetVersion=$NuGetVersion"
 $OutputDirectory="bin\"
 
