@@ -4,8 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Newtonsoft.Json.Linq;
 
-using NXKit.Server.Serialization;
-
 namespace NXKit.Server.Tests.Serialization
 {
 

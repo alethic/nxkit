@@ -17,7 +17,7 @@
     <AssemblyName>NXKit.View.Ng</AssemblyName>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <NuGetPackageImportStamp>e4762d29</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>8ac80a4c</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
@@ -89,15 +89,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(ProjectDir)..\NXKit.targets" />
   <Import Project="$(ProjectDir)..\NXKit.Node.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets'))" />
-  </Target>
-  <Import Project="..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" />
   <Target Name="BeforeBuild">
     <ItemGroup>
       <JsSourceFiles Include="nxkit-ng.js.prefix" />
@@ -108,4 +99,5 @@
     <UglifyJsTask InputPath="$(IntermediateOutputPath)nxkit-ng.js" OutputPath="$(IntermediateOutputPath)nxkit-ng.min.js" />
     <Copy SourceFiles="$(IntermediateOutputPath)nxkit-ng.js;$(IntermediateOutputPath)nxkit-ng.min.js" DestinationFolder="$(OutputPath)" />
   </Target>
+  <Import Project="..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets')" />
 </Project>

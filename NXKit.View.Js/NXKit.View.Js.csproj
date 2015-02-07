@@ -18,7 +18,7 @@
     <AssemblyName>NXKit.View.Js</AssemblyName>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <NuGetPackageImportStamp>e1b4691f</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>a4edeebc</NuGetPackageImportStamp>
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="DeferredExecutor.ts" />
@@ -82,7 +82,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -214,16 +214,8 @@
     <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="$(ProjectDir)..\NXKit.targets" Condition="Exists('$(ProjectDir)..\NXKit.targets')" />
   <Import Project="$(ProjectDir)..\NXKit.Node.targets" Condition="Exists('$(ProjectDir)..\NXKit.Node.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets'))" />
-  </Target>
   <Target Name="BuildJs" DependsOnTargets="CompileTypeScript">
     <ItemGroup>
       <BuildJsInputPaths Include="nxkit.js.prefix" />
@@ -263,8 +255,7 @@
       </EmbeddedResource>
     </ItemGroup>
   </Target>
-  <Target Name="AfterResolveReferences" DependsOnTargets="BuildJs;BuildHtml;BuildLess">
-  </Target>
+  <Target Name="AfterResolveReferences" DependsOnTargets="BuildJs;BuildHtml;BuildLess"></Target>
   <Target Name="AfterBuild">
     <ItemGroup>
       <WebContentOutputItems Include="$(OutputPath)nxkit-xforms.js">
@@ -282,5 +273,5 @@
     </ItemGroup>
     <Copy SourceFiles="$(IntermediateOutputPath)nxkit.ts.d.ts" DestinationFiles="$(OutputPath)nxkit.d.ts" />
   </Target>
-  <Import Project="..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.1.2.1\Build\GitVersionTask.targets')" />
+  <Import Project="..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets')" />
 </Project>
