@@ -9,11 +9,11 @@ namespace NXKit.Scripting.EcmaScript
 {
 
     /// <summary>
-    /// Provides a ECMAScript implementation using the Google V8 engine.
+    /// Provides a ECMAScript implementation using the Jurassic JavaScript engine.
     /// </summary>
     [Export(typeof(IScriptEngine))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
-    public class V8ScriptEngine :
+    public class JurassicScriptEngine :
         IScriptEngine,
         IDisposable
     {
@@ -27,20 +27,19 @@ namespace NXKit.Scripting.EcmaScript
 
 
         readonly Func<Document> host;
-        readonly Lazy<Microsoft.ClearScript.V8.V8ScriptEngine> engine;
+        readonly Lazy<Jurassic.ScriptEngine> engine;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="host"></param>
         [ImportingConstructor]
-        public V8ScriptEngine(Func<Document> host)
+        public JurassicScriptEngine(Func<Document> host)
         {
             Contract.Requires<ArgumentNullException>(host != null);
 
             this.host = host;
-            this.engine = new Lazy<Microsoft.ClearScript.V8.V8ScriptEngine>(() =>
-                new Microsoft.ClearScript.V8.V8ScriptEngine());
+            this.engine = new Lazy<Jurassic.ScriptEngine>(() => new Jurassic.ScriptEngine());
         }
 
         public bool CanExecute(string type, string code)
@@ -77,12 +76,9 @@ namespace NXKit.Scripting.EcmaScript
         public void Dispose()
         {
             GC.SuppressFinalize(this);
-
-            if (engine.IsValueCreated)
-                engine.Value.Dispose();
         }
 
-        ~V8ScriptEngine()
+        ~JurassicScriptEngine()
         {
             Dispose();
         }

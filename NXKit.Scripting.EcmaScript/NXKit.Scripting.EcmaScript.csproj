@@ -111,9 +111,8 @@
     <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClearScript, Version=5.3.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ClearScript.V8.5.3.10.0\lib\ClearScript.dll</HintPath>
+    <Reference Include="Jurassic">
+      <HintPath>..\packages\Jurassic.2.2.0\lib\Jurassic.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -124,7 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="V8ScriptEngine.cs" />
+    <Compile Include="JurassicScriptEngine.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NXKit.Scripting.EcmaScript.nuspec">
