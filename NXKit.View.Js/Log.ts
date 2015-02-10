@@ -23,15 +23,15 @@
             return result;
         }
 
-        static InvokeLogMethod(func: (m: string, ...args: any[]) => void, message: string, ...args: any[]) {
+        static InvokeLogMethod(func: (m: string, ...args: any[]) => void, message: string, args: any[]) {
             // add message as first arg
             args.unshift(message);
 
             // invoke function
             if (typeof func === 'function') {
-                func.call(args);
+                func.apply(console, args);
             } else {
-                console.log.call(args);
+                console.log.apply(console, args);
             }
         }
 

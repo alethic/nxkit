@@ -133,6 +133,7 @@
     <Compile Include="IEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaConstants.cs" />
+    <Compile Include="Script.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="xml-events-attribs-1.xsd">
@@ -151,6 +152,10 @@
     <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
       <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
       <Name>NXKit.DOMEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Scripting\NXKit.Scripting.csproj">
+      <Project>{f509df8d-af13-468d-8381-028835a79dec}</Project>
+      <Name>NXKit.Scripting</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
