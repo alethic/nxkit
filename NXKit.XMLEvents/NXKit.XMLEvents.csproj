@@ -136,7 +136,7 @@
     <Compile Include="Script.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="xml-events-attribs-1.xsd">
+    <EmbeddedResource Include="xml-events-2.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
