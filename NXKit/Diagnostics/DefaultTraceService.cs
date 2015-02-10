@@ -75,19 +75,19 @@ namespace NXKit.Diagnostics
         public void Information(object data)
         {
             foreach (var sink in sinks)
-                sink.Debug(GetProxy(data));
+                sink.Information(GetProxy(data));
         }
 
         public void Information(string message)
         {
             foreach (var sink in sinks)
-                sink.Debug(message);
+                sink.Information(message);
         }
 
         public void Information(string format, params object[] args)
         {
             foreach (var sink in sinks)
-                sink.Debug(format, GetProxies(args));
+                sink.Information(format, GetProxies(args));
         }
 
         public void Warning(object data)
@@ -106,6 +106,24 @@ namespace NXKit.Diagnostics
         {
             foreach (var sink in sinks)
                 sink.Warning(format, GetProxies(args));
+        }
+
+        public void Error(object data)
+        {
+            foreach (var sink in sinks)
+                sink.Error(GetProxy(data));
+        }
+
+        public void Error(string message)
+        {
+            foreach (var sink in sinks)
+                sink.Error(message);
+        }
+
+        public void Error(string format, params object[] args)
+        {
+            foreach (var sink in sinks)
+                sink.Error(format, GetProxies(args));
         }
 
     }

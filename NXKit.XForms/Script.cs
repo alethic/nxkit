@@ -23,6 +23,8 @@ namespace NXKit.XForms
         IEventHandler
     {
 
+        readonly Lazy<IDocumentScript> documentScript;
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -32,6 +34,8 @@ namespace NXKit.XForms
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+
+            this.documentScript = new Lazy<IDocumentScript>(() => element.Document.Interface<IDocumentScript>());
         }
 
         public string Type
@@ -39,14 +43,26 @@ namespace NXKit.XForms
             get { return (string)Element.Attribute("type"); }
         }
 
-        IDocumentScript DocumentScript
+        public string Src
         {
-            get { return Element.Document.Interface<IDocumentScript>(); }
+            get { return (string)Element.Attribute("src"); }
+        }
+
+        public string Charset
+        {
+            get { return (string)Element.Attribute("charset"); }
         }
 
         public void Invoke()
         {
-            DocumentScript.Execute(Type, Element.Value);
+            try
+            {
+                documentScript.Value.Execute(Type, Element.Value);
+            }
+            catch (ScriptingException e)
+            {
+                throw new DOMTargetEventException(Element, Events.ActionError, e);
+            }
         }
 
         public void HandleEvent(Event evt)

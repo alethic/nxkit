@@ -108,8 +108,16 @@ module NXKit.View {
                 if (command != null) {
 
                     if (command.$type === 'NXKit.View.Server.Commands.Trace, NXKit.View.Server') {
-                        if (command.Message != null && typeof console === 'object') {
-                            console.log(command.Message);
+                        if (command.Message != null) {
+                            if (command.Message.Severity === 'Debug') {
+                                Log.Debug(command.Message.Text);
+                            } else if (command.Message.Severity === 'Information') {
+                                Log.Information(command.Message.Text);
+                            } else if (command.Message.Severity === 'Warning') {
+                                Log.Warning(command.Message.Text);
+                            } else if (command.Message.Severity === 'Error') {
+                                Log.Error(command.Message.Text);
+                            }
                         }
                     }
 
@@ -167,7 +175,7 @@ module NXKit.View {
             // generate push action
             var data = {
                 $type: 'NXKit.View.Server.Commands.Invoke, NXKit.View.Server',
-                 
+
                 NodeId: node.Id,
                 Interface: interfaceName,
                 Method: methodName,
@@ -293,7 +301,7 @@ module NXKit.View {
                     self._body);
 
                 // execute after deferral
-                NXKit.require(['nx-html!nxkit.html'], () => {
+                NXKit.require(['nx-html!nxkit.html'],() => {
 
                     // ensure body is to render template
                     $(self._body)

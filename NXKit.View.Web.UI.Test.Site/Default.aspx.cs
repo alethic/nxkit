@@ -13,7 +13,18 @@ namespace NXKit.View.Web.UI.Test.Site
         {
             if (!IsPostBack)
             {
-                UriTextBox.Text = new Uri(Request.Url, "../Examples/form.xml").ToString();
+                // default uri value
+                var uri = new Uri(Request.Url, "../Examples/form.xml");
+
+                // allow the user to specify the URI to load
+                if (Request["Uri"] != null)
+                    uri = new Uri(Request["Uri"], UriKind.RelativeOrAbsolute);
+
+                // ensure the URI is absolute
+                if (!uri.IsAbsoluteUri)
+                    uri = new Uri(Request.Url, uri);
+
+                UriTextBox.Text = uri.ToString();
                 View.Open(UriTextBox.Text);
             }
         }

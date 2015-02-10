@@ -23,14 +23,38 @@
             return result;
         }
 
+        static InvokeLogMethod(func: (m: string, ...args: any[]) => void, message: string, ...args: any[]) {
+            // add message as first arg
+            args.unshift(message);
+
+            // invoke function
+            if (typeof func === 'function') {
+                func.call(args);
+            } else {
+                console.log.call(args);
+            }
+        }
+
         public static Debug(message: string, ...args: any[]) {
-            if (Log.Verbose)
-                console.debug(message, args);
+            this.InvokeLogMethod(console.debug, message, args);
+        }
+
+        public static Information(message: string, ...args: any[]) {
+            this.InvokeLogMethod(console.info, message, args);
+        }
+
+        public static Warning(message: string, ...args: any[]) {
+            this.InvokeLogMethod(console.warn, message, args);
+        }
+
+        public static Error(message: string, ...args: any[]) {
+            this.InvokeLogMethod(console.error, message, args);
         }
 
         public static Object(object: any, ...args: any[]) {
-            if (Log.Verbose)
+            if (typeof console.dir === 'function') {
                 console.dir(object, args);
+            }
         }
 
     }

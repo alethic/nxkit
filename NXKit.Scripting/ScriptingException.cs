@@ -16,6 +16,27 @@ namespace NXKit.Scripting
 
         }
 
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="message"></param>
+        public ScriptingException(string message)
+            : base(message)
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="innerException"></param>
+        public ScriptingException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+
+        }
+
     }
 
 }
