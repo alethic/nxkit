@@ -1,6 +1,6 @@
 ﻿using System.Web.UI;
 
-[assembly: WebResource("NXKit.View.Web.UI.Scripts.jquery-2.1.1.js", "text/javascript")]
+[assembly: WebResource("NXKit.View.Web.UI.Scripts.jquery-2.1.3.js", "text/javascript")]
 [assembly: WebResource("NXKit.View.Web.UI.Scripts.knockout-3.2.0.js", "text/javascript")]
 [assembly: WebResource("NXKit.View.Web.UI.Scripts.nx-require.js", "text/javascript")]
 [assembly: WebResource("NXKit.View.Web.UI.Scripts.nxkit-ui.js", "text/javascript")]
@@ -28,9 +28,9 @@ namespace NXKit.View.Web.UI
                 ScriptManager.ScriptResourceMapping.AddDefinition("jquery", new ScriptResourceDefinition()
                 {
                     ResourceAssembly = typeof(PreApplication).Assembly,
-                    ResourceName = "NXKit.View.Web.UI.Scripts.jquery-2.1.1.js",
-                    CdnPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js",
-                    CdnDebugPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.js",
+                    ResourceName = "NXKit.View.Web.UI.Scripts.jquery-2.1.3.js",
+                    CdnPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js",
+                    CdnDebugPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.js",
                     CdnSupportsSecureConnection = true,
                     LoadSuccessExpression = "window.jQuery"
                 });
