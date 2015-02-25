@@ -187,14 +187,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>nx-require.tt</DependentUpon>
     </EmbeddedResource>
-    <None Include="Scripts\r.js" />
-    <EmbeddedResource Include="Scripts\require.js" />
     <EmbeddedResource Include="Scripts\jquery-2.1.1.intellisense.js" />
     <EmbeddedResource Include="Scripts\jquery-2.1.1.js" />
     <EmbeddedResource Include="Scripts\jquery-2.1.1.min.js" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\r.js" />
+    <Content Include="Scripts\require.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\..\NXKit.targets" />

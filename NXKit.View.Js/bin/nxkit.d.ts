@@ -82,12 +82,6 @@ declare module NXKit.View.Knockout {
         public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
     }
 }
-declare module NXKit.View.Knockout {
-    class VisibleBindingHandler implements KnockoutBindingHandler {
-        public init(element: HTMLElement, valueAccessor: () => any): void;
-        public update(element: HTMLElement, valueAccessor: () => any): void;
-    }
-}
 declare module NXKit.View.Util {
     function Observable<T>(value?: T): KnockoutObservable<T>;
     function ObservableArray<T>(value?: T[]): KnockoutObservableArray<T>;
@@ -95,6 +89,20 @@ declare module NXKit.View.Util {
     function DeepEquals(a: any, b: any, f?: (a: any, b: any) => boolean): boolean;
     function GenerateGuid(): string;
     function GetContextItems(context: KnockoutBindingContext): any[];
+}
+declare module NXKit.View.Knockout {
+    class NodeBindingHandler implements KnockoutBindingHandler {
+        public init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: KnockoutAllBindingsAccessor, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public update(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: KnockoutAllBindingsAccessor, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        static ConvertValueAccessor(element: HTMLElement, valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any;
+        static Match(node: Node, data: any): boolean;
+    }
+}
+declare module NXKit.View.Knockout {
+    class VisibleBindingHandler implements KnockoutBindingHandler {
+        public init(element: HTMLElement, valueAccessor: () => any): void;
+        public update(element: HTMLElement, valueAccessor: () => any): void;
+    }
 }
 declare module NXKit.View {
     class LayoutOptions {
@@ -108,7 +116,11 @@ declare module NXKit.View {
     class Log {
         static Verbose: boolean;
         static Group<T>(title?: string, func?: () => T): any;
+        static InvokeLogMethod(func: (m: string, ...args: any[]) => void, message: string, args: any[]): void;
         static Debug(message: string, ...args: any[]): void;
+        static Information(message: string, ...args: any[]): void;
+        static Warning(message: string, ...args: any[]): void;
+        static Error(message: string, ...args: any[]): void;
         static Object(object: any, ...args: any[]): void;
     }
 }
@@ -268,12 +280,4 @@ declare module NXKit.View.ViewModelUtil {
     function GetTransparentNodes(nodes: Node[]): Node[];
     function GetContentNodes(nodes: Node[]): Node[];
     function GetContents(node: Node): Node[];
-}
-declare module NXKit.View.Knockout {
-    class NodeBindingHandler implements KnockoutBindingHandler {
-        public init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: KnockoutAllBindingsAccessor, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        public update(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: KnockoutAllBindingsAccessor, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        static ConvertValueAccessor(element: HTMLElement, valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any;
-        static Match(node: Node, data: any): boolean;
-    }
 }
