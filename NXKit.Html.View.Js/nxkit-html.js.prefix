@@ -1,0 +1,2 @@
+﻿(function () {
+	var init = function ($, ko, NXKit) {

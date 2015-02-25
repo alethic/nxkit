@@ -1,0 +1,15 @@
+{
+  "name": "nxkit-html",
+  "version": "0.0.0",
+  "description": "",
+  "main": "nxkit-html.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "less": "^1.7.5",
+    "uglify-js": "^2.4.15"
+  }
+}

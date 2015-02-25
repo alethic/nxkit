@@ -3,96 +3,27 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <ProjectGuid>{9499152C-156E-4005-A01F-4D6F1C480C63}</ProjectGuid>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{38A49F91-54FA-47C7-B046-71D9FEF16F3F}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <OutputPath>bin</OutputPath>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NXKit.Html.View.Web.UI</RootNamespace>
+    <AssemblyName>NXKit.Html.View.Web.UI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <RootNamespace>NXKit.XForms.Layout.View.Js</RootNamespace>
-    <AssemblyName>NXKit.XForms.Layout.View.Js</AssemblyName>
+    <NuGetPackageImportStamp>2d9ed3fd</NuGetPackageImportStamp>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <NuGetPackageImportStamp>42cf5e85</NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
   </PropertyGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="..\NXKit.View.Js\bin\nxkit.d.ts">
-      <Link>Scripts\typings\nxkit\nxkit.ts.d.ts</Link>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="..\NXKit.XForms.View.Js\bin\nxkit-xforms.d.ts">
-      <Link>Scripts\typings\nxkit\nxkit-xforms.d.ts</Link>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="FormViewModel.ts" />
-    <TypeScriptCompile Include="IconViewModel.ts" />
-    <TypeScriptCompile Include="ItemViewModel.ts" />
-    <TypeScriptCompile Include="ListViewModel.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
-    <TypeScriptCompile Include="StrongViewModel.ts" />
-    <TypeScriptCompile Include="ParagraphViewModel.ts" />
-    <TypeScriptCompile Include="SegmentViewModel.ts" />
-    <TypeScriptCompile Include="TableCellViewModel.ts" />
-    <TypeScriptCompile Include="TableViewModel.ts" />
-    <TypeScriptCompile Include="SectionViewModel.ts" />
-    <TypeScriptCompile Include="LayoutNodeViewModel.ts" />
-    <TypeScriptCompile Include="FormUtil.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="nxkit-xforms-layout.js.prefix" />
-    <None Include="nxkit-xforms-layout.js.suffix" />
-    <None Include="Segment.html" />
-    <None Include="List.html" />
-    <None Include="Section.html" />
-    <None Include="Paragraph.html" />
-    <None Include="Form.html" />
-    <None Include="Table.html" />
-    <None Include="Item.html" />
-    <None Include="Icon.html" />
-    <None Include="Strong.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Icon.less" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="package.json" />
-    <None Include="NXKit.XForms.Layout.View.Js.nuspec" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NXKit.View.Js\NXKit.View.Js.csproj">
-      <Project>{c7aedb60-a136-4356-9c04-35aa344d857e}</Project>
-      <Name>NXKit.View.Js</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
-      <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
-      <Name>NXKit.XForms.Layout</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.XForms.View.Js\NXKit.XForms.View.Js.csproj">
-      <Project>{f106499b-42cc-41cf-9824-39755e25993f}</Project>
-      <Name>NXKit.XForms.View.Js</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit\NXKit.csproj">
-      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
-      <Name>NXKit</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ViewModuleDependencyProvider.cs" />
-    <Compile Include="ViewModuleProvider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptOutFile>obj\Debug\nxkit-xforms-layout.ts.js</TypeScriptOutFile>
-    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
-    <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
-    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
-    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
     <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
     <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
@@ -136,13 +67,13 @@
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptOutFile>obj\Release\nxkit-xforms-layout.ts.js</TypeScriptOutFile>
-    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
-    <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
-    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
-    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
     <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
     <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
@@ -186,52 +117,46 @@
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
-  <Import Project="$(ProjectDir)..\NXKit.targets" Condition="Exists('$(ProjectDir)..\NXKit.targets')" />
-  <Import Project="$(ProjectDir)..\NXKit.Node.targets" Condition="Exists('$(ProjectDir)..\NXKit.Node.targets')" />
-  <Target Name="BuildJs" DependsOnTargets="CompileTypeScript">
-    <ItemGroup>
-      <BuildJsInputPaths Include="nxkit-xforms-layout.js.prefix" />
-      <BuildJsInputPaths Include="$(IntermediateOutputPath)nxkit-xforms-layout.ts.js" />
-      <BuildJsInputPaths Include="nxkit-xforms-layout.js.suffix" />
-    </ItemGroup>
-    <ConcatinateTask InputPaths="@(BuildJsInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit-xforms-layout.js" />
-    <UglifyJsTask InputPath="$(IntermediateOutputPath)nxkit-xforms-layout.js" OutputPath="$(IntermediateOutputPath)nxkit-xforms-layout.min.js" />
-    <ItemGroup>
-      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms-layout.js">
-        <LogicalName>$(RootNamespace).nxkit-xforms-layout.js</LogicalName>
-      </EmbeddedResource>
-      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms-layout.min.js">
-        <LogicalName>$(RootNamespace).nxkit-xforms-layout.min.js</LogicalName>
-      </EmbeddedResource>
-    </ItemGroup>
-  </Target>
-  <Target Name="BuildHtml">
-    <ItemGroup>
-      <BuildHtmlInputPaths Include="*.html" />
-    </ItemGroup>
-    <ConcatinateTask InputPaths="@(BuildHtmlInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit-xforms-layout.html" />
-    <ItemGroup>
-      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms-layout.html">
-        <LogicalName>$(RootNamespace).nxkit-xforms-layout.html</LogicalName>
-      </EmbeddedResource>
-    </ItemGroup>
-  </Target>
-  <Target Name="BuildLess">
-    <ItemGroup>
-      <BuildLessInputPaths Include="*.less" />
-    </ItemGroup>
-    <LessTask InputPaths="@(BuildLessInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit-xforms-layout.css" />
-    <ItemGroup>
-      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms-layout.css">
-        <LogicalName>$(RootNamespace).nxkit-xforms-layout.css</LogicalName>
-      </EmbeddedResource>
-    </ItemGroup>
-  </Target>
-  <Target Name="AfterResolveReferences" DependsOnTargets="BuildJs;BuildHtml;BuildLess"></Target>
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(IntermediateOutputPath)nxkit-xforms-layout.ts.d.ts" DestinationFiles="$(OutputPath)nxkit-xforms-layout.d.ts" />
-  </Target>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NXKit.Html.View.Js\NXKit.Html.View.Js.csproj">
+      <Project>{9a7a0358-eafc-487f-ba00-8d80c6ffb1d6}</Project>
+      <Name>NXKit.Html.View.Js</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Html\NXKit.Html.csproj">
+      <Project>{441881fb-1f5e-43c3-80c0-db6560f6edeb}</Project>
+      <Name>NXKit.Html</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.View.Js\NXKit.View.Js.csproj">
+      <Project>{c7aedb60-a136-4356-9c04-35aa344d857e}</Project>
+      <Name>NXKit.View.Js</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.View.Web.UI\NXKit.View.Web.UI.csproj">
+      <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
+      <Name>NXKit.View.Web.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit\NXKit.csproj">
+      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
+      <Name>NXKit</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NXKit.Html.View.Web.UI.nuspec" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildProjectDirectory)\..\NXKit.targets" />
   <Import Project="..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets')" />
 </Project>
