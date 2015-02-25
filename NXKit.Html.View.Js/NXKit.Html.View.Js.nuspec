@@ -10,7 +10,7 @@
         <projectUrl>https://github.com/nxkit</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
         <description>
-            Additions to the NXKit View for HTML.
+            HTML support for the NXKit View.
         </description>
         <releaseNotes />
         <copyright>Copyright © 2014 Jerome Haltom</copyright>
@@ -18,6 +18,9 @@
         <dependencies>
             <dependency
                 id="NXKit"
+                version="[$NuGetVersion$]"/>
+            <dependency
+                id="NXKit.Html"
                 version="[$NuGetVersion$]"/>
             <dependency
                 id="NXKit.View.Js"
