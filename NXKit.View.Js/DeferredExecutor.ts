@@ -21,7 +21,7 @@
             self.callback(self.deferred);
 
             // return new promise
-            return self.deferred.progress([]);
+            return self.deferred.progress();
         }
 
     }

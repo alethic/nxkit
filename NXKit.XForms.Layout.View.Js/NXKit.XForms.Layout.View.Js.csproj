@@ -229,8 +229,7 @@
       </EmbeddedResource>
     </ItemGroup>
   </Target>
-  <Target Name="AfterResolveReferences" DependsOnTargets="BuildJs;BuildHtml;BuildLess">
-  </Target>
+  <Target Name="AfterResolveReferences" DependsOnTargets="BuildJs;BuildHtml;BuildLess"></Target>
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(IntermediateOutputPath)nxkit-xforms-layout.ts.d.ts" DestinationFiles="$(OutputPath)nxkit-xforms-layout.d.ts" />
   </Target>

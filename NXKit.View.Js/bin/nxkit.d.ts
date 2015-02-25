@@ -1,8 +1,8 @@
-declare module NXKit.View {
+﻿declare module NXKit.View {
     class DeferredExecutor {
         private _queue;
-        Register(cb: (promise: JQueryDeferred<void>) => void): void;
-        Wait(cb: () => void): void;
+        public Register(cb: (promise: JQueryDeferred<void>) => void): void;
+        public Wait(cb: () => void): void;
     }
 }
 declare module NXKit.View {
@@ -30,12 +30,12 @@ declare module NXKit.View {
         private _name;
         private _properties;
         constructor(node: Node, name: string, source: any);
-        Node: Node;
-        View: View;
-        Name: string;
-        Properties: IPropertyMap;
-        Apply(source: any): void;
-        ToData(): {
+        public Node : Node;
+        public View : View;
+        public Name : string;
+        public Properties : IPropertyMap;
+        public Apply(source: any): void;
+        public ToData(): {
             [name: string]: any;
         };
     }
@@ -59,27 +59,27 @@ declare module NXKit.View.Knockout {
     class CheckboxBindingHandler implements KnockoutBindingHandler {
         static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
         static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
     }
 }
 declare module NXKit.View.Knockout {
     class HorizontalVisibleBindingHandler implements KnockoutBindingHandler {
-        init(element: HTMLElement, valueAccessor: () => any): void;
-        update(element: HTMLElement, valueAccessor: () => any): void;
+        public init(element: HTMLElement, valueAccessor: () => any): void;
+        public update(element: HTMLElement, valueAccessor: () => any): void;
     }
 }
 declare module NXKit.View.Knockout {
     class InputBindingHandler implements KnockoutBindingHandler {
         static _init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
         static _update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public update(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
     }
 }
 declare module NXKit.View.Knockout {
     class ModalBindingHandler implements KnockoutBindingHandler {
-        init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public init(element: HTMLElement, valueAccessor: () => any, allBindings: any, viewModel: any, bindingContext: KnockoutBindingContext): void;
     }
 }
 declare module NXKit.View.Util {
@@ -92,16 +92,16 @@ declare module NXKit.View.Util {
 }
 declare module NXKit.View.Knockout {
     class NodeBindingHandler implements KnockoutBindingHandler {
-        init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: KnockoutAllBindingsAccessor, viewModel: any, bindingContext: KnockoutBindingContext): void;
-        update(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: KnockoutAllBindingsAccessor, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public init(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: KnockoutAllBindingsAccessor, viewModel: any, bindingContext: KnockoutBindingContext): void;
+        public update(element: HTMLElement, valueAccessor: () => any, allBindingsAccessor: KnockoutAllBindingsAccessor, viewModel: any, bindingContext: KnockoutBindingContext): void;
         static ConvertValueAccessor(element: HTMLElement, valueAccessor: () => any, viewModel: any, bindingContext: KnockoutBindingContext): any;
         static Match(node: Node, data: any): boolean;
     }
 }
 declare module NXKit.View.Knockout {
     class VisibleBindingHandler implements KnockoutBindingHandler {
-        init(element: HTMLElement, valueAccessor: () => any): void;
-        update(element: HTMLElement, valueAccessor: () => any): void;
+        public init(element: HTMLElement, valueAccessor: () => any): void;
+        public update(element: HTMLElement, valueAccessor: () => any): void;
     }
 }
 declare module NXKit.View {
@@ -109,7 +109,7 @@ declare module NXKit.View {
         static GetArgs(bindingContext: KnockoutBindingContext): any;
         private _args;
         constructor(args: any);
-        Args: any;
+        public Args : any;
     }
 }
 declare module NXKit.View {
@@ -129,8 +129,8 @@ declare module NXKit.View {
         private _severity;
         private _text;
         constructor(severity: Severity, text: string);
-        Severity: Severity;
-        Text: string;
+        public Severity : Severity;
+        public Text : string;
     }
 }
 declare module NXKit.View {
@@ -144,52 +144,52 @@ declare module NXKit.View {
         private _valueAsNumber;
         private _valueAsDate;
         constructor(intf: Interface, name: string, source: any);
-        Interface: Interface;
-        Node: Node;
-        View: View;
-        Name: string;
-        Value: KnockoutObservable<any>;
-        ValueAsString: KnockoutObservable<string>;
-        ValueAsBoolean: KnockoutObservable<boolean>;
-        ValueAsNumber: KnockoutObservable<number>;
-        ValueAsDate: KnockoutObservable<Date>;
-        Update(source: any): void;
-        ToData(): any;
-        OnUpdate(): void;
+        public Interface : Interface;
+        public Node : Node;
+        public View : View;
+        public Name : string;
+        public Value : KnockoutObservable<any>;
+        public ValueAsString : KnockoutObservable<string>;
+        public ValueAsBoolean : KnockoutObservable<boolean>;
+        public ValueAsNumber : KnockoutObservable<number>;
+        public ValueAsDate : KnockoutObservable<Date>;
+        public Update(source: any): void;
+        public ToData(): any;
+        public OnUpdate(): void;
     }
 }
 declare module NXKit.View {
     class Node {
-        _view: View;
-        _id: number;
-        _data: any;
-        _type: NodeType;
-        _name: string;
-        _value: KnockoutObservable<string>;
-        _intfs: IInterfaceMap;
-        _nodes: KnockoutObservableArray<Node>;
+        public _view: View;
+        public _id: number;
+        public _data: any;
+        public _type: NodeType;
+        public _name: string;
+        public _value: KnockoutObservable<string>;
+        public _intfs: IInterfaceMap;
+        public _nodes: KnockoutObservableArray<Node>;
         constructor(view: View, source: any);
-        View: View;
-        IsNode: boolean;
-        Data: any;
-        Id: number;
-        Type: NodeType;
-        Name: string;
-        Value: KnockoutObservable<string>;
-        Interfaces: IInterfaceMap;
-        Nodes: KnockoutObservableArray<Node>;
-        Property(interfaceName: string, propertyName: string): Property;
-        Invoke(interfaceName: string, methodName: string, params?: any): void;
-        Apply(source: any): void;
-        ApplyId(id: number): void;
-        ApplyType(type: string): void;
-        ApplyName(name: string): void;
-        ApplyValue(value: string): void;
-        ApplyInterfaces(source: any): void;
-        UpdateInterface(name: string, source: any): void;
-        ApplyNodes(sources: Array<any>): void;
-        ToData(): any;
-        NodesToData(): any[];
+        public View : View;
+        public IsNode : boolean;
+        public Data : any;
+        public Id : number;
+        public Type : NodeType;
+        public Name : string;
+        public Value : KnockoutObservable<string>;
+        public Interfaces : IInterfaceMap;
+        public Nodes : KnockoutObservableArray<Node>;
+        public Property(interfaceName: string, propertyName: string): Property;
+        public Invoke(interfaceName: string, methodName: string, params?: any): void;
+        public Apply(source: any): void;
+        public ApplyId(id: number): void;
+        public ApplyType(type: string): void;
+        public ApplyName(name: string): void;
+        public ApplyValue(value: string): void;
+        public ApplyInterfaces(source: any): void;
+        public UpdateInterface(name: string, source: any): void;
+        public ApplyNodes(sources: any[]): void;
+        public ToData(): any;
+        public NodesToData(): any[];
     }
 }
 declare module NXKit.View {
@@ -200,7 +200,7 @@ declare module NXKit.View {
         private _value;
         static Parse(value: string): NodeType;
         constructor(value: string);
-        ToString(): string;
+        public ToString(): string;
     }
 }
 declare module NXKit.View {
@@ -208,11 +208,11 @@ declare module NXKit.View {
         private _context;
         private _node;
         constructor(context: KnockoutBindingContext, node: Node);
-        Context: KnockoutBindingContext;
-        Node: Node;
-        Contents: Node[];
-        GetContents(): Node[];
-        ContentsCount: number;
+        public Context : KnockoutBindingContext;
+        public Node : Node;
+        public Contents : Node[];
+        public GetContents(): Node[];
+        public ContentsCount : number;
     }
 }
 declare module NXKit.View {
@@ -241,19 +241,19 @@ declare module NXKit.View {
         private _queueRunning;
         private _busy;
         constructor(body: HTMLElement, server: IServerInvoke);
-        Busy: KnockoutObservable<boolean>;
-        Body: HTMLElement;
-        Data: any;
-        Root: Node;
-        Threshold: Severity;
-        Receive(args: any): void;
-        ReceiveNode(node: any): void;
-        ReceiveCommands(commands: any[]): void;
+        public Busy : KnockoutObservable<boolean>;
+        public Body : HTMLElement;
+        public Data : any;
+        public Root : Node;
+        public Threshold : Severity;
+        public Receive(args: any): void;
+        public ReceiveNode(node: any): void;
+        public ReceiveCommands(commands: any[]): void;
         private Apply(data);
-        PushUpdate(node: Node, $interface: Interface, property: Property, value: any): void;
-        PushInvoke(node: Node, interfaceName: string, methodName: string, parameters: any): void;
-        Queue(command: any): void;
-        ApplyBindings(): void;
+        public PushUpdate(node: Node, $interface: Interface, property: Property, value: any): void;
+        public PushInvoke(node: Node, interfaceName: string, methodName: string, parameters: any): void;
+        public Queue(command: any): void;
+        public ApplyBindings(): void;
     }
 }
 declare module NXKit.View.ViewModelUtil {
@@ -261,7 +261,9 @@ declare module NXKit.View.ViewModelUtil {
     var ControlNodes: string[];
     var MetadataNodes: string[];
     var TransparentNodes: string[];
-    var TransparentNodePredicates: Array<(n: Node) => boolean>;
+    var TransparentNodePredicates: {
+        (n: Node): boolean;
+    }[];
     function IsEmptyTextNode(node: Node): boolean;
     function IsIgnoredNode(node: Node): boolean;
     function IsGroupNode(node: Node): boolean;
