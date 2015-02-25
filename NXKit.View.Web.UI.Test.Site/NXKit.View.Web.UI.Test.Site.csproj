@@ -298,6 +298,14 @@
       <Project>{441881fb-1f5e-43c3-80c0-db6560f6edeb}</Project>
       <Name>NXKit.Html</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NXKit.Scripting.EcmaScript\NXKit.Scripting.EcmaScript.csproj">
+      <Project>{285cda69-8a75-408c-a3a1-b750ad9b6bd1}</Project>
+      <Name>NXKit.Scripting.EcmaScript</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Scripting\NXKit.Scripting.csproj">
+      <Project>{f509df8d-af13-468d-8381-028835a79dec}</Project>
+      <Name>NXKit.Scripting</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.View.Js\NXKit.View.Js.csproj">
       <Project>{c7aedb60-a136-4356-9c04-35aa344d857e}</Project>
       <Name>NXKit.View.Js</Name>

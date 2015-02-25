@@ -98,17 +98,17 @@ namespace NXKit.View.Server
 
         public void Debug(object data)
         {
-            state.Value.messages.Enqueue(new TraceMessage(Severity.Verbose, data.ToString()));
+            state.Value.messages.Enqueue(new TraceMessage(Severity.Debug, data.ToString()));
         }
 
         public void Debug(string message)
         {
-            state.Value.messages.Enqueue(new TraceMessage(Severity.Verbose, message));
+            state.Value.messages.Enqueue(new TraceMessage(Severity.Debug, message));
         }
 
         public void Debug(string format, params object[] args)
         {
-            state.Value.messages.Enqueue(new TraceMessage(Severity.Verbose, string.Format(format, args)));
+            state.Value.messages.Enqueue(new TraceMessage(Severity.Debug, string.Format(format, args)));
         }
 
         public void Information(object data)
@@ -139,6 +139,21 @@ namespace NXKit.View.Server
         public void Warning(string format, params object[] args)
         {
             state.Value.messages.Enqueue(new TraceMessage(Severity.Warning, string.Format(format, args)));
+        }
+
+        public void Error(object data)
+        {
+            state.Value.messages.Enqueue(new TraceMessage(Severity.Error, data.ToString()));
+        }
+
+        public void Error(string message)
+        {
+            state.Value.messages.Enqueue(new TraceMessage(Severity.Error, message));
+        }
+
+        public void Error(string format, params object[] args)
+        {
+            state.Value.messages.Enqueue(new TraceMessage(Severity.Error, string.Format(format, args)));
         }
 
     }

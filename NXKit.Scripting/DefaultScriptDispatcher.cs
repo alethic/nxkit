@@ -68,7 +68,7 @@ namespace NXKit.Scripting
         {
             var engine = GetEngines(type, code).FirstOrDefault();
             if (engine == null)
-                throw new ScriptingException();
+                throw new ScriptingException(string.Format("No ScriptEngine for {0}", type));
 
             return engine.Evaluate(type, code);
         }
@@ -82,7 +82,7 @@ namespace NXKit.Scripting
         {
             var engine = GetEngines(type, code).FirstOrDefault();
             if (engine == null)
-                throw new ScriptingException();
+                throw new ScriptingException(string.Format("No ScriptEngine for {0}", type));
 
             engine.Execute(type, code);
         }

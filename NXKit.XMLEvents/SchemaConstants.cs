@@ -10,7 +10,7 @@ namespace NXKit.XMLEvents
 
         public static readonly XNamespace Events_1_0 = Events_1_0_NS;
 
-        public const string Events_1_0_HREF = "http://www.w3.org/MarkUp/SCHEMA/xml-events-attribs-1.xsd";
+        public const string Events_1_0_HREF = "http://www.w3.org/MarkUp/SCHEMA/xml-events-2.xsd";
 
     }
 

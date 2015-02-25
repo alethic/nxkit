@@ -59,6 +59,21 @@ namespace NXKit.Diagnostics
             trace.TraceEvent(TraceEventType.Warning, 0, format, args);
         }
 
+        public void Error(object data)
+        {
+            trace.TraceEvent(TraceEventType.Error, 0, data.ToString());
+        }
+
+        public void Error(string message)
+        {
+            trace.TraceEvent(TraceEventType.Error, 0, message);
+        }
+
+        public void Error(string format, params object[] args)
+        {
+            trace.TraceEvent(TraceEventType.Error, 0, format, args);
+        }
+
     }
 
 }

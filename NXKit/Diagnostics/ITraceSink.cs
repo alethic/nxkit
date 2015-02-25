@@ -68,6 +68,25 @@ namespace NXKit.Diagnostics
         /// <param name="args"></param>
         void Warning(string format, params object[] args);
 
+        /// <summary>
+        /// Logs the specified error object.
+        /// </summary>
+        /// <param name="data"></param>
+        void Error(object data);
+
+        /// <summary>
+        /// Logs the specified error message.
+        /// </summary>
+        /// <param name="message"></param>
+        void Error(string message);
+
+        /// <summary>
+        /// Logs the specified formatted error message.
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        void Error(string format, params object[] args);
+
     }
 
     [ContractClassFor(typeof(ITraceSink))]
@@ -126,6 +145,25 @@ namespace NXKit.Diagnostics
         }
 
         public void Warning(string format, params object[] args)
+        {
+            Contract.Requires<ArgumentNullException>(format != null);
+            Contract.Requires<ArgumentNullException>(args != null);
+            throw new NotImplementedException();
+        }
+
+        public void Error(object data)
+        {
+            Contract.Requires<ArgumentNullException>(data != null);
+            throw new NotImplementedException();
+        }
+
+        public void Error(string message)
+        {
+            Contract.Requires<ArgumentNullException>(message != null);
+            throw new NotImplementedException();
+        }
+
+        public void Error(string format, params object[] args)
         {
             Contract.Requires<ArgumentNullException>(format != null);
             Contract.Requires<ArgumentNullException>(args != null);

@@ -9,13 +9,13 @@ using NXKit.Scripting;
 using NXKit.Xml;
 using NXKit.XMLEvents;
 
-namespace NXKit.XForms
+namespace NXKit.XMLEvents
 {
 
     /// <summary>
-    /// XForms 2.0 script tag.
+    /// XML Events 2 script tag.
     /// </summary>
-    [Extension("{http://www.w3.org/2002/xforms}script")]
+    [Extension("{http://www.w3.org/2001/xml-events}script")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class Script :
@@ -53,6 +53,16 @@ namespace NXKit.XForms
             get { return (string)Element.Attribute("charset"); }
         }
 
+        public string Defer
+        {
+            get { return (string)Element.Attribute("defer"); }
+        }
+
+        public string Implements
+        {
+            get { return (string)Element.Attribute("implements "); }
+        }
+
         public void Invoke()
         {
             try
@@ -61,7 +71,7 @@ namespace NXKit.XForms
             }
             catch (ScriptingException e)
             {
-                throw new DOMTargetEventException(Element, Events.ActionError, e);
+                throw new DOMTargetEventException(Element, Events.Error, e);
             }
         }
 
