@@ -11,6 +11,7 @@ using NXKit.Xml;
 namespace NXKit.XInclude
 {
 
+    [Extension("{http://www.w3.org/2001/XInclude}include")]
     [Extension(typeof(IOnInit), "{http://www.w3.org/2001/XInclude}include")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Include :

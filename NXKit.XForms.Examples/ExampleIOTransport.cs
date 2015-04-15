@@ -7,7 +7,7 @@ namespace NXKit.XForms.Examples
 {
 
     [Export(typeof(IIOTransport))]
-    public class ExampleIOHandler :
+    public class ExampleIOTransport :
         IOTransport
     {
 
@@ -23,10 +23,11 @@ namespace NXKit.XForms.Examples
                 .Where(i => i.EndsWith("." + request.ResourceUri.LocalPath.Substring(1)))
                 .Select(i => typeof(Ref).Assembly.GetManifestResourceStream(i))
                 .FirstOrDefault();
-            if (stm == null)
-                return null;
 
-            return new IOResponse(request, IOStatus.Success, stm, "application/xml");
+            if (stm == null)
+                return new IOResponse(request, IOStatus.Unknown);
+            else
+                return new IOResponse(request, IOStatus.Success, stm, "application/xml");
         }
 
     }

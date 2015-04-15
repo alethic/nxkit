@@ -31,7 +31,7 @@ namespace NXKit.XInclude
         /// </summary>
         /// <param name="element"></param>
         public AttributeAccessor(XElement element)
-            : this(element, "http://schemas.nxkit.org/2014/NXInclude")
+            : this(element, "http://www.w3.org/2001/XInclude")
         {
             Contract.Requires<ArgumentNullException>(element != null);
         }

@@ -1,0 +1,16 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:NXKit.XForms.Layout.View.Windows"
+    xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
+
+    <DataTemplate
+        x:Key="{nxw:ElementTemplateResourceKey ExpandedName={}{http://schemas.nxkit.org/2014/xforms-layout}p}">
+        <Border
+            Padding="4">
+            <TextBlock
+                Text="Paragraph" />
+        </Border>
+    </DataTemplate>
+
+</ResourceDictionary>

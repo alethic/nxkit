@@ -8,7 +8,7 @@ using NXKit.Composition;
 namespace NXKit.NXInclude
 {
 
-    [Extension("{http://schemas.nxkit.org/2014/NXInclude}include")]
+    [Extension(typeof(IncludeProperties))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IncludeProperties :
         XInclude.IncludeProperties

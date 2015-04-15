@@ -10,7 +10,7 @@ using NXKit.IO.Media;
 namespace NXKit.XInclude
 {
 
-    [Extension("{http://www.w3.org/2001/XInclude}include")]
+    [Extension(typeof(IncludeProperties))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IncludeProperties :
         ElementExtension

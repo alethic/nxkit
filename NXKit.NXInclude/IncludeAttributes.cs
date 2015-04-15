@@ -2,12 +2,13 @@
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
 using NXKit.Composition;
 
 namespace NXKit.NXInclude
 {
 
-    [Extension("{http://schemas.nxkit.org/2014/NXInclude}include")]
+    [Extension(typeof(IncludeAttributes))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IncludeAttributes :
         XInclude.IncludeAttributes

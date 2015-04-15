@@ -1,0 +1,28 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:NXKit.XForms.Layout.View.Windows"
+    xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
+
+    <DataTemplate
+        x:Key="{nxw:ElementTemplateResourceKey ExpandedName={}{http://schemas.nxkit.org/2014/xforms-layout}segment}">
+        <Border
+            Padding="4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Grid.Row="0"
+                    Text="Segment" />
+                <ItemsControl
+                    Grid.Row="1"
+                    ItemsSource="{Binding Elements}" />
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+</ResourceDictionary>

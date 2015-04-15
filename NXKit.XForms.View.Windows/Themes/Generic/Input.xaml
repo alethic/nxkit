@@ -1,0 +1,13 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:NXKit.XForms.View.Windows"
+    xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
+
+    <DataTemplate
+        x:Key="{nxw:ElementTemplateResourceKey ExpandedName={}{http://www.w3.org/2002/xforms}input}">
+        <TextBox
+            Text="Input" />
+    </DataTemplate>
+
+</ResourceDictionary>
