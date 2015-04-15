@@ -1,0 +1,25 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:NXKit.XForms.View.Windows">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary
+            Source="Generic/Model.xaml" />
+        <ResourceDictionary
+            Source="Generic/Label.xaml" />
+        <ResourceDictionary
+            Source="Generic/Group.xaml" />
+        <ResourceDictionary
+            Source="Generic/Repeat.xaml" />
+        <ResourceDictionary
+            Source="Generic/Input.xaml" />
+        <ResourceDictionary
+            Source="Generic/Range.xaml" />
+        <ResourceDictionary
+            Source="Generic/Select1.xaml" />
+        <ResourceDictionary
+            Source="Generic/Trigger.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

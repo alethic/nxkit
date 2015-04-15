@@ -1,0 +1,18 @@
+﻿<Application
+    x:Class="NXKit.View.Windows.Test.App.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    StartupUri="MainWindow.xaml">
+    <Application.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="pack://application:,,,/NXKit.XForms.View.Windows;component/Themes/Generic.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/NXKit.XForms.Layout.View.Windows;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Application.Resources>
+</Application>

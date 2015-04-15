@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C836ABB9-A418-4C06-8F9C-6E6211C1F09B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NXKit.View.Windows.Test.App</RootNamespace>
+    <AssemblyName>NXKit.View.Windows.Test.App</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DelegateCommand.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
+      <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
+      <Name>NXKit.DOMEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj">
+      <Project>{075ba36b-f95a-4563-bbe9-20d4405e9c9e}</Project>
+      <Name>NXKit.DOM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.NXInclude\NXKit.NXInclude.csproj">
+      <Project>{8d43ba5c-df3f-4ad8-bf28-6dda74a0a2a1}</Project>
+      <Name>NXKit.NXInclude</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Scripting.EcmaScript\NXKit.Scripting.EcmaScript.csproj">
+      <Project>{285cda69-8a75-408c-a3a1-b750ad9b6bd1}</Project>
+      <Name>NXKit.Scripting.EcmaScript</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.Scripting\NXKit.Scripting.csproj">
+      <Project>{f509df8d-af13-468d-8381-028835a79dec}</Project>
+      <Name>NXKit.Scripting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.View.Windows\NXKit.View.Windows.csproj">
+      <Project>{17a17c2e-baab-4df1-8cee-91c04df2d61d}</Project>
+      <Name>NXKit.View.Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Examples\NXKit.XForms.Examples.csproj">
+      <Project>{564c13be-ab20-49fd-9bc4-44fe701e3ac2}</Project>
+      <Name>NXKit.XForms.Examples</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Layout.View.Windows\NXKit.XForms.Layout.View.Windows.csproj">
+      <Project>{57ec368d-96c2-4775-9192-169be5d31494}</Project>
+      <Name>NXKit.XForms.Layout.View.Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
+      <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
+      <Name>NXKit.XForms.Layout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.View.Windows\NXKit.XForms.View.Windows.csproj">
+      <Project>{66132f55-660e-4627-a86f-11a48c1e38f0}</Project>
+      <Name>NXKit.XForms.View.Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
+      <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
+      <Name>NXKit.XForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XInclude\NXKit.XInclude.csproj">
+      <Project>{9742529e-8881-4aa3-91ef-1a474cb38ac4}</Project>
+      <Name>NXKit.XInclude</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XMLEvents\NXKit.XMLEvents.csproj">
+      <Project>{db71b395-df60-470a-b761-b083d7acafe8}</Project>
+      <Name>NXKit.XMLEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XPath2\NXKit.XPath2.csproj">
+      <Project>{4fc0495c-b8e7-407a-9505-fba9e973ba4c}</Project>
+      <Name>NXKit.XPath2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XPath\NXKit.XPath.csproj">
+      <Project>{a91bc0e8-18cc-41f6-b00d-07e91b1593be}</Project>
+      <Name>NXKit.XPath</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit\NXKit.csproj">
+      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
+      <Name>NXKit</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

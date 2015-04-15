@@ -1,0 +1,12 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:NXKit.XForms.Layout.View.Windows">
+
+    <DataTemplate
+        DataType="{}{http://www.w3.org/2002/xforms}input">
+        <TextBox
+            Text="Input" />
+    </DataTemplate>
+
+</ResourceDictionary>

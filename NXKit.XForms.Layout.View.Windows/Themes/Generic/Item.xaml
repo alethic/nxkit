@@ -1,0 +1,12 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:NXKit.XForms.Layout.View.Windows">
+
+    <DataTemplate
+        DataType="{}{http://schemas.nxkit.org/2014/xforms-layout}item">
+        <TextBlock
+            Text="Item" />
+    </DataTemplate>
+
+</ResourceDictionary>
