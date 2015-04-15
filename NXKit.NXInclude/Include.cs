@@ -11,6 +11,7 @@ namespace NXKit.NXInclude
 {
 
     [Extension("{http://schemas.nxkit.org/2014/NXInclude}include")]
+    [Extension(typeof(IOnInit), "{http://schemas.nxkit.org/2014/NXInclude}include")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Include :
         NXKit.XInclude.Include
