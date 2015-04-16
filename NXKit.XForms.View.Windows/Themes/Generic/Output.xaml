@@ -1,19 +1,22 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:NXKit.XForms.Layout.View.Windows"
+    xmlns:local="clr-namespace:NXKit.XForms.View.Windows"
     xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
 
     <DataTemplate
-        x:Key="NXKit:{http://schemas.nxkit.org/2014/xforms-layout}p">
+        x:Key="NXKit:{http://www.w3.org/2002/xforms}output">
         <nxw:ElementViewModelControl
             Element="{Binding}"
-            ElementViewModelType="{x:Type local:ParagraphViewModel}">
+            ElementViewModelType="{x:Type local:OutputViewModel}">
             <nxw:ElementViewModelControl.Resources>
                 <DataTemplate
-                    DataType="{x:Type local:ParagraphViewModel}">
-                    <nxw:NodesPresenter
-                        ItemsSource="{Binding Element.Nodes}" />
+                    DataType="{x:Type local:OutputViewModel}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Text="{Binding Value}" />
+                    </StackPanel>
                 </DataTemplate>
             </nxw:ElementViewModelControl.Resources>
         </nxw:ElementViewModelControl>

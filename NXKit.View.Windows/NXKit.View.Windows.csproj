@@ -90,17 +90,36 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DelegateCommand.cs" />
+    <Compile Include="NodeContainer.cs" />
+    <Compile Include="NodesPresenter.cs" />
+    <Compile Include="NodePresenter.cs" />
+    <Compile Include="ElementViewModel.cs" />
+    <Compile Include="XContainerNodesPropertyDescriptor.cs" />
+    <Compile Include="XPropertyDescriptor.cs" />
+    <Compile Include="XTypeDescriptionProvider.cs" />
+    <Compile Include="XTypeDescriptor.cs" />
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="ElementModelItem.cs" />
+    <Compile Include="ElementContainer.cs" />
+    <Compile Include="ElementViewModelControl.cs" />
+    <Compile Include="ElementsPresenter.cs" />
     <Compile Include="ElementPresenter.cs" />
-    <Compile Include="ElementTemplateResourceKey.cs" />
-    <Compile Include="ElementTemplateResourceKeyConverter.cs" />
+    <Compile Include="ResourceKeyBinding.cs" />
+    <Compile Include="ResourceKeyToResourceConverter.cs" />
     <Compile Include="View.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Themes\Generic\Controls.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic\XObjects.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -120,6 +139,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="NXKit.View.Windows.nuspec" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

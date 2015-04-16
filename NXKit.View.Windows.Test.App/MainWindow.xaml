@@ -38,7 +38,7 @@
         </Grid>
         <ScrollViewer
             Grid.Row="1"
-            HorizontalScrollBarVisibility="Visible"
+            HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Visible">
             <nx:View
                 Document="{Binding Document}" />

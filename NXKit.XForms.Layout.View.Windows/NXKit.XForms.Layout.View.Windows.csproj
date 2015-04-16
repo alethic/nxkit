@@ -97,6 +97,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Themes\Generic\Icon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic\Item.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -127,6 +131,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SegmentViewModel.cs" />
+    <Compile Include="SectionViewModel.cs" />
+    <Compile Include="ParagraphViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -144,6 +151,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="NXKit.XForms.Layout.View.Windows.nuspec" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -158,6 +166,10 @@
     <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
       <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
       <Name>NXKit.XForms.Layout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NXKit.XForms.View.Windows\NXKit.XForms.View.Windows.csproj">
+      <Project>{66132f55-660e-4627-a86f-11a48c1e38f0}</Project>
+      <Name>NXKit.XForms.View.Windows</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
       <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>

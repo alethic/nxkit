@@ -1,0 +1,131 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:nx="clr-namespace:NXKit;assembly=NXKit"
+    xmlns:local="clr-namespace:NXKit.View.Windows">
+
+    <Style
+        TargetType="{x:Type local:NodePresenter}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type local:NodePresenter}">
+                    <ContentPresenter
+                        Content="{Binding Node, RelativeSource={RelativeSource TemplatedParent}}"
+                        ContentTemplate="{local:ResourceKeyBinding Path=NodeTemplateResourceKey, RelativeSource={RelativeSource TemplatedParent}}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type local:ElementViewModelControl}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type local:ElementViewModelControl}">
+                    <ContentPresenter
+                        Content="{TemplateBinding ElementViewModel}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type local:ElementPresenter}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type local:ElementPresenter}">
+                    <ContentPresenter
+                        Content="{Binding Element, RelativeSource={RelativeSource TemplatedParent}}"
+                        ContentTemplate="{local:ResourceKeyBinding Path=ElementTemplateResourceKey, RelativeSource={RelativeSource TemplatedParent}}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type local:NodeContainer}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type local:NodeContainer}">
+                    <local:NodePresenter
+                        Node="{Binding}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type local:ElementContainer}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type local:ElementContainer}">
+                    <local:ElementPresenter
+                        Element="{Binding}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type local:NodesPresenter}">
+        <Setter
+            Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel
+                        Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type local:ElementsPresenter}">
+        <Setter
+            Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel
+                        Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type local:View}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type local:View}">
+                    <ControlTemplate.Resources>
+                        <DataTemplate
+                            DataType="{x:Type nx:Document}">
+                            <local:ElementPresenter
+                                Element="{Binding Root}" />
+                        </DataTemplate>
+                    </ControlTemplate.Resources>
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter
+                            Content="{TemplateBinding Document}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

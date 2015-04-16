@@ -51,35 +51,17 @@ namespace NXKit.View.Windows
             var element = ctrl.Element;
             if (element != null)
             {
-                ctrl.SetValue(ElementModelItemPropertyKey, new ElementModelItem(element));
-                ctrl.SetValue(ElementTemplateResourceKeyPropertyKey, new ElementTemplateResourceKey(element.Name));
+                ctrl.SetValue(ElementTemplateResourceKeyPropertyKey, "NXKit:" + element.Name.ToString());
             }
             else
             {
-                ctrl.SetValue(ElementModelItemPropertyKey, null);
                 ctrl.SetValue(ElementTemplateResourceKeyPropertyKey, null);
             }
         }
 
-        static readonly DependencyPropertyKey ElementModelItemPropertyKey = DependencyProperty.RegisterReadOnly(
-            "ElementModelItem",
-            typeof(ElementModelItem),
-            typeof(ElementPresenter),
-            new FrameworkPropertyMetadata());
-
-        public static readonly DependencyProperty ElementModelItemProperty = ElementModelItemPropertyKey.DependencyProperty;
-
-        /// <summary>
-        /// Gets the <see cref="ElementModelItem"/> that will be set as the DataContext of the template.
-        /// </summary>
-        public ElementModelItem ElementModelItem
-        {
-            get { return (ElementModelItem)GetValue(ElementModelItemProperty); }
-        }
-
         static readonly DependencyPropertyKey ElementTemplateResourceKeyPropertyKey = DependencyProperty.RegisterReadOnly(
             "ElementTemplateResourceKey",
-            typeof(ElementTemplateResourceKey),
+            typeof(string),
             typeof(ElementPresenter),
             new FrameworkPropertyMetadata());
 
@@ -88,9 +70,9 @@ namespace NXKit.View.Windows
         /// <summary>
         /// Gets the <see cref="ElementTemplateResourceKey"/> that can be used to resolve the presented <see cref="XElement"/>'s template.
         /// </summary>
-        public ElementTemplateResourceKey ElementTemplateResourceKey
+        public string ElementTemplateResourceKey
         {
-            get { return (ElementTemplateResourceKey)GetValue(ElementTemplateResourceKeyProperty); }
+            get { return (string)GetValue(ElementTemplateResourceKeyProperty); }
         }
 
     }

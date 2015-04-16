@@ -5,8 +5,8 @@
     xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
     
     <DataTemplate
-        x:Key="{nxw:ElementTemplateResourceKey ExpandedName={}{http://schemas.nxkit.org/2014/xforms-layout}form}">
-        <ItemsControl
+        x:Key="NXKit:{http://schemas.nxkit.org/2014/xforms-layout}form">
+        <nxw:ElementsPresenter
             ItemsSource="{Binding Elements}" />
     </DataTemplate>
     

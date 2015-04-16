@@ -5,7 +5,7 @@
     xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
 
     <DataTemplate
-        x:Key="{nxw:ElementTemplateResourceKey ExpandedName={}{http://schemas.nxkit.org/2014/xforms-layout}table}">
+        x:Key="NXKit:{http://schemas.nxkit.org/2014/xforms-layout}table">
         <Border
             BorderThickness="1">
             <Grid>

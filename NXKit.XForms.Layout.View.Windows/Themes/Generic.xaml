@@ -5,21 +5,23 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary
-            Source="Generic/Form.xaml" />
+            Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/Form.xaml" />
         <ResourceDictionary
-            Source="Generic/Section.xaml" />
+            Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/Section.xaml" />
         <ResourceDictionary
-            Source="Generic/Segment.xaml" />
+            Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/Segment.xaml" />
         <ResourceDictionary
-            Source="Generic/Paragraph.xaml" />
+            Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/Paragraph.xaml" />
         <ResourceDictionary
-            Source="Generic/Anchor.xaml" />
+            Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/Anchor.xaml" />
         <ResourceDictionary
-            Source="Generic/List.xaml" />
+            Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/List.xaml" />
         <ResourceDictionary
-            Source="Generic/Item.xaml" />
+            Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/Item.xaml" />
         <ResourceDictionary
-            Source="Generic/Table.xaml" />
+            Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/Table.xaml" />
+        <ResourceDictionary
+            Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/Icon.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

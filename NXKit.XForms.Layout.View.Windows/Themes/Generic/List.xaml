@@ -5,7 +5,7 @@
     xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
 
     <DataTemplate
-        x:Key="{nxw:ElementTemplateResourceKey ExpandedName={}{http://schemas.nxkit.org/2014/xforms-layout}list}">
+        x:Key="NXKit:{http://schemas.nxkit.org/2014/xforms-layout}list">
         <Border
             Padding="4">
             <Grid>
@@ -18,7 +18,7 @@
                 <TextBlock
                     Grid.Row="0"
                     Text="List" />
-                <ItemsControl
+                <nxw:ElementsPresenter
                     Grid.Row="1"
                     ItemsSource="{Binding Elements}" />
             </Grid>

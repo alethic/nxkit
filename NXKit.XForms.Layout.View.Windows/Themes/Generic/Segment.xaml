@@ -5,24 +5,36 @@
     xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
 
     <DataTemplate
-        x:Key="{nxw:ElementTemplateResourceKey ExpandedName={}{http://schemas.nxkit.org/2014/xforms-layout}segment}">
-        <Border
-            Padding="4">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="Auto" />
-                    <RowDefinition
-                        Height="Auto" />
-                </Grid.RowDefinitions>
-                <TextBlock
-                    Grid.Row="0"
-                    Text="Segment" />
-                <ItemsControl
-                    Grid.Row="1"
-                    ItemsSource="{Binding Elements}" />
-            </Grid>
-        </Border>
+        x:Key="NXKit:{http://schemas.nxkit.org/2014/xforms-layout}segment">
+        <nxw:ElementViewModelControl
+            Element="{Binding}"
+            ElementViewModelType="{x:Type local:SegmentViewModel}">
+            <nxw:ElementViewModelControl.Resources>
+                <DataTemplate
+                    DataType="{x:Type local:SegmentViewModel}">
+                    <Border
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        Padding="4">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="Auto" />
+                                <RowDefinition
+                                    Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <nxw:NodesPresenter
+                                Grid.Row="0"
+                                Background="Gray"
+                                ItemsSource="{Binding Label.Nodes}" />
+                            <nxw:ElementsPresenter
+                                Grid.Row="1"
+                                ItemsSource="{Binding Element.Elements}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </nxw:ElementViewModelControl.Resources>
+        </nxw:ElementViewModelControl>
     </DataTemplate>
 
 </ResourceDictionary>

@@ -5,9 +5,40 @@
     xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
 
     <DataTemplate
-        x:Key="{nxw:ElementTemplateResourceKey ExpandedName={}{http://www.w3.org/2002/xforms}input}">
-        <TextBox
-            Text="Input" />
+        x:Key="NXKit:{http://www.w3.org/2002/xforms}input">
+        <nxw:ElementViewModelControl
+            Element="{Binding}"
+            ElementViewModelType="{x:Type local:InputViewModel}">
+            <nxw:ElementViewModelControl.Resources>
+                <DataTemplate
+                    DataType="{x:Type local:InputViewModel}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <Label>
+                            <nxw:NodesPresenter
+                                ItemsSource="{Binding Label.Nodes}" />
+                        </Label>
+                        <TextBox
+                            Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
+                            <TextBox.Style>
+                                <Style
+                                    TargetType="TextBox">
+                                    <Style.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding Valid}"
+                                            Value="False">
+                                            <Setter
+                                                Property="BorderBrush"
+                                                Value="Red" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </StackPanel>
+                </DataTemplate>
+            </nxw:ElementViewModelControl.Resources>
+        </nxw:ElementViewModelControl>
     </DataTemplate>
 
 </ResourceDictionary>

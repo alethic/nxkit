@@ -5,8 +5,21 @@
     xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
 
     <DataTemplate
-        x:Key="{nxw:ElementTemplateResourceKey ExpandedName={}{http://www.w3.org/2002/xforms}trigger}">
-        <Button />
+        x:Key="NXKit:{http://www.w3.org/2002/xforms}trigger">
+        <nxw:ElementViewModelControl
+            Element="{Binding}"
+            ElementViewModelType="{x:Type local:TriggerViewModel}">
+            <nxw:ElementViewModelControl.Resources>
+                <DataTemplate
+                    DataType="{x:Type local:TriggerViewModel}">
+                    <Button
+                        Command="{Binding DOMActivateCommand}">
+                        <nxw:NodesPresenter
+                            ItemsSource="{Binding Label.Nodes}" />
+                    </Button>
+                </DataTemplate>
+            </nxw:ElementViewModelControl.Resources>
+        </nxw:ElementViewModelControl>
     </DataTemplate>
-    
+
 </ResourceDictionary>

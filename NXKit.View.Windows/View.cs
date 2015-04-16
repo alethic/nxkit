@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
+using System.Xml.Linq;
 
 namespace NXKit.View.Windows
 {
@@ -16,6 +18,8 @@ namespace NXKit.View.Windows
         /// </summary>
         static View()
         {
+            TypeDescriptor.AddProvider(new XTypeDescriptionProvider<XContainer>(), typeof(XContainer));
+
             DefaultStyleKeyProperty.OverrideMetadata(typeof(View), new FrameworkPropertyMetadata(typeof(View)));
         }
 

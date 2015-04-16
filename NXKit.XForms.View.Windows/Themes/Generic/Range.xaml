@@ -5,7 +5,7 @@
     xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
 
     <DataTemplate
-        x:Key="{nxw:ElementTemplateResourceKey ExpandedName={}{http://www.w3.org/2002/xforms}range}">
+        x:Key="NXKit:{http://www.w3.org/2002/xforms}range">
         <TextBox
             Text="Range" />
     </DataTemplate>

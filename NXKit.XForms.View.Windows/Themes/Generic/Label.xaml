@@ -5,9 +5,18 @@
     xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
 
     <DataTemplate
-        x:Key="{nxw:ElementTemplateResourceKey ExpandedName={}{http://www.w3.org/2002/xforms}label}">
-        <TextBlock
-            Text="Label" />
+        x:Key="NXKit:{http://www.w3.org/2002/xforms}label">
+        <nxw:ElementViewModelControl
+            Element="{Binding}"
+            ElementViewModelType="{x:Type local:LabelViewModel}">
+            <nxw:ElementViewModelControl.Resources>
+                <DataTemplate
+                    DataType="{x:Type local:LabelViewModel}">
+                    <nxw:NodesPresenter
+                        ItemsSource="{Binding Element.Nodes}" />
+                </DataTemplate>
+            </nxw:ElementViewModelControl.Resources>
+        </nxw:ElementViewModelControl>
     </DataTemplate>
 
 </ResourceDictionary>

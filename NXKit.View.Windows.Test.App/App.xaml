@@ -8,6 +8,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
+                    Source="pack://application:,,,/NXKit.View.Windows;component/Themes/Generic.xaml" />
+                <ResourceDictionary
                     Source="pack://application:,,,/NXKit.XForms.View.Windows;component/Themes/Generic.xaml" />
                 <ResourceDictionary
                     Source="pack://application:,,,/NXKit.XForms.Layout.View.Windows;component/Themes/Generic.xaml" />

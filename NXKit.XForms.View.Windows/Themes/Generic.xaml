@@ -5,21 +5,25 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary
-            Source="Generic/Model.xaml" />
+            Source="/NXKit.XForms.View.Windows;component/Themes/Generic/Model.xaml" />
         <ResourceDictionary
-            Source="Generic/Label.xaml" />
+            Source="/NXKit.XForms.View.Windows;component/Themes/Generic/Label.xaml" />
         <ResourceDictionary
-            Source="Generic/Group.xaml" />
+            Source="/NXKit.XForms.View.Windows;component/Themes/Generic/Group.xaml" />
         <ResourceDictionary
-            Source="Generic/Repeat.xaml" />
+            Source="/NXKit.XForms.View.Windows;component/Themes/Generic/Repeat.xaml" />
         <ResourceDictionary
-            Source="Generic/Input.xaml" />
+            Source="/NXKit.XForms.View.Windows;component/Themes/Generic/Input.xaml" />
         <ResourceDictionary
-            Source="Generic/Range.xaml" />
+            Source="/NXKit.XForms.View.Windows;component/Themes/Generic/Output.xaml" />
         <ResourceDictionary
-            Source="Generic/Select1.xaml" />
+            Source="/NXKit.XForms.View.Windows;component/Themes/Generic/Range.xaml" />
         <ResourceDictionary
-            Source="Generic/Trigger.xaml" />
+            Source="/NXKit.XForms.View.Windows;component/Themes/Generic/Select1.xaml" />
+        <ResourceDictionary
+            Source="/NXKit.XForms.View.Windows;component/Themes/Generic/Trigger.xaml" />
+        <ResourceDictionary
+            Source="/NXKit.XForms.View.Windows;component/Themes/Generic/Submit.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
