@@ -14,7 +14,7 @@ namespace NXKit.View.Web.UI.Test.Site
             if (!IsPostBack)
             {
                 // default uri value
-                var uri = new Uri(Request.Url, "../Examples/form.xml");
+                var uri = new Uri(Request.Url, "nx-example:///aship-form.xml");
 
                 // allow the user to specify the URI to load
                 if (Request["Uri"] != null)

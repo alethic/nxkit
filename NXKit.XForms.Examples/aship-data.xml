@@ -1,0 +1,24 @@
+﻿<aship xmlns="urn::data">
+    <coverage>M</coverage>
+    <plan>1</plan>
+    <aca_compliance>false</aca_compliance>
+    <insureds>
+        <member>
+            <name></name>
+            <dob></dob>
+        </member>
+        <spouse>
+            <name></name>
+            <dob></dob>
+        </spouse>
+        <child1>
+            <name></name>
+            <dob></dob>
+        </child1>
+        <child2>
+            <name></name>
+            <dob></dob>
+        </child2>
+    </insureds>
+    <premium></premium>
+</aship>

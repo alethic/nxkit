@@ -1,0 +1,183 @@
+﻿<f:form
+    xmlns="http://www.w3.org/2002/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
+    xmlns:xf="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:d="urn::data"
+    xmlns:r="urn::rates"
+    id="form">
+    <xf:model>
+        <xf:instance
+            id="data"
+            src="aship-data.xml" />
+        <xf:bind
+            ref="instance('data')">
+            <xf:bind
+                ref="d:coverage"
+                type="xsd:string"
+                required="true()" />
+            <xf:bind
+                ref="d:plan"
+                type="xsd:string" />
+            <xf:bind
+                ref="d:aca_compliance"
+                type="xsd:boolean" />
+            <xf:bind
+                ref="d:insureds/*/d:dob"
+                type="xsd:date" />
+            <xf:bind
+                ref="d:premium"
+                calculate="instance('rates')/r:rate[@plan=instance('data')/d:plan and @coverage=instance('data')/d:coverage]" />
+        </xf:bind>
+        <xf:submission
+            id="submission"
+            ref="instance('data')"
+            method="put"
+            action="aship-data.xml">
+            <xf:dispatch
+                ev:event="xforms-submit-done"
+                name="isis-form-next"
+                targetid="form"
+                bubbles="true" />
+        </xf:submission>
+        <xf:instance
+            id="rates">
+            <rates xmlns="urn::rates">
+                <rate plan="1"
+                      coverage="M">20</rate>
+                <rate plan="1"
+                      coverage="MS">40</rate>
+                <rate plan="1"
+                      coverage="MF">50</rate>
+
+                <rate plan="2"
+                      coverage="M">30</rate>
+                <rate plan="2"
+                      coverage="MS">60</rate>
+                <rate plan="2"
+                      coverage="MF">75</rate>
+
+                <rate plan="3"
+                      coverage="M">40</rate>
+                <rate plan="3"
+                      coverage="MS">80</rate>
+                <rate plan="3"
+                      coverage="MF">100</rate>
+            </rates>
+        </xf:instance>
+    </xf:model>
+
+    <f:section
+        ref="instance('data')">
+        <xf:group>
+            <xf:label>Coverage Information</xf:label>
+            <xf:select1
+                ref="d:coverage"
+                appearance="full">
+                <xf:label>Select who you would like to be covered:</xf:label>
+                <xf:item>
+                    <xf:label>Member Only</xf:label>
+                    <xf:value>M</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Member &amp; Spouse or Party to a Civil Union</xf:label>
+                    <xf:value>MS</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Member &amp; Family</xf:label>
+                    <xf:value>MF</xf:value>
+                </xf:item>
+            </xf:select1>
+            <xf:select1
+                ref="d:plan"
+                appearance="full">
+                <xf:label>Select your Plan option:</xf:label>
+                <xf:item>
+                    <xf:label>Plan 1</xf:label>
+                    <xf:value>1</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Plan 2</xf:label>
+                    <xf:value>2</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Plan 3</xf:label>
+                    <xf:value>3</xf:value>
+                </xf:item>
+            </xf:select1>
+            <f:p>
+                Premium is <xf:output ref="d:premium"/>
+            </f:p>
+        </xf:group>
+        <xf:group
+            ref="d:insureds">
+            <xf:label>Insured Persons</xf:label>
+            <xf:group
+                ref="d:member">
+                <xf:input
+                    ref="d:name">
+                    <xf:label>Member</xf:label>
+                </xf:input>
+                <xf:input
+                    ref="d:dob">
+                    <xf:label>Date of Birth</xf:label>
+                </xf:input>
+            </xf:group>
+            <xf:group
+                ref="d:spouse">
+                <xf:input
+                    ref="d:name">
+                    <xf:label>Spouse or Party to a Civil Union</xf:label>
+                </xf:input>
+                <xf:input
+                    ref="d:dob">
+                    <xf:label>Date of Birth</xf:label>
+                </xf:input>
+            </xf:group>
+            <xf:group
+                ref="d:child1">
+                <xf:input
+                    ref="d:name">
+                    <xf:label>Child #1</xf:label>
+                </xf:input>
+                <xf:input
+                    ref="d:dob">
+                    <xf:label>Date of Birth</xf:label>
+                </xf:input>
+            </xf:group>
+            <xf:group
+                ref="d:child2">
+                <xf:input
+                    ref="d:name">
+                    <xf:label>Child #2</xf:label>
+                </xf:input>
+                <xf:input
+                    ref="d:dob">
+                    <xf:label>Date of Birth</xf:label>
+                </xf:input>
+            </xf:group>
+        </xf:group>
+    </f:section>
+
+    <xf:trigger>
+        <xf:label>
+            <f:icon
+                name="left" />
+            Back
+        </xf:label>
+        <xf:dispatch
+            ev:event="DOMActivate"
+            name="isis-form-previous"
+            targetid="form" />
+    </xf:trigger>
+    <xf:trigger>
+        <xf:label>
+            Next
+            <f:icon name="right" />
+        </xf:label>
+        <xf:send
+            ev:event="DOMActivate"
+            submission="primaryperson_submission" />
+    </xf:trigger>
+</f:form>
