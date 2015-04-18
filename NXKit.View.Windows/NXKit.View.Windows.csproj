@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DelegateCommand.cs" />
+    <Compile Include="Extensions\IViewMetadata.cs" />
     <Compile Include="NodeContainer.cs" />
     <Compile Include="NodesPresenter.cs" />
     <Compile Include="NodePresenter.cs" />
