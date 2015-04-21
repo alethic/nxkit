@@ -237,7 +237,28 @@ namespace NXKit.XForms
 
             // convert value to destination item type if possible
             if (ItemType != null)
-                newValue = ConvertTo(ItemType, newValue);
+            {
+                var schemaType = GetXsdSchemaType() as XmlSchemaSimpleType;
+                if (schemaType != null)
+                {
+                    try
+                    {
+                        var value = schemaType.Datatype.ParseValue(newValue, Model.State.XmlSchemas.NameTable, null);
+                        if (value != null)
+                            newValue = (string)schemaType.Datatype.ChangeType(value, typeof(string));
+                    }
+                    catch (XmlSchemaException)
+                    {
+                        // ignore
+                    }
+                }
+                else
+                    newValue = ConvertTo(ItemType, newValue);
+            }
+
+            // some sort of conversion error occurred
+            if (newValue == null)
+                return;
 
             // nothing changed
             if (newValue == GetValue())

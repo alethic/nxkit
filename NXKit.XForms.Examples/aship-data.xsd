@@ -1,94 +1,106 @@
-﻿<xsd:schema
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+﻿<schema
+    xmlns="http://www.w3.org/2001/XMLSchema"
     xmlns:d="urn:aship-data"
     targetNamespace="urn:aship-data"
-    elementFormDefault="unqualified"
-    attributeFormDefault="unqualified">
-    <xsd:element
+    elementFormDefault="qualified">
+    <simpleType
         name="coverage">
-        <xsd:simpleType>
-            <xsd:restriction base="xsd:string">
-                <xsd:enumeration value="M"/>
-                <xsd:enumeration value="MS"/>
-                <xsd:enumeration value="MF"/>
-            </xsd:restriction>
-        </xsd:simpleType>
-    </xsd:element>
-    <xsd:element
+        <restriction
+            base="string">
+            <enumeration
+                value="M"/>
+            <enumeration
+                value="MS"/>
+            <enumeration
+                value="MF"/>
+        </restriction>
+    </simpleType>
+    <simpleType
         name="plan">
-        <xsd:simpleType>
-            <xsd:restriction base="xsd:integer">
-                <xsd:minInclusive value="1"/>
-                <xsd:maxInclusive value="3"/>
-            </xsd:restriction>
-        </xsd:simpleType>
-    </xsd:element>
-    <xsd:element
-        name="aca_compliance"
-        type="xsd:boolean" />
-    <xsd:complexType
+        <restriction
+            base="integer">
+            <minInclusive
+                value="1"/>
+            <maxInclusive
+                value="3"/>
+        </restriction>
+    </simpleType>
+    <simpleType
+        name="aca_compliance">
+        <restriction
+            base="boolean" />
+    </simpleType>
+    <complexType
         name="person">
-        <xsd:sequence>
-            <xsd:element
-                name="name"
-                type="xsd:string" />
-            <xsd:element
+        <sequence>
+            <element
+                name="name">
+                <simpleType>
+                    <restriction
+                        base="string">
+                        <minLength
+                            value="1" />
+                    </restriction>
+                </simpleType>
+            </element>
+            <element
                 name="dateOfBirth"
-                type="xsd:date" />
-        </xsd:sequence>
-    </xsd:complexType>
-    <xsd:complexType
+                type="date" />
+        </sequence>
+    </complexType>
+    <complexType
         name="child">
-        <xsd:complexContent>
-            <xsd:extension
+        <complexContent>
+            <extension
                 base="d:person">
-                <xsd:sequence>
-                    <xsd:element
+                <sequence>
+                    <element
                         name="index"
-                        type="xsd:integer" />
-                </xsd:sequence>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
-    <xsd:element
-        name="spouse"
-        type="d:person" />
-    <xsd:element
+                        type="integer" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType
         name="insureds">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element
-                    ref="d:spouse" />
-                <xsd:element
-                    name="children">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element
-                                name="child"
-                                type="d:child"
-                                minOccurs="1" />
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-    <xsd:element
+        <sequence>
+            <element
+                name="spouse"
+                type="d:person"/>
+            <element
+                name="children">
+                <complexType>
+                    <sequence>
+                        <element
+                            name="child"
+                            type="d:child"
+                            minOccurs="0"
+                            maxOccurs="unbounded" />
+                    </sequence>
+                </complexType>
+            </element>
+        </sequence>
+    </complexType>
+    <element
         name="aship">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element
-                    ref="d:coverage"/>
-                <xsd:element
-                    ref="d:plan"/>
-                <xsd:element
-                    ref="d:aca_compliance"/>
-                <xsd:element
-                    ref="d:insureds"/>
-                <xsd:element
+        <complexType>
+            <sequence>
+                <element
+                    name="plan"
+                    type="d:plan" />
+                <element
+                    name="coverage"
+                    type="d:coverage" />
+                <element
+                    name="aca_compliance"
+                    type="boolean" />
+                <element
+                    name="insureds"
+                    type="d:insureds" />
+                <element
                     name="premium"
-                    type="xsd:decimal"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-</xsd:schema>
+                    type="decimal" />
+            </sequence>
+        </complexType>
+    </element>
+</schema>

@@ -49,6 +49,13 @@ namespace NXKit.XForms.View.Js
                 "text/html",
                 GetLastModifiedTime(),
                 GetETag()),
+
+            new ViewModuleInfo(
+                "nx-moment",
+                _ => typeof(ViewModuleProvider).Assembly.GetManifestResourceStream("NXKit.XForms.View.Js.Scripts.nx-moment.js").CopyTo(_),
+                "application/javascript",
+                GetLastModifiedTime(),
+                GetETag()),
         };
 
         public IQueryable<ViewModuleInfo> GetViewModules()

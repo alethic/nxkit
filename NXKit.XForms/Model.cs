@@ -375,14 +375,13 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(reader != null);
 
             // load instance
-            var schema = XmlSchema.Read(reader, XmlSchema_ValidationEvent);
+            var schema = XmlSchema.Read(reader, LoadSchema_ValidationEvent);
             if (schema != null)
                 State.XmlSchemas.Add(schema);
         }
 
-        void XmlSchema_ValidationEvent(object sender, ValidationEventArgs args)
+        void LoadSchema_ValidationEvent(object sender, ValidationEventArgs args)
         {
-            Contract.Requires<ArgumentNullException>(sender != null);
             Contract.Requires<ArgumentNullException>(args != null);
         }
 

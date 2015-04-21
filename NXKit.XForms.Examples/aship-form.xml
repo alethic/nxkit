@@ -208,6 +208,7 @@
             <xf:group
                 ref="d:children">
                 <xf:label>Children</xf:label>
+                <xf:alert>You need more children!</xf:alert>
                 <f:p>
                     Since you have elected the Member &amp; Family coverage option, additional information about
                     your covered children is required. Complete the names and birthdates of those to be covered.

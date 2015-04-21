@@ -26,6 +26,7 @@
     <TypeScriptCompile Include="Scripts\Select1BindingHandler.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
     <TypeScriptCompile Include="SubmitViewModel.ts" />
     <TypeScriptCompile Include="TriggerViewModel.ts" />
@@ -45,6 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="NXKit.XForms.View.Js.nuspec" />
+    <None Include="Scripts\nx-moment.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>nx-moment.js</LastGenOutput>
+    </None>
     <None Include="Submit.html" />
     <None Include="Group.html" />
     <None Include="Model.html" />
@@ -94,6 +99,22 @@
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
       <Name>NXKit</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\moment-with-locales.js" />
+    <EmbeddedResource Include="Scripts\moment-with-locales.min.js" />
+    <EmbeddedResource Include="Scripts\moment.js" />
+    <EmbeddedResource Include="Scripts\moment.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\nx-moment.js">
+      <DependentUpon>nx-moment.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>

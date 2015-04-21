@@ -18,6 +18,7 @@ namespace NXKit.XForms.View.Js
             new ViewModuleDependency(ViewModuleType.Script, "nxkit-xforms"),
             new ViewModuleDependency(ViewModuleType.Css, "nxkit-xforms.css"),
             new ViewModuleDependency(ViewModuleType.Template, "nxkit-xforms.html"),
+            new ViewModuleDependency(ViewModuleType.Script, "nx-moment"),
         };
 
         public IEnumerable<ViewModuleDependency> GetDependencies(XObject obj)

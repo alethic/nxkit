@@ -209,7 +209,7 @@ namespace NXKit.XForms
             // initiate validation against schema
             State.Document.Validate(
                 Model.Interface<Model>().State.XmlSchemas,
-                Validate_EventHandler,
+                XmlSchemaValidate_ValidationEvent,
                 true);
         }
 
@@ -218,7 +218,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        void Validate_EventHandler(object sender, EventArgs args)
+        void XmlSchemaValidate_ValidationEvent(object sender, EventArgs args)
         {
 
         }

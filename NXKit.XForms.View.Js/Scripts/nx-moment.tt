@@ -1,0 +1,13 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ output extension=".js" #>
+
+(function () {
+
+requirejs = NXKit.requirejs;
+require = NXKit.require;
+define = NXKit.define;
+
+<#@ include file="moment.js" #>
+
+}).call(NXKit.global);
