@@ -123,7 +123,8 @@ namespace NXKit.Scripting.EcmaScript
 
         public void Load()
         {
-            if (state.state != null)
+            if (state.state != null &&
+                state.state.Length > 0)
             {
                 // deserialize engine from previous state
                 var m = new MemoryStream(state.state);

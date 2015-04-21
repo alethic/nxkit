@@ -7,7 +7,6 @@ using System.Xml.Linq;
 
 using NXKit.Composition;
 using NXKit.DOMEvents;
-using NXKit.Util;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -241,18 +240,9 @@ namespace NXKit.XForms
             {
                 State.Revalidate = false;
 
+                // validate each instance
                 foreach (var instance in Instances)
-                {
-                    // all model items
-                    var modelItems = instance.State.Document.Root
-                        .DescendantNodesAndSelf()
-                        .OfType<XElement>()
-                        .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
-                        .Select(i => i.AnnotationOrCreate<ModelItem>(() => new ModelItem(i)));
-
-                    foreach (var modelItem in modelItems)
-                        modelItem.State.Valid = (modelItem.Required ? modelItem.Value.TrimToNull() != null : true) && modelItem.Constraint;
-                }
+                    instance.Validate();
             }
             while (State.Revalidate);
         }

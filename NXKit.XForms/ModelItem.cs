@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
+
 using NXKit.DOMEvents;
-using NXKit.XForms.XmlSchema;
+using NXKit.Util;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -201,13 +201,16 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Converts the given value to the specified XSD type.sss
+        /// Converts the given value to the specified XSD type.
         /// </summary>
         /// <param name="xsdType"></param>
         /// <param name="value"></param>
         /// <returns></returns>
         string ConvertTo(XName xsdType, string value)
         {
+            Contract.Requires<ArgumentNullException>(xsdType != null);
+            Contract.Requires<ArgumentNullException>(value != null);
+
             // select compatible converter
             var converter = Instance.XsdTypeConverters
                 .Where(i => i.CanConvertTo(xsdType))
@@ -267,7 +270,7 @@ namespace NXKit.XForms
             else if (Xml is XAttribute)
             {
                 var target = (XAttribute)Xml;
-                ((XAttribute)Xml).SetValue(newValue);
+                target.Value = newValue;
             }
             else if (Xml is XText)
             {
@@ -440,6 +443,15 @@ namespace NXKit.XForms
                 return element.CreateNavigator();
 
             throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Validates the <see cref="ModelItem"/>.
+        /// </summary>
+        /// <returns></returns>
+        public bool Validate()
+        {
+            return (bool)(State.Valid = (Required ? Value.TrimToNull() != null : true) && Constraint);
         }
 
     }
