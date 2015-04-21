@@ -4,9 +4,11 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+using System.Xml.Schema;
 
 using NXKit.Composition;
 using NXKit.DOMEvents;
+using NXKit.Util;
 using NXKit.XForms.IO;
 using NXKit.XForms.XmlSchema;
 using NXKit.Xml;
@@ -164,6 +166,31 @@ namespace NXKit.XForms
         {
             // ensure instances are reloaded properly
             State.Initialize(Model, Element);
+        }
+
+        /// <summary>
+        /// Validates the instance data.
+        /// </summary>
+        internal void Validate()
+        {
+            // all model items
+            var modelItems = State.Document.Root
+                .DescendantNodesAndSelf()
+                .OfType<XElement>()
+                .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
+                .Select(i => i.AnnotationOrCreate<ModelItem>(() => new ModelItem(i)));
+
+            // initiate validation against schema
+            State.Document.Validate(null, Validate_EventHandler, true);
+
+            // initiate individual model item validation
+            foreach (var modelItem in modelItems)
+                modelItem.Validate();
+        }
+
+        void Validate_EventHandler(object sender, EventArgs args)
+        {
+
         }
 
     }

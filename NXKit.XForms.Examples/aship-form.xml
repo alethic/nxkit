@@ -4,8 +4,8 @@
     xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
     xmlns:xf="http://www.w3.org/2002/xforms"
     xmlns:ev="http://www.w3.org/2001/xml-events"
-    xmlns:d="urn::data"
-    xmlns:r="urn::rates"
+    xmlns:d="urn:aship-data"
+    xmlns:r="urn:aship-rates"
     id="form">
     <xf:model>
         <xf:instance
@@ -24,8 +24,19 @@
                 ref="d:aca_compliance"
                 type="xsd:boolean" />
             <xf:bind
-                ref="d:insureds/*/d:dob"
-                type="xsd:date" />
+                ref="d:insureds"
+                relevant="../d:coverage='MS' or ../d:coverage='MF'">
+                <xf:bind
+                    ref="d:spouse/d:dateOfBirth"
+                    type="xsd:date" />
+                <xf:bind
+                    ref="d:children"
+                    relevant="../../d:coverage='MF'">
+                    <xf:bind
+                        ref="d:child/d:dateOfBirth"
+                        type="xsd:date" />
+                </xf:bind>
+            </xf:bind>
             <xf:bind
                 ref="d:premium"
                 calculate="instance('rates')/r:rate[@plan=instance('data')/d:plan and @coverage=instance('data')/d:coverage]" />
@@ -43,7 +54,7 @@
         </xf:submission>
         <xf:instance
             id="rates">
-            <rates xmlns="urn::rates">
+            <rates xmlns="urn:aship-rates">
                 <rate plan="1"
                       coverage="M">20</rate>
                 <rate plan="1"
@@ -71,24 +82,84 @@
     <f:section
         ref="instance('data')">
         <xf:group>
+            <f:p>
+                It's easy to enroll. No questions about your health. No medical exam.
+            </f:p>
             <xf:label>Coverage Information</xf:label>
-            <xf:select1
-                ref="d:coverage"
-                appearance="full">
-                <xf:label>Select who you would like to be covered:</xf:label>
-                <xf:item>
-                    <xf:label>Member Only</xf:label>
-                    <xf:value>M</xf:value>
-                </xf:item>
-                <xf:item>
-                    <xf:label>Member &amp; Spouse or Party to a Civil Union</xf:label>
-                    <xf:value>MS</xf:value>
-                </xf:item>
-                <xf:item>
-                    <xf:label>Member &amp; Family</xf:label>
-                    <xf:value>MF</xf:value>
-                </xf:item>
-            </xf:select1>
+            <f:table>
+                <f:table-row>
+                    <f:table-cell>
+                        <f:strong>Available Benefts</f:strong>
+                    </f:table-cell>
+                    <f:table-cell>Plan 1</f:table-cell>
+                    <f:table-cell>Plan 2</f:table-cell>
+                    <f:table-cell>Plan 3</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>Daily In-Hospital Benefit</f:table-cell>
+                    <f:table-cell>$150</f:table-cell>
+                    <f:table-cell>$250</f:table-cell>
+                    <f:table-cell>$500</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>Daily ICU Benefit</f:table-cell>
+                    <f:table-cell>$150</f:table-cell>
+                    <f:table-cell>$250</f:table-cell>
+                    <f:table-cell>$500</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>Daily Recuperation Benefit</f:table-cell>
+                    <f:table-cell>$100</f:table-cell>
+                    <f:table-cell>$100</f:table-cell>
+                    <f:table-cell>$100</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>Semi-Annual (2 per year) ER Visit</f:table-cell>
+                    <f:table-cell>$150</f:table-cell>
+                    <f:table-cell>$200</f:table-cell>
+                    <f:table-cell>$250</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>Semi-Annyal (2 per year) Physician Office Visit</f:table-cell>
+                    <f:table-cell>$50</f:table-cell>
+                    <f:table-cell>$50</f:table-cell>
+                    <f:table-cell>$50</f:table-cell>
+                </f:table-row>
+            </f:table>
+            <f:table>
+                <f:table-row>
+                    <f:table-cell>
+                        <f:strong>Monthly Rates</f:strong>
+                    </f:table-cell>
+                    <f:table-cell>
+                        Plan 1
+                        <xf:setvalue
+                            ev:event="DOMActivate"
+                            ref="d:plan"
+                            value="1" />
+                    </f:table-cell>
+                    <f:table-cell>Plan 2</f:table-cell>
+                    <f:table-cell>Plan 3</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>Member Only</f:table-cell>
+                    <f:table-cell>$20.00/m</f:table-cell>
+                    <f:table-cell>$30.00/m</f:table-cell>
+                    <f:table-cell>$40.00/m</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>Member &amp; Spouse or Party to a Civil Union</f:table-cell>
+                    <f:table-cell>$40.00/m</f:table-cell>
+                    <f:table-cell>$60.00/m</f:table-cell>
+                    <f:table-cell>$80.00/m</f:table-cell>
+                </f:table-row>
+                <f:table-row>
+                    <f:table-cell>Member &amp; Family</f:table-cell>
+                    <f:table-cell>$50.00/m</f:table-cell>
+                    <f:table-cell>$75.00/m</f:table-cell>
+                    <f:table-cell>$100.00/m</f:table-cell>
+                </f:table-row>
+            </f:table>
             <xf:select1
                 ref="d:plan"
                 appearance="full">
@@ -106,24 +177,35 @@
                     <xf:value>3</xf:value>
                 </xf:item>
             </xf:select1>
+            <xf:select1
+                ref="d:coverage"
+                appearance="full">
+                <xf:label>Select who you would like to be covered:</xf:label>
+                <xf:item>
+                    <xf:label>Member Only</xf:label>
+                    <xf:value>M</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Member &amp; Spouse or Party to a Civil Union</xf:label>
+                    <xf:value>MS</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Member &amp; Family</xf:label>
+                    <xf:value>MF</xf:value>
+                </xf:item>
+            </xf:select1>
             <f:p>
-                Premium is <xf:output ref="d:premium"/>
+                Premium is $<xf:output ref="d:premium"/>
             </f:p>
         </xf:group>
         <xf:group
             ref="d:insureds">
             <xf:label>Insured Persons</xf:label>
-            <xf:group
-                ref="d:member">
-                <xf:input
-                    ref="d:name">
-                    <xf:label>Member</xf:label>
-                </xf:input>
-                <xf:input
-                    ref="d:dob">
-                    <xf:label>Date of Birth</xf:label>
-                </xf:input>
-            </xf:group>
+            <f:p>
+                Since you have elected the Member &amp; Spouse coverage option, additional information about
+                your covered spouse or domestic partner is required. Complete the name and birth date of your spouse
+                or domestic partner.
+            </f:p>
             <xf:group
                 ref="d:spouse">
                 <xf:input
@@ -131,32 +213,56 @@
                     <xf:label>Spouse or Party to a Civil Union</xf:label>
                 </xf:input>
                 <xf:input
-                    ref="d:dob">
+                    ref="d:dateOfBirth">
                     <xf:label>Date of Birth</xf:label>
                 </xf:input>
             </xf:group>
             <xf:group
-                ref="d:child1">
-                <xf:input
-                    ref="d:name">
-                    <xf:label>Child #1</xf:label>
-                </xf:input>
-                <xf:input
-                    ref="d:dob">
-                    <xf:label>Date of Birth</xf:label>
-                </xf:input>
+                ref="d:children">
+                <xf:label>Children</xf:label>
+                <f:p>
+                    Since you have elected the Member &amp; Family coverage option, additional information about
+                    your covered children is required. Complete the names and birthdates of those to be covered.
+                </f:p>
+                <xf:repeat
+                    id="children-repeat"
+                    ref="d:child">
+                    <xf:group>
+                        <xf:input
+                            ref="d:name">
+                            <xf:label>
+                                Child #<xf:output value="../d:index" />
+                            </xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="d:dateOfBirth">
+                            <xf:label>Date of Birth</xf:label>
+                        </xf:input>
+                    </xf:group>
+                </xf:repeat>
             </xf:group>
-            <xf:group
-                ref="d:child2">
-                <xf:input
-                    ref="d:name">
-                    <xf:label>Child #2</xf:label>
-                </xf:input>
-                <xf:input
-                    ref="d:dob">
-                    <xf:label>Date of Birth</xf:label>
-                </xf:input>
-            </xf:group>
+        </xf:group>
+        <xf:group>
+            <xf:label>Compliance</xf:label>
+            <f:p>
+                <f:strong>
+                    THIS IS A SUPPLEMENT TO HEALTH INSURANCE AND IS NOT A SUBSTITUTE FOR MAJOR MEDICAL COVERAGE.
+                    LACK OF MAJOR MEDICAL COVERAGE (OR OTHER MINIMUM ESSENTIAL COVERAGE) MAY RESULT IN AN ADDITIONAL PAYMENT
+                    WITH YOUR TAXES.
+                </f:strong>
+            </f:p>
+            <f:p>
+                Please Node: If the answer to the following question is "No," you will not be allowed to complete this
+                enrollment as the Company is prohibited by law from issuing this insurance policy.
+            </f:p>
+            <xf:input
+                ref="d:aca_compliance">
+                <xf:label>
+                    Do you and all other individuals to be covered under this policy have other
+                    health coverage that is minimum essential coverage within the meaning of Section 5000A(f) of the Internal
+                    Revenue Code and which is required under the Affordable Care Act?
+                </xf:label>
+            </xf:input>
         </xf:group>
     </f:section>
 
