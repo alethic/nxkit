@@ -10,7 +10,7 @@ using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Util;
 using NXKit.XForms.IO;
-using NXKit.XForms.XmlSchema;
+using NXKit.XForms.Converters;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -160,12 +160,25 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(document != null);
 
             State.Initialize(Model, Element, document);
+
+            // applies XML schema validation information
+            XmlSchemaValidate();
         }
 
         void IOnLoad.Load()
         {
             // ensure instances are reloaded properly
             State.Initialize(Model, Element);
+        }
+
+        internal void Rebuild()
+        {
+            XmlSchemaValidate();
+        }
+
+        internal void Calculate()
+        {
+
         }
 
         /// <summary>
@@ -180,14 +193,31 @@ namespace NXKit.XForms
                 .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
                 .Select(i => i.AnnotationOrCreate<ModelItem>(() => new ModelItem(i)));
 
-            // initiate validation against schema
-            State.Document.Validate(null, Validate_EventHandler, true);
+            // rerun the XML schema validation
+            XmlSchemaValidate();
 
             // initiate individual model item validation
             foreach (var modelItem in modelItems)
                 modelItem.Validate();
         }
 
+        /// <summary>
+        /// Runs the XML schema validation which attaches annotations to the model items.
+        /// </summary>
+        internal void XmlSchemaValidate()
+        {
+            // initiate validation against schema
+            State.Document.Validate(
+                Model.Interface<Model>().State.XmlSchemas,
+                Validate_EventHandler,
+                true);
+        }
+
+        /// <summary>
+        /// Invoked when an XML validation event occurs.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         void Validate_EventHandler(object sender, EventArgs args)
         {
 

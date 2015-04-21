@@ -1,7 +1,6 @@
-﻿using System.Xml;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
 
 using NXKit.Serialization;
 
@@ -12,9 +11,8 @@ namespace NXKit
     /// Stores various NXKit information on the <see cref="XObject"/>.
     /// </summary>
     [SerializableAnnotation]
-    [XmlRoot("object")]
     public class ObjectAnnotation :
-        IXmlSerializable
+        IAttributeSerializableAnnotation
     {
 
         int id;
@@ -67,26 +65,16 @@ namespace NXKit
             set { load = value; }
         }
 
-        XmlSchema IXmlSerializable.GetSchema()
+        IEnumerable<XAttribute> IAttributeSerializableAnnotation.Serialize(AnnotationSerializer serializer, XNamespace ns)
         {
-            return null;
+            yield return new XAttribute(ns + "id", id);
+            yield return new XAttribute(ns + "init", init);
         }
 
-        void IXmlSerializable.ReadXml(XmlReader reader)
+        void IAttributeSerializableAnnotation.Deserialize(AnnotationSerializer serializer, XNamespace ns, IEnumerable<XAttribute> attributes)
         {
-            if (reader.MoveToContent() == XmlNodeType.Element &&
-                reader.LocalName == "object")
-            {
-                id = int.Parse(reader["id"]);
-                init = bool.Parse(reader["init"] ?? "false");
-            }
-        }
-
-        void IXmlSerializable.WriteXml(XmlWriter writer)
-        {
-            writer.WriteAttributeString("id", id.ToString());
-            if (init)
-                writer.WriteAttributeString("init", "true");
+            id = (int?)attributes.FirstOrDefault(i => i.Name == ns + "id") ?? 0;
+            init = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "init") ?? true;
         }
 
     }

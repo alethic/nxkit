@@ -10,7 +10,7 @@
         /// <summary>
         /// Gets whether or not the <see cref="XElement"/> is a metadata element.
         /// </summary>
-        public bool IsMetadata { get; }
+        bool IsMetadata { get; }
 
     }
 

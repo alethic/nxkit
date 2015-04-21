@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace NXKit.XForms.XmlSchema
+namespace NXKit.XForms.Converters
 {
 
     /// <summary>

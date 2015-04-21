@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
-
+using System.Xml.Schema;
 using NXKit.Composition;
 using NXKit.DOMEvents;
+using NXKit.IO;
+using NXKit.XForms.IO;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -19,7 +23,7 @@ namespace NXKit.XForms
         IEventDefaultAction
     {
 
-
+        readonly IIOService io;
         readonly ModelAttributes attributes;
         readonly Lazy<ModelState> state;
         readonly Lazy<DocumentAnnotation> documentAnnotation;
@@ -27,17 +31,21 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="io"></param>
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         [ImportingConstructor]
         public Model(
+            IIOService io,
             XElement element,
             ModelAttributes attributes)
             : base(element)
         {
+            Contract.Requires<ArgumentNullException>(io != null);
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(attributes != null);
 
+            this.io = io;
             this.attributes = attributes;
             this.state = new Lazy<ModelState>(() => Element.AnnotationOrCreate<ModelState>());
             this.documentAnnotation = new Lazy<DocumentAnnotation>(() => Element.Document.AnnotationOrCreate<DocumentAnnotation>());
@@ -152,9 +160,19 @@ namespace NXKit.XForms
                     if (version != "1.0")
                         throw new DOMTargetEventException(Element, Events.VersionException);
 
+            // attempt to load XML schemas refered to by the Schema attribute
             if (attributes.Schema != null)
                 foreach (var item in attributes.Schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
-                    continue; // TODO
+                    LoadSchema(new Uri(item, UriKind.RelativeOrAbsolute));
+
+            // attempt to load XML schemas listed directly under the model
+            foreach (var element in Element.Elements("{http://www.w3.org/2001/XMLSchema}schema"))
+            {
+                LoadSchema(element);
+
+                // remove node from tree
+                element.Remove();
+            }
 
             // attempt to load model instance data
             foreach (var instance in Instances)
@@ -207,6 +225,10 @@ namespace NXKit.XForms
             {
                 State.Rebuild = false;
                 State.Recalculate = true;
+
+                // validate each instance
+                foreach (var instance in Instances)
+                    instance.Rebuild();
             }
             while (State.Rebuild);
         }
@@ -220,6 +242,10 @@ namespace NXKit.XForms
             {
                 State.Recalculate = false;
                 State.Revalidate = true;
+
+                // validate each instance
+                foreach (var instance in Instances)
+                    instance.Calculate();
 
                 // apply all of the bind elements
                 foreach (var bind in GetAllExtensions<Bind>())
@@ -295,6 +321,69 @@ namespace NXKit.XForms
 
             if (state.Value.Refresh)
                 OnRefresh();
+        }
+
+        /// <summary>
+        /// Loads the given schema into the model.
+        /// </summary>
+        /// <param name="uri"></param>
+        void LoadSchema(Uri uri)
+        {
+            Contract.Requires<ArgumentNullException>(uri != null);
+
+            try
+            {
+                // normalize uri with base
+                if (Element.GetBaseUri() != null && !uri.IsAbsoluteUri)
+                    uri = new Uri(Element.GetBaseUri(), uri);
+            }
+            catch (UriFormatException e)
+            {
+                throw new DOMTargetEventException(Element, Events.LinkException, e);
+            }
+
+            // return resource as a stream
+            var response = io.Send(new IORequest(uri, IOMethod.Get));
+            if (response == null ||
+                response.Status != IOStatus.Success)
+                throw new DOMTargetEventException(Element, Events.LinkException,
+                    string.Format("Error retrieving schema '{0}'.", uri));
+
+            // load the retrieved schema
+            using (var rdr = XmlReader.Create(response.Content))
+                LoadSchema(rdr);
+        }
+
+        /// <summary>
+        /// Loads the schema given by the specified <see cref="XElement"/>.
+        /// </summary>
+        /// <param name="element"></param>
+        void LoadSchema(XElement element)
+        {
+            Contract.Requires<ArgumentOutOfRangeException>(element.Name == XName.Get("{http://www.w3.org/2001/XMLSchema}schema"));
+
+            using (var rdr = element.CreateReader())
+                LoadSchema(rdr);
+        }
+
+        /// <summary>
+        /// Loads the schema given the specified <see cref="XmlReader"/>.
+        /// </summary>
+        /// <param name="reader"></param>
+        void LoadSchema(XmlReader reader)
+        {
+            Contract.Requires<ArgumentNullException>(reader != null);
+
+            // load instance
+            var schema = XmlSchema.Read(reader, XmlSchema_ValidationEvent);
+            if (schema != null)
+                State.XmlSchemas.Add(schema);
+        }
+
+        void XmlSchema_ValidationEvent(object sender, ValidationEventArgs args)
+        {
+            Contract.Requires<ArgumentNullException>(sender != null);
+            Contract.Requires<ArgumentNullException>(args != null);
         }
 
     }

@@ -7,7 +7,9 @@
     xmlns:d="urn:aship-data"
     xmlns:r="urn:aship-rates"
     id="form">
-    <xf:model>
+
+    <xf:model
+        schema="aship-data.xsd">
         <xf:instance
             id="data"
             src="aship-data.xml" />
@@ -15,27 +17,13 @@
             ref="instance('data')">
             <xf:bind
                 ref="d:coverage"
-                type="xsd:string"
                 required="true()" />
-            <xf:bind
-                ref="d:plan"
-                type="xsd:string" />
-            <xf:bind
-                ref="d:aca_compliance"
-                type="xsd:boolean" />
             <xf:bind
                 ref="d:insureds"
                 relevant="../d:coverage='MS' or ../d:coverage='MF'">
                 <xf:bind
-                    ref="d:spouse/d:dateOfBirth"
-                    type="xsd:date" />
-                <xf:bind
                     ref="d:children"
-                    relevant="../../d:coverage='MF'">
-                    <xf:bind
-                        ref="d:child/d:dateOfBirth"
-                        type="xsd:date" />
-                </xf:bind>
+                    relevant="../../d:coverage='MF'" />
             </xf:bind>
             <xf:bind
                 ref="d:premium"

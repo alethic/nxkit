@@ -41,6 +41,11 @@ namespace NXKit.XForms
             get { return GetAttributeValue("schema"); }
         }
 
+        public string Functions
+        {
+            get { return GetAttributeValue("functions"); }
+        }
+
     }
 
 }

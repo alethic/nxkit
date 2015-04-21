@@ -2,9 +2,7 @@
 using System.Collections.Immutable;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
 using NXKit.Serialization;
@@ -16,9 +14,8 @@ namespace NXKit.DOMEvents
     /// List of event listeners registered with a particular <see cref="EventTarget"/>.
     /// </summary>
     [SerializableAnnotation]
-    [XmlRoot("event-target")]
     public class EventTargetState :
-        IXmlSerializable
+        ISerializableAnnotation
     {
 
         internal ImmutableHashSet<EventListenerRegistration> registrations;
@@ -31,57 +28,23 @@ namespace NXKit.DOMEvents
             this.registrations = ImmutableHashSet<EventListenerRegistration>.Empty;
         }
 
-        XmlSchema IXmlSerializable.GetSchema()
+        XElement ISerializableAnnotation.Serialize(AnnotationSerializer serializer)
         {
+            var items = registrations
+                .Where(i => i.Listener.GetType().IsPublic)
+                .Where(i => i.Listener.GetType().GetConstructor(new Type[0]) != null)
+                .ToList();
+
+            if (items.Count > 0)
+                return new XElement("listeners", items
+                    .GroupBy(i => i.Listener)
+                    .Select(i => new XElement("item",
+                        SerializeListener(i.Key),
+                        i.Select(j => new XElement("registration",
+                            new XAttribute("event", j.EventType),
+                            new XAttribute("capture", j.Capture))))));
+
             return null;
-        }
-
-        void IXmlSerializable.ReadXml(XmlReader reader)
-        {
-            if (reader.MoveToContent() == XmlNodeType.Element &&
-                reader.LocalName == "event-target")
-            {
-                if (reader.ReadToDescendant("listeners"))
-                {
-                    // load listeners tree
-                    var listenersXml = XElement.Load(
-                        reader.ReadSubtree(),
-                        LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri);
-
-                    foreach (var itemXml in listenersXml.Elements("item"))
-                    {
-                        var listenerXml = itemXml.Element("listener");
-                        if (listenerXml == null)
-                            throw new InvalidOperationException();
-
-                        var root = listenerXml.FirstNode;
-                        if (root == null)
-                            throw new InvalidOperationException();
-
-                        var typeName = (string)listenerXml.Attribute("type");
-                        if (string.IsNullOrWhiteSpace(typeName))
-                            throw new InvalidOperationException();
-
-                        var type = Type.GetType(typeName);
-                        if (type == null)
-                            throw new InvalidOperationException();
-
-                        // deserialize listener
-                        using (var rdr = root.CreateReader())
-                        {
-                            var listener = (IEventListener)new XmlSerializer(type).Deserialize(rdr);
-
-                            // register listener with stored events
-                            foreach (var registrationXml in itemXml.Elements("registration"))
-                                registrations = registrations.Add(
-                                    new EventListenerRegistration(
-                                        (string)registrationXml.Attribute("event"),
-                                        listener,
-                                        (bool)registrationXml.Attribute("capture")));
-                        }
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -108,18 +71,44 @@ namespace NXKit.DOMEvents
             return element;
         }
 
-        void IXmlSerializable.WriteXml(XmlWriter writer)
+        void ISerializableAnnotation.Deserialize(AnnotationSerializer serializer, XElement element)
         {
-            new XElement("listeners",
-                registrations
-                    .Where(i => i.Listener.GetType().IsPublic)
-                    .Where(i => i.Listener.GetType().GetConstructor(new Type[0]) != null)
-                    .GroupBy(i => i.Listener).Select(i => new XElement("item",
-                        SerializeListener(i.Key),
-                        i.Select(j => new XElement("registration",
-                            new XAttribute("event", j.EventType),
-                            new XAttribute("capture", j.Capture))))))
-                .WriteTo(writer);
+            var items = element
+                .Elements("listeners")
+                .Select(i => i.Element("item"));
+
+            foreach (var itemXml in items)
+            {
+                var listenerXml = itemXml.Element("listener");
+                if (listenerXml == null)
+                    throw new InvalidOperationException();
+
+                var root = listenerXml.FirstNode;
+                if (root == null)
+                    throw new InvalidOperationException();
+
+                var typeName = (string)listenerXml.Attribute("type");
+                if (string.IsNullOrWhiteSpace(typeName))
+                    throw new InvalidOperationException();
+
+                var type = Type.GetType(typeName);
+                if (type == null)
+                    throw new InvalidOperationException();
+
+                // deserialize listener
+                using (var rdr = root.CreateReader())
+                {
+                    var listener = (IEventListener)new XmlSerializer(type).Deserialize(rdr);
+
+                    // register listener with stored events
+                    foreach (var registrationXml in itemXml.Elements("registration"))
+                        registrations = registrations.Add(
+                            new EventListenerRegistration(
+                                (string)registrationXml.Attribute("event"),
+                                listener,
+                                (bool)registrationXml.Attribute("capture")));
+                }
+            }
         }
 
     }

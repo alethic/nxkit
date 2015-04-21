@@ -44,8 +44,6 @@ namespace NXKit.XForms
                     document.AddAnnotation(model.Interface<Model>());
                 if (instance != null)
                     document.AddAnnotation(instance.Interface<Instance>());
-
-                document.Validate(new XmlSchemaSet(), (s, a) => { }, true);
             }
 
             this.document = document;

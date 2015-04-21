@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 using NXKit.Composition;
 
-namespace NXKit.XForms.XmlSchema
+namespace NXKit.XForms.Converters
 {
 
     [Export(typeof(IXsdTypeConverter))]

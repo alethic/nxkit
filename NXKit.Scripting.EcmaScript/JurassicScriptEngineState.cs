@@ -15,7 +15,7 @@ namespace NXKit.Scripting.EcmaScript
 
         public XElement Serialize(AnnotationSerializer serializer)
         {
-            return new XElement("jurassic-engine", state != null ? Convert.ToBase64String(state) : null);
+            return state != null && state.Length > 0 ? new XElement("jurassic-engine", Convert.ToBase64String(state)) : null;
         }
 
         public void Deserialize(AnnotationSerializer serializer, XElement element)

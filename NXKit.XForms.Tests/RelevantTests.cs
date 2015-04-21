@@ -50,19 +50,15 @@ namespace NXKit.XForms.Tests
             Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "false";
-            d.Invoke();
             Assert.IsFalse(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "true";
-            d.Invoke();
             Assert.IsTrue(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "false";
-            d.Invoke();
             Assert.IsFalse(inputs[1].UIBinding.Relevant);
 
             inputs[0].UIBinding.Value = "true";
-            d.Invoke();
             Assert.IsTrue(inputs[1].UIBinding.Relevant);
         }
 
@@ -86,12 +82,10 @@ namespace NXKit.XForms.Tests
             inputs[0].Target.AddEventDelegate("xforms-value-changed", i => c++);
             inputs[0].BindingNode.UIBinding.Value = "false";
             inputs[0].BindingNode.UIBinding.Value = "false";
-            d.Invoke();
             Assert.AreEqual(1, c);
 
             inputs[0].BindingNode.UIBinding.Value = "true";
             inputs[0].BindingNode.UIBinding.Value = "true";
-            d.Invoke();
             Assert.AreEqual(2, c);
         }
 
@@ -115,7 +109,6 @@ namespace NXKit.XForms.Tests
             inputs[1].Target.AddEventDelegate("xforms-disabled", i => c++);
             inputs[0].BindingNode.UIBinding.Value = "false";
             inputs[0].BindingNode.UIBinding.Value = "false";
-            d.Invoke();
             Assert.AreEqual(1, c);
             Assert.IsFalse(inputs[1].BindingNode.UIBinding.Relevant);
         }
@@ -139,9 +132,7 @@ namespace NXKit.XForms.Tests
             int c = 0;
             inputs[1].Target.AddEventDelegate("xforms-enabled", i => c++);
             inputs[0].BindingNode.UIBinding.Value = "false";
-            d.Invoke();
             inputs[0].BindingNode.UIBinding.Value = "true";
-            d.Invoke();
             Assert.AreEqual(1, c);
             Assert.IsTrue(inputs[1].BindingNode.UIBinding.Relevant);
         }

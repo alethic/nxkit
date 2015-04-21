@@ -20,12 +20,6 @@ namespace NXKit.Tests
         }
 
         [TestMethod]
-        public void Test_basic_invoke()
-        {
-            Document.Load(XDocument.Parse(@"<unknown />")).Invoke();
-        }
-
-        [TestMethod]
         public void Test_basic_save()
         {
             var doc = Document.Load(XDocument.Parse(@"<unknown />"));
@@ -45,7 +39,6 @@ namespace NXKit.Tests
         public void Test_basic_invoke_save()
         {
             var doc = Document.Load(XDocument.Parse(@"<unknown />"));
-            doc.Invoke();
 
             using (var str = new StringWriter())
             using (var wrt = XmlWriter.Create(str))

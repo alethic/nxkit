@@ -2,9 +2,10 @@
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using System.Xml.XPath;
-
 using NXKit.DOMEvents;
 using NXKit.Util;
 using NXKit.Xml;
@@ -17,6 +18,8 @@ namespace NXKit.XForms
     /// </summary>
     public class ModelItem
     {
+
+        readonly static XmlQualifiedName XS_ANYTYPE = new XmlQualifiedName("anyType", XmlSchemaConstants.XMLSchema_NS);
 
         /// <summary>
         /// Gets the model item for the given <see cref="XObject"/>.
@@ -95,7 +98,7 @@ namespace NXKit.XForms
 
         XName GetItemType()
         {
-            return State.Type ?? NXKit.XmlSchemaConstants.XMLSchema + "string";
+            return State.Type ?? GetXsiType() ?? GetXsdItemType() ?? NXKit.XmlSchemaConstants.XMLSchema + "string";
         }
 
         /// <summary>
@@ -449,9 +452,159 @@ namespace NXKit.XForms
         /// Validates the <see cref="ModelItem"/>.
         /// </summary>
         /// <returns></returns>
-        public bool Validate()
+        internal void Validate()
         {
-            return (bool)(State.Valid = (Required ? Value.TrimToNull() != null : true) && Constraint);
+            State.Valid = GetValidate();
+        }
+
+        /// <summary>
+        /// Executes the validation and returns the result.
+        /// </summary>
+        /// <returns></returns>
+        bool GetValidate()
+        {
+            // field is required by binding
+            if (Required)
+                if (Value.TrimToNull() == null)
+                    return false;
+
+            // contraint is invalid
+            if (!Constraint)
+                return false;
+
+            // schema validation failed
+            var schemaInfo = GetSchemaInfo();
+            if (schemaInfo != null)
+                if (schemaInfo.SchemaType != null)
+                    if (schemaInfo.Validity == XmlSchemaValidity.Invalid)
+                        return false;
+
+            // validate against expressed item type
+            var schemaType = Model.State.XmlSchemas.GlobalTypes[new XmlQualifiedName(ItemType.LocalName, ItemType.NamespaceName)] as XmlSchemaType;
+            if (schemaType != null)
+                if (!ValidateValueAgainstXmlSchemaType(schemaType, Value, Model.State.XmlSchemas.NameTable, null))
+                    return false;
+
+            // otherwise true
+            return true;
+        }
+
+        /// <summary>
+        /// Attempts to validate a value against the given schema type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <param name="nt"></param>
+        /// <param name="resolver"></param>
+        /// <returns></returns>
+        bool ValidateValueAgainstXmlSchemaType(XmlSchemaType type, string value, XmlNameTable nt, IXmlNamespaceResolver resolver)
+        {
+            Contract.Requires<ArgumentNullException>(type != null);
+            Contract.Requires<ArgumentNullException>(value != null);
+            Contract.Requires<ArgumentNullException>(nt != null);
+
+            try
+            {
+                type.Datatype.ParseValue(value, nt, resolver);
+                return true;
+            }
+            catch (XmlSchemaValidationException)
+            {
+                // ignore
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the type associated with the model item by 'xsi:type'.
+        /// </summary>
+        /// <returns></returns>
+        XName GetXsiType()
+        {
+            var element = xml as XElement;
+            if (element == null)
+                return null;
+
+            var value = (string)element.Attribute("{http://www.w3.org/2001/XMLSchema-instance}type");
+            if (value != null)
+                return element.ResolvePrefixedName(value);
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="XmlSchemaType"/> associated with the model item by XSD.
+        /// </summary>
+        /// <returns></returns>
+        XmlSchemaType GetXsdSchemaType()
+        {
+            var schemaInfo = GetSchemaInfo();
+            if (schemaInfo == null)
+                return null;
+
+            return schemaInfo.SchemaType;
+        }
+
+        /// <summary>
+        /// Gets the first named <see cref="XmlSchemaType"/> associated with the model item by XSD.
+        /// </summary>
+        /// <returns></returns>
+        XmlSchemaType GetXsdNamedSchemaType()
+        {
+            var schemaType = GetXsdSchemaType();
+            if (schemaType == null)
+                return null;
+
+            return schemaType.Recurse(i => i.BaseXmlSchemaType).FirstOrDefault(i => !i.QualifiedName.IsEmpty);
+        }
+
+        /// <summary>
+        /// Gets the applied XML schema type.
+        /// </summary>
+        /// <returns></returns>
+        XName GetXsdType()
+        {
+            var schemaType = GetXsdNamedSchemaType();
+            if (schemaType == null)
+                return null;
+
+            return XName.Get(schemaType.QualifiedName.Name, schemaType.QualifiedName.Namespace);
+        }
+
+        /// <summary>
+        /// Gets the model item type from the XML schema. This is the first base type of the schema type supported by 
+        /// the native XForms type system. Ultimately, richer type information should be exposed out of model-items and
+        /// be made available to the client.
+        /// </summary>
+        /// <returns></returns>
+        XName GetXsdItemType()
+        {
+            var schemaType = GetXsdSchemaType();
+            if (schemaType == null)
+                return null;
+
+            return schemaType
+                .Recurse(i => i.BaseXmlSchemaType)
+                .Where(i => !i.QualifiedName.IsEmpty)
+                .Where(i => i.QualifiedName != XS_ANYTYPE)
+                .Where(i => i.QualifiedName.Namespace == XmlSchemaConstants.XMLSchema_NS)
+                .Select(i => XName.Get(i.QualifiedName.Name, i.QualifiedName.Namespace))
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IXmlSchemaInfo"/> associated with the <see cref="ModelItem"/>.
+        /// </summary>
+        /// <returns></returns>
+        IXmlSchemaInfo GetSchemaInfo()
+        {
+            if (xml is XAttribute)
+                return ((XAttribute)xml).GetSchemaInfo();
+            if (xml is XElement)
+                return ((XElement)xml).GetSchemaInfo();
+
+            return null;
         }
 
     }

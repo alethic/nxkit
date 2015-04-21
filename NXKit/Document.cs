@@ -179,6 +179,19 @@ namespace NXKit
         }
 
         /// <summary>
+        /// Loads a <see cref="Document"/> by parsing the given input XML.
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <returns></returns>
+        public static Document Parse(string xml)
+        {
+            Contract.Requires<ArgumentNullException>(xml != null);
+            Contract.Requires<ArgumentOutOfRangeException>(!string.IsNullOrWhiteSpace(xml));
+
+            return Load(XDocument.Parse(xml));
+        }
+
+        /// <summary>
         /// Gets the <see cref="CompositionConfiguration"/> for the given input.
         /// </summary>
         /// <param name="catalog"></param>

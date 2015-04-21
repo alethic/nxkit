@@ -8,13 +8,6 @@
             <dateOfBirth></dateOfBirth>
         </spouse>
         <children>
-            <show_add_child />
-            <template>
-                <child>
-                    <name></name>
-                    <dateOfBirth></dateOfBirth>
-                </child>
-            </template>
             <child>
                 <index>1</index>
                 <name></name>

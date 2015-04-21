@@ -17,7 +17,7 @@ namespace NXKit.Tests
         {
             var d1 = new XDocument(
                 new XElement("Hello"));
-            var d2 = XNodeAnnotationSerializer.Serialize(d1);
+            var d2 = new AnnotationSerializer().Serialize(d1);
         }
 
         [TestMethod]
@@ -27,8 +27,8 @@ namespace NXKit.Tests
             var d1 = new XDocument(e1);
             var di = d1.GetObjectId();
             var id = e1.GetObjectId();
-            var d2 = XNodeAnnotationSerializer.Serialize(d1);
-            var d3 = XNodeAnnotationSerializer.Deserialize(d2);
+            var d2 = new AnnotationSerializer().Serialize(d1);
+            var d3 = new AnnotationSerializer().Deserialize(d2);
             Assert.IsTrue(d3.Root.GetObjectId() == id);
         }
 
@@ -41,8 +41,8 @@ namespace NXKit.Tests
             var di = d1.GetObjectId();
             var id = e1.GetObjectId();
             var ti = tx.GetObjectId();
-            var d2 = XNodeAnnotationSerializer.Serialize(d1);
-            var d3 = XNodeAnnotationSerializer.Deserialize(d2);
+            var d2 = new AnnotationSerializer().Serialize(d1);
+            var d3 = new AnnotationSerializer().Deserialize(d2);
             Assert.IsTrue(d3.Root.FirstNode.GetObjectId() == ti);
         }
 
@@ -56,8 +56,8 @@ namespace NXKit.Tests
             var l1 = d1.DescendantNodesAndSelf()
                 .Select(i => i.GetObjectId())
                 .ToArray();
-            var d2 = XNodeAnnotationSerializer.Serialize(d1);
-            var d3 = XNodeAnnotationSerializer.Deserialize(d2);
+            var d2 = new AnnotationSerializer().Serialize(d1);
+            var d3 = new AnnotationSerializer().Deserialize(d2);
             var l2 = d3.DescendantNodesAndSelf()
                 .Select(i => i.GetObjectId())
                 .ToArray();
@@ -74,8 +74,8 @@ namespace NXKit.Tests
             var l1 = d1.DescendantNodesAndSelf()
                 .Select(i => i.GetObjectId())
                 .ToArray();
-            var d2 = XNodeAnnotationSerializer.Serialize(d1);
-            var d3 = XNodeAnnotationSerializer.Deserialize(d2);
+            var d2 = new AnnotationSerializer().Serialize(d1);
+            var d3 = new AnnotationSerializer().Deserialize(d2);
             var l2 = d3.DescendantNodesAndSelf()
                 .Select(i => i.GetObjectId())
                 .ToArray();
@@ -83,8 +83,8 @@ namespace NXKit.Tests
             var l3 = d3.DescendantNodesAndSelf()
                 .Select(i => i.GetObjectId())
                 .ToArray();
-            var d4 = XNodeAnnotationSerializer.Serialize(d3);
-            var d5 = XNodeAnnotationSerializer.Deserialize(d4);
+            var d4 = new AnnotationSerializer().Serialize(d3);
+            var d5 = new AnnotationSerializer().Deserialize(d4);
             var l5 = d5.DescendantNodesAndSelf()
                 .Select(i => i.GetObjectId())
                 .ToArray();

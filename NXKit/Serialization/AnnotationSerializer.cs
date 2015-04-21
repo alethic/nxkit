@@ -47,32 +47,6 @@ namespace NXKit.Serialization
             return xmlSerializerCache.GetOrAdd(type, i => new XmlSerializer(i));
         }
 
-
-        readonly IEnumerable<IAnnotationObjectSerializer> serializers;
-        readonly IEnumerable<IAnnotationObjectDeserializer> deserializers;
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        public AnnotationSerializer()
-        {
-
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="serializers"></param>
-        /// <param name="deserializers"></param>
-        [ImportingConstructor]
-        public AnnotationSerializer(
-            [ImportMany] IEnumerable<IAnnotationObjectSerializer> serializers,
-            [ImportMany] IEnumerable<IAnnotationObjectDeserializer> deserializers)
-        {
-            this.serializers = serializers ?? Enumerable.Empty<IAnnotationObjectSerializer>();
-            this.deserializers = deserializers ?? Enumerable.Empty<IAnnotationObjectDeserializer>();
-        }
-
         #region Serialize
 
         /// <summary>
@@ -150,6 +124,11 @@ namespace NXKit.Serialization
             foreach (var attr in element.Attributes())
                 yield return attr;
 
+            // produces additional attributes by attribute serializers
+            foreach (var attr in GetSerializationAttributes(element))
+                if (attr != null)
+                    yield return attr;
+
             // produce saved data of element
             foreach (var save in GetSerializationBody(element))
                 if (save != null)
@@ -168,6 +147,62 @@ namespace NXKit.Serialization
                     foreach (var save in SerializeObject(node))
                         yield return save;
                 }
+        }
+
+        /// <summary>
+        /// Gets the saved state of the <see cref="XElement"/> which supports serializing to attributes.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        IEnumerable<XAttribute> GetSerializationAttributes(XElement element)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+
+            // emit annotations configured on the object itself
+            foreach (var annotation in element.Annotations<IAttributeSerializableAnnotation>())
+                foreach (var attribute in SerializeAttributeAnnotation(element, annotation))
+                    yield return attribute;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="XAttribute"/> stream for the given attribute serializer.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="annotation"></param>
+        /// <returns></returns>
+        IEnumerable<XAttribute> SerializeAttributeAnnotation(XElement element, IAttributeSerializableAnnotation annotation)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(annotation != null);
+
+            // check for supported attribution
+            var type = annotation.GetType();
+            var attr = type.GetCustomAttribute<SerializableAnnotationAttribute>();
+            if (attr == null)
+                yield break;
+
+            // require public type
+            if (!(type.IsPublic || type.IsNestedPublic))
+                yield break;
+
+            // disallow abstract
+            if (type.IsAbstract)
+                yield break;
+
+            // find default constructor
+            var ctor = type.GetConstructor(Type.EmptyTypes);
+            if (ctor == null)
+                yield break;
+
+            // special namespace for attribute serializer
+            var ns = string.Format(
+                "nx-annotation:{0};{1}",
+                annotation.GetType().FullName,
+                annotation.GetType().Assembly.GetName().Name);
+
+            // serialize object and emit attributes
+            foreach (var attr2 in annotation.Serialize(this, ns))
+                yield return attr2;
         }
 
         /// <summary>
@@ -213,16 +248,16 @@ namespace NXKit.Serialization
             // object is an element
             var element = obj as XElement;
             if (element != null)
-                return SerializeElements(element);
+                return SerializeElement(element);
 
             // object is attribute
             var attribute = obj as XAttribute;
             if (attribute != null)
-                return SerializeAttributes(attribute);
+                return SerializeAttribute(attribute);
 
             var node = obj as XNode;
             if (node != null)
-                return SerializeNodes(node);
+                return SerializeNode(node);
 
             return null;
         }
@@ -253,7 +288,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
-        IEnumerable<XElement> SerializeElements(XElement element)
+        IEnumerable<XElement> SerializeElement(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
@@ -270,7 +305,7 @@ namespace NXKit.Serialization
 
             // emit annotations on the attributes
             foreach (var attribute in element.Attributes())
-                foreach (var i in SerializeAttributes(attribute))
+                foreach (var i in SerializeAttribute(attribute))
                     yield return i;
         }
 
@@ -279,7 +314,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        IEnumerable<XElement> SerializeAttributes(XAttribute attribute)
+        IEnumerable<XElement> SerializeAttribute(XAttribute attribute)
         {
             Contract.Requires<ArgumentNullException>(attribute != null);
 
@@ -296,7 +331,6 @@ namespace NXKit.Serialization
                     obj.SetAttributeValue(NX_FOR, NX_FOR_ATTRIBUTE);
                     yield return obj;
                 }
-
             }
         }
 
@@ -305,7 +339,7 @@ namespace NXKit.Serialization
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        IEnumerable<XElement> SerializeNodes(XNode node)
+        IEnumerable<XElement> SerializeNode(XNode node)
         {
             Contract.Requires<ArgumentNullException>(node != null);
 
@@ -384,34 +418,59 @@ namespace NXKit.Serialization
             element.SetAttributeValue(NX_TYPE, annotation.GetType().FullName + ", " + annotation.GetType().Assembly.GetName().Name);
             element.RemoveNodes();
 
-            // serialize anntation into body
-            using (var wrt = element.CreateWriter())
+            if (annotation is IAttributeSerializableAnnotation)
             {
-                wrt.WriteWhitespace(""); // fixes a bug in XmlSerializer that tries to WriteStartDocument
+                // an attribute serializable has no body for an element
+                var eobj = obj as XElement;
+                if (eobj == null)
+                {
+                    var ns = string.Format(
+                        "nx-annotation:{0};{1}",
+                        annotation.GetType().FullName,
+                        annotation.GetType().Assembly.GetName().Name);
 
-                if (annotation is ISerializableAnnotation)
-                {
-                    element.Add(((ISerializableAnnotation)annotation).Serialize(this));
+                    var attrs = ((IAttributeSerializableAnnotation)annotation).Serialize(this, ns);
+                    if (attrs == null)
+                        return null;
+
+                    element.Add(attrs);
+                    return element;
                 }
-                else if (annotation is IXmlSerializable)
-                {
-                    var srs = GetXmlSerializer(annotation.GetType());
-                    var ens = new XmlSerializerNamespaces();
-                    ens.Add("", "");
-                    srs.Serialize(wrt, annotation, ens);
-                }
-                else if (annotation.GetType().GetCustomAttribute<XmlRootAttribute>() != null)
-                {
-                    var srs = GetXmlSerializer(annotation.GetType());
-                    var ens = new XmlSerializerNamespaces();
-                    ens.Add("", "");
-                    srs.Serialize(wrt, annotation, ens);
-                }
-                else
+            }
+            else if (annotation is ISerializableAnnotation)
+            {
+                var serialized = ((ISerializableAnnotation)annotation).Serialize(this);
+                if (serialized == null)
                     return null;
+
+                element.Add(serialized);
+                return element;
+            }
+            else if (annotation is IXmlSerializable)
+            {
+                using (var wrt = element.CreateWriter())
+                {
+                    wrt.WriteWhitespace("");
+                    var srs = GetXmlSerializer(annotation.GetType());
+                    var ens = new XmlSerializerNamespaces();
+                    ens.Add("", "");
+                    srs.Serialize(wrt, annotation, ens);
+                    return element;
+                }
+            }
+            else if (annotation.GetType().GetCustomAttribute<XmlRootAttribute>() != null)
+            {
+                using (var wrt = element.CreateWriter())
+                {
+                    var srs = GetXmlSerializer(annotation.GetType());
+                    var ens = new XmlSerializerNamespaces();
+                    ens.Add("", "");
+                    srs.Serialize(wrt, annotation, ens);
+                    return element;
+                }
             }
 
-            return element;
+            return null;
         }
 
         /// <summary>
@@ -473,13 +532,20 @@ namespace NXKit.Serialization
                 xml.SetBaseUri(document.BaseUri);
 
             // apply serialied contents
-            DeserializeContents(xml);
+            DeserializeDocument(xml);
 
             // strip out NX namespaces
             xml.Root.DescendantsAndSelf()
                 .SelectMany(i => i.Attributes())
                 .Where(i => i.IsNamespaceDeclaration)
                 .Where(i => i.Value == NX_NS)
+                .Remove();
+
+            // strip out nx-annotation namespaces
+            xml.Root.DescendantsAndSelf()
+                .SelectMany(i => i.Attributes())
+                .Where(i => i.IsNamespaceDeclaration)
+                .Where(i => i.Value.StartsWith("nx-annotation:"))
                 .Remove();
 
             // strip out unsupported processing instructions
@@ -495,22 +561,26 @@ namespace NXKit.Serialization
         /// Deserializes the contents of the <see cref="XDocument"/>.
         /// </summary>
         /// <param name="document"></param>
-        void DeserializeContents(XDocument document)
+        void DeserializeDocument(XDocument document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
 
             // deserializes the entire document hierarchy
             foreach (var element in document.Descendants())
-                DeserializeContents(element);
+                DeserializeElement(element);
         }
 
         /// <summary>
         /// Deserializes the contents of the <see cref="XElement"/>.
         /// </summary>
         /// <param name="element"></param>
-        void DeserializeContents(XElement element)
+        void DeserializeElement(XElement element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+
+            // deserializes attribute annotations onto the element
+            if (element.Name != NX_ANNOTATION)
+                DeserializeAttributeAnnotations(element);
 
             // extract annotation elements
             var annotations = element
@@ -523,6 +593,50 @@ namespace NXKit.Serialization
 
             // remove annotations from element
             annotations.Remove();
+        }
+
+        /// <summary>
+        /// Deserializes all the attribute annotations.
+        /// </summary>
+        /// <param name="element"></param>
+        void DeserializeAttributeAnnotations(XElement element)
+        {
+            Contract.Requires<ArgumentNullException>(element != null);
+
+            // finds all nx-annotation namespaces for attribute serializers
+            var namespaces = element
+                .Attributes()
+                .Where(i => i.Name.NamespaceName.StartsWith("nx-annotation:"))
+                .GroupBy(i => i.Name.NamespaceName)
+                .ToList();
+
+            // evaluate each discovered annotation attribute
+            foreach (var attrs in namespaces)
+            {
+                var text = attrs.Key.Split(':', ';');
+                if (text.Length != 3)
+                    throw new InvalidOperationException();
+
+                // resolve type from text
+                var type = Type.GetType(text[1] + ", " + text[2]);
+                if (type == null)
+                    throw new InvalidOperationException();
+
+                // specified type is an attribute serializable
+                if (typeof(IAttributeSerializableAnnotation).IsAssignableFrom(type))
+                {
+                    var ns = string.Format(
+                        "nx-annotation:{0};{1}",
+                        type.FullName,
+                        type.Assembly.GetName().Name);
+
+                    var obj = (IAttributeSerializableAnnotation)Activator.CreateInstance(type);
+                    obj.Deserialize(this, ns, attrs);
+                    element.AddAnnotation(obj);
+                }
+
+                attrs.Remove();
+            }
         }
 
         /// <summary>
@@ -587,10 +701,6 @@ namespace NXKit.Serialization
         {
             Contract.Requires<ArgumentNullException>(element != null);
 
-            var root = element.FirstNode;
-            if (root == null)
-                throw new InvalidOperationException();
-
             var typeName = (string)element.Attribute(NX_TYPE);
             if (typeName == null)
                 throw new InvalidOperationException();
@@ -600,21 +710,35 @@ namespace NXKit.Serialization
                 throw new InvalidOperationException();
 
             // serialize anntation into body
-            using (var rdr = root.CreateReader())
+            if (typeof(IAttributeSerializableAnnotation).IsAssignableFrom(type))
             {
-                if (typeof(ISerializableAnnotation).IsAssignableFrom(type))
-                {
-                    var obj = (ISerializableAnnotation)Activator.CreateInstance(type);
-                    obj.Deserialize(this, (XElement)root);
-                    return obj;
-                }
-                else if (typeof(IXmlSerializable).IsAssignableFrom(type))
-                    return GetXmlSerializer(type).Deserialize(rdr);
-                else if (type.GetCustomAttribute<XmlRootAttribute>() != null)
-                    return GetXmlSerializer(type).Deserialize(rdr);
-                else
-                    return null;
+                var ns = string.Format(
+                    "nx-annotation:{0};{1}",
+                    type.FullName,
+                    type.Assembly.GetName().Name);
+
+                var obj = (IAttributeSerializableAnnotation)Activator.CreateInstance(type);
+                obj.Deserialize(this, ns, element.Attributes().Where(i => i.Name.NamespaceName == ns));
+                return obj;
             }
+            else if (typeof(ISerializableAnnotation).IsAssignableFrom(type))
+            {
+                var obj = (ISerializableAnnotation)Activator.CreateInstance(type);
+                obj.Deserialize(this, (XElement)element.FirstNode);
+                return obj;
+            }
+            else if (typeof(IXmlSerializable).IsAssignableFrom(type))
+            {
+                using (var rdr = element.FirstNode.CreateReader())
+                    return GetXmlSerializer(type).Deserialize(rdr);
+            }
+            else if (type.GetCustomAttribute<XmlRootAttribute>() != null)
+            {
+                using (var rdr = element.FirstNode.CreateReader())
+                    return GetXmlSerializer(type).Deserialize(rdr);
+            }
+
+            return null;
         }
 
         static void ApplyAnnotationToDocument(XElement element, XElement annotation, object obj)
@@ -646,10 +770,6 @@ namespace NXKit.Serialization
             Contract.Requires<ArgumentNullException>(obj != null);
 
             var attributeName = (XName)(string)annotation.Attribute(NX_ATTRIBUTE);
-            if (attributeName == null)
-                throw new InvalidOperationException();
-
-            // ignore xmlns attributes
             if (attributeName.LocalName == "xmlns")
                 return;
 
