@@ -111,21 +111,27 @@ namespace NXKit.XForms
         public XName ItemType
         {
             get { return GetItemType(); }
-            set { SetItemType(value); }
+            internal set { SetItemType(value); }
         }
 
+        /// <summary>
+        /// Getter for the ItemType property.
+        /// </summary>
+        /// <returns></returns>
         XName GetItemType()
         {
             return State.Type ?? GetXsiType() ?? GetXsdItemType() ?? NXKit.XmlSchemaConstants.XMLSchema + "string";
         }
 
         /// <summary>
-        /// Sets the type of the given model item.
+        /// Setter for the ItemType property.
         /// </summary>
         /// <param name="type"></param>
-        public void SetItemType(XName type)
+        void SetItemType(XName type)
         {
             State.Type = type;
+            Debug.WriteLine("ModelItem item type set: {0}: {1}", this, type);
+
         }
 
         /// <summary>
@@ -135,12 +141,26 @@ namespace NXKit.XForms
         public bool Required
         {
             get { return GetRequired(); }
-            internal set { State.Required = value; }
+            internal set { SetRequired(value); }
         }
 
+        /// <summary>
+        /// Getter for the Required property.
+        /// </summary>
+        /// <returns></returns>
         bool GetRequired()
         {
             return State.Required ?? false;
+        }
+
+        /// <summary>
+        /// Setter for the Required property.
+        /// </summary>
+        /// <param name="value"></param>
+        void SetRequired(bool value)
+        {
+            State.Required = value;
+            Debug.WriteLine("ModelItem required set: {0}: {1}", this, value);
         }
 
         /// <summary>
@@ -150,12 +170,26 @@ namespace NXKit.XForms
         public bool ReadOnly
         {
             get { return GetReadOnly(); }
-            internal set { State.ReadOnly = value; }
+            internal set { SetReadOnly(value); }
         }
 
+        /// <summary>
+        /// Getter for the ReadOnly property.
+        /// </summary>
+        /// <returns></returns>
         bool GetReadOnly()
         {
             return xml.AncestorsAndSelf().Any(i => i.AnnotationOrCreate<ModelItemState>().ReadOnly ?? false);
+        }
+
+        /// <summary>
+        /// Setter for the ReadOnly property.
+        /// </summary>
+        /// <param name="value"></param>
+        void SetReadOnly(bool value)
+        {
+            State.ReadOnly = value;
+            Debug.WriteLine("ModelItem readonly set: {0}: {1}", this, value);
         }
 
         /// <summary>
@@ -168,9 +202,23 @@ namespace NXKit.XForms
             internal set { State.Relevant = value; }
         }
 
+        /// <summary>
+        /// Getter for the Relevant property.
+        /// </summary>
+        /// <returns></returns>
         bool GetRelevant()
         {
             return xml.AncestorsAndSelf().All(i => i.AnnotationOrCreate<ModelItemState>().Relevant ?? true);
+        }
+
+        /// <summary>
+        /// Setter for the Relevant property.
+        /// </summary>
+        /// <param name="value"></param>
+        void SetRelevant(bool value)
+        {
+            State.Relevant = value;
+            Debug.WriteLine("ModelItem relevant set: {0}: {1}", this, value);
         }
 
         /// <summary>
@@ -188,6 +236,12 @@ namespace NXKit.XForms
             return State.Constraint ?? true;
         }
 
+        void SetConstraint(bool value)
+        {
+            State.Constraint = value;
+            Debug.WriteLine("ModelItem relevant set: {0}: {1}", this, value);
+        }
+
         /// <summary>
         /// Gets whether the given model item is currently valid.
         /// </summary>
@@ -195,11 +249,26 @@ namespace NXKit.XForms
         public bool Valid
         {
             get { return GetValid(); }
+            internal set { SetValid(value); }
         }
 
+        /// <summary>
+        /// Getter for the Valid property.
+        /// </summary>
+        /// <returns></returns>
         bool GetValid()
         {
             return State.Valid ?? true;
+        }
+
+        /// <summary>
+        /// Setter for the Valid property.
+        /// </summary>
+        /// <param name="value"></param>
+        void SetValid(bool value)
+        {
+            State.Valid = value;
+            Debug.WriteLine("ModelItem value set: {0}: {1}", this, value);
         }
 
         /// <summary>
@@ -286,11 +355,6 @@ namespace NXKit.XForms
             if (newValue == GetValue())
                 return;
 
-            // This action has no effect if the Single Item Binding does not select an instance data node or if a 
-            // readonly instance data node is selected.
-            if (ReadOnly)
-                return;
-
             if (Xml is XElement)
             {
                 // An xforms-binding-exception occurs if the Single Item Binding indicates a node whose content is not
@@ -311,21 +375,21 @@ namespace NXKit.XForms
                 // set new value
                 text.Value = newValue;
 
-                Debug.WriteLine("ModelItem simple content changed: {0}", this);
+                Debug.WriteLine("ModelItem simple content changed: {0}: '{1}'", this, text.Value);
             }
             else if (Xml is XAttribute)
             {
                 var target = (XAttribute)Xml;
                 target.Value = newValue;
 
-                Debug.WriteLine("ModelItem attribute value changed: {0}", this);
+                Debug.WriteLine("ModelItem attribute value changed: {0}: '{1}'", this, target.Value);
             }
             else if (Xml is XText)
             {
                 var target = (XText)Xml;
                 target.Value = newValue;
 
-                Debug.WriteLine("ModelItem text value changed: {0}", this);
+                Debug.WriteLine("ModelItem text value changed: {0}: '{1}'", this, target.Value);
             }
             else
                 throw new InvalidOperationException();

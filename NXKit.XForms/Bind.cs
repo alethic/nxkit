@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
@@ -19,8 +18,7 @@ namespace NXKit.XForms
         ElementExtension
     {
 
-        readonly string id;
-        readonly BindAttributes attributes;
+        readonly BindProperties properties;
         readonly Extension<IBindingNode> bindingNode;
         readonly Lazy<EvaluationContext> context;
 
@@ -28,21 +26,23 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="properties"></param>
+        /// <param name="bindingNode"></param>
+        /// <param name="context"></param>
         [ImportingConstructor]
         public Bind(
             XElement element,
-            BindAttributes attributes,
+            BindProperties properties,
             Extension<IBindingNode> bindingNode,
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(attributes != null);
+            Contract.Requires<ArgumentNullException>(properties != null);
             Contract.Requires<ArgumentNullException>(bindingNode != null);
             Contract.Requires<ArgumentNullException>(context != null);
 
-            this.id = (string)element.Attribute("id");
-            this.attributes = attributes;
+            this.properties = properties;
             this.bindingNode = bindingNode;
             this.context = new Lazy<EvaluationContext>(() => context.Value.Context);
         }
@@ -74,19 +74,6 @@ namespace NXKit.XForms
                 return Binding.ModelItems ?? Enumerable.Empty<ModelItem>();
             else
                 throw new Exception();
-        }
-
-        public XName Type
-        {
-            get { return GetModelItemType(); }
-        }
-
-        XName GetModelItemType()
-        {
-            if (attributes.Type == null)
-                return null;
-
-            return Element.ResolvePrefixedName(attributes.Type);
         }
 
         /// <summary>
@@ -163,56 +150,47 @@ namespace NXKit.XForms
                 if (modelItem == null)
                     continue;
 
-                var state = modelItem.State;
-                if (state == null)
-                    continue;
+                // evaluation context for attributes
+                var context = new Lazy<EvaluationContext>(() =>
+                    new EvaluationContext(modelItem.Model, modelItem.Instance, modelItem, i, modelItems.Length));
 
-                if (Type != null)
-                    if (state.Type != Type)
-                        state.Type = Type;
+                if (properties.Type != null)
+                    modelItem.ItemType = properties.Type;
 
-                var ec = new EvaluationContext(modelItem.Model, modelItem.Instance, modelItem, i, modelItems.Length);
-
-                if (!string.IsNullOrWhiteSpace(attributes.ReadOnly))
+                if (properties.ReadOnly != null)
                 {
-                    var readOnly = ParseBooleanValue(new Binding(Element, ec, attributes.ReadOnly));
+                    var readOnly = ParseBooleanValue(new Binding(Element, context.Value, properties.ReadOnly));
                     if (readOnly != null)
-                        state.ReadOnly = readOnly;
+                        modelItem.ReadOnly = (bool)readOnly;
                 }
 
-                if (!string.IsNullOrWhiteSpace(attributes.Required))
+                if (properties.Required != null)
                 {
-                    var required = ParseBooleanValue(new Binding(Element, ec, attributes.Required));
+                    var required = ParseBooleanValue(new Binding(Element, context.Value, properties.Required));
                     if (required != null)
-                        state.Required = required;
+                        modelItem.Required = (bool)required;
                 }
 
-                if (!string.IsNullOrWhiteSpace(attributes.Relevant))
+                if (properties.Relevant != null)
                 {
-                    var relevant = ParseBooleanValue(new Binding(Element, ec, attributes.Relevant));
-                    if (relevant != null &&
-                        relevant != state.Relevant)
-                    {
-                        state.Relevant = relevant;
-                        Debug.WriteLine("ModelItem relevancy changed: {0}", state.Relevant);
-                    }
+                    var relevant = ParseBooleanValue(new Binding(Element, context.Value, properties.Relevant));
+                    if (relevant != null)
+                        modelItem.Relevant = (bool)relevant;
                 }
 
-                if (!string.IsNullOrWhiteSpace(attributes.Constraint))
+                if (properties.Constraint != null)
                 {
-                    var constraint = ParseBooleanValue(new Binding(Element, ec, attributes.Constraint));
+                    var constraint = ParseBooleanValue(new Binding(Element, context.Value, properties.Constraint));
                     if (constraint != null)
-                        state.Constraint = constraint;
+                        modelItem.Constraint = (bool)constraint;
                 }
 
-                if (!string.IsNullOrWhiteSpace(attributes.Calculate))
+                if (properties.Calculate != null)
                 {
-                    var calculate = new Binding(Element, ec, attributes.Calculate).Value;
+                    var calculate = new Binding(Element, context.Value, properties.Calculate).Value;
                     if (calculate != null)
                     {
-                        if (state.ReadOnly == false)
-                            state.ReadOnly = true;
-
+                        modelItem.ReadOnly = true;
                         modelItem.Value = calculate;
                     }
                 }

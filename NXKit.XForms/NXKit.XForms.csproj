@@ -126,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionProperties.cs" />
+    <Compile Include="BindProperties.cs" />
     <Compile Include="CommonProperties.cs" />
     <Compile Include="Converters\BooleanXsdTypeConverter.cs" />
     <Compile Include="Converters\DateTimeXsdTypeConverter.cs" />
