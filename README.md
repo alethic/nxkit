@@ -129,3 +129,13 @@ NXKit.Scripting.EcmaScript
 ----------
 
 Support for ECMAScript using the Jurassic JavaScript implementation.
+
+This means you can insert `script` elements into your XForms documents which are invoked in response to XForms events:
+
+    <xf:trigger>
+        <xf:label>Do Thing</xf:label>
+        <xf:script type="text/javascript" ev:event="DOMActivate">
+            console.log(i = 0);
+        </xf:script>
+    </xf:trigger>
+    
