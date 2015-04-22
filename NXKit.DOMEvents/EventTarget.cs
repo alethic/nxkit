@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
+
 using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.DOM;

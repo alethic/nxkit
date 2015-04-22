@@ -63,6 +63,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NXKit.Node.props = NXKit.Node.props
 		NXKit.Node.targets = NXKit.Node.targets
 		NXKit.targets = NXKit.targets
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.View.Web.UI.Test.Site", "NXKit.View.Web.UI.Test.Site\NXKit.View.Web.UI.Test.Site.csproj", "{606CFC52-D06A-4B21-B295-A52C5D8C979E}"
