@@ -44,7 +44,7 @@ The implementation currently covers most features from XForms 1.1, and some feat
 NXKit.XForms.Layout
 ----------
 
-NXKit.XForms.Layout contains a basic layout module supporting pages and sections.
+NXKit.XForms.Layout contains a basic layout module supporting sections, tables, and a number of text formatting elements. Can serve as a semantic-only approach to building a form without getting involed with HTML.
 
 
 NXKit.View.Server
