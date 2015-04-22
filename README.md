@@ -19,7 +19,12 @@ NXKit.DOMEvents
 
 Implements W3C DOM Events. Elements can have events dispatched to them using the `IEventTarget` interface.
 
-    document.Xml.Element("my-element").Interface<IEventTarget>().DispatchEvent(UIEvents.DOMActivate);
+For instance to synthesize a UI client or activate (defined as emitting a `DOMActivate` event):
+
+    document.Xml
+        .Element("my-element")
+        .Interface<IEventTarget>()
+        .DispatchEvent(UIEvents.DOMActivate);
 
 
 NXKit.XMLEvents
