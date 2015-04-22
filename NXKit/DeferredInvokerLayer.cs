@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
-
+using System.Xml;
 using NXKit.Composition;
 using NXKit.Util;
 using NXKit.Xml;
@@ -88,7 +88,7 @@ namespace NXKit
                 {
                     var inits = host().Xml
                         .DescendantNodesAndSelf()
-                        .Where(i => i.GetObjectId() > 0)
+                        .Where(i => i.NodeType == XmlNodeType.Document || i.NodeType == XmlNodeType.Element)
                         .Where(i => i.InterfaceOrDefault<IOnInit>() != null)
                         .Where(i => i.AnnotationOrCreate<NXObjectAnnotation>().Init == true)
                         .ToLinkedList();
@@ -120,7 +120,7 @@ namespace NXKit
                 {
                     var loads = host().Xml
                         .DescendantNodesAndSelf()
-                        .Where(i => i.GetObjectId() > 0)
+                        .Where(i => i.NodeType == XmlNodeType.Document || i.NodeType == XmlNodeType.Element)
                         .Where(i => i.InterfaceOrDefault<IOnLoad>() != null)
                         .Where(i => i.AnnotationOrCreate<NXObjectAnnotation>().Load == true)
                         .ToLinkedList();
@@ -152,7 +152,8 @@ namespace NXKit
                 do
                 {
                     var invokes = host().Xml
-                        .DescendantsAndSelf()
+                        .DescendantNodesAndSelf()
+                        .Where(i => i.NodeType == XmlNodeType.Document || i.NodeType == XmlNodeType.Element)
                         .SelectMany(i => i.Interfaces<IOnInvoke>())
                         .ToLinkedList();
 

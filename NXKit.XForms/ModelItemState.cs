@@ -1,6 +1,6 @@
-﻿using System.Xml;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 
 using NXKit.Serialization;
 
@@ -11,9 +11,8 @@ namespace NXKit.XForms
     /// Records additional information associated with a model item.
     /// </summary>
     [SerializableAnnotation]
-    [XmlRoot("model-item")]
     public class ModelItemState :
-        IXmlSerializable
+        IAttributeSerializableAnnotation
     {
 
         XName type;
@@ -59,56 +58,30 @@ namespace NXKit.XForms
             set { valid = value; }
         }
 
-        System.Xml.Schema.XmlSchema IXmlSerializable.GetSchema()
-        {
-            return null;
-        }
-
-        void IXmlSerializable.ReadXml(XmlReader reader)
-        {
-            if (reader.MoveToContent() == XmlNodeType.Element &&
-                reader.LocalName == "model-item")
-            {
-                var type_ = reader["type"];
-                if (type_ != null)
-                    type = (XName)type_;
-
-                var readOnly_ = reader["readonly"];
-                if (readOnly_ != null)
-                    readOnly = bool.Parse(readOnly_);
-
-                var required_ = reader["required"];
-                if (required_ != null)
-                    required = bool.Parse(required_);
-
-                var relevant_ = reader["relevant"];
-                if (relevant_ != null)
-                    relevant = bool.Parse(relevant_);
-
-                var constraint_ = reader["constraint"];
-                if (constraint_ != null)
-                    constraint = bool.Parse(constraint_);
-
-                var valid_ = reader["valid"];
-                if (valid_ != null)
-                    valid = bool.Parse(valid_);
-            }
-        }
-
-        void IXmlSerializable.WriteXml(XmlWriter writer)
+        IEnumerable<XAttribute> IAttributeSerializableAnnotation.Serialize(AnnotationSerializer serializer, XNamespace ns)
         {
             if (type != null)
-                writer.WriteAttributeString("type", type.ToString());
+                yield return new XAttribute(ns + "type", type);
             if (readOnly != null)
-                writer.WriteAttributeString("readonly", (bool)readOnly ? "true" : "false");
+                yield return new XAttribute(ns + "readonly", readOnly);
             if (required != null)
-                writer.WriteAttributeString("required", (bool)required ? "true" : "false");
+                yield return new XAttribute(ns + "required", required);
             if (relevant != null)
-                writer.WriteAttributeString("relevant", (bool)relevant ? "true" : "false");
+                yield return new XAttribute(ns + "relevant", relevant);
             if (constraint != null)
-                writer.WriteAttributeString("constraint", (bool)constraint ? "true" : "false");
+                yield return new XAttribute(ns + "constraint", constraint);
             if (valid != null)
-                writer.WriteAttributeString("valid", (bool)valid ? "true" : "false");
+                yield return new XAttribute(ns + "valid", valid);
+        }
+
+        void IAttributeSerializableAnnotation.Deserialize(AnnotationSerializer serializer, XNamespace ns, IEnumerable<XAttribute> attributes)
+        {
+            type = attributes.Where(i => i.Name == ns + "type").Select(i => XName.Get((string)i)).FirstOrDefault();
+            readOnly = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "readonly");
+            required = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "required");
+            relevant = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "relevant");
+            constraint = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "constraint");
+            valid = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "valid");
         }
 
     }

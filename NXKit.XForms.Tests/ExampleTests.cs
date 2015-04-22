@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.IO;
+using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NXKit.XForms.Tests
@@ -13,6 +14,17 @@ namespace NXKit.XForms.Tests
         public void Test_form()
         {
             var host = Document.Load(new Uri("nx-example:///form.xml"));
+        }
+
+        [TestMethod]
+        public void Test_form_save_load()
+        {
+            var host = Document.Load(new Uri("nx-example:///form.xml"));
+            var save = new MemoryStream();
+            host.Save(save);
+            save = new MemoryStream(save.ToArray());
+            var load = XDocument.Load(save);
+            host = Document.Load(load);
         }
 
         [TestMethod]
