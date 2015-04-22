@@ -15,6 +15,10 @@ Extensions implement various interfaces. For example, `Input` from the NXKit.XFo
 
 NXKit `Document` instances fully support serializing and deserializing a running instance through the usage of the `Save` method. The output of the serialization process is a copy of the current running `Document` instance with all the included runtime state.
 
+        var host = Document.Load(new Uri("nx-example:///form.xml"));
+        var save = new MemoryStream();
+        host.Save(save);
+
 
 NXKit.DOMEvents
 ----------
