@@ -52,6 +52,24 @@ namespace NXKit.XForms
         }
 
         /// <summary>
+        /// Returns a string representation of the instance.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            if (Xml is XElement)
+                return ((XElement)xml).Name.ToString();
+            if (Xml is XDocument)
+                return "Document";
+            if (Xml is XAttribute)
+                return ((XAttribute)xml).Name.ToString();
+            if (Xml is XText)
+                return Get(Xml.Parent).ToString();
+
+            return Xml.GetObjectId().ToString();
+        }
+
+        /// <summary>
         /// Gets a reference to the underlying XML object.
         /// </summary>
         public XObject Xml
@@ -117,6 +135,7 @@ namespace NXKit.XForms
         public bool Required
         {
             get { return GetRequired(); }
+            internal set { State.Required = value; }
         }
 
         bool GetRequired()
@@ -131,6 +150,7 @@ namespace NXKit.XForms
         public bool ReadOnly
         {
             get { return GetReadOnly(); }
+            internal set { State.ReadOnly = value; }
         }
 
         bool GetReadOnly()
@@ -145,6 +165,7 @@ namespace NXKit.XForms
         public bool Relevant
         {
             get { return GetRelevant(); }
+            internal set { State.Relevant = value; }
         }
 
         bool GetRelevant()
@@ -159,6 +180,7 @@ namespace NXKit.XForms
         public bool Constraint
         {
             get { return GetConstraint(); }
+            internal set { State.Constraint = value; }
         }
 
         bool GetConstraint()
@@ -289,17 +311,21 @@ namespace NXKit.XForms
                 // set new value
                 text.Value = newValue;
 
-                Debug.WriteLine("ModelItem value changed: {0}", Xml);
+                Debug.WriteLine("ModelItem simple content changed: {0}", this);
             }
             else if (Xml is XAttribute)
             {
                 var target = (XAttribute)Xml;
                 target.Value = newValue;
+
+                Debug.WriteLine("ModelItem attribute value changed: {0}", this);
             }
             else if (Xml is XText)
             {
                 var target = (XText)Xml;
                 target.Value = newValue;
+
+                Debug.WriteLine("ModelItem text value changed: {0}", this);
             }
             else
                 throw new InvalidOperationException();
