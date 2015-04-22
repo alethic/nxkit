@@ -46,27 +46,28 @@ NXKit.XForms is an implementation of XForms in the NXKit processing model.
 
 The implementation currently covers most features from XForms 1.1, and some features from XForms 2.0.
 
-<f:form xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    <f:form 
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
         xmlns:xf="http://www.w3.org/2002/xforms"
         xmlns:ev="http://www.w3.org/2001/xml-events">
-    <xf:model>
-        <xf:instance>
-            <data xmlns="">
-                <value>text</value>
-            </data>
-        </xf:instance>
-    </xf:model>
-    <f:section>
-        <xf:label>Section 1</xf:label>
-        <xf:group>
+        <xf:model>
+            <xf:instance>
+                <data xmlns="">
+                    <value>text</value>
+                </data>
+            </xf:instance>
+        </xf:model>
+        <f:section>
             <xf:label>Section 1</xf:label>
-            <xf:input ref="value">
-                <xf:label>Label</xf:label>
-            </xf:input>
-        </xf:group>
-    </f:section>
-</f:form>
+            <xf:group>
+                <xf:label>Section 1</xf:label>
+                <xf:input ref="value">
+                    <xf:label>Label</xf:label>
+                </xf:input>
+            </xf:group>
+        </f:section>
+    </f:form>
 
 
 NXKit.XForms.Layout
