@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 
 using NXKit.Serialization;
 
@@ -21,7 +20,7 @@ namespace NXKit.XForms
         bool readOnly = false;
         bool required = false;
         bool valid = true;
-        string value;
+        string value = "";
 
         bool dispatchValueChanged;
         bool dispatchReadOnly;
@@ -141,9 +140,9 @@ namespace NXKit.XForms
 
         void IAttributeSerializableAnnotation.Deserialize(AnnotationSerializer serializer, XNamespace ns, IEnumerable<XAttribute> attributes)
         {
-            dataType = attributes.Where(i => i.Name == ns + "dataType").Select(i => XName.Get((string)i)).FirstOrDefault();
+            dataType = attributes.Where(i => i.Name == ns + "type").Select(i => XName.Get((string)i)).FirstOrDefault();
             relevant = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "relevant") ?? true;
-            readOnly = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "readOnly") ?? false;
+            readOnly = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "readonly") ?? false;
             required = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "required") ?? false;
             valid = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "valid") ?? true;
             value = (string)attributes.FirstOrDefault(i => i.Name == ns + "value") ?? "";
