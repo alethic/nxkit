@@ -46,6 +46,18 @@ NXKit.XForms.Layout
 
 NXKit.XForms.Layout contains a basic layout module supporting sections, tables, and a number of text formatting elements. Can serve as a semantic-only approach to building a form without getting involed with HTML.
 
+    <table>
+        <table-row>
+            <table-cell><strong>Header 1</strong></table-cell>
+            <table-cell><strong>Header 2</strong></table-cell>
+            <table-cell><strong>Header 3</strong></table-cell>
+        </table-row>
+        <table-row>
+            <table-cell>Header 1</table-cell>
+            <table-cell>Header 2</table-cell>
+            <table-cell>Header 3</table-cell>
+        </table-row>
+    </table>
 
 NXKit.View.Server
 ----------
