@@ -93,7 +93,7 @@ NXKit.View.Server
 
 Provides a server side object model for assisting in running a NXKit Document on a server that communicates with a remote (client-based) user interface.
 
-This class is used by the Web UI library to host a `Document` instance on the server to which the HTML interface can connect to.
+For example, the `ViewServer` class is used by the Web UI library to host a `Document` instance on the server to which the HTML interface can connect to.
 
 NXKit.View.Js
 ----------
@@ -104,7 +104,7 @@ Base implementation of the NXKit View in JavaScript using Knockout.
 NXKit.View.Web.UI
 ----------
 
-ASP.Net WebForms starting point for NXKit. Contains a View control that you can add to the page, which imports all the neccessary client side objects and script.
+ASP.Net WebForms starting point for NXKit. Contains a View control that you can add to the page, which imports all the neccessary client side objects and script. Communication with the server is handled using async postbacks, serializing the running document instance into the `ViewState`.
 
     <xforms:View ID="View" runat="server"
         CssClass="FormView"
