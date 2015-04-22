@@ -25,6 +25,8 @@ NXKit.DOMEvents
 
 Implements W3C DOM Events. Elements can have events dispatched to them using the `IEventTarget` interface.
 
+http://www.w3.org/TR/2013/WD-DOM-Level-3-Events-20131105/
+
 For instance to synthesize a UI client or activate (defined as emitting a `DOMActivate` event):
 
     document.Xml
@@ -38,11 +40,15 @@ NXKit.XMLEvents
 
 Implements W3C XML Events. This provides a number of elements and attributes for listening to DOM Events.
 
+http://www.w3.org/TR/xml-events2/
 
 NXKit.XForms
 ----------
 
 NXKit.XForms is an implementation of XForms in the NXKit processing model.
+
+http://www.w3.org/TR/xforms/
+http://www.w3.org/TR/xforms20/
 
 The implementation currently covers most features from XForms 1.1, and some features from XForms 2.0.
 
