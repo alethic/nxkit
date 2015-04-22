@@ -27,7 +27,7 @@ Implements W3C DOM Events. Elements can have events dispatched to them using the
 
 http://www.w3.org/TR/2013/WD-DOM-Level-3-Events-20131105/
 
-For instance to synthesize a UI client or activate (defined as emitting a `DOMActivate` event):
+For instance to synthesize a UI click or activate (defined as emitting a `DOMActivate` event):
 
     document.Xml
         .Element("my-element")
