@@ -13,6 +13,8 @@ NXKit is simple to use. Just create a project, ensure extension assemblies are r
 The `Document` instance loads your document into an internal XLinq instance and provides extensions on elements. These extensions can come from various plugin assemblies, such as `NXKit.XForms`.
 Extensions implement various interfaces. For example, `Input` from the NXKit.XForms namespace.
 
+NXKit `Document` instances fully support serializing and deserializing a running instance through the usage of the `Save` method. The output of the serialization process is a copy of the current running `Document` instance with all the included runtime state.
+
 
 NXKit.DOMEvents
 ----------
