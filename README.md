@@ -104,7 +104,9 @@ For example, the `ViewServer` class is used by the Web UI library to host a `Doc
 NXKit.View.Js
 ----------
 
-Base implementation of the NXKit View in JavaScript using Knockout.
+Core implementation of the NXKit View in JavaScript using Knockout.
+
+Provides a set of client side objects and scripts for implementing a browser based interface for NXKit documents. The `NXKit.View.Web.UI` library makes use of these during rendering.
 
 
 NXKit.View.Web.UI
@@ -124,6 +126,12 @@ ASP.Net WebForms interface for NXKit. Contains a `View` control that you can add
             View.Open(new Uri(Request.Url, "nx-example:///aship-form.xml"));
         }
     }
+
+
+NXKit.XForms.View.Js
+----------
+
+XForms client-side components. Extends `NXKit.View.Js` for the client-side interface for XForms. 
 
 NXKit.Scripting.EcmaScript
 ----------
