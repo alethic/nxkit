@@ -64,6 +64,7 @@ NXKit.View.Server
 
 Provides a server side object model for assisting in running a NXKit Document on a server that communicates with a remote (client-based) user interface.
 
+This class is used by the Web UI library to host a `Document` instance on the server to which the HTML interface can connect to.
 
 NXKit.View.Js
 ----------
@@ -76,6 +77,17 @@ NXKit.View.Web.UI
 
 ASP.Net WebForms starting point for NXKit. Contains a View control that you can add to the page, which imports all the neccessary client side objects and script.
 
+    <xforms:View ID="View" runat="server"
+        CssClass="FormView"
+        OnLoad="View_Load" />
+
+    protected void View_Load(object sender, EventArgs args)
+    {
+        if (!IsPostBack)
+        {
+            View.Open(new Uri(Request.Url, "nx-example:///aship-form.xml"));
+        }
+    }
 
 NXKit.Scripting.EcmaScript
 ----------
