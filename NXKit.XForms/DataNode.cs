@@ -11,12 +11,27 @@ namespace NXKit.XForms
     /// <summary>
     /// Encapsulates the binding information for a UI element.
     /// </summary>
-    [Extension]
+    [Extension(PredicateType = typeof(DataNodePredicate))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DataNode :
         ElementExtension,
         IDataNode
     {
+
+        public class DataNodePredicate :
+            ExtensionPredicateBase
+        {
+
+            public override bool IsMatch(XObject obj)
+            {
+                var element = obj as XElement;
+                if (element != null)
+                    return element.Name != Constants.XForms_1_0 + "bind";
+
+                return true;
+            }
+
+        }
 
         readonly Extension<IUIBindingNode> uiBindingNode;
         readonly Lazy<UIBinding> uiBinding;

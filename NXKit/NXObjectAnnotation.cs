@@ -47,12 +47,13 @@ namespace NXKit
 
         IEnumerable<XAttribute> IAttributeSerializableAnnotation.Serialize(AnnotationSerializer serializer, XNamespace ns)
         {
-            yield return new XAttribute(ns + "init", init);
+            if (init)
+                yield return new XAttribute(ns + "init", init);
         }
 
         void IAttributeSerializableAnnotation.Deserialize(AnnotationSerializer serializer, XNamespace ns, IEnumerable<XAttribute> attributes)
         {
-            init = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "init") ?? true;
+            init = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "init") ?? false;
         }
 
     }

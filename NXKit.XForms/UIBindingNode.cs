@@ -12,13 +12,28 @@ namespace NXKit.XForms
     /// <summary>
     /// Provides a <see cref="UIBinding"/> for a node.
     /// </summary>
-    [Extension]
+    [Extension(PredicateType = typeof(UIBindingNodePredicate))]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class UIBindingNode :
         ElementExtension,
         IUIBindingNode,
         IOnRefresh
     {
+
+        public class UIBindingNodePredicate :
+            ExtensionPredicateBase
+        {
+
+            public override bool IsMatch(XObject obj)
+            {
+                var element = obj as XElement;
+                if (element != null)
+                    return element.Name != Constants.XForms_1_0 + "bind";
+
+                return true;
+            }
+
+        }
 
         readonly IInvoker invoker;
         readonly Lazy<UIBinding> uiBinding;

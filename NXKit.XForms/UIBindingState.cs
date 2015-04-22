@@ -17,10 +17,10 @@ namespace NXKit.XForms
     {
 
         XName dataType;
-        bool relevant;
-        bool readOnly;
-        bool required;
-        bool valid;
+        bool relevant = true;
+        bool readOnly = false;
+        bool required = false;
+        bool valid = true;
         string value;
 
         bool dispatchValueChanged;
@@ -127,22 +127,26 @@ namespace NXKit.XForms
         {
             if (dataType != null)
                 yield return new XAttribute(ns + "type", dataType);
-            yield return new XAttribute(ns + "relevant", relevant);
-            yield return new XAttribute(ns + "readonly", readOnly);
-            yield return new XAttribute(ns + "required", required);
-            yield return new XAttribute(ns + "valid", valid);
-            if (value != null)
+            if (!relevant)
+                yield return new XAttribute(ns + "relevant", relevant);
+            if (readOnly)
+                yield return new XAttribute(ns + "readonly", readOnly);
+            if (required)
+                yield return new XAttribute(ns + "required", required);
+            if (!valid)
+                yield return new XAttribute(ns + "valid", valid);
+            if (value != null && value != "")
                 yield return new XAttribute(ns + "value", value);
         }
 
         void IAttributeSerializableAnnotation.Deserialize(AnnotationSerializer serializer, XNamespace ns, IEnumerable<XAttribute> attributes)
         {
             dataType = attributes.Where(i => i.Name == ns + "dataType").Select(i => XName.Get((string)i)).FirstOrDefault();
-            relevant = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "relevant") ?? false;
+            relevant = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "relevant") ?? true;
             readOnly = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "readOnly") ?? false;
             required = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "required") ?? false;
-            valid = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "valid") ?? false;
-            value = (string)attributes.FirstOrDefault(i => i.Name == ns + "value");
+            valid = (bool?)attributes.FirstOrDefault(i => i.Name == ns + "valid") ?? true;
+            value = (string)attributes.FirstOrDefault(i => i.Name == ns + "value") ?? "";
         }
 
     }
