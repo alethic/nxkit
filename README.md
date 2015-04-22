@@ -110,7 +110,7 @@ Base implementation of the NXKit View in JavaScript using Knockout.
 NXKit.View.Web.UI
 ----------
 
-ASP.Net WebForms interface for NXKit. Contains a `View` control that you can add to the page, which imports all the neccessary client side objects and script. Communication with the server is handled using async postbacks, serializing the running document instance into the `ViewState`. Just drop the `View` control on your page, ensure UI extension packages are referenced (such as NXKit.XForms.View.Web.UI) and open a document.
+ASP.Net WebForms interface for NXKit. Contains a `View` control that you can add to the page, which imports all the neccessary client side objects and script. Communication with the server is handled using async postbacks, serializing the running document instance into the `ViewState`. Just drop the `View` control on your page, ensure UI extension packages are referenced (such as `NXKit.XForms.View.Web.UI`) and open a document.
 
     <xforms:View ID="View" runat="server"
         CssClass="FormView"
