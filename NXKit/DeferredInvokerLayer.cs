@@ -90,7 +90,7 @@ namespace NXKit
                         .DescendantNodesAndSelf()
                         .Where(i => i.GetObjectId() > 0)
                         .Where(i => i.InterfaceOrDefault<IOnInit>() != null)
-                        .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Init == true)
+                        .Where(i => i.AnnotationOrCreate<NXObjectAnnotation>().Init == true)
                         .ToLinkedList();
 
                     if (inits.Count == 0)
@@ -100,7 +100,7 @@ namespace NXKit
                         if (init.Document != null)
                         {
                             invoker.Value.Invoke(() => init.Interface<IOnInit>().Init());
-                            init.AnnotationOrCreate<ObjectAnnotation>().Init = false;
+                            init.AnnotationOrCreate<NXObjectAnnotation>().Init = false;
                         }
                 }
             }
@@ -122,7 +122,7 @@ namespace NXKit
                         .DescendantNodesAndSelf()
                         .Where(i => i.GetObjectId() > 0)
                         .Where(i => i.InterfaceOrDefault<IOnLoad>() != null)
-                        .Where(i => i.AnnotationOrCreate<ObjectAnnotation>().Load == true)
+                        .Where(i => i.AnnotationOrCreate<NXObjectAnnotation>().Load == true)
                         .ToLinkedList();
 
                     if (loads.Count == 0)
@@ -132,7 +132,7 @@ namespace NXKit
                         if (load.Document != null)
                         {
                             invoker.Value.Invoke(() => load.Interface<IOnLoad>().Load());
-                            load.AnnotationOrCreate<ObjectAnnotation>().Load = false;
+                            load.AnnotationOrCreate<NXObjectAnnotation>().Load = false;
                         }
                 }
             }

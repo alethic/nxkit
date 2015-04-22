@@ -175,6 +175,7 @@
     <Compile Include="IRemote.cs" />
     <Compile Include="ITextExtension.cs" />
     <Compile Include="IDocumentExtension.cs" />
+    <Compile Include="NXObjectAnnotation.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Serialization\IAttributeSerializableAnnotation.cs" />
     <Compile Include="Serialization\ISerializableAnnotation.cs" />

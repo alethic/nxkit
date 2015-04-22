@@ -1,6 +1,6 @@
-﻿using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 
 using NXKit.Serialization;
 
@@ -11,9 +11,8 @@ namespace NXKit
     /// Stores various information on a <see cref="XDocument"/>.
     /// </summary>
     [SerializableAnnotation]
-    [XmlRoot("document")]
     public class DocumentAnnotation :
-        IXmlSerializable
+        IAttributeSerializableAnnotation
     {
 
         int nextObjectId = 1;
@@ -25,24 +24,15 @@ namespace NXKit
         {
             return nextObjectId++;
         }
-
-        XmlSchema IXmlSerializable.GetSchema()
+        
+        IEnumerable<XAttribute> IAttributeSerializableAnnotation.Serialize(AnnotationSerializer serializer, XNamespace ns)
         {
-            return null;
+            yield return new XAttribute(ns + "next-object-id", nextObjectId);
         }
 
-        void IXmlSerializable.ReadXml(XmlReader reader)
+        void IAttributeSerializableAnnotation.Deserialize(AnnotationSerializer serializer, XNamespace ns, IEnumerable<XAttribute> attributes)
         {
-            if (reader.MoveToContent() == XmlNodeType.Element &&
-                reader.LocalName == "document")
-            {
-                nextObjectId = int.Parse(reader["next-object-id"]);
-            }
-        }
-
-        void IXmlSerializable.WriteXml(XmlWriter writer)
-        {
-            writer.WriteAttributeString("next-object-id", nextObjectId.ToString());
+            nextObjectId = (int?)attributes.FirstOrDefault(i => i.Name == ns + "next-object-id") ?? 1;
         }
 
     }
