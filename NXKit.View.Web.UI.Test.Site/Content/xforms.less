@@ -94,6 +94,12 @@
 
 }
 
+.xforms-group-field-disabled() {
+
+    display: none;
+
+}
+
 .xforms-group {
     &:extend(.ui.form all);
     &:extend(.ui.fluid.form all);
@@ -151,6 +157,10 @@
 
         > .item[data-nx-xforms-data~="invalid"] {
             .xforms-group-field-invalid();
+        }
+
+        > .item[data-nx-xforms-data~="disabled"] {
+            .xforms-group-field-disabled();
         }
 
         > .item > .xforms-group {

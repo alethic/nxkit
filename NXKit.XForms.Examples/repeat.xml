@@ -1,10 +1,13 @@
-﻿<f:form xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
-        xmlns:xf="http://www.w3.org/2002/xforms"
-        xmlns:ev="http://www.w3.org/2001/xml-events">
+﻿<f:form
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
+    xmlns:xf="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events">
     <xf:model>
-        <xf:instance id="my-data">
-            <data xmlns="">
+        <xf:instance
+            id="my-data">
+            <data
+                xmlns="">
                 <group>
                     <code>yes</code>
                     <field>display 1</field>
@@ -24,21 +27,22 @@
             </data>
         </xf:instance>
 
-
-        <xf:bind id="field"
-                 nodeset="instance('my-data')/group/field"
-                 relevant="../code = 'yes'"/>
-
+        <xf:bind
+            id="field"
+            ref="instance('my-data')/group/field"
+            relevant="../code = 'yes'"/>
 
     </xf:model>
     <f:section>
-        <xf:repeat nodeset="instance('my-data')/group"
-                   id="my-repeat">
+        <xf:repeat
+            nodeset="instance('my-data')/group"
+            id="my-repeat">
             <xf:group>
                 <xf:label>
                     Group # <xf:output value="count(preceding-sibling::*) +1"></xf:output>
                 </xf:label>
-                <xf:select1 ref="code">
+                <xf:select1
+                    ref="code">
                     <xf:label>Display Input Field: </xf:label>
                     <xf:item>
                         <xf:label>Yes</xf:label>
@@ -50,15 +54,16 @@
                     </xf:item>
                 </xf:select1>
 
-
-                <xf:input ref="field" >
+                <xf:input
+                    ref="field">
                     <xf:label>Conditional Display: </xf:label>
                 </xf:input>
 
             </xf:group>
         </xf:repeat>
 
-        <xf:output value="index('my-repeat')">
+        <xf:output
+            value="index('my-repeat')">
             <xf:label>Current Selected Group: </xf:label>
         </xf:output>
     </f:section>
