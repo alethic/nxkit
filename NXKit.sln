@@ -100,6 +100,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.Layout.View.Wi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms.View.Windows", "NXKit.XForms.View.Windows\NXKit.XForms.View.Windows.csproj", "{66132F55-660E-4627-A86F-11A48C1E38F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.View.Server.Redis", "NXKit.View.Server.Redis\NXKit.View.Server.Redis.csproj", "{BBA40BEC-D3E3-483B-95C5-8BB1883115F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -250,6 +252,10 @@ Global
 		{66132F55-660E-4627-A86F-11A48C1E38F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66132F55-660E-4627-A86F-11A48C1E38F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66132F55-660E-4627-A86F-11A48C1E38F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBA40BEC-D3E3-483B-95C5-8BB1883115F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBA40BEC-D3E3-483B-95C5-8BB1883115F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBA40BEC-D3E3-483B-95C5-8BB1883115F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBA40BEC-D3E3-483B-95C5-8BB1883115F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -291,5 +297,6 @@ Global
 		{17A17C2E-BAAB-4DF1-8CEE-91C04DF2D61D} = {B542A17F-16F9-4614-BAC5-04A62D7DBABA}
 		{57EC368D-96C2-4775-9192-169BE5D31494} = {3156689D-0161-4846-9D34-6742FEEC2FEA}
 		{66132F55-660E-4627-A86F-11A48C1E38F0} = {DAA65BB5-15AE-420C-A7AF-838E46967312}
+		{BBA40BEC-D3E3-483B-95C5-8BB1883115F9} = {B542A17F-16F9-4614-BAC5-04A62D7DBABA}
 	EndGlobalSection
 EndGlobal

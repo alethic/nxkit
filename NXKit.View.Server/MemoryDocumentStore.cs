@@ -1,16 +1,17 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Diagnostics.Contracts;
 using System.Runtime.Caching;
 
 namespace NXKit.View.Server
 {
 
     [Export(typeof(IDocumentStore))]
-    public class DefaultDocumentStore :
+    public class MemoryDocumentStore :
         IDocumentStore
     {
 
-        static readonly string KEY_FORMAT = typeof(DefaultDocumentStore).FullName + ":{0}";
+        static readonly string KEY_FORMAT = typeof(MemoryDocumentStore).FullName + ":{0}";
 
         readonly MemoryCache cache;
         readonly TimeSpan cacheTime = TimeSpan.FromMinutes(15);
@@ -19,7 +20,7 @@ namespace NXKit.View.Server
         /// Initializes a new instance.
         /// </summary>
         [ImportingConstructor]
-        public DefaultDocumentStore()
+        public MemoryDocumentStore()
         {
             this.cache = MemoryCache.Default;
         }
@@ -28,8 +29,10 @@ namespace NXKit.View.Server
         /// Initializes a new instance.
         /// </summary>
         /// <param name="cacheTime"></param>
-        public DefaultDocumentStore(TimeSpan cacheTime)
+        public MemoryDocumentStore(TimeSpan cacheTime)
         {
+            Contract.Requires<ArgumentOutOfRangeException>(cacheTime > TimeSpan.Zero);
+
             this.cacheTime = cacheTime;
         }
 

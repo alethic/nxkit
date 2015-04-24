@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Runtime.Caching;
+
+using StackExchange.Redis;
 
 namespace NXKit.View.Server
 {
@@ -9,29 +10,29 @@ namespace NXKit.View.Server
     /// Caches document state in a memory cache to later be reconstituted.
     /// </summary>
     [Export(typeof(IDocumentCache))]
-    public class DefaultDocumentCache :
+    public class RedisDocumentCache :
         IDocumentCache
     {
 
-        static readonly string KEY_FORMAT = typeof(DefaultDocumentCache).FullName + ":{0}";
+        static readonly string KEY_FORMAT = typeof(RedisDocumentCache).FullName + ":{0}";
 
-        readonly MemoryCache cache;
-        readonly TimeSpan cacheTime = TimeSpan.FromMinutes(30);
+        readonly ConnectionMultiplexer cache;
+        readonly TimeSpan cacheTime = TimeSpan.FromHours(4);
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         [ImportingConstructor]
-        public DefaultDocumentCache()
+        public RedisDocumentCache()
         {
-            this.cache = MemoryCache.Default;
+            this.cache = ConnectionMultiplexer.Connect("");
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="cacheTime"></param>
-        public DefaultDocumentCache(TimeSpan cacheTime)
+        public RedisDocumentCache(TimeSpan cacheTime)
             : this()
         {
             this.cacheTime = cacheTime;
@@ -39,12 +40,14 @@ namespace NXKit.View.Server
 
         public string Get(string key)
         {
-            return (string)cache.Get(string.Format(KEY_FORMAT, key));
+            var db = cache.GetDatabase();
+            return (string)db.StringGet(string.Format(KEY_FORMAT, key));
         }
 
         public void Set(string key, string save)
         {
-            cache.Set(string.Format(KEY_FORMAT, key), save, DateTimeOffset.UtcNow + cacheTime);
+            var db = cache.GetDatabase();
+            db.StringSet(string.Format(KEY_FORMAT, key), save, cacheTime);
         }
 
     }

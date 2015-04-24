@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics.Contracts;
@@ -25,8 +26,8 @@ namespace NXKit.View.Server
     public class ViewServer
     {
 
-        readonly IDocumentStore store;
-        readonly IDocumentCache cache;
+        readonly IEnumerable<IDocumentStore> stores;
+        readonly IEnumerable<IDocumentCache> caches;
         ComposablePartCatalog catalog;
         ExportProvider exports;
 
@@ -34,7 +35,7 @@ namespace NXKit.View.Server
         /// Initializes a new instance.
         /// </summary>
         public ViewServer()
-            : this(null, null, null, null)
+            : this(null, null, store: null, cache: null)
         {
 
         }
@@ -51,11 +52,28 @@ namespace NXKit.View.Server
             ExportProvider exports = null,
             IDocumentStore store = null,
             IDocumentCache cache = null)
+            : this(catalog, exports, store != null ? new[] { store } : null, cache != null ? new[] { cache } : null)
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="catalog"></param>
+        /// <param name="exports"></param>
+        /// <param name="stores"></param>
+        /// <param name="caches"></param>
+        ViewServer(
+            ComposablePartCatalog catalog = null,
+            ExportProvider exports = null,
+            IEnumerable<IDocumentStore> stores = null,
+            IEnumerable<IDocumentCache> caches = null)
         {
             this.catalog = catalog;
             this.exports = exports;
-            this.store = store ?? new DefaultDocumentStore();
-            this.cache = cache ?? new DefaultDocumentCache();
+            this.stores = (stores ?? new[] { new MemoryDocumentStore() }).Where(i => i != null);
+            this.caches = (caches ?? new[] { new MemoryDocumentCache() }).Where(i => i != null);
         }
 
         /// <summary>
@@ -290,8 +308,10 @@ namespace NXKit.View.Server
             var hash = GetMD5HashText(save);
 
             // cache save data
-            store.Put(hash, document);
-            cache.Set(hash, save);
+            foreach (var store in stores)
+                store.Put(hash, document);
+            foreach (var cache in caches)
+                cache.Set(hash, save);
 
             // respond with object containing new save and JSON tree
             return new ViewMessage(status, hash, save, node)
@@ -327,11 +347,11 @@ namespace NXKit.View.Server
         {
             if (hash != null)
             {
-                var document = store.Get(hash);
+                var document = stores.Select(i => i.Get(hash)).FirstOrDefault(i => i != null);
                 if (document != null)
                     return document;
 
-                var save = cache.Get(hash);
+                var save = caches.Select(i => i.Get(hash)).FirstOrDefault(i => i != null);
                 if (save != null)
                     return LoadFromSave(save);
             }

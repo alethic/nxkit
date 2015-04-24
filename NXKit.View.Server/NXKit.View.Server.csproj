@@ -132,14 +132,14 @@
   <ItemGroup>
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\Trace.cs" />
-    <Compile Include="DefaultDocumentStore.cs" />
+    <Compile Include="MemoryDocumentStore.cs" />
     <Compile Include="DocumentEventArgs.cs" />
     <Compile Include="DocumentLoadedEventHandler.cs" />
     <Compile Include="DocumentUnloadingEventHandler.cs" />
     <Compile Include="ICommandProvider.cs" />
     <Compile Include="IDocumentStore.cs" />
     <Compile Include="IDocumentCache.cs" />
-    <Compile Include="DefaultDocumentCache.cs" />
+    <Compile Include="MemoryDocumentCache.cs" />
     <Compile Include="TraceCommandProvider.cs" />
     <Compile Include="ScriptCommandProvider.cs" />
     <Compile Include="Serialization\RemoteDescriptor.cs" />
