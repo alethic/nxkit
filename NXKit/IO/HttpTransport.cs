@@ -6,7 +6,7 @@ namespace NXKit.IO
 {
 
     /// <summary>
-    /// Handles submissions of the default HTTP scheme's expressed by the XForms standard.
+    /// Handles communication over the HTTP transport.
     /// </summary>
     [Export(typeof(IIOTransport))]
     public class HttpTransport :
