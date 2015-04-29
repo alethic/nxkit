@@ -19,6 +19,6 @@ foreach ($i in get-item *\*.nuspec) {
     if (Test-Path $PackFile) {
         & $PackFile -NuGetDirectory $NuGetDirectory -NuGetExe $NuGetExe -Version $NuGetVersion -Properties $Properties -OutputDirectory $OutputDirectory
     } else {
-        & $NuGetExe pack $ProjectFile -Version $NuGetVersion -Properties $Properties -OutputDirectory $OutputDirectory
+        & $NuGetExe pack $ProjectFile -Version $NuGetVersion -Properties $Properties -OutputDirectory $OutputDirectory -Symbols
     }
 }

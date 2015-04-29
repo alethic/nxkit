@@ -302,7 +302,9 @@ namespace NXKit.XForms
                 // all: the event xforms-submit-done may be dispatched with appropriate context information, and submit
                 // processing concludes with the entire containing document being replaced with the returned body.
                 case SubmissionReplace.All:
-                    throw new NotImplementedException();
+                    throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
+                        SubmitErrorErrorType.NoData,
+                        responseBody: "SubmissionReplace.All not supported"));
 
                 // instance: If the body is not of type accepted by the processor, as specified in Creating instance data
                 // from external resources, nothing in the document is replaced and submission fails with resource-error. 
@@ -320,7 +322,9 @@ namespace NXKit.XForms
                 // performed according to Replacing Data with the Submission Response. If this operation fails, then the
                 // submission fails with target-error. Otherwise, submission succeeds.
                 case SubmissionReplace.Text:
-                    throw new NotImplementedException();
+                    throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
+                        SubmitErrorErrorType.NoData,
+                        responseBody: "SubmissionReplace.Text not supported"));
             }
         }
 
