@@ -188,11 +188,8 @@ namespace NXKit.XForms
                 if (properties.Calculate != null)
                 {
                     var calculate = new Binding(Element, context.Value, properties.Calculate).Value;
-                    if (calculate != null)
-                    {
-                        modelItem.ReadOnly = true;
-                        modelItem.Value = calculate;
-                    }
+                    modelItem.ReadOnly = true;
+                    modelItem.Value = calculate ?? "";
                 }
             }
         }

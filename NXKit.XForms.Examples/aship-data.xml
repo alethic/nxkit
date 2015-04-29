@@ -1,5 +1,6 @@
-﻿<aship xmlns="urn:aship-data"
-       xmlns:d="urn:aship-data">
+﻿<aship
+    xmlns="urn:aship-data"
+    xmlns:d="urn:aship-data">
     <plan>1</plan>
     <coverage>M</coverage>
     <aca_compliance>false</aca_compliance>
@@ -12,22 +13,14 @@
             <child>
                 <name></name>
                 <dateOfBirth></dateOfBirth>
-                <index>1</index>
             </child>
             <child>
                 <name></name>
                 <dateOfBirth></dateOfBirth>
-                <index>2</index>
             </child>
             <child>
                 <name></name>
                 <dateOfBirth></dateOfBirth>
-                <index>3</index>
-            </child>
-            <child>
-                <name></name>
-                <dateOfBirth></dateOfBirth>
-                <index>4</index>
             </child>
         </children>
     </insureds>

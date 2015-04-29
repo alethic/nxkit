@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
-using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
+
 using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.IO;
-using NXKit.XForms.IO;
+using NXKit.Util;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -110,7 +110,8 @@ namespace NXKit.XForms
         IEnumerable<T> GetAllExtensions<T>()
         {
             return Element.Document.Root
-                .DescendantNodesAndSelf()
+                .DescendantsAndSelf().Cast<XObject>()
+                .Prepend(Element.Document)
                 .Where(i => i.Document != null)
                 .SelectMany(i => i.Interfaces<T>());
         }

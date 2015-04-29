@@ -23,7 +23,11 @@
                 relevant="../d:coverage='MS' or ../d:coverage='MF'">
                 <xf:bind
                     ref="d:children"
-                    relevant="../../d:coverage='MF'" />
+                    relevant="../../d:coverage='MF'">
+                    <xf:bind
+                        ref="d:child"
+                        relevant="count(preceding-sibling::d:child)=0" />
+                </xf:bind>
             </xf:bind>
             <xf:bind
                 ref="d:premium"
@@ -40,6 +44,13 @@
                 targetid="form"
                 bubbles="true" />
         </xf:submission>
+        <xf:instance
+            id="child-template">
+            <d:child>
+                <d:name></d:name>
+                <d:dateOfBirth></d:dateOfBirth>
+            </d:child>
+        </xf:instance>
         <xf:instance
             id="rates">
             <rates xmlns="urn:aship-rates">
@@ -219,9 +230,7 @@
                     <xf:group>
                         <xf:input
                             ref="d:name">
-                            <xf:label>
-                                Child #<xf:output value="../d:index" />
-                            </xf:label>
+                            <xf:label>Name</xf:label>
                         </xf:input>
                         <xf:input
                             ref="d:dateOfBirth">
@@ -229,6 +238,22 @@
                         </xf:input>
                     </xf:group>
                 </xf:repeat>
+                <xf:trigger>
+                    <xf:label>Add</xf:label>
+                    <xf:insert
+                        ref="d:child"
+                        at="last()"
+                        position="after"
+                        origin="instance('child-template')"
+                        ev:event="DOMActivate" />
+                </xf:trigger>
+                <xf:trigger>
+                    <xf:label>Remove</xf:label>
+                    <xf:delete
+                        ref="d:child[index('children-repeat')]"
+                        if="count(d:child) &gt; 1"
+                        ev:event="DOMActivate" />
+                </xf:trigger>
             </xf:group>
         </xf:group>
         <xf:group>

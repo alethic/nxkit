@@ -345,16 +345,16 @@ namespace NXKit.View.Server
         /// <returns></returns>
         Document LoadFromHash(string hash)
         {
-            //if (hash != null)
-            //{
-            //    var document = stores.Select(i => i.Get(hash)).FirstOrDefault(i => i != null);
-            //    if (document != null)
-            //        return document;
+            if (hash != null)
+            {
+                var document = stores.Select(i => i.Get(hash)).FirstOrDefault(i => i != null);
+                if (document != null)
+                    return document;
 
-            //    var save = caches.Select(i => i.Get(hash)).FirstOrDefault(i => i != null);
-            //    if (save != null)
-            //        return LoadFromSave(save);
-            //}
+                var save = caches.Select(i => i.Get(hash)).FirstOrDefault(i => i != null);
+                if (save != null)
+                    return LoadFromSave(save);
+            }
 
             return null;
         }

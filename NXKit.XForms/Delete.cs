@@ -22,6 +22,7 @@ namespace NXKit.XForms
 
         readonly CommonProperties commonProperties;
         readonly BindingProperties bindingProperties;
+        readonly ActionProperties actionProperties;
         readonly DeleteProperties deleteProperties;
         readonly Extension<EvaluationContextResolver> resolver;
 
@@ -34,6 +35,7 @@ namespace NXKit.XForms
             XElement element,
             CommonProperties commonProperties,
             BindingProperties bindingProperties,
+            ActionProperties actionProperties,
             DeleteProperties deleteProperties,
             Extension<EvaluationContextResolver> resolver)
             : base(element)
@@ -41,12 +43,14 @@ namespace NXKit.XForms
             Contract.Requires<ArgumentNullException>(element != null);
             Contract.Requires<ArgumentNullException>(commonProperties != null);
             Contract.Requires<ArgumentNullException>(bindingProperties != null);
+            Contract.Requires<ArgumentNullException>(actionProperties != null);
             Contract.Requires<ArgumentNullException>(deleteProperties != null);
             Contract.Requires<ArgumentNullException>(resolver != null);
 
             this.commonProperties = commonProperties;
             this.bindingProperties = bindingProperties;
             this.deleteProperties = deleteProperties;
+            this.actionProperties = actionProperties;
             this.resolver = resolver;
         }
 
@@ -121,6 +125,15 @@ namespace NXKit.XForms
             var deleteContext = GetDeleteContext();
             if (deleteContext == null)
                 return;
+
+            if (actionProperties.If != null)
+            {
+                var result = new Binding(Element, deleteContext, actionProperties.If).Result;
+                if (result is bool && !(bool)result)
+                    return;
+                if (result is string && !bool.Parse((string)result))
+                    return;
+            }
 
             // The Sequence Binding node-sequence is determined.
             var sequenceBindingNodeSequence = GetSequenceBindingNodeSequence(deleteContext);

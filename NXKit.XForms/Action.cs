@@ -19,15 +19,22 @@ namespace NXKit.XForms
         IEventHandler
     {
 
+        readonly ActionProperties actionProperties;
+
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         [ImportingConstructor]
-        public Action(XElement element)
+        public Action(
+            XElement element,
+            ActionProperties actionProperties)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
+            Contract.Requires<ArgumentNullException>(actionProperties != null);
+
+            this.actionProperties = actionProperties;
         }
 
         public void HandleEvent(Event ev)
