@@ -30,7 +30,7 @@
             // invoke function
             if (typeof func === 'function') {
                 func.apply(console, args);
-            } else {
+            } else if (typeof console.log.apply === 'function') {
                 console.log.apply(console, args);
             }
         }
