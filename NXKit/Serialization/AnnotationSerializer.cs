@@ -44,6 +44,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         static XmlSerializer GetXmlSerializer(Type type)
         {
+            Contract.Requires<ArgumentNullException>(type != null);
+
             return xmlSerializerCache.GetOrAdd(type, i => new XmlSerializer(i));
         }
 
