@@ -1,7 +1,10 @@
 ﻿using System;
+using NXKit.Xml;
+using System.Linq;
 using System.IO;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NXKit.DOMEvents;
 
 namespace NXKit.XForms.Tests
 {
@@ -43,6 +46,19 @@ namespace NXKit.XForms.Tests
         public void Test_select1()
         {
             var host = Document.Load(new Uri("nx-example:///select1.xml"));
+        }
+
+        [TestMethod]
+        public void Test_send()
+        {
+            var host = Document.Load(new Uri("nx-example:///trigger.xml"));
+
+            var stm = new StringWriter();
+            host.Save(stm);
+            host = Document.Load(new StringReader(stm.ToString()));
+
+            var trigger = host.Xml.Descendants(XForms.Constants.XForms_1_0 + "trigger").First();
+            trigger.Interface<EventTarget>().Dispatch("DOMActivate");
         }
 
     }

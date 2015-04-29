@@ -74,8 +74,7 @@ namespace NXKit.DOMEvents
         void ISerializableAnnotation.Deserialize(AnnotationSerializer serializer, XElement element)
         {
             var items = element
-                .Elements("listeners")
-                .Select(i => i.Element("item"));
+                .Elements("item");
 
             foreach (var itemXml in items)
             {

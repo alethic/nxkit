@@ -8,8 +8,9 @@
                 <choice>false</choice>
             </data>
         </xf:instance>
-        <xf:bind nodeset="choice"
-                 type="xsd:boolean" />
+        <xf:bind
+            nodeset="choice"
+            type="xsd:boolean" />
     </xf:model>
     <f:section>
         <xf:group>
