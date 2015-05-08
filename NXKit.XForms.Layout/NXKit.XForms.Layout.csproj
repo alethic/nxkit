@@ -136,6 +136,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Icon.cs" />
+    <Compile Include="Small.cs" />
     <Compile Include="Strong.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="Form.cs" />

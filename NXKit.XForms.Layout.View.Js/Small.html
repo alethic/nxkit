@@ -1,0 +1,17 @@
+﻿<script type="text/html" data-nx-node-view='
+{
+    "Name": "{http://schemas.nxkit.org/2014/xforms-layout}small"
+}'>
+    <!-- ko with: new NXKit.View.XForms.Layout.SmallViewModel($context, $data) -->
+    <small class="xforms-layout-small"
+            data-bind="
+attr : {
+    'data-nx-name': $data.Node.Name,
+}">
+        <!-- ko foreach: Contents -->
+        <!-- ko nx_node -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </small>
+    <!-- /ko -->
+</script>

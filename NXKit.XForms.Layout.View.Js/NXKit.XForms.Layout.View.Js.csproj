@@ -29,6 +29,7 @@
     <TypeScriptCompile Include="ListViewModel.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
+    <TypeScriptCompile Include="SmallViewModel.ts" />
     <TypeScriptCompile Include="StrongViewModel.ts" />
     <TypeScriptCompile Include="ParagraphViewModel.ts" />
     <TypeScriptCompile Include="SegmentViewModel.ts" />
@@ -85,6 +86,9 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Small.html" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>

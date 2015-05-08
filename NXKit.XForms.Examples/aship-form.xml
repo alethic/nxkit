@@ -1,58 +1,44 @@
-﻿<f:form
-    xmlns="http://www.w3.org/2002/xforms"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
-    xmlns:xf="http://www.w3.org/2002/xforms"
-    xmlns:ev="http://www.w3.org/2001/xml-events"
-    xmlns:d="urn:aship-data"
-    xmlns:r="urn:aship-rates"
-    id="form">
-
-    <xf:model
-        schema="aship-data.xsd">
-        <xf:instance
-            id="data"
-            src="aship-data.xml" />
-        <xf:bind
-            ref="instance('data')">
-            <xf:bind
-                ref="d:coverage"
-                required="true()" />
-            <xf:bind
-                ref="d:insureds"
-                relevant="../d:coverage='MS' or ../d:coverage='MF'">
-                <xf:bind
-                    ref="d:children"
-                    relevant="../../d:coverage='MF'">
-                    <xf:bind
-                        ref="d:child"
-                        relevant="count(preceding-sibling::d:child)=0" />
+﻿<f:form xmlns="http://www.w3.org/2002/xforms"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
+        xmlns:xf="http://www.w3.org/2002/xforms"
+        xmlns:ev="http://www.w3.org/2001/xml-events"
+        xmlns:d="urn:aship-data"
+        xmlns:r="urn:aship-rates"
+        id="form">
+    <xf:model schema="aship-data.xsd">
+        <xf:instance id="data"
+                     src="aship-data.xml" />
+        <xf:bind ref="instance('data')">
+            <xf:bind ref="d:coverage"
+                     required="true()" />
+            <xf:bind ref="d:insureds"
+                     relevant="../d:coverage='MS' or ../d:coverage='MF'">
+                <xf:bind ref="d:children"
+                         relevant="../../d:coverage='MF'">
+                    <xf:bind ref="d:child"
+                             relevant="count(preceding-sibling::d:child)=0" />
                 </xf:bind>
             </xf:bind>
-            <xf:bind
-                ref="d:premium"
-                calculate="instance('rates')/r:rate[@plan=instance('data')/d:plan and @coverage=instance('data')/d:coverage]" />
+            <xf:bind ref="d:premium"
+                     calculate="instance('rates')/r:rate[@plan=instance('data')/d:plan and @coverage=instance('data')/d:coverage]" />
         </xf:bind>
-        <xf:submission
-            id="submission"
-            ref="instance('data')"
-            method="put"
-            action="aship-data.xml">
-            <xf:dispatch
-                ev:event="xforms-submit-done"
-                name="isis-form-next"
-                targetid="form"
-                bubbles="true" />
+        <xf:submission id="submission"
+                       ref="instance('data')"
+                       method="put"
+                       action="aship-data.xml">
+            <xf:dispatch ev:event="xforms-submit-done"
+                         name="isis-form-next"
+                         targetid="form"
+                         bubbles="true" />
         </xf:submission>
-        <xf:instance
-            id="child-template">
+        <xf:instance id="child-template">
             <d:child>
-                <d:name></d:name>
-                <d:dateOfBirth></d:dateOfBirth>
+                <d:name />
+                <d:dateOfBirth />
             </d:child>
         </xf:instance>
-        <xf:instance
-            id="rates">
+        <xf:instance id="rates">
             <rates xmlns="urn:aship-rates">
                 <rate plan="1"
                       coverage="M">20</rate>
@@ -60,14 +46,12 @@
                       coverage="MS">40</rate>
                 <rate plan="1"
                       coverage="MF">50</rate>
-
                 <rate plan="2"
                       coverage="M">30</rate>
                 <rate plan="2"
                       coverage="MS">60</rate>
                 <rate plan="2"
                       coverage="MF">75</rate>
-
                 <rate plan="3"
                       coverage="M">40</rate>
                 <rate plan="3"
@@ -77,9 +61,7 @@
             </rates>
         </xf:instance>
     </xf:model>
-
-    <f:section
-        ref="instance('data')">
+    <f:section ref="instance('data')">
         <xf:group>
             <f:p>
                 It's easy to enroll. No questions about your health. No medical exam.
@@ -88,7 +70,7 @@
             <f:table>
                 <f:table-row>
                     <f:table-cell>
-                        <f:strong>Available Benefts</f:strong>
+                        <f:strong>Benefits</f:strong>
                     </f:table-cell>
                     <f:table-cell>Plan 1</f:table-cell>
                     <f:table-cell>Plan 2</f:table-cell>
@@ -113,18 +95,30 @@
                     <f:table-cell>$100</f:table-cell>
                 </f:table-row>
                 <f:table-row>
-                    <f:table-cell>Semi-Annual (2 per year) ER Visit</f:table-cell>
+                    <f:table-cell>ER Visit (2 per year)</f:table-cell>
                     <f:table-cell>$150</f:table-cell>
                     <f:table-cell>$200</f:table-cell>
                     <f:table-cell>$250</f:table-cell>
                 </f:table-row>
                 <f:table-row>
-                    <f:table-cell>Semi-Annyal (2 per year) Physician Office Visit</f:table-cell>
+                    <f:table-cell>Physician Office Visit (2 per year)</f:table-cell>
                     <f:table-cell>$50</f:table-cell>
                     <f:table-cell>$50</f:table-cell>
                     <f:table-cell>$50</f:table-cell>
                 </f:table-row>
             </f:table>
+            <f:p>
+                <f:small>* All benefits reduce to 50% of original benefit at age 65.</f:small>
+            </f:p>
+            <f:p>
+                <f:small>** All benefits reduce to 25% of original benefit at age 75.</f:small>
+            </f:p>
+            <f:p>
+                <f:small>*** Coverage terminates at age 80.</f:small>
+            </f:p>
+            <f:p>
+                <f:small>**** Benefits for each child will be 50% of the primary insured's benefits.</f:small>
+            </f:p>
             <f:table>
                 <f:table-row>
                     <f:table-cell>
@@ -132,36 +126,34 @@
                     </f:table-cell>
                     <f:table-cell>
                         Plan 1
-                        <xf:setvalue
-                            ev:event="DOMActivate"
-                            ref="d:plan"
-                            value="1" />
+                        <xf:setvalue ev:event="DOMActivate"
+                                     ref="d:plan"
+                                     value="1" />
                     </f:table-cell>
                     <f:table-cell>Plan 2</f:table-cell>
                     <f:table-cell>Plan 3</f:table-cell>
                 </f:table-row>
                 <f:table-row>
                     <f:table-cell>Member Only</f:table-cell>
-                    <f:table-cell>$20.00/m</f:table-cell>
-                    <f:table-cell>$30.00/m</f:table-cell>
-                    <f:table-cell>$40.00/m</f:table-cell>
+                    <f:table-cell>$20.00/mo</f:table-cell>
+                    <f:table-cell>$30.00/mo</f:table-cell>
+                    <f:table-cell>$40.00/mo</f:table-cell>
                 </f:table-row>
                 <f:table-row>
                     <f:table-cell>Member &amp; Spouse or Party to a Civil Union</f:table-cell>
-                    <f:table-cell>$40.00/m</f:table-cell>
-                    <f:table-cell>$60.00/m</f:table-cell>
-                    <f:table-cell>$80.00/m</f:table-cell>
+                    <f:table-cell>$40.00/mo</f:table-cell>
+                    <f:table-cell>$60.00/mo</f:table-cell>
+                    <f:table-cell>$80.00/mo</f:table-cell>
                 </f:table-row>
                 <f:table-row>
                     <f:table-cell>Member &amp; Family</f:table-cell>
-                    <f:table-cell>$50.00/m</f:table-cell>
-                    <f:table-cell>$75.00/m</f:table-cell>
-                    <f:table-cell>$100.00/m</f:table-cell>
+                    <f:table-cell>$50.00/mo</f:table-cell>
+                    <f:table-cell>$75.00/mo</f:table-cell>
+                    <f:table-cell>$100.00/mo</f:table-cell>
                 </f:table-row>
             </f:table>
-            <xf:select1
-                ref="d:plan"
-                appearance="full">
+            <xf:select1 ref="d:plan"
+                        appearance="full">
                 <xf:label>Select your Plan option:</xf:label>
                 <xf:item>
                     <xf:label>Plan 1</xf:label>
@@ -176,9 +168,8 @@
                     <xf:value>3</xf:value>
                 </xf:item>
             </xf:select1>
-            <xf:select1
-                ref="d:coverage"
-                appearance="full">
+            <xf:select1 ref="d:coverage"
+                        appearance="full">
                 <xf:label>Select who you would like to be covered:</xf:label>
                 <xf:item>
                     <xf:label>Member Only</xf:label>
@@ -194,65 +185,57 @@
                 </xf:item>
             </xf:select1>
             <f:p>
-                Premium is $<xf:output ref="d:premium"/>
+                <f:strong>
+                    Your chosen premium will be billed at $<xf:output ref="d:premium" /> per month.
+                </f:strong>
             </f:p>
         </xf:group>
-        <xf:group
-            ref="d:insureds">
+        <xf:group ref="d:insureds">
             <xf:label>Insured Persons</xf:label>
             <f:p>
                 Since you have elected the Member &amp; Spouse coverage option, additional information about
                 your covered spouse or domestic partner is required. Complete the name and birth date of your spouse
                 or domestic partner.
             </f:p>
-            <xf:group
-                ref="d:spouse">
-                <xf:input
-                    ref="d:name">
+            <xf:group ref="d:spouse">
+                <xf:input ref="d:name">
                     <xf:label>Spouse or Party to a Civil Union</xf:label>
                 </xf:input>
-                <xf:input
-                    ref="d:dateOfBirth">
+                <xf:input ref="d:dateOfBirth">
                     <xf:label>Date of Birth</xf:label>
                 </xf:input>
             </xf:group>
-            <xf:group
-                ref="d:children">
+            <xf:group ref="d:children">
                 <xf:label>Children</xf:label>
                 <xf:alert>You need more children!</xf:alert>
                 <f:p>
                     Since you have elected the Member &amp; Family coverage option, additional information about
                     your covered children is required. Complete the names and birthdates of those to be covered.
                 </f:p>
-                <xf:repeat
-                    id="children-repeat"
-                    ref="d:child">
+                <xf:repeat id="children-repeat"
+                           ref="d:child">
                     <xf:group>
-                        <xf:input
-                            ref="d:name">
+                        <xf:input ref="d:name">
                             <xf:label>Name</xf:label>
                         </xf:input>
-                        <xf:input
-                            ref="d:dateOfBirth">
+                        <xf:input ref="d:dateOfBirth">
                             <xf:label>Date of Birth</xf:label>
                         </xf:input>
                     </xf:group>
                 </xf:repeat>
                 <xf:trigger>
                     <xf:label>Add</xf:label>
-                    <xf:insert
-                        ref="d:child"
-                        at="last()"
-                        position="after"
-                        origin="instance('child-template')"
-                        ev:event="DOMActivate" />
+                    <xf:insert ref="d:child"
+                               at="last()"
+                               position="after"
+                               origin="instance('child-template')"
+                               ev:event="DOMActivate" />
                 </xf:trigger>
                 <xf:trigger>
                     <xf:label>Remove</xf:label>
-                    <xf:delete
-                        ref="d:child[index('children-repeat')]"
-                        if="count(d:child) &gt; 1"
-                        ev:event="DOMActivate" />
+                    <xf:delete ref="d:child[index('children-repeat')]"
+                               if="count(d:child) &gt; 1"
+                               ev:event="DOMActivate" />
                 </xf:trigger>
             </xf:group>
         </xf:group>
@@ -266,11 +249,10 @@
                 </f:strong>
             </f:p>
             <f:p>
-                Please Node: If the answer to the following question is "No," you will not be allowed to complete this
+                Please Note: If the answer to the following question is "No," you will not be allowed to complete this
                 enrollment as the Company is prohibited by law from issuing this insurance policy.
             </f:p>
-            <xf:input
-                ref="d:aca_compliance">
+            <xf:input ref="d:aca_compliance">
                 <xf:label>
                     Do you and all other individuals to be covered under this policy have other
                     health coverage that is minimum essential coverage within the meaning of Section 5000A(f) of the Internal
@@ -279,25 +261,15 @@
             </xf:input>
         </xf:group>
     </f:section>
-
     <xf:trigger>
-        <xf:label>
-            <f:icon
-                name="left" />
-            Back
-        </xf:label>
-        <xf:dispatch
-            ev:event="DOMActivate"
-            name="isis-form-previous"
-            targetid="form" />
+        <xf:label>Back</xf:label>
+        <xf:dispatch ev:event="DOMActivate"
+                     name="isis-form-previous"
+                     targetid="form" />
     </xf:trigger>
     <xf:trigger>
-        <xf:label>
-            Next
-            <f:icon name="right" />
-        </xf:label>
-        <xf:send
-            ev:event="DOMActivate"
-            submission="primaryperson_submission" />
+        <xf:label>Next</xf:label>
+        <xf:send ev:event="DOMActivate"
+                 submission="submission" />
     </xf:trigger>
 </f:form>
