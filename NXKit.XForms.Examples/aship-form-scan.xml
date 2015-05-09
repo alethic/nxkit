@@ -1,0 +1,150 @@
+﻿<f:form
+    xmlns="http://www.w3.org/2002/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:f="http://schemas.nxkit.org/2014/xforms-layout"
+    xmlns:xf="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:i="http://schemas.nxkit.org/2015/imaging"
+    xmlns:d="urn:aship-data"
+    xmlns:r="urn:aship-rates"
+    id="form">
+    <xf:model schema="aship-data.xsd">
+        <xf:instance id="data"
+                     src="aship-data.xml" />
+        <xf:bind ref="instance('data')">
+            <xf:bind ref="d:coverage"
+                     required="true()" />
+            <xf:bind ref="d:insureds"
+                     relevant="../d:coverage='MS' or ../d:coverage='MF'">
+                <xf:bind ref="d:children"
+                         relevant="../../d:coverage='MF'">
+                    <xf:bind ref="d:child"
+                             relevant="count(preceding-sibling::d:child)=0" />
+                </xf:bind>
+            </xf:bind>
+            <xf:bind ref="d:premium"
+                     calculate="instance('rates')/r:rate[@plan=instance('data')/d:plan and @coverage=instance('data')/d:coverage]" />
+        </xf:bind>
+        <xf:submission id="submission"
+                       ref="instance('data')"
+                       method="put"
+                       action="aship-data.xml">
+            <xf:dispatch ev:event="xforms-submit-done"
+                         name="isis-form-next"
+                         targetid="form"
+                         bubbles="true" />
+        </xf:submission>
+        <xf:instance id="child-template">
+            <d:child>
+                <d:name />
+                <d:dateOfBirth />
+            </d:child>
+        </xf:instance>
+    </xf:model>
+    <f:section ref="instance('data')" i:page="2" i:width="8.5in" i:height="11in">
+        <xf:group>
+            <xf:label>Coverage Information</xf:label>
+            <xf:select1 ref="d:plan"
+                        appearance="full"
+                        i:left="1in"
+                        i:top="1in"
+                        i:width="3in"
+                        i:height="2in">
+                <xf:label>Select your Plan option:</xf:label>
+                <xf:item
+                    i:width=".5in"
+                    i:height=".5in">
+                    <xf:label>Plan 1</xf:label>
+                    <xf:value>1</xf:value>
+                </xf:item>
+                <xf:item
+                    i:left=".75in"
+                    i:height=".5in">
+                    <xf:label>Plan 2</xf:label>
+                    <xf:value>2</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Plan 3</xf:label>
+                    <xf:value>3</xf:value>
+                </xf:item>
+            </xf:select1>
+            <xf:select1 ref="d:coverage"
+                        appearance="full">
+                <xf:label>Select who you would like to be covered:</xf:label>
+                <xf:item>
+                    <xf:label>Member Only</xf:label>
+                    <xf:value>M</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Member &amp; Spouse or Party to a Civil Union</xf:label>
+                    <xf:value>MS</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Member &amp; Family</xf:label>
+                    <xf:value>MF</xf:value>
+                </xf:item>
+            </xf:select1>
+        </xf:group>
+        <xf:group ref="d:insureds">
+            <xf:label>Insured Persons</xf:label>
+            <xf:group ref="d:spouse">
+                <xf:input ref="d:name">
+                    <xf:label>Spouse or Party to a Civil Union</xf:label>
+                </xf:input>
+                <xf:input ref="d:dateOfBirth">
+                    <xf:label>Date of Birth</xf:label>
+                </xf:input>
+            </xf:group>
+            <xf:group ref="d:children">
+                <xf:label>Children</xf:label>
+                <xf:alert>You need more children!</xf:alert>
+                <xf:repeat id="children-repeat"
+                           ref="d:child">
+                    <xf:group>
+                        <xf:input ref="d:name">
+                            <xf:label>Name</xf:label>
+                        </xf:input>
+                        <xf:input ref="d:dateOfBirth">
+                            <xf:label>Date of Birth</xf:label>
+                        </xf:input>
+                    </xf:group>
+                </xf:repeat>
+                <xf:trigger>
+                    <xf:label>Add</xf:label>
+                    <xf:insert ref="d:child"
+                               at="last()"
+                               position="after"
+                               origin="instance('child-template')"
+                               ev:event="DOMActivate" />
+                </xf:trigger>
+                <xf:trigger>
+                    <xf:label>Remove</xf:label>
+                    <xf:delete ref="d:child[index('children-repeat')]"
+                               if="count(d:child) &gt; 1"
+                               ev:event="DOMActivate" />
+                </xf:trigger>
+            </xf:group>
+        </xf:group>
+        <xf:group>
+            <xf:label>Compliance</xf:label>
+            <xf:input ref="d:aca_compliance">
+                <xf:label>
+                    Do you and all other individuals to be covered under this policy have other
+                    health coverage that is minimum essential coverage within the meaning of Section 5000A(f) of the Internal
+                    Revenue Code and which is required under the Affordable Care Act?
+                </xf:label>
+            </xf:input>
+        </xf:group>
+    </f:section>
+    <xf:trigger>
+        <xf:label>Back</xf:label>
+        <xf:dispatch ev:event="DOMActivate"
+                     name="isis-form-previous"
+                     targetid="form" />
+    </xf:trigger>
+    <xf:trigger>
+        <xf:label>Next</xf:label>
+        <xf:send ev:event="DOMActivate"
+                 submission="submission" />
+    </xf:trigger>
+</f:form>
