@@ -1,0 +1,27 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:NXKit.XForms.Layout.View.Windows"
+    xmlns:nxw="clr-namespace:NXKit.View.Windows;assembly=NXKit.View.Windows">
+
+    <local:SmallFontSizeConverter
+        x:Key="SmallFontSizeConverter" />
+
+    <DataTemplate
+        x:Key="NXKit:{http://schemas.nxkit.org/2014/xforms-layout}small">
+        <nxw:ElementViewModelControl
+            Element="{Binding}"
+            ElementViewModelType="{x:Type local:SmallViewModel}">
+            <nxw:ElementViewModelControl.Resources>
+                <DataTemplate
+                    DataType="{x:Type local:SmallViewModel}">
+                    <nxw:NodesPresenter
+                        TextBlock.FontSize="{Binding RelativeSource={RelativeSource Self}, Path=Parent.(TextBlock.FontSize), Converter={StaticResource SmallFontSizeConverter}}"
+                        ItemsSource="{Binding Element.Nodes}">
+                    </nxw:NodesPresenter>
+                </DataTemplate>
+            </nxw:ElementViewModelControl.Resources>
+        </nxw:ElementViewModelControl>
+    </DataTemplate>
+
+</ResourceDictionary>

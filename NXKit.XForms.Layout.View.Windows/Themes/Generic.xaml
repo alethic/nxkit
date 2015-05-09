@@ -22,6 +22,10 @@
             Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/Table.xaml" />
         <ResourceDictionary
             Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/Icon.xaml" />
+        <ResourceDictionary
+            Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/Strong.xaml" />
+        <ResourceDictionary
+            Source="/NXKit.XForms.Layout.View.Windows;component/Themes/Generic/Small.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

@@ -105,6 +105,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Themes\Generic\Small.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic\Strong.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic\Paragraph.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -131,6 +139,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SmallFontSizeConverter.cs" />
+    <Compile Include="SmallViewModel.cs" />
+    <Compile Include="StrongViewModel.cs" />
     <Compile Include="SegmentViewModel.cs" />
     <Compile Include="SectionViewModel.cs" />
     <Compile Include="ParagraphViewModel.cs" />

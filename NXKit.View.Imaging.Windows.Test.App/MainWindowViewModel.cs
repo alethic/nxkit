@@ -2,7 +2,9 @@
 using System.ComponentModel;
 using System.Windows.Input;
 
-namespace NXKit.View.Windows.Test.App
+using NXKit.View.Windows;
+
+namespace NXKit.View.Imaging.Windows.Test.App
 {
 
     public class MainWindowViewModel :
@@ -19,7 +21,7 @@ namespace NXKit.View.Windows.Test.App
         public MainWindowViewModel()
         {
             this.loadCommand = new DelegateCommand(i => ExecuteLoad(i), i => CanExecuteLoad(i));
-            this.loadUri = "nx-example:///aship-form.xml";
+            this.loadUri = "nx-example:///aship-form-scan.xml";
         }
 
         public string LoadUri

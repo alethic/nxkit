@@ -106,6 +106,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NXKit.Imaging", "NXKit.Imag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Imaging", "NXKit.Imaging\NXKit.Imaging.csproj", "{4344AF94-1038-42F0-9760-8003ECF5B056}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.View.Imaging.Windows.Test.App", "NXKit.View.Imaging.Windows.Test.App\NXKit.View.Imaging.Windows.Test.App.csproj", "{73387947-6D47-48F0-B9EB-40F3975AAE73}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -264,6 +266,10 @@ Global
 		{4344AF94-1038-42F0-9760-8003ECF5B056}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4344AF94-1038-42F0-9760-8003ECF5B056}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4344AF94-1038-42F0-9760-8003ECF5B056}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73387947-6D47-48F0-B9EB-40F3975AAE73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73387947-6D47-48F0-B9EB-40F3975AAE73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73387947-6D47-48F0-B9EB-40F3975AAE73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73387947-6D47-48F0-B9EB-40F3975AAE73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -307,5 +313,6 @@ Global
 		{66132F55-660E-4627-A86F-11A48C1E38F0} = {DAA65BB5-15AE-420C-A7AF-838E46967312}
 		{BBA40BEC-D3E3-483B-95C5-8BB1883115F9} = {B542A17F-16F9-4614-BAC5-04A62D7DBABA}
 		{4344AF94-1038-42F0-9760-8003ECF5B056} = {A0446CA2-FDFC-4A4D-A2F1-F211B633E632}
+		{73387947-6D47-48F0-B9EB-40F3975AAE73} = {6076674D-F023-4DBB-8173-CF2B27C55C6E}
 	EndGlobalSection
 EndGlobal

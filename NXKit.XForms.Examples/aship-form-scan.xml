@@ -40,6 +40,28 @@
                 <d:dateOfBirth />
             </d:child>
         </xf:instance>
+        <xf:instance id="rates">
+            <rates xmlns="urn:aship-rates">
+                <rate plan="1"
+                      coverage="M">20</rate>
+                <rate plan="1"
+                      coverage="MS">40</rate>
+                <rate plan="1"
+                      coverage="MF">50</rate>
+                <rate plan="2"
+                      coverage="M">30</rate>
+                <rate plan="2"
+                      coverage="MS">60</rate>
+                <rate plan="2"
+                      coverage="MF">75</rate>
+                <rate plan="3"
+                      coverage="M">40</rate>
+                <rate plan="3"
+                      coverage="MS">80</rate>
+                <rate plan="3"
+                      coverage="MF">100</rate>
+            </rates>
+        </xf:instance>
     </xf:model>
     <f:section ref="instance('data')" i:page="2" i:width="8.5in" i:height="11in">
         <xf:group>
