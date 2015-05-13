@@ -127,6 +127,7 @@
   <ItemGroup>
     <Compile Include="Anchor.cs" />
     <Compile Include="AttributeAccessor.cs" />
+    <Compile Include="AnchorAttributes.cs" />
     <Compile Include="IconAttributes.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Events.cs" />

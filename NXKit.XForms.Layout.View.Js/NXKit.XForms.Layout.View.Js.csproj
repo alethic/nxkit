@@ -30,6 +30,7 @@
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="SmallViewModel.ts" />
+    <TypeScriptCompile Include="AnchorViewModel.ts" />
     <TypeScriptCompile Include="StrongViewModel.ts" />
     <TypeScriptCompile Include="ParagraphViewModel.ts" />
     <TypeScriptCompile Include="SegmentViewModel.ts" />
@@ -89,6 +90,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Small.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Anchor.html" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>

@@ -5,6 +5,7 @@
         xmlns:ev="http://www.w3.org/2001/xml-events"
         xmlns:d="urn:aship-data"
         xmlns:r="urn:aship-rates"
+        xmlns:l="urn:aship-layout"
         id="form">
     <xf:model schema="aship-data.xsd">
         <xf:instance id="data"
@@ -20,17 +21,23 @@
                              relevant="count(preceding-sibling::d:child)=0" />
                 </xf:bind>
             </xf:bind>
-            <xf:bind ref="d:premium"
-                     calculate="instance('rates')/r:rate[@plan=instance('data')/d:plan and @coverage=instance('data')/d:coverage]" />
+            <xf:bind
+                ref="d:aca_compliance"
+                constraint=". = 'true'" />
+            <xf:bind
+                ref="d:premium"
+                calculate="instance('rates')/r:rate[@plan=instance('data')/d:plan and @coverage=instance('data')/d:coverage]" />
         </xf:bind>
-        <xf:submission id="submission"
-                       ref="instance('data')"
-                       method="put"
-                       action="aship-data.xml">
-            <xf:dispatch ev:event="xforms-submit-done"
-                         name="isis-form-next"
-                         targetid="form"
-                         bubbles="true" />
+        <xf:submission
+            id="submission"
+            ref="instance('data')"
+            method="put"
+            action="aship-data.xml">
+            <xf:dispatch
+                ev:event="xforms-submit-done"
+                name="isis-form-next"
+                targetid="form"
+                bubbles="true" />
         </xf:submission>
         <xf:instance id="child-template">
             <d:child>
@@ -60,6 +67,14 @@
                       coverage="MF">100</rate>
             </rates>
         </xf:instance>
+        <xf:instance id="layout">
+            <layout xmlns="urn:aship-layout">
+                <aca_compliance_no />
+            </layout>
+        </xf:instance>
+        <xf:bind
+            ref="instance('layout')/l:aca_compliance_no"
+            relevant="instance('data')/d:aca_compliance='false' or instance('data')/d:aca_compliance=''" />
     </xf:model>
     <f:section ref="instance('data')">
         <xf:group>
@@ -70,7 +85,7 @@
             <f:table>
                 <f:table-row>
                     <f:table-cell>
-                        <f:strong>Benefits</f:strong>
+                        <f:strong>Benefits*</f:strong>
                     </f:table-cell>
                     <f:table-cell>Plan 1</f:table-cell>
                     <f:table-cell>Plan 2</f:table-cell>
@@ -108,16 +123,12 @@
                 </f:table-row>
             </f:table>
             <f:p>
-                <f:small>* All benefits reduce to 50% of original benefit at age 65.</f:small>
-            </f:p>
-            <f:p>
-                <f:small>** All benefits reduce to 25% of original benefit at age 75.</f:small>
-            </f:p>
-            <f:p>
-                <f:small>*** Coverage terminates at age 80.</f:small>
-            </f:p>
-            <f:p>
-                <f:small>**** Benefits for each child will be 50% of the primary insured's benefits.</f:small>
+                <f:small>
+                    * All benefits reduce to 50% of original benefit at age 65. 
+                    All benefits reduce to 25% of original benefit at age 75. 
+                    Coverage terminates at age 80. 
+                    Benefits for each child will be 50% of the primary insured's benefits.
+                </f:small>
             </f:p>
             <f:table>
                 <f:table-row>
@@ -186,16 +197,17 @@
             </xf:select1>
             <f:p>
                 <f:strong>
-                    Your chosen premium will be billed at $<xf:output ref="d:premium" /> per month.
+                    Your chosen coverage will be billed at $<xf:output ref="d:premium" /> per month.
+                    Click <f:a href="http://www.google.com">here</f:a> to examine the Summary of Coverage.
                 </f:strong>
             </f:p>
         </xf:group>
         <xf:group ref="d:insureds">
             <xf:label>Insured Persons</xf:label>
             <f:p>
-                Since you have elected the Member &amp; Spouse coverage option, additional information about
-                your covered spouse or domestic partner is required. Complete the name and birth date of your spouse
-                or domestic partner.
+                Since you have elected the Member &amp; Spouse or Party to a Civil Union coverage option, additional information about
+                your covered spouse or party to a civil union is required. Complete the name and birth date of your spouse
+                or party to a civil union.
             </f:p>
             <xf:group ref="d:spouse">
                 <xf:input ref="d:name">
@@ -239,26 +251,36 @@
                 </xf:trigger>
             </xf:group>
         </xf:group>
-        <xf:group>
-            <xf:label>Compliance</xf:label>
-            <f:p>
-                <f:strong>
-                    THIS IS A SUPPLEMENT TO HEALTH INSURANCE AND IS NOT A SUBSTITUTE FOR MAJOR MEDICAL COVERAGE.
-                    LACK OF MAJOR MEDICAL COVERAGE (OR OTHER MINIMUM ESSENTIAL COVERAGE) MAY RESULT IN AN ADDITIONAL PAYMENT
-                    WITH YOUR TAXES.
-                </f:strong>
-            </f:p>
-            <f:p>
-                Please Note: If the answer to the following question is "No," you will not be allowed to complete this
-                enrollment as the Company is prohibited by law from issuing this insurance policy.
-            </f:p>
-            <xf:input ref="d:aca_compliance">
-                <xf:label>
-                    Do you and all other individuals to be covered under this policy have other
-                    health coverage that is minimum essential coverage within the meaning of Section 5000A(f) of the Internal
-                    Revenue Code and which is required under the Affordable Care Act?
-                </xf:label>
-            </xf:input>
+        <xf:group ref="d:aca_compliance">
+            <xf:label>ACA Compliance</xf:label>
+            <xf:group appearance="full">
+                <xf:input ref=".">
+                    <xf:label>
+                        Do you and all other individuals to be covered under this policy have other
+                        health coverage that is minimum essential coverage within the meaning of Section 5000A(f) of the Internal
+                        Revenue Code and which is required under the Affordable Care Act?
+                    </xf:label>
+                </xf:input>
+            </xf:group>
+            <xf:group ref="instance('layout')/l:aca_compliance_no">
+                <f:p>
+                    <f:strong>
+                        We cannot complete your enrollment as the Company is prohibited by law from issuing this insurance policy unless you currently have other health
+
+                        coverage
+                        as required by the Affordable care Act.
+                    </f:strong>
+                </f:p>
+            </xf:group>
+            <xf:group>
+                <f:p>
+                    <f:strong>
+                        THIS IS A SUPPLEMENT TO HEALTH INSURANCE AND IS NOT A SUBSTITUTE FOR MAJOR MEDICAL COVERAGE.
+                        LACK OF MAJOR MEDICAL COVERAGE (OR OTHER MINIMUM ESSENTIAL COVERAGE) MAY RESULT IN AN ADDITIONAL PAYMENT
+                        WITH YOUR TAXES.
+                    </f:strong>
+                </f:p>
+            </xf:group>
         </xf:group>
     </f:section>
     <xf:trigger>

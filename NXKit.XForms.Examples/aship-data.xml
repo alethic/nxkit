@@ -3,7 +3,7 @@
     xmlns:d="urn:aship-data">
     <plan>1</plan>
     <coverage>M</coverage>
-    <aca_compliance>false</aca_compliance>
+    <aca_compliance></aca_compliance>
     <insureds>
         <spouse>
             <name></name>

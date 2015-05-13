@@ -8,37 +8,32 @@ using NXKit.Composition;
 namespace NXKit.XForms.Layout
 {
 
-    [Extension("{http://schemas.nxkit.org/2014/xforms-layout}a")]
+    /// <summary>
+    /// Makes the 'anchor' attribute available.
+    /// </summary>
+    [Extension(typeof(AnchorAttributes), "{http://schemas.nxkit.org/2014/xforms-layout}anchor")]
     [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
-    [Remote]
-    public class Anchor :
-        ElementExtension
+    public class AnchorAttributes :
+        AttributeAccessor
     {
-
-        readonly AnchorAttributes attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         [ImportingConstructor]
-        public Anchor(
-            XElement element,
-            AnchorAttributes attributes)
+        public AnchorAttributes(XElement element)
             : base(element)
         {
             Contract.Requires<ArgumentNullException>(element != null);
-
-            this.attributes = attributes;
         }
 
         /// <summary>
-        /// Gets the icon name.
+        /// Gets the 'name' attribute value.
         /// </summary>
-        [Remote]
         public string Href
         {
-            get { return attributes.Href; }
+            get { return GetAttributeValue("href"); }
         }
 
     }
