@@ -14,14 +14,6 @@
                 <name></name>
                 <dateOfBirth></dateOfBirth>
             </child>
-            <child>
-                <name></name>
-                <dateOfBirth></dateOfBirth>
-            </child>
-            <child>
-                <name></name>
-                <dateOfBirth></dateOfBirth>
-            </child>
         </children>
     </insureds>
     <premium></premium>

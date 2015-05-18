@@ -7,7 +7,7 @@
         xmlns:r="urn:aship-rates"
         xmlns:l="urn:aship-layout"
         id="form">
-    <xf:model schema="aship-data.xsd">
+    <xf:model >
         <xf:instance id="data"
                      src="aship-data.xml" />
         <xf:bind ref="instance('data')">
@@ -15,14 +15,28 @@
                      required="true()" />
             <xf:bind ref="d:insureds"
                      relevant="../d:coverage='MS' or ../d:coverage='MF'">
+                <xf:bind ref="d:spouse">
+                    <xf:bind ref="d:name"
+                             required="true()" />
+                    <xf:bind ref="d:dateOfBirth"
+                             required="true()"
+                             type="xsd:date" />
+                </xf:bind>
                 <xf:bind ref="d:children"
                          relevant="../../d:coverage='MF'">
                     <xf:bind ref="d:child"
-                             relevant="count(preceding-sibling::d:child)=0" />
+                             relevant="count(preceding-sibling::d:child)=0">
+                        <xf:bind ref="d:name"
+                                 required="true()" />
+                        <xf:bind ref="d:dateOfBirth"
+                                 type="xsd:date"
+                                 required="true()"/>
+                    </xf:bind>
                 </xf:bind>
             </xf:bind>
             <xf:bind
                 ref="d:aca_compliance"
+                type="xsd:boolean"
                 constraint=". = 'true'" />
             <xf:bind
                 ref="d:premium"
@@ -124,9 +138,9 @@
             </f:table>
             <f:p>
                 <f:small>
-                    * All benefits reduce to 50% of original benefit at age 65. 
-                    All benefits reduce to 25% of original benefit at age 75. 
-                    Coverage terminates at age 80. 
+                    * All benefits reduce to 50% of original benefit at age 65.
+                    All benefits reduce to 25% of original benefit at age 75.
+                    Coverage terminates at age 80.
                     Benefits for each child will be 50% of the primary insured's benefits.
                 </f:small>
             </f:p>
@@ -198,14 +212,14 @@
             <f:p>
                 <f:strong>
                     Your chosen coverage will be billed at $<xf:output ref="d:premium" /> per month.
-                    Click <f:a href="http://www.google.com">here</f:a> to examine the Summary of Coverage.
+                    Click <f:a href="http://misc.public.isillc.com/ASHIP-DOC.pdf">here</f:a> to examine the Summary of Coverage.
                 </f:strong>
             </f:p>
         </xf:group>
         <xf:group ref="d:insureds">
             <xf:label>Insured Persons</xf:label>
             <f:p>
-                Since you have elected the Member &amp; Spouse or Party to a Civil Union coverage option, additional information about
+                Since you have elected the <f:strong>Member &amp; Spouse or Party to a Civil Union</f:strong> coverage option, additional information about
                 your covered spouse or party to a civil union is required. Complete the name and birth date of your spouse
                 or party to a civil union.
             </f:p>
@@ -221,7 +235,7 @@
                 <xf:label>Children</xf:label>
                 <xf:alert>You need more children!</xf:alert>
                 <f:p>
-                    Since you have elected the Member &amp; Family coverage option, additional information about
+                    Since you have elected the <f:strong>Member &amp; Family</f:strong> coverage option, additional information about
                     your covered children is required. Complete the names and birthdates of those to be covered.
                 </f:p>
                 <xf:repeat id="children-repeat"
@@ -266,9 +280,7 @@
                 <f:p>
                     <f:strong>
                         We cannot complete your enrollment as the Company is prohibited by law from issuing this insurance policy unless you currently have other health
-
-                        coverage
-                        as required by the Affordable care Act.
+                        coverage as required by the Affordable care Act.
                     </f:strong>
                 </f:p>
             </xf:group>

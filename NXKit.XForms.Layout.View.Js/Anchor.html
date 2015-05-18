@@ -3,8 +3,11 @@
     "Name": "{http://schemas.nxkit.org/2014/xforms-layout}a"
 }'>
     <!-- ko with: new NXKit.View.XForms.Layout.AnchorViewModel($context, $data) -->
-    <a class="xforms-layout-anchor"
-            data-bind="
+    <a 
+       class="xforms-layout-anchor"
+       target="_blank"
+       href="#"
+       data-bind="
 attr : {
     'data-nx-name': $data.Node.Name,
     'href': $data.Href

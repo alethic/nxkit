@@ -39,7 +39,7 @@
                     <restriction
                         base="string">
                         <minLength
-                            value="1" />
+                            value="0" />
                     </restriction>
                 </simpleType>
             </element>
@@ -50,22 +50,34 @@
     </complexType>
     <complexType
         name="child">
-        <complexContent>
-            <extension
-                base="d:person">
-                <sequence>
-                </sequence>
-            </extension>
-        </complexContent>
+        <sequence>
+            <element
+                name="name">
+                <simpleType>
+                    <restriction
+                        base="string">
+                        <minLength
+                            value="0" />
+                    </restriction>
+                </simpleType>
+            </element>
+            <element
+                name="dateOfBirth"
+                type="date" />
+        </sequence>
     </complexType>
     <complexType
         name="insureds">
         <sequence>
             <element
                 name="spouse"
-                type="d:person"/>
+                type="d:person"
+                minOccurs="0"
+                maxOccurs="1"/>
             <element
-                name="children">
+                name="children"
+                minOccurs="0"
+                maxOccurs="1">
                 <complexType>
                     <sequence>
                         <element
@@ -93,10 +105,13 @@
                     type="boolean" />
                 <element
                     name="insureds"
-                    type="d:insureds" />
+                    type="d:insureds"
+                    minOccurs="0"
+                    maxOccurs="1" />
                 <element
                     name="premium"
-                    type="decimal" />
+                    type="decimal"
+                    nillable="true" />
             </sequence>
         </complexType>
     </element>
