@@ -13,12 +13,14 @@ module NXKit.View.XForms {
             return this.Label != null ? ViewModelUtil.GetAppearance(this.Label) : null;
         }
 
-        public get Count(): number {
-            return this.Contents.length;
+        public get Count(): KnockoutObservable<number> {
+            var self = this;
+            return ko.pureComputed(() => self.Contents().length);
         }
 
-        public get CountEnabled(): number {
-            return ko.utils.arrayFilter(this.Contents, _ => ViewModelUtil.GetRelevant(_)()).length;
+        public get CountEnabled(): KnockoutObservable<number> {
+            var self = this;
+            return ko.pureComputed(() => ko.utils.arrayFilter(self.Contents(), _ => ViewModelUtil.GetRelevant(_)()).length);
         }
 
     }

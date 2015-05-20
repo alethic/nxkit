@@ -128,17 +128,17 @@
     /**
       * Filters out the given node set for content nodes. This descends through transparent nodes.
       */
-    export function GetContentNodes(nodes: Node[]): Node[] {
+    export function GetContentNodesInternal(nodes: Node[]): Node[] {
         try {
             var l = nodes.filter(_ => !IsMetadataNode(_));
             var r = new Array<Node>();
             for (var i = 0; i < l.length; i++) {
                 var v = l[i];
                 if (v == null) {
-                    throw new Error('ViewModelUtil.GetContentNodes(): prospective Node is null');
+                    throw new Error('ViewModelUtil.GetContentNodesInternal(): prospective Node is null');
                 }
                 if (IsTransparentNode(v)) {
-                    var s = GetContentNodes(v.Nodes());
+                    var s = GetContentNodesInternal(v.Nodes());
                     for (var j = 0; j < s.length; j++)
                         r.push(s[j]);
                 } else {
@@ -148,7 +148,7 @@
 
             return r;
         } catch (ex) {
-            ex.message = 'ViewModelUtil.GetContentNodes()' + '"\nMessage: ' + ex.message;
+            ex.message = 'ViewModelUtil.GetContentNodesInternal()' + '"\nMessage: ' + ex.message;
             throw ex;
         }
     }
@@ -156,9 +156,9 @@
     /**
       * Gets the content nodes of the given node. This descends through transparent nodes.
       */
-    export function GetContents(node: Node): Node[] {
+    export function GetContents(node: Node): KnockoutObservable<Node[]> {
         try {
-            return GetContentNodes(node.Nodes());
+            return ko.computed(() => GetContentNodesInternal(node.Nodes()));
         } catch (ex) {
             ex.message = 'ViewModelUtil.GetContents()' + '"\nMessage: ' + ex.message;
             throw ex;

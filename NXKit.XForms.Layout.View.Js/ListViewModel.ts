@@ -9,8 +9,9 @@ module NXKit.View.XForms.Layout {
             super(context, node);
         }
 
-        public get Items(): Node[] {
-            return ko.utils.arrayFilter(this.Contents, _ => _.Name == '{http://schemas.nxkit.org/2014/xforms-layout}item');
+        public get Items(): KnockoutObservable<Node[]> {
+            var self = this;
+            return ko.computed(() => ko.utils.arrayFilter(self.Contents(), _ => _.Name == '{http://schemas.nxkit.org/2014/xforms-layout}item'));
         }
 
     }

@@ -40,11 +40,11 @@ module NXKit.View {
         /**
           * Gets the content nodes of the current node.
           */
-        public get Contents(): Node[] {
+        public get Contents(): KnockoutObservable<Node[]> {
             return this.GetContents();
         }
 
-        GetContents(): Node[] {
+        GetContents(): KnockoutObservable<Node[]> {
             try {
                 return ViewModelUtil.GetContents(this.Node);
             } catch (ex) {

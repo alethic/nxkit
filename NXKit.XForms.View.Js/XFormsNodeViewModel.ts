@@ -72,8 +72,9 @@
             return ViewModelUtil.GetAlertNode(this.Node);
         }
 
-        public get CountEnabled(): number {
-            return ko.utils.arrayFilter(this.Contents, _ => ViewModelUtil.GetRelevant(_)()).length;
+        public get CountEnabled(): KnockoutObservable<number> {
+            var self = this;
+            return ko.pureComputed(() => ko.utils.arrayFilter(self.Contents(), _ => ViewModelUtil.GetRelevant(_)()).length);
         }
 
     }
