@@ -34,7 +34,17 @@
         name="person">
         <sequence>
             <element
-                name="name">
+                name="firstName">
+                <simpleType>
+                    <restriction
+                        base="string">
+                        <minLength
+                            value="0" />
+                    </restriction>
+                </simpleType>
+            </element>
+            <element
+                name="lastName">
                 <simpleType>
                     <restriction
                         base="string">
@@ -52,7 +62,17 @@
         name="child">
         <sequence>
             <element
-                name="name">
+                name="firstName">
+                <simpleType>
+                    <restriction
+                        base="string">
+                        <minLength
+                            value="0" />
+                    </restriction>
+                </simpleType>
+            </element>
+            <element
+                name="lastName">
                 <simpleType>
                     <restriction
                         base="string">

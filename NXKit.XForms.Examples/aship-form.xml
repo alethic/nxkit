@@ -16,7 +16,9 @@
             <xf:bind ref="d:insureds"
                      relevant="../d:coverage='MS' or ../d:coverage='MF'">
                 <xf:bind ref="d:spouse">
-                    <xf:bind ref="d:name"
+                    <xf:bind ref="d:firstName"
+                             required="true()" />
+                    <xf:bind ref="d:lastName"
                              required="true()" />
                     <xf:bind ref="d:dateOfBirth"
                              required="true()"
@@ -24,9 +26,10 @@
                 </xf:bind>
                 <xf:bind ref="d:children"
                          relevant="../../d:coverage='MF'">
-                    <xf:bind ref="d:child"
-                             relevant="count(preceding-sibling::d:child)=0">
-                        <xf:bind ref="d:name"
+                    <xf:bind ref="d:child">
+                        <xf:bind ref="d:firstName"
+                                 required="true()" />
+                        <xf:bind ref="d:lastName"
                                  required="true()" />
                         <xf:bind ref="d:dateOfBirth"
                                  type="xsd:date"
@@ -36,7 +39,6 @@
             </xf:bind>
             <xf:bind
                 ref="d:aca_compliance"
-                type="xsd:boolean"
                 constraint=". = 'true'" />
             <xf:bind
                 ref="d:premium"
@@ -55,7 +57,8 @@
         </xf:submission>
         <xf:instance id="child-template">
             <d:child>
-                <d:name />
+                <d:firstName />
+                <d:lastName />
                 <d:dateOfBirth />
             </d:child>
         </xf:instance>
@@ -83,12 +86,13 @@
         </xf:instance>
         <xf:instance id="layout">
             <layout xmlns="urn:aship-layout">
-                <aca_compliance_no />
+                <aca_compliance_error />
             </layout>
         </xf:instance>
         <xf:bind
-            ref="instance('layout')/l:aca_compliance_no"
-            relevant="instance('data')/d:aca_compliance='false' or instance('data')/d:aca_compliance=''" />
+            ref="instance('layout')/l:aca_compliance_error"
+            relevant="instance('data')/d:aca_compliance='false'"
+            constraint="instance('data')/d:aca_compliance='true'" />
     </xf:model>
     <f:section ref="instance('data')">
         <xf:group>
@@ -224,16 +228,19 @@
                 or party to a civil union.
             </f:p>
             <xf:group ref="d:spouse">
-                <xf:input ref="d:name">
-                    <xf:label>Spouse or Party to a Civil Union</xf:label>
+                <xf:label>Spouse or Party to a Civil Union</xf:label>
+                <xf:input ref="d:firstName" appearance="minimal">
+                    <xf:label>First Name</xf:label>
                 </xf:input>
-                <xf:input ref="d:dateOfBirth">
+                <xf:input ref="d:lastName" appearance="minimal">
+                    <xf:label>Last Name</xf:label>
+                </xf:input>
+                <xf:input ref="d:dateOfBirth" appearance="compact">
                     <xf:label>Date of Birth</xf:label>
                 </xf:input>
             </xf:group>
             <xf:group ref="d:children">
                 <xf:label>Children</xf:label>
-                <xf:alert>You need more children!</xf:alert>
                 <f:p>
                     Since you have elected the <f:strong>Member &amp; Family</f:strong> coverage option, additional information about
                     your covered children is required. Complete the names and birthdates of those to be covered.
@@ -241,10 +248,16 @@
                 <xf:repeat id="children-repeat"
                            ref="d:child">
                     <xf:group>
-                        <xf:input ref="d:name">
-                            <xf:label>Name</xf:label>
+                        <xf:input ref="d:firstName"
+                                  appearance="minimal">
+                            <xf:label>First Name</xf:label>
                         </xf:input>
-                        <xf:input ref="d:dateOfBirth">
+                        <xf:input ref="d:lastName"
+                                  appearance="minimal">
+                            <xf:label>Last Name</xf:label>
+                        </xf:input>
+                        <xf:input ref="d:dateOfBirth"
+                                  appearance="compact">
                             <xf:label>Date of Birth</xf:label>
                         </xf:input>
                     </xf:group>
@@ -268,21 +281,34 @@
         <xf:group ref="d:aca_compliance">
             <xf:label>ACA Compliance</xf:label>
             <xf:group appearance="full">
-                <xf:input ref=".">
+                <xf:select1 ref="."
+                            appearance="full">
                     <xf:label>
                         Do you and all other individuals to be covered under this policy have other
                         health coverage that is minimum essential coverage within the meaning of Section 5000A(f) of the Internal
                         Revenue Code and which is required under the Affordable Care Act?
                     </xf:label>
-                </xf:input>
-            </xf:group>
-            <xf:group ref="instance('layout')/l:aca_compliance_no">
-                <f:p>
-                    <f:strong>
-                        We cannot complete your enrollment as the Company is prohibited by law from issuing this insurance policy unless you currently have other health
-                        coverage as required by the Affordable care Act.
-                    </f:strong>
-                </f:p>
+                    <xf:item>
+                        <xf:label>Select an option...</xf:label>
+                        <xf:value></xf:value>
+                    </xf:item>
+                    <xf:item>
+                        <xf:label>Yes</xf:label>
+                        <xf:value>true</xf:value>
+                    </xf:item>
+                    <xf:item>
+                        <xf:label>No</xf:label>
+                        <xf:value>false</xf:value>
+                    </xf:item>
+                </xf:select1>
+                <xf:group ref="instance('layout')/l:aca_compliance_error">
+                    <f:p>
+                        <f:strong>
+                            &#x2718; We cannot complete your enrollment as the Company is prohibited by law from issuing this insurance policy unless you currently have other health
+                            coverage as required by the Affordable care Act.
+                        </f:strong>
+                    </f:p>
+                </xf:group>
             </xf:group>
             <xf:group>
                 <f:p>

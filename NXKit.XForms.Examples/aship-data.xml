@@ -6,12 +6,14 @@
     <aca_compliance></aca_compliance>
     <insureds>
         <spouse>
-            <name></name>
+            <firstName></firstName>
+            <lastName></lastName>
             <dateOfBirth></dateOfBirth>
         </spouse>
         <children>
             <child>
-                <name></name>
+                <firstName></firstName>
+                <lastName></lastName>
                 <dateOfBirth></dateOfBirth>
             </child>
         </children>
