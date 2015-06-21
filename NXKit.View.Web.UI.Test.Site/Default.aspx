@@ -10,7 +10,7 @@
     <title></title>
 
     <link rel="stylesheet" type="text/css" href="Content/normalize.css" />
-    <link rel="stylesheet/less" type="text/css" href="Content/styles.less" />
+    <link rel="stylesheet" type="text/css" href="Content/styles.css" />
 
     <style type="text/css">
         html, body {

@@ -237,6 +237,12 @@
     <Content Include="Content\semantic\packaged\images\loader-small.gif" />
     <Content Include="Content\semantic\packaged\javascript\semantic.js" />
     <Content Include="Content\semantic\packaged\javascript\semantic.min.js" />
+    <Content Include="Content\styles.css">
+      <DependentUpon>styles.less</DependentUpon>
+    </Content>
+    <Content Include="Content\styles.min.css">
+      <DependentUpon>styles.css</DependentUpon>
+    </Content>
     <Content Include="Default.aspx" />
     <Content Include="Content\styles.less" />
     <Content Include="Global.asax" />
@@ -245,6 +251,9 @@
     <Content Include="packages.config" />
     <Content Include="Content\xforms-layout.less" />
     <Content Include="Content\xforms.less" />
+    <Content Include="Content\styles.css.map">
+      <DependentUpon>styles.css</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\nxkit.pubxml" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
