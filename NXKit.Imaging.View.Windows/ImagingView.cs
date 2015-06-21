@@ -1,26 +1,22 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Linq;
 
-namespace NXKit.View.Windows
+namespace NXKit.Imaging.View.Windows
 {
 
     /// <summary>
-    /// Provides a Windows WPF <see cref="Control"/> that visualizes a NXKit <see cref="Document"/>.
+    /// Defines a view layer that draws overlayed region indicators.
     /// </summary>
-    public class View :
-        Control
+    public class ImagingView :
+        ContentControl
     {
 
         /// <summary>
         /// Initializes the static instance.
         /// </summary>
-        static View()
+        static ImagingView()
         {
-            TypeDescriptor.AddProvider(new XTypeDescriptionProvider<XContainer>(), typeof(XContainer));
-
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(View), new FrameworkPropertyMetadata(typeof(View)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ImagingView), new FrameworkPropertyMetadata(typeof(ImagingView)));
         }
 
         /// <summary>
@@ -29,7 +25,7 @@ namespace NXKit.View.Windows
         public static readonly DependencyProperty DocumentProperty = DependencyProperty.Register(
             "Document",
             typeof(Document),
-            typeof(View),
+            typeof(ImagingView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsParentMeasure));
 
         /// <summary>

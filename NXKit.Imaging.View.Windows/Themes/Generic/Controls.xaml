@@ -5,25 +5,66 @@
     xmlns:local="clr-namespace:NXKit.Imaging.View.Windows">
 
     <Style
-        TargetType="{x:Type local:View}">
+        TargetType="{x:Type local:RegionView}">
         <Setter
             Property="Template">
             <Setter.Value>
                 <ControlTemplate
-                    TargetType="{x:Type local:View}">
-                    <ControlTemplate.Resources>
-                        <DataTemplate
-                            DataType="{x:Type nx:Document}">
-                            <local:ElementPresenter
-                                Element="{Binding Root}" />
-                        </DataTemplate>
-                    </ControlTemplate.Resources>
+                    TargetType="{x:Type local:RegionView}">
+                    <Border
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Width="{Binding Region.Width}"
+                        Height="{Binding Region.Height}">
+                        
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type local:ImagingView}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type local:ImagingView}">
+                    <local:ElementsViewPresenter
+                        Element="{TemplateBinding Element}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type local:ImagingViewRoot}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type local:ImagingViewRoot}">
+                    <local:ElementView
+                        Element="{TemplateBinding Element}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style
+        TargetType="{x:Type local:ImagingView}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type local:ImagingView}">
                     <Border
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-                        <ContentPresenter
-                            Content="{TemplateBinding Document}" />
+                        <local:ImagingViewRoot
+                            Element="{Binding Document.Root}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

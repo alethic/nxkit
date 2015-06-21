@@ -100,6 +100,10 @@
       <Project>{075ba36b-f95a-4563-bbe9-20d4405e9c9e}</Project>
       <Name>NXKit.DOM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NXKit.Imaging.View.Windows\NXKit.Imaging.View.Windows.csproj">
+      <Project>{9fbc540a-7a13-4f2c-b936-071922a3f707}</Project>
+      <Name>NXKit.Imaging.View.Windows</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NXKit.Imaging\NXKit.Imaging.csproj">
       <Project>{4344af94-1038-42f0-9760-8003ecf5b056}</Project>
       <Name>NXKit.Imaging</Name>
