@@ -7,7 +7,7 @@ using NXKit.Xml;
 
 namespace NXKit.XForms
 {
-    
+
     /// <summary>
     /// Provides utility methods for <see cref="Binding"/> operation.
     /// </summary>

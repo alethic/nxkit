@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
 using NXKit.Composition;
 
 namespace NXKit.XForms

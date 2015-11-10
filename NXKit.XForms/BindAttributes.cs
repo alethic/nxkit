@@ -47,7 +47,7 @@ namespace NXKit.XForms
         {
             get { return GetAttributeValue("required"); }
         }
-        
+
         public string Relevant
         {
             get { return GetAttributeValue("relevant"); }

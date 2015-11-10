@@ -47,7 +47,7 @@ namespace NXKit.XForms
             this.attributes = attributes;
             this.context = context;
 
-            this.type = new Lazy<XName>(() => 
+            this.type = new Lazy<XName>(() =>
                 !string.IsNullOrEmpty(attributes.Type) ? Element.ResolvePrefixedName(attributes.Type) : null);
 
             this.readOnly = new Lazy<XPathExpression>(() =>
