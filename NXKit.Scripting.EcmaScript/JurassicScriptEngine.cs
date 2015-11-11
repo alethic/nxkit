@@ -35,9 +35,9 @@ namespace NXKit.Scripting.EcmaScript
 
 
         readonly Func<Document> host;
-        readonly JurassicScriptEngineState state;
         readonly ScriptObjectDescriptor[] objects;
         readonly ScriptObjectProxyGenerator generator;
+        readonly JurassicScriptEngineState state;
         Jurassic.ScriptEngine engine;
 
         /// <summary>
@@ -57,8 +57,8 @@ namespace NXKit.Scripting.EcmaScript
 
             this.host = host;
             this.objects = objects.SelectMany(i => i.GetObjects()).ToArray();
-            this.state = host().Xml.AnnotationOrCreate<JurassicScriptEngineState>();
             this.generator = generator;
+            this.state = host().Xml.AnnotationOrCreate<JurassicScriptEngineState>();
         }
 
         /// <summary>
