@@ -122,10 +122,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Console.cs" />
     <Compile Include="JurassicScriptEngineState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JurassicScriptEngine.cs" />
+    <Compile Include="ScriptObjectProxyGenerator.cs" />
+    <Compile Include="ScriptObjectInstance.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NXKit.Scripting.EcmaScript.nuspec">

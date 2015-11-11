@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 
 using Jurassic;
 
 using NXKit.Composition;
-using NXKit.Diagnostics;
 using NXKit.IO.Media;
 using NXKit.Xml;
 
@@ -34,24 +35,30 @@ namespace NXKit.Scripting.EcmaScript
 
 
         readonly Func<Document> host;
-        readonly ITraceService trace;
         readonly JurassicScriptEngineState state;
+        readonly ScriptObjectDescriptor[] objects;
+        readonly ScriptObjectProxyGenerator generator;
         Jurassic.ScriptEngine engine;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="host"></param>
-        /// <param name="trace"></param>
+        /// <param name="objects"></param>
         [ImportingConstructor]
-        public JurassicScriptEngine(Func<Document> host, ITraceService trace)
+        public JurassicScriptEngine(
+            Func<Document> host,
+            [ImportMany] IEnumerable<IScriptObjectProvider> objects,
+            ScriptObjectProxyGenerator generator)
         {
             Contract.Requires<ArgumentNullException>(host != null);
-            Contract.Requires<ArgumentNullException>(trace != null);
+            Contract.Requires<ArgumentNullException>(objects != null);
+            Contract.Requires<ArgumentNullException>(generator != null);
 
             this.host = host;
-            this.trace = trace;
+            this.objects = objects.SelectMany(i => i.GetObjects()).ToArray();
             this.state = host().Xml.AnnotationOrCreate<JurassicScriptEngineState>();
+            this.generator = generator;
         }
 
         /// <summary>
@@ -75,7 +82,10 @@ namespace NXKit.Scripting.EcmaScript
         {
             // configure script engine
             engine.EnableExposedClrTypes = true;
-            engine.SetGlobalValue("console", new Console(engine, trace));
+
+            // register globally available script objects
+            foreach (var i in objects)
+                engine.SetGlobalValue(i.Name, generator.GetOrBuildProxy(engine, i.Value));
         }
 
         /// <summary>
@@ -83,7 +93,9 @@ namespace NXKit.Scripting.EcmaScript
         /// </summary>
         void DeconfigureJurassic()
         {
-            engine.SetGlobalValue("console", "");
+            // unregister globally available script objects
+            foreach (var i in objects)
+                engine.SetGlobalValue(i.Name, "");
         }
 
         public bool CanExecute(string type, string code)
@@ -102,7 +114,7 @@ namespace NXKit.Scripting.EcmaScript
             }
             catch (JavaScriptException e)
             {
-                throw new ScriptingException(e.Message, e);
+                throw new ScriptException(e.Message, e);
             }
         }
 
@@ -117,7 +129,7 @@ namespace NXKit.Scripting.EcmaScript
             }
             catch (JavaScriptException e)
             {
-                throw new ScriptingException(e.Message, e);
+                throw new ScriptException(e.Message, e);
             }
         }
 

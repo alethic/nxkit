@@ -31,7 +31,7 @@ namespace NXKit.Scripting
         public DocumentScript(
             XDocument document,
             IScriptDispatcher dispatcher)
-            :base(document)
+            : base(document)
         {
             Contract.Requires<ArgumentNullException>(document != null);
             Contract.Requires<ArgumentNullException>(dispatcher != null);

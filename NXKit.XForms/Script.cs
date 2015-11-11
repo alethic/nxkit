@@ -59,7 +59,7 @@ namespace NXKit.XForms
             {
                 documentScript.Value.Execute(Type, Element.Value);
             }
-            catch (ScriptingException e)
+            catch (ScriptException e)
             {
                 throw new DOMTargetEventException(Element, Events.ActionError, e);
             }

@@ -3,14 +3,14 @@
 namespace NXKit.Scripting
 {
 
-    public class ScriptingException :
+    public class ScriptException :
         Exception
     {
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public ScriptingException()
+        public ScriptException()
             : base()
         {
 
@@ -20,7 +20,7 @@ namespace NXKit.Scripting
         /// Initializes a new instance.
         /// </summary>
         /// <param name="message"></param>
-        public ScriptingException(string message)
+        public ScriptException(string message)
             : base(message)
         {
 
@@ -31,7 +31,7 @@ namespace NXKit.Scripting
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public ScriptingException(string message, Exception innerException)
+        public ScriptException(string message, Exception innerException)
             : base(message, innerException)
         {
 

@@ -1,15 +1,18 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
-using Jurassic;
-using Jurassic.Library;
 using System.Linq;
+
+using NXKit.Composition;
 using NXKit.Diagnostics;
 
-namespace NXKit.Scripting.EcmaScript
+namespace NXKit.Scripting
 {
 
+    [ScriptObject("console")]
+    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
     public class Console :
-        ObjectInstance
+        IScriptObject
     {
 
         readonly ITraceService trace;
@@ -18,20 +21,19 @@ namespace NXKit.Scripting.EcmaScript
         /// Initializes a new instance.
         /// </summary>
         /// <param name="trace"></param>
-        public Console(ScriptEngine engine, ITraceService trace)
-            : base(engine)
+        [ImportingConstructor]
+        public Console(ITraceService trace)
         {
-            Contract.Requires<ArgumentNullException>(engine != null);
             Contract.Requires<ArgumentNullException>(trace != null);
 
             this.trace = trace;
-
-            PopulateFunctions();
         }
 
-        [JSFunction(Name = "log")]
+        [ScriptFunction("log")]
         public void Log(params object[] items)
         {
+            Contract.Requires<ArgumentNullException>(items != null);
+
             if (items.Length < 1)
                 return;
 
@@ -40,9 +42,11 @@ namespace NXKit.Scripting.EcmaScript
             trace.Information(fmt, arg);
         }
 
-        [JSFunction(Name = "debug")]
+        [ScriptFunction("debug")]
         public void Debug(params object[] items)
         {
+            Contract.Requires<ArgumentNullException>(items != null);
+
             if (items.Length < 1)
                 return;
 
@@ -51,9 +55,11 @@ namespace NXKit.Scripting.EcmaScript
             trace.Debug(fmt, arg);
         }
 
-        [JSFunction(Name = "info")]
+        [ScriptFunction("info")]
         public void Info(params object[] items)
         {
+            Contract.Requires<ArgumentNullException>(items != null);
+
             if (items.Length < 1)
                 return;
 
@@ -62,9 +68,11 @@ namespace NXKit.Scripting.EcmaScript
             trace.Information(fmt, arg);
         }
 
-        [JSFunction(Name = "warn")]
+        [ScriptFunction("warn")]
         public void Warn(params object[] items)
         {
+            Contract.Requires<ArgumentNullException>(items != null);
+
             if (items.Length < 1)
                 return;
 
@@ -73,9 +81,11 @@ namespace NXKit.Scripting.EcmaScript
             trace.Warning(fmt, arg);
         }
 
-        [JSFunction(Name = "error")]
+        [ScriptFunction("error")]
         public void Error(params object[] items)
         {
+            Contract.Requires<ArgumentNullException>(items != null);
+
             if (items.Length < 1)
                 return;
 
@@ -84,43 +94,43 @@ namespace NXKit.Scripting.EcmaScript
             trace.Error(fmt, arg);
         }
 
-        [JSFunction(Name = "assert")]
+        [ScriptFunction("assert")]
         public void Assert(bool expression, params object[] items)
         {
-
+            Contract.Requires<ArgumentNullException>(items != null);
         }
 
-        [JSFunction(Name = "clear")]
+        [ScriptFunction("clear")]
         public void Clear(params object[] items)
         {
-
+            Contract.Requires<ArgumentNullException>(items != null);
         }
 
-        [JSFunction(Name = "group")]
+        [ScriptFunction("group")]
         public void Group(params object[] items)
         {
-
+            Contract.Requires<ArgumentNullException>(items != null);
         }
 
-        [JSFunction(Name = "groupCollapsed")]
+        [ScriptFunction("groupCollapsed")]
         public void GroupCollapsed(params object[] items)
         {
-
+            Contract.Requires<ArgumentNullException>(items != null);
         }
 
-        [JSFunction(Name = "groupEnd")]
+        [ScriptFunction("groupEnd")]
         public void GroupEnd()
         {
 
         }
 
-        [JSFunction(Name = "time", Flags = JSFunctionFlags.MutatesThisObject)]
+        [ScriptFunction("time")]
         public void Time(string name = "")
         {
 
         }
 
-        [JSFunction(Name = "timeEnd", Flags = JSFunctionFlags.MutatesThisObject)]
+        [ScriptFunction("timeEnd")]
         public void TimeEnd(string name = "")
         {
 
