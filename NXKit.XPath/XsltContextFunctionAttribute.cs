@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.Xsl;
 
@@ -25,7 +24,8 @@ namespace NXKit.XPath
         public XsltContextFunctionAttribute(XName name)
             : base(typeof(IXsltContextFunction))
         {
-            Contract.Requires<ArgumentNullException>(name != null);
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
             this.expandedName = name.ToString();
         }
@@ -37,7 +37,8 @@ namespace NXKit.XPath
         public XsltContextFunctionAttribute(string expandedName)
             : this(XName.Get(expandedName))
         {
-            Contract.Requires<ArgumentNullException>(expandedName != null);
+            if (expandedName == null)
+                throw new ArgumentNullException(nameof(expandedName));
         }
 
         /// <summary>

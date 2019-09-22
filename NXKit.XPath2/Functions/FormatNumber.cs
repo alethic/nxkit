@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.Contracts;
-using System.Linq;
+﻿using System.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
+
 using NXKit.XPath;
 
 namespace NXKit.XPath2.Functions

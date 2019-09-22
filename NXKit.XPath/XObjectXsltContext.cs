@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Xml;
@@ -28,10 +27,10 @@ namespace NXKit.XPath
             XObject xml)
             : base(functionProvider)
         {
-            Contract.Requires<ArgumentNullException>(functionProvider != null);
-            Contract.Requires<ArgumentNullException>(xml != null);
+            if (functionProvider == null)
+                throw new ArgumentNullException(nameof(functionProvider));
 
-            this.xml = xml;
+            this.xml = xml ?? throw new ArgumentNullException(nameof(xml));
         }
 
         /// <summary>

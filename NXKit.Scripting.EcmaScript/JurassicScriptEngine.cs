@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -51,13 +50,12 @@ namespace NXKit.Scripting.EcmaScript
             [ImportMany] IEnumerable<IScriptObjectProvider> objects,
             ScriptObjectProxyGenerator generator)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
-            Contract.Requires<ArgumentNullException>(objects != null);
-            Contract.Requires<ArgumentNullException>(generator != null);
+            if (objects == null)
+                throw new ArgumentNullException(nameof(objects));
 
-            this.host = host;
+            this.host = host ?? throw new ArgumentNullException(nameof(host));
             this.objects = objects.SelectMany(i => i.GetObjects()).ToArray();
-            this.generator = generator;
+            this.generator = generator ?? throw new ArgumentNullException(nameof(generator));
             this.state = host().Xml.AnnotationOrCreate<JurassicScriptEngineState>();
         }
 

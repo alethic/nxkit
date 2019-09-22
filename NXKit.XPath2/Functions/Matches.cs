@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
 using System.Xml.XPath;
 using System.Xml.Xsl;
@@ -46,7 +45,8 @@ namespace NXKit.XPath2.Functions
 
         Flags GetFlags(string flags)
         {
-            Contract.Requires<ArgumentNullException>(flags != null);
+            if (flags == null)
+                throw new ArgumentNullException(nameof(flags));
 
             var f = Flags.None;
             foreach (var c in flags)

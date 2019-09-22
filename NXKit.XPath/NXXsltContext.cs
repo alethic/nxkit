@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -27,9 +26,7 @@ namespace NXKit.XPath
             IXsltContextFunctionProvider functionProvider)
             : base()
         {
-            Contract.Requires<ArgumentNullException>(functionProvider != null);
-
-            this.functionProvider = functionProvider;
+            this.functionProvider = functionProvider ?? throw new ArgumentNullException(nameof(functionProvider));
         }
 
         /// <summary>
@@ -41,9 +38,12 @@ namespace NXKit.XPath
         /// <returns></returns>
         public override IXsltContextFunction ResolveFunction(string prefix, string localName, XPathResultType[] argTypes)
         {
-            Contract.Assert(prefix != null);
-            Contract.Assert(localName != null);
-            Contract.Assert(argTypes != null);
+            if (prefix == null)
+                throw new ArgumentNullException(nameof(prefix));
+            if (localName == null)
+                throw new ArgumentNullException(nameof(localName));
+            if (argTypes == null)
+                throw new ArgumentNullException(nameof(argTypes));
 
             return functionProvider.GetFunctions()
                 .SelectMany(i => i.Metadata.ExpandedName
@@ -69,9 +69,12 @@ namespace NXKit.XPath
         /// <returns></returns>
         bool ResolveFunctionPredicate(XName name, string prefix, string localName)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(prefix != null);
-            Contract.Requires<ArgumentNullException>(localName != null);
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+            if (prefix == null)
+                throw new ArgumentNullException(nameof(prefix));
+            if (localName == null)
+                throw new ArgumentNullException(nameof(localName));
 
             // local name must match
             if (localName != name.LocalName)

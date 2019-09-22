@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -28,8 +27,10 @@ namespace NXKit.Scripting.EcmaScript
         /// <returns></returns>
         public ScriptObjectInstance GetOrBuildProxy(Jurassic.ScriptEngine engine, object target)
         {
-            Contract.Requires<ArgumentNullException>(engine != null);
-            Contract.Requires<ArgumentNullException>(target != null);
+            if (engine == null)
+                throw new ArgumentNullException(nameof(engine));
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
 
             return (ScriptObjectInstance)Activator.CreateInstance(
                 GetOrBuildProxyType(target.GetType()),
@@ -43,7 +44,8 @@ namespace NXKit.Scripting.EcmaScript
         /// <returns></returns>
         Type GetOrBuildProxyType(Type targetType)
         {
-            Contract.Requires<ArgumentNullException>(targetType != null);
+            if (targetType == null)
+                throw new ArgumentNullException(nameof(targetType));
 
             return proxyTypes.GetOrAdd(targetType, BuildType);
         }
@@ -55,7 +57,8 @@ namespace NXKit.Scripting.EcmaScript
         /// <returns></returns>
         Type BuildType(Type targetType)
         {
-            Contract.Requires<ArgumentNullException>(targetType != null);
+            if (targetType == null)
+                throw new ArgumentNullException(nameof(targetType));
 
             var assembly = AppDomain.CurrentDomain.DefineDynamicAssembly(new AssemblyName("NXKit.Scripting.EcmaScript.Proxy"), AssemblyBuilderAccess.Run);
             var module = assembly.DefineDynamicModule(assembly.GetName().Name);
@@ -82,7 +85,8 @@ namespace NXKit.Scripting.EcmaScript
         /// <returns></returns>
         IEnumerable<MethodInfo> GetScriptMethods(Type targetType)
         {
-            Contract.Requires<ArgumentNullException>(targetType != null);
+            if (targetType == null)
+                throw new ArgumentNullException(nameof(targetType));
 
             return targetType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(i => i.GetCustomAttribute<ScriptFunctionAttribute>() != null);
@@ -94,8 +98,10 @@ namespace NXKit.Scripting.EcmaScript
         /// <param name="tb"></param>
         ConstructorBuilder BuildConstructor(TypeBuilder tb, FieldBuilder target)
         {
-            Contract.Requires<ArgumentNullException>(tb != null);
-            Contract.Requires<ArgumentNullException>(target != null);
+            if (tb == null)
+                throw new ArgumentNullException(nameof(tb));
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
 
             var ctor = tb.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new Type[] { typeof(Jurassic.ScriptEngine), typeof(object) });
             var bctor = typeof(ScriptObjectInstance).GetConstructor(new[] { typeof(Jurassic.ScriptEngine) });
@@ -128,9 +134,12 @@ namespace NXKit.Scripting.EcmaScript
         /// <returns></returns>
         MethodBuilder BuildMethod(TypeBuilder tb, FieldBuilder target, MethodInfo targetMethod)
         {
-            Contract.Requires<ArgumentNullException>(tb != null);
-            Contract.Requires<ArgumentNullException>(target != null);
-            Contract.Requires<ArgumentNullException>(targetMethod != null);
+            if (tb == null)
+                throw new ArgumentNullException(nameof(tb));
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+            if (targetMethod == null)
+                throw new ArgumentNullException(nameof(targetMethod));
 
             // extract parameter types
             var parameterTypes = targetMethod.GetParameters()

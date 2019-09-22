@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Xsl;
 
 namespace NXKit.XPath
@@ -25,9 +24,7 @@ namespace NXKit.XPath
         public DefaultXsltContextFunctionProvider(
             [ImportMany] IEnumerable<Lazy<IXsltContextFunction, IXsltContextFunctionMetadata>> functions)
         {
-            Contract.Requires<ArgumentNullException>(functions != null);
-
-            this.functions = functions;
+            this.functions = functions ?? throw new ArgumentNullException(nameof(functions));
         }
 
         public IEnumerable<Lazy<IXsltContextFunction, IXsltContextFunctionMetadata>> GetFunctions()

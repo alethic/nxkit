@@ -1,13 +1,11 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Scripting;
 using NXKit.Xml;
-using NXKit.XMLEvents;
 
 namespace NXKit.XMLEvents
 {
@@ -33,7 +31,8 @@ namespace NXKit.XMLEvents
         public Script(XElement element)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             this.documentScript = new Lazy<IDocumentScript>(() => element.Document.Interface<IDocumentScript>());
         }

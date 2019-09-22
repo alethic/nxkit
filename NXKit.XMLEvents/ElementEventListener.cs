@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -38,12 +37,11 @@ namespace NXKit.XMLEvents
             IInvoker invoker)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(attributes != null);
-            Contract.Requires<ArgumentNullException>(invoker != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.invoker = invoker;
-            this.attributes = attributes;
+            this.invoker = invoker ?? throw new ArgumentNullException(nameof(invoker));
+            this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
             this.handler = new Lazy<IEventHandler>(() => GetHandler());
             this.observer = new Lazy<EventTarget>(() => GetObserver());
         }
@@ -168,7 +166,8 @@ namespace NXKit.XMLEvents
 
         public void InvokeHandleEvent(Event evt)
         {
-            Contract.Requires<ArgumentNullException>(evt != null);
+            if (evt == null)
+                throw new ArgumentNullException(nameof(evt));
 
             invoker.Invoke(() =>
                 handler.Value.HandleEvent(evt));

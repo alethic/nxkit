@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Reflection;
 
 using Jurassic.Library;
@@ -24,9 +23,12 @@ namespace NXKit.Scripting.EcmaScript
         /// <returns></returns>
         protected static MethodInfo GetInvocationMethodInfo(object target, string methodName, Type[] parameterTypes)
         {
-            Contract.Requires<ArgumentNullException>(target != null);
-            Contract.Requires<ArgumentNullException>(methodName != null);
-            Contract.Requires<ArgumentNullException>(parameterTypes != null);
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+            if (methodName == null)
+                throw new ArgumentNullException(nameof(methodName));
+            if (parameterTypes == null)
+                throw new ArgumentNullException(nameof(parameterTypes));
 
             return target.GetType().GetMethod(
                 methodName,
@@ -55,9 +57,12 @@ namespace NXKit.Scripting.EcmaScript
         /// <returns></returns>
         protected object Invoke(object target, MethodInfo method, params object[] args)
         {
-            Contract.Requires<ArgumentNullException>(target != null);
-            Contract.Requires<ArgumentNullException>(method != null);
-            Contract.Requires<ArgumentNullException>(args != null);
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+            if (method == null)
+                throw new ArgumentNullException(nameof(method));
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
 
             return method.Invoke(target, args);
         }

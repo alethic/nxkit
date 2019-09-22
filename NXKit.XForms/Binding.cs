@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -26,16 +24,6 @@ namespace NXKit.XForms
         Lazy<ModelItem> modelItem;
         Lazy<string> value;
 
-        [ContractInvariantMethod]
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
-        private void ObjectInvariant()
-        {
-            Contract.Invariant(result != null);
-            Contract.Invariant(modelItems != null);
-            Contract.Invariant(modelItem != null);
-            Contract.Invariant(value != null);
-        }
-
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -44,13 +32,9 @@ namespace NXKit.XForms
         /// <param name="xpath"></param>
         internal Binding(XObject xml, EvaluationContext context, XPathExpression xpath)
         {
-            Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentNullException>(context != null);
-            Contract.Requires<ArgumentNullException>(xpath != null);
-
-            this.xml = xml;
-            this.context = context;
-            this.xpath = xpath;
+            this.xml = xml ?? throw new ArgumentNullException(nameof(xml));
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
+            this.xpath = xpath ?? throw new ArgumentNullException(nameof(xpath));
 
             // initial load of values
             Recalculate();
@@ -65,9 +49,12 @@ namespace NXKit.XForms
         internal Binding(XObject xml, EvaluationContext context, string xpath)
             : this(xml, context, context.CompileXPath(xml, xpath))
         {
-            Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentNullException>(context != null);
-            Contract.Requires<ArgumentNullException>(xpath != null);
+            if (xml == null)
+                throw new ArgumentNullException(nameof(xml));
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+            if (xpath == null)
+                throw new ArgumentNullException(nameof(xpath));
         }
 
         /// <summary>
