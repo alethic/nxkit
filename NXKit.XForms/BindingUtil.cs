@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.DOMEvents;
@@ -22,7 +21,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         public static Binding ForElement(XElement element, string xpath)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             // ignore empty expressions
             if (xpath == null ||

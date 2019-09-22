@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -33,10 +32,10 @@ namespace NXKit.XForms
             Extension<EventTarget> eventTarget)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(eventTarget != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.eventTarget = eventTarget;
+            this.eventTarget = eventTarget ?? throw new ArgumentNullException(nameof(eventTarget));
         }
 
         void IEventDefaultAction.DefaultAction(Event evt)

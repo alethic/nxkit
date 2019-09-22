@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -52,17 +51,14 @@ namespace NXKit.XForms
             AnnotationSerializer serializer)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(attributes != null);
-            Contract.Requires<ArgumentNullException>(bindingNode != null);
-            Contract.Requires<ArgumentNullException>(uiBindingNode != null);
-            Contract.Requires<ArgumentNullException>(serializer != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.serializer = serializer;
-            this.attributes = attributes;
-            this.bindingNode = bindingNode;
+            this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+            this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
+            this.bindingNode = bindingNode ?? throw new ArgumentNullException(nameof(bindingNode));
             this.binding = new Lazy<Binding>(() => bindingNode.Value.Binding);
-            this.uiBindingNode = uiBindingNode;
+            this.uiBindingNode = uiBindingNode ?? throw new ArgumentNullException(nameof(uiBindingNode));
             this.uiBinding = new Lazy<UIBinding>(() => uiBindingNode.Value.UIBinding);
             this.state = new Lazy<RepeatState>(() => Element.AnnotationOrCreate<RepeatState>());
             this.template = new Lazy<XElement>(() => State.Template);
@@ -226,7 +222,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         IEnumerable<T> GetAllExtensions<T>(XElement root)
         {
-            Contract.Requires<ArgumentNullException>(root != null);
+            if (root == null)
+                throw new ArgumentNullException(nameof(root));
 
             return root
                 .DescendantNodesAndSelf()

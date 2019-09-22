@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -27,7 +26,8 @@ namespace NXKit.XForms
             XAttribute attribute)
             : base(attribute)
         {
-            Contract.Requires<ArgumentNullException>(attribute != null);
+            if (attribute == null)
+                throw new ArgumentNullException(nameof(attribute));
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
@@ -51,10 +50,14 @@ namespace NXKit.XForms.XPath.Functions
         /// <returns></returns>
         protected Model GetModel(EvaluationXsltContext context, XPathNavigator navigator)
         {
-            Contract.Requires<ArgumentNullException>(context != null);
-            Contract.Requires<ArgumentNullException>(navigator != null);
-            Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
-            Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+            if (navigator == null)
+                throw new ArgumentNullException(nameof(navigator));
+            if (navigator.UnderlyingObject == null)
+                throw new ArgumentException(nameof(navigator));
+            if (navigator.UnderlyingObject is XObject == false)
+                throw new ArgumentException(nameof(navigator));
 
             var result = GetModel(navigator);
             if (result == null)
@@ -71,10 +74,14 @@ namespace NXKit.XForms.XPath.Functions
         /// <returns></returns>
         protected Instance GetInstance(EvaluationXsltContext context, XPathNavigator navigator)
         {
-            Contract.Requires<ArgumentNullException>(context != null);
-            Contract.Requires<ArgumentNullException>(navigator != null);
-            Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
-            Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+            if (navigator == null)
+                throw new ArgumentNullException(nameof(navigator));
+            if (navigator.UnderlyingObject == null)
+                throw new ArgumentException(nameof(navigator));
+            if (navigator.UnderlyingObject is XObject == false)
+                throw new ArgumentException(nameof(navigator));
 
             return GetInstance(navigator);
         }
@@ -86,10 +93,12 @@ namespace NXKit.XForms.XPath.Functions
         /// <returns></returns>
         Model GetModel(XPathNavigator navigator)
         {
-            Contract.Requires<ArgumentNullException>(navigator != null);
-            Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
-            Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
-            Contract.Ensures(Contract.Result<Model>() != null);
+            if (navigator == null)
+                throw new ArgumentNullException(nameof(navigator));
+            if (navigator.UnderlyingObject == null)
+                throw new ArgumentException(nameof(navigator));
+            if (navigator.UnderlyingObject is XObject == false)
+                throw new ArgumentException(nameof(navigator));
 
             return ((XObject)navigator.UnderlyingObject).AnnotationOrCreate<ModelItem>(() =>
                 new ModelItem((XObject)navigator.UnderlyingObject)).Model;
@@ -102,10 +111,12 @@ namespace NXKit.XForms.XPath.Functions
         /// <returns></returns>
         Instance GetInstance(XPathNavigator navigator)
         {
-            Contract.Requires<ArgumentNullException>(navigator != null);
-            Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject != null);
-            Contract.Requires<ArgumentNullException>(navigator.UnderlyingObject is XObject);
-            Contract.Ensures(Contract.Result<Instance>() != null);
+            if (navigator == null)
+                throw new ArgumentNullException(nameof(navigator));
+            if (navigator.UnderlyingObject == null)
+                throw new ArgumentException(nameof(navigator));
+            if (navigator.UnderlyingObject is XObject == false)
+                throw new ArgumentException(nameof(navigator));
 
             return ModelItem.Get((XObject)navigator.UnderlyingObject).Instance;
         }

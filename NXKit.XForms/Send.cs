@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -35,12 +34,11 @@ namespace NXKit.XForms
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(attributes != null);
-            Contract.Requires<ArgumentNullException>(context != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.attributes = attributes;
-            this.context = context;
+            this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public void HandleEvent(Event ev)

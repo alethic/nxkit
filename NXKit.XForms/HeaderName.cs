@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -46,7 +45,8 @@ namespace NXKit.XForms
             Extension<IBindingNode> bindingNode)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             this.attributes = attributes;
             this.bindingNode = bindingNode;

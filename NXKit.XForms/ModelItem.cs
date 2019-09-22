@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.XPath;
+
 using NXKit.DOMEvents;
 using NXKit.Util;
 using NXKit.Xml;
@@ -43,9 +43,7 @@ namespace NXKit.XForms
         /// <param name="xml"></param>
         public ModelItem(XObject xml)
         {
-            Contract.Requires<ArgumentNullException>(xml != null);
-
-            this.xml = xml;
+            this.xml = xml ?? throw new ArgumentNullException(nameof(xml));
             this.model = new Lazy<Model>(() => xml.Document.Annotation<Model>());
             this.instance = new Lazy<Instance>(() => xml.Document.Annotation<Instance>());
             this.state = new Lazy<ModelItemState>(() => xml.AnnotationOrCreate<ModelItemState>());
@@ -239,7 +237,6 @@ namespace NXKit.XForms
         void SetConstraint(bool value)
         {
             State.Constraint = value;
-            Debug.WriteLine("ModelItem relevant set: {0}: {1}", this, value);
         }
 
         /// <summary>
@@ -268,7 +265,6 @@ namespace NXKit.XForms
         void SetValid(bool value)
         {
             State.Valid = value;
-            Debug.WriteLine("ModelItem value set: {0}: {1}", this, value);
         }
 
         /// <summary>
@@ -277,7 +273,7 @@ namespace NXKit.XForms
         public string Value
         {
             get { return GetValue(); }
-            set { Contract.Requires<ArgumentNullException>(value != null); SetValue(value); }
+            set { if (value == null) throw new ArgumentNullException(nameof(value)); SetValue(value); }
         }
 
         /// <summary>
@@ -302,8 +298,10 @@ namespace NXKit.XForms
         /// <returns></returns>
         string ConvertTo(XName xsdType, string value)
         {
-            Contract.Requires<ArgumentNullException>(xsdType != null);
-            Contract.Requires<ArgumentNullException>(value != null);
+            if (xsdType == null)
+                throw new ArgumentNullException(nameof(xsdType));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
 
             // select compatible converter
             var converter = Instance.XsdTypeConverters
@@ -324,7 +322,8 @@ namespace NXKit.XForms
         /// <param name="newValue"></param>
         void SetValue(string newValue)
         {
-            Contract.Requires<ArgumentNullException>(newValue != null);
+            if (newValue == null)
+                throw new ArgumentNullException(nameof(newValue));
 
             // convert value to destination item type if possible
             if (ItemType != null)
@@ -415,8 +414,6 @@ namespace NXKit.XForms
         /// <returns></returns>
         XElement GetContents()
         {
-            Contract.Requires<ArgumentException>(Xml is XElement);
-
             if (xml is XElement)
                 return ((XElement)xml).HasElements ? (XElement)((XElement)xml).FirstNode : null;
             else
@@ -429,8 +426,6 @@ namespace NXKit.XForms
         /// <param name="newContents"></param>
         void SetContents(XElement newContents)
         {
-            Contract.Requires<ArgumentException>(Xml is XElement);
-
             throw new NotImplementedException();
 
             // trigger recalculate event to collect new value
@@ -511,8 +506,8 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         void Replace(XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<InvalidOperationException>(Xml is XElement);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             ((XElement)Xml).ReplaceWith(element);
             Model.State.Rebuild = true;
@@ -527,7 +522,8 @@ namespace NXKit.XForms
         /// <param name="item"></param>
         public void Apply(ModelItem item)
         {
-            Contract.Requires<ArgumentNullException>(item != null);
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
 
             State.Type = item.State.Type;
             State.Relevant = item.State.Relevant;
@@ -610,9 +606,12 @@ namespace NXKit.XForms
         /// <returns></returns>
         bool ValidateValueAgainstXmlSchemaType(XmlSchemaType type, string value, XmlNameTable nt, IXmlNamespaceResolver resolver)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(value != null);
-            Contract.Requires<ArgumentNullException>(nt != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            if (nt == null)
+                throw new ArgumentNullException(nameof(nt));
 
             try
             {

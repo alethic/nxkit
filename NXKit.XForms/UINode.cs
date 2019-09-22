@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -33,10 +32,10 @@ namespace NXKit.XForms
             Extension<CommonAttributes> attributes)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(attributes != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.attributes = attributes;
+            this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
         }
 
         /// <summary>

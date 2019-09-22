@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -31,10 +30,10 @@ namespace NXKit.XForms
             ActionProperties actionProperties)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(actionProperties != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.actionProperties = actionProperties;
+            this.actionProperties = actionProperties ?? throw new ArgumentNullException(nameof(actionProperties));
         }
 
         public void HandleEvent(Event ev)

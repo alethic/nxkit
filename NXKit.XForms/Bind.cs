@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -37,13 +36,13 @@ namespace NXKit.XForms
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(properties != null);
-            Contract.Requires<ArgumentNullException>(bindingNode != null);
-            Contract.Requires<ArgumentNullException>(context != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
 
-            this.properties = properties;
-            this.bindingNode = bindingNode;
+            this.properties = properties ?? throw new ArgumentNullException(nameof(properties));
+            this.bindingNode = bindingNode ?? throw new ArgumentNullException(nameof(bindingNode));
             this.context = new Lazy<EvaluationContext>(() => context.Value.Context);
         }
 
@@ -83,7 +82,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         bool? ParseBooleanValue(Binding binding)
         {
-            Contract.Requires<ArgumentNullException>(binding != null);
+            if (binding == null)
+                throw new ArgumentNullException(nameof(binding));
 
             if (binding.Result is bool)
                 return (bool?)binding.Result;

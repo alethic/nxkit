@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -27,7 +26,8 @@ namespace NXKit.XForms
             XDocument document)
             : base(document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 using NXKit.Composition;
@@ -29,7 +28,8 @@ namespace NXKit.Scripting
         public DefaultScriptObjectProvider(
             [ImportMany] IEnumerable<Lazy<IScriptObject, IDictionary<string, object>>> objects)
         {
-            Contract.Requires<ArgumentNullException>(objects != null);
+            if (objects == null)
+                throw new ArgumentNullException(nameof(objects));
 
             // discover available IScriptObject implementations and resolve their metadata names
             this.objects = objects

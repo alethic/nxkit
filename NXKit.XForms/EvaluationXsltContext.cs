@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.Xsl;
 
@@ -29,10 +28,10 @@ namespace NXKit.XForms
             EvaluationContext evaluationContext)
             : base(functionProvider, xml)
         {
-            Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentNullException>(evaluationContext != null);
+            if (xml == null)
+                throw new ArgumentNullException(nameof(xml));
 
-            this.evaluationContext = evaluationContext;
+            this.evaluationContext = evaluationContext ?? throw new ArgumentNullException(nameof(evaluationContext));
         }
 
         /// <summary>
@@ -45,8 +44,10 @@ namespace NXKit.XForms
             EvaluationContext evaluationContext)
             : this(xml.Exports().GetExportedValue<IXsltContextFunctionProvider>(), xml, evaluationContext)
         {
-            Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentNullException>(evaluationContext != null);
+            if (xml == null)
+                throw new ArgumentNullException(nameof(xml));
+            if (evaluationContext == null)
+                throw new ArgumentNullException(nameof(evaluationContext));
         }
 
         /// <summary>

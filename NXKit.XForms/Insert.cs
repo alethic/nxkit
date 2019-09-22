@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -45,9 +44,7 @@ namespace NXKit.XForms
             public TargetLocation(XObject source, TargetPosition position)
                 : this()
             {
-                Contract.Requires<ArgumentNullException>(source != null);
-
-                this.source = source;
+                this.source = source ?? throw new ArgumentNullException(nameof(source));
                 this.position = position;
             }
 
@@ -60,10 +57,7 @@ namespace NXKit.XForms
             public TargetLocation(XObject source, TargetPosition position, XObject target)
                 : this(source, position)
             {
-                Contract.Requires<ArgumentNullException>(source != null);
-                Contract.Requires<ArgumentNullException>(target != null);
-
-                this.target = target;
+                this.target = target ?? throw new ArgumentNullException(nameof(target));
             }
 
             public XObject Source
@@ -103,16 +97,13 @@ namespace NXKit.XForms
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(commonProperties != null);
-            Contract.Requires<ArgumentNullException>(bindingProperties != null);
-            Contract.Requires<ArgumentNullException>(insertProperties != null);
-            Contract.Requires<ArgumentNullException>(context != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.commonProperties = commonProperties;
-            this.bindingProperties = bindingProperties;
-            this.insertProperties = insertProperties;
-            this.context = context;
+            this.commonProperties = commonProperties ?? throw new ArgumentNullException(nameof(commonProperties));
+            this.bindingProperties = bindingProperties ?? throw new ArgumentNullException(nameof(bindingProperties));
+            this.insertProperties = insertProperties ?? throw new ArgumentNullException(nameof(insertProperties));
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public void HandleEvent(Event ev)
@@ -149,8 +140,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         XObject[] GetSequenceBindingNodeSequence(EvaluationContext insertContext)
         {
-            Contract.Requires<ArgumentNullException>(insertContext != null);
-            Contract.Ensures(Contract.Result<XObject[]>() != null);
+            if (insertContext == null)
+                throw new ArgumentNullException(nameof(insertContext));
 
             // If a bind attribute is present, it directly determines the Sequence Binding node-sequence.
             var bindId = bindingProperties.Bind;
@@ -190,9 +181,10 @@ namespace NXKit.XForms
         /// <returns></returns>
         XObject[] GetOriginNodeSequence(EvaluationContext insertContext, XObject[] sequenceBindingNodeSequence)
         {
-            Contract.Requires<ArgumentNullException>(insertContext != null);
-            Contract.Requires<ArgumentNullException>(sequenceBindingNodeSequence != null);
-            Contract.Ensures(Contract.Result<XObject[]>() != null);
+            if (insertContext == null)
+                throw new ArgumentNullException(nameof(insertContext));
+            if (sequenceBindingNodeSequence == null)
+                throw new ArgumentNullException(nameof(sequenceBindingNodeSequence));
 
             XObject[] result = null;
 
@@ -236,9 +228,10 @@ namespace NXKit.XForms
         /// <returns></returns>
         XObject GetInsertLocationNode(EvaluationContext insertContext, XObject[] sequenceBindingNodeSequence)
         {
-            Contract.Requires<ArgumentNullException>(insertContext != null);
-            Contract.Requires<ArgumentNullException>(sequenceBindingNodeSequence != null);
-            Contract.Ensures(Contract.Result<XObject>() != null);
+            if (insertContext == null)
+                throw new ArgumentNullException(nameof(insertContext));
+            if (sequenceBindingNodeSequence == null)
+                throw new ArgumentNullException(nameof(sequenceBindingNodeSequence));
 
             // If the Sequence Binding node-sequence is not specified or empty, the insert location node is the insert
             // context node.
@@ -294,10 +287,14 @@ namespace NXKit.XForms
         /// <returns></returns>
         TargetLocation GetTargetLocation(EvaluationContext insertContext, XObject[] sequenceBindingNodeSequence, XObject insertLocationNode, XObject insertNode)
         {
-            Contract.Requires<ArgumentNullException>(insertContext != null);
-            Contract.Requires<ArgumentNullException>(sequenceBindingNodeSequence != null);
-            Contract.Requires<ArgumentNullException>(insertLocationNode != null);
-            Contract.Requires<ArgumentNullException>(insertNode != null);
+            if (insertContext == null)
+                throw new ArgumentNullException(nameof(insertContext));
+            if (sequenceBindingNodeSequence == null)
+                throw new ArgumentNullException(nameof(sequenceBindingNodeSequence));
+            if (insertLocationNode == null)
+                throw new ArgumentNullException(nameof(insertLocationNode));
+            if (insertNode == null)
+                throw new ArgumentNullException(nameof(insertNode));
 
             // f the Sequence Binding node-sequence is not specified or empty, then the insert location node provided
             // by the context attribute is intended to be the parent of the cloned node. The target location is

@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace NXKit.XForms.Xml
@@ -18,8 +17,10 @@ namespace NXKit.XForms.Xml
         /// <returns></returns>
         public static object GetVariableValue(this XElement self, string name)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(name != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
             // search referencable objects for id, or obtain from cache
             return GetVariables(self)

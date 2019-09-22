@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Dynamic;
 using System.Xml.Linq;
 
@@ -34,10 +33,8 @@ namespace NXKit.DOMEvents
         /// </summary>
         public Event(Document host)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
-
             this.initialized = false;
-            this.host = host;
+            this.host = host ?? throw new ArgumentNullException(nameof(host));
             this.eventPhase = EventPhase.None;
             this.timeStamp = (ulong)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
             this.isTrusted = false;

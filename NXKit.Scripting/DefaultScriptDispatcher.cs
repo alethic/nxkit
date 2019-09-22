@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 using NXKit.Composition;
@@ -25,9 +24,7 @@ namespace NXKit.Scripting
         public DefaultScriptDispatcher(
             [ImportMany] IEnumerable<IScriptEngine> engines)
         {
-            Contract.Requires<ArgumentNullException>(engines != null);
-
-            this.engines = engines;
+            this.engines = engines ?? throw new ArgumentNullException(nameof(engines));
         }
 
         /// <summary>
@@ -38,8 +35,10 @@ namespace NXKit.Scripting
         /// <returns></returns>
         IEnumerable<IScriptEngine> GetEngines(string type, string code)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(code != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (code == null)
+                throw new ArgumentNullException(nameof(code));
 
             return engines.Where(i => i.CanExecute(type, code));
         }
@@ -52,8 +51,10 @@ namespace NXKit.Scripting
         /// <returns></returns>
         IScriptEngine GetEngine(string type, string code)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(code != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (code == null)
+                throw new ArgumentNullException(nameof(code));
 
             return GetEngines(type, code).FirstOrDefault();
         }

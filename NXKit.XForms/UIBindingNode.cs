@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -47,10 +46,10 @@ namespace NXKit.XForms
         public UIBindingNode(XElement element, IInvoker invoker)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(invoker != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.invoker = invoker;
+            this.invoker = invoker ?? throw new ArgumentNullException(nameof(invoker));
             this.uiBinding = new Lazy<UIBinding>(() => CreateUIBinding());
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.XForms.IO
 {
@@ -37,7 +36,8 @@ namespace NXKit.XForms.IO
         /// <param name="name"></param>
         ModelMethod(string name)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(name));
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("", nameof(name));
 
             this.name = name;
         }

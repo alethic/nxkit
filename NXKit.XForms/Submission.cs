@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -140,14 +139,12 @@ namespace NXKit.XForms
             IModelRequestService requestService)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(properties != null);
-            Contract.Requires<ArgumentNullException>(context != null);
-            Contract.Requires<ArgumentNullException>(requestService != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.requestService = requestService;
-            this.properties = properties;
-            this.context = context;
+            this.requestService = requestService ?? throw new ArgumentNullException(nameof(requestService));
+            this.properties = properties ?? throw new ArgumentNullException(nameof(properties));
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         void IEventDefaultAction.DefaultAction(Event evt)
@@ -407,9 +404,12 @@ namespace NXKit.XForms
         /// <param name="modelItem">Instance data node that was submitted.</param>
         void FinishWithReplaceInstance(ModelResponse response, ModelItem modelItem)
         {
-            Contract.Requires<ArgumentNullException>(response != null);
-            Contract.Requires<ArgumentException>(response.Body != null);
-            Contract.Requires<ArgumentNullException>(modelItem != null);
+            if (response == null)
+                throw new ArgumentNullException(nameof(response));
+            if (response.Body == null)
+                throw new ArgumentException("", nameof(response));
+            if (modelItem == null)
+                throw new ArgumentNullException(nameof(modelItem));
 
             // When the attribute is absent, then the default is the instance that contains the submission data.
             var instance = modelItem != null ? modelItem.Instance : null;

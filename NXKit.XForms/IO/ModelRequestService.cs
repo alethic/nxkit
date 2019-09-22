@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace NXKit.XForms.IO
 {
-    
+
     [Export(typeof(IModelRequestService))]
     public class ModelRequestService :
         IModelRequestService
@@ -22,9 +21,7 @@ namespace NXKit.XForms.IO
         public ModelRequestService(
             [ImportMany] IEnumerable<IModelRequestHandler> handlers)
         {
-            Contract.Requires<ArgumentNullException>(handlers != null);
-
-            this.handlers = handlers;
+            this.handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
         }
 
         /// <summary>
@@ -34,7 +31,8 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         IModelRequestHandler GetHandler(ModelRequest request)
         {
-            Contract.Requires<ArgumentNullException>(request != null);
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             return handlers
                 .Select(i => new { Priority = i.CanSubmit(request), Processor = i })

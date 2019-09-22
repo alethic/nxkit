@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -33,10 +32,10 @@ namespace NXKit.Scripting
             IScriptDispatcher dispatcher)
             : base(document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
-            Contract.Requires<ArgumentNullException>(dispatcher != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
-            this.dispatcher = dispatcher;
+            this.dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
         }
 
         public object Execute(string type, string code)

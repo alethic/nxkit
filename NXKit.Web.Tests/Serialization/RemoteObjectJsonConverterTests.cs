@@ -1,8 +1,4 @@
-﻿using System.Xml.Linq;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NXKit.Server.Tests.Serialization
 {

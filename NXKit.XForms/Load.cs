@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -30,10 +29,10 @@ namespace NXKit.XForms
             LoadProperties properties)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(properties != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.properties = properties;
+            this.properties = properties ?? throw new ArgumentNullException(nameof(properties));
         }
 
         public void HandleEvent(Event ev)

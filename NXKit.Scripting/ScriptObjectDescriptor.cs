@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.Scripting
 {
@@ -20,11 +19,8 @@ namespace NXKit.Scripting
         /// <param name="value"></param>
         public ScriptObjectDescriptor(string name, Func<object> value)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(value != null);
-
-            this.name = name;
-            this.value = value;
+            this.name = name ?? throw new ArgumentNullException(nameof(name));
+            this.value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         /// <summary>

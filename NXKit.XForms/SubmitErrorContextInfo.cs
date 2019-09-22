@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit
@@ -26,13 +25,11 @@ namespace NXKit
             string responseReasonPhrase = "",
             object responseBody = null)
         {
-            Contract.Requires<ArgumentNullException>(responseReasonPhrase != null);
-
             this.errorType = errorType;
             this.resourceUri = resourceUri;
             this.responseStatusCode = responseStatusCode;
             this.responseHeaders = responseHeaders;
-            this.responseReasonPhrase = responseReasonPhrase;
+            this.responseReasonPhrase = responseReasonPhrase ?? throw new ArgumentNullException(nameof(responseReasonPhrase));
             this.responseBody = responseBody;
         }
 

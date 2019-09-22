@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -37,12 +36,11 @@ namespace NXKit.XForms
             Extension<EvaluationContextResolver> resolver)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(properties != null);
-            Contract.Requires<ArgumentNullException>(resolver != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.properties = properties;
-            this.resolver = resolver;
+            this.properties = properties ?? throw new ArgumentNullException(nameof(properties));
+            this.resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
             this.binding = new Lazy<Binding>(() => GetOrCreateBinding());
         }
 

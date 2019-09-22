@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
+
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -31,11 +31,11 @@ namespace NXKit.XForms
             XElement element, 
             EvaluationContext context)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(context != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             this.attributes = element.AnnotationOrCreate(() => new RepeatExtensionAttributes(element));
-            this.context = context;
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
 
             this.ref_ = new Lazy<XPathExpression>(() =>
                 !string.IsNullOrEmpty(attributes.Ref) ?

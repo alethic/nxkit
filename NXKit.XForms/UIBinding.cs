@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -29,11 +27,8 @@ namespace NXKit.XForms
         /// <param name="invoker"></param>
         public UIBinding(XElement element, IInvoker invoker)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(invoker != null);
-
-            this.element = element;
-            this.invoker = invoker;
+            this.element = element ?? throw new ArgumentNullException(nameof(element));
+            this.invoker = invoker ?? throw new ArgumentNullException(nameof(invoker));
             this.state = new Lazy<UIBindingState>(() => element.AnnotationOrCreate<UIBindingState>());
         }
 
@@ -45,9 +40,6 @@ namespace NXKit.XForms
         internal UIBinding(XElement element, IInvoker invoker, ModelItem modelItem)
             : this(element, invoker)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(invoker != null);
-
             this.modelItem = modelItem;
         }
 
@@ -58,13 +50,9 @@ namespace NXKit.XForms
         /// <param name="invoker"></param>
         /// <param name="binding"></param>
         internal UIBinding(XElement element, IInvoker invoker, Binding binding)
-            : this(element, invoker,binding.ModelItem)
+            : this(element, invoker, binding.ModelItem)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(invoker != null);
-            Contract.Requires<ArgumentNullException>(binding != null);
-
-            this.binding = binding;
+            this.binding = binding ?? throw new ArgumentNullException(nameof(binding));
         }
 
         /// <summary>

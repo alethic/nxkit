@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -40,18 +39,14 @@ namespace NXKit.XForms
             Extension<EvaluationContextResolver> resolver)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(commonProperties != null);
-            Contract.Requires<ArgumentNullException>(bindingProperties != null);
-            Contract.Requires<ArgumentNullException>(actionProperties != null);
-            Contract.Requires<ArgumentNullException>(deleteProperties != null);
-            Contract.Requires<ArgumentNullException>(resolver != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.commonProperties = commonProperties;
-            this.bindingProperties = bindingProperties;
-            this.deleteProperties = deleteProperties;
-            this.actionProperties = actionProperties;
-            this.resolver = resolver;
+            this.commonProperties = commonProperties ?? throw new ArgumentNullException(nameof(commonProperties));
+            this.bindingProperties = bindingProperties ?? throw new ArgumentNullException(nameof(bindingProperties));
+            this.deleteProperties = deleteProperties ?? throw new ArgumentNullException(nameof(deleteProperties));
+            this.actionProperties = actionProperties ?? throw new ArgumentNullException(nameof(actionProperties));
+            this.resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
         }
 
         public void HandleEvent(Event ev)
@@ -87,8 +82,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         XObject[] GetSequenceBindingNodeSequence(EvaluationContext deleteContext)
         {
-            Contract.Requires<ArgumentNullException>(deleteContext != null);
-            Contract.Ensures(Contract.Result<XObject[]>() != null);
+            if (deleteContext == null)
+                throw new ArgumentNullException(nameof(deleteContext));
 
             // If a bind attribute is present, it directly determines the Sequence Binding node-sequence.
             var bindId = bindingProperties.Bind;

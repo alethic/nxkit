@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -29,15 +28,14 @@ namespace NXKit.XForms
         /// <param name="size"></param>
         internal EvaluationContext(Model model, Instance instance, ModelItem modelItem, int position, int size)
         {
-            Contract.Requires<ArgumentNullException>(model != null);
-            Contract.Requires<ArgumentNullException>(instance != null);
-            Contract.Requires<ArgumentNullException>(modelItem != null);
-            Contract.Requires<ArgumentNullException>(position >= 1);
-            Contract.Requires<ArgumentNullException>(size >= 1);
+            if (position < 1)
+                throw new ArgumentOutOfRangeException(nameof(position));
+            if (size < 1)
+                throw new ArgumentOutOfRangeException(nameof(size));
 
-            this.model = model;
-            this.instance = instance;
-            this.modelItem = modelItem;
+            this.model = model ?? throw new ArgumentNullException(nameof(model));
+            this.instance = instance ?? throw new ArgumentNullException(nameof(instance));
+            this.modelItem = modelItem ?? throw new ArgumentNullException(nameof(modelItem));
             this.position = position;
             this.size = size;
         }
@@ -51,9 +49,12 @@ namespace NXKit.XForms
         internal EvaluationContext(ModelItem item, int position, int size)
             : this(item.Model, item.Instance, item, position, size)
         {
-            Contract.Requires<ArgumentNullException>(item != null);
-            Contract.Requires<ArgumentNullException>(position >= 1);
-            Contract.Requires<ArgumentNullException>(size >= 1);
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+            if (position < 1)
+                throw new ArgumentOutOfRangeException(nameof(position));
+            if (size < 1)
+                throw new ArgumentOutOfRangeException(nameof(size));
         }
 
         /// <summary>
@@ -104,8 +105,10 @@ namespace NXKit.XForms
         /// <returns></returns>
         public XPathExpression CompileXPath(XObject xml, string expression)
         {
-            Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentNullException>(expression != null);
+            if (xml == null)
+                throw new ArgumentNullException(nameof(xml));
+            if (expression == null)
+                throw new ArgumentNullException(nameof(expression));
 
             var nc = new EvaluationXsltContext(xml, this);
             var xp = XPathExpression.Compile(expression, nc);
@@ -122,8 +125,10 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal object EvaluateXPath(XObject xml, XPathExpression expression, XPathResultType resultType)
         {
-            Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentNullException>(expression != null);
+            if (xml == null)
+                throw new ArgumentNullException(nameof(xml));
+            if (expression == null)
+                throw new ArgumentNullException(nameof(expression));
 
             var nv = modelItem.CreateNavigator();
             var nd = nv.Evaluate(expression, new Iterator(position, size, nv));
@@ -184,8 +189,10 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal object EvaluateXPath(XObject xml, string expression, XPathResultType resultType)
         {
-            Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentNullException>(expression != null);
+            if (xml == null)
+                throw new ArgumentNullException(nameof(xml));
+            if (expression == null)
+                throw new ArgumentNullException(nameof(expression));
 
             return EvaluateXPath(xml, CompileXPath(xml, expression), resultType);
         }

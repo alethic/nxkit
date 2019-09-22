@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
 using NXKit.Serialization;
@@ -56,11 +52,8 @@ namespace NXKit.XForms
         /// <param name="instance"></param>
         internal void Initialize(XElement model, XElement instance)
         {
-            Contract.Requires<ArgumentNullException>(model != null);
-            Contract.Requires<ArgumentNullException>(instance != null);
-
-            this.model = model;
-            this.instance = instance;
+            this.model = model ?? throw new ArgumentNullException(nameof(model));
+            this.instance = instance ?? throw new ArgumentNullException(nameof(instance));
 
             Initialize(document);
         }
@@ -72,9 +65,6 @@ namespace NXKit.XForms
         /// <param name="instance"></param>
         internal void Initialize(XElement model, XElement instance, XDocument document)
         {
-            Contract.Requires<ArgumentNullException>(model != null);
-            Contract.Requires<ArgumentNullException>(instance != null);
-
             Initialize(model, instance);
             Initialize(document);
         }
@@ -86,7 +76,8 @@ namespace NXKit.XForms
         /// <returns></returns>
         ModelItemState GetModelItem(XObject obj)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
             return obj.AnnotationOrCreate<ModelItemState>();
         }

@@ -1,10 +1,7 @@
-﻿using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using NXKit.Net;
 using NXKit.Xml;
 
 namespace NXKit.XForms.Tests.XPathFunctions

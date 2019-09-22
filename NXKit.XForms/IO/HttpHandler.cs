@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 
 using NXKit.IO;
 using NXKit.XForms.Serialization;
@@ -30,9 +29,12 @@ namespace NXKit.XForms.IO
             [ImportMany] IEnumerable<IModelDeserializer> deserializers)
             : base(ioService, serializers, deserializers)
         {
-            Contract.Requires<ArgumentNullException>(ioService != null);
-            Contract.Requires<ArgumentNullException>(serializers != null);
-            Contract.Requires<ArgumentNullException>(deserializers != null);
+            if (ioService == null)
+                throw new ArgumentNullException(nameof(ioService));
+            if (serializers == null)
+                throw new ArgumentNullException(nameof(serializers));
+            if (deserializers == null)
+                throw new ArgumentNullException(nameof(deserializers));
         }
 
         /// <summary>

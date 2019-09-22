@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NXKit.DOMEvents.Tests

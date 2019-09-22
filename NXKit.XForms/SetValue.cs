@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -41,16 +40,13 @@ namespace NXKit.XForms
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(commonProperties != null);
-            Contract.Requires<ArgumentNullException>(bindingProperties != null);
-            Contract.Requires<ArgumentNullException>(setValueProperties != null);
-            Contract.Requires<ArgumentNullException>(context != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.commonProperties = commonProperties;
-            this.bindingProperties = bindingProperties;
-            this.setValueProperties = setValueProperties;
-            this.context = context;
+            this.commonProperties = commonProperties ?? throw new ArgumentNullException(nameof(commonProperties));
+            this.bindingProperties = bindingProperties ?? throw new ArgumentNullException(nameof(bindingProperties));
+            this.setValueProperties = setValueProperties ?? throw new ArgumentNullException(nameof(setValueProperties));
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         EvaluationContext GetContext()
@@ -69,8 +65,8 @@ namespace NXKit.XForms
 
         XObject[] GetSequenceBindingNodeSequence(EvaluationContext insertContext)
         {
-            Contract.Requires<ArgumentNullException>(insertContext != null);
-            Contract.Ensures(Contract.Result<XObject[]>() != null);
+            if (insertContext == null)
+                throw new ArgumentNullException(nameof(insertContext));
 
             var bindId = bindingProperties.Bind;
             if (bindId != null)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -9,8 +8,8 @@ using System.Xml.Schema;
 using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Util;
-using NXKit.XForms.IO;
 using NXKit.XForms.Converters;
+using NXKit.XForms.IO;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -23,11 +22,10 @@ namespace NXKit.XForms
         ElementExtension,
         IOnLoad
     {
-
-        readonly InstanceAttributes attributes;
-        readonly IModelRequestService requestService;
-        readonly IEnumerable<IXsdTypeConverter> xsdTypeConverters;
-        readonly Lazy<InstanceState> state;
+        private readonly InstanceAttributes attributes;
+        private readonly IModelRequestService requestService;
+        private readonly IEnumerable<IXsdTypeConverter> xsdTypeConverters;
+        private readonly Lazy<InstanceState> state;
 
         /// <summary>
         /// Initializes a new instance.
@@ -44,13 +42,13 @@ namespace NXKit.XForms
             [ImportMany] IEnumerable<IXsdTypeConverter> xsdTypeConverters)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(attributes != null);
-            Contract.Requires<ArgumentNullException>(requestService != null);
-            Contract.Requires<ArgumentNullException>(xsdTypeConverters != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (xsdTypeConverters == null)
+                throw new ArgumentNullException(nameof(xsdTypeConverters));
 
-            this.requestService = requestService;
-            this.attributes = attributes;
+            this.requestService = requestService ?? throw new ArgumentNullException(nameof(requestService));
+            this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
             this.xsdTypeConverters = xsdTypeConverters.ToList();
             this.state = new Lazy<InstanceState>(() => Element.AnnotationOrCreate<InstanceState>());
         }
@@ -58,26 +56,17 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the model of the instance.
         /// </summary>
-        XElement Model
-        {
-            get { return Element.Ancestors(Constants.XForms_1_0 + "model").First(); }
-        }
+        private XElement Model => Element.Ancestors(Constants.XForms_1_0 + "model").First();
 
         /// <summary>
         /// Gets the instance state associated with this instance visual.
         /// </summary>
-        public InstanceState State
-        {
-            get { return state.Value; }
-        }
+        public InstanceState State => state.Value;
 
         /// <summary>
         /// Gets the available <see cref="IXsdTypeConverter"/>s for this instance.
         /// </summary>
-        public IEnumerable<IXsdTypeConverter> XsdTypeConverters
-        {
-            get { return xsdTypeConverters; }
-        }
+        public IEnumerable<IXsdTypeConverter> XsdTypeConverters => xsdTypeConverters;
 
         /// <summary>
         /// Loads the instance data from the instance element.
@@ -109,7 +98,8 @@ namespace NXKit.XForms
         /// <param name="resourceUri"></param>
         internal void Load(string resourceUri)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(resourceUri));
+            if (string.IsNullOrEmpty(resourceUri))
+                throw new ArgumentOutOfRangeException(nameof(resourceUri));
 
             try
             {
@@ -127,7 +117,8 @@ namespace NXKit.XForms
         /// <param name="resourceUri"></param>
         internal void Load(Uri resourceUri)
         {
-            Contract.Requires<ArgumentNullException>(resourceUri != null);
+            if (resourceUri == null)
+                throw new ArgumentNullException(nameof(resourceUri));
 
             try
             {
@@ -157,7 +148,8 @@ namespace NXKit.XForms
         /// <param name="document"></param>
         internal void Load(XDocument document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
             State.Initialize(Model, Element, document);
 
@@ -218,7 +210,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        void XmlSchemaValidate_ValidationEvent(object sender, EventArgs args)
+        private void XmlSchemaValidate_ValidationEvent(object sender, EventArgs args)
         {
 
         }

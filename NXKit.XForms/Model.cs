@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -41,12 +40,11 @@ namespace NXKit.XForms
             ModelAttributes attributes)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(io != null);
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(attributes != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.io = io;
-            this.attributes = attributes;
+            this.io = io ?? throw new ArgumentNullException(nameof(io));
+            this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
             this.state = new Lazy<ModelState>(() => Element.AnnotationOrCreate<ModelState>());
             this.documentAnnotation = new Lazy<DocumentAnnotation>(() => Element.Document.AnnotationOrCreate<DocumentAnnotation>());
         }
@@ -330,7 +328,8 @@ namespace NXKit.XForms
         /// <param name="uri"></param>
         void LoadSchema(Uri uri)
         {
-            Contract.Requires<ArgumentNullException>(uri != null);
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
 
             try
             {
@@ -361,7 +360,10 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         void LoadSchema(XElement element)
         {
-            Contract.Requires<ArgumentOutOfRangeException>(element.Name == XName.Get("{http://www.w3.org/2001/XMLSchema}schema"));
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (element.Name != XName.Get("{http://www.w3.org/2001/XMLSchema}schema"))
+                throw new ArgumentException("", nameof(element));
 
             using (var rdr = element.CreateReader())
                 LoadSchema(rdr);
@@ -373,7 +375,8 @@ namespace NXKit.XForms
         /// <param name="reader"></param>
         void LoadSchema(XmlReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
 
             // load instance
             var schema = XmlSchema.Read(reader, LoadSchema_ValidationEvent);
@@ -383,7 +386,8 @@ namespace NXKit.XForms
 
         void LoadSchema_ValidationEvent(object sender, ValidationEventArgs args)
         {
-            Contract.Requires<ArgumentNullException>(args != null);
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
         }
 
     }

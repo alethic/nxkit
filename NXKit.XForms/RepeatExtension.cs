@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -52,8 +51,10 @@ namespace NXKit.XForms
             Lazy<EvaluationContextResolver> context)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(context != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
 
             this.properties = new Lazy<RepeatExtensionProperties>(() => 
                 element.AnnotationOrCreate(() => 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -35,11 +34,11 @@ namespace NXKit.XForms
             Extension<EvaluationContextResolver> contextResolver)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(contextResolver != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             this.attributes = attributes;
-            this.contextResolver = contextResolver;
+            this.contextResolver = contextResolver ?? throw new ArgumentNullException(nameof(contextResolver));
 
             this.context = new Lazy<XPathExpression>(() =>
                 !string.IsNullOrEmpty(attributes.Context) ? contextResolver.Value.Context.CompileXPath(element, attributes.Context) : null);

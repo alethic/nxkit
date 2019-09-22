@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit.XForms
@@ -20,8 +19,10 @@ namespace NXKit.XForms
         public AttributeAccessor(XElement element, XNamespace defaultNamespace)
             : base(element, defaultNamespace)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(defaultNamespace != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (defaultNamespace == null)
+                throw new ArgumentNullException(nameof(defaultNamespace));
         }
 
         /// <summary>
@@ -31,7 +32,8 @@ namespace NXKit.XForms
         public AttributeAccessor(XElement element)
             : this(element, Constants.XForms_1_0)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
         }
 
     }

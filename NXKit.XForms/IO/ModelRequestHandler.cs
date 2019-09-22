@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -32,11 +31,8 @@ namespace NXKit.XForms.IO
             [ImportMany] IEnumerable<IModelSerializer> serializers,
             [ImportMany] IEnumerable<IModelDeserializer> deserializers)
         {
-            Contract.Requires<ArgumentNullException>(serializers != null);
-            Contract.Requires<ArgumentNullException>(deserializers != null);
-
-            this.serializers = serializers;
-            this.deserializers = deserializers;
+            this.serializers = serializers ?? throw new ArgumentNullException(nameof(serializers));
+            this.deserializers = deserializers ?? throw new ArgumentNullException(nameof(deserializers));
         }
 
         /// <summary>
@@ -61,8 +57,10 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected IModelSerializer GetSerializer(XNode node, MediaRange mediaType)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(mediaType != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+            if (mediaType == null)
+                throw new ArgumentNullException(nameof(mediaType));
 
             return serializers
                 .Select(i => new { Priority = i.CanSerialize(node, mediaType), Serializer = i })
@@ -80,9 +78,12 @@ namespace NXKit.XForms.IO
         /// <param name="mediaType"></param>
         protected void Serialize(TextWriter writer, XNode node, MediaRange mediaType)
         {
-            Contract.Requires<ArgumentNullException>(writer != null);
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(mediaType != null);
+            if (writer == null)
+                throw new ArgumentNullException(nameof(writer));
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+            if (mediaType == null)
+                throw new ArgumentNullException(nameof(mediaType));
 
             // obtain serializer
             var serializer = GetSerializer(node, mediaType);
@@ -99,7 +100,8 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected IModelDeserializer GetDeserializer(MediaRange mediaType)
         {
-            Contract.Requires<ArgumentNullException>(mediaType != null);
+            if (mediaType == null)
+                throw new ArgumentNullException(nameof(mediaType));
 
             return deserializers
                 .Select(i => new { Priority = i.CanDeserialize(mediaType), Serializer = i })
@@ -117,8 +119,10 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected XNode Deserialize(TextReader reader, MediaRange mediaType)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
-            Contract.Requires<ArgumentNullException>(mediaType != null);
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+            if (mediaType == null)
+                throw new ArgumentNullException(nameof(mediaType));
 
             // obtain serializer
             var deserializer = GetDeserializer(mediaType);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 using NXKit.Composition;
@@ -24,15 +23,14 @@ namespace NXKit.Scripting
         [ImportingConstructor]
         public Console(ITraceService trace)
         {
-            Contract.Requires<ArgumentNullException>(trace != null);
-
-            this.trace = trace;
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
         }
 
         [ScriptFunction("log")]
         public void Log(params object[] items)
         {
-            Contract.Requires<ArgumentNullException>(items != null);
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
 
             if (items.Length < 1)
                 return;
@@ -45,7 +43,8 @@ namespace NXKit.Scripting
         [ScriptFunction("debug")]
         public void Debug(params object[] items)
         {
-            Contract.Requires<ArgumentNullException>(items != null);
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
 
             if (items.Length < 1)
                 return;
@@ -58,7 +57,8 @@ namespace NXKit.Scripting
         [ScriptFunction("info")]
         public void Info(params object[] items)
         {
-            Contract.Requires<ArgumentNullException>(items != null);
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
 
             if (items.Length < 1)
                 return;
@@ -71,7 +71,8 @@ namespace NXKit.Scripting
         [ScriptFunction("warn")]
         public void Warn(params object[] items)
         {
-            Contract.Requires<ArgumentNullException>(items != null);
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
 
             if (items.Length < 1)
                 return;
@@ -84,7 +85,8 @@ namespace NXKit.Scripting
         [ScriptFunction("error")]
         public void Error(params object[] items)
         {
-            Contract.Requires<ArgumentNullException>(items != null);
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
 
             if (items.Length < 1)
                 return;
@@ -97,25 +99,29 @@ namespace NXKit.Scripting
         [ScriptFunction("assert")]
         public void Assert(bool expression, params object[] items)
         {
-            Contract.Requires<ArgumentNullException>(items != null);
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
         }
 
         [ScriptFunction("clear")]
         public void Clear(params object[] items)
         {
-            Contract.Requires<ArgumentNullException>(items != null);
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
         }
 
         [ScriptFunction("group")]
         public void Group(params object[] items)
         {
-            Contract.Requires<ArgumentNullException>(items != null);
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
         }
 
         [ScriptFunction("groupCollapsed")]
         public void GroupCollapsed(params object[] items)
         {
-            Contract.Requires<ArgumentNullException>(items != null);
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
         }
 
         [ScriptFunction("groupEnd")]

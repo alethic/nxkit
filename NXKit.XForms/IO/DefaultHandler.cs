@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -36,11 +35,12 @@ namespace NXKit.XForms.IO
             [ImportMany] IEnumerable<IModelDeserializer> deserializers)
             : base(serializers, deserializers)
         {
-            Contract.Requires<ArgumentNullException>(ioService != null);
-            Contract.Requires<ArgumentNullException>(serializers != null);
-            Contract.Requires<ArgumentNullException>(deserializers != null);
+            if (serializers == null)
+                throw new ArgumentNullException(nameof(serializers));
+            if (deserializers == null)
+                throw new ArgumentNullException(nameof(deserializers));
 
-            this.ioService = ioService;
+            this.ioService = ioService ?? throw new ArgumentNullException(nameof(ioService));
         }
 
         public override Priority CanSubmit(ModelRequest request)
@@ -80,7 +80,8 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected virtual IOMethod GetMethod(ModelRequest request)
         {
-            Contract.Requires<ArgumentNullException>(request != null);
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             if (request.Method == ModelMethod.Get)
                 return IOMethod.Get;
@@ -107,7 +108,8 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected virtual bool IsQuery(ModelRequest request)
         {
-            Contract.Requires<ArgumentNullException>(request != null);
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             // get http method
             var method = GetMethod(request);
@@ -126,7 +128,8 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected virtual IORequest WriteIORequest(ModelRequest request)
         {
-            Contract.Requires<ArgumentNullException>(request != null);
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             var mediaType = GetMediaType(request);
             if (mediaType == null)
@@ -175,7 +178,8 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected virtual ModelResponseStatus ReadRequestStatus(IOResponse response)
         {
-            Contract.Requires<ArgumentNullException>(response != null);
+            if (response == null)
+                throw new ArgumentNullException(nameof(response));
 
             return response.Status == IOStatus.Success ? ModelResponseStatus.Success : ModelResponseStatus.Error;
         }
@@ -188,8 +192,10 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         ModelResponse ReadIOResponseFromContent(IOResponse ioResponse, ModelRequest request)
         {
-            Contract.Requires<ArgumentNullException>(ioResponse != null);
-            Contract.Requires<ArgumentNullException>(request != null);
+            if (ioResponse == null)
+                throw new ArgumentNullException(nameof(ioResponse));
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             // deserialize if possible
             if (ioResponse.Content != null &&
@@ -225,8 +231,10 @@ namespace NXKit.XForms.IO
         /// <returns></returns>
         protected virtual ModelResponse ReadIOResponse(IOResponse ioResponse, ModelRequest request)
         {
-            Contract.Requires<ArgumentNullException>(ioResponse != null);
-            Contract.Requires<ArgumentNullException>(request != null);
+            if (ioResponse == null)
+                throw new ArgumentNullException(nameof(ioResponse));
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             var response = ReadIOResponseFromContent(ioResponse, request);
             response.Headers.Add(ioResponse.Headers);

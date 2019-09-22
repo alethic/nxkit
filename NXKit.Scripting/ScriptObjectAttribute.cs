@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.Scripting
 {
@@ -23,9 +22,7 @@ namespace NXKit.Scripting
         public ScriptObjectAttribute(string name)
             : base(typeof(IScriptObject))
         {
-            Contract.Requires<ArgumentNullException>(name != null);
-
-            this.name = name;
+            this.name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -31,9 +30,7 @@ namespace NXKit.XForms.Serialization
         [ImportingConstructor]
         public XmlModelDeserializer(AnnotationSerializer serializer)
         {
-            Contract.Requires<ArgumentNullException>(serializer != null);
-
-            this.serializer = serializer;
+            this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 
         public Priority CanDeserialize(MediaRange mediaType)

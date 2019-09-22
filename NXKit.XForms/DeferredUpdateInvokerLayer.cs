@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 using NXKit.Composition;
@@ -29,9 +28,7 @@ namespace NXKit.XForms
         public DeferredUpdateInvokerLayer(
             [Import] Func<Document> host)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
-
-            this.host = host;
+            this.host = host ?? throw new ArgumentNullException(nameof(host));
         }
 
         public void Invoke(System.Action action)

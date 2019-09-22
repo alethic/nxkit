@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -36,15 +35,13 @@ namespace NXKit.XForms
             Lazy<EvaluationContextResolver> context)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(attributes != null);
-            Contract.Requires<ArgumentNullException>(context != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.attributes = attributes;
-            this.context = context;
+            this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
 
-            this.value = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.Value) ? context.Value.Context.CompileXPath(element, attributes.Value) : null);
+            this.value = new Lazy<XPathExpression>(() => !string.IsNullOrEmpty(attributes.Value) ? context.Value.Context.CompileXPath(element, attributes.Value) : null);
         }
 
         public XPathExpression Value

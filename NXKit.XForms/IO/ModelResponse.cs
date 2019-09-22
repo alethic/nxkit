@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.IO;
@@ -24,9 +23,7 @@ namespace NXKit.XForms.IO
         /// <param name="request"></param>
         public ModelResponse(ModelRequest request, ModelResponseStatus status, XDocument body)
         {
-            Contract.Requires<ArgumentNullException>(request != null);
-
-            this.request = request;
+            this.request = request ?? throw new ArgumentNullException(nameof(request));
             this.status = status;
             this.body = body;
             this.headers = new Headers();

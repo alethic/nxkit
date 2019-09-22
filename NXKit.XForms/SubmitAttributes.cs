@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -25,8 +24,10 @@ namespace NXKit.XForms
         public SubmitAttributes(XElement element)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(element.Name == Constants.XForms_1_0 + "submit");
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (element.Name != Constants.XForms_1_0 + "submit")
+                throw new ArgumentException("", nameof(element));
         }
 
         /// <summary>

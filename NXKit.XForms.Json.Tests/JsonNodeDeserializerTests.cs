@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using NXKit.XForms.Json.Serialization;
 
 namespace NXKit.XForms.Json.Tests

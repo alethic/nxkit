@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Text;
 using System.Xml.Linq;
 
@@ -33,8 +32,10 @@ namespace NXKit.XForms.IO
             Uri resourceUri,
             ModelMethod method)
         {
-            Contract.Requires<ArgumentNullException>(resourceUri != null);
-            Contract.Requires<ArgumentException>(resourceUri.IsAbsoluteUri);
+            if (resourceUri == null)
+                throw new ArgumentNullException(nameof(resourceUri));
+            if (resourceUri.IsAbsoluteUri == false)
+                throw new ArgumentException("", nameof(resourceUri));
 
             this.resourceUri = resourceUri;
             this.method = method;
@@ -48,7 +49,7 @@ namespace NXKit.XForms.IO
         /// </summary>
         public Uri ResourceUri
         {
-            get { Contract.Ensures(Contract.Result<Uri>() != null); return resourceUri; }
+            get { return resourceUri; }
         }
 
         /// <summary>
@@ -83,8 +84,8 @@ namespace NXKit.XForms.IO
         /// </summary>
         public Encoding Encoding
         {
-            get { Contract.Ensures(Contract.Result<Encoding>() != null); return encoding; }
-            set { Contract.Requires<ArgumentException>(value != null); encoding = value; }
+            get { return encoding; }
+            set { encoding = value ?? throw new ArgumentNullException(nameof(value)); }
         }
 
         /// <summary>

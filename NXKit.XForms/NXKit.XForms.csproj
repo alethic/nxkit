@@ -1,353 +1,64 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{67ECD54B-BD0D-442F-A184-65B4CA014E75}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NXKit.XForms</RootNamespace>
-    <AssemblyName>NXKit.XForms</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <FodyPath>..\packages\Fody.1.17.4.0</FodyPath>
-    <NuGetPackageImportStamp>cb288c71</NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
-    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
-    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
-    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
-    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
-    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
-    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
-    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
-    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
-    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
-    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
-    <CodeContractsInferRequires>True</CodeContractsInferRequires>
-    <CodeContractsInferEnsures>True</CodeContractsInferEnsures>
-    <CodeContractsInferObjectInvariants>True</CodeContractsInferObjectInvariants>
-    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
-    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
-    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
-    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
-    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
-    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
-    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
-    <CodeContractsCustomRewriterAssembly />
-    <CodeContractsCustomRewriterClass />
-    <CodeContractsLibPaths />
-    <CodeContractsExtraRewriteOptions />
-    <CodeContractsExtraAnalysisOptions />
-    <CodeContractsSQLServerOption />
-    <CodeContractsBaseLineFile />
-    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
-    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
-    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
-    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
-    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
-    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
-    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
-    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
-    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
-    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
-    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
-    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
-    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
-    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
-    <CodeContractsInferRequires>True</CodeContractsInferRequires>
-    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
-    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
-    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
-    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
-    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
-    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
-    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
-    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
-    <CodeContractsCustomRewriterAssembly />
-    <CodeContractsCustomRewriterClass />
-    <CodeContractsLibPaths />
-    <CodeContractsExtraRewriteOptions />
-    <CodeContractsExtraAnalysisOptions />
-    <CodeContractsSQLServerOption />
-    <CodeContractsBaseLineFile />
-    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
-    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
-    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
-    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-    <DocumentationFile>bin\Release\NXKit.XForms.xml</DocumentationFile>
-    <CodeContractsAssertsToContractsCheckBox>True</CodeContractsAssertsToContractsCheckBox>
-    <CodeContractsRedundantTests>True</CodeContractsRedundantTests>
-    <CodeContractsMissingPublicEnsuresAsWarnings>False</CodeContractsMissingPublicEnsuresAsWarnings>
-    <CodeContractsSuggestAssumptionsForCallees>False</CodeContractsSuggestAssumptionsForCallees>
-    <CodeContractsNecessaryEnsures>True</CodeContractsNecessaryEnsures>
-    <CodeContractsSuggestReadonly>True</CodeContractsSuggestReadonly>
-    <CodeContractsSkipAnalysisIfCannotConnectToCache>False</CodeContractsSkipAnalysisIfCannotConnectToCache>
-    <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ActionProperties.cs" />
-    <Compile Include="BindProperties.cs" />
-    <Compile Include="CommonProperties.cs" />
-    <Compile Include="Converters\BooleanXsdTypeConverter.cs" />
-    <Compile Include="Converters\DateTimeXsdTypeConverter.cs" />
-    <Compile Include="Converters\DateXsdTypeConverter.cs" />
-    <Compile Include="Converters\IXsdTypeConverter.cs" />
-    <Compile Include="DeferredUpdateInvokerLayer.cs" />
-    <Compile Include="LoadShow.cs" />
-    <Compile Include="LoadAttributes.cs" />
-    <Compile Include="LoadProperties.cs" />
-    <Compile Include="VarProperties.cs" />
-    <Compile Include="VarAttributes.cs" />
-    <Compile Include="Var.cs" />
-    <Compile Include="RepeatExtensionAttributes.cs" />
-    <Compile Include="RepeatExtension.cs" />
-    <Compile Include="RepeatExtensionProperties.cs" />
-    <Compile Include="SetValueProperties.cs" />
-    <Compile Include="SetValueAttributes.cs" />
-    <Compile Include="DispatchAttributes.cs" />
-    <Compile Include="InsertPosition.cs" />
-    <Compile Include="BindingProperties.cs" />
-    <Compile Include="DeleteProperties.cs" />
-    <Compile Include="OutputProperties.cs" />
-    <Compile Include="IO\FileHandler.cs" />
-    <Compile Include="IO\IModelRequestService.cs" />
-    <Compile Include="IO\ModelRequest.cs" />
-    <Compile Include="IO\ModelMethod.cs" />
-    <Compile Include="IO\ModelRequestService.cs" />
-    <Compile Include="IO\ModelResponse.cs" />
-    <Compile Include="IO\ModelResponseStatus.cs" />
-    <Compile Include="IO\RequestException.cs" />
-    <Compile Include="IO\UnsupportedMediaTypeException.cs" />
-    <Compile Include="InsertAttributes.cs" />
-    <Compile Include="OutputAttributes.cs" />
-    <Compile Include="Serialization\IModelDeserializer.cs" />
-    <Compile Include="Serialization\IModelSerializer.cs" />
-    <Compile Include="Serialization\XmlModelDeserializer.cs" />
-    <Compile Include="Serialization\XmlModelSerializer.cs" />
-    <Compile Include="IO\DefaultHandler.cs" />
-    <Compile Include="Serialization\UrlEncodedModelSerializer.cs" />
-    <Compile Include="IO\ModelRequestHandler.cs" />
-    <Compile Include="SendAttributes.cs" />
-    <Compile Include="InsertProperties.cs" />
-    <Compile Include="SubmitAttributes.cs" />
-    <Compile Include="AttributeEvaluationContextResolver.cs" />
-    <Compile Include="HeaderAttributes.cs" />
-    <Compile Include="BindingUtil.cs" />
-    <Compile Include="ElementEvaluationContextResolver.cs" />
-    <Compile Include="Header.cs" />
-    <Compile Include="IEvaluationContextProvider.cs" />
-    <Compile Include="EvaluationContextResolver.cs" />
-    <Compile Include="IO\IModelRequestHandler.cs" />
-    <Compile Include="HeaderValueAttributes.cs" />
-    <Compile Include="HeaderValue.cs" />
-    <Compile Include="HeaderNameAttributes.cs" />
-    <Compile Include="HeaderName.cs" />
-    <Compile Include="SubmissionSerialization.cs" />
-    <Compile Include="ResourceAttributes.cs" />
-    <Compile Include="Resource.cs" />
-    <Compile Include="MethodAttributes.cs" />
-    <Compile Include="Method.cs" />
-    <Compile Include="SubmissionMode.cs" />
-    <Compile Include="SubmissionProperties.cs" />
-    <Compile Include="SubmissionAttributes.cs" />
-    <Compile Include="IOnRecalculate.cs" />
-    <Compile Include="IOnRefresh.cs" />
-    <Compile Include="IDataNode.cs" />
-    <Compile Include="ModelAttributes.cs" />
-    <Compile Include="InstanceAttributes.cs" />
-    <Compile Include="AttributeAccessor.cs" />
-    <Compile Include="ActionAttributes.cs" />
-    <Compile Include="Delete.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DeleteAttributes.cs" />
-    <Compile Include="DocumentInvoke.cs" />
-    <Compile Include="RangeAttributes.cs" />
-    <Compile Include="RepeatAttributes.cs" />
-    <Compile Include="ItemValueAttributes.cs" />
-    <Compile Include="ISelectableValue.cs" />
-    <Compile Include="RepeatItemState.cs" />
-    <Compile Include="Select1Attributes.cs" />
-    <Compile Include="BindAttributes.cs" />
-    <Compile Include="CommonAttributes.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Events.cs" />
-    <Compile Include="Events.partial.cs">
-      <DependentUpon>Events.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="IBindingNode.cs" />
-    <Compile Include="BindingAttributes.cs" />
-    <Compile Include="IEvaluationContextScope.cs" />
-    <Compile Include="ISelectable.cs" />
-    <Compile Include="IUIBindingNode.cs" />
-    <Compile Include="IUINode.cs" />
-    <Compile Include="ModelItem.cs" />
-    <Compile Include="BindingNode.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Script.cs" />
-    <Compile Include="SubmissionReplace.cs" />
-    <Compile Include="SubmitSerializeContextInfo.cs" />
-    <Compile Include="SubmitErrorContextInfo.cs" />
-    <Compile Include="SubmitErrorErrorType.cs" />
-    <Compile Include="Switch.cs" />
-    <Compile Include="DataNode.cs" />
-    <Compile Include="Submit.cs" />
-    <Compile Include="UINode.cs" />
-    <Compile Include="UIBinding.cs" />
-    <Compile Include="UIBindingNode.cs" />
-    <Compile Include="UIBindingState.cs" />
-    <Compile Include="EvaluationXsltContext.cs" />
-    <Compile Include="Action.cs" />
-    <Compile Include="Alert.cs" />
-    <Compile Include="Binding.cs" />
-    <Compile Include="Bind.cs" />
-    <Compile Include="Choices.cs" />
-    <Compile Include="Copy.cs" />
-    <Compile Include="Dispatch.cs" />
-    <Compile Include="EvaluationContext.cs" />
-    <Compile Include="Group.cs" />
-    <Compile Include="Help.cs" />
-    <Compile Include="Hint.cs" />
-    <Compile Include="Input.cs" />
-    <Compile Include="Insert.cs" />
-    <Compile Include="Instance.cs" />
-    <Compile Include="InstanceState.cs" />
-    <Compile Include="Item.cs" />
-    <Compile Include="Label.cs" />
-    <Compile Include="Load.cs" />
-    <Compile Include="Message.cs" />
-    <Compile Include="ModelItemState.cs" />
-    <Compile Include="Model.cs" />
-    <Compile Include="ModelState.cs" />
-    <Compile Include="DocumentAnnotation.cs" />
-    <Compile Include="Output.cs" />
-    <Compile Include="Range.cs" />
-    <Compile Include="Rebuild.cs" />
-    <Compile Include="Recalculate.cs" />
-    <Compile Include="Refresh.cs" />
-    <Compile Include="RepeatItem.cs" />
-    <Compile Include="RepeatState.cs" />
-    <Compile Include="Repeat.cs" />
-    <Compile Include="Revalidate.cs" />
-    <Compile Include="Select1.cs" />
-    <Compile Include="Selection.cs" />
-    <Compile Include="Select.cs" />
-    <Compile Include="Send.cs" />
-    <Compile Include="SetValue.cs" />
-    <Compile Include="Submission.cs" />
-    <Compile Include="TextArea.cs" />
-    <Compile Include="Trigger.cs" />
-    <Compile Include="ItemValue.cs" />
-    <Compile Include="IO\HttpHandler.cs" />
-    <Compile Include="Xml\XElementExtensions.cs" />
-    <Compile Include="XPath\Functions\BooleanFromString.cs" />
-    <Compile Include="XPath\Functions\IfFunction.cs" />
-    <Compile Include="XPath\Functions\IndexFunction.cs" />
-    <Compile Include="XPath\Functions\DaysFromDateFunction.cs" />
-    <Compile Include="XPath\Functions\NowFunction.cs" />
-    <Compile Include="XPath\Functions\InstanceFunction.cs" />
-    <Compile Include="XPath\Functions\MaxFunction.cs" />
-    <Compile Include="XPath\Functions\PositionFunction.cs" />
-    <Compile Include="XPath\Functions\XPathFunction.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj">
-      <Project>{afda4394-6fc4-48da-bbd0-d97a77f5ae0c}</Project>
-      <Name>NXKit.DOMEvents</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj">
-      <Project>{075ba36b-f95a-4563-bbe9-20d4405e9c9e}</Project>
-      <Name>NXKit.DOM</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.Scripting\NXKit.Scripting.csproj">
-      <Project>{f509df8d-af13-468d-8381-028835a79dec}</Project>
-      <Name>NXKit.Scripting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.XMLEvents\NXKit.XMLEvents.csproj">
-      <Project>{db71b395-df60-470a-b761-b083d7acafe8}</Project>
-      <Name>NXKit.XMLEvents</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.XPath2\NXKit.XPath2.csproj">
-      <Project>{4fc0495c-b8e7-407a-9505-fba9e973ba4c}</Project>
-      <Name>NXKit.XPath2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.XPath\NXKit.XPath.csproj">
-      <Project>{a91bc0e8-18cc-41f6-b00d-07e91b1593be}</Project>
-      <Name>NXKit.XPath</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit\NXKit.csproj">
-      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
-      <Name>NXKit</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="XForms-Schema.xsd">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Events.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Events.partial.cs</LastGenOutput>
-    </None>
-    <None Include="NXKit.XForms.nuspec" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Events.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net45</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Authors>Jerome Haltom</Authors>
+        <Description>NXKit implementation of the W3C XForms 2.0 specification.</Description>
+        <PackageProjectUrl>https://github.com/nxkit</PackageProjectUrl>
+        <PackageIconUrl></PackageIconUrl>
+        <Copyright>Copyright © Jerome Haltom 2014</Copyright>
+        <PackageLicenseUrl>http://www.gnu.org/licenses/gpl.txt</PackageLicenseUrl>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PackageTags>xml xforms</PackageTags>
+        <Product>NXKit XForms</Product>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="XForms-Schema.xsd" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="XForms-Schema.xsd" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+      <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj" />
+      <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj" />
+      <ProjectReference Include="..\NXKit.Scripting\NXKit.Scripting.csproj" />
+      <ProjectReference Include="..\NXKit.XMLEvents\NXKit.XMLEvents.csproj" />
+      <ProjectReference Include="..\NXKit.XPath2\NXKit.XPath2.csproj" />
+      <ProjectReference Include="..\NXKit.XPath\NXKit.XPath.csproj" />
+      <ProjectReference Include="..\NXKit\NXKit.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="System.ComponentModel.Composition" />
+      <Reference Include="System.Xaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Events.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>Events.partial.cs</LastGenOutput>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Events.partial.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Events.tt</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

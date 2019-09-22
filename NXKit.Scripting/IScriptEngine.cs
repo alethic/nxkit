@@ -1,13 +1,9 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-
-namespace NXKit.Scripting
+﻿namespace NXKit.Scripting
 {
 
     /// <summary>
     /// Provides a script engine capable of handling one or more language types.
     /// </summary>
-    [ContractClass(typeof(IScriptEnginer_Contract))]
     public interface IScriptEngine
     {
 
@@ -44,44 +40,6 @@ namespace NXKit.Scripting
         /// <see cref="Document"/> instance in the form of a serializable annotation.
         /// </summary>
         void Save();
-
-    }
-
-    [ContractClassFor(typeof(IScriptEngine))]
-    abstract class IScriptEnginer_Contract :
-        IScriptEngine
-    {
-
-        public bool CanExecute(string type, string code)
-        {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(type));
-            Contract.Requires<ArgumentNullException>(code != null);
-            throw new NotImplementedException();
-        }
-
-        public void Execute(string type, string code)
-        {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(type));
-            Contract.Requires<ArgumentNullException>(code != null);
-        }
-
-        public object Evaluate(string type, string code)
-        {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(type));
-            Contract.Requires<ArgumentNullException>(code != null);
-            throw new NotImplementedException();
-        }
-
-        public void Load()
-        {
-
-        }
-
-        public void Save()
-        {
-
-        }
-
 
     }
 

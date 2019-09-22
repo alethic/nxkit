@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -56,7 +55,8 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         XDocument ToDocument(JToken token)
         {
-            Contract.Requires<ArgumentNullException>(token != null);
+            if (token == null)
+                throw new ArgumentNullException(nameof(token));
 
             return new XDocument(
                 ToRootElement(token));
@@ -69,7 +69,8 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         XElement ToRootElement(JToken token)
         {
-            Contract.Requires<ArgumentNullException>(token != null);
+            if (token == null)
+                throw new ArgumentNullException(nameof(token));
 
             return new XElement("json",
                 ToContents(token));
@@ -83,7 +84,8 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         IEnumerable<object> ToContents(JToken token)
         {
-            Contract.Requires<ArgumentNullException>(token != null);
+            if (token == null)
+                throw new ArgumentNullException(nameof(token));
 
             if (token is JObject)
                 return ToContents((JObject)token);
@@ -103,7 +105,8 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         IEnumerable<XNode> ToContents(JObject jobject)
         {
-            Contract.Requires<ArgumentNullException>(jobject != null);
+            if (jobject == null)
+                throw new ArgumentNullException(nameof(jobject));
 
             foreach (var property in jobject.Properties())
                 if (property.Value is JArray)
@@ -122,8 +125,10 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         IEnumerable<XNode> ToContents(XName name, JArray jarray)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(jarray != null);
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+            if (jarray == null)
+                throw new ArgumentNullException(nameof(jarray));
 
             for (int i = 0; i < jarray.Count; i++)
                 yield return new XElement(
@@ -139,7 +144,8 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         IEnumerable<object> ToContents(JValue value)
         {
-            Contract.Requires<ArgumentNullException>(value != null);
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
 
             if (value.Type == JTokenType.Integer ||
                 value.Type == JTokenType.Float)
@@ -160,7 +166,8 @@ namespace NXKit.XForms.Json.Serialization
         /// <returns></returns>
         XName ToName(JProperty property)
         {
-            Contract.Requires<ArgumentNullException>(property != null);
+            if (property == null)
+                throw new ArgumentNullException(nameof(property));
 
             return property.Name;
         }

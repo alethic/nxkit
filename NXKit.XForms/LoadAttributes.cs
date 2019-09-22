@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
+
 using NXKit.Composition;
 
 namespace NXKit.XForms
@@ -24,33 +24,26 @@ namespace NXKit.XForms
         public LoadAttributes(XElement element)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(element.Name == Constants.XForms_1_0 + "load");
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (element.Name != Constants.XForms_1_0 + "load")
+                throw new ArgumentException("", nameof(element));
         }
 
         /// <summary>
         /// Gets the 'resource' attribute value.
         /// </summary>
-        public string Resource
-        {
-            get { return GetAttributeValue("resource"); }
-        }
+        public string Resource => GetAttributeValue("resource");
 
         /// <summary>
         /// Gets the 'show' attribute value.
         /// </summary>
-        public string Show
-        {
-            get { return GetAttributeValue("show"); }
-        }
+        public string Show => GetAttributeValue("show");
 
         /// <summary>
         /// Gets the 'targetid' attribute value.
         /// </summary>
-        public string TargetId
-        {
-            get { return GetAttributeValue("targetid"); }
-        }
+        public string TargetId => GetAttributeValue("targetid");
 
     }
 

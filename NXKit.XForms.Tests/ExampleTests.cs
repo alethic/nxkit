@@ -1,10 +1,12 @@
 ﻿using System;
-using NXKit.Xml;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NXKit.DOMEvents;
+using NXKit.Xml;
 
 namespace NXKit.XForms.Tests
 {

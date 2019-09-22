@@ -50,7 +50,7 @@ namespace NXKit
 
         R Invoke<R>(Func<R> func, LinkedListNode<Lazy<IInvokerLayer>> next)
         {
-            if (next == null || func == null)
+            if (next == null && func == null)
                 throw new ArgumentException();
 
             if (next != null)

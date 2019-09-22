@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -41,11 +40,11 @@ namespace NXKit.XForms
             Extension<EvaluationContextResolver> context)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(context != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             this.attributes = attributes;
-            this.context = context;
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
 
             this.type = new Lazy<XName>(() =>
                 !string.IsNullOrEmpty(attributes.Type) ? Element.ResolvePrefixedName(attributes.Type) : null);

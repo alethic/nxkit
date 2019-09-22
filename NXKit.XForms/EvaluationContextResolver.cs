@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -22,9 +21,7 @@ namespace NXKit.XForms
         /// <param name="obj"></param>
         public EvaluationContextResolver(XObject obj)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
-
-            this.obj = obj;
+            this.obj = obj ?? throw new ArgumentNullException(nameof(obj));
         }
 
         /// <summary>

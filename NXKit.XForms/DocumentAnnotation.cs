@@ -1,6 +1,5 @@
-﻿using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
+﻿using System.Xml.Linq;
+
 using NXKit.Serialization;
 
 namespace NXKit.XForms
