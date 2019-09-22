@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 using NXKit.Composition;
@@ -27,16 +26,14 @@ namespace NXKit.Diagnostics
             [ImportMany] IEnumerable<ITraceSink> sinks,
             [ImportMany] IEnumerable<Lazy<ITypeProxyProvider, ITypeProxyProviderMetadata>> proxies)
         {
-            Contract.Requires<ArgumentNullException>(sinks != null);
-            Contract.Requires<ArgumentNullException>(proxies != null);
-
-            this.sinks = sinks;
-            this.proxies = proxies;
+            this.sinks = sinks ?? throw new ArgumentNullException(nameof(sinks));
+            this.proxies = proxies ?? throw new ArgumentNullException(nameof(proxies));
         }
 
         object GetProxy(object input)
         {
-            Contract.Requires<ArgumentNullException>(input != null);
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
 
             return proxies
                 .Where(i => i.Metadata.Type.IsInstanceOfType(input))
@@ -47,7 +44,8 @@ namespace NXKit.Diagnostics
 
         object[] GetProxies(params object[] inputs)
         {
-            Contract.Requires<ArgumentNullException>(inputs != null);
+            if (inputs == null)
+                throw new ArgumentNullException(nameof(inputs));
 
             return inputs
                 .Select(i => GetProxy(i))

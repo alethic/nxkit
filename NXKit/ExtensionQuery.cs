@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 namespace NXKit
 {
@@ -23,15 +22,14 @@ namespace NXKit
         /// <param name="value"></param>
         public ExtensionQuery(Func<IEnumerable<T>> values)
         {
-            Contract.Requires<ArgumentNullException>(values != null);
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
 
             this.values = new Lazy<IEnumerable<T>>(() => values());
         }
 
         public new IEnumerator<T> GetEnumerator()
         {
-            Contract.Assume(values.Value != null);
-
             return values.Value.GetEnumerator();
         }
 

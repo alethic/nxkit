@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.IO.Media
 {
@@ -29,7 +28,8 @@ namespace NXKit.IO.Media
         /// <param name="value"></param>
         MediaType(string value)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(value));
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentException("Value must be a non empty string.", nameof(value));
 
             this.value = value;
         }

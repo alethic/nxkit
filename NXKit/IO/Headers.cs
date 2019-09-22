@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.IO
 {
@@ -34,7 +33,8 @@ namespace NXKit.IO
         /// <param name="headers"></param>
         public void Add(Headers headers)
         {
-            Contract.Requires<ArgumentNullException>(headers != null);
+            if (headers == null)
+                throw new ArgumentNullException(nameof(headers));
 
             foreach (var header in headers)
                 items[header.Key] = header.Value;
@@ -46,7 +46,8 @@ namespace NXKit.IO
         /// <param name="headers"></param>
         public void Add(NameValueCollection headers)
         {
-            Contract.Requires<ArgumentNullException>(headers != null);
+            if (headers == null)
+                throw new ArgumentNullException(nameof(headers));
 
             foreach (string key in headers)
                 items[key] = headers[key];

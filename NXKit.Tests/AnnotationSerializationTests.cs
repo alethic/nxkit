@@ -1,8 +1,9 @@
-﻿using System.Xml.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NXKit.Serialization;
-using System.Linq;
+﻿using System.Linq;
+using System.Xml.Linq;
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using NXKit.Serialization;
 using NXKit.Xml;
 
 namespace NXKit.Tests

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net;
 
@@ -28,10 +27,12 @@ namespace NXKit.Net
         public DynamicWebRequest(Uri uri)
             : base()
         {
-            Contract.Requires<ArgumentNullException>(uri != null);
-            Contract.Requires<ArgumentOutOfRangeException>(uri.Scheme == DynamicUriHelper.UriSchemeDynamic);
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
+            if (uri.Scheme != DynamicUriHelper.UriSchemeDynamic)
+                throw new ArgumentOutOfRangeException(nameof(uri));
 
-            this.uri = uri;
+            this.uri = uri ?? throw new ArgumentNullException(nameof(uri));
             this.method = "GET";
             this.contentLength = 0;
             this.headers = new WebHeaderCollection();

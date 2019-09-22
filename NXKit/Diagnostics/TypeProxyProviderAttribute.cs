@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.Diagnostics
 {
@@ -21,9 +20,7 @@ namespace NXKit.Diagnostics
         public TypeProxyProviderAttribute(Type type)
             : base(typeof(ITypeProxyProvider))
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-
-            this.type = type;
+            this.type = type ?? throw new ArgumentNullException(nameof(type));
         }
 
         public Type Type

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.Util
 {
@@ -20,7 +19,8 @@ namespace NXKit.Util
         /// <returns></returns>
         public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T item)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
 
             foreach (var i in source)
                 yield return i;
@@ -36,7 +36,8 @@ namespace NXKit.Util
         /// <returns></returns>
         public static IEnumerable<T> Prepend<T>(this IEnumerable<T> source, T item)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
 
             yield return item;
             foreach (var i in source)
@@ -45,7 +46,8 @@ namespace NXKit.Util
 
         public static IEnumerable<T> Recurse<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> func)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
 
             foreach (var i in source)
             {
@@ -63,8 +65,9 @@ namespace NXKit.Util
         /// <returns></returns>
         public static LinkedList<T> ToLinkedList<T>(this IEnumerable<T> source)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
-            
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
             return new LinkedList<T>(source);
         }
 
@@ -77,7 +80,8 @@ namespace NXKit.Util
         /// <returns></returns>
         public static IEnumerable<T> Buffer<T>(this IEnumerable<T> source)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
 
             return BufferInternal<T>(source.GetEnumerator(), new LinkedList<T>());
         }
@@ -91,8 +95,10 @@ namespace NXKit.Util
         /// <returns></returns>
         static IEnumerable<T> BufferInternal<T>(this IEnumerator<T> source, LinkedList<T> cache)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(cache != null);
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (cache == null)
+                throw new ArgumentNullException(nameof(cache));
 
             var node = cache.First;
             if (node != null)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit
@@ -27,7 +26,8 @@ namespace NXKit
         public ExtensionAttribute(Type contractType)
             : this(contractType, ExtensionObjectType.Element)
         {
-            Contract.Requires<ArgumentNullException>(contractType != null);
+            if (contractType == null)
+                throw new ArgumentNullException(nameof(contractType));
         }
 
         /// <summary>
@@ -47,7 +47,8 @@ namespace NXKit
         public ExtensionAttribute(Type contractType, ExtensionObjectType objectType)
             : base(contractType)
         {
-            Contract.Requires<ArgumentNullException>(contractType != null);
+            if (contractType == null)
+                throw new ArgumentNullException(nameof(contractType));
 
             this.objectType = objectType;
         }
@@ -70,8 +71,10 @@ namespace NXKit
         public ExtensionAttribute(Type contractType, XName name)
             : this(contractType, name.NamespaceName, name.LocalName)
         {
-            Contract.Requires<ArgumentNullException>(contractType != null);
-            Contract.Requires<ArgumentNullException>(name != null);
+            if (contractType == null)
+                throw new ArgumentNullException(nameof(contractType));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
         }
 
         /// <summary>
@@ -81,7 +84,8 @@ namespace NXKit
         public ExtensionAttribute(XName name)
             : this(name.NamespaceName, name.LocalName)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
         }
 
         /// <summary>
@@ -92,8 +96,10 @@ namespace NXKit
         public ExtensionAttribute(Type contractType, string expandedName)
             : this(contractType, XName.Get(expandedName))
         {
-            Contract.Requires<ArgumentNullException>(contractType != null);
-            Contract.Requires<ArgumentNullException>(expandedName != null);
+            if (contractType == null)
+                throw new ArgumentNullException(nameof(contractType));
+            if (expandedName == null)
+                throw new ArgumentNullException(nameof(expandedName));
         }
 
         /// <summary>
@@ -103,7 +109,8 @@ namespace NXKit
         public ExtensionAttribute(string expandedName)
             : this(XName.Get(expandedName))
         {
-            Contract.Requires<ArgumentNullException>(expandedName != null);
+            if (expandedName == null)
+                throw new ArgumentNullException(nameof(expandedName));
         }
 
         /// <summary>
@@ -115,7 +122,8 @@ namespace NXKit
         public ExtensionAttribute(Type contractType, string namespaceName, string localName)
             : this(contractType, ExtensionObjectType.Element)
         {
-            Contract.Requires<ArgumentNullException>(contractType != null);
+            if (contractType == null)
+                throw new ArgumentNullException(nameof(contractType));
 
             this.namespaceName = namespaceName;
             this.localName = localName;

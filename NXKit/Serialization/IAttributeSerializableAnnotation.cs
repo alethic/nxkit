@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace NXKit.Serialization
@@ -9,7 +7,6 @@ namespace NXKit.Serialization
     /// <summary>
     /// Marks an annotation as supporting serialization to attributes.
     /// </summary>
-    [ContractClass(typeof(IAttributeSerializableAnnotation_Contract))]
     public interface IAttributeSerializableAnnotation
     {
 
@@ -27,28 +24,6 @@ namespace NXKit.Serialization
         /// <param name="ns"></param>
         /// <param name="attributes"></param>
         void Deserialize(AnnotationSerializer serializer, XNamespace ns, IEnumerable<XAttribute> attributes);
-
-    }
-
-    [ContractClassFor(typeof(IAttributeSerializableAnnotation))]
-    abstract class IAttributeSerializableAnnotation_Contract :
-        IAttributeSerializableAnnotation
-    {
-        
-        public IEnumerable<XAttribute> Serialize(AnnotationSerializer serializer, XNamespace ns)
-        {
-            Contract.Requires<ArgumentNullException>(serializer != null);
-            Contract.Requires<ArgumentNullException>(ns != null);
-            throw new NotImplementedException();
-        }
-
-        public void Deserialize(AnnotationSerializer serializer, XNamespace ns, IEnumerable<XAttribute> attributes)
-        {
-            Contract.Requires<ArgumentNullException>(serializer != null);
-            Contract.Requires<ArgumentNullException>(ns != null);
-            Contract.Requires<ArgumentNullException>(attributes != null);
-            throw new NotImplementedException();
-        }
 
     }
 

@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
+
 using NXKit.Composition;
 using NXKit.Util;
 using NXKit.Xml;
@@ -33,11 +34,8 @@ namespace NXKit
             [Import] Func<Document> host,
             [Import] Lazy<IInvoker> invoker)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
-            Contract.Requires<ArgumentNullException>(invoker != null);
-
-            this.host = host;
-            this.invoker = invoker;
+            this.host = host ?? throw new ArgumentNullException(nameof(host));
+            this.invoker = invoker ?? throw new ArgumentNullException(nameof(invoker));
         }
 
         public void Invoke(System.Action action)

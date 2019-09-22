@@ -1,0 +1,105 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\dev\\nxkit\\.node\\Node.exe',
+1 verbose cli   'C:\\dev\\nxkit\\.node\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install' ]
+2 info using npm@1.4.12
+3 info using node@v0.10.32
+4 warn package.json nxkit@0.0.0 No description
+5 warn package.json nxkit@0.0.0 No repository field.
+6 warn package.json nxkit@0.0.0 No README data
+7 verbose readDependencies using package.json deps
+8 verbose install where, deps [ 'C:\\dev\\nxkit\\NXKit.View.Js', [ 'less', 'uglify-js' ] ]
+9 info preinstall nxkit@0.0.0
+10 verbose readDependencies using package.json deps
+11 verbose cache add [ 'less@^1.7.5', null ]
+12 verbose cache add name=undefined spec="less@^1.7.5" args=["less@^1.7.5",null]
+13 verbose parsed url { protocol: null,
+13 verbose parsed url   slashes: null,
+13 verbose parsed url   auth: null,
+13 verbose parsed url   host: null,
+13 verbose parsed url   port: null,
+13 verbose parsed url   hostname: null,
+13 verbose parsed url   hash: null,
+13 verbose parsed url   search: null,
+13 verbose parsed url   query: null,
+13 verbose parsed url   pathname: 'less@^1.7.5',
+13 verbose parsed url   path: 'less@^1.7.5',
+13 verbose parsed url   href: 'less@^1.7.5' }
+14 verbose cache add [ 'uglify-js@^2.4.15', null ]
+15 verbose cache add name=undefined spec="uglify-js@^2.4.15" args=["uglify-js@^2.4.15",null]
+16 verbose parsed url { protocol: null,
+16 verbose parsed url   slashes: null,
+16 verbose parsed url   auth: null,
+16 verbose parsed url   host: null,
+16 verbose parsed url   port: null,
+16 verbose parsed url   hostname: null,
+16 verbose parsed url   hash: null,
+16 verbose parsed url   search: null,
+16 verbose parsed url   query: null,
+16 verbose parsed url   pathname: 'uglify-js@^2.4.15',
+16 verbose parsed url   path: 'uglify-js@^2.4.15',
+16 verbose parsed url   href: 'uglify-js@^2.4.15' }
+17 verbose cache add name="less" spec="^1.7.5" args=["less","^1.7.5"]
+18 verbose parsed url { protocol: null,
+18 verbose parsed url   slashes: null,
+18 verbose parsed url   auth: null,
+18 verbose parsed url   host: null,
+18 verbose parsed url   port: null,
+18 verbose parsed url   hostname: null,
+18 verbose parsed url   hash: null,
+18 verbose parsed url   search: null,
+18 verbose parsed url   query: null,
+18 verbose parsed url   pathname: '^1.7.5',
+18 verbose parsed url   path: '^1.7.5',
+18 verbose parsed url   href: '^1.7.5' }
+19 verbose addNamed [ 'less', '^1.7.5' ]
+20 verbose addNamed [ null, '>=1.7.5-0 <2.0.0-0' ]
+21 verbose cache add name="uglify-js" spec="^2.4.15" args=["uglify-js","^2.4.15"]
+22 verbose parsed url { protocol: null,
+22 verbose parsed url   slashes: null,
+22 verbose parsed url   auth: null,
+22 verbose parsed url   host: null,
+22 verbose parsed url   port: null,
+22 verbose parsed url   hostname: null,
+22 verbose parsed url   hash: null,
+22 verbose parsed url   search: null,
+22 verbose parsed url   query: null,
+22 verbose parsed url   pathname: '^2.4.15',
+22 verbose parsed url   path: '^2.4.15',
+22 verbose parsed url   href: '^2.4.15' }
+23 verbose addNamed [ 'uglify-js', '^2.4.15' ]
+24 verbose addNamed [ null, '>=2.4.15-0 <3.0.0-0' ]
+25 silly lockFile 14bc5a15-less-1-7-5 less@^1.7.5
+26 verbose lock less@^1.7.5 C:\Users\wasabi\AppData\Roaming\npm-cache\14bc5a15-less-1-7-5.lock
+27 silly lockFile cc3ce3f3-uglify-js-2-4-15 uglify-js@^2.4.15
+28 verbose lock uglify-js@^2.4.15 C:\Users\wasabi\AppData\Roaming\npm-cache\cc3ce3f3-uglify-js-2-4-15.lock
+29 silly addNameRange { name: 'less', range: '>=1.7.5-0 <2.0.0-0', hasData: false }
+30 silly addNameRange { name: 'uglify-js',
+30 silly addNameRange   range: '>=2.4.15-0 <3.0.0-0',
+30 silly addNameRange   hasData: false }
+31 verbose url raw less
+32 verbose url resolving [ 'https://pkgs.dev.azure.com/fileandserve/_packaging/FileAndServe/npm/registry/',
+32 verbose url resolving   './less' ]
+33 verbose url resolved https://pkgs.dev.azure.com/fileandserve/_packaging/FileAndServe/npm/registry/less
+34 silly lockFile 14bc5a15-less-1-7-5 less@^1.7.5
+35 silly lockFile 14bc5a15-less-1-7-5 less@^1.7.5
+36 verbose url raw uglify-js
+37 verbose url resolving [ 'https://pkgs.dev.azure.com/fileandserve/_packaging/FileAndServe/npm/registry/',
+37 verbose url resolving   './uglify-js' ]
+38 verbose url resolved https://pkgs.dev.azure.com/fileandserve/_packaging/FileAndServe/npm/registry/uglify-js
+39 silly lockFile cc3ce3f3-uglify-js-2-4-15 uglify-js@^2.4.15
+40 silly lockFile cc3ce3f3-uglify-js-2-4-15 uglify-js@^2.4.15
+41 error Error: This request requires auth credentials. Run `npm login` and repeat the request.
+41 error     at RegClient.regRequest [as request] (C:\dev\nxkit\.node\node_modules\npm\node_modules\npm-registry-client\lib\request.js:81:15)
+41 error     at RegClient.get_ (C:\dev\nxkit\.node\node_modules\npm\node_modules\npm-registry-client\lib\get.js:115:8)
+41 error     at RegClient.<anonymous> (C:\dev\nxkit\.node\node_modules\npm\node_modules\npm-registry-client\lib\get.js:45:15)
+41 error     at Object.oncomplete (fs.js:107:15)
+42 error If you need help, you may report this *entire* log,
+42 error including the npm and node versions, at:
+42 error     <http://github.com/npm/npm/issues>
+43 error System Windows_NT 6.2.9200
+44 error command "C:\\dev\\nxkit\\.node\\Node.exe" "C:\\dev\\nxkit\\.node\\node_modules\\npm\\bin\\npm-cli.js" "install"
+45 error cwd C:\dev\nxkit\NXKit.View.Js
+46 error node -v v0.10.32
+47 error npm -v 1.4.12
+48 verbose exit [ 1, true ]

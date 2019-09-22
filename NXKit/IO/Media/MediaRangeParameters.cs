@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace NXKit.IO.Media
@@ -21,7 +20,8 @@ namespace NXKit.IO.Media
         /// <returns></returns>
         public static MediaRangeParameters Parse(string parameters)
         {
-            Contract.Requires<ArgumentNullException>(parameters != null);
+            if (parameters == null)
+                throw new ArgumentNullException(nameof(parameters));
 
             return new MediaRangeParameters(parameters
                 .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
@@ -56,7 +56,8 @@ namespace NXKit.IO.Media
         /// <param name="parameters">The parameters.</param>
         internal MediaRangeParameters(IDictionary<string, string> parameters)
         {
-            Contract.Requires<ArgumentNullException>(parameters != null);
+            if (parameters == null)
+                throw new ArgumentNullException(nameof(parameters));
 
             this.parameters = new Dictionary<string, string>(parameters, StringComparer.OrdinalIgnoreCase);
         }
@@ -95,7 +96,8 @@ namespace NXKit.IO.Media
         /// <returns>True if matching, false if not</returns>
         public bool Matches(MediaRangeParameters other)
         {
-            Contract.Requires<ArgumentNullException>(other != null);
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
 
             return parameters.OrderBy(p => p.Key).SequenceEqual(other.parameters.OrderBy(p => p.Key));
         }
@@ -116,7 +118,13 @@ namespace NXKit.IO.Media
         /// <returns>The value for the parameter. If the parameter is not defined then null is returned.</returns>
         public string this[string name]
         {
-            get { Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(name)); return (parameters.ContainsKey(name)) ? parameters[name] : null; }
+            get
+            {
+                if (string.IsNullOrEmpty(name))
+                    throw new ArgumentOutOfRangeException(nameof(name));
+
+                return parameters.ContainsKey(name) ? parameters[name] : null;
+            }
         }
 
         public override string ToString()

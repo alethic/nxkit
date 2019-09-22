@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -20,9 +19,7 @@ namespace NXKit.Net
         public ResourceWebResponse(ResourceWebRequest request)
             : base()
         {
-            Contract.Requires<ArgumentNullException>(request != null);
-
-            this.request = request;
+            this.request = request ?? throw new ArgumentNullException(nameof(request));
         }
 
         public override Stream GetResponseStream()

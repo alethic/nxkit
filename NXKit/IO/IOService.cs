@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace NXKit.IO
 {
-    
+
     [Export(typeof(IIOService))]
     public class IOService :
         IIOService
@@ -22,9 +21,7 @@ namespace NXKit.IO
         public IOService(
             [ImportMany] IEnumerable<IIOTransport> transports)
         {
-            Contract.Requires<ArgumentNullException>(transports != null);
-
-            this.transports = transports;
+            this.transports = transports ?? throw new ArgumentNullException(nameof(transports));
         }
 
         /// <summary>
@@ -34,7 +31,8 @@ namespace NXKit.IO
         /// <returns></returns>
         IIOTransport GetTransport(IORequest request)
         {
-            Contract.Requires<ArgumentNullException>(request != null);
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             return transports
                 .Select(i => new { Priority = i.CanSend(request), Processor = i })

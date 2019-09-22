@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Primitives;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -38,8 +37,10 @@ namespace NXKit
         /// <returns></returns>
         internal static bool Predicate(XObject obj, IExtensionMetadata metadata)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
-            Contract.Requires<ArgumentNullException>(metadata != null);
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
+            if (metadata == null)
+                throw new ArgumentNullException(nameof(metadata));
 
             if (!metadata.ObjectType.HasFlag(GetObjectType(obj)))
                 return false;
@@ -68,7 +69,8 @@ namespace NXKit
         /// <returns></returns>
         internal static ExtensionObjectType GetObjectType(XObject obj)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
             if (obj is XDocument)
                 return ExtensionObjectType.Document;
@@ -84,7 +86,8 @@ namespace NXKit
 
         internal static bool IsMatch(XElement element, string namespaceName, string localName)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             if (namespaceName != null &&
                 namespaceName != element.Name.NamespaceName)
@@ -99,7 +102,8 @@ namespace NXKit
 
         internal static bool IsMatch(XAttribute attribute, string namespaceName, string localName)
         {
-            Contract.Requires<ArgumentNullException>(attribute != null);
+            if (attribute == null)
+                throw new ArgumentNullException(nameof(attribute));
 
             if (namespaceName != null &&
                 namespaceName != attribute.Name.NamespaceName)
@@ -126,11 +130,8 @@ namespace NXKit
             XObject obj,
             [ImportMany] IEnumerable<Lazy<IExtension, IDictionary<string, object>>> extensions)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
-            Contract.Requires<ArgumentNullException>(extensions != null);
-
-            this.obj = obj;
-            this.extensions = GetExtensions(extensions).ToList();
+            this.obj = obj ?? throw new ArgumentNullException(nameof(obj));
+            this.extensions = GetExtensions(extensions?? throw new ArgumentNullException(nameof(extensions))).ToList();
         }
 
         /// <summary>
@@ -147,7 +148,8 @@ namespace NXKit
         /// <returns></returns>
         IEnumerable<Lazy<IExtension>> GetExtensions(IEnumerable<Lazy<IExtension, IDictionary<string, object>>> extensions)
         {
-            Contract.Requires<ArgumentNullException>(extensions != null);
+            if (extensions == null)
+                throw new ArgumentNullException(nameof(extensions));
 
             foreach (var extension in extensions)
                 foreach (var metadata in ExtensionMetadata.Extract(extension.Metadata))
@@ -180,13 +182,10 @@ namespace NXKit
             ExtensionProvider provider,
             [ImportMany] IEnumerable<Lazy<T, IDictionary<string, object>>> extensions)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
-            Contract.Requires<ArgumentNullException>(provider != null);
-            Contract.Requires<ArgumentNullException>(extensions != null);
 
-            this.obj = obj;
-            this.provider = provider;
-            this.extensions = extensions;
+            this.obj = obj ?? throw new ArgumentNullException(nameof(obj));
+            this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            this.extensions = extensions ?? throw new ArgumentNullException(nameof(extensions));
             this.query = new Lazy<IEnumerable<T>>(() => GetExtensions());
         }
 

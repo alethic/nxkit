@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition.Hosting;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.Composition
 {
@@ -16,9 +15,7 @@ namespace NXKit.Composition
         /// <param name="container"></param>
         public ContainerRef(CompositionContainer container)
         {
-            Contract.Requires<ArgumentNullException>(container != null);
-
-            this.container = container;
+            this.container = container ?? throw new ArgumentNullException(nameof(container));
         }
 
         public CompositionContainer Container

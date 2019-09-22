@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit", "NXKit\NXKit.csproj", "{2B27233A-849A-4339-96C6-BABCB968B8B0}"
 EndProject
@@ -10,11 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.XForms", "NXKit.XForms\NXKit.XForms.csproj", "{67ECD54B-BD0D-442F-A184-65B4CA014E75}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.View.Web.UI", "NXKit.View.Web.UI\NXKit.View.Web.UI.csproj", "{434F4E74-1BA0-4579-AB27-B0DC7DF4166C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{06088512-EBD1-40EE-915C-639EC7160665}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.config = .nuget\NuGet.config
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NXKit.Tests", "NXKit.Tests\NXKit.Tests.csproj", "{5FE52D8D-76F0-4E3E-B54C-FF79343DE832}"
 EndProject
@@ -284,5 +279,8 @@ Global
 		{57EC368D-96C2-4775-9192-169BE5D31494} = {3156689D-0161-4846-9D34-6742FEEC2FEA}
 		{66132F55-660E-4627-A86F-11A48C1E38F0} = {DAA65BB5-15AE-420C-A7AF-838E46967312}
 		{BBA40BEC-D3E3-483B-95C5-8BB1883115F9} = {B542A17F-16F9-4614-BAC5-04A62D7DBABA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1548D223-131E-4DFA-8A7C-12A9CAE5651F}
 	EndGlobalSection
 EndGlobal

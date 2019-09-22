@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit.Xml
@@ -29,7 +28,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XContainer Clone(this XContainer self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             return XCloneTransformer.Default.Visit(self);
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace NXKit.Reflection
@@ -16,7 +15,8 @@ namespace NXKit.Reflection
         /// <returns></returns>
         public static IEnumerable<Type> GetTypes(this Type type)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
 
             while (type != null)
             {
@@ -32,7 +32,8 @@ namespace NXKit.Reflection
         /// <returns></returns>
         public static IEnumerable<Type> GetAllTypes(this Type type)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
 
             return GetTypes(type).Concat(type.GetInterfaces());
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 
@@ -22,9 +21,7 @@ namespace NXKit.IO.Media
         public MediaConverterProvider(
             [ImportMany] IEnumerable<IMediaConverter> converters)
         {
-            Contract.Requires<ArgumentNullException>(converters != null);
-
-            this.converters = converters;
+            this.converters = converters ?? throw new ArgumentNullException(nameof(converters));
         }
 
         /// <summary>

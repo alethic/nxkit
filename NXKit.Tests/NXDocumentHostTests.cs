@@ -1,10 +1,8 @@
 ﻿using System.IO;
 using System.Xml;
 using System.Xml.Linq;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NXKit.Net;
-using NXKit.Util;
-using NXKit.Xml;
 
 namespace NXKit.Tests
 {

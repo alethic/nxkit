@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 using NXKit.Util;
 
@@ -22,7 +21,8 @@ namespace NXKit.Net
         /// <param name="authority"></param>
         internal static void Register(DynamicUriAuthority authority)
         {
-            Contract.Requires<ArgumentNullException>(authority != null);
+            if (authority == null)
+                throw new ArgumentNullException(nameof(authority));
 
             if (authorities.ContainsKey(authority.Id))
                 throw new InvalidOperationException();
@@ -37,7 +37,8 @@ namespace NXKit.Net
         /// <param name="authority"></param>
         internal static void Unregister(DynamicUriAuthority authority)
         {
-            Contract.Requires<ArgumentNullException>(authority != null);
+            if (authority == null)
+                throw new ArgumentNullException(nameof(authority));
 
             if (authorities.ContainsKey(authority.Id))
                 lock (authorities)
@@ -51,7 +52,8 @@ namespace NXKit.Net
         /// <param name="id"></param>
         internal static DynamicUriAuthority Get(Guid id)
         {
-            Contract.Requires<ArgumentException>(id != Guid.Empty);
+            if (id == Guid.Empty)
+                throw new ArgumentOutOfRangeException(nameof(id));
 
             lock (authorities)
             {

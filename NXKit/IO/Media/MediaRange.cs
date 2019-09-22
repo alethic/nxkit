@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace NXKit.IO.Media
@@ -65,11 +64,9 @@ namespace NXKit.IO.Media
         /// </summary>
         MediaRange(MediaType type, MediaType subtype, MediaRangeParameters parameters)
         {
-            Contract.Requires<ArgumentNullException>(parameters != null);
-
             this.type = type;
             this.subtype = subtype;
-            this.parameters = parameters;
+            this.parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
         }
 
         /// <summary>
@@ -111,7 +108,8 @@ namespace NXKit.IO.Media
         /// <returns>True if matching, false if not.</returns>
         public bool Matches(MediaRange other)
         {
-            Contract.Requires<ArgumentNullException>(other != null);
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
 
             return type.Matches(other.type) && subtype.Matches(other.subtype);
         }
@@ -123,7 +121,8 @@ namespace NXKit.IO.Media
         /// <returns>True if matching, false if not.</returns>
         public bool MatchesWithParameters(MediaRange other)
         {
-            Contract.Requires<ArgumentNullException>(other != null);
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
 
             return Matches(other) && parameters.Matches(other.parameters);
         }
@@ -135,7 +134,8 @@ namespace NXKit.IO.Media
         /// <returns></returns>
         public bool Matches(IEnumerable<MediaRange> others)
         {
-            Contract.Requires<ArgumentNullException>(others != null);
+            if (others == null)
+                throw new ArgumentNullException(nameof(others));
 
             var self = this;
             return others.Any(i => self.Matches(i));
@@ -148,7 +148,8 @@ namespace NXKit.IO.Media
         /// <returns></returns>
         public bool MatchesWithParameters(IEnumerable<MediaRange> others)
         {
-            Contract.Requires<ArgumentNullException>(others != null);
+            if (others == null)
+                throw new ArgumentNullException(nameof(others));
 
             var self = this;
             return others.Any(i => self.MatchesWithParameters(i));

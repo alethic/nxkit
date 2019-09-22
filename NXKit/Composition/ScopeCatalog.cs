@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
-using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 
 namespace NXKit.Composition
@@ -46,7 +45,8 @@ namespace NXKit.Composition
         public ScopeCatalog(ComposablePartCatalog parent, Scope scope)
             : base(parent, GetFilter(scope))
         {
-            Contract.Requires<ArgumentNullException>(parent != null);
+            if (parent == null)
+                throw new ArgumentNullException(nameof(parent));
 
             this.scope = scope;
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Xml;
 
@@ -30,8 +29,10 @@ namespace NXKit.Xml
         /// <param name="accept"></param>
         public static XmlReader Create(IIOService ioService, Uri uri, MediaRangeList accept)
         {
-            Contract.Requires<ArgumentNullException>(ioService != null);
-            Contract.Requires<ArgumentNullException>(uri != null);
+            if (ioService == null)
+                throw new ArgumentNullException(nameof(ioService));
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
 
             // default acceptable media types
             accept = !accept.IsEmpty ? accept : XML_MEDIA_RANGES;
@@ -62,8 +63,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XmlReader Create(IIOService ioService, Uri uri)
         {
-            Contract.Requires<ArgumentNullException>(ioService != null);
-            Contract.Requires<ArgumentNullException>(uri != null);
+            if (ioService == null)
+                throw new ArgumentNullException(nameof(ioService));
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
 
             return Create(ioService, uri, XML_MEDIA_RANGES);
         }
@@ -79,8 +82,10 @@ namespace NXKit.Xml
         IOXmlReader(Uri uri, TextReader reader)
             : base(reader)
         {
-            Contract.Requires<ArgumentNullException>(uri != null);
-            Contract.Requires<ArgumentNullException>(reader != null);
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
 
             this.uri = uri;
         }
@@ -93,8 +98,10 @@ namespace NXKit.Xml
         IOXmlReader(Uri uri, Stream stream)
             : base(stream)
         {
-            Contract.Requires<ArgumentNullException>(uri != null);
-            Contract.Requires<ArgumentNullException>(stream != null);
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
 
             this.uri = uri;
         }

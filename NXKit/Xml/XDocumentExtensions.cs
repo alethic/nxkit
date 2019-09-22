@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit.Xml
@@ -20,8 +19,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static ExportProvider Exports(this XDocument self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Ensures(Contract.Result<ExportProvider>() != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             return self.Annotation<ExportProvider>();
         }
@@ -34,8 +33,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XElement ResolveId(this XDocument self, string id)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(id != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
 
             return self.Root.ResolveId(id);
         }
@@ -48,8 +49,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XNamespace GetNamespaceOfPrefix(this XDocument self, string prefix)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(prefix != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (prefix == null)
+                throw new ArgumentNullException(nameof(prefix));
 
             return prefix != "" ? self.Root.GetNamespaceOfPrefix(prefix) : self.Root.GetDefaultNamespace();
         }
@@ -62,8 +65,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static string GetPrefixOfNamespace(this XDocument self, XNamespace ns)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(ns != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (ns == null)
+                throw new ArgumentNullException(nameof(ns));
 
             return self.Root.GetPrefixOfNamespace(ns);
         }
@@ -75,7 +80,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static IEnumerable<XNode> DescendantsAndSelf(this XDocument document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
             yield return document;
             foreach (var node in document.DescendantNodes())
@@ -89,7 +95,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XDocument Clone(this XDocument self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             return XCloneTransformer.Default.Visit(self);
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Dynamic;
 
 namespace NXKit.Util
@@ -36,7 +35,8 @@ namespace NXKit.Util
         /// <returns>An <see cref="DynamicDictionary"/> instance.</returns>
         public static DynamicDictionary Create(IDictionary<string, object> values)
         {
-            Contract.Requires<ArgumentNullException>(values != null);
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
 
             var instance = new DynamicDictionary();
             foreach (var key in values.Keys)
@@ -104,7 +104,8 @@ namespace NXKit.Util
         {
             get
             {
-                Contract.Requires<ArgumentNullException>(name != null);
+                if (name == null)
+                    throw new ArgumentNullException(nameof(name));
 
                 name = GetNeutralKey(name);
 
@@ -302,7 +303,8 @@ namespace NXKit.Util
 
         static string GetNeutralKey(string key)
         {
-            Contract.Requires<ArgumentNullException>(key != null);
+            if (key == null)
+                throw new ArgumentNullException(nameof(key));
 
             return key.Replace("-", string.Empty);
         }

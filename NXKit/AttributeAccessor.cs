@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -24,8 +23,10 @@ namespace NXKit
         public AttributeAccessor(XElement element, XNamespace defaultNamespace)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(defaultNamespace != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (defaultNamespace == null)
+                throw new ArgumentNullException(nameof(defaultNamespace));
 
             this.defaultNamespace = defaultNamespace;
         }
@@ -37,12 +38,14 @@ namespace NXKit
         public AttributeAccessor(XElement element)
             : this(element, XNamespace.None)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
         }
 
         public XAttribute GetAttribute(string name)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
             var fq = Element.Attribute(defaultNamespace + name);
             if (fq != null)
@@ -62,7 +65,8 @@ namespace NXKit
         /// <returns></returns>
         public string GetAttributeValue(string name)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
             return (string)GetAttribute(name);
         }
@@ -74,7 +78,8 @@ namespace NXKit
         /// <returns></returns>
         public XName GetAttributePrefixedName(string name)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
             return GetAttributePrefixedNames(name).FirstOrDefault();
         }
@@ -86,7 +91,8 @@ namespace NXKit
         /// <returns></returns>
         public IEnumerable<XName> GetAttributePrefixedNames(string name)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
             var attr = GetAttribute(name);
             if (attr == null)
@@ -125,8 +131,10 @@ namespace NXKit
         /// <param name="value"></param>
         public void SetAttribute(string name, string value)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(value != null);
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
 
             throw new NotImplementedException();
         }
@@ -137,7 +145,8 @@ namespace NXKit
         /// <param name="name"></param>
         public void RemoveAttribute(string name)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
             throw new NotImplementedException();
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 
 using NXKit.IO.Media;
@@ -26,9 +25,7 @@ namespace NXKit.IO
         /// <param name="status"></param>
         public IOResponse(IORequest request, IOStatus status)
         {
-            Contract.Requires<ArgumentNullException>(request != null);
-
-            this.request = request;
+            this.request = request ?? throw new ArgumentNullException(nameof(request));
             this.status = status;
             this.headers = new Headers();
         }
@@ -43,10 +40,10 @@ namespace NXKit.IO
         public IOResponse(IORequest request, IOStatus status, Stream content, MediaRange contentType)
             : this(request, status)
         {
-            Contract.Requires<ArgumentNullException>(request != null);
-            Contract.Requires<ArgumentNullException>(content != null);
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
-            this.content = content;
+            this.content = content ?? throw new ArgumentNullException(nameof(content));
             this.contentType = contentType;
         }
 

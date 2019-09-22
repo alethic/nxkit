@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.Util
 {
@@ -16,7 +15,8 @@ namespace NXKit.Util
         /// <returns></returns>
         public static IEnumerable<T> DequeueAll<T>(this Queue<T> self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             while (self.Count > 0)
                 yield return self.Dequeue();

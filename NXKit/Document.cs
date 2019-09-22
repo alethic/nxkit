@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -44,7 +43,8 @@ namespace NXKit
         /// <returns></returns>
         public static Document Load(XmlReader reader, ComposablePartCatalog catalog = null, ExportProvider exports = null)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
 
             return new Document(host =>
                 host.Container.GetExportedValue<AnnotationSerializer>().Deserialize(
@@ -62,7 +62,8 @@ namespace NXKit
         /// <returns></returns>
         public static Document Load(XmlReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
 
             return Load(reader, null, null);
         }
@@ -75,7 +76,8 @@ namespace NXKit
         /// <param name="exports"></param>
         public static Document Load(TextReader reader, ComposablePartCatalog catalog = null, ExportProvider exports = null)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
 
             using (var rdr = XmlReader.Create(reader))
                 return Load(rdr, catalog, exports);
@@ -87,7 +89,8 @@ namespace NXKit
         /// <param name="reader"></param>
         public static Document Load(TextReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
 
             return Load(reader, null, null);
         }
@@ -101,7 +104,8 @@ namespace NXKit
         /// <returns></returns>
         public static Document Load(Stream stream, ComposablePartCatalog catalog = null, ExportProvider exports = null)
         {
-            Contract.Requires<ArgumentNullException>(stream != null);
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
 
             using (var rdr = new StreamReader(stream))
                 return Load(rdr, catalog, exports);
@@ -113,7 +117,8 @@ namespace NXKit
         /// <param name="stream"></param>
         public static Document Load(Stream stream)
         {
-            Contract.Requires<ArgumentNullException>(stream != null);
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
 
             return Load(stream, null, null);
         }
@@ -127,7 +132,8 @@ namespace NXKit
         /// <returns></returns>
         public static Document Load(Uri uri, ComposablePartCatalog catalog = null, ExportProvider exports = null)
         {
-            Contract.Requires<ArgumentNullException>(uri != null);
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
 
             return new Document(host =>
                 host.Container.GetExportedValue<AnnotationSerializer>().Deserialize(
@@ -147,7 +153,8 @@ namespace NXKit
         /// <returns></returns>
         public static Document Load(Uri uri)
         {
-            Contract.Requires<ArgumentNullException>(uri != null);
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
 
             return Load(uri, null, null);
         }
@@ -161,7 +168,8 @@ namespace NXKit
         /// <returns></returns>
         public static Document Load(XDocument document, ComposablePartCatalog catalog = null, ExportProvider exports = null)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
             return Load(document.CreateReader(), catalog, exports);
         }
@@ -173,7 +181,8 @@ namespace NXKit
         /// <returns></returns>
         public static Document Load(XDocument document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
             return Load(document, null, null);
         }
@@ -185,8 +194,10 @@ namespace NXKit
         /// <returns></returns>
         public static Document Parse(string xml)
         {
-            Contract.Requires<ArgumentNullException>(xml != null);
-            Contract.Requires<ArgumentOutOfRangeException>(!string.IsNullOrWhiteSpace(xml));
+            if (xml == null)
+                throw new ArgumentNullException(nameof(xml));
+            if (string.IsNullOrWhiteSpace(xml))
+                throw new ArgumentOutOfRangeException(nameof(xml));
 
             return Load(XDocument.Parse(xml));
         }
@@ -235,7 +246,8 @@ namespace NXKit
             ComposablePartCatalog catalog,
             ExportProvider exports)
         {
-            Contract.Requires<ArgumentNullException>(xml != null);
+            if (xml == null)
+                throw new ArgumentNullException(nameof(xml));
 
             // configure composition
             this.configuration = GetConfiguration(catalog, exports);
@@ -302,7 +314,8 @@ namespace NXKit
         /// <returns></returns>
         public void Save(XmlWriter writer)
         {
-            Contract.Requires<ArgumentNullException>(writer != null);
+            if (writer == null)
+                throw new ArgumentNullException(nameof(writer));
 
             // instruct any interfaces to save their state
             var saves = Xml.DescendantsAndSelf()
@@ -321,7 +334,8 @@ namespace NXKit
         /// <param name="writer"></param>
         public void Save(TextWriter writer)
         {
-            Contract.Requires<ArgumentNullException>(writer != null);
+            if (writer == null)
+                throw new ArgumentNullException(nameof(writer));
 
             var settings = new XmlWriterSettings()
             {
@@ -340,7 +354,8 @@ namespace NXKit
         /// <param name="stream"></param>
         public void Save(Stream stream)
         {
-            Contract.Requires<ArgumentNullException>(stream != null);
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
 
             using (var wrt = new StreamWriter(stream, Encoding.UTF8))
                 Save(wrt);

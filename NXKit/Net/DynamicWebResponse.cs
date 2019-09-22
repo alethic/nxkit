@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Net;
 
 namespace NXKit.Net
@@ -17,9 +16,7 @@ namespace NXKit.Net
         public DynamicWebResponse(DynamicWebRequest request)
             : base()
         {
-            Contract.Requires<ArgumentNullException>(request != null);
-
-            this.request = request;
+            this.request = request ?? throw new ArgumentNullException(nameof(request));
         }
 
     }

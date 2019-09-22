@@ -2,7 +2,6 @@
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.Composition
 {
@@ -104,7 +103,8 @@ namespace NXKit.Composition
         /// <returns></returns>
         public static CompositionContainer CreateContainer(ComposablePartCatalog catalog)
         {
-            Contract.Requires<ArgumentNullException>(catalog != null);
+            if (catalog == null)
+                throw new ArgumentNullException(nameof(catalog));
             
             return ConfigureContainer(new CompositionContainer(catalog));
         }
@@ -116,7 +116,8 @@ namespace NXKit.Composition
         /// <returns></returns>
         public static CompositionContainer ConfigureContainer(CompositionContainer container)
         {
-            Contract.Requires<ArgumentNullException>(container != null);
+            if (container == null)
+                throw new ArgumentNullException(nameof(container));
 
             if (container.GetExportedValueOrDefault<ContainerRef>() == null)
                 container.WithExport<ContainerRef>(new ContainerRef(container));
@@ -142,8 +143,10 @@ namespace NXKit.Composition
         public static CompositionContainer WithExport<T>(this CompositionContainer container, T value)
             where T : class
         {
-            Contract.Requires<ArgumentNullException>(container != null);
-            Contract.Requires<ArgumentNullException>(value != null);
+            if (container == null)
+                throw new ArgumentNullException(nameof(container));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
 
             container.ComposeExportedValue(value);
 
@@ -159,9 +162,12 @@ namespace NXKit.Composition
         /// <param name="value"></param>
         public static CompositionContainer WithExport(this CompositionContainer container, Type contractType, object value)
         {
-            Contract.Requires<ArgumentNullException>(container != null);
-            Contract.Requires<ArgumentNullException>(contractType != null);
-            Contract.Requires<ArgumentNullException>(value != null);
+            if (container == null)
+                throw new ArgumentNullException(nameof(container));
+            if (contractType == null)
+                throw new ArgumentNullException(nameof(contractType));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
 
             container.ComposeExportedValue(AttributedModelServices.GetContractName(contractType), value);
 

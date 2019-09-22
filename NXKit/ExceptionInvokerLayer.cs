@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Runtime.ExceptionServices;
+
 using NXKit.Composition;
 
 namespace NXKit
@@ -24,9 +24,7 @@ namespace NXKit
         public ExceptionInvokerLayer(
             [ImportMany] IEnumerable<IExceptionHandler> handlers)
         {
-            Contract.Requires<ArgumentNullException>(handlers != null);
-
-            this.handlers = handlers;
+            this.handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
         }
 
         public void Invoke(Action action)
@@ -61,7 +59,8 @@ namespace NXKit
         /// <param name="exception"></param>
         void HandleException(Exception exception)
         {
-            Contract.Requires<ArgumentNullException>(exception != null);
+            if (exception == null)
+                throw new ArgumentNullException(nameof(exception));
 
             bool rethrow = true;
 

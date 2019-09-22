@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit.Xml
@@ -19,9 +18,12 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XElement ResolveId(this XNode self, string id)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self.Parent != null);
-            Contract.Requires<ArgumentNullException>(id != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.Parent == null)
+                throw new ArgumentNullException(nameof(self));
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
 
             var element = self as XElement;
             if (element != null)
@@ -42,9 +44,12 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XNamespace GetNamespaceOfPrefix(this XNode self, string prefix)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self.Parent != null);
-            Contract.Requires<ArgumentNullException>(prefix != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.Parent == null)
+                throw new ArgumentNullException(nameof(self));
+            if (prefix == null)
+                throw new ArgumentNullException(nameof(prefix));
 
             var element = self as XElement;
             if (element != null)
@@ -65,9 +70,12 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static string GetPrefixOfNamespace(this XNode self, XNamespace ns)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentException>(self.Parent != null);
-            Contract.Requires<ArgumentNullException>(ns != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.Parent == null)
+                throw new ArgumentNullException(nameof(self));
+            if (ns == null)
+                throw new ArgumentNullException(nameof(ns));
 
             var element = self as XElement;
             if (element != null)
@@ -87,7 +95,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XNode Clone(this XNode self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             return XCloneTransformer.Default.Visit(self);
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 
 namespace NXKit
 {
@@ -21,7 +20,8 @@ namespace NXKit
         /// <param name="value"></param>
         public Extension(Func<T> value)
         {
-            Contract.Requires<ArgumentNullException>(value != null);
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
 
             this.value = new Lazy<T>(() => value());
         }

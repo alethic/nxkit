@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net;
 
@@ -24,8 +23,10 @@ namespace NXKit.Net
         public ResourceWebRequest(Uri uri)
             : base()
         {
-            Contract.Requires<ArgumentNullException>(uri != null);
-            Contract.Requires<ArgumentOutOfRangeException>(uri.Scheme == ResourceUriHelper.UriSchemeResource);
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
+            if (uri.Scheme != ResourceUriHelper.UriSchemeResource)
+                throw new ArgumentOutOfRangeException(nameof(uri));
 
             this.uri = uri;
             this.method = "GET";

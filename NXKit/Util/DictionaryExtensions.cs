@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.Util
 {
@@ -22,8 +21,8 @@ namespace NXKit.Util
         /// <returns></returns>
         public static TValue GetOrValue<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, TValue value)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(key != null);
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
 
             TValue v;
             if (source.TryGetValue(key, out v))
@@ -42,8 +41,8 @@ namespace NXKit.Util
         /// <returns></returns>
         public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(key != null);
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
 
             return GetOrValue<TKey, TValue>(source, key, default(TValue));
         }
@@ -59,8 +58,8 @@ namespace NXKit.Util
         /// <returns></returns>
         public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TValue> func)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(key != null);
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
 
             return GetOrAdd(source, key, k => func());
         }
@@ -76,8 +75,8 @@ namespace NXKit.Util
         /// <returns></returns>
         public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TKey, TValue> func)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(key != null);
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
 
             TValue v;
             if (source.TryGetValue(key, out v))

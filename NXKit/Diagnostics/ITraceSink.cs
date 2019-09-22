@@ -1,13 +1,9 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-
-namespace NXKit.Diagnostics
+﻿namespace NXKit.Diagnostics
 {
 
     /// <summary>
     /// Provides an interface that receives log messages.
     /// </summary>
-    [ContractClass(typeof(ITraceSink_Contract))]
     public interface ITraceSink
     {
 
@@ -86,89 +82,6 @@ namespace NXKit.Diagnostics
         /// <param name="format"></param>
         /// <param name="args"></param>
         void Error(string format, params object[] args);
-
-    }
-
-    [ContractClassFor(typeof(ITraceSink))]
-    public abstract class ITraceSink_Contract :
-        ITraceSink
-    {
-
-        public void Debug(object data)
-        {
-            Contract.Requires<ArgumentNullException>(data != null);
-            throw new NotImplementedException();
-        }
-
-        public void Debug(string message)
-        {
-            Contract.Requires<ArgumentNullException>(message != null);
-            throw new NotImplementedException();
-        }
-
-        public void Debug(string format, params object[] args)
-        {
-            Contract.Requires<ArgumentNullException>(format != null);
-            Contract.Requires<ArgumentNullException>(args != null);
-            throw new NotImplementedException();
-        }
-
-        public void Information(object data)
-        {
-            Contract.Requires<ArgumentNullException>(data != null);
-            throw new NotImplementedException();
-        }
-
-        public void Information(string message)
-        {
-            Contract.Requires<ArgumentNullException>(message != null);
-            throw new NotImplementedException();
-        }
-
-        public void Information(string format, params object[] args)
-        {
-            Contract.Requires<ArgumentNullException>(format != null);
-            Contract.Requires<ArgumentNullException>(args != null);
-            throw new NotImplementedException();
-        }
-
-        public void Warning(object data)
-        {
-            Contract.Requires<ArgumentNullException>(data != null);
-            throw new NotImplementedException();
-        }
-
-        public void Warning(string message)
-        {
-            Contract.Requires<ArgumentNullException>(message != null);
-            throw new NotImplementedException();
-        }
-
-        public void Warning(string format, params object[] args)
-        {
-            Contract.Requires<ArgumentNullException>(format != null);
-            Contract.Requires<ArgumentNullException>(args != null);
-            throw new NotImplementedException();
-        }
-
-        public void Error(object data)
-        {
-            Contract.Requires<ArgumentNullException>(data != null);
-            throw new NotImplementedException();
-        }
-
-        public void Error(string message)
-        {
-            Contract.Requires<ArgumentNullException>(message != null);
-            throw new NotImplementedException();
-        }
-
-        public void Error(string format, params object[] args)
-        {
-            Contract.Requires<ArgumentNullException>(format != null);
-            Contract.Requires<ArgumentNullException>(args != null);
-            throw new NotImplementedException();
-        }
 
     }
 

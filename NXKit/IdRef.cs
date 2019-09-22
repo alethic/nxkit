@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace NXKit
 {
@@ -26,8 +25,8 @@ namespace NXKit
         /// <param name="id"></param>
         public IdRef(string id)
         {
-            Contract.Requires<ArgumentNullException>(id != null);
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(id));
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentOutOfRangeException(nameof(id));
 
             this.id = id;
         }

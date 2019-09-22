@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace NXKit.IO.Media
@@ -181,7 +180,8 @@ namespace NXKit.IO.Media
         /// <returns>True if matching, false if not.</returns>
         public bool Matches(MediaRange other)
         {
-            Contract.Requires<ArgumentNullException>(other != null);
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
 
             return items.Any(i => i.Matches(other));
         }
@@ -193,7 +193,8 @@ namespace NXKit.IO.Media
         /// <returns>True if matching, false if not.</returns>
         public bool MatchesWithParameters(MediaRange other)
         {
-            Contract.Requires<ArgumentNullException>(other != null);
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
 
             return items.Any(i => i.MatchesWithParameters(other));
         }

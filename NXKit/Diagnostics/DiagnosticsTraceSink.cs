@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
+
 using NXKit.Composition;
 
 namespace NXKit.Diagnostics

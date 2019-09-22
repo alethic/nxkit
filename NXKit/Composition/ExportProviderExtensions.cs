@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition.Hosting;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace NXKit.Composition
@@ -11,8 +10,10 @@ namespace NXKit.Composition
 
         public static object GetExportedValue(this ExportProvider container, Type type)
         {
-            Contract.Requires<ArgumentNullException>(container != null);
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (container == null)
+                throw new ArgumentNullException(nameof(container));
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
 
             return container.GetExports(type, null, null).Select(i => i.Value).FirstOrDefault();
         }

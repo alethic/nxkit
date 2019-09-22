@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Text;
 
@@ -24,8 +23,10 @@ namespace NXKit.IO
         /// <param name="accept"></param>
         public static TextReader Create(IIOService ioService, Uri uri, MediaRangeList accept, Encoding encoding)
         {
-            Contract.Requires<ArgumentNullException>(ioService != null);
-            Contract.Requires<ArgumentNullException>(uri != null);
+            if (ioService == null)
+                throw new ArgumentNullException(nameof(ioService));
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
 
             var request = new IORequest(uri, IOMethod.Get)
             {
@@ -55,8 +56,10 @@ namespace NXKit.IO
         /// <returns></returns>
         public static TextReader Create(IIOService ioService, Uri uri, MediaRangeList accept)
         {
-            Contract.Requires<ArgumentNullException>(ioService != null);
-            Contract.Requires<ArgumentNullException>(uri != null);
+            if (ioService == null)
+                throw new ArgumentNullException(nameof(ioService));
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
 
             return Create(ioService, uri, accept, null);
         }
@@ -70,8 +73,10 @@ namespace NXKit.IO
         /// <returns></returns>
         public static TextReader Create(IIOService ioService, Uri uri, Encoding encoding)
         {
-            Contract.Requires<ArgumentNullException>(ioService != null);
-            Contract.Requires<ArgumentNullException>(uri != null);
+            if (ioService == null)
+                throw new ArgumentNullException(nameof(ioService));
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
 
             return Create(ioService, uri, TXT_MEDIA_RANGES, encoding);
         }
@@ -84,8 +89,10 @@ namespace NXKit.IO
         /// <returns></returns>
         public static TextReader Create(IIOService ioService, Uri uri)
         {
-            Contract.Requires<ArgumentNullException>(ioService != null);
-            Contract.Requires<ArgumentNullException>(uri != null);
+            if (ioService == null)
+                throw new ArgumentNullException(nameof(ioService));
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
 
             return Create(ioService, uri, TXT_MEDIA_RANGES, null);
         }
@@ -103,12 +110,8 @@ namespace NXKit.IO
         IOTextReader(Uri uri, Stream stream, Encoding encoding)
             : base(stream, encoding)
         {
-            Contract.Requires<ArgumentNullException>(uri != null);
-            Contract.Requires<ArgumentNullException>(stream != null);
-            Contract.Requires<ArgumentNullException>(encoding != null);
-
-            this.uri = uri;
-            this.stream = stream;
+            this.uri = uri ?? throw new ArgumentNullException(nameof(uri));
+            this.stream = stream ?? throw new ArgumentNullException(nameof(stream));
         }
 
         /// <summary>
@@ -119,11 +122,8 @@ namespace NXKit.IO
         IOTextReader(Uri uri, Stream stream)
             : base(stream)
         {
-            Contract.Requires<ArgumentNullException>(uri != null);
-            Contract.Requires<ArgumentNullException>(stream != null);
-
-            this.uri = uri;
-            this.stream = stream;
+            this.uri = uri ?? throw new ArgumentNullException(nameof(uri));
+            this.stream = stream ?? throw new ArgumentNullException(nameof(stream));
         }
 
     }

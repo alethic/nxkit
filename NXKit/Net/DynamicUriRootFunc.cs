@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net;
 
@@ -24,10 +23,10 @@ namespace NXKit.Net
             public FuncResponse(DynamicWebRequest request, Func<Stream> getFunc)
                 : base(request)
             {
-                Contract.Requires<ArgumentNullException>(request != null);
-                Contract.Requires<ArgumentNullException>(getFunc != null);
+                if (request == null)
+                    throw new ArgumentNullException(nameof(request));
 
-                this.getFunc = getFunc;
+                this.getFunc = getFunc ?? throw new ArgumentNullException(nameof(getFunc));
             }
 
             public override Stream GetResponseStream()
@@ -46,9 +45,7 @@ namespace NXKit.Net
         public DynamicUriRootFunc(Func<Stream> getFunc)
             : base()
         {
-            Contract.Requires<ArgumentNullException>(getFunc != null);
-
-            this.getFunc = getFunc;
+            this.getFunc = getFunc ?? throw new ArgumentNullException(nameof(getFunc));
         }
 
         public override WebResponse GetResponse(DynamicWebRequest request)

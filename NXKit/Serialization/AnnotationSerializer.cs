@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
@@ -44,7 +43,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         static XmlSerializer GetXmlSerializer(Type type)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
 
             return xmlSerializerCache.GetOrAdd(type, i => new XmlSerializer(i));
         }
@@ -58,7 +58,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         public XNode Serialize(XNode node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
 
             if (node is XDocument)
                 return Serialize((XDocument)node);
@@ -75,7 +76,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         public XElement Serialize(XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             return new XElement(element.Name, SerializeContents(element));
         }
@@ -88,7 +90,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         public XDocument Serialize(XDocument document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
             return new XDocument(SerializeContents(document));
         }
@@ -100,7 +103,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         IEnumerable<object> SerializeContents(XDocument document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
             if (document.DocumentType != null)
                 yield return document.DocumentType;
@@ -120,7 +124,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         IEnumerable<object> SerializeContents(XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             // produces attributes of element
             foreach (var attr in element.Attributes())
@@ -158,7 +163,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         IEnumerable<XAttribute> GetSerializationAttributes(XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             // emit annotations configured on the object itself
             foreach (var annotation in element.Annotations<IAttributeSerializableAnnotation>())
@@ -174,8 +180,10 @@ namespace NXKit.Serialization
         /// <returns></returns>
         IEnumerable<XAttribute> SerializeAttributeAnnotation(XElement element, IAttributeSerializableAnnotation annotation)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(annotation != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (annotation == null)
+                throw new ArgumentNullException(nameof(annotation));
 
             // check for supported attribution
             var type = annotation.GetType();
@@ -214,7 +222,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         IEnumerable<object> GetSerializationBody(XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             if (element == element.Document.Root)
             {
@@ -241,7 +250,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         IEnumerable<XElement> SerializeObject(XObject obj)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
             var document = obj as XDocument;
             if (document != null)
@@ -271,7 +281,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         IEnumerable<XElement> SerializeDocument(XDocument document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
             // emit annotations configured on the object itself
             foreach (var annotation in document.Annotations<object>())
@@ -292,7 +303,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         IEnumerable<XElement> SerializeElement(XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             // emit annotations configured on the object itself
             foreach (var annotation in element.Annotations<object>())
@@ -318,7 +330,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         IEnumerable<XElement> SerializeAttribute(XAttribute attribute)
         {
-            Contract.Requires<ArgumentNullException>(attribute != null);
+            if (attribute == null)
+                throw new ArgumentNullException(nameof(attribute));
 
             // skip namespace attribute
             if (attribute.IsNamespaceDeclaration)
@@ -343,7 +356,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         IEnumerable<XElement> SerializeNode(XNode node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
 
             foreach (var annotation in node.Annotations<object>())
             {
@@ -364,8 +378,10 @@ namespace NXKit.Serialization
         /// <returns></returns>
         XElement SerializeAnnotation(XObject obj, object annotation)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
-            Contract.Requires<ArgumentNullException>(annotation != null);
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
+            if (annotation == null)
+                throw new ArgumentNullException(nameof(annotation));
 
             return SerializeToXml(obj, annotation);
         }
@@ -378,8 +394,10 @@ namespace NXKit.Serialization
         /// <returns></returns>
         XElement SerializeToXml(XObject obj, object annotation)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
-            Contract.Requires<ArgumentNullException>(annotation != null);
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
+            if (annotation == null)
+                throw new ArgumentNullException(nameof(annotation));
 
             // check for supported attribution
             var type = annotation.GetType();
@@ -411,9 +429,12 @@ namespace NXKit.Serialization
         /// <param name="element"></param>
         XElement SerializeToXml(XObject obj, object annotation, XElement element)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
-            Contract.Requires<ArgumentNullException>(annotation != null);
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
+            if (annotation == null)
+                throw new ArgumentNullException(nameof(annotation));
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             // configure element
             element.SetAttributeValue(NX_FORMAT, NX_FORMAT_XML);
@@ -483,9 +504,10 @@ namespace NXKit.Serialization
         /// <returns></returns>
         static XElement CreateAnnotationElement(XObject obj, object annotation)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
-            Contract.Requires<ArgumentNullException>(annotation != null);
-            Contract.Ensures(Contract.Result<XElement>() != null);
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
+            if (annotation == null)
+                throw new ArgumentNullException(nameof(annotation));
 
             if (obj is XDocument)
                 return new XElement(NX_ANNOTATION,
@@ -524,7 +546,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         public XDocument Deserialize(XDocument document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
             // copy element and deserialize contents 
             var xml = new XDocument(document);
@@ -565,7 +588,8 @@ namespace NXKit.Serialization
         /// <param name="document"></param>
         void DeserializeDocument(XDocument document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
             // deserializes the entire document hierarchy
             foreach (var element in document.Descendants())
@@ -578,7 +602,8 @@ namespace NXKit.Serialization
         /// <param name="element"></param>
         void DeserializeElement(XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             // deserializes attribute annotations onto the element
             if (element.Name != NX_ANNOTATION)
@@ -603,7 +628,8 @@ namespace NXKit.Serialization
         /// <param name="element"></param>
         void DeserializeAttributeAnnotations(XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             // finds all nx-annotation namespaces for attribute serializers
             var namespaces = element
@@ -648,8 +674,10 @@ namespace NXKit.Serialization
         /// <param name="annotation">The annotation element.</param>
         void DeserializeAnnotationElement(XElement element, XElement annotation)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(annotation != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (annotation == null)
+                throw new ArgumentNullException(nameof(annotation));
 
             // deserialize anotation data
             var obj = DeserializeAnnotationElement(annotation);
@@ -683,7 +711,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         object DeserializeAnnotationElement(XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             switch ((string)element.Attribute(NX_FORMAT))
             {
@@ -701,7 +730,8 @@ namespace NXKit.Serialization
         /// <returns></returns>
         object DeserializeAnnotationFromXml(XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             var typeName = (string)element.Attribute(NX_TYPE);
             if (typeName == null)
@@ -745,9 +775,12 @@ namespace NXKit.Serialization
 
         static void ApplyAnnotationToDocument(XElement element, XElement annotation, object obj)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(annotation != null);
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (annotation == null)
+                throw new ArgumentNullException(nameof(annotation));
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
             var document = element.Document;
             if (document == null)
@@ -758,18 +791,24 @@ namespace NXKit.Serialization
 
         static void ApplyAnnotationToElement(XElement element, XElement annotation, object obj)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(annotation != null);
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (annotation == null)
+                throw new ArgumentNullException(nameof(annotation));
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
             element.AddAnnotation(obj);
         }
 
         static void ApplyAnnotationToAttribute(XElement element, XElement annotation, object obj)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(annotation != null);
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (annotation == null)
+                throw new ArgumentNullException(nameof(annotation));
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
             var attributeName = (XName)(string)annotation.Attribute(NX_ATTRIBUTE);
             if (attributeName.LocalName == "xmlns")
@@ -784,9 +823,12 @@ namespace NXKit.Serialization
 
         static void ApplyAnnotationToNode(XElement element, XElement annotation, object obj)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(annotation != null);
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (annotation == null)
+                throw new ArgumentNullException(nameof(annotation));
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
             var node = annotation.PreviousNode;
             if (node == null)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit
@@ -19,7 +18,8 @@ namespace NXKit
         public DocumentExtension(XDocument document)
             : base(document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
         }
 
         /// <summary>

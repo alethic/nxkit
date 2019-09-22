@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Net;
 
 namespace NXKit.IO
@@ -36,7 +35,8 @@ namespace NXKit.IO
         /// <returns></returns>
         protected virtual WebRequest WriteWebRequest(IORequest request)
         {
-            Contract.Requires<ArgumentNullException>(request != null);
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             // generate new web request
             var webRequest = WebRequest.Create(request.ResourceUri);
@@ -63,8 +63,10 @@ namespace NXKit.IO
         /// <returns></returns>
         protected virtual IOResponse ReadResponse(WebResponse webResponse, IORequest request)
         {
-            Contract.Requires<ArgumentNullException>(webResponse != null);
-            Contract.Requires<ArgumentNullException>(request != null);
+            if (webResponse == null)
+                throw new ArgumentNullException(nameof(webResponse));
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
             // generate new response
             var response = new IOResponse(

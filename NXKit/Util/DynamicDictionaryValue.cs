@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq.Expressions;
+
 using Microsoft.CSharp.RuntimeBinder;
 
 namespace NXKit.Util
@@ -14,8 +14,7 @@ namespace NXKit.Util
         IEquatable<DynamicDictionaryValue>,
         IConvertible
     {
-
-        readonly object value;
+        private readonly object value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DynamicDictionaryValue"/> class.
@@ -31,18 +30,12 @@ namespace NXKit.Util
         /// </summary>
         /// <value><c>true</c> if this instance has value; otherwise, <c>false</c>.</value>
         /// <remarks><see langword="null"/> is considered as not being a value.</remarks>
-        public bool HasValue
-        {
-            get { return (this.value != null); }
-        }
+        public bool HasValue => (this.value != null);
 
         /// <summary>
         /// Gets the inner value
         /// </summary>
-        public object Value
-        {
-            get { return this.value; }
-        }
+        public object Value => this.value;
 
         /// <summary>
         /// Returns a default value if Value is null
@@ -61,9 +54,7 @@ namespace NXKit.Util
                 catch
                 {
                     var typeName = value.GetType().Name;
-                    var message = string.Format("Cannot convert value of type '{0}' to type '{1}'",
-                                                typeName, typeof(T).Name);
-
+                    var message = string.Format("Cannot convert value of type '{0}' to type '{1}'", typeName, typeof(T).Name);
                     throw new InvalidCastException(message);
                 }
             }
@@ -77,16 +68,14 @@ namespace NXKit.Util
         /// <typeparam name="T">When no default value is supplied, required to supply the default type</typeparam>
         /// <param name="defaultValue">Optional parameter for default value, if not given it returns default of type T</param>
         /// <returns>If value is not null, value is returned, else default value is returned</returns>
-        public T TryParse<T>(T defaultValue = default (T))
+        public T TryParse<T>(T defaultValue = default(T))
         {
-            if (this.HasValue)
+            if (HasValue)
             {
                 try
                 {
                     if (value.GetType().IsAssignableFrom(typeof(T)))
-                    {
                         return (T)value;
-                    }
 
                     var TType = typeof(T);
 
@@ -125,7 +114,8 @@ namespace NXKit.Util
 
         public static bool operator ==(DynamicDictionaryValue dynamicValue, object compareValue)
         {
-            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+            if (dynamicValue == null)
+                throw new ArgumentNullException(nameof(dynamicValue));
 
             if (dynamicValue.value == null && compareValue == null)
                 return true;
@@ -135,7 +125,8 @@ namespace NXKit.Util
 
         public static bool operator !=(DynamicDictionaryValue dynamicValue, object compareValue)
         {
-            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+            if (dynamicValue == null)
+                throw new ArgumentNullException(nameof(dynamicValue));
 
             return !(dynamicValue == compareValue);
         }
@@ -285,7 +276,8 @@ namespace NXKit.Util
 
         public static implicit operator bool(DynamicDictionaryValue dynamicValue)
         {
-            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+            if (dynamicValue == null)
+                throw new ArgumentNullException(nameof(dynamicValue));
 
             if (!dynamicValue.HasValue)
                 return false;
@@ -303,14 +295,16 @@ namespace NXKit.Util
 
         public static implicit operator string(DynamicDictionaryValue dynamicValue)
         {
-            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+            if (dynamicValue == null)
+                throw new ArgumentNullException(nameof(dynamicValue));
 
             return dynamicValue.HasValue ? Convert.ToString(dynamicValue.value) : null;
         }
 
         public static implicit operator int(DynamicDictionaryValue dynamicValue)
         {
-            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+            if (dynamicValue == null)
+                throw new ArgumentNullException(nameof(dynamicValue));
 
             if (dynamicValue.value.GetType().IsValueType)
                 return Convert.ToInt32(dynamicValue.value);
@@ -320,7 +314,8 @@ namespace NXKit.Util
 
         public static implicit operator Guid(DynamicDictionaryValue dynamicValue)
         {
-            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+            if (dynamicValue == null)
+                throw new ArgumentNullException(nameof(dynamicValue));
 
             if (dynamicValue.value is Guid)
                 return (Guid)dynamicValue.value;
@@ -330,7 +325,8 @@ namespace NXKit.Util
 
         public static implicit operator DateTime(DynamicDictionaryValue dynamicValue)
         {
-            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+            if (dynamicValue == null)
+                throw new ArgumentNullException(nameof(dynamicValue));
 
             if (dynamicValue.value is DateTime)
                 return (DateTime)dynamicValue.value;
@@ -340,7 +336,8 @@ namespace NXKit.Util
 
         public static implicit operator TimeSpan(DynamicDictionaryValue dynamicValue)
         {
-            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+            if (dynamicValue == null)
+                throw new ArgumentNullException(nameof(dynamicValue));
 
             if (dynamicValue.value is TimeSpan)
                 return (TimeSpan)dynamicValue.value;
@@ -350,7 +347,8 @@ namespace NXKit.Util
 
         public static implicit operator long(DynamicDictionaryValue dynamicValue)
         {
-            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+            if (dynamicValue == null)
+                throw new ArgumentNullException(nameof(dynamicValue));
 
             if (dynamicValue.value.GetType().IsValueType)
                 return Convert.ToInt64(dynamicValue.value);
@@ -360,7 +358,8 @@ namespace NXKit.Util
 
         public static implicit operator float(DynamicDictionaryValue dynamicValue)
         {
-            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+            if (dynamicValue == null)
+                throw new ArgumentNullException(nameof(dynamicValue));
 
             if (dynamicValue.value.GetType().IsValueType)
                 return Convert.ToSingle(dynamicValue.value);
@@ -370,7 +369,8 @@ namespace NXKit.Util
 
         public static implicit operator decimal(DynamicDictionaryValue dynamicValue)
         {
-            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+            if (dynamicValue == null)
+                throw new ArgumentNullException(nameof(dynamicValue));
 
             if (dynamicValue.value.GetType().IsValueType)
             {
@@ -382,7 +382,8 @@ namespace NXKit.Util
 
         public static implicit operator double(DynamicDictionaryValue dynamicValue)
         {
-            Contract.Requires<ArgumentNullException>(dynamicValue != null);
+            if (dynamicValue == null)
+                throw new ArgumentNullException(nameof(dynamicValue));
 
             if (dynamicValue.value.GetType().IsValueType)
             {
@@ -600,6 +601,7 @@ namespace NXKit.Util
         }
 
         #endregion
+
     }
 
 }

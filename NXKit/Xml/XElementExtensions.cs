@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -29,7 +28,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XElement ResolveId(this XElement self, string id)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             // search referencable objects for id, or obtain from cache
             return self.AnnotationOrCreate<IdRefCache>()
@@ -46,7 +46,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static IEnumerable<XElement> RefElements(this XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             // obtain root element
             var root = (XElement)element.AncestorsAndSelf()
@@ -73,8 +74,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         static IEnumerable<XElement> DescendantsAndSelfInRefScope(XElement self, HashSet<IRefScope> scopes)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(scopes != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (scopes == null)
+                throw new ArgumentNullException(nameof(scopes));
 
             yield return self;
 
@@ -96,7 +99,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XElement PrefixSafeClone(this XElement self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             return new XElement(self.Name,
                 GetNamespacePrefixAttributes(self),
@@ -111,7 +115,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static IEnumerable<XAttribute> GetNamespacePrefixAttributes(this XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             return element.AncestorsAndSelf()
                 .Attributes()
@@ -129,7 +134,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XElement Clone(this XElement self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             return XCloneTransformer.Default.Visit(self);
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 
 using NXKit.Composition;
 using NXKit.Util;
@@ -25,7 +24,8 @@ namespace NXKit
         public DefaultInvoker(
             [ImportMany] IEnumerable<Lazy<IInvokerLayer>> layers)
         {
-            Contract.Requires<ArgumentNullException>(layers != null);
+            if (layers == null)
+                throw new ArgumentNullException(nameof(layers));
 
             this.layers = layers.ToLinkedList();
         }
@@ -50,7 +50,8 @@ namespace NXKit
 
         R Invoke<R>(Func<R> func, LinkedListNode<Lazy<IInvokerLayer>> next)
         {
-            Contract.Requires<ArgumentException>(next != null || func != null);
+            if (next == null || func == null)
+                throw new ArgumentException();
 
             if (next != null)
                 return next.Value.Value.Invoke<R>(() => Invoke<R>(func, next.Next));

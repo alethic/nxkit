@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.IO;
 
 using NXKit.IO.Media;
@@ -29,12 +28,12 @@ namespace NXKit.IO
         /// </summary>
         /// <param name="resourceUri"></param>
         /// <param name="method"></param>
-        public IORequest(
-            Uri resourceUri,
-            IOMethod method)
+        public IORequest(Uri resourceUri, IOMethod method)
         {
-            Contract.Requires<ArgumentNullException>(resourceUri != null);
-            Contract.Requires<ArgumentException>(resourceUri.IsAbsoluteUri);
+            if (resourceUri == null)
+                throw new ArgumentNullException(nameof(resourceUri));
+            if (resourceUri.IsAbsoluteUri == false)
+                throw new ArgumentOutOfRangeException(nameof(resourceUri));
 
             this.resourceUri = resourceUri;
             this.method = method;
@@ -47,7 +46,7 @@ namespace NXKit.IO
         /// </summary>
         public Uri ResourceUri
         {
-            get { Contract.Ensures(Contract.Result<Uri>() != null); return resourceUri; }
+            get { return resourceUri; }
         }
 
         /// <summary>

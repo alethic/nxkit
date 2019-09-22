@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.Util
 {
@@ -16,8 +15,10 @@ namespace NXKit.Util
         /// <returns></returns>
         public static IEnumerable<T> Forwards<T>(this LinkedList<T> self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self.First != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.First == null)
+                throw new ArgumentNullException(nameof(self));
 
             return self.First.Forwards();
         }
@@ -30,7 +31,8 @@ namespace NXKit.Util
         /// <returns></returns>
         public static IEnumerable<T> Forwards<T>(this LinkedListNode<T> self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             yield return self.Value;
 
@@ -46,8 +48,10 @@ namespace NXKit.Util
         /// <returns></returns>
         public static IEnumerable<T> Backwards<T>(this LinkedList<T> self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self.First != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.First == null)
+                throw new ArgumentNullException(nameof(self));
 
             return self.Last.Backwards();
         }
@@ -60,7 +64,8 @@ namespace NXKit.Util
         /// <returns></returns>
         public static IEnumerable<T> Backwards<T>(this LinkedListNode<T> self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             yield return self.Value;
 

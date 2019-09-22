@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit
@@ -20,9 +19,7 @@ namespace NXKit
         /// <param name="node"></param>
         public NodeExtension(XNode node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-
-            this.node = node;
+            this.node = node ?? throw new ArgumentNullException(nameof(node));
         }
 
         public XObject Object

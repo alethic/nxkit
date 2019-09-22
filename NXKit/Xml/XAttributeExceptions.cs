@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit.Xml
@@ -18,9 +17,12 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XElement ResolveId(this XAttribute self, string id)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self.Parent != null);
-            Contract.Requires<ArgumentNullException>(id != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.Parent == null)
+                throw new ArgumentNullException(nameof(self));
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
 
             return self.Parent.ResolveId(id);
         }
@@ -35,9 +37,12 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XNamespace GetNamespaceOfPrefix(this XAttribute self, string prefix)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentException>(self.Parent != null);
-            Contract.Requires<ArgumentNullException>(prefix != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.Parent == null)
+                throw new ArgumentNullException(nameof(self));
+            if (prefix == null)
+                throw new ArgumentNullException(nameof(prefix));
 
             // resolve through element
             if (prefix == "")
@@ -54,9 +59,12 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static string GetPrefixOfNamespace(this XAttribute self, XNamespace ns)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentException>(self.Parent != null);
-            Contract.Requires<ArgumentNullException>(ns != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.Parent == null)
+                throw new ArgumentNullException(nameof(self));
+            if (ns == null)
+                throw new ArgumentNullException(nameof(ns));
 
             return self.Parent.GetPrefixOfNamespace(ns);
         }

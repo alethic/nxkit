@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -25,9 +24,12 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XElement ResolveId(this XObject self, string id)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self.Parent != null);
-            Contract.Requires<ArgumentNullException>(id != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.Parent == null)
+                throw new ArgumentNullException(nameof(self));
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
 
             var attr = self as XAttribute;
             if (attr != null)
@@ -47,8 +49,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static int GetObjectId(this XObject self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self.Document != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.Document == null)
+                throw new ArgumentNullException(nameof(self));
 
             // gets the node id, or allocates a new one with the document
             return self.AnnotationOrCreate<ObjectAnnotation>(() =>
@@ -72,8 +76,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XObject ResolveObjectId(this XObject self, int objectId)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self.Document != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.Document == null)
+                throw new ArgumentNullException(nameof(self));
 
             return self.Document.AnnotationOrCreate<ObjectIdCache>()
                 .cache.GetOrAdd(objectId, () =>
@@ -91,10 +97,12 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XNamespace GetNamespaceOfPrefix(this XObject self, string prefix)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(self is XAttribute || self is XNode);
-            Contract.Requires<ArgumentException>(self.Parent != null);
-            Contract.Requires<ArgumentNullException>(prefix != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.Parent == null)
+                throw new ArgumentNullException(nameof(self));
+            if (prefix == null)
+                throw new ArgumentNullException(nameof(prefix));
 
             var attr = self as XAttribute;
             if (attr != null)
@@ -115,10 +123,12 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static string GetPrefixOfNamespace(this XObject self, XNamespace ns)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentException>(self is XAttribute || self is XNode);
-            Contract.Requires<ArgumentException>(self.Parent != null);
-            Contract.Requires<ArgumentNullException>(ns != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (self.Parent == null)
+                throw new ArgumentNullException(nameof(self));
+            if (ns == null)
+                throw new ArgumentNullException(nameof(ns));
 
             var attr = self as XAttribute;
             if (attr != null)
@@ -140,8 +150,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XName ResolvePrefixedName(this XObject self, string prefixedName)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(prefixedName != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (prefixedName == null)
+                throw new ArgumentNullException(nameof(prefixedName));
 
             var i = prefixedName.IndexOf(':');
             if (i == -1)
@@ -171,8 +183,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static IEnumerable<XName> ResolvePrefixedNames(this XObject self, string prefixedNames)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(prefixedNames != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (prefixedNames == null)
+                throw new ArgumentNullException(nameof(prefixedNames));
 
             foreach (var v in prefixedNames.Split(' '))
             {
@@ -193,7 +207,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static Uri GetBaseUri(this XObject self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             var baseUriAnno = self.Annotation<BaseUriAnnotation>();
             if (baseUriAnno != null &&
@@ -213,7 +228,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static Uri GetBaseUri(this XElement self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             var baseUriAttr = (string)self.Attribute(XNamespace.Xml + "base");
             if (baseUriAttr != null)
@@ -235,7 +251,8 @@ namespace NXKit.Xml
         /// <param name="baseUri"></param>
         public static void SetBaseUri(this XObject self, Uri baseUri)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             if (baseUri != null)
                 self.AnnotationOrCreate<BaseUriAnnotation>().BaseUri = baseUri;
@@ -250,7 +267,8 @@ namespace NXKit.Xml
         /// <param name="baseUri"></param>
         public static void SetBaseUri(this XObject self, string baseUri)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             SetBaseUri(self, !string.IsNullOrWhiteSpace(baseUri) ? new Uri(baseUri) : null);
         }
@@ -266,7 +284,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static IEnumerable<XElement> Ancestors(this XObject self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             return self.Parent != null ? self.Parent.AncestorsAndSelf() : Enumerable.Empty<XElement>();
         }
@@ -279,8 +298,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static IEnumerable<XElement> Ancestors(this XObject self, XName name)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(name != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
             return self.Parent != null ? self.Parent.AncestorsAndSelf(name) : Enumerable.Empty<XElement>();
         }
@@ -293,7 +314,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static IEnumerable<XObject> AncestorsAndSelf(this XObject self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             return self.Ancestors().Prepend(self);
         }
@@ -311,7 +333,8 @@ namespace NXKit.Xml
         public static T AnnotationOrCreate<T>(this XObject self)
             where T : class, new()
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             var value = self.Annotation<T>();
             if (value == null)
@@ -329,8 +352,10 @@ namespace NXKit.Xml
         public static T AnnotationOrCreate<T>(this XObject self, Func<T> create)
             where T : class
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(create != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (create == null)
+                throw new ArgumentNullException(nameof(create));
 
             var value = self.Annotation<T>();
             if (value == null)
@@ -347,8 +372,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static object AnnotationOrCreate(this XObject self, Type type)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
 
             var value = self.Annotation(type);
             if (value == null)
@@ -366,9 +393,12 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static object AnnotationOrCreate(this XObject self, Type type, Func<object> create)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(create != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (create == null)
+                throw new ArgumentNullException(nameof(create));
 
             var value = self.Annotation(type);
             if (value == null)
@@ -388,8 +418,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static IEnumerable<object> Interfaces(this XObject node, Type type)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
 
             return Interfaces(node, type, node.Exports());
         }
@@ -401,7 +433,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static IEnumerable<T> Interfaces<T>(this XObject node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
 
             return Interfaces<T>(node, node.Exports());
         }
@@ -414,9 +447,12 @@ namespace NXKit.Xml
         /// <returns></returns>
         static IEnumerable<object> Interfaces(this XObject node, Type type, ExportProvider exports)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(exports != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (exports == null)
+                throw new ArgumentNullException(nameof(exports));
 
             return (ExtensionQuery)node.AnnotationOrCreate(typeof(ExtensionQuery<>).MakeGenericType(type), () => exports.GetExportedValue(typeof(ExtensionQuery<>).MakeGenericType(type)));
         }
@@ -429,8 +465,10 @@ namespace NXKit.Xml
         /// <returns></returns>
         static IEnumerable<T> Interfaces<T>(this XObject node, ExportProvider exports)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(exports != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+            if (exports == null)
+                throw new ArgumentNullException(nameof(exports));
 
             return node.AnnotationOrCreate<ExtensionQuery<T>>(() => exports.GetExportedValue<ExtensionQuery<T>>());
         }
@@ -443,7 +481,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static T InterfaceOrDefault<T>(this XObject node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
 
             return Interfaces<T>(node)
                 .FirstOrDefault();
@@ -457,8 +496,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static T Interface<T>(this XObject node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Ensures(Contract.Result<T>() != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
 
             var i = InterfaceOrDefault<T>(node);
             if (i == null)
@@ -474,8 +513,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static ExportProvider Exports(this XObject self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
-            Contract.Ensures(Contract.Result<ExportProvider>() != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             // get or create the new object container annotation
             return self.AnnotationOrCreate<ExportProvider>(() =>
@@ -514,7 +553,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public static XObject Clone(this XObject self)
         {
-            Contract.Requires<ArgumentNullException>(self != null);
+            if (self == null)
+                throw new ArgumentNullException(nameof(self));
 
             return XCloneTransformer.Default.Visit(self);
         }

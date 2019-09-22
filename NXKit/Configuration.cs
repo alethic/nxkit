@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
-using System.Diagnostics.Contracts;
 
 using NXKit.Composition;
 
@@ -62,15 +61,10 @@ namespace NXKit
             ScopeCatalog objectCatalog,
             ExportProvider exports)
         {
-            Contract.Requires<ArgumentNullException>(globalCatalog != null);
-            Contract.Requires<ArgumentNullException>(hostCatalog != null);
-            Contract.Requires<ArgumentNullException>(objectCatalog != null);
-            Contract.Requires<ArgumentNullException>(exports != null);
-
-            this.globalCatalog = globalCatalog;
-            this.hostCatalog = hostCatalog;
-            this.objectCatalog = objectCatalog;
-            this.exports = exports;
+            this.globalCatalog = globalCatalog ?? throw new ArgumentNullException(nameof(globalCatalog));
+            this.hostCatalog = hostCatalog ?? throw new ArgumentNullException(nameof(hostCatalog));
+            this.objectCatalog = objectCatalog ?? throw new ArgumentNullException(nameof(objectCatalog));
+            this.exports = exports ?? throw new ArgumentNullException(nameof(exports));
         }
 
         /// <summary>
@@ -87,8 +81,10 @@ namespace NXKit
                 new ScopeCatalog(catalog, Scope.Object),
                 exports)
         {
-            Contract.Requires<ArgumentNullException>(catalog != null);
-            Contract.Requires<ArgumentNullException>(exports != null);
+            if (catalog == null)
+                throw new ArgumentNullException(nameof(catalog));
+            if (exports == null)
+                throw new ArgumentNullException(nameof(exports));
         }
 
         /// <summary>

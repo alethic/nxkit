@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -19,7 +18,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public virtual XObject Visit(XObject obj)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
             if (obj is XNode)
                 return Visit((XNode)obj);
@@ -36,7 +36,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public virtual XNode Visit(XNode node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
 
             if (node is XDocumentType)
                 return Visit((XDocumentType)node);
@@ -61,7 +62,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public virtual XContainer Visit(XContainer container)
         {
-            Contract.Requires<ArgumentNullException>(container != null);
+            if (container == null)
+                throw new ArgumentNullException(nameof(container));
 
             if (container is XDocument)
                 return Visit((XDocument)container);
@@ -78,7 +80,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public virtual XDocument Visit(XDocument document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
             return new XDocument(
                 document.Declaration != null ? Visit(document.Declaration) : null,
@@ -92,7 +95,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public virtual XDeclaration Visit(XDeclaration declaration)
         {
-            Contract.Requires<ArgumentNullException>(declaration != null);
+            if (declaration == null)
+                throw new ArgumentNullException(nameof(declaration));
 
             return declaration;
         }
@@ -104,7 +108,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public virtual XDocumentType Visit(XDocumentType documentType)
         {
-            Contract.Requires<ArgumentNullException>(documentType != null);
+            if (documentType == null)
+                throw new ArgumentNullException(nameof(documentType));
 
             return documentType;
         }
@@ -116,7 +121,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public virtual XText Visit(XText text)
         {
-            Contract.Requires<ArgumentNullException>(text != null);
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
 
             return text;
         }
@@ -128,7 +134,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public virtual XComment Visit(XComment comment)
         {
-            Contract.Requires<ArgumentNullException>(comment != null);
+            if (comment == null)
+                throw new ArgumentNullException(nameof(comment));
 
             return comment;
         }
@@ -140,7 +147,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public virtual XCData Visit(XCData cdata)
         {
-            Contract.Requires<ArgumentNullException>(cdata != null);
+            if (cdata == null)
+                throw new ArgumentNullException(nameof(cdata));
 
             return cdata;
         }
@@ -152,7 +160,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public virtual XProcessingInstruction Visit(XProcessingInstruction processingInstruction)
         {
-            Contract.Requires<ArgumentNullException>(processingInstruction != null);
+            if (processingInstruction == null)
+                throw new ArgumentNullException(nameof(processingInstruction));
 
             return processingInstruction;
         }
@@ -164,7 +173,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public virtual XElement Visit(XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             return new XElement(
                 element.Name,
@@ -179,7 +189,8 @@ namespace NXKit.Xml
         /// <returns></returns>
         public virtual XAttribute Visit(XAttribute attribute)
         {
-            Contract.Requires<ArgumentNullException>(attribute != null);
+            if (attribute == null)
+                throw new ArgumentNullException(nameof(attribute));
 
             return attribute;
         }
