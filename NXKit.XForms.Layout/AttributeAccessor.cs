@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit.XForms.Layout
@@ -19,7 +18,8 @@ namespace NXKit.XForms.Layout
         public AttributeAccessor(XElement element)
             : base(element, Constants.Layout_1_0)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
         }
 
     }

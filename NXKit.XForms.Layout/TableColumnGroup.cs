@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -28,10 +27,10 @@ namespace NXKit.XForms.Layout
             Extension<TableColumnGroupAttributes> attributes)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(attributes != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
-            this.attributes = attributes;
+            this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
         }
 
         public string Name

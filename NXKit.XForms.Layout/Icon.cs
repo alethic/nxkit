@@ -1,10 +1,8 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
-using NXKit.Xml;
 
 namespace NXKit.XForms.Layout
 {
@@ -29,7 +27,8 @@ namespace NXKit.XForms.Layout
             IconAttributes attributes)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
 
             this.attributes = attributes;
         }
