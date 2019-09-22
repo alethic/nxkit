@@ -297,10 +297,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NXKit.Html.View.Web.UI\NXKit.Html.View.Web.UI.csproj">
-      <Project>{38a49f91-54fa-47c7-b046-71d9fef16f3f}</Project>
-      <Name>NXKit.Html.View.Web.UI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NXKit.Html\NXKit.Html.csproj">
       <Project>{441881fb-1f5e-43c3-80c0-db6560f6edeb}</Project>
       <Name>NXKit.Html</Name>
@@ -328,10 +324,6 @@
     <ProjectReference Include="..\NXKit.View.Server\NXKit.View.Server.csproj">
       <Project>{a296bbea-d7b7-40e6-b107-558413a59b8c}</Project>
       <Name>NXKit.View.Server</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.XForms.Layout.View.Web.UI\NXKit.XForms.Layout.View.Web.UI.csproj">
-      <Project>{38a49f91-54fa-47c7-b046-71d9fef16f3e}</Project>
-      <Name>NXKit.XForms.Layout.View.Web.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Examples\NXKit.XForms.Examples.csproj">
       <Project>{564c13be-ab20-49fd-9bc4-44fe701e3ac2}</Project>

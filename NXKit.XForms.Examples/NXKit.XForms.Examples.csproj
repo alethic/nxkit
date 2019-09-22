@@ -1,186 +1,79 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{564C13BE-AB20-49FD-9BC4-44FE701E3AC2}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NXKit.XForms.Examples</RootNamespace>
-    <AssemblyName>NXKit.XForms.Examples</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>d917eb19</NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
-    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
-    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
-    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
-    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
-    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
-    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
-    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
-    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
-    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
-    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
-    <CodeContractsInferRequires>True</CodeContractsInferRequires>
-    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
-    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
-    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
-    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
-    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
-    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
-    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
-    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
-    <CodeContractsCustomRewriterAssembly />
-    <CodeContractsCustomRewriterClass />
-    <CodeContractsLibPaths />
-    <CodeContractsExtraRewriteOptions />
-    <CodeContractsExtraAnalysisOptions />
-    <CodeContractsSQLServerOption />
-    <CodeContractsBaseLineFile />
-    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
-    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
-    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
-    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
-    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
-    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
-    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
-    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
-    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
-    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
-    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
-    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
-    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
-    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
-    <CodeContractsInferRequires>True</CodeContractsInferRequires>
-    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
-    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
-    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
-    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
-    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
-    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
-    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
-    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
-    <CodeContractsCustomRewriterAssembly />
-    <CodeContractsCustomRewriterClass />
-    <CodeContractsLibPaths />
-    <CodeContractsExtraRewriteOptions />
-    <CodeContractsExtraAnalysisOptions />
-    <CodeContractsSQLServerOption />
-    <CodeContractsBaseLineFile />
-    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
-    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
-    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
-    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ExampleIOTransport.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Ref.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="basic.xml" />
-    <EmbeddedResource Include="beneficiaries.xml" />
-    <EmbeddedResource Include="elections.xml" />
-    <EmbeddedResource Include="form.xml" />
-    <EmbeddedResource Include="group.xml" />
-    <EmbeddedResource Include="include.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="include2.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="persons.xml" />
-    <EmbeddedResource Include="primaryelections.xml" />
-    <EmbeddedResource Include="primaryperson.xml" />
-    <EmbeddedResource Include="primaryquestions.xml" />
-    <EmbeddedResource Include="questions.xml" />
-    <EmbeddedResource Include="relationships.xml" />
-    <EmbeddedResource Include="relevant.xml" />
-    <EmbeddedResource Include="repeat.xml" />
-    <EmbeddedResource Include="script.xml" />
-    <EmbeddedResource Include="secondaryelections.xml" />
-    <EmbeddedResource Include="secondaryperson.xml" />
-    <EmbeddedResource Include="secondaryquestions.xml" />
-    <EmbeddedResource Include="section.xml" />
-    <EmbeddedResource Include="select1.xml" />
-    <EmbeddedResource Include="submit.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="trigger.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
-      <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
-      <Name>NXKit.XForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit\NXKit.csproj">
-      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
-      <Name>NXKit</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="insert.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="nxinclude_form1.xml" />
-    <EmbeddedResource Include="nxinclude.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="aship-form.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="aship-data.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="aship-data.xsd">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net45</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="aship-data.xml" />
+      <None Remove="aship-data.xsd" />
+      <None Remove="aship-form.xml" />
+      <None Remove="basic.xml" />
+      <None Remove="beneficiaries.xml" />
+      <None Remove="elections.xml" />
+      <None Remove="form.xml" />
+      <None Remove="group.xml" />
+      <None Remove="include.xml" />
+      <None Remove="include2.xml" />
+      <None Remove="insert.xml" />
+      <None Remove="nxinclude.xml" />
+      <None Remove="nxinclude_form1.xml" />
+      <None Remove="persons.xml" />
+      <None Remove="primaryelections.xml" />
+      <None Remove="primaryperson.xml" />
+      <None Remove="primaryquestions.xml" />
+      <None Remove="questions.xml" />
+      <None Remove="relationships.xml" />
+      <None Remove="relevant.xml" />
+      <None Remove="repeat.xml" />
+      <None Remove="script.xml" />
+      <None Remove="secondaryelections.xml" />
+      <None Remove="secondaryperson.xml" />
+      <None Remove="secondaryquestions.xml" />
+      <None Remove="section.xml" />
+      <None Remove="select1.xml" />
+      <None Remove="submit.xml" />
+      <None Remove="trigger.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="aship-data.xml" />
+      <EmbeddedResource Include="aship-data.xsd" />
+      <EmbeddedResource Include="aship-form.xml" />
+      <EmbeddedResource Include="basic.xml" />
+      <EmbeddedResource Include="beneficiaries.xml" />
+      <EmbeddedResource Include="elections.xml" />
+      <EmbeddedResource Include="form.xml" />
+      <EmbeddedResource Include="group.xml" />
+      <EmbeddedResource Include="include.xml" />
+      <EmbeddedResource Include="include2.xml" />
+      <EmbeddedResource Include="insert.xml" />
+      <EmbeddedResource Include="nxinclude.xml" />
+      <EmbeddedResource Include="nxinclude_form1.xml" />
+      <EmbeddedResource Include="persons.xml" />
+      <EmbeddedResource Include="primaryelections.xml" />
+      <EmbeddedResource Include="primaryperson.xml" />
+      <EmbeddedResource Include="primaryquestions.xml" />
+      <EmbeddedResource Include="questions.xml" />
+      <EmbeddedResource Include="relationships.xml" />
+      <EmbeddedResource Include="relevant.xml" />
+      <EmbeddedResource Include="repeat.xml" />
+      <EmbeddedResource Include="script.xml" />
+      <EmbeddedResource Include="secondaryelections.xml" />
+      <EmbeddedResource Include="secondaryperson.xml" />
+      <EmbeddedResource Include="secondaryquestions.xml" />
+      <EmbeddedResource Include="section.xml" />
+      <EmbeddedResource Include="select1.xml" />
+      <EmbeddedResource Include="submit.xml" />
+      <EmbeddedResource Include="trigger.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\NXKit\NXKit.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="System.ComponentModel.Composition" />
+    </ItemGroup>
+
 </Project>

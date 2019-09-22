@@ -8,7 +8,25 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Themes\Generic.xaml" />
+      <None Remove="Themes\Generic\Controls.xaml" />
+      <None Remove="Themes\Generic\XObjects.xaml" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Include="Themes\Generic.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
+      <Page Include="Themes\Generic\Controls.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
+      <Page Include="Themes\Generic\XObjects.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
     </ItemGroup>
 
     <ItemGroup>

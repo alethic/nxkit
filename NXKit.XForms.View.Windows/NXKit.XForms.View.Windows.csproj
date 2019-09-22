@@ -8,7 +8,57 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Themes\Generic.xaml" />
+      <None Remove="Themes\Generic\Group.xaml" />
+      <None Remove="Themes\Generic\Input.xaml" />
+      <None Remove="Themes\Generic\Label.xaml" />
+      <None Remove="Themes\Generic\Model.xaml" />
+      <None Remove="Themes\Generic\Output.xaml" />
+      <None Remove="Themes\Generic\Range.xaml" />
+      <None Remove="Themes\Generic\Repeat.xaml" />
+      <None Remove="Themes\Generic\Select1.xaml" />
+      <None Remove="Themes\Generic\Submit.xaml" />
+      <None Remove="Themes\Generic\Trigger.xaml" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Include="Themes\Generic.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
+      <Page Include="Themes\Generic\Group.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
+      <Page Include="Themes\Generic\Input.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
+      <Page Include="Themes\Generic\Label.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
+      <Page Include="Themes\Generic\Model.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
+      <Page Include="Themes\Generic\Output.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
+      <Page Include="Themes\Generic\Range.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
+      <Page Include="Themes\Generic\Repeat.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
+      <Page Include="Themes\Generic\Select1.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
+      <Page Include="Themes\Generic\Submit.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
+      <Page Include="Themes\Generic\Trigger.xaml">
+        <Generator>XamlIntelliSenseFileGenerator</Generator>
+      </Page>
     </ItemGroup>
 
     <ItemGroup>
@@ -19,9 +69,11 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Reference Include="PresentationCore" />
         <Reference Include="PresentationFramework" />
         <Reference Include="System.ComponentModel.Composition" />
         <Reference Include="System.Xaml" />
+        <Reference Include="WindowsBase" />
     </ItemGroup>
 
 </Project>

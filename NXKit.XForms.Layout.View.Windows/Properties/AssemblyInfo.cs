@@ -1,17 +1,4 @@
-﻿using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Windows;
-
-[assembly: AssemblyTitle("NXKit.XForms.Layout.View.Windows")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NXKit.XForms.Layout.View.Windows")]
-[assembly: AssemblyCopyright("Copyright © Jerome Haltom 2015")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-
-[assembly: ComVisible(false)]
+﻿using System.Windows;
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None,
