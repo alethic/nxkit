@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -33,10 +32,10 @@ namespace NXKit.View.Js
             [ImportMany] IEnumerable<IViewModuleDependencyProvider> providers)
             : base(node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(providers != null);
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
 
-            this.providers = providers;
+            this.providers = providers ?? throw new ArgumentNullException(nameof(providers));
         }
 
         [Remote]

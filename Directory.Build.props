@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project>
+    <PropertyGroup>
+        <Authors>Jerome Haltom</Authors>
+        <Copyright>Copyright © Jerome Haltom 2014</Copyright>
+        <PackageProjectUrl>https://github.com/nxkit</PackageProjectUrl>
+        <PackageLicenseExpression>GPL-2.0-only</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PackageTags>xml xforms</PackageTags>
+    </PropertyGroup>
+</Project>

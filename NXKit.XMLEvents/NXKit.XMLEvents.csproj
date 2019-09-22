@@ -3,15 +3,8 @@
     <PropertyGroup>
         <TargetFramework>net45</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Authors>Jerome Haltom</Authors>
-        <Description>NXKit implementation of the W3c XML Events 2 specification.</Description>
-        <PackageProjectUrl>https://github.com/nxkit</PackageProjectUrl>
-        <PackageIconUrl></PackageIconUrl>
-        <Copyright>Copyright © Jerome Haltom 2014</Copyright>
-        <PackageLicenseUrl>http://www.gnu.org/licenses/gpl.txt</PackageLicenseUrl>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <PackageTags>xml xforms</PackageTags>
         <Product>NXKit XML Events</Product>
+        <Description>NXKit implementation of the W3c XML Events 2 specification.</Description>
     </PropertyGroup>
 
     <ItemGroup>

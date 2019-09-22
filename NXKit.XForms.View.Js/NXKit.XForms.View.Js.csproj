@@ -1,272 +1,52 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F106499B-42CC-41CF-9824-39755E25993F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <OutputPath>bin</OutputPath>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <RootNamespace>NXKit.XForms.View.Js</RootNamespace>
-    <AssemblyName>NXKit.XForms.View.Js</AssemblyName>
-    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <NuGetPackageImportStamp>1580a1c7</NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="..\NXKit.View.Js\bin\nxkit.d.ts">
-      <Link>Scripts\typings\nxkit\nxkit.d.ts</Link>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="OutputViewModel.ts" />
-    <TypeScriptCompile Include="RepeatViewModel.ts" />
-    <TypeScriptCompile Include="Scripts\InputBooleanBindingHandler.ts" />
-    <TypeScriptCompile Include="Scripts\Select1BindingHandler.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\knockout\knockout.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\semantic\semantic.d.ts" />
-    <TypeScriptCompile Include="SubmitViewModel.ts" />
-    <TypeScriptCompile Include="TriggerViewModel.ts" />
-    <TypeScriptCompile Include="SelectUtil.ts" />
-    <TypeScriptCompile Include="GroupUtil.ts" />
-    <TypeScriptCompile Include="GroupViewModel.ts" />
-    <TypeScriptCompile Include="HelpViewModel.ts" />
-    <TypeScriptCompile Include="AlertViewModel.ts" />
-    <TypeScriptCompile Include="HintViewModel.ts" />
-    <TypeScriptCompile Include="InputViewModel.ts" />
-    <TypeScriptCompile Include="LabelViewModel.ts" />
-    <TypeScriptCompile Include="RangeViewModel.ts" />
-    <TypeScriptCompile Include="Select1ViewModel.ts" />
-    <TypeScriptCompile Include="TextAreaViewModel.ts" />
-    <TypeScriptCompile Include="ViewModelUtil.ts" />
-    <TypeScriptCompile Include="XFormsNodeViewModel.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="NXKit.XForms.View.Js.nuspec" />
-    <None Include="Scripts\nx-moment.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>nx-moment.js</LastGenOutput>
-    </None>
-    <None Include="Submit.html" />
-    <None Include="Group.html" />
-    <None Include="Model.html" />
-    <None Include="Help.html" />
-    <None Include="Repeat.html" />
-    <None Include="TextArea.html" />
-    <None Include="Select1.html" />
-    <None Include="Range.html" />
-    <None Include="Input.html" />
-    <None Include="Hint.html" />
-    <None Include="Label.html" />
-    <None Include="Alert.html" />
-    <None Include="Trigger.html" />
-    <None Include="Output.html" />
-    <None Include="Action.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Input.less" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="package.json" />
-    <None Include="nxkit-xforms.js.prefix" />
-    <None Include="nxkit-xforms.js.suffix" />
-    <None Include="nxkit-xforms.less.prefix" />
-    <None Include="nxkit-xforms.less.suffix" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ViewModuleDependencyProvider.cs" />
-    <Compile Include="ViewModuleProvider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NXKit.View.Js\NXKit.View.Js.csproj">
-      <Project>{c7aedb60-a136-4356-9c04-35aa344d857e}</Project>
-      <Name>NXKit.View.Js</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
-      <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>
-      <Name>NXKit.XForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit\NXKit.csproj">
-      <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
-      <Name>NXKit</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\moment-with-locales.js" />
-    <EmbeddedResource Include="Scripts\moment-with-locales.min.js" />
-    <EmbeddedResource Include="Scripts\moment.js" />
-    <EmbeddedResource Include="Scripts\moment.min.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\nx-moment.js">
-      <DependentUpon>nx-moment.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptOutFile>obj\Debug\nxkit-xforms.ts.js</TypeScriptOutFile>
-    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
-    <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
-    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
-    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
-    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
-    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
-    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
-    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
-    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
-    <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
-    <CodeContractsEnumObligations>True</CodeContractsEnumObligations>
-    <CodeContractsRedundantAssumptions>True</CodeContractsRedundantAssumptions>
-    <CodeContractsAssertsToContractsCheckBox>True</CodeContractsAssertsToContractsCheckBox>
-    <CodeContractsRedundantTests>True</CodeContractsRedundantTests>
-    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
-    <CodeContractsMissingPublicEnsuresAsWarnings>False</CodeContractsMissingPublicEnsuresAsWarnings>
-    <CodeContractsInferRequires>True</CodeContractsInferRequires>
-    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
-    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
-    <CodeContractsSuggestAssumptionsForCallees>False</CodeContractsSuggestAssumptionsForCallees>
-    <CodeContractsSuggestRequires>False</CodeContractsSuggestRequires>
-    <CodeContractsNecessaryEnsures>True</CodeContractsNecessaryEnsures>
-    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
-    <CodeContractsSuggestReadonly>True</CodeContractsSuggestReadonly>
-    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
-    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
-    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
-    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
-    <CodeContractsCustomRewriterAssembly />
-    <CodeContractsCustomRewriterClass />
-    <CodeContractsLibPaths />
-    <CodeContractsExtraRewriteOptions />
-    <CodeContractsExtraAnalysisOptions />
-    <CodeContractsSQLServerOption />
-    <CodeContractsBaseLineFile />
-    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
-    <CodeContractsSkipAnalysisIfCannotConnectToCache>False</CodeContractsSkipAnalysisIfCannotConnectToCache>
-    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
-    <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
-    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
-    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptOutFile>obj\Release\nxkit-xforms.ts.js</TypeScriptOutFile>
-    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
-    <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
-    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
-    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
-    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
-    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
-    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
-    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
-    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
-    <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
-    <CodeContractsEnumObligations>True</CodeContractsEnumObligations>
-    <CodeContractsRedundantAssumptions>True</CodeContractsRedundantAssumptions>
-    <CodeContractsAssertsToContractsCheckBox>True</CodeContractsAssertsToContractsCheckBox>
-    <CodeContractsRedundantTests>True</CodeContractsRedundantTests>
-    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
-    <CodeContractsMissingPublicEnsuresAsWarnings>False</CodeContractsMissingPublicEnsuresAsWarnings>
-    <CodeContractsInferRequires>True</CodeContractsInferRequires>
-    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
-    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
-    <CodeContractsSuggestAssumptionsForCallees>False</CodeContractsSuggestAssumptionsForCallees>
-    <CodeContractsSuggestRequires>False</CodeContractsSuggestRequires>
-    <CodeContractsNecessaryEnsures>True</CodeContractsNecessaryEnsures>
-    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
-    <CodeContractsSuggestReadonly>True</CodeContractsSuggestReadonly>
-    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
-    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
-    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
-    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
-    <CodeContractsCustomRewriterAssembly />
-    <CodeContractsCustomRewriterClass />
-    <CodeContractsLibPaths />
-    <CodeContractsExtraRewriteOptions />
-    <CodeContractsExtraAnalysisOptions />
-    <CodeContractsSQLServerOption />
-    <CodeContractsBaseLineFile />
-    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
-    <CodeContractsSkipAnalysisIfCannotConnectToCache>False</CodeContractsSkipAnalysisIfCannotConnectToCache>
-    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
-    <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
-    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
-    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
-    <TypeScriptSourceMap>False</TypeScriptSourceMap>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
-    <TypeScriptSourceMap>False</TypeScriptSourceMap>
-  </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" />
-  <Import Project="$(ProjectDir)..\NXKit.targets" Condition="Exists('$(ProjectDir)..\NXKit.targets')" />
-  <Import Project="$(ProjectDir)..\NXKit.Node.targets" Condition="Exists('$(ProjectDir)..\NXKit.Node.targets')" />
-  <Target Name="BuildJs" DependsOnTargets="CompileTypeScript">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net45</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Product>NXKit XForms View for JavaScript</Product>
+        <Description>XForms additions to the NXKit View for JavaScript.</Description>
+        <TypeScriptTarget>ES2017</TypeScriptTarget>
+        <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
+        <TypeScriptSourceMap>True</TypeScriptSourceMap>
+        <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
+        <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+        <TypeScriptToolsVersion>3.5</TypeScriptToolsVersion>
+        <TypeScriptJSXEmit>Preserve</TypeScriptJSXEmit>
+        <TypeScriptCompileOnSaveEnabled>False</TypeScriptCompileOnSaveEnabled>
+        <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+        <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
+        <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+        <TypeScriptMapRoot />
+        <TypeScriptSourceRoot />
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+        <TypeScriptOutFile>obj\Debug\nxkit-xforms.ts.js</TypeScriptOutFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <TypeScriptOutFile>obj\Release\nxkit-xforms.ts.js</TypeScriptOutFile>
+    </PropertyGroup>
+
     <ItemGroup>
-      <BuildJsInputPaths Include="nxkit-xforms.js.prefix" />
-      <BuildJsInputPaths Include="$(IntermediateOutputPath)nxkit-xforms.ts.js" />
-      <BuildJsInputPaths Include="nxkit-xforms.js.suffix" />
+        <PackageReference Include="jquery.TypeScript.DefinitelyTyped" Version="2.1.9" />
+        <PackageReference Include="knockout.TypeScript.DefinitelyTyped" Version="0.7.3" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.6.3">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Moment.js" Version="2.10.2" />
+        <PackageReference Include="moment.TypeScript.DefinitelyTyped" Version="1.0.2" />
     </ItemGroup>
-    <ConcatinateTask InputPaths="@(BuildJsInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit-xforms.js" />
-    <UglifyJsTask InputPath="$(IntermediateOutputPath)nxkit-xforms.js" OutputPath="$(IntermediateOutputPath)nxkit-xforms.min.js" />
+
     <ItemGroup>
-      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms.js">
-        <LogicalName>$(RootNamespace).nxkit-xforms.js</LogicalName>
-      </EmbeddedResource>
-      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms.min.js">
-        <LogicalName>$(RootNamespace).nxkit-xforms.min.js</LogicalName>
-      </EmbeddedResource>
+        <ProjectReference Include="..\NXKit.View.Js\NXKit.View.Js.csproj" />
+        <ProjectReference Include="..\NXKit\NXKit.csproj" />
     </ItemGroup>
-  </Target>
-  <Target Name="BuildHtml">
+
     <ItemGroup>
-      <BuildHtmlInputPaths Include="*.html" />
+        <Reference Include="System.ComponentModel.Composition" />
     </ItemGroup>
-    <ConcatinateTask InputPaths="@(BuildHtmlInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit-xforms.html" />
-    <ItemGroup>
-      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms.html">
-        <LogicalName>$(RootNamespace).nxkit-xforms.html</LogicalName>
-      </EmbeddedResource>
-    </ItemGroup>
-  </Target>
-  <Target Name="BuildLess">
-    <ItemGroup>
-      <BuildLessInputPaths Include="*.less" />
-    </ItemGroup>
-    <LessTask InputPaths="@(BuildLessInputPaths)" OutputPath="$(IntermediateOutputPath)nxkit-xforms.css" />
-    <ItemGroup>
-      <EmbeddedResource Include="$(IntermediateOutputPath)nxkit-xforms.css">
-        <LogicalName>$(RootNamespace).nxkit-xforms.css</LogicalName>
-      </EmbeddedResource>
-    </ItemGroup>
-  </Target>
-  <Target Name="AfterResolveReferences" DependsOnTargets="BuildJs;BuildHtml;BuildLess">
-  </Target>
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(IntermediateOutputPath)nxkit-xforms.ts.d.ts" DestinationFiles="$(OutputPath)nxkit-xforms.d.ts" />
-  </Target>
-  <Import Project="..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets')" />
+
 </Project>

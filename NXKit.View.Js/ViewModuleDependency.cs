@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 using Newtonsoft.Json;
@@ -58,7 +57,8 @@ namespace NXKit.View.Js
         /// <returns></returns>
         public static ViewModuleDependency Parse(string value)
         {
-            Contract.Requires<ArgumentNullException>(value != null);
+            if (value is null)
+                throw new ArgumentNullException(nameof(value));
 
             if (!string.IsNullOrWhiteSpace(value))
             {

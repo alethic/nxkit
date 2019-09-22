@@ -3,15 +3,8 @@
     <PropertyGroup>
         <TargetFramework>net45</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Authors>Jerome Haltom</Authors>
-        <Description>NXKit base support for scripting support. Requires an additional scripting support package for language implementation.</Description>
-        <PackageProjectUrl>https://github.com/nxkit</PackageProjectUrl>
-        <PackageIconUrl></PackageIconUrl>
-        <Copyright>Copyright © Jerome Haltom 2014</Copyright>
-        <PackageLicenseUrl>http://www.gnu.org/licenses/gpl.txt</PackageLicenseUrl>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <PackageTags>xml xforms</PackageTags>
         <Product>NXKit Scripting</Product>
+        <Description>NXKit base support for scripting support. Requires an additional scripting support package for language implementation.</Description>
     </PropertyGroup>
 
     <ItemGroup>

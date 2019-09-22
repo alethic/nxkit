@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 
 using NXKit.IO.Media;
@@ -24,13 +23,9 @@ namespace NXKit.View.Js
         /// <param name="contentType"></param>
         public ViewModuleInfo(string name, Action<Stream> write, MediaRange contentType)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(write != null);
-            Contract.Requires<ArgumentNullException>(contentType != null);
-
-            this.name = name;
-            this.write = write;
-            this.contentType = contentType;
+            this.name = name ?? throw new ArgumentNullException(nameof(name));
+            this.write = write ?? throw new ArgumentNullException(nameof(write));
+            this.contentType = contentType ?? throw new ArgumentNullException(nameof(contentType));
             this.lastModifiedTime = DateTime.UtcNow;
             this.etag = null;
         }
@@ -45,9 +40,12 @@ namespace NXKit.View.Js
         public ViewModuleInfo(string name, Action<Stream> writer, MediaRange contentType, DateTime lastModifiedTime, string etag)
             : this(name, writer, contentType)
         {
-            Contract.Requires<ArgumentNullException>(name != null);
-            Contract.Requires<ArgumentNullException>(writer != null);
-            Contract.Requires<ArgumentNullException>(contentType != null);
+            if (name is null)
+                throw new ArgumentNullException(nameof(name));
+            if (writer is null)
+                throw new ArgumentNullException(nameof(writer));
+            if (contentType is null)
+                throw new ArgumentNullException(nameof(contentType));
 
             this.lastModifiedTime = lastModifiedTime;
             this.etag = etag;

@@ -131,21 +131,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NXKit.Html.View.Js\NXKit.Html.View.Js.csproj">
-      <Project>{9a7a0358-eafc-487f-ba00-8d80c6ffb1d6}</Project>
-      <Name>NXKit.Html.View.Js</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NXKit.Html\NXKit.Html.csproj">
       <Project>{441881fb-1f5e-43c3-80c0-db6560f6edeb}</Project>
       <Name>NXKit.Html</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.View.Js\NXKit.View.Js.csproj">
-      <Project>{c7aedb60-a136-4356-9c04-35aa344d857e}</Project>
-      <Name>NXKit.View.Js</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.View.Web.UI\NXKit.View.Web.UI.csproj">
-      <Project>{434f4e74-1ba0-4579-ab27-b0dc7df4166c}</Project>
-      <Name>NXKit.View.Web.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit\NXKit.csproj">
       <Project>{2b27233a-849a-4339-96c6-babcb968b8b0}</Project>
