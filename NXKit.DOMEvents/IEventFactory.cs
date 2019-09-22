@@ -1,13 +1,9 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-
-namespace NXKit.DOMEvents
+﻿namespace NXKit.DOMEvents
 {
 
     /// <summary>
     /// Provides event instances configured as appropriate.
     /// </summary>
-    [ContractClass(typeof(IEventFactory_Contract))]
     public interface IEventFactory
     {
 
@@ -26,27 +22,6 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         T CreateEvent<T>(string type)
             where T : Event;
-
-    }
-
-    [ContractClassFor(typeof(IEventFactory))]
-    abstract class IEventFactory_Contract :
-        IEventFactory
-    {
-
-        public Event CreateEvent(string eventInterface)
-        {
-            Contract.Requires<ArgumentNullException>(eventInterface != null);
-            Contract.Requires<ArgumentNullException>(eventInterface.Length != 0);
-            throw new NotImplementedException();
-        }
-
-        public T CreateEvent<T>(string type) where T : Event
-        {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(type.Length != 0);
-            throw new NotImplementedException();
-        }
 
     }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.DOMEvents
 {
@@ -20,8 +19,10 @@ namespace NXKit.DOMEvents
         public MutationEventInfo(string type, bool bubbles, bool cancelable)
             : base(type, "MutationEvent", bubbles, cancelable)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(type.Length > 0);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (type.Length < 1)
+                throw new ArgumentOutOfRangeException(nameof(type));
         }
 
     }

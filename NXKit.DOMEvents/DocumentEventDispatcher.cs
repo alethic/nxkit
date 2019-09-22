@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Xml;
-using System.Xml.Linq;
 using System.Linq;
+using System.Xml.Linq;
 
 using NXKit.Xml;
 
@@ -28,9 +26,7 @@ namespace NXKit.DOMEvents
         /// <param name="document"></param>
         public DocumentEventDispatcher(XDocument document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
-
-            this.document = document;
+            this.document = document ?? throw new ArgumentNullException(nameof(document));
         }
 
         /// <summary>
@@ -44,8 +40,10 @@ namespace NXKit.DOMEvents
 
         void document_Changing(object sender, XObjectChangeEventArgs args)
         {
-            Contract.Requires<ArgumentNullException>(sender != null);
-            Contract.Requires<ArgumentNullException>(args != null);
+            if (sender == null)
+                throw new ArgumentNullException(nameof(sender));
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
 
             // store parent for subtree dispatch
             var obj = (XObject)sender;
@@ -69,8 +67,10 @@ namespace NXKit.DOMEvents
 
         void document_Changed(object sender, XObjectChangeEventArgs args)
         {
-            Contract.Requires<ArgumentNullException>(sender != null);
-            Contract.Requires<ArgumentNullException>(args != null);
+            if (sender == null)
+                throw new ArgumentNullException(nameof(sender));
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
 
             // store parent for subtree dispatch
             var obj = (XObject)sender;
@@ -100,9 +100,10 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         MutationEvent CreateEvent(XObject obj, string eventType)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
-            Contract.Requires<ArgumentNullException>(obj.Document != null);
-            Contract.Requires<ArgumentNullException>(eventType != null);
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
+            if (eventType == null)
+                throw new ArgumentNullException(nameof(eventType));
 
             var events = obj.Document.Interface<INXDocumentEvent>();
             var event_ = events.CreateEvent<MutationEvent>(eventType);
@@ -117,9 +118,10 @@ namespace NXKit.DOMEvents
         /// <param name="eventType"></param>
         void DispatchEvent(XNode node, string eventType)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(node.Document != null);
-            Contract.Requires<ArgumentNullException>(eventType != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+            if (eventType == null)
+                throw new ArgumentNullException(nameof(eventType));
 
             node.Interface<EventTarget>().Dispatch(CreateEvent(node, eventType));
         }
@@ -130,7 +132,8 @@ namespace NXKit.DOMEvents
         /// <param name="obj"></param>
         void OnAdded(XObject obj)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
             var node = obj as XNode;
             if (node != null)
@@ -143,7 +146,8 @@ namespace NXKit.DOMEvents
         /// <param name="node"></param>
         void OnAdded(XNode node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
 
             DispatchEvent(node, Events.DOMNodeInserted);
 
@@ -159,7 +163,8 @@ namespace NXKit.DOMEvents
         /// <param name="node"></param>
         void OnNodeAddedToDocument(XNode node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
 
             DispatchEvent(node, Events.DOMNodeInsertedIntoDocument);
         }
@@ -170,7 +175,8 @@ namespace NXKit.DOMEvents
         /// <param name="obj"></param>
         void OnRemoving(XObject obj)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
             var node = obj as XNode;
             if (node != null)
@@ -183,7 +189,8 @@ namespace NXKit.DOMEvents
         /// <param name="node"></param>
         void OnRemoving(XNode node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
 
             DispatchEvent(node, Events.DOMNodeRemoved);
 
@@ -199,7 +206,8 @@ namespace NXKit.DOMEvents
         /// <param name="node"></param>
         void OnNodeRemovedFromDocument(XNode node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
 
             DispatchEvent(node, Events.DOMNodeRemovedFromDocument);
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Xml;
@@ -20,8 +19,10 @@ namespace NXKit.DOMEvents
         /// <param name="type"></param>
         public static void DispatchEvent(this XElement element, string type)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(type));
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (string.IsNullOrWhiteSpace(type))
+                throw new ArgumentException("Type must be a non-empty string.", nameof(type));
 
             var target = element.InterfaceOrDefault<EventTarget>();
             if (target == null)
@@ -38,8 +39,10 @@ namespace NXKit.DOMEvents
         /// <param name="context"></param>
         public static void DispatchEvent(this XElement element, string type, object context)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(type));
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (string.IsNullOrWhiteSpace(type))
+                throw new ArgumentException("Type must be a non-empty string.", nameof(type));
 
             var target = element.InterfaceOrDefault<EventTarget>();
             if (target == null)
@@ -55,8 +58,10 @@ namespace NXKit.DOMEvents
         /// <param name="evt"></param>
         public static void DispatchEvent(this XElement element, Event evt)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(evt != null);
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (evt == null)
+                throw new ArgumentNullException(nameof(evt));
 
             var target = element.InterfaceOrDefault<EventTarget>();
             if (target == null)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -54,7 +53,8 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         XElement SerializeListener(IEventListener listener)
         {
-            Contract.Requires<ArgumentNullException>(listener != null);
+            if (listener == null)
+                throw new ArgumentNullException(nameof(listener));
 
             // generate listener element
             var element = new XElement("listener",

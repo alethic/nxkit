@@ -28,9 +28,7 @@ namespace NXKit.DOMEvents
         public DefaultEventFactory(
             [ImportMany] IEnumerable<IEventProvider> providers)
         {
-            Contract.Requires<ArgumentNullException>(providers != null);
-
-            this.providers = providers;
+            this.providers = providers ?? throw new ArgumentNullException(nameof(providers));
         }
 
         public Event CreateEvent(string type)

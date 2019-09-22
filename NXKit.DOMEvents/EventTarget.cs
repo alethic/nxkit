@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -47,15 +46,10 @@ namespace NXKit.DOMEvents
             IInvoker invoker)
             : base(node)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(events != null);
-            Contract.Requires<ArgumentNullException>(trace != null);
-            Contract.Requires<ArgumentNullException>(invoker != null);
-
-            this.node = node;
-            this.events = events;
-            this.trace = trace;
-            this.invoker = invoker;
+            this.node = node ?? throw new ArgumentNullException(nameof(node));
+            this.events = events ?? throw new ArgumentNullException(nameof(events));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
+            this.invoker = invoker ?? throw new ArgumentNullException(nameof(invoker));
             this.state = node.AnnotationOrCreate<EventTargetState>();
         }
 
@@ -76,8 +70,10 @@ namespace NXKit.DOMEvents
         /// <param name="capture"></param>
         public void Register(string type, IEventListener listener, bool capture)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(listener != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (listener == null)
+                throw new ArgumentNullException(nameof(listener));
 
             state.registrations = state.registrations.Add(new EventListenerRegistration(type, listener, capture));
         }
@@ -90,8 +86,10 @@ namespace NXKit.DOMEvents
         /// <param name="capture"></param>
         public void Unregister(string type, IEventListener listener, bool capture)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(listener != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (listener == null)
+                throw new ArgumentNullException(nameof(listener));
 
             var items = state.registrations
                 .Where(i => i.EventType == type)
@@ -109,7 +107,8 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         public bool Dispatch(Event evt)
         {
-            Contract.Requires<ArgumentNullException>(evt != null);
+            if (evt == null)
+                throw new ArgumentNullException(nameof(evt));
 
             trace.Information("EventDispatcher.DispatchEvent: {0} to {1}", evt.Type, node);
 
@@ -181,8 +180,10 @@ namespace NXKit.DOMEvents
         /// <param name="evt"></param>
         void InvokeListeners(XNode node, Event evt)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(evt != null);
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+            if (evt == null)
+                throw new ArgumentNullException(nameof(evt));
 
             // Initialize event's currentTarget attribute to the object for which these steps are run.
             evt.currentTarget = node;
@@ -235,7 +236,8 @@ namespace NXKit.DOMEvents
         [Remote]
         public Event Dispatch(string type)
         {
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(type));
+            if (string.IsNullOrWhiteSpace(type))
+                throw new ArgumentOutOfRangeException(nameof(type));
 
             var evt = events.CreateEvent(type);
             if (evt == null)
@@ -255,7 +257,8 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         public Event Dispatch(string type, object context)
         {
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(type));
+            if (string.IsNullOrWhiteSpace(type))
+                throw new ArgumentOutOfRangeException(nameof(type));
 
             var evt = events.CreateEvent(type);
             if (evt == null)
@@ -277,8 +280,10 @@ namespace NXKit.DOMEvents
         /// <param name="handler"></param>
         public void AddEventDelegate(string type, EventHandlerDelegate handler)
         {
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(type));
-            Contract.Requires<ArgumentNullException>(handler != null);
+            if (string.IsNullOrWhiteSpace(type))
+                throw new ArgumentOutOfRangeException(nameof(type));
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
 
             AddEventDelegate(type, handler, false);
         }
@@ -291,8 +296,10 @@ namespace NXKit.DOMEvents
         /// <param name="capture"></param>
         public void AddEventDelegate(string type, EventHandlerDelegate handler, bool capture)
         {
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(type));
-            Contract.Requires<ArgumentNullException>(handler != null);
+            if (string.IsNullOrWhiteSpace(type))
+                throw new ArgumentOutOfRangeException(nameof(type));
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
 
             Register(type, new ActionEventListener(_ => handler(_)), capture);
         }

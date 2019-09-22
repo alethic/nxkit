@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+
 using NXKit.Xml;
 
 namespace NXKit.DOMEvents
@@ -27,10 +27,10 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="methodInfo"></param>
         /// <returns></returns>
-        [Pure]
         public static bool IsValidMethodInfo(MethodInfo methodInfo)
         {
-            Contract.Requires<ArgumentNullException>(methodInfo != null);
+            if (methodInfo == null)
+                throw new ArgumentNullException(nameof(methodInfo));
 
             // method must be public
             if (!methodInfo.IsPublic)
@@ -69,10 +69,14 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         public static InterfaceEventListener Create(XObject handler, Type interfaceType, MethodInfo methodInfo)
         {
-            Contract.Requires<ArgumentNullException>(handler != null);
-            Contract.Requires<ArgumentNullException>(interfaceType != null);
-            Contract.Requires<ArgumentNullException>(methodInfo != null);
-            Contract.Requires<ArgumentException>(IsValidMethodInfo(methodInfo));
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
+            if (interfaceType == null)
+                throw new ArgumentNullException(nameof(interfaceType));
+            if (methodInfo == null)
+                throw new ArgumentNullException(nameof(methodInfo));
+            if (IsValidMethodInfo(methodInfo) == false)
+                throw new ArgumentException("", nameof(methodInfo));
 
             return new InterfaceEventListener(handler, interfaceType, methodInfo);
         }
@@ -84,11 +88,16 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         public static InterfaceEventListener Create(Action action)
         {
-            Contract.Requires<ArgumentNullException>(action != null);
-            Contract.Requires<ArgumentException>(action.Target != null, "Action must have target.");
-            Contract.Requires<ArgumentException>(action.Method != null, "Action must have method.");
-            Contract.Requires<ArgumentException>(action.Target is ElementExtension);
-            Contract.Requires<ArgumentException>(IsValidMethodInfo(action.Method));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+            if (action.Target == null)
+                throw new ArgumentException("Action must have target.");
+            if (action.Method == null)
+                throw new ArgumentException("Action must have method.");
+            if (action.Target is ElementExtension == false)
+                throw new ArgumentException("Action target must be an ElementExtension.");
+            if (IsValidMethodInfo(action.Method) == false)
+                throw new ArgumentException("", nameof(action.Method));
 
             var target = action.Target;
             var method = action.Method;
@@ -103,11 +112,16 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         public static InterfaceEventListener Create(Action<Event> action)
         {
-            Contract.Requires<ArgumentNullException>(action != null);
-            Contract.Requires<ArgumentException>(action.Target != null, "Action must have target.");
-            Contract.Requires<ArgumentException>(action.Method != null, "Action must have method.");
-            Contract.Requires<ArgumentException>(action.Target is ElementExtension);
-            Contract.Requires<ArgumentException>(IsValidMethodInfo(action.Method));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+            if (action.Target == null)
+                throw new ArgumentException("Action must have target.");
+            if (action.Method == null)
+                throw new ArgumentException("Action must have method.");
+            if (action.Target is ElementExtension == false)
+                throw new ArgumentException("Action target must be an ElementExtension.");
+            if (IsValidMethodInfo(action.Method) == false)
+                throw new ArgumentException("", nameof(action.Method));
 
             var target = action.Target;
             var method = action.Method;
@@ -127,12 +141,18 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         public static InterfaceEventListener GetListener(EventTarget dispatcher, string eventType, bool capture, XObject handler, Type interfaceType, MethodInfo methodInfo)
         {
-            Contract.Requires<ArgumentNullException>(dispatcher != null);
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(eventType));
-            Contract.Requires<ArgumentNullException>(handler != null);
-            Contract.Requires<ArgumentNullException>(interfaceType != null);
-            Contract.Requires<ArgumentNullException>(methodInfo != null);
-            Contract.Requires<ArgumentException>(IsValidMethodInfo(methodInfo));
+            if (dispatcher == null)
+                throw new ArgumentNullException(nameof(dispatcher));
+            if (string.IsNullOrWhiteSpace(eventType))
+                throw new ArgumentOutOfRangeException(nameof(eventType));
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
+            if (interfaceType == null)
+                throw new ArgumentNullException(nameof(interfaceType));
+            if (methodInfo == null)
+                throw new ArgumentNullException(nameof(methodInfo));
+            if (IsValidMethodInfo(methodInfo) == false)
+                throw new ArgumentException("", nameof(methodInfo));
 
             var host = handler.Exports().GetExportedValue<Func<Document>>()();
             if (host == null)
@@ -159,13 +179,20 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         public static InterfaceEventListener GetListener(EventTarget dispatcher, string eventType, bool capture, Action action)
         {
-            Contract.Requires<ArgumentNullException>(dispatcher != null);
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(eventType));
-            Contract.Requires<ArgumentNullException>(action != null);
-            Contract.Requires<ArgumentException>(action.Target != null, "Action must have target.");
-            Contract.Requires<ArgumentException>(action.Method != null, "Action must have method.");
-            Contract.Requires<ArgumentException>(action.Target is ElementExtension, "Action.Target must be a ElementExtension.");
-            Contract.Requires<ArgumentException>(IsValidMethodInfo(action.Method));
+            if (dispatcher == null)
+                throw new ArgumentNullException(nameof(dispatcher));
+            if (string.IsNullOrWhiteSpace(eventType))
+                throw new ArgumentOutOfRangeException( nameof(eventType));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+            if (action.Target == null)
+                throw new ArgumentException("Action must have target.");
+            if (action.Method == null)
+                throw new ArgumentException("Action must have method.");
+            if (action.Target is ElementExtension == false)
+                throw new ArgumentException("Action target must be an ElementExtension.");
+            if (IsValidMethodInfo(action.Method) == false)
+                throw new ArgumentException("", nameof(action.Method));
 
             var handler = action.Target;
             var method = action.Method;
@@ -183,13 +210,20 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         public static InterfaceEventListener GetListener(EventTarget dispatcher, string eventType, bool capture, Action<Event> action)
         {
-            Contract.Requires<ArgumentNullException>(dispatcher != null);
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(eventType));
-            Contract.Requires<ArgumentNullException>(action != null);
-            Contract.Requires<ArgumentException>(action.Target != null, "Action must have target.");
-            Contract.Requires<ArgumentException>(action.Method != null, "Action must have method.");
-            Contract.Requires<ArgumentException>(action.Target is ElementExtension, "Action.Target must be a ElementExtension.");
-            Contract.Requires<ArgumentException>(IsValidMethodInfo(action.Method));
+            if (dispatcher == null)
+                throw new ArgumentNullException(nameof(dispatcher));
+            if (string.IsNullOrWhiteSpace(eventType))
+                throw new ArgumentOutOfRangeException(nameof(eventType));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+            if (action.Target == null)
+                throw new ArgumentException("Action must have target.");
+            if (action.Method == null)
+                throw new ArgumentException("Action must have method.");
+            if (action.Target is ElementExtension == false)
+                throw new ArgumentException("Action target must be an ElementExtension.");
+            if (IsValidMethodInfo(action.Method) == false)
+                throw new ArgumentException("", nameof(action.Method));
 
             var handler = action.Target;
             var method = action.Method;
@@ -197,10 +231,9 @@ namespace NXKit.DOMEvents
             return GetListener(dispatcher, eventType, capture, ((ElementExtension)handler).Element, handler.GetType(), method);
         }
 
-
-        int handlerId;
-        Type interfaceType;
-        MethodInfo methodInfo;
+        private int handlerId;
+        private Type interfaceType;
+        private MethodInfo methodInfo;
 
         /// <summary>
         /// Initializes a new instance.
@@ -216,16 +249,16 @@ namespace NXKit.DOMEvents
         /// <param name="handler"></param>
         /// <param name="interfaceType"></param>
         /// <param name="methodInfo"></param>
-        InterfaceEventListener(XObject handler, Type interfaceType, MethodInfo methodInfo)
+        private InterfaceEventListener(XObject handler, Type interfaceType, MethodInfo methodInfo)
         {
-            Contract.Requires<ArgumentNullException>(handler != null);
-            Contract.Requires<ArgumentNullException>(interfaceType != null);
-            Contract.Requires<ArgumentNullException>(methodInfo != null);
-            Contract.Requires<ArgumentException>(IsValidMethodInfo(methodInfo));
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
+            if (IsValidMethodInfo(methodInfo) == false)
+                throw new ArgumentException("", nameof(methodInfo));
 
             this.handlerId = handler.GetObjectId();
-            this.interfaceType = interfaceType;
-            this.methodInfo = methodInfo;
+            this.interfaceType = interfaceType ?? throw new ArgumentNullException(nameof(interfaceType));
+            this.methodInfo = methodInfo ?? throw new ArgumentNullException(nameof(methodInfo));
         }
 
         /// <summary>
@@ -235,7 +268,8 @@ namespace NXKit.DOMEvents
         /// <returns></returns>
         public XObject GetHandler(Document host)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
 
             return host.Xml.ResolveObjectId(handlerId);
         }
@@ -243,18 +277,12 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Gets the interface type that handles the event.
         /// </summary>
-        public Type InterfaceType
-        {
-            get { return interfaceType; }
-        }
+        public Type InterfaceType => interfaceType;
 
         /// <summary>
         /// Gets the <see cref="MethodInfo"/> that handles the event.
         /// </summary>
-        public MethodInfo MethodInfo
-        {
-            get { return methodInfo; }
-        }
+        public MethodInfo MethodInfo => methodInfo;
 
         public void HandleEvent(Event evt)
         {

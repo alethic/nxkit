@@ -33,10 +33,10 @@ namespace NXKit.DOMEvents
             [ImportMany] IEnumerable<IEventInstanceProvider> providers)
             : base (document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
-            Contract.Requires<ArgumentNullException>(providers != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
-            this.providers = providers;
+            this.providers = providers ?? throw new ArgumentNullException(nameof(providers));
         }
 
         public Event CreateEvent(string eventInterface)

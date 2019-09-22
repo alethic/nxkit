@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit.DOMEvents
@@ -23,10 +22,10 @@ namespace NXKit.DOMEvents
         public DOMTargetEventException(XElement target, string type, object contextInfo)
             : base(type, contextInfo)
         {
-            Contract.Requires<ArgumentNullException>(target != null);
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
 
-            this.target = target;
+            this.target = target ?? throw new ArgumentNullException(nameof(target));
         }
 
         /// <summary>
@@ -37,10 +36,10 @@ namespace NXKit.DOMEvents
         public DOMTargetEventException(XElement target, string type)
             : base(type)
         {
-            Contract.Requires<ArgumentNullException>(target != null);
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
 
-            this.target = target;
+            this.target = target ?? throw new ArgumentNullException(nameof(target));
         }
 
         /// <summary>
@@ -52,10 +51,10 @@ namespace NXKit.DOMEvents
         public DOMTargetEventException(XElement target, string type, string message)
             : base(type, message)
         {
-            Contract.Requires<ArgumentNullException>(target != null);
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
 
-            this.target = target;
+            this.target = target ?? throw new ArgumentNullException(nameof(target));
         }
 
         /// <summary>
@@ -67,11 +66,12 @@ namespace NXKit.DOMEvents
         public DOMTargetEventException(XElement target, string type, Exception innerException)
             : base(type, innerException)
         {
-            Contract.Requires<ArgumentNullException>(target != null);
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(innerException != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (innerException == null)
+                throw new ArgumentNullException(nameof(innerException));
 
-            this.target = target;
+            this.target = target ?? throw new ArgumentNullException(nameof(target));
         }
 
         /// <summary>

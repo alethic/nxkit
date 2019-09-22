@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.DOMEvents
 {
@@ -22,11 +21,11 @@ namespace NXKit.DOMEvents
         /// <param name="capture"></param>
         public EventListenerRegistration(string eventType,IEventListener listener, bool capture )
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(eventType));
-            Contract.Requires<ArgumentNullException>(listener != null);
+            if (string.IsNullOrWhiteSpace(eventType))
+                throw new ArgumentNullException(nameof(eventType));
 
             this.eventType = eventType;
-            this.listener = listener;
+            this.listener = listener ?? throw new ArgumentNullException(nameof(listener));
             this.capture = capture;
         }
 

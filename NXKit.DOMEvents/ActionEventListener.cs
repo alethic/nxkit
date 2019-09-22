@@ -16,9 +16,7 @@ namespace NXKit.DOMEvents
         /// <param name="action"></param>
         public ActionEventListener(Action<Event> action)
         {
-            Contract.Requires<ArgumentNullException>(action != null);
-
-            this.action = action;
+            this.action = action ?? throw new ArgumentNullException(nameof(action));
         }
 
         void IEventListener.HandleEvent(Event @event)

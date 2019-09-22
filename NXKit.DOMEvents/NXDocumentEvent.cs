@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -31,10 +30,10 @@ namespace NXKit.DOMEvents
             IEventFactory factory)
             : base(document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
-            Contract.Requires<ArgumentNullException>(factory != null);
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
-            this.factory = factory;
+            this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
         public T CreateEvent<T>(string type)

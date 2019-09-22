@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.DOMEvents
 {
@@ -24,10 +23,14 @@ namespace NXKit.DOMEvents
         /// <param name="cancelable"></param>
         protected EventInfo(string type, string eventInterface, bool bubbles, bool cancelable)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(type.Length > 0);
-            Contract.Requires<ArgumentNullException>(eventInterface != null);
-            Contract.Requires<ArgumentNullException>(eventInterface.Length > 0);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (type.Length <= 0)
+                throw new ArgumentOutOfRangeException(nameof(type));
+            if (eventInterface == null)
+                throw new ArgumentNullException(nameof(eventInterface));
+            if (eventInterface.Length <= 0)
+                throw new ArgumentOutOfRangeException(nameof(eventInterface));
 
             this.type = type;
             this.eventInterface = eventInterface;
@@ -44,8 +47,10 @@ namespace NXKit.DOMEvents
         public EventInfo(string type, bool canBubble, bool cancelable)
             :this(type, "Event", canBubble, cancelable)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(type.Length > 0);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (type.Length <= 0)
+                throw new ArgumentOutOfRangeException(nameof(type));
         }
 
         public string Type
@@ -70,7 +75,8 @@ namespace NXKit.DOMEvents
 
         public virtual void InitEvent(Event evt)
         {
-            Contract.Requires<ArgumentNullException>(evt != null);
+            if (evt == null)
+                throw new ArgumentNullException(nameof(evt));
 
             evt.InitEvent(type, canBubble, cancelable);
         }

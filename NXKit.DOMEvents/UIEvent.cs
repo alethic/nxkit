@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.DOMEvents
 {
@@ -14,7 +13,8 @@ namespace NXKit.DOMEvents
         public UIEvent(Document host)
             : base(host)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
         }
 
         /// <summary>
@@ -25,8 +25,10 @@ namespace NXKit.DOMEvents
         public UIEvent(Document host, string type)
             : base(host, type)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
         }
 
         /// <summary>
@@ -41,9 +43,12 @@ namespace NXKit.DOMEvents
         public UIEvent(Document host, string type, bool canBubble, bool cancelable, object view, long detail)
             : base(host, type, canBubble, cancelable)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(type.Length > 0);
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (type.Length < 1)
+                throw new ArgumentOutOfRangeException(nameof(type));
 
             InitUIEvent(type, canBubble, cancelable, view, detail);
         }

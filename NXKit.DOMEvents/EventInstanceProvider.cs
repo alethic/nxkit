@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 
 using NXKit.Composition;
 
@@ -22,9 +21,7 @@ namespace NXKit.DOMEvents
         [ImportingConstructor]
         public EventInstanceProvider(Func<Document> host)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
-
-            this.host = host;
+            this.host = host ?? throw new ArgumentNullException(nameof(host));
         }
 
         public Event CreateEvent(string eventInterface)

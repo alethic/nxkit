@@ -22,7 +22,8 @@ namespace NXKit.DOMEvents
         public DOMEventException(string type, object contextInfo)
             : this(type)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
 
             this.contextInfo = contextInfo;
         }
@@ -33,7 +34,8 @@ namespace NXKit.DOMEvents
         /// <param name="type"></param>
         public DOMEventException(string type)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
 
             this.type = type;
         }
@@ -46,7 +48,8 @@ namespace NXKit.DOMEvents
         public DOMEventException(string type, string message)
             : base(message)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
 
             this.type = type;
         }
@@ -59,8 +62,10 @@ namespace NXKit.DOMEvents
         public DOMEventException(string type, Exception innerException)
             : base(innerException.Message, innerException)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(innerException != null);
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (innerException == null)
+                throw new ArgumentNullException(nameof(innerException));
 
             this.type = type;
         }

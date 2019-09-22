@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 using NXKit.Composition;
@@ -29,10 +28,10 @@ namespace NXKit.DOMEvents
             Func<Document> host,
             [ImportMany] IEnumerable<IEventInfoTable> tables)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
-            Contract.Requires<ArgumentNullException>(tables != null);
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
 
-            this.tables = tables;
+            this.tables = tables ?? throw new ArgumentNullException(nameof(tables));
             this.documentEvent = new Lazy<IDocumentEvent>(() => host().Xml.Interface<IDocumentEvent>());
         }
 

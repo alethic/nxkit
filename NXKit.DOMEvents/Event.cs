@@ -52,10 +52,10 @@ namespace NXKit.DOMEvents
         public Event(Document host, string type)
             : this(host)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
 
-            this.type = type;
+            this.type = type ?? throw new ArgumentNullException(nameof(type));
         }
 
         /// <summary>
@@ -68,9 +68,12 @@ namespace NXKit.DOMEvents
         public Event(Document host, string type, bool canBubble, bool cancelable)
             : this(host)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
-            Contract.Requires<ArgumentNullException>(type != null);
-            Contract.Requires<ArgumentNullException>(type.Length > 0);
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            if (type.Length <= 0)
+                throw new ArgumentOutOfRangeException(nameof(type));
 
             InitEvent(type, canBubble, cancelable);
         }
