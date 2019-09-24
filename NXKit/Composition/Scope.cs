@@ -18,7 +18,7 @@
         Host = 1,
 
         /// <summary>
-        /// Export is allocated within the pbject container. These exports are not available to Host or Global exports.
+        /// Export is allocated within the object container. These exports are not available to Host or Global exports.
         /// </summary>
         Object = 2,
 
