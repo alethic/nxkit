@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -13,7 +11,6 @@ namespace NXKit.XMLEvents
     /// Listens for a given event on an element.
     /// </summary>
     [Extension]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ElementEventListener :
         ElementExtension,
         IOnInit
@@ -30,7 +27,6 @@ namespace NXKit.XMLEvents
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         /// <param name="invoker"></param>
-        [ImportingConstructor]
         public ElementEventListener(
             XElement element,
             EventListenerAttributes attributes,

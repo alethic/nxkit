@@ -4,7 +4,7 @@
     /// <summary>
     /// Specifies an interface that is invoked during the document invoke phase.
     /// </summary>
-    public interface IOnInvoke
+    public interface IOnInvoke : IExtension
     {
 
         /// <summary>

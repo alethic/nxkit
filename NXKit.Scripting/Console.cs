@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Linq;
 
 using NXKit.Composition;
@@ -8,8 +7,7 @@ using NXKit.Diagnostics;
 namespace NXKit.Scripting
 {
 
-    [ScriptObject("console")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [ScriptObject("console", CompositionScope.Host)]
     public class Console :
         IScriptObject
     {
@@ -20,7 +18,6 @@ namespace NXKit.Scripting
         /// Initializes a new instance.
         /// </summary>
         /// <param name="trace"></param>
-        [ImportingConstructor]
         public Console(ITraceService trace)
         {
             this.trace = trace ?? throw new ArgumentNullException(nameof(trace));

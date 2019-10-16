@@ -1,14 +1,10 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}range")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class Range :
         ElementExtension
@@ -21,7 +17,6 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="attributes"></param>
-        [ImportingConstructor]
         public Range(
             XElement element,
             RangeAttributes attributes)

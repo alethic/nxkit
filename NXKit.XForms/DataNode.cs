@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -11,7 +8,6 @@ namespace NXKit.XForms
     /// Encapsulates the binding information for a UI element.
     /// </summary>
     [Extension(PredicateType = typeof(DataNodePredicate))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DataNode :
         ElementExtension,
         IDataNode
@@ -32,7 +28,7 @@ namespace NXKit.XForms
 
         }
 
-        readonly Extension<IUIBindingNode> uiBindingNode;
+        readonly Lazy<IUIBindingNode> uiBindingNode;
         readonly Lazy<UIBinding> uiBinding;
 
         /// <summary>
@@ -40,10 +36,9 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="uiBindingNode"></param>
-        [ImportingConstructor]
         public DataNode(
             XElement element,
-            Extension<IUIBindingNode> uiBindingNode)
+            Lazy<IUIBindingNode> uiBindingNode)
             : base(element)
         {
             if (element == null)

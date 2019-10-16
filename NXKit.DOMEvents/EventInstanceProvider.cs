@@ -1,32 +1,29 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 
 using NXKit.Composition;
 
 namespace NXKit.DOMEvents
 {
 
-    [Export(typeof(IEventInstanceProvider))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(IEventInstanceProvider), CompositionScope.Host)]
     public class EventInstanceProvider :
         IEventInstanceProvider
     {
 
-        readonly Func<Document> host;
+        readonly DocumentEnvironment environment;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="host"></param>
-        [ImportingConstructor]
-        public EventInstanceProvider(Func<Document> host)
+        /// <param name="environment"></param>
+        public EventInstanceProvider(DocumentEnvironment environment)
         {
-            this.host = host ?? throw new ArgumentNullException(nameof(host));
+            this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
         public Event CreateEvent(string eventInterface)
         {
-            var host = this.host();
+            var host = environment.GetHost();
             if (host == null)
                 throw new NullReferenceException();
 

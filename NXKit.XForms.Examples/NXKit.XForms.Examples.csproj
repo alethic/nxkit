@@ -1,79 +1,75 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net45</TargetFramework>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <None Remove="aship-data.xml" />
-      <None Remove="aship-data.xsd" />
-      <None Remove="aship-form.xml" />
-      <None Remove="basic.xml" />
-      <None Remove="beneficiaries.xml" />
-      <None Remove="elections.xml" />
-      <None Remove="form.xml" />
-      <None Remove="group.xml" />
-      <None Remove="include.xml" />
-      <None Remove="include2.xml" />
-      <None Remove="insert.xml" />
-      <None Remove="nxinclude.xml" />
-      <None Remove="nxinclude_form1.xml" />
-      <None Remove="persons.xml" />
-      <None Remove="primaryelections.xml" />
-      <None Remove="primaryperson.xml" />
-      <None Remove="primaryquestions.xml" />
-      <None Remove="questions.xml" />
-      <None Remove="relationships.xml" />
-      <None Remove="relevant.xml" />
-      <None Remove="repeat.xml" />
-      <None Remove="script.xml" />
-      <None Remove="secondaryelections.xml" />
-      <None Remove="secondaryperson.xml" />
-      <None Remove="secondaryquestions.xml" />
-      <None Remove="section.xml" />
-      <None Remove="select1.xml" />
-      <None Remove="submit.xml" />
-      <None Remove="trigger.xml" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Remove="aship-data.xml" />
+    <None Remove="aship-data.xsd" />
+    <None Remove="aship-form.xml" />
+    <None Remove="basic.xml" />
+    <None Remove="beneficiaries.xml" />
+    <None Remove="elections.xml" />
+    <None Remove="form.xml" />
+    <None Remove="group.xml" />
+    <None Remove="include.xml" />
+    <None Remove="include2.xml" />
+    <None Remove="insert.xml" />
+    <None Remove="nxinclude.xml" />
+    <None Remove="nxinclude_form1.xml" />
+    <None Remove="persons.xml" />
+    <None Remove="primaryelections.xml" />
+    <None Remove="primaryperson.xml" />
+    <None Remove="primaryquestions.xml" />
+    <None Remove="questions.xml" />
+    <None Remove="relationships.xml" />
+    <None Remove="relevant.xml" />
+    <None Remove="repeat.xml" />
+    <None Remove="script.xml" />
+    <None Remove="secondaryelections.xml" />
+    <None Remove="secondaryperson.xml" />
+    <None Remove="secondaryquestions.xml" />
+    <None Remove="section.xml" />
+    <None Remove="select1.xml" />
+    <None Remove="submit.xml" />
+    <None Remove="trigger.xml" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <EmbeddedResource Include="aship-data.xml" />
-      <EmbeddedResource Include="aship-data.xsd" />
-      <EmbeddedResource Include="aship-form.xml" />
-      <EmbeddedResource Include="basic.xml" />
-      <EmbeddedResource Include="beneficiaries.xml" />
-      <EmbeddedResource Include="elections.xml" />
-      <EmbeddedResource Include="form.xml" />
-      <EmbeddedResource Include="group.xml" />
-      <EmbeddedResource Include="include.xml" />
-      <EmbeddedResource Include="include2.xml" />
-      <EmbeddedResource Include="insert.xml" />
-      <EmbeddedResource Include="nxinclude.xml" />
-      <EmbeddedResource Include="nxinclude_form1.xml" />
-      <EmbeddedResource Include="persons.xml" />
-      <EmbeddedResource Include="primaryelections.xml" />
-      <EmbeddedResource Include="primaryperson.xml" />
-      <EmbeddedResource Include="primaryquestions.xml" />
-      <EmbeddedResource Include="questions.xml" />
-      <EmbeddedResource Include="relationships.xml" />
-      <EmbeddedResource Include="relevant.xml" />
-      <EmbeddedResource Include="repeat.xml" />
-      <EmbeddedResource Include="script.xml" />
-      <EmbeddedResource Include="secondaryelections.xml" />
-      <EmbeddedResource Include="secondaryperson.xml" />
-      <EmbeddedResource Include="secondaryquestions.xml" />
-      <EmbeddedResource Include="section.xml" />
-      <EmbeddedResource Include="select1.xml" />
-      <EmbeddedResource Include="submit.xml" />
-      <EmbeddedResource Include="trigger.xml" />
-    </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="aship-data.xml" />
+    <EmbeddedResource Include="aship-data.xsd" />
+    <EmbeddedResource Include="aship-form.xml" />
+    <EmbeddedResource Include="basic.xml" />
+    <EmbeddedResource Include="beneficiaries.xml" />
+    <EmbeddedResource Include="elections.xml" />
+    <EmbeddedResource Include="form.xml" />
+    <EmbeddedResource Include="group.xml" />
+    <EmbeddedResource Include="include.xml" />
+    <EmbeddedResource Include="include2.xml" />
+    <EmbeddedResource Include="insert.xml" />
+    <EmbeddedResource Include="nxinclude.xml" />
+    <EmbeddedResource Include="nxinclude_form1.xml" />
+    <EmbeddedResource Include="persons.xml" />
+    <EmbeddedResource Include="primaryelections.xml" />
+    <EmbeddedResource Include="primaryperson.xml" />
+    <EmbeddedResource Include="primaryquestions.xml" />
+    <EmbeddedResource Include="questions.xml" />
+    <EmbeddedResource Include="relationships.xml" />
+    <EmbeddedResource Include="relevant.xml" />
+    <EmbeddedResource Include="repeat.xml" />
+    <EmbeddedResource Include="script.xml" />
+    <EmbeddedResource Include="secondaryelections.xml" />
+    <EmbeddedResource Include="secondaryperson.xml" />
+    <EmbeddedResource Include="secondaryquestions.xml" />
+    <EmbeddedResource Include="section.xml" />
+    <EmbeddedResource Include="select1.xml" />
+    <EmbeddedResource Include="submit.xml" />
+    <EmbeddedResource Include="trigger.xml" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\NXKit\NXKit.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Reference Include="System.ComponentModel.Composition" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NXKit\NXKit.csproj" />
+  </ItemGroup>
 
 </Project>

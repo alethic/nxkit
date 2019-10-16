@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -11,7 +8,6 @@ namespace NXKit.XForms
     /// The author-optional element help provides a convenient way to attach help information to a form control.
     /// </summary>
     [Extension("{http://www.w3.org/2002/xforms}help")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Help :
         ElementExtension
     {
@@ -20,7 +16,6 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public Help(XElement element)
             : base(element)
         {

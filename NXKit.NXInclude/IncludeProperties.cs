@@ -1,15 +1,10 @@
 ﻿using System;
-using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.NXInclude
 {
 
     [Extension(typeof(IncludeProperties))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IncludeProperties :
         XInclude.IncludeProperties
     {
@@ -19,14 +14,15 @@ namespace NXKit.NXInclude
         /// </summary>
         /// <param name="element"></param>
         /// <param name="attributes"></param>
-        [ImportingConstructor]
         public IncludeProperties(
             XElement element,
             IncludeAttributes attributes)
             : base(element, () => attributes)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(attributes != null);
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
+            if (attributes is null)
+                throw new ArgumentNullException(nameof(attributes));
         }
 
     }

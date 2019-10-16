@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -31,12 +30,10 @@ namespace NXKit.Xml
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            var attr = self as XAttribute;
-            if (attr != null)
+            if (self is XAttribute attr)
                 return attr.ResolveId(id);
 
-            var node = self as XNode;
-            if (node != null)
+            if (self is XNode node)
                 return node.ResolveId(id);
 
             throw new InvalidOperationException();
@@ -104,12 +101,10 @@ namespace NXKit.Xml
             if (prefix == null)
                 throw new ArgumentNullException(nameof(prefix));
 
-            var attr = self as XAttribute;
-            if (attr != null)
+            if (self is XAttribute attr)
                 return attr.GetNamespaceOfPrefix(prefix);
 
-            var node = self as XNode;
-            if (node != null)
+            if (self is XNode node)
                 return node.GetNamespaceOfPrefix(prefix);
 
             throw new InvalidOperationException();
@@ -130,12 +125,10 @@ namespace NXKit.Xml
             if (ns == null)
                 throw new ArgumentNullException(nameof(ns));
 
-            var attr = self as XAttribute;
-            if (attr != null)
+            if (self is XAttribute attr)
                 return attr.GetPrefixOfNamespace(ns);
 
-            var node = self as XNode;
-            if (node != null)
+            if (self is XNode node)
                 return node.GetPrefixOfNamespace(ns);
 
             throw new InvalidOperationException();
@@ -423,7 +416,7 @@ namespace NXKit.Xml
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
 
-            return Interfaces(node, type, node.Exports());
+            return Interfaces(node, type, node.GetContext());
         }
 
         /// <summary>
@@ -432,45 +425,48 @@ namespace NXKit.Xml
         /// <param name="node"></param>
         /// <returns></returns>
         public static IEnumerable<T> Interfaces<T>(this XObject node)
+            where T : class, IExtension
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
 
-            return Interfaces<T>(node, node.Exports());
+            return Interfaces<T>(node, node.GetContext());
         }
 
         /// <summary>
         /// Implements Interfaces, allowing the specification of an export provider.
         /// </summary>
         /// <param name="node"></param>
-        /// <param name="exports"></param>
+        /// <param name="context"></param>
         /// <returns></returns>
-        static IEnumerable<object> Interfaces(this XObject node, Type type, ExportProvider exports)
+        static IEnumerable<object> Interfaces(this XObject node, Type type, ICompositionContext context)
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
-            if (exports == null)
-                throw new ArgumentNullException(nameof(exports));
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
 
-            return (ExtensionQuery)node.AnnotationOrCreate(typeof(ExtensionQuery<>).MakeGenericType(type), () => exports.GetExportedValue(typeof(ExtensionQuery<>).MakeGenericType(type)));
+            var q = typeof(ExtensionQuery<>).MakeGenericType(type);
+            return (ExtensionQuery)node.AnnotationOrCreate(q, () => (ExtensionQuery)context.Resolve(q));
         }
 
         /// <summary>
         /// Implements Interfaces, allowing the specification of an export provider.
         /// </summary>
         /// <param name="node"></param>
-        /// <param name="exports"></param>
+        /// <param name="context"></param>
         /// <returns></returns>
-        static IEnumerable<T> Interfaces<T>(this XObject node, ExportProvider exports)
+        static IEnumerable<T> Interfaces<T>(this XObject node, ICompositionContext context)
+            where T : class, IExtension
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
-            if (exports == null)
-                throw new ArgumentNullException(nameof(exports));
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
 
-            return node.AnnotationOrCreate<ExtensionQuery<T>>(() => exports.GetExportedValue<ExtensionQuery<T>>());
+            return node.AnnotationOrCreate<ExtensionQuery<T>>(() => context.Resolve<ExtensionQuery<T>>());
         }
 
         /// <summary>
@@ -480,6 +476,7 @@ namespace NXKit.Xml
         /// <param name="node"></param>
         /// <returns></returns>
         public static T InterfaceOrDefault<T>(this XObject node)
+            where T : class, IExtension
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
@@ -495,6 +492,7 @@ namespace NXKit.Xml
         /// <param name="node"></param>
         /// <returns></returns>
         public static T Interface<T>(this XObject node)
+            where T : class, IExtension
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
@@ -511,36 +509,34 @@ namespace NXKit.Xml
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static ExportProvider Exports(this XObject self)
+        public static ICompositionContext GetContext(this XObject self)
         {
             if (self == null)
                 throw new ArgumentNullException(nameof(self));
 
             // get or create the new object container annotation
-            return self.AnnotationOrCreate<ExportProvider>(() =>
+            return self.AnnotationOrCreate(() =>
             {
                 var document = self.Document.Annotation<Document>();
                 if (document == null)
                     throw new InvalidOperationException();
 
                 // initialize new container
-                var container = CompositionUtil.ConfigureContainer(new CompositionContainer(
-                    document.Configuration.ObjectCatalog,
-                    CompositionOptions.DisableSilentRejection,
-                    document.Container));
+                var context = document.Context.BeginContext(CompositionScope.Object, b =>
+                {
+                    if (self is XObject)
+                        b.AddInstance<XObject>(self);
+                    if (self is XDocument)
+                        b.AddInstance<XDocument>((XDocument)self);
+                    if (self is XElement)
+                        b.AddInstance<XElement>((XElement)self);
+                    if (self is XNode)
+                        b.AddInstance<XNode>((XNode)self);
+                    if (self is XAttribute)
+                        b.AddInstance<XAttribute>((XAttribute)self);
+                });
 
-                if (self is XObject)
-                    container.WithExport<XObject>(self);
-                if (self is XDocument)
-                    container.WithExport<XDocument>((XDocument)self);
-                if (self is XElement)
-                    container.WithExport<XElement>((XElement)self);
-                if (self is XNode)
-                    container.WithExport<XNode>((XNode)self);
-                if (self is XAttribute)
-                    container.WithExport<XAttribute>((XAttribute)self);
-
-                return container;
+                return context;
             });
         }
 

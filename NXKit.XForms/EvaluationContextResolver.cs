@@ -10,7 +10,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Resolves various <see cref="EvaluationContext"/> instances with regards to the specified <see cref="XObject"/>.
     /// </summary>
-    public abstract class EvaluationContextResolver
+    public abstract class EvaluationContextResolver : IExtension
     {
 
         readonly XObject obj;

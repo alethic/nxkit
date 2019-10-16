@@ -1,6 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Net;
+
+using NXKit.Composition;
 
 namespace NXKit.Net
 {

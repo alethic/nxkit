@@ -1,14 +1,10 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}value", PredicateType = typeof(ItemValuePredicate))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ItemValue :
         ElementExtension,
         ISelectableValue
@@ -26,7 +22,7 @@ namespace NXKit.XForms
         }
 
         readonly ItemValueAttributes attributes;
-        readonly Extension<IBindingNode> bindingNode;
+        readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
         /// <summary>
@@ -35,11 +31,10 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         /// <param name="bindingNode"></param>
-        [ImportingConstructor]
         public ItemValue(
             XElement element,
             ItemValueAttributes attributes,
-            Extension<IBindingNode> bindingNode)
+            Lazy<IBindingNode> bindingNode)
             : base(element)
         {
             if (element == null)

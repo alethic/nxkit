@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Composition.Primitives;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -14,6 +11,7 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+using NXKit.Composition;
 using NXKit.View.Server.Serialization;
 using NXKit.Xml;
 
@@ -26,33 +24,21 @@ namespace NXKit.View.Server
     public class ViewServer
     {
 
+        readonly ICompositionContext context;
         readonly IEnumerable<IDocumentStore> stores;
         readonly IEnumerable<IDocumentCache> caches;
-        ComposablePartCatalog catalog;
-        ExportProvider exports;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public ViewServer()
-            : this(null, null, store: null, cache: null)
-        {
-
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="catalog"></param>
-        /// <param name="exports"></param>
+        /// <param name="context"></param>
         /// <param name="store"></param>
         /// <param name="cache"></param>
         ViewServer(
-            ComposablePartCatalog catalog = null,
-            ExportProvider exports = null,
+            ICompositionContext context,
             IDocumentStore store = null,
             IDocumentCache cache = null)
-            : this(catalog, exports, store != null ? new[] { store } : null, cache != null ? new[] { cache } : null)
+            : this(context, store != null ? new[] { store } : null, cache != null ? new[] { cache } : null)
         {
 
         }
@@ -60,18 +46,15 @@ namespace NXKit.View.Server
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="catalog"></param>
-        /// <param name="exports"></param>
+        /// <param name="context"></param>
         /// <param name="stores"></param>
         /// <param name="caches"></param>
         ViewServer(
-            ComposablePartCatalog catalog = null,
-            ExportProvider exports = null,
+            ICompositionContext context,
             IEnumerable<IDocumentStore> stores = null,
             IEnumerable<IDocumentCache> caches = null)
         {
-            this.catalog = catalog;
-            this.exports = exports;
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.stores = (stores ?? new[] { new MemoryDocumentStore() }).Where(i => i != null);
             this.caches = (caches ?? new[] { new MemoryDocumentCache() }).Where(i => i != null);
         }
@@ -79,19 +62,9 @@ namespace NXKit.View.Server
         /// <summary>
         /// Gets or sets the additional set of exports to introduce to the document.
         /// </summary>
-        public ExportProvider Exports
+        public ICompositionContext Context
         {
-            get { return exports; }
-            set { exports = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the additional set of parts to introduce to the document.
-        /// </summary>
-        public ComposablePartCatalog Catalog
-        {
-            get { return catalog; }
-            set { catalog = value; }
+            get { return context; }
         }
 
         /// <summary>
@@ -100,10 +73,11 @@ namespace NXKit.View.Server
         /// <param name="uri"></param>
         public ViewMessage Load(Uri uri)
         {
-            Contract.Requires<ArgumentNullException>(uri != null);
+            if (uri is null)
+                throw new ArgumentNullException(nameof(uri));
 
             // load new document
-            return Save(Load(() => Document.Load(uri, catalog, exports)), ViewMessageStatus.Good);
+            return Save(Load(() => Document.Load(uri, context)), ViewMessageStatus.Good);
         }
 
         /// <summary>
@@ -112,7 +86,8 @@ namespace NXKit.View.Server
         /// <param name="uri"></param>
         public ViewMessage Load(string uri)
         {
-            Contract.Requires<ArgumentNullException>(uri != null);
+            if (uri is null)
+                throw new ArgumentNullException(nameof(uri));
 
             return Load(new Uri(uri, UriKind.RelativeOrAbsolute));
         }
@@ -123,10 +98,11 @@ namespace NXKit.View.Server
         /// <param name="reader"></param>
         public ViewMessage Load(TextReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
+            if (reader is null)
+                throw new ArgumentNullException(nameof(reader));
 
             // load new document
-            return Save(Load(() => Document.Load(reader, catalog, exports)), ViewMessageStatus.Good);
+            return Save(Load(() => Document.Load(reader, context)), ViewMessageStatus.Good);
         }
 
         /// <summary>
@@ -135,10 +111,11 @@ namespace NXKit.View.Server
         /// <param name="reader"></param>
         public ViewMessage Load(XmlReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
+            if (reader is null)
+                throw new ArgumentNullException(nameof(reader));
 
             // load new document
-            return Save(Load(() => Document.Load(reader, catalog, exports)), ViewMessageStatus.Good);
+            return Save(Load(() => Document.Load(reader, context)), ViewMessageStatus.Good);
         }
 
         /// <summary>
@@ -148,7 +125,8 @@ namespace NXKit.View.Server
         /// <returns></returns>
         public ViewMessage Load(ViewMessage message)
         {
-            Contract.Requires<ArgumentNullException>(message != null);
+            if (message is null)
+                throw new ArgumentNullException(nameof(message));
 
             // load document from args
             var document = LoadFromMessage(message);
@@ -191,10 +169,10 @@ namespace NXKit.View.Server
         /// <param name="args"></param>
         void OnDocumentLoaded(DocumentEventArgs args)
         {
-            Contract.Requires<ArgumentNullException>(args != null);
+            if (args is null)
+                throw new ArgumentNullException(nameof(args));
 
-            if (DocumentLoaded != null)
-                DocumentLoaded(this, args);
+            DocumentLoaded?.Invoke(this, args);
         }
 
         /// <summary>
@@ -208,10 +186,10 @@ namespace NXKit.View.Server
         /// <param name="args"></param>
         void OnDocumentUnloading(DocumentEventArgs args)
         {
-            Contract.Requires<ArgumentNullException>(args != null);
+            if (args is null)
+                throw new ArgumentNullException(nameof(args));
 
-            if (DocumentUnloading != null)
-                DocumentUnloading(this, args);
+            DocumentUnloading?.Invoke(this, args);
         }
 
         /// <summary>
@@ -221,7 +199,8 @@ namespace NXKit.View.Server
         /// <returns></returns>
         string GetMD5HashText(string data)
         {
-            Contract.Requires<ArgumentNullException>(data != null);
+            if (data is null)
+                throw new ArgumentNullException(nameof(data));
 
             var hash = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(data));
             var text = new StringBuilder();
@@ -236,7 +215,8 @@ namespace NXKit.View.Server
         /// <returns></returns>
         string GetSaveString(Document document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document is null)
+                throw new ArgumentNullException(nameof(document));
 
             using (var stream = new MemoryStream())
             using (var encode = new CryptoStream(stream, new ToBase64Transform(), CryptoStreamMode.Write))
@@ -260,7 +240,8 @@ namespace NXKit.View.Server
         /// <returns></returns>
         JToken CreateNodeJObject(Document document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document is null)
+                throw new ArgumentNullException(nameof(document));
 
             // serialize document state to data field
             using (var wrt = new JTokenWriter())
@@ -276,18 +257,20 @@ namespace NXKit.View.Server
         /// <returns></returns>
         object GetNodeObject(Document document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document is null)
+                throw new ArgumentNullException(nameof(document));
 
             return CreateNodeJObject(document);
         }
 
         /// <summary>
-        /// Gets the client-side data as a <see cref="String"/>.
+        /// Gets the client-side data as a <see cref="string"/>.
         /// </summary>
         /// <returns></returns>
         string GetDataString(Document document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
+            if (document is null)
+                throw new ArgumentNullException(nameof(document));
 
             return JsonConvert.SerializeObject(GetNodeObject(document));
         }
@@ -302,7 +285,7 @@ namespace NXKit.View.Server
             OnDocumentUnloading(new DocumentEventArgs(document));
 
             // extract data from document
-            var cmds = document.Container.GetExportedValues<ICommandProvider>().SelectMany(i => i.Commands).ToArray();
+            var cmds = document.Context.Resolve<IEnumerable<ICommandProvider>>().SelectMany(i => i.Commands).ToArray();
             var node = GetNodeObject(document);
             var save = GetSaveString(document);
             var hash = GetMD5HashText(save);
@@ -327,14 +310,15 @@ namespace NXKit.View.Server
         /// <returns></returns>
         Document LoadFromSave(string save)
         {
-            Contract.Requires<ArgumentNullException>(save != null);
+            if (save is null)
+                throw new ArgumentNullException(nameof(save));
 
             using (var stm = new MemoryStream(Encoding.ASCII.GetBytes(save)))
             using (var b64 = new CryptoStream(stm, new FromBase64Transform(), CryptoStreamMode.Read))
             using (var cmp = new DeflateStream(b64, CompressionMode.Decompress))
             using (var rdr = XmlDictionaryReader.CreateBinaryReader(cmp, new XmlDictionaryReaderQuotas()))
             {
-                return Document.Load(rdr, catalog, exports);
+                return Document.Load(rdr, context);
             }
         }
 
@@ -366,7 +350,8 @@ namespace NXKit.View.Server
         /// <returns></returns>
         Document LoadFromMessage(ViewMessage message)
         {
-            Contract.Requires<ArgumentNullException>(message != null);
+            if (message is null)
+                throw new ArgumentNullException(nameof(message));
 
             // load save data
             if (message.Save != null)
@@ -386,8 +371,10 @@ namespace NXKit.View.Server
         /// <returns></returns>
         void Execute(Document document, ViewMessage message)
         {
-            Contract.Requires<ArgumentNullException>(message != null);
-            Contract.Requires<InvalidOperationException>(document != null);
+            if (document is null)
+                throw new ArgumentNullException(nameof(document));
+            if (message is null)
+                throw new ArgumentNullException(nameof(message));
 
             if (message.Commands != null)
             {
@@ -418,10 +405,14 @@ namespace NXKit.View.Server
         /// <param name="value"></param>
         void ClientUpdate(Document document, int nodeId, string @interface, string property, JValue value)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
-            Contract.Requires<ArgumentOutOfRangeException>(nodeId > 0);
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(@interface));
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(property));
+            if (document is null)
+                throw new ArgumentNullException(nameof(document));
+            if (nodeId < 1)
+                throw new ArgumentOutOfRangeException(nameof(nodeId));
+            if (string.IsNullOrWhiteSpace(@interface))
+                throw new ArgumentOutOfRangeException(nameof(@interface));
+            if (string.IsNullOrWhiteSpace(property))
+                throw new ArgumentOutOfRangeException(nameof(property));
 
             var node = (XNode)document.Xml.ResolveObjectId(nodeId);
             if (node == null)
@@ -440,10 +431,14 @@ namespace NXKit.View.Server
         /// <param name="params"></param>
         void ClientInvoke(Document document, int nodeId, string @interface, string method, JObject @params)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
-            Contract.Requires<ArgumentOutOfRangeException>(nodeId > 0);
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(@interface));
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(method));
+            if (document is null)
+                throw new ArgumentNullException(nameof(document));
+            if (nodeId < 1)
+                throw new ArgumentOutOfRangeException(nameof(nodeId));
+            if (string.IsNullOrWhiteSpace(@interface))
+                throw new ArgumentOutOfRangeException(nameof(@interface));
+            if (string.IsNullOrWhiteSpace(method))
+                throw new ArgumentOutOfRangeException(nameof(method));
 
             var node = (XNode)document.Xml.ResolveObjectId(nodeId);
             if (node == null)

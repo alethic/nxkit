@@ -1,9 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Text;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.IO.Media;
 using NXKit.XForms.IO;
 using NXKit.Xml;
@@ -15,7 +13,6 @@ namespace NXKit.XForms
     /// Provides the XForms 'submission' properties.
     /// </summary>
     [Extension(typeof(SubmissionProperties), "{http://www.w3.org/2002/xforms}submission")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class SubmissionProperties :
         ElementExtension
     {
@@ -27,7 +24,6 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="attributes"></param>
-        [ImportingConstructor]
         public SubmissionProperties(
             XElement element,
             SubmissionAttributes attributes)

@@ -1,5 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
+
+using NXKit.Composition;
 
 using StackExchange.Redis;
 
@@ -22,7 +23,6 @@ namespace NXKit.View.Server
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        [ImportingConstructor]
         public RedisDocumentCache()
         {
             this.cache = ConnectionMultiplexer.Connect("");

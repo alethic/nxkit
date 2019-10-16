@@ -1,9 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-using NXKit.Composition;
 using NXKit.IO.Media;
 
 namespace NXKit.XForms
@@ -13,13 +11,12 @@ namespace NXKit.XForms
     /// Provides the XForms 'output' properties.
     /// </summary>
     [Extension(typeof(OutputProperties), "{http://www.w3.org/2002/xforms}output")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class OutputProperties :
         ElementExtension
     {
 
         readonly OutputAttributes attributes;
-        readonly Extension<EvaluationContextResolver> context;
+        readonly Lazy<EvaluationContextResolver> context;
         readonly Lazy<XPathExpression> value;
         readonly MediaRange mediaType;
 
@@ -29,11 +26,10 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         /// <param name="context"></param>
-        [ImportingConstructor]
         public OutputProperties(
             XElement element,
             OutputAttributes attributes,
-            Extension<EvaluationContextResolver> context)
+            Lazy<EvaluationContextResolver> context)
             : base(element)
         {
             if (element == null)

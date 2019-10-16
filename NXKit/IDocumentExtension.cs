@@ -1,12 +1,10 @@
-﻿using System.Xml.Linq;
-
-namespace NXKit
+﻿namespace NXKit
 {
 
-    public interface IDocumentExtension
+    public interface IDocumentExtension : IExtension
     {
 
-        XDocument Document { get; }
+
 
     }
 

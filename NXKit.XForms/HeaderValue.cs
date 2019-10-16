@@ -1,20 +1,15 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}value", PredicateType = typeof(HeaderValuePredicate))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class HeaderValue :
         ElementExtension
     {
 
-        class HeaderValuePredicate :
-            IExtensionPredicate
+        class HeaderValuePredicate : IExtensionPredicate
         {
 
             public bool IsMatch(XObject obj)
@@ -25,7 +20,7 @@ namespace NXKit.XForms
         }
 
         readonly HeaderValueAttributes attributes;
-        readonly Extension<IBindingNode> bindingNode;
+        readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
         /// <summary>
@@ -34,11 +29,10 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         /// <param name="bindingNode"></param>
-        [ImportingConstructor]
         public HeaderValue(
             XElement element,
             HeaderValueAttributes attributes,
-            Extension<IBindingNode> bindingNode)
+            Lazy<IBindingNode> bindingNode)
             : base(element)
         {
             if (element == null)

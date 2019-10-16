@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Xsl;
+
+using NXKit.Composition;
 
 namespace NXKit.XPath
 {
@@ -15,7 +16,7 @@ namespace NXKit.XPath
         /// Gets all of the available functions.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<Lazy<IXsltContextFunction,IXsltContextFunctionMetadata>> GetFunctions();
+        IEnumerable<IExport<IXsltContextFunction, IXsltContextFunctionMetadata>> GetFunctions();
 
     }
 

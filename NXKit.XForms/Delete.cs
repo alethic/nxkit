@@ -1,10 +1,8 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 using NXKit.XMLEvents;
@@ -13,7 +11,6 @@ namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}delete")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Delete :
         ElementExtension,
         IEventHandler
@@ -23,20 +20,19 @@ namespace NXKit.XForms
         readonly BindingProperties bindingProperties;
         readonly ActionProperties actionProperties;
         readonly DeleteProperties deleteProperties;
-        readonly Extension<EvaluationContextResolver> resolver;
+        readonly Lazy<EvaluationContextResolver> resolver;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public Delete(
             XElement element,
             CommonProperties commonProperties,
             BindingProperties bindingProperties,
             ActionProperties actionProperties,
             DeleteProperties deleteProperties,
-            Extension<EvaluationContextResolver> resolver)
+            Lazy<EvaluationContextResolver> resolver)
             : base(element)
         {
             if (element == null)

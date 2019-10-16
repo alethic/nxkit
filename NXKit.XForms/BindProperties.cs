@@ -1,9 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -13,13 +11,12 @@ namespace NXKit.XForms
     /// Provides the XForms 'bind' properties.
     /// </summary>
     [Extension(typeof(BindProperties), "{http://www.w3.org/2002/xforms}bind")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class BindProperties :
         ElementExtension
     {
 
         readonly BindAttributes attributes;
-        readonly Extension<EvaluationContextResolver> context;
+        readonly Lazy<EvaluationContextResolver> context;
         readonly Lazy<XName> type;
         readonly Lazy<XPathExpression> readOnly;
         readonly Lazy<XPathExpression> required;
@@ -33,11 +30,10 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         /// <param name="context"></param>
-        [ImportingConstructor]
         public BindProperties(
             XElement element,
             BindAttributes attributes,
-            Extension<EvaluationContextResolver> context)
+            Lazy<EvaluationContextResolver> context)
             : base(element)
         {
             if (element == null)
@@ -46,23 +42,12 @@ namespace NXKit.XForms
             this.attributes = attributes;
             this.context = context ?? throw new ArgumentNullException(nameof(context));
 
-            this.type = new Lazy<XName>(() =>
-                !string.IsNullOrEmpty(attributes.Type) ? Element.ResolvePrefixedName(attributes.Type) : null);
-
-            this.readOnly = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.ReadOnly) ? context.Value.Context.CompileXPath(element, attributes.ReadOnly) : null);
-
-            this.required = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.Required) ? context.Value.Context.CompileXPath(element, attributes.Required) : null);
-
-            this.relevant = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.Relevant) ? context.Value.Context.CompileXPath(element, attributes.Relevant) : null);
-
-            this.calculate = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.Calculate) ? context.Value.Context.CompileXPath(element, attributes.Calculate) : null);
-
-            this.constraint = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.Constraint) ? context.Value.Context.CompileXPath(element, attributes.Constraint) : null);
+            type = new Lazy<XName>(() => !string.IsNullOrEmpty(attributes.Type) ? Element.ResolvePrefixedName(attributes.Type) : null);
+            readOnly = new Lazy<XPathExpression>(() => !string.IsNullOrEmpty(attributes.ReadOnly) ? context.Value.Context.CompileXPath(element, attributes.ReadOnly) : null);
+            required = new Lazy<XPathExpression>(() => !string.IsNullOrEmpty(attributes.Required) ? context.Value.Context.CompileXPath(element, attributes.Required) : null);
+            relevant = new Lazy<XPathExpression>(() => !string.IsNullOrEmpty(attributes.Relevant) ? context.Value.Context.CompileXPath(element, attributes.Relevant) : null);
+            calculate = new Lazy<XPathExpression>(() => !string.IsNullOrEmpty(attributes.Calculate) ? context.Value.Context.CompileXPath(element, attributes.Calculate) : null);
+            constraint = new Lazy<XPathExpression>(() => !string.IsNullOrEmpty(attributes.Constraint) ? context.Value.Context.CompileXPath(element, attributes.Constraint) : null);
         }
 
         public XName Type

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms.Layout
 {
@@ -11,7 +8,6 @@ namespace NXKit.XForms.Layout
     /// Makes the 'anchor' attribute available.
     /// </summary>
     [Extension(typeof(AnchorAttributes), "{http://schemas.nxkit.org/2014/xforms-layout}anchor")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class AnchorAttributes :
         AttributeAccessor
     {
@@ -20,7 +16,6 @@ namespace NXKit.XForms.Layout
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public AnchorAttributes(XElement element)
             : base(element)
         {

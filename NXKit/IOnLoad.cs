@@ -4,7 +4,7 @@
     /// <summary>
     /// Invoked by the processor each time a document is loaded.
     /// </summary>
-    public interface IOnLoad
+    public interface IOnLoad : IExtension
     {
 
         /// <summary>

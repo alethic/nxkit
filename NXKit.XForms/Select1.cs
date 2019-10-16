@@ -1,35 +1,31 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}select1")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class Select1 :
         ElementExtension
     {
 
         readonly Select1Attributes attributes;
-        readonly Extension<IBindingNode> bindingNode;
-        readonly Extension<IUIBindingNode> uiBindingNode;
+        readonly Lazy<IBindingNode> bindingNode;
+        readonly Lazy<IUIBindingNode> uiBindingNode;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public Select1(
             XElement element,
             Select1Attributes attributes,
-            Extension<IBindingNode> bindingNode,
-            Extension<IUIBindingNode> uiBindingNode)
+            Lazy<IBindingNode> bindingNode,
+            Lazy<IUIBindingNode> uiBindingNode)
             : base(element)
         {
             if (element == null)

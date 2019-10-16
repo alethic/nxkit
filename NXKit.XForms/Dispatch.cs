@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 using NXKit.XMLEvents;
@@ -11,14 +9,13 @@ namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}dispatch")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Dispatch :
         ElementExtension,
         IEventHandler
     {
 
         readonly DispatchAttributes attributes;
-        readonly Extension<EvaluationContextResolver> context;
+        readonly Lazy<EvaluationContextResolver> context;
 
         /// <summary>
         /// Initializes a new instance.
@@ -26,11 +23,10 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         /// <param name="context"></param>
-        [ImportingConstructor]
         public Dispatch(
             XElement element,
             DispatchAttributes attributes,
-            Extension<EvaluationContextResolver> context)
+            Lazy<EvaluationContextResolver> context)
             : base(element)
         {
             if (element == null)

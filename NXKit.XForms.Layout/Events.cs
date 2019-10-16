@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.Composition;
 
+using NXKit.Composition;
 using NXKit.DOMEvents;
 
 namespace NXKit.XForms.Layout

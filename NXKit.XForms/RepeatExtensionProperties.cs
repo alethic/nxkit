@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -26,7 +25,6 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="context"></param>
-        [ImportingConstructor]
         public RepeatExtensionProperties(
             XElement element, 
             EvaluationContext context)

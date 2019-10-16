@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-
-namespace NXKit.View.Server
+﻿namespace NXKit.View.Server
 {
 
     /// <summary>

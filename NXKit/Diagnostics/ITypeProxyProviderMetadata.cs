@@ -1,13 +1,14 @@
-﻿
-using System;
+﻿using System;
+
+using NXKit.Composition;
 
 namespace NXKit.Diagnostics
 {
 
-    public interface ITypeProxyProviderMetadata
+    public interface ITypeProxyProviderMetadata : IExportMetadata
     {
 
-        Type Type { get; }
+        Type ProxyType { get; }
 
     }
 

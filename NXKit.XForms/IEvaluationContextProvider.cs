@@ -4,7 +4,7 @@
     /// <summary>
     /// Describes an interface on an element that directly returns an evaluation context.
     /// </summary>
-    public interface IEvaluationContextProvider
+    public interface IEvaluationContextProvider : IExtension
     {
 
         /// <summary>

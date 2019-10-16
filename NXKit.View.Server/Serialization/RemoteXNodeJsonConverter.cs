@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using Newtonsoft.Json;
@@ -30,11 +29,14 @@ namespace NXKit.View.Server.Serialization
 
         protected virtual void Apply(XNode node, JsonSerializer serializer, JObject obj)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentNullException>(serializer != null);
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
+            if (serializer is null)
+                throw new ArgumentNullException(nameof(serializer));
+            if (obj is null)
+                throw new ArgumentNullException(nameof(obj));
 
-            RemotesToObject(node.Interfaces<object>(), obj, serializer);
+            RemotesToObject(node.Interfaces<IExtension>(), obj, serializer);
         }
 
     }

@@ -10,40 +10,6 @@ namespace NXKit.Util
     public static class EnumerableExtensions
     {
 
-        /// <summary>
-        /// Appends <paramref name="item"/> to <paramref name="source"/>.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T item)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            foreach (var i in source)
-                yield return i;
-            yield return item;
-        }
-
-        /// <summary>
-        /// Prepends <paramref name="item"/> to <paramref name="source"/>.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> Prepend<T>(this IEnumerable<T> source, T item)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            yield return item;
-            foreach (var i in source)
-                yield return i;
-        }
-
         public static IEnumerable<T> Recurse<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> func)
         {
             if (source == null)

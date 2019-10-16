@@ -4,7 +4,7 @@
     /// <summary>
     /// Invoked by the processor before a document is saved.
     /// </summary>
-    public interface IOnSave
+    public interface IOnSave : IExtension
     {
 
         /// <summary>

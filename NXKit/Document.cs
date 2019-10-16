@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Composition.Primitives;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,33 +24,23 @@ namespace NXKit
     {
 
         /// <summary>
-        /// Initializes the static instance.
-        /// </summary>
-        static Document()
-        {
-            if (!FrameworkUtil.IsCompatibleWithFramework())
-                throw new Exception("NXKit is only compatible with Frameworks targeting .NET 4.5 or above.");
-        }
-
-        /// <summary>
         /// Loads a <see cref="Document"/> from the given <see cref="XmlReader"/>.
         /// </summary>
         /// <param name="reader"></param>
-        /// <param name="catalog"></param>
+        /// <param name="context"></param>
         /// <param name="exports"></param>
         /// <returns></returns>
-        public static Document Load(XmlReader reader, ComposablePartCatalog catalog = null, ExportProvider exports = null)
+        public static Document Load(XmlReader reader, ICompositionContext context = null)
         {
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
 
             return new Document(host =>
-                host.Container.GetExportedValue<AnnotationSerializer>().Deserialize(
+                host.Context.Resolve<AnnotationSerializer>().Deserialize(
                     XDocument.Load(
                         reader,
                         LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
-                catalog,
-                exports);
+                context);
         }
 
         /// <summary>
@@ -65,22 +53,21 @@ namespace NXKit
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
 
-            return Load(reader, null, null);
+            return Load(reader, null);
         }
 
         /// <summary>
         /// Loads a <see cref="Document"/> from the given <see cref="TextReader"/>.
         /// </summary>
         /// <param name="reader"></param>
-        /// <param name="catalog"></param>
-        /// <param name="exports"></param>
-        public static Document Load(TextReader reader, ComposablePartCatalog catalog = null, ExportProvider exports = null)
+        /// <param name="context"></param>
+        public static Document Load(TextReader reader, ICompositionContext context = null)
         {
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
 
             using (var rdr = XmlReader.Create(reader))
-                return Load(rdr, catalog, exports);
+                return Load(rdr, context);
         }
 
         /// <summary>
@@ -92,23 +79,22 @@ namespace NXKit
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
 
-            return Load(reader, null, null);
+            return Load(reader, null);
         }
 
         /// <summary>
         /// Loads a <see cref="Document"/> from the given <see cref="Stream"/>.
         /// </summary>
         /// <param name="stream"></param>
-        /// <param name="catalog"></param>
-        /// <param name="exports"></param>
+        /// <param name="context"></param>
         /// <returns></returns>
-        public static Document Load(Stream stream, ComposablePartCatalog catalog = null, ExportProvider exports = null)
+        public static Document Load(Stream stream, ICompositionContext context = null)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
             using (var rdr = new StreamReader(stream))
-                return Load(rdr, catalog, exports);
+                return Load(rdr, context);
         }
 
         /// <summary>
@@ -120,30 +106,28 @@ namespace NXKit
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
-            return Load(stream, null, null);
+            return Load(stream, null);
         }
 
         /// <summary>
         /// Loads a <see cref="Document"/> from the given <see cref="Uri"/>.
         /// </summary>
         /// <param name="uri"></param>
-        /// <param name="catalog"></param>
-        /// <param name="exports"></param>
+        /// <param name="context"></param>
         /// <returns></returns>
-        public static Document Load(Uri uri, ComposablePartCatalog catalog = null, ExportProvider exports = null)
+        public static Document Load(Uri uri, ICompositionContext context = null)
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
 
             return new Document(host =>
-                host.Container.GetExportedValue<AnnotationSerializer>().Deserialize(
+                host.Context.Resolve<AnnotationSerializer>().Deserialize(
                     XDocument.Load(
                         NXKit.Xml.IOXmlReader.Create(
-                            host.Container.GetExportedValue<IIOService>(),
+                            host.Context.Resolve<IIOService>(),
                             uri),
                         LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
-                catalog,
-                exports);
+                context);
         }
 
         /// <summary>
@@ -156,22 +140,21 @@ namespace NXKit
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
 
-            return Load(uri, null, null);
+            return Load(uri, null);
         }
 
         /// <summary>
         /// Loads a <see cref="Document"/> from the given <see cref="XDocument"/>.
         /// </summary>
         /// <param name="document"></param>
-        /// <param name="catalog"></param>
-        /// <param name="exports"></param>
+        /// <param name="context"></param>
         /// <returns></returns>
-        public static Document Load(XDocument document, ComposablePartCatalog catalog = null, ExportProvider exports = null)
+        public static Document Load(XDocument document, ICompositionContext context = null)
         {
             if (document == null)
                 throw new ArgumentNullException(nameof(document));
 
-            return Load(document.CreateReader(), catalog, exports);
+            return Load(document.CreateReader(), context);
         }
 
         /// <summary>
@@ -184,7 +167,7 @@ namespace NXKit
             if (document == null)
                 throw new ArgumentNullException(nameof(document));
 
-            return Load(document, null, null);
+            return Load(document, null);
         }
 
         /// <summary>
@@ -192,45 +175,17 @@ namespace NXKit
         /// </summary>
         /// <param name="xml"></param>
         /// <returns></returns>
-        public static Document Parse(string xml)
+        public static Document Parse(string xml, ICompositionContext context = null)
         {
             if (xml == null)
                 throw new ArgumentNullException(nameof(xml));
             if (string.IsNullOrWhiteSpace(xml))
                 throw new ArgumentOutOfRangeException(nameof(xml));
 
-            return Load(XDocument.Parse(xml));
+            return Load(XDocument.Parse(xml), context);
         }
 
-        /// <summary>
-        /// Gets the <see cref="CompositionConfiguration"/> for the given input.
-        /// </summary>
-        /// <param name="catalog"></param>
-        /// <param name="exports"></param>
-        /// <returns></returns>
-        static CompositionConfiguration GetConfiguration(ComposablePartCatalog catalog, ExportProvider exports)
-        {
-            // default configuration
-            if (catalog == null &&
-                exports == null)
-                return CompositionConfiguration.Default;
-
-            // default catalogs
-            if (catalog == null)
-                return new CompositionConfiguration(
-                    CompositionUtil.DefaultGlobalCatalog,
-                    CompositionUtil.DefaultHostCatalog,
-                    CompositionUtil.DefaultObjectCatalog,
-                    exports ?? new CompositionContainer());
-
-            // otherwise, generate new
-            return new CompositionConfiguration(
-                catalog,
-                exports ?? new CompositionContainer());
-        }
-
-        readonly CompositionConfiguration configuration;
-        readonly CompositionContainer container;
+        readonly ICompositionContext context;
         readonly IInvoker invoker;
         readonly ITraceService trace;
         readonly XDocument xml;
@@ -239,24 +194,19 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        /// <param name="catalog"></param>
-        /// <param name="exports"></param>
-        Document(
-            Func<Document, XDocument> xml,
-            ComposablePartCatalog catalog,
-            ExportProvider exports)
+        /// <param name="context"></param>
+        Document(Func<Document, XDocument> xml, ICompositionContext context)
         {
             if (xml == null)
                 throw new ArgumentNullException(nameof(xml));
 
             // configure composition
-            this.configuration = GetConfiguration(catalog, exports);
-            this.container = new CompositionContainer(configuration.HostCatalog, true, new CompositionContainer(configuration.GlobalCatalog, true, configuration.Exports));
-            this.container.GetExportedValue<DocumentEnvironment>().SetHost(this);
+            this.context = context.BeginContext(CompositionScope.Host);
+            this.context.Resolve<DocumentEnvironment>().SetHost(this);
 
             // required services
-            this.invoker = container.GetExportedValue<IInvoker>();
-            this.trace = container.GetExportedValue<ITraceService>();
+            this.invoker = this.context.Resolve<IInvoker>();
+            this.trace = this.context.Resolve<ITraceService>();
 
             // initialize xml
             this.xml = xml(this);
@@ -276,19 +226,11 @@ namespace NXKit
         }
 
         /// <summary>
-        /// Gets the <see cref="CompositionConfiguration"/> for the host.
+        /// Gets the host configured <see cref="ICompositionContext"/>.
         /// </summary>
-        public CompositionConfiguration Configuration
+        public ICompositionContext Context
         {
-            get { return configuration; }
-        }
-
-        /// <summary>
-        /// Gets the host configured <see cref="CompositionContainer"/>.
-        /// </summary>
-        public CompositionContainer Container
-        {
-            get { return container; }
+            get { return context; }
         }
 
         /// <summary>
@@ -325,7 +267,7 @@ namespace NXKit
                 save.Save();
 
             // serialize document to writer
-            container.GetExportedValue<AnnotationSerializer>().Serialize(xml).Save(writer);
+            context.Resolve<AnnotationSerializer>().Serialize(xml).Save(writer);
         }
 
         /// <summary>
@@ -381,8 +323,8 @@ namespace NXKit
             }
 
             // dispose of host container
-            if (container != null)
-                container.Dispose();
+            if (context != null)
+                context.Dispose();
         }
 
         /// <summary>

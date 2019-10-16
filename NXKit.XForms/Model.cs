@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.IO;
-using NXKit.Util;
 using NXKit.Xml;
 
 namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}model")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Model :
         ElementExtension,
         IEventDefaultAction
@@ -33,7 +29,6 @@ namespace NXKit.XForms
         /// <param name="io"></param>
         /// <param name="element"></param>
         /// <param name="attributes"></param>
-        [ImportingConstructor]
         public Model(
             IIOService io,
             XElement element,
@@ -106,6 +101,7 @@ namespace NXKit.XForms
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         IEnumerable<T> GetAllExtensions<T>()
+            where T : class, IExtension
         {
             return Element.Document.Root
                 .DescendantsAndSelf().Cast<XObject>()

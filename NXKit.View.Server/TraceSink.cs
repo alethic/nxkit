@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -19,9 +17,8 @@ namespace NXKit.View.Server
     /// <summary>
     /// Captures trace messages from the <see cref="Document"/> to be output to the client.
     /// </summary>
-    [Export(typeof(TraceSink))]
-    [Export(typeof(ITraceSink))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(TraceSink), CompositionScope.Host)]
+    [Export(typeof(ITraceSink), CompositionScope.Host)]
     public class TraceSink :
         ITraceSink
     {
@@ -69,11 +66,10 @@ namespace NXKit.View.Server
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        [ImportingConstructor]
-        public TraceSink(
-            Func<Document> host)
+        public TraceSink(Func<Document> host)
         {
-            Contract.Requires<ArgumentNullException>(host != null);
+            if (host is null)
+                throw new ArgumentNullException(nameof(host));
 
             this.state = new Lazy<State>(() => host().Xml.AnnotationOrCreate<State>());
         }

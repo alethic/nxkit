@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
+
+using NXKit.Composition;
 
 namespace NXKit.IO
 {
@@ -17,9 +18,7 @@ namespace NXKit.IO
         /// Initializes a new instance.
         /// </summary>
         /// <param name="transports"></param>
-        [ImportingConstructor]
-        public IOService(
-            [ImportMany] IEnumerable<IIOTransport> transports)
+        public IOService(IEnumerable<IIOTransport> transports)
         {
             this.transports = transports ?? throw new ArgumentNullException(nameof(transports));
         }

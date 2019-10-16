@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.DOMEvents
 {
@@ -12,8 +9,7 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Provides a <see cref="IDocumentEvent"/> implementation.
     /// </summary>
-    [Extension(ExtensionObjectType.Document)]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
+    [Extension(typeof(IDocumentEvent), ExtensionObjectType.Document)]
     public class DocumentEvent :
         DocumentExtension,
         IDocumentEvent
@@ -26,11 +22,10 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="document"></param>
         /// <param name="providers"></param>
-        [ImportingConstructor]
         public DocumentEvent(
             XDocument document,
-            [ImportMany] IEnumerable<IEventInstanceProvider> providers)
-            : base (document)
+            IEnumerable<IEventInstanceProvider> providers)
+            : base(document)
         {
             if (document == null)
                 throw new ArgumentNullException(nameof(document));

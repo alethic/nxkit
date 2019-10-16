@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.Scripting
 {
@@ -11,7 +8,6 @@ namespace NXKit.Scripting
     /// Provides an interface towards executing scripts within the document.
     /// </summary>
     [Extension(ExtensionObjectType.Document)]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DocumentScript :
         DocumentExtension,
         IDocumentScript,
@@ -26,7 +22,6 @@ namespace NXKit.Scripting
         /// </summary>
         /// <param name="document"></param>
         /// <param name="dispatcher"></param>
-        [ImportingConstructor]
         public DocumentScript(
             XDocument document,
             IScriptDispatcher dispatcher)

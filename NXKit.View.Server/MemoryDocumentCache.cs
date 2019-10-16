@@ -1,7 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Runtime.Caching;
+
+using NXKit.Composition;
 
 namespace NXKit.View.Server
 {
@@ -22,7 +22,6 @@ namespace NXKit.View.Server
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        [ImportingConstructor]
         public MemoryDocumentCache()
         {
             this.cache = MemoryCache.Default;
@@ -35,7 +34,8 @@ namespace NXKit.View.Server
         public MemoryDocumentCache(TimeSpan cacheTime)
             : this()
         {
-            Contract.Requires<ArgumentOutOfRangeException>(cacheTime > TimeSpan.Zero);
+            if (cacheTime <= TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(cacheTime));
 
             this.cacheTime = cacheTime;
         }

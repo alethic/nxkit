@@ -1,9 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-using NXKit.Composition;
 using NXKit.IO.Media;
 
 namespace NXKit.XForms
@@ -13,7 +11,6 @@ namespace NXKit.XForms
     /// Provides the XForms 'var' properties.
     /// </summary>
     [Extension("{http://www.w3.org/2002/xforms}var")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class VarProperties :
         ElementExtension
     {

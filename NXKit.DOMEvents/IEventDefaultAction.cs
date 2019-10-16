@@ -4,7 +4,7 @@
     /// <summary>
     /// Extensions implementing this interface provide a default action for the specified event type.
     /// </summary>
-    public interface IEventDefaultAction
+    public interface IEventDefaultAction : IElementExtension
     {
 
         /// <summary>

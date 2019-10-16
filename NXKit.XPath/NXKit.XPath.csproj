@@ -1,23 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net45</TargetFramework>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Product>NXKit XPath</Product>
-        <Description>NXKit XPath support.</Description>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Product>NXKit XPath</Product>
+    <Description>NXKit XPath support.</Description>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-        <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.6.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\NXKit\NXKit.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Reference Include="System.ComponentModel.Composition" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NXKit\NXKit.csproj" />
+  </ItemGroup>
 
 </Project>

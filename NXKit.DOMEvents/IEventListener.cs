@@ -1,7 +1,7 @@
 ﻿namespace NXKit.DOMEvents
 {
 
-    public interface IEventListener
+    public interface IEventListener : IElementExtension
     {
 
         void HandleEvent(Event evt);

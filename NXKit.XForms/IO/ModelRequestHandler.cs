@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -26,10 +25,9 @@ namespace NXKit.XForms.IO
         /// </summary>
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
-        [ImportingConstructor]
         public ModelRequestHandler(
-            [ImportMany] IEnumerable<IModelSerializer> serializers,
-            [ImportMany] IEnumerable<IModelDeserializer> deserializers)
+            IEnumerable<IModelSerializer> serializers,
+            IEnumerable<IModelDeserializer> deserializers)
         {
             this.serializers = serializers ?? throw new ArgumentNullException(nameof(serializers));
             this.deserializers = deserializers ?? throw new ArgumentNullException(nameof(deserializers));

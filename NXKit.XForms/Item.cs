@@ -1,16 +1,13 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}item")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Item :
         ElementExtension,
         ISelectable
@@ -22,7 +19,6 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public Item(XElement element)
             : base(element)
         {

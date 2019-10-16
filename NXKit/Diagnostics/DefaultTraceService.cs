@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 
 using NXKit.Composition;
@@ -8,23 +7,21 @@ using NXKit.Composition;
 namespace NXKit.Diagnostics
 {
 
-    [Export(typeof(ITraceService))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(ITraceService), CompositionScope.Host)]
     public class DefaultTraceService :
         ITraceService
     {
 
         readonly IEnumerable<ITraceSink> sinks;
-        readonly IEnumerable<Lazy<ITypeProxyProvider, ITypeProxyProviderMetadata>> proxies;
+        readonly IEnumerable<IExport<ITypeProxyProvider, ITypeProxyProviderMetadata>> proxies;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="sinks"></param>
-        [ImportingConstructor]
         public DefaultTraceService(
-            [ImportMany] IEnumerable<ITraceSink> sinks,
-            [ImportMany] IEnumerable<Lazy<ITypeProxyProvider, ITypeProxyProviderMetadata>> proxies)
+            IEnumerable<ITraceSink> sinks,
+            IEnumerable<IExport<ITypeProxyProvider, ITypeProxyProviderMetadata>> proxies)
         {
             this.sinks = sinks ?? throw new ArgumentNullException(nameof(sinks));
             this.proxies = proxies ?? throw new ArgumentNullException(nameof(proxies));
@@ -36,7 +33,7 @@ namespace NXKit.Diagnostics
                 throw new ArgumentNullException(nameof(input));
 
             return proxies
-                .Where(i => i.Metadata.Type.IsInstanceOfType(input))
+                .Where(i => i.Metadata.ProxyType.IsInstanceOfType(input))
                 .Select(i => i.Value)
                 .Select(i => i.Proxy(input))
                 .FirstOrDefault(i => i != null) ?? input;

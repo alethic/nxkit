@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.Composition;
-using System.Linq;
+﻿using System.Linq;
 
+using NXKit.Composition;
 using NXKit.IO;
 
 namespace NXKit.XForms.Examples

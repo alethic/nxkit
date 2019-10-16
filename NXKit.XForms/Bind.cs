@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -12,13 +11,12 @@ namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}bind")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Bind :
         ElementExtension
     {
 
         readonly BindProperties properties;
-        readonly Extension<IBindingNode> bindingNode;
+        readonly IExport<IBindingNode> bindingNode;
         readonly Lazy<EvaluationContext> context;
 
         /// <summary>
@@ -28,12 +26,11 @@ namespace NXKit.XForms
         /// <param name="properties"></param>
         /// <param name="bindingNode"></param>
         /// <param name="context"></param>
-        [ImportingConstructor]
         public Bind(
             XElement element,
             BindProperties properties,
-            Extension<IBindingNode> bindingNode,
-            Extension<EvaluationContextResolver> context)
+            IExport<IBindingNode> bindingNode,
+            IExport<EvaluationContextResolver> context)
             : base(element)
         {
             if (element == null)
@@ -57,20 +54,14 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the binding of the element.
         /// </summary>
-        Binding Binding
-        {
-            get { return bindingNode.Value != null ? bindingNode.Value.Binding : null; }
-        }
+        private Binding GetBinding() => bindingNode.Value?.Binding;
 
-        IEnumerable<ModelItem> ModelItems
-        {
-            get { return GetModelItems(); }
-        }
+        IEnumerable<ModelItem> ModelItems => GetModelItems();
 
         IEnumerable<ModelItem> GetModelItems()
         {
-            if (Binding != null)
-                return Binding.ModelItems ?? Enumerable.Empty<ModelItem>();
+            if (GetBinding() != null)
+                return GetBinding().ModelItems ?? Enumerable.Empty<ModelItem>();
             else
                 throw new Exception();
         }
@@ -108,7 +99,7 @@ namespace NXKit.XForms
         internal ModelItem[] GetBoundNodes()
         {
             // TODO this is a poor implementation of nested bind elements
-            var modelItems = Binding.ModelItems.ToList();
+            var modelItems = GetBinding().ModelItems.ToList();
             var parentBind = Element.Ancestors(Constants.XForms_1_0 + "bind")
                 .SelectMany(i => i.Interfaces<Bind>())
                 .FirstOrDefault();

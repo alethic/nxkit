@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+
+using NXKit.Composition;
 
 namespace NXKit.Scripting.EcmaScript
 {
 
     /// <summary>
-    /// Generates <see cref="ObjectInstance"/> classes from given native classes decorated with <see
+    /// Generates <see cref="ScriptObjectInstance"/> classes from given native classes decorated with <see
     /// cref="ScriptFunctionAttribute"/>.
     /// </summary>
     [Export(typeof(ScriptObjectProxyGenerator))]
     public class ScriptObjectProxyGenerator
     {
 
-        static readonly ConcurrentDictionary<Type, Type> proxyTypes =
-            new ConcurrentDictionary<Type, Type>();
+        static readonly ConcurrentDictionary<Type, Type> proxyTypes = new ConcurrentDictionary<Type, Type>();
 
         /// <summary>
         /// Gets or generates a <see cref="ScriptObjectInstance"/> from the given target object.

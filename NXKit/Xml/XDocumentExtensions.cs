@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition.Hosting;
 using System.Xml.Linq;
+
+using NXKit.Composition;
 
 namespace NXKit.Xml
 {
@@ -17,12 +18,12 @@ namespace NXKit.Xml
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
-        public static ExportProvider Exports(this XDocument self)
+        public static ICompositionContext Exports(this XDocument self)
         {
             if (self == null)
                 throw new ArgumentNullException(nameof(self));
 
-            return self.Annotation<ExportProvider>();
+            return self.Annotation<ICompositionContext>();
         }
 
         /// <summary>

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 
@@ -14,14 +12,13 @@ namespace NXKit
     /// <summary>
     /// Captures invocations to handle unwrapping and invoking the deferred behavior.
     /// </summary>
-    [Export(typeof(IInvokerLayer))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(IInvokerLayer), CompositionScope.Host)]
     public class DeferredInvokerLayer :
         IInvokerLayer
     {
 
         readonly Func<Document> host;
-        readonly Lazy<IInvoker> invoker;
+        readonly IExport<IInvoker> invoker;
         int count = 0;
 
         /// <summary>
@@ -29,13 +26,20 @@ namespace NXKit
         /// </summary>
         /// <param name="host"></param>
         /// <param name="invoker"></param>
-        [ImportingConstructor]
-        public DeferredInvokerLayer(
-            [Import] Func<Document> host,
-            [Import] Lazy<IInvoker> invoker)
+        public DeferredInvokerLayer(Func<Document> host, IExport<IInvoker> invoker)
         {
             this.host = host ?? throw new ArgumentNullException(nameof(host));
             this.invoker = invoker ?? throw new ArgumentNullException(nameof(invoker));
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="environment"></param>
+        /// <param name="invoker"></param>
+        public DeferredInvokerLayer(DocumentEnvironment environment, IExport<IInvoker> invoker) : this(() => environment?.GetHost(), invoker)
+        {
+
         }
 
         public void Invoke(System.Action action)

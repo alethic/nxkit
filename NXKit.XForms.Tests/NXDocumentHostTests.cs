@@ -2,8 +2,13 @@
 using System.Linq;
 using System.Xml.Linq;
 
+using Autofac;
+
+using Cogito.Autofac;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms.Tests
@@ -33,7 +38,15 @@ namespace NXKit.XForms.Tests
 
         Document GetSampleDocument()
         {
-            return Document.Load(Sample);
+            return Document.Load(Sample, CreateCompositionContext());
+        }
+
+        ICompositionContext CreateCompositionContext()
+        {
+            var bld = new ContainerBuilder();
+            bld.RegisterAllAssemblyModules();
+            var cnt = bld.Build();
+            return cnt.Resolve<ICompositionContext>();
         }
 
         [TestMethod]
@@ -97,7 +110,7 @@ namespace NXKit.XForms.Tests
             {
                 doc.Save(str);
                 var xml = str.ToString();
-                Document.Load(new StringReader(xml));
+                Document.Load(new StringReader(xml), CreateCompositionContext());
             }
         }
 

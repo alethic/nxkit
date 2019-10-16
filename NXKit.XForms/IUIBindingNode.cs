@@ -4,7 +4,7 @@
     /// <summary>
     /// Describes a form element that participates as a UI binding element.
     /// </summary>
-    public interface IUIBindingNode
+    public interface IUIBindingNode : IElementExtension
     {
 
         /// <summary>

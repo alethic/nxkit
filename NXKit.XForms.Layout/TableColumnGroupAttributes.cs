@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms.Layout
 {
@@ -11,7 +8,6 @@ namespace NXKit.XForms.Layout
     /// Provides the attributes for the 'table-column-group' element.
     /// </summary>
     [Extension("{http://schemas.nxkit.org/2014/xforms-layout}table-column-group")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class TableColumnGroupAttributes :
         AttributeAccessor
     {
@@ -20,7 +16,6 @@ namespace NXKit.XForms.Layout
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public TableColumnGroupAttributes(XElement element)
             : base(element)
         {

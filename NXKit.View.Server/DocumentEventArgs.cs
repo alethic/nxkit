@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.View.Server
 {
@@ -16,9 +15,7 @@ namespace NXKit.View.Server
         /// <param name="document"></param>
         public DocumentEventArgs(Document document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
-
-            this.document = document;
+            this.document = document ?? throw new ArgumentNullException(nameof(document));
         }
 
         /// <summary>

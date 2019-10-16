@@ -4,7 +4,7 @@
     /// <summary>
     /// Describes an element's participation in the Refresh phase.
     /// </summary>
-    public interface IOnRefresh
+    public interface IOnRefresh : IElementExtension
     {
 
         /// <summary>

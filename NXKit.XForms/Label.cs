@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -13,7 +10,6 @@ namespace NXKit.XForms
     /// short description of form controls while navigating among them.
     /// </summary>
     [Extension("{http://www.w3.org/2002/xforms}label")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Label :
         ElementExtension
     {
@@ -22,7 +18,6 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public Label(XElement element)
             : base(element)
         {

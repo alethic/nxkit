@@ -1,9 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -13,24 +11,22 @@ namespace NXKit.XForms
     /// <summary>
     /// Resolves various <see cref="EvaluationContext"/> instances with regards to the specified <see cref="XElement"/>.
     /// </summary>
-    [Extension]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
+    [Extension(typeof(EvaluationContextResolver), ExtensionObjectType.Element)]
     public class ElementEvaluationContextResolver :
         EvaluationContextResolver,
         IEvaluationContextScope,
         IExtension
     {
 
-        readonly Extension<CommonAttributes> attributes;
+        readonly Lazy<CommonAttributes> attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public ElementEvaluationContextResolver(
             XElement element,
-            Extension<CommonAttributes> attributes)
+            Lazy<CommonAttributes> attributes)
             : base(element)
         {
             if (element == null)

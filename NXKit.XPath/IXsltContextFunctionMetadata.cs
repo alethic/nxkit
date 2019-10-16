@@ -1,12 +1,14 @@
 ﻿using System.Xml.Xsl;
 
+using NXKit.Composition;
+
 namespace NXKit.XPath
 {
 
     /// <summary>
     /// Describes an exported <see cref="IXsltContextFunction"/>.
     /// </summary>
-    public interface IXsltContextFunctionMetadata
+    public interface IXsltContextFunctionMetadata : IExportMetadata
     {
 
         /// <summary>

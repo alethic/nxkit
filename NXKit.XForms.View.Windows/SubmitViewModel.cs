@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Windows.Input;
 using System.Xml.Linq;
@@ -23,7 +22,8 @@ namespace NXKit.XForms.View.Windows
         public SubmitViewModel(XElement element)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
 
             domActivateCommand = new DelegateCommand(i => DOMActivate_Execute());
         }

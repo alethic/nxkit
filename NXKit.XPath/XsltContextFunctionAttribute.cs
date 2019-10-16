@@ -1,7 +1,8 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 using System.Xml.Xsl;
+
+using NXKit.Composition;
 
 namespace NXKit.XPath
 {
@@ -10,9 +11,9 @@ namespace NXKit.XPath
     /// Marks a function as a function.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    [MetadataAttribute]
     public class XsltContextFunctionAttribute :
-        ExportAttribute
+        ExportAttribute,
+        IXsltContextFunctionMetadata
     {
 
         readonly string expandedName;
@@ -21,21 +22,21 @@ namespace NXKit.XPath
         /// Initializes a new instance.
         /// </summary>
         /// <param name="name"></param>
-        public XsltContextFunctionAttribute(XName name)
-            : base(typeof(IXsltContextFunction))
+        public XsltContextFunctionAttribute(XName name) :
+            base(typeof(IXsltContextFunction))
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
 
-            this.expandedName = name.ToString();
+            expandedName = name.ToString();
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="expandedName"></param>
-        public XsltContextFunctionAttribute(string expandedName)
-            : this(XName.Get(expandedName))
+        public XsltContextFunctionAttribute(string expandedName) :
+            this(XName.Get(expandedName))
         {
             if (expandedName == null)
                 throw new ArgumentNullException(nameof(expandedName));
@@ -44,9 +45,9 @@ namespace NXKit.XPath
         /// <summary>
         /// Gets the name of the function.
         /// </summary>
-        public string ExpandedName
+        public string[] ExpandedName
         {
-            get { return expandedName; }
+            get { return new[] { expandedName }; }
         }
 
     }

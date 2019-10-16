@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net45</TargetFramework>
+        <TargetFramework>net47</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Product>NXKit View for WPF</Product>
         <Description>NXKit core WPF view control.</Description>
@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -36,7 +36,6 @@
     <ItemGroup>
         <Reference Include="PresentationCore" />
         <Reference Include="PresentationFramework" />
-        <Reference Include="System.ComponentModel.Composition" />
         <Reference Include="System.Xaml" />
         <Reference Include="WindowsBase" />
     </ItemGroup>

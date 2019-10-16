@@ -1,12 +1,10 @@
-﻿using System.Xml.Linq;
-
-namespace NXKit
+﻿namespace NXKit
 {
 
-    public interface IElementExtension
+    public interface IElementExtension : INodeExtension
     {
 
-        XElement Element { get; }
+
 
     }
 

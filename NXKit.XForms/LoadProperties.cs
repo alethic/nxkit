@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -11,13 +10,12 @@ namespace NXKit.XForms
     /// Provides the XForms 'load' properties.
     /// </summary>
     [Extension(typeof(LoadProperties), "{http://www.w3.org/2002/xforms}load")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class LoadProperties :
         ElementExtension
     {
 
         readonly LoadAttributes attributes;
-        readonly Extension<EvaluationContextResolver> context;
+        readonly IExport<EvaluationContextResolver> context;
         readonly Lazy<LoadShow> show;
 
         /// <summary>
@@ -26,11 +24,10 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         /// <param name="context"></param>
-        [ImportingConstructor]
         public LoadProperties(
             XElement element,
             LoadAttributes attributes,
-            Extension<EvaluationContextResolver> context)
+            IExport<EvaluationContextResolver> context)
             : base(element)
         {
             if (element == null)

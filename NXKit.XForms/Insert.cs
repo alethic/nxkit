@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -13,7 +12,6 @@ namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}insert")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Insert :
         ElementExtension,
         IEventHandler
@@ -81,20 +79,19 @@ namespace NXKit.XForms
         readonly CommonProperties commonProperties;
         readonly BindingProperties bindingProperties;
         readonly InsertProperties insertProperties;
-        readonly Extension<EvaluationContextResolver> context;
+        readonly IExport<EvaluationContextResolver> context;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         /// <param name="context"></param>
-        [ImportingConstructor]
         public Insert(
             XElement element,
             CommonProperties commonProperties,
             BindingProperties bindingProperties,
             InsertProperties insertProperties,
-            Extension<EvaluationContextResolver> context)
+            IExport<EvaluationContextResolver> context)
             : base(element)
         {
             if (element == null)

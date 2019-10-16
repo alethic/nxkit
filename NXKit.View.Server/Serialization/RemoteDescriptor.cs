@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 
@@ -21,11 +20,8 @@ namespace NXKit
         /// <param name="type"></param>
         public RemoteDescriptor(object target, Type type)
         {
-            Contract.Requires<ArgumentNullException>(target != null);
-            Contract.Requires<ArgumentNullException>(type != null);
-
-            this.target = target;
-            this.type = type;
+            this.target = target ?? throw new ArgumentNullException(nameof(target));
+            this.type = type ?? throw new ArgumentNullException(nameof(type));
         }
 
         /// <summary>
@@ -51,7 +47,8 @@ namespace NXKit
         /// <returns></returns>
         public PropertyInfo GetProperty(string name)
         {
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(name));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentOutOfRangeException(nameof(name));
 
             return RemoteObjectJsonConverter.GetRemoteProperties(Type)
                 .FirstOrDefault(i => i.Name == name);
@@ -64,7 +61,8 @@ namespace NXKit
         /// <returns></returns>
         public MethodInfo GetMethod(string name)
         {
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(name));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentOutOfRangeException(nameof(name));
 
             return RemoteObjectJsonConverter.GetRemoteMethods(Type)
                 .FirstOrDefault(i => i.Name == name);

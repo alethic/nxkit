@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -11,7 +8,6 @@ namespace NXKit.XForms
     /// Provides the XForms 'submit' element.
     /// </summary>
     [Extension(typeof(SubmitAttributes), "{http://www.w3.org/2002/xforms}submit")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class SubmitAttributes :
         AttributeAccessor
     {
@@ -20,7 +16,6 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public SubmitAttributes(XElement element)
             : base(element)
         {

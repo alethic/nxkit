@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 
 using NXKit.Composition;
 using NXKit.IO.Media;
-using NXKit.View.Server.Commands;
 using NXKit.Util;
+using NXKit.View.Server.Commands;
 using NXKit.Xml;
 
 namespace NXKit.View.Server
 {
 
-    [Export(typeof(ScriptCommandProvider))]
-    [Export(typeof(ICommandProvider))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(ScriptCommandProvider), CompositionScope.Host)]
+    [Export(typeof(ICommandProvider), CompositionScope.Host)]
     public class ScriptCommandProvider :
         ICommandProvider
     {
@@ -41,12 +38,9 @@ namespace NXKit.View.Server
         /// Initializes a new instance.
         /// </summary>
         /// <param name="document"></param>
-        [ImportingConstructor]
         public ScriptCommandProvider(Func<Document> document)
         {
-            Contract.Requires<ArgumentNullException>(document != null);
-
-            this.document = document;
+            this.document = document ?? throw new ArgumentNullException(nameof(document));
             this.state = new Lazy<State>(() => document().Xml.AnnotationOrCreate<State>());
         }
 

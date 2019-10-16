@@ -6,7 +6,7 @@ namespace NXKit.XMLEvents
     /// <summary>
     /// Describes a node which will receive events.
     /// </summary>
-    public interface IEventHandler
+    public interface IEventHandler : INodeExtension
     {
 
         /// <summary>

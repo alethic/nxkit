@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Schema;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Util;
 using NXKit.XForms.Converters;
@@ -17,15 +15,15 @@ namespace NXKit.XForms
 
     [Extension("{http://www.w3.org/2002/xforms}instance")]
     [Extension(typeof(IOnLoad), "{http://www.w3.org/2002/xforms}instance")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Instance :
         ElementExtension,
         IOnLoad
     {
-        private readonly InstanceAttributes attributes;
-        private readonly IModelRequestService requestService;
-        private readonly IEnumerable<IXsdTypeConverter> xsdTypeConverters;
-        private readonly Lazy<InstanceState> state;
+
+        readonly InstanceAttributes attributes;
+        readonly IModelRequestService requestService;
+        readonly IEnumerable<IXsdTypeConverter> xsdTypeConverters;
+        readonly Lazy<InstanceState> state;
 
         /// <summary>
         /// Initializes a new instance.
@@ -34,12 +32,11 @@ namespace NXKit.XForms
         /// <param name="attributes"></param>
         /// <param name="requestService"></param>
         /// <param name="xsdTypeConverters"></param>
-        [ImportingConstructor]
         public Instance(
             XElement element,
             InstanceAttributes attributes,
             IModelRequestService requestService,
-            [ImportMany] IEnumerable<IXsdTypeConverter> xsdTypeConverters)
+            IEnumerable<IXsdTypeConverter> xsdTypeConverters)
             : base(element)
         {
             if (element == null)

@@ -30,6 +30,11 @@ namespace NXKit.DOMEvents
         }
 
         /// <summary>
+        /// Gets a reference to the extended object.
+        /// </summary>
+        public XObject Object => document;
+
+        /// <summary>
         /// Attach to events at document load.
         /// </summary>
         public void Load()

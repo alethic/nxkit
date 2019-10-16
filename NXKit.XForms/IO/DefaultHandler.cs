@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.IO;
 using System.Net;
 using System.Text;
 
+using NXKit.Composition;
 using NXKit.IO;
 using NXKit.IO.Media;
 using NXKit.XForms.Serialization;
@@ -28,11 +28,10 @@ namespace NXKit.XForms.IO
         /// <param name="ioService"></param>
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
-        [ImportingConstructor]
         public DefaultHandler(
             IIOService ioService,
-            [ImportMany] IEnumerable<IModelSerializer> serializers,
-            [ImportMany] IEnumerable<IModelDeserializer> deserializers)
+            IEnumerable<IModelSerializer> serializers,
+            IEnumerable<IModelDeserializer> deserializers)
             : base(serializers, deserializers)
         {
             if (serializers == null)

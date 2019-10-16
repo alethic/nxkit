@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -10,7 +8,6 @@ namespace NXKit.XForms
 {
 
     [Extension(PredicateType = typeof(Predicate))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class RepeatExtension :
         ElementExtension
@@ -45,7 +42,6 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="context"></param>
-        [ImportingConstructor]
         public RepeatExtension(
             XElement element, 
             Lazy<EvaluationContextResolver> context)

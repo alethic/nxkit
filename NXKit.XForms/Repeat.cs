@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -13,9 +12,6 @@ namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}repeat")]
-    [Extension(typeof(IOnInit), "{http://www.w3.org/2002/xforms}repeat")]
-    [Extension(typeof(IOnRefresh), "{http://www.w3.org/2002/xforms}repeat")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class Repeat :
         ElementExtension,
@@ -25,9 +21,9 @@ namespace NXKit.XForms
 
         readonly AnnotationSerializer serializer;
         readonly RepeatAttributes attributes;
-        readonly Extension<IBindingNode> bindingNode;
+        readonly IExport<IBindingNode> bindingNode;
         readonly Lazy<Binding> binding;
-        readonly Extension<IUIBindingNode> uiBindingNode;
+        readonly IExport<IUIBindingNode> uiBindingNode;
         readonly Lazy<UIBinding> uiBinding;
         readonly Lazy<RepeatState> state;
         readonly Lazy<XElement> template;
@@ -42,12 +38,11 @@ namespace NXKit.XForms
         /// <param name="bindingNode"></param>
         /// <param name="uiBindingNode"></param>
         /// <param name="serializer"></param>
-        [ImportingConstructor]
         public Repeat(
             XElement element,
             RepeatAttributes attributes,
-            Extension<IBindingNode> bindingNode,
-            Extension<IUIBindingNode> uiBindingNode,
+            IExport<IBindingNode> bindingNode,
+            IExport<IUIBindingNode> uiBindingNode,
             AnnotationSerializer serializer)
             : base(element)
         {
@@ -221,6 +216,7 @@ namespace NXKit.XForms
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         IEnumerable<T> GetAllExtensions<T>(XElement root)
+            where T : class, IExtension
         {
             if (root == null)
                 throw new ArgumentNullException(nameof(root));

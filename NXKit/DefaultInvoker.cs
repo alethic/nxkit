@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 
 using NXKit.Composition;
 using NXKit.Util;
@@ -8,21 +7,18 @@ using NXKit.Util;
 namespace NXKit
 {
 
-    [Export(typeof(IInvoker))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(IInvoker), CompositionScope.Host)]
     public class DefaultInvoker :
         IInvoker
     {
 
-        readonly LinkedList<Lazy<IInvokerLayer>> layers;
+        readonly LinkedList<IExport<IInvokerLayer>> layers;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="layers"></param>
-        [ImportingConstructor]
-        public DefaultInvoker(
-            [ImportMany] IEnumerable<Lazy<IInvokerLayer>> layers)
+        public DefaultInvoker(IEnumerable<IExport<IInvokerLayer>> layers)
         {
             if (layers == null)
                 throw new ArgumentNullException(nameof(layers));
@@ -35,7 +31,7 @@ namespace NXKit
             Invoke(action, layers.First);
         }
 
-        void Invoke(Action action, LinkedListNode<Lazy<IInvokerLayer>> next)
+        void Invoke(Action action, LinkedListNode<IExport<IInvokerLayer>> next)
         {
             if (next != null)
                 next.Value.Value.Invoke(() => Invoke(action, next.Next));
@@ -48,7 +44,7 @@ namespace NXKit
             return Invoke(func, layers.First);
         }
 
-        R Invoke<R>(Func<R> func, LinkedListNode<Lazy<IInvokerLayer>> next)
+        R Invoke<R>(Func<R> func, LinkedListNode<IExport<IInvokerLayer>> next)
         {
             if (next == null && func == null)
                 throw new ArgumentException();

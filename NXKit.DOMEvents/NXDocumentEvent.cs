@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.DOMEvents
 {
@@ -11,7 +8,6 @@ namespace NXKit.DOMEvents
     /// NX-specified document event interface.
     /// </summary>
     [Extension(ExtensionObjectType.Document)]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class NXDocumentEvent :
         DocumentExtension,
         INXDocumentEvent
@@ -24,7 +20,6 @@ namespace NXKit.DOMEvents
         /// </summary>
         /// <param name="document"></param>
         /// <param name="factory"></param>
-        [ImportingConstructor]
         public NXDocumentEvent(
             XDocument document,
             IEventFactory factory)

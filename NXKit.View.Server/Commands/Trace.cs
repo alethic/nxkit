@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace NXKit.View.Server.Commands
 {
@@ -14,9 +13,7 @@ namespace NXKit.View.Server.Commands
         /// <param name="message"></param>
         public Trace(TraceMessage message)
         {
-            Contract.Requires<ArgumentNullException>(message != null);
-
-            Message = message;
+            Message = message ?? throw new ArgumentNullException(nameof(message));
         }
 
         public TraceMessage Message { get; set; }

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Scripting;
 using NXKit.Xml;
@@ -15,7 +13,6 @@ namespace NXKit.XForms
     /// XForms 2.0 script tag.
     /// </summary>
     [Extension("{http://www.w3.org/2002/xforms}script")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class Script :
         ElementExtension,
@@ -28,7 +25,6 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public Script(XElement element)
             : base(element)
         {

@@ -1,21 +1,18 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
 
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Extension("{http://www.w3.org/2002/xforms}output")]
     [Extension(typeof(IRemote), "{http://www.w3.org/2002/xforms}output")]
     [Remote]
     public class Output :
-        ElementExtension
+        ElementExtension,
+        IRemote
     {
 
-        readonly Extension<EvaluationContextResolver> context;
+        readonly Lazy<EvaluationContextResolver> context;
         readonly OutputProperties properties;
         readonly Lazy<Binding> value;
 
@@ -25,10 +22,9 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="context"></param>
         /// <param name="properties"></param>
-        [ImportingConstructor]
         public Output(
             XElement element,
-            Extension<EvaluationContextResolver> context,
+            Lazy<EvaluationContextResolver> context,
             OutputProperties properties)
             : base(element)
         {

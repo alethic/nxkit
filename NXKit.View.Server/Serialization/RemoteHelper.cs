@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -26,8 +25,10 @@ namespace NXKit.View.Server.Serialization
         /// <param name="element"></param>
         public static void GetJson(JsonWriter writer, XElement element)
         {
-            Contract.Requires<ArgumentNullException>(writer != null);
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (writer is null)
+                throw new ArgumentNullException(nameof(writer));
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
 
             serializer.Serialize(writer, element);
         }
@@ -40,10 +41,12 @@ namespace NXKit.View.Server.Serialization
         /// <returns></returns>
         static RemoteDescriptor GetRemoteDescriptor(XNode node, string interfaceName)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(interfaceName));
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
+            if (string.IsNullOrWhiteSpace(interfaceName))
+                throw new ArgumentOutOfRangeException(nameof(interfaceName));
 
-            return RemoteObjectJsonConverter.GetRemotes(node.Interfaces<object>())
+            return RemoteObjectJsonConverter.GetRemotes(node.Interfaces<IExtension>())
                 .FirstOrDefault(i => i.Type.FullName == interfaceName);
         }
 
@@ -56,10 +59,14 @@ namespace NXKit.View.Server.Serialization
         /// <param name="jvalue"></param>
         public static void Update(XNode node, string interfaceName, string propertyName, JValue jvalue)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(interfaceName));
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(propertyName));
-            Contract.Requires<ArgumentNullException>(jvalue != null);
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
+            if (string.IsNullOrWhiteSpace(interfaceName))
+                throw new ArgumentOutOfRangeException(nameof(interfaceName));
+            if (string.IsNullOrWhiteSpace(propertyName))
+                throw new ArgumentOutOfRangeException(nameof(propertyName));
+            if (jvalue is null)
+                throw new ArgumentNullException(nameof(jvalue));
 
             var remote = GetRemoteDescriptor(node, interfaceName);
             if (remote == null)
@@ -76,7 +83,7 @@ namespace NXKit.View.Server.Serialization
 
             // extract incoming value and convert to appropriate property value type
             var type = property.PropertyType;
-            var value = jvalue != null ? jvalue.ToObject(type) : null;
+            var value = jvalue?.ToObject(type);
             var oldValue = property.GetValue(remote.Target);
 
             // if value has been changed, apply change to remote
@@ -93,10 +100,14 @@ namespace NXKit.View.Server.Serialization
         /// <param name="args"></param>
         public static void Invoke(XNode node, string interfaceName, string methodName, JObject args)
         {
-            Contract.Requires<ArgumentNullException>(node != null);
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(interfaceName));
-            Contract.Requires<ArgumentException>(!string.IsNullOrWhiteSpace(methodName));
-            Contract.Requires<ArgumentNullException>(args != null);
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
+            if (string.IsNullOrWhiteSpace(interfaceName))
+                throw new ArgumentOutOfRangeException(nameof(interfaceName));
+            if (string.IsNullOrWhiteSpace(methodName))
+                throw new ArgumentOutOfRangeException(nameof(methodName));
+            if (args is null)
+                throw new ArgumentNullException(nameof(args));
 
             var remote = GetRemoteDescriptor(node, interfaceName);
             if (remote == null)

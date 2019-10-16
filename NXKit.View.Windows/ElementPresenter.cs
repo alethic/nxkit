@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Linq;
@@ -44,8 +43,8 @@ namespace NXKit.View.Windows
         /// <param name="args"></param>
         static void Element_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            Contract.Requires<ArgumentNullException>(sender != null);
-            Contract.Requires<ArgumentNullException>(args != null);
+            if (sender is null)
+                throw new ArgumentNullException(nameof(sender));
 
             var ctrl = (ElementPresenter)sender;
             var element = ctrl.Element;

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -13,13 +11,12 @@ namespace NXKit.XForms
     /// a submission to be dynamically calculated based on instance data.
     /// </summary>
     [Extension("{http://www.w3.org/2002/xforms}resource")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Resource :
         ElementExtension
     {
 
         readonly ResourceAttributes attributes;
-        readonly Extension<IBindingNode> bindingNode;
+        readonly Lazy<IBindingNode> bindingNode;
         readonly Lazy<Binding> valueBinding;
 
         /// <summary>
@@ -28,11 +25,10 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         /// <param name="bindingNode"></param>
-        [ImportingConstructor]
         public Resource(
             XElement element,
             ResourceAttributes attributes,
-            Extension<IBindingNode> bindingNode)
+            Lazy<IBindingNode> bindingNode)
             : base(element)
         {
             if (element == null)
@@ -45,7 +41,7 @@ namespace NXKit.XForms
 
         Binding Binding
         {
-            get { return bindingNode.Value != null ? bindingNode.Value.Binding : null; }
+            get { return bindingNode.Value?.Binding; }
         }
 
         Binding ValueBinding

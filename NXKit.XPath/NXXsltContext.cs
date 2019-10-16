@@ -1,9 +1,10 @@
 ﻿using System;
-using System.ComponentModel.Composition;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
+using NXKit.Util;
 
 namespace NXKit.XPath
 {
@@ -16,14 +17,13 @@ namespace NXKit.XPath
     {
 
         readonly IXsltContextFunctionProvider functionProvider;
+        readonly Dictionary<(string Prefix, string LocalName), IXsltContextFunction> cache = new Dictionary<(string, string), IXsltContextFunction>();
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="functionProvider"></param>
-        [ImportingConstructor]
-        public NXXsltContext(
-            IXsltContextFunctionProvider functionProvider)
+        public NXXsltContext(IXsltContextFunctionProvider functionProvider)
             : base()
         {
             this.functionProvider = functionProvider ?? throw new ArgumentNullException(nameof(functionProvider));
@@ -45,6 +45,18 @@ namespace NXKit.XPath
             if (argTypes == null)
                 throw new ArgumentNullException(nameof(argTypes));
 
+            return cache.GetOrAdd((prefix, localName), _ => ResolveFunctionImpl(_.Item1, _.Item2, argTypes));
+        }
+
+        IXsltContextFunction ResolveFunctionImpl(string prefix, string localName, XPathResultType[] argTypes)
+        {
+            if (prefix == null)
+                throw new ArgumentNullException(nameof(prefix));
+            if (localName == null)
+                throw new ArgumentNullException(nameof(localName));
+            if (argTypes == null)
+                throw new ArgumentNullException(nameof(argTypes));
+
             return functionProvider.GetFunctions()
                 .SelectMany(i => i.Metadata.ExpandedName
                     .Select((j, k) => new
@@ -52,10 +64,7 @@ namespace NXKit.XPath
                         Name = i.Metadata.ExpandedName[k],
                         Item = i,
                     }))
-                .Where(i => ResolveFunctionPredicate(
-                    XName.Get(i.Name),
-                    prefix,
-                    localName))
+                .Where(i => ResolveFunctionPredicate(XName.Get(i.Name), prefix, localName))
                 .Select(i => i.Item.Value)
                 .FirstOrDefault();
         }

@@ -4,7 +4,7 @@
     /// <summary>
     /// Marks an extension which is capable of providing an evaluation context to children.
     /// </summary>
-    public interface IEvaluationContextScope
+    public interface IEvaluationContextScope : IExtension
     {
 
         EvaluationContext Context { get; }

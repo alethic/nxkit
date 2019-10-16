@@ -1,23 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net45</TargetFramework>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Product>NXKit Scripting: ECMAScript (V8)</Product>
-        <Description>NXKit scripting support for ECMAScript using the V8 engine.</Description>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net47</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Product>NXKit Scripting: ECMAScript (V8)</Product>
+    <Description>NXKit scripting support for ECMAScript using the V8 engine.</Description>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Jurassic" Version="2.2.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Jurassic" Version="2.2.0" />
+    <PackageReference Include="System.Reflection.Emit" Version="4.6.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\NXKit.Scripting\NXKit.Scripting.csproj" />
-      <ProjectReference Include="..\NXKit\NXKit.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="System.ComponentModel.Composition" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NXKit.Scripting\NXKit.Scripting.csproj" />
+    <ProjectReference Include="..\NXKit\NXKit.csproj" />
+  </ItemGroup>
 
 </Project>

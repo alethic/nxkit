@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
 using NXKit.Xml;
@@ -21,7 +20,6 @@ namespace NXKit.XPath
         /// </summary>
         /// <param name="functionProvider"></param>
         /// <param name="xml"></param>
-        [ImportingConstructor]
         public XObjectXsltContext(
             IXsltContextFunctionProvider functionProvider,
             XObject xml)

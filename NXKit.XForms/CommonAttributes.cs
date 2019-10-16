@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -13,7 +10,6 @@ namespace NXKit.XForms
     /// The Common Attribute Collection applies to every element in the XForms namespace.
     /// </summary>
     [Extension(typeof(CommonAttributes))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class CommonAttributes :
         AttributeAccessor
     {
@@ -22,7 +18,6 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public CommonAttributes(XElement element)
             : base(element)
         {

@@ -42,7 +42,7 @@ namespace NXKit.XForms
         public EvaluationXsltContext(
             XObject xml,
             EvaluationContext evaluationContext)
-            : this(xml.Exports().GetExportedValue<IXsltContextFunctionProvider>(), xml, evaluationContext)
+            : this(xml.GetContext().Resolve<IXsltContextFunctionProvider>(), xml, evaluationContext)
         {
             if (xml == null)
                 throw new ArgumentNullException(nameof(xml));

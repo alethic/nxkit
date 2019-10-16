@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 
 using NXKit.Composition;
@@ -8,8 +7,7 @@ using NXKit.Composition;
 namespace NXKit.Scripting
 {
 
-    [Export(typeof(IScriptDispatcher))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(IScriptDispatcher), CompositionScope.Host)]
     public class DefaultScriptDispatcher :
         IScriptDispatcher
     {
@@ -20,9 +18,8 @@ namespace NXKit.Scripting
         /// Initializes a new instance.
         /// </summary>
         /// <param name="engines"></param>
-        [ImportingConstructor]
         public DefaultScriptDispatcher(
-            [ImportMany] IEnumerable<IScriptEngine> engines)
+            IEnumerable<IScriptEngine> engines)
         {
             this.engines = engines ?? throw new ArgumentNullException(nameof(engines));
         }

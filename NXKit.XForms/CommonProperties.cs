@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -12,13 +11,12 @@ namespace NXKit.XForms
     /// Provides the XForms common properties.
     /// </summary>
     [Extension(typeof(CommonProperties))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class CommonProperties :
         ElementExtension
     {
 
         readonly CommonAttributes attributes;
-        readonly Extension<EvaluationContextResolver> contextResolver;
+        readonly IExport<EvaluationContextResolver> contextResolver;
         readonly Lazy<XPathExpression> context;
 
         /// <summary>
@@ -27,11 +25,10 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         /// <param name="contextResolver"></param>
-        [ImportingConstructor]
         public CommonProperties(
             XElement element,
             CommonAttributes attributes,
-            Extension<EvaluationContextResolver> contextResolver)
+            IExport<EvaluationContextResolver> contextResolver)
             : base(element)
         {
             if (element == null)
@@ -40,8 +37,7 @@ namespace NXKit.XForms
             this.attributes = attributes;
             this.contextResolver = contextResolver ?? throw new ArgumentNullException(nameof(contextResolver));
 
-            this.context = new Lazy<XPathExpression>(() =>
-                !string.IsNullOrEmpty(attributes.Context) ? contextResolver.Value.Context.CompileXPath(element, attributes.Context) : null);
+            context = new Lazy<XPathExpression>(() => !string.IsNullOrEmpty(attributes.Context) ? contextResolver.Value.Context.CompileXPath(element, attributes.Context) : null);
         }
 
         public IdRef Model

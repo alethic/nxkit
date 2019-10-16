@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.IO;
 using NXKit.XForms.IO;
@@ -15,7 +13,6 @@ namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}submission")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Submission :
         ElementExtension,
         IEventDefaultAction
@@ -124,18 +121,17 @@ namespace NXKit.XForms
 
         readonly IModelRequestService requestService;
         readonly SubmissionProperties properties;
-        readonly Extension<EvaluationContextResolver> context;
+        readonly Lazy<EvaluationContextResolver> context;
         bool submissionInProgress = false;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public Submission(
             XElement element,
             SubmissionProperties properties,
-            Extension<EvaluationContextResolver> context,
+            Lazy<EvaluationContextResolver> context,
             IModelRequestService requestService)
             : base(element)
         {

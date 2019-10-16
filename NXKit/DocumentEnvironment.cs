@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Primitives;
 
 using NXKit.Composition;
 
@@ -10,8 +8,7 @@ namespace NXKit
     /// <summary>
     /// Provides access to document scope variables.
     /// </summary>
-    [Export(typeof(DocumentEnvironment))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(DocumentEnvironment), CompositionScope.Host)]
     public class DocumentEnvironment
     {
 
@@ -21,7 +18,6 @@ namespace NXKit
         /// Gets the configured host.
         /// </summary>
         /// <returns></returns>
-        [Export(typeof(Func<Document>))]
         public Document GetHost()
         {
             return host;

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
+
+using NXKit.Composition;
 
 namespace NXKit.IO.Media
 {
@@ -17,9 +18,7 @@ namespace NXKit.IO.Media
         /// Initializes a new instance.
         /// </summary>
         /// <param name="converters"></param>
-        [ImportingConstructor]
-        public MediaConverterProvider(
-            [ImportMany] IEnumerable<IMediaConverter> converters)
+        public MediaConverterProvider(IEnumerable<IMediaConverter> converters)
         {
             this.converters = converters ?? throw new ArgumentNullException(nameof(converters));
         }

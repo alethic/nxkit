@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Scripting;
 using NXKit.Xml;
@@ -14,7 +12,6 @@ namespace NXKit.XMLEvents
     /// XML Events 2 script tag.
     /// </summary>
     [Extension("{http://www.w3.org/2001/xml-events}script")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class Script :
         ElementExtension,
@@ -27,7 +24,6 @@ namespace NXKit.XMLEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public Script(XElement element)
             : base(element)
         {

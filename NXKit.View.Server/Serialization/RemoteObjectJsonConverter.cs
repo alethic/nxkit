@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 
@@ -32,13 +31,14 @@ namespace NXKit.View.Server.Serialization
 
 
         /// <summary>
-        /// Gets the supported remote interface types of the given <see cref="Object"/>.
+        /// Gets the supported remote interface types of the given <see cref="object"/>.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         internal static IEnumerable<RemoteDescriptor> GetRemotes(object obj)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (obj is null)
+                throw new ArgumentNullException(nameof(obj));
 
             return GetRemotes(new[] { obj });
         }
@@ -49,7 +49,8 @@ namespace NXKit.View.Server.Serialization
         /// <param name="objects"></param>
         internal static IEnumerable<RemoteDescriptor> GetRemotes(IEnumerable<object> objects)
         {
-            Contract.Requires<ArgumentNullException>(objects != null);
+            if (objects is null)
+                throw new ArgumentNullException(nameof(objects));
 
             return objects
                 .Where(i => i != null)
@@ -77,7 +78,8 @@ namespace NXKit.View.Server.Serialization
         /// <returns></returns>
         internal static IEnumerable<Type> GetRemoteTypes(object obj)
         {
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (obj is null)
+                throw new ArgumentNullException(nameof(obj));
 
             return GetRemoteTypes(obj.GetType());
         }
@@ -89,7 +91,8 @@ namespace NXKit.View.Server.Serialization
         /// <returns></returns>
         internal static IEnumerable<Type> GetRemoteTypes(Type type)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (type is null)
+                throw new ArgumentNullException(nameof(type));
 
             return remoteTypeCache.GetOrAdd(type, k =>
                 TypeDescriptor.GetReflectionType(k)
@@ -107,7 +110,8 @@ namespace NXKit.View.Server.Serialization
         /// <returns></returns>
         internal static IEnumerable<PropertyInfo> GetRemoteProperties(Type type)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (type is null)
+                throw new ArgumentNullException(nameof(type));
 
             return remotePropertyCache.GetOrAdd(type, k =>
                 TypeDescriptor.GetReflectionType(k)
@@ -126,7 +130,8 @@ namespace NXKit.View.Server.Serialization
         /// <returns></returns>
         internal static IEnumerable<MethodInfo> GetRemoteMethods(Type type)
         {
-            Contract.Requires<ArgumentNullException>(type != null);
+            if (type is null)
+                throw new ArgumentNullException(nameof(type));
 
             return remoteMethodCache.GetOrAdd(type, k =>
                 TypeDescriptor.GetReflectionType(k)
@@ -146,7 +151,8 @@ namespace NXKit.View.Server.Serialization
         /// <returns></returns>
         internal static JToken JTokenFromObject(object value, JsonSerializer serializer)
         {
-            Contract.Requires<ArgumentNullException>(serializer != null);
+            if (serializer is null)
+                throw new ArgumentNullException(nameof(serializer));
 
             return value != null ? JToken.FromObject(value, serializer) : null;
         }
@@ -159,7 +165,8 @@ namespace NXKit.View.Server.Serialization
         /// <returns></returns>
         internal static IEnumerable<JProperty> InterfaceToProperties(RemoteDescriptor remote, JsonSerializer serializer)
         {
-            Contract.Requires<ArgumentNullException>(serializer != null);
+            if (serializer is null)
+                throw new ArgumentNullException(nameof(serializer));
 
             foreach (var property in GetRemoteProperties(remote.Type))
                 yield return new JProperty(property.Name,
@@ -175,9 +182,12 @@ namespace NXKit.View.Server.Serialization
         /// <returns></returns>
         internal static void RemoteToObject(object source, JObject destination, JsonSerializer serializer)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(destination != null);
-            Contract.Requires<ArgumentNullException>(serializer != null);
+            if (source is null)
+                throw new ArgumentNullException(nameof(source));
+            if (destination is null)
+                throw new ArgumentNullException(nameof(destination));
+            if (serializer is null)
+                throw new ArgumentNullException(nameof(serializer));
 
             // append interfaces to object
             destination.Add(
@@ -196,8 +206,10 @@ namespace NXKit.View.Server.Serialization
         /// <returns></returns>
         internal static JObject RemoteToObject(object source, JsonSerializer serializer)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(serializer != null);
+            if (source is null)
+                throw new ArgumentNullException(nameof(source));
+            if (serializer is null)
+                throw new ArgumentNullException(nameof(serializer));
 
             var obj = new JObject();
             RemoteToObject(source, obj, serializer);
@@ -213,9 +225,12 @@ namespace NXKit.View.Server.Serialization
         /// <returns></returns>
         internal static void RemotesToObject(IEnumerable<object> source, JObject destination, JsonSerializer serializer)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(destination != null);
-            Contract.Requires<ArgumentNullException>(serializer != null);
+            if (source is null)
+                throw new ArgumentNullException(nameof(source));
+            if (destination is null)
+                throw new ArgumentNullException(nameof(destination));
+            if (serializer is null)
+                throw new ArgumentNullException(nameof(serializer));
 
             // append interfaces to object
             destination.Add(
@@ -234,8 +249,10 @@ namespace NXKit.View.Server.Serialization
         /// <returns></returns>
         internal static JObject RemotesToObject(IEnumerable<object> source, JsonSerializer serializer)
         {
-            Contract.Requires<ArgumentNullException>(source != null);
-            Contract.Requires<ArgumentNullException>(serializer != null);
+            if (source is null)
+                throw new ArgumentNullException(nameof(source));
+            if (serializer is null)
+                throw new ArgumentNullException(nameof(serializer));
 
             var obj = new JObject();
             RemotesToObject(source, obj, serializer);
@@ -253,7 +270,7 @@ namespace NXKit.View.Server.Serialization
             throw new NotSupportedException();
         }
 
-        public override sealed void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public sealed override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var jobj = new JObject();
             Apply(value, serializer, jobj);
@@ -262,9 +279,12 @@ namespace NXKit.View.Server.Serialization
 
         protected virtual void Apply(object value, JsonSerializer serializer, JObject obj)
         {
-            Contract.Requires<ArgumentNullException>(value != null);
-            Contract.Requires<ArgumentNullException>(serializer != null);
-            Contract.Requires<ArgumentNullException>(obj != null);
+            if (value is null)
+                throw new ArgumentNullException(nameof(value));
+            if (serializer is null)
+                throw new ArgumentNullException(nameof(serializer));
+            if (obj is null)
+                throw new ArgumentNullException(nameof(obj));
 
             obj["Type"] = "Object";
             RemoteToObject(value, obj, serializer);

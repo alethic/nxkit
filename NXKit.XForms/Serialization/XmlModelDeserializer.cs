@@ -1,9 +1,9 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Composition;
 using NXKit.IO.Media;
 using NXKit.Serialization;
 
@@ -27,7 +27,6 @@ namespace NXKit.XForms.Serialization
         /// Initializes a new instance.
         /// </summary>
         /// <param name="serializer"></param>
-        [ImportingConstructor]
         public XmlModelDeserializer(AnnotationSerializer serializer)
         {
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));

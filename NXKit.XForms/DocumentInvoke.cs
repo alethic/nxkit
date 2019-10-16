@@ -1,9 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -11,7 +9,6 @@ namespace NXKit.XForms
 {
 
     [Extension(ExtensionObjectType.Document)]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class DocumentInvoke :
         DocumentExtension,
         IOnInvoke
@@ -21,7 +18,6 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="document"></param>
-        [ImportingConstructor]
         public DocumentInvoke(
             XDocument document)
             : base(document)

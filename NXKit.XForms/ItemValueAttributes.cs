@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -11,7 +8,6 @@ namespace NXKit.XForms
     /// Provides the XForms 'value' element attributes.
     /// </summary>
     [Extension(typeof(ItemValueAttributes), "{http://www.w3.org/2002/xforms}value", PredicateType = typeof(ItemValuePredicate))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class ItemValueAttributes :
         AttributeAccessor
     {
@@ -31,7 +27,6 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public ItemValueAttributes(XElement element)
             : base(element)
         {

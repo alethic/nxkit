@@ -1,9 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -13,23 +11,21 @@ namespace NXKit.XForms
     /// Encapsulates the binding information for a UI element.
     /// </summary>
     [Extension]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class UINode :
         ElementExtension,
         IUINode
     {
 
-        readonly Extension<CommonAttributes> attributes;
+        readonly Lazy<CommonAttributes> attributes;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         /// <param name="attributes"></param>
-        [ImportingConstructor]
         public UINode(
             XElement element,
-            Extension<CommonAttributes> attributes)
+            Lazy<CommonAttributes> attributes)
             : base(element)
         {
             if (element == null)

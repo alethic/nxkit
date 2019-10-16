@@ -7,7 +7,7 @@ namespace NXKit.XForms
     /// Provides an interface to an item that can be selected.
     /// </summary>
     [Remote]
-    public interface ISelectable
+    public interface ISelectable : IElementExtension
     {
 
         /// <summary>

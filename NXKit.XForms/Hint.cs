@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -11,7 +8,6 @@ namespace NXKit.XForms
     /// The author-optional element hint provides a convenient way to attach hint information to a form control.
     /// </summary>
     [Extension("{http://www.w3.org/2002/xforms}hint")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Hint :
         ElementExtension
     {
@@ -20,7 +16,6 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public Hint(XElement element)
             : base(element)
         {

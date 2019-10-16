@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Runtime.ExceptionServices;
 
 using NXKit.Composition;
@@ -8,8 +7,7 @@ using NXKit.Composition;
 namespace NXKit
 {
 
-    [Export(typeof(IInvokerLayer))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(IInvokerLayer), CompositionScope.Host)]
     public class ExceptionInvokerLayer :
         IInvokerLayer
     {
@@ -20,9 +18,7 @@ namespace NXKit
         /// Initializes a new instance.
         /// </summary>
         /// <param name="handlers"></param>
-        [ImportingConstructor]
-        public ExceptionInvokerLayer(
-            [ImportMany] IEnumerable<IExceptionHandler> handlers)
+        public ExceptionInvokerLayer(IEnumerable<IExceptionHandler> handlers)
         {
             this.handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
         }

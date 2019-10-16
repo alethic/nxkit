@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -11,7 +8,6 @@ namespace NXKit.XForms
     /// Provides the XForms repeat extension attributes.
     /// </summary>
     [Extension(typeof(RepeatExtensionAttributes))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class RepeatExtensionAttributes :
         AttributeAccessor
     {
@@ -20,7 +16,6 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public RepeatExtensionAttributes(XElement element)
             : base(element)
         {

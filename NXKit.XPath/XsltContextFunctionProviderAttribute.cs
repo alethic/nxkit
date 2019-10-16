@@ -1,5 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
+
+using NXKit.Composition;
 
 namespace NXKit.XPath
 {

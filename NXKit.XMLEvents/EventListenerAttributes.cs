@@ -1,14 +1,10 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XMLEvents
 {
 
     [Extension(typeof(EventListenerAttributes))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class EventListenerAttributes :
         AttributeAccessor
     {
@@ -17,7 +13,6 @@ namespace NXKit.XMLEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public EventListenerAttributes(XElement element)
             : base(element)
         {

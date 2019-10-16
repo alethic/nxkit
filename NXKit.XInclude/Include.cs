@@ -1,9 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.Diagnostics;
 using NXKit.IO;
 using NXKit.Xml;
@@ -13,7 +10,6 @@ namespace NXKit.XInclude
 
     [Extension("{http://www.w3.org/2001/XInclude}include")]
     [Extension(typeof(IOnInit), "{http://www.w3.org/2001/XInclude}include")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Include :
         ElementExtension,
         IOnInit
@@ -30,7 +26,6 @@ namespace NXKit.XInclude
         /// <param name="properties"></param>
         /// <param name="trace"></param>
         /// <param name="io"></param>
-        [ImportingConstructor]
         public Include(
             XElement element,
             IncludeProperties properties,
@@ -38,10 +33,14 @@ namespace NXKit.XInclude
             IIOService io)
             : this(element, () => properties, trace, io)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(properties != null);
-            Contract.Requires<ArgumentNullException>(trace != null);
-            Contract.Requires<ArgumentNullException>(io != null);
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
+            if (properties is null)
+                throw new ArgumentNullException(nameof(properties));
+            if (trace is null)
+                throw new ArgumentNullException(nameof(trace));
+            if (io is null)
+                throw new ArgumentNullException(nameof(io));
         }
 
         /// <summary>
@@ -58,10 +57,14 @@ namespace NXKit.XInclude
             IIOService io)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(properties != null);
-            Contract.Requires<ArgumentNullException>(trace != null);
-            Contract.Requires<ArgumentNullException>(io != null);
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
+            if (properties is null)
+                throw new ArgumentNullException(nameof(properties));
+            if (trace is null)
+                throw new ArgumentNullException(nameof(trace));
+            if (io is null)
+                throw new ArgumentNullException(nameof(io));
 
             this.properties = properties;
             this.trace = trace;

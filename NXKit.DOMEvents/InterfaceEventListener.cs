@@ -154,7 +154,7 @@ namespace NXKit.DOMEvents
             if (IsValidMethodInfo(methodInfo) == false)
                 throw new ArgumentException("", nameof(methodInfo));
 
-            var host = handler.Exports().GetExportedValue<Func<Document>>()();
+            var host = handler.GetContext().Resolve<DocumentEnvironment>().GetHost();
             if (host == null)
                 throw new InvalidOperationException();
 

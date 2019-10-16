@@ -4,7 +4,7 @@
     /// <summary>
     /// Provides an interface to an item that can be selected.
     /// </summary>
-    public interface ISelectableValue
+    public interface ISelectableValue : IElementExtension
     {
 
         /// <summary>

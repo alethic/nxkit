@@ -1,12 +1,14 @@
 ﻿using System;
 
+using NXKit.Composition;
+
 namespace NXKit
 {
 
     /// <summary>
     /// Describes an extension's metadata.
     /// </summary>
-    public interface IExtensionMetadata
+    public interface IExtensionMetadata : IExportMetadata
     {
 
         /// <summary>

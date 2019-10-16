@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit.XInclude
@@ -22,8 +21,10 @@ namespace NXKit.XInclude
             XNamespace defaultNamespace)
             : base(element, defaultNamespace)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-            Contract.Requires<ArgumentNullException>(defaultNamespace != null);
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
+            if (defaultNamespace is null)
+                throw new ArgumentNullException(nameof(defaultNamespace));
         }
 
         /// <summary>
@@ -33,7 +34,8 @@ namespace NXKit.XInclude
         public AttributeAccessor(XElement element)
             : this(element, "http://www.w3.org/2001/XInclude")
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
         }
 
     }

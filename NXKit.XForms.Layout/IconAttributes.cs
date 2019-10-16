@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms.Layout
 {
@@ -11,7 +8,6 @@ namespace NXKit.XForms.Layout
     /// Makes the 'icon' attribute available.
     /// </summary>
     [Extension(typeof(IconAttributes), "{http://schemas.nxkit.org/2014/xforms-layout}icon")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IconAttributes :
         AttributeAccessor
     {
@@ -20,7 +16,6 @@ namespace NXKit.XForms.Layout
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public IconAttributes(XElement element)
             : base(element)
         {

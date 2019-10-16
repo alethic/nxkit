@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -17,8 +16,7 @@ namespace NXKit.Scripting.EcmaScript
     /// <summary>
     /// Provides a ECMAScript implementation using the Jurassic JavaScript engine.
     /// </summary>
-    [Export(typeof(IScriptEngine))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(IScriptEngine), CompositionScope.Host)]
     public class JurassicScriptEngine :
         IScriptEngine,
         IDisposable
@@ -44,10 +42,10 @@ namespace NXKit.Scripting.EcmaScript
         /// </summary>
         /// <param name="host"></param>
         /// <param name="objects"></param>
-        [ImportingConstructor]
+        /// <param name="generator"></param>
         public JurassicScriptEngine(
             Func<Document> host,
-            [ImportMany] IEnumerable<IScriptObjectProvider> objects,
+            IEnumerable<IScriptObjectProvider> objects,
             ScriptObjectProxyGenerator generator)
         {
             if (objects == null)

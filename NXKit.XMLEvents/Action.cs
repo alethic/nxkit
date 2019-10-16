@@ -1,18 +1,14 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
-
 
 namespace NXKit.XMLEvents
 {
 
     [Extension("{http://www.w3.org/2001/xml-events}action")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Action :
         ElementExtension,
         IEventHandler
@@ -22,7 +18,6 @@ namespace NXKit.XMLEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public Action(XElement element)
             : base(element)
         {

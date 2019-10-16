@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -12,7 +10,6 @@ namespace NXKit.XForms
     /// Provides a <see cref="UIBinding"/> for a node.
     /// </summary>
     [Extension(PredicateType = typeof(UIBindingNodePredicate))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class UIBindingNode :
         ElementExtension,
         IUIBindingNode,
@@ -42,7 +39,6 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="invoker"></param>
-        [ImportingConstructor]
         public UIBindingNode(XElement element, IInvoker invoker)
             : base(element)
         {

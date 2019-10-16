@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using NXKit.Composition;
+
 namespace NXKit
 {
 
@@ -9,28 +11,27 @@ namespace NXKit
     /// Wraps a deferred extension lookup.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [Export(typeof(ExtensionQuery<>), CompositionScope.Object)]
     public class ExtensionQuery<T> :
         ExtensionQueryInternal,
         IEnumerable<T>
+        where T : class, IExtension
     {
 
-        readonly Lazy<IEnumerable<T>> values;
+        readonly ExtensionProvider<T> provider;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="value"></param>
-        public ExtensionQuery(Func<IEnumerable<T>> values)
+        public ExtensionQuery(ExtensionProvider<T> provider)
         {
-            if (values == null)
-                throw new ArgumentNullException(nameof(values));
-
-            this.values = new Lazy<IEnumerable<T>>(() => values());
+            this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
         }
 
         public new IEnumerator<T> GetEnumerator()
         {
-            return values.Value.GetEnumerator();
+            return provider.Extensions.GetEnumerator();
         }
 
         protected override IEnumerator<object> GetGetEnumerator()

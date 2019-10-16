@@ -7,7 +7,7 @@ namespace NXKit.XForms
     /// Describes a UI element.
     /// </summary>
     [Remote]
-    public interface IUINode
+    public interface IUINode : IElementExtension
     {
 
         /// <summary>

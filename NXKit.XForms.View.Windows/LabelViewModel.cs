@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Windows.Input;
 using System.Xml.Linq;
 
-using NXKit.DOMEvents;
 using NXKit.View.Windows;
 
 namespace NXKit.XForms.View.Windows
@@ -21,7 +17,8 @@ namespace NXKit.XForms.View.Windows
         public LabelViewModel(XElement element)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
         }
 
     }

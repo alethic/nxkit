@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -13,7 +11,6 @@ namespace NXKit.XForms
     /// Describes the implicit 'repeat item' group element.
     /// </summary>
     [Extension(PredicateType = typeof(RepeatItemPredicate))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Remote]
     public class RepeatItem :
         ElementExtension,
@@ -38,7 +35,6 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public RepeatItem(XElement element)
             : base(element)
         {

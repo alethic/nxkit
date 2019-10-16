@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.XMLEvents;
 
@@ -10,7 +8,6 @@ namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}load")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Load :
         ElementExtension,
         IEventHandler
@@ -23,7 +20,6 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         /// <param name="properties"></param>
-        [ImportingConstructor]
         public Load(
             XElement element,
             LoadProperties properties)

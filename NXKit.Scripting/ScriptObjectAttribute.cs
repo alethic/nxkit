@@ -1,5 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Composition;
+
+using NXKit.Composition;
 
 namespace NXKit.Scripting
 {
@@ -8,9 +9,9 @@ namespace NXKit.Scripting
     /// Exports the given object as a script object.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    [MetadataAttribute]
     public class ScriptObjectAttribute :
-        ExportAttribute
+        ExportAttribute,
+        IScriptObjectMetadata
     {
 
         readonly string name;
@@ -19,8 +20,8 @@ namespace NXKit.Scripting
         /// Initializes a new instance.
         /// </summary>
         /// <param name="name"></param>
-        public ScriptObjectAttribute(string name)
-            : base(typeof(IScriptObject))
+        public ScriptObjectAttribute(string name, CompositionScope scope = CompositionScope.Global)
+            : base(typeof(IScriptObject), scope)
         {
             this.name = name ?? throw new ArgumentNullException(nameof(name));
         }

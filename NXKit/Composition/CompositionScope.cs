@@ -4,7 +4,7 @@
     /// <summary>
     /// Describes the various scopes of exports.
     /// </summary>
-    public enum Scope
+    public enum CompositionScope
     {
 
         /// <summary>
@@ -21,6 +21,11 @@
         /// Export is allocated within the object container. These exports are not available to Host or Global exports.
         /// </summary>
         Object = 2,
+
+        /// <summary>
+        /// Export is available per-dependency. These exports are available all the time, and associated with the context that requests them.
+        /// </summary>
+        Transient = 3,
 
     }
 

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms
 {
@@ -11,7 +8,6 @@ namespace NXKit.XForms
     /// Provides the XForms 'name' element attributes.
     /// </summary>
     [Extension(typeof(HeaderNameAttributes), "{http://www.w3.org/2002/xforms}name", PredicateType = typeof(HeaderNamePredicate))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class HeaderNameAttributes :
         AttributeAccessor
     {
@@ -31,7 +27,6 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public HeaderNameAttributes(XElement element)
             : base(element)
         {

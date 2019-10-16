@@ -1,9 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 
-using NXKit.Composition;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 using NXKit.XMLEvents;
@@ -12,7 +10,6 @@ namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}setvalue")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class SetValue :
         ElementExtension,
         IEventHandler
@@ -21,7 +18,7 @@ namespace NXKit.XForms
         readonly CommonProperties commonProperties;
         readonly BindingProperties bindingProperties;
         readonly SetValueProperties setValueProperties;
-        readonly Extension<EvaluationContextResolver> context;
+        readonly Lazy<EvaluationContextResolver> context;
 
         /// <summary>
         /// Initializes a new instance.
@@ -31,13 +28,12 @@ namespace NXKit.XForms
         /// <param name="bindingProperties"></param>
         /// <param name="setValueProperties"></param>
         /// <param name="context"></param>
-        [ImportingConstructor]
         public SetValue(
             XElement element,
             CommonProperties commonProperties,
             BindingProperties bindingProperties,
             SetValueProperties setValueProperties,
-            Extension<EvaluationContextResolver> context)
+            Lazy<EvaluationContextResolver> context)
             : base(element)
         {
             if (element == null)

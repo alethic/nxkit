@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -13,14 +12,13 @@ namespace NXKit.XForms
     /// Provides a <see cref="Binding"/> for an element.
     /// </summary>
     [Extension]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class BindingNode :
         ElementExtension,
         IBindingNode
     {
 
-        readonly Extension<BindingProperties> properties;
-        readonly Extension<EvaluationContextResolver> resolver;
+        readonly IExport<BindingProperties> properties;
+        readonly IExport<EvaluationContextResolver> resolver;
         readonly Lazy<Binding> binding;
 
         /// <summary>
@@ -29,11 +27,10 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="properties"></param>
         /// <param name="resolver"></param>
-        [ImportingConstructor]
         public BindingNode(
             XElement element,
-            Extension<BindingProperties> properties,
-            Extension<EvaluationContextResolver> resolver)
+            IExport<BindingProperties> properties,
+            IExport<EvaluationContextResolver> resolver)
             : base(element)
         {
             if (element == null)

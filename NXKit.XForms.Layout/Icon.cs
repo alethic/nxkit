@@ -1,18 +1,15 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XForms.Layout
 {
 
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     [Extension("{http://schemas.nxkit.org/2014/xforms-layout}icon")]
     [Extension(typeof(IRemote), "{http://schemas.nxkit.org/2014/xforms-layout}icon")]
     [Remote]
     public class Icon :
-        ElementExtension
+        ElementExtension,
+        IRemote
     {
 
         readonly IconAttributes attributes;
@@ -21,7 +18,6 @@ namespace NXKit.XForms.Layout
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public Icon(
             XElement element,
             IconAttributes attributes)

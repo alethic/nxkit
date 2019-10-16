@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -19,7 +18,8 @@ namespace NXKit.XForms.Layout.View.Windows
         public SegmentViewModel(XElement element)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
         }
 
         public XElement Label

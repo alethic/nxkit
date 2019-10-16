@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Linq;
 
 using NXKit.Composition;
@@ -11,8 +10,7 @@ namespace NXKit.XForms
     /// <summary>
     /// Captures invocations to handle unwrapping and invoking the deferred update behavior.
     /// </summary>
-    [Export(typeof(IInvokerLayer))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(IInvokerLayer), CompositionScope.Host)]
     public class DeferredUpdateInvokerLayer :
         IInvokerLayer
     {
@@ -24,11 +22,18 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="host"></param>
-        [ImportingConstructor]
-        public DeferredUpdateInvokerLayer(
-            [Import] Func<Document> host)
+        public DeferredUpdateInvokerLayer(Func<Document> host)
         {
             this.host = host ?? throw new ArgumentNullException(nameof(host));
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="host"></param>
+        public DeferredUpdateInvokerLayer(DocumentEnvironment environment) : this(() => environment?.GetHost())
+        {
+
         }
 
         public void Invoke(System.Action action)

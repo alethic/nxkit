@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 
 using NXKit.Composition;
@@ -9,8 +8,7 @@ using NXKit.Xml;
 namespace NXKit.DOMEvents
 {
 
-    [Export(typeof(IEventProvider))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(IEventProvider), CompositionScope.Host)]
     public class EventInfoTableProvider :
         IEventProvider
     {
@@ -21,18 +19,17 @@ namespace NXKit.DOMEvents
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="host"></param>
+        /// <param name="environment"></param>
         /// <param name="tables"></param>
-        [ImportingConstructor]
         public EventInfoTableProvider(
-            Func<Document> host,
-            [ImportMany] IEnumerable<IEventInfoTable> tables)
+            DocumentEnvironment environment,
+            IEnumerable<IEventInfoTable> tables)
         {
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
+            if (environment == null)
+                throw new ArgumentNullException(nameof(environment));
 
             this.tables = tables ?? throw new ArgumentNullException(nameof(tables));
-            this.documentEvent = new Lazy<IDocumentEvent>(() => host().Xml.Interface<IDocumentEvent>());
+            this.documentEvent = new Lazy<IDocumentEvent>(() => environment.GetHost().Xml.Interface<IDocumentEvent>());
         }
 
         public Event CreateEvent(string type)

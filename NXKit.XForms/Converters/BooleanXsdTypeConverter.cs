@@ -1,14 +1,11 @@
-﻿using System;
-using System.ComponentModel.Composition;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 using NXKit.Composition;
 
 namespace NXKit.XForms.Converters
 {
 
-    [Export(typeof(IXsdTypeConverter))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(IXsdTypeConverter), CompositionScope.Host)]
     public class BooleanXsdTypeConverter :
         IXsdTypeConverter
     {

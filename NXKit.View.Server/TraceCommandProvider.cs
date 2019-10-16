@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 using NXKit.Composition;
@@ -10,9 +8,8 @@ using NXKit.View.Server.Commands;
 namespace NXKit.View.Server
 {
 
-    [Export(typeof(TraceCommandProvider))]
-    [Export(typeof(ICommandProvider))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(TraceCommandProvider), CompositionScope.Host)]
+    [Export(typeof(ICommandProvider), CompositionScope.Host)]
     public class TraceCommandProvider :
         ICommandProvider
     {
@@ -23,12 +20,9 @@ namespace NXKit.View.Server
         /// Initializes a new instance.
         /// </summary>
         /// <param name="sink"></param>
-        [ImportingConstructor]
         public TraceCommandProvider(TraceSink sink)
         {
-            Contract.Requires<ArgumentNullException>(sink != null);
-
-            this.sink = sink;
+            this.sink = sink ?? throw new ArgumentNullException(nameof(sink));
         }
 
         IEnumerable<Command> ICommandProvider.Commands

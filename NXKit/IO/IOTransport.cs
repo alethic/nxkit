@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.Composition;
-
-namespace NXKit.IO
+﻿namespace NXKit.IO
 {
 
     /// <summary>
@@ -13,7 +11,6 @@ namespace NXKit.IO
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        [ImportingConstructor]
         public IOTransport()
         {
 

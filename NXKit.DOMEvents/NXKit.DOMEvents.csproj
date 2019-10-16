@@ -1,43 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net45</TargetFramework>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Product>NXKit DOM Events</Product>
-        <Description>NXKit implementation of the DOM (Document Object Model) events.</Description>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Product>NXKit DOM Events</Product>
+    <Description>NXKit implementation of the DOM (Document Object Model) events.</Description>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-        <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.6.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj" />
-        <ProjectReference Include="..\NXKit\NXKit.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NXKit.DOM\NXKit.DOM.csproj" />
+    <ProjectReference Include="..\NXKit\NXKit.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <Reference Include="System.ComponentModel.Composition" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Update="Events.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Events.partial.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
 
-    <ItemGroup>
-      <None Update="Events.tt">
-        <Generator>TextTemplatingFileGenerator</Generator>
-        <LastGenOutput>Events.partial.cs</LastGenOutput>
-      </None>
-    </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Events.partial.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Events.tt</DependentUpon>
-      </Compile>
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Events.partial.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Events.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
 </Project>

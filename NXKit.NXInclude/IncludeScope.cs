@@ -1,15 +1,10 @@
 ﻿using System;
-using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.NXInclude
 {
 
     [Extension(PredicateType = typeof(IncludeScopePredicate))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IncludeScope :
         ElementExtension,
         IRefScope
@@ -29,11 +24,11 @@ namespace NXKit.NXInclude
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        [ImportingConstructor]
         public IncludeScope(XElement element)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
         }
 
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 
 using NXKit.Composition;
@@ -11,8 +10,7 @@ namespace NXKit.DOMEvents
     /// <summary>
     /// Implements the <see cref="IEventFactory"/> interface.
     /// </summary>
-    [Export(typeof(IEventFactory))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Host)]
+    [Export(typeof(IEventFactory), CompositionScope.Host)]
     public class DefaultEventFactory :
         IEventFactory
     {
@@ -23,9 +21,7 @@ namespace NXKit.DOMEvents
         /// Initializes a new instance.
         /// </summary>
         /// <param name="providers"></param>
-        [ImportingConstructor]
-        public DefaultEventFactory(
-            [ImportMany] IEnumerable<IEventProvider> providers)
+        public DefaultEventFactory(IEnumerable<IEventProvider> providers)
         {
             this.providers = providers ?? throw new ArgumentNullException(nameof(providers));
         }

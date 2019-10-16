@@ -1,6 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Net;
+
+using NXKit.Composition;
 
 namespace NXKit.IO
 {
@@ -16,9 +17,7 @@ namespace NXKit.IO
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        [ImportingConstructor]
-        public HttpTransport()
-            : base()
+        public HttpTransport() : base()
         {
 
         }

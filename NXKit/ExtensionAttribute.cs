@@ -1,40 +1,43 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
+
+using NXKit.Composition;
 
 namespace NXKit
 {
 
     /// <summary>
-    /// Marks the interface object as being associated with a given fully qualified element name.
+    /// Marks the interface object as being associated with a type of object.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    [MetadataAttribute]
-    public class ExtensionAttribute :
-        ExportAttribute
+    public class ExtensionAttribute : ExportAttribute, IExtensionMetadata
     {
 
-        ExtensionObjectType objectType;
-        string namespaceName;
-        string localName;
-        Type predicateType;
-
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="contractType"></param>
-        public ExtensionAttribute(Type contractType)
-            : this(contractType, ExtensionObjectType.Element)
+        public ExtensionAttribute() :
+            this((Type)null)
         {
-            if (contractType == null)
-                throw new ArgumentNullException(nameof(contractType));
+
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public ExtensionAttribute()
-            : this(ExtensionObjectType.Element)
+        /// <param name="contractType"></param>
+        public ExtensionAttribute(Type contractType) :
+            this(contractType, ExtensionObjectType.Element)
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="objectType"></param>
+        public ExtensionAttribute(ExtensionObjectType objectType) :
+            this(null, objectType)
         {
 
         }
@@ -44,23 +47,20 @@ namespace NXKit
         /// </summary>
         /// <param name="contractType"></param>
         /// <param name="objectType"></param>
-        public ExtensionAttribute(Type contractType, ExtensionObjectType objectType)
-            : base(contractType)
+        public ExtensionAttribute(Type contractType, ExtensionObjectType objectType) :
+            base(contractType, CompositionScope.Object)
         {
-            if (contractType == null)
-                throw new ArgumentNullException(nameof(contractType));
-
-            this.objectType = objectType;
+            ObjectType = objectType;
         }
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="objectType"></param>
-        public ExtensionAttribute(ExtensionObjectType objectType)
-            : base(typeof(IExtension))
+        /// <param name="name"></param>
+        public ExtensionAttribute(XName name) :
+            this((Type)null, name)
         {
-            this.objectType = objectType;
+
         }
 
         /// <summary>
@@ -68,21 +68,8 @@ namespace NXKit
         /// </summary>
         /// <param name="contractType"></param>
         /// <param name="name"></param>
-        public ExtensionAttribute(Type contractType, XName name)
-            : this(contractType, name.NamespaceName, name.LocalName)
-        {
-            if (contractType == null)
-                throw new ArgumentNullException(nameof(contractType));
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="name"></param>
-        public ExtensionAttribute(XName name)
-            : this(name.NamespaceName, name.LocalName)
+        public ExtensionAttribute(Type contractType, XName name) :
+            this(contractType, name.NamespaceName, name.LocalName)
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
@@ -91,13 +78,21 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
+        /// <param name="expandedName"></param>
+        public ExtensionAttribute(string expandedName) :
+            this((Type)null, expandedName)
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
         /// <param name="contractType"></param>
         /// <param name="expandedName"></param>
-        public ExtensionAttribute(Type contractType, string expandedName)
-            : this(contractType, XName.Get(expandedName))
+        public ExtensionAttribute(Type contractType, string expandedName) :
+            this(contractType, XName.Get(expandedName))
         {
-            if (contractType == null)
-                throw new ArgumentNullException(nameof(contractType));
             if (expandedName == null)
                 throw new ArgumentNullException(nameof(expandedName));
         }
@@ -105,12 +100,12 @@ namespace NXKit
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="expandedName"></param>
-        public ExtensionAttribute(string expandedName)
-            : this(XName.Get(expandedName))
+        /// <param name="namespaceName"></param>
+        /// <param name="localName"></param>
+        public ExtensionAttribute(string namespaceName, string localName) :
+            this((Type)null, namespaceName, localName)
         {
-            if (expandedName == null)
-                throw new ArgumentNullException(nameof(expandedName));
+
         }
 
         /// <summary>
@@ -119,77 +114,42 @@ namespace NXKit
         /// <param name="contractType"></param>
         /// <param name="namespaceName"></param>
         /// <param name="localName"></param>
-        public ExtensionAttribute(Type contractType, string namespaceName, string localName)
-            : this(contractType, ExtensionObjectType.Element)
+        public ExtensionAttribute(Type contractType, string namespaceName, string localName) :
+            this(contractType, ExtensionObjectType.Element)
         {
-            if (contractType == null)
-                throw new ArgumentNullException(nameof(contractType));
-
-            this.namespaceName = namespaceName;
-            this.localName = localName;
-        }
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        /// <param name="namespaceName"></param>
-        /// <param name="localName"></param>
-        public ExtensionAttribute(string namespaceName, string localName)
-            : this(ExtensionObjectType.Element)
-        {
-            this.namespaceName = namespaceName;
-            this.localName = localName;
+            NamespaceName = namespaceName;
+            LocalName = localName;
         }
 
         /// <summary>
         /// Gets the type of node this interface applies to.
         /// </summary>
-        public ExtensionObjectType ObjectType
-        {
-            get { return objectType; }
-        }
+        public ExtensionObjectType ObjectType { get; }
 
         /// <summary>
         /// Gets the expanded name.
         /// </summary>
-        XName Name
-        {
-            get { return namespaceName != null && localName != null ? XName.Get(localName, namespaceName) : null; }
-        }
+        XName Name => NamespaceName != null && LocalName != null ? XName.Get(LocalName, NamespaceName) : null;
 
         /// <summary>
         /// Gets the associated name.
         /// </summary>
-        public string ExpandedName
-        {
-            get { return Name != null ? Name.ToString() : null; }
-        }
+        public string ExpandedName => Name?.ToString();
 
         /// <summary>
         /// Gets the namespace name.
         /// </summary>
-        public string NamespaceName
-        {
-            get { return namespaceName; }
-            set { namespaceName = value; }
-        }
+        public string NamespaceName { get; set; }
 
         /// <summary>
         /// Gets the local name.
         /// </summary>
-        public string LocalName
-        {
-            get { return localName; }
-        }
+        public string LocalName { get; }
 
         /// <summary>
         /// Specifies the predicate type to determine whether this interface applies to the decorated <see cref="XObject"/>.
         /// </summary>
-        public Type PredicateType
-        {
-            get { return predicateType; }
-            set { predicateType = value; }
-        }
+        public Type PredicateType { get; set; }
 
     }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 
+using NXKit.Composition;
 using NXKit.IO;
 using NXKit.XForms.Serialization;
 
@@ -22,11 +22,10 @@ namespace NXKit.XForms.IO
         /// <param name="ioService"></param>
         /// <param name="serializers"></param>
         /// <param name="deserializers"></param>
-        [ImportingConstructor]
         public HttpHandler(
             IIOService ioService,
-            [ImportMany] IEnumerable<IModelSerializer> serializers,
-            [ImportMany] IEnumerable<IModelDeserializer> deserializers)
+            IEnumerable<IModelSerializer> serializers,
+            IEnumerable<IModelDeserializer> deserializers)
             : base(ioService, serializers, deserializers)
         {
             if (ioService == null)

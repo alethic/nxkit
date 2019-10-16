@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.Composition;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 using NXKit.Composition;
 
@@ -7,7 +6,6 @@ namespace NXKit.Diagnostics
 {
 
     [Export(typeof(ITraceSink))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Global)]
     public class DiagnosticsTraceSink :
         ITraceSink
     {

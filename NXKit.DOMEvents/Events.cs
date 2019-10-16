@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.Composition;
+
+using NXKit.Composition;
 
 namespace NXKit.DOMEvents
 {

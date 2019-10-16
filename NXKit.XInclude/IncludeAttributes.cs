@@ -1,15 +1,10 @@
 ﻿using System;
-using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
-
-using NXKit.Composition;
 
 namespace NXKit.XInclude
 {
 
     [Extension(typeof(IncludeAttributes))]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class IncludeAttributes :
         AttributeAccessor
     {
@@ -18,11 +13,11 @@ namespace NXKit.XInclude
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
-        [ImportingConstructor]
         public IncludeAttributes(XElement element)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
         }
 
         /// <summary>
@@ -33,7 +28,8 @@ namespace NXKit.XInclude
         public IncludeAttributes(XElement element, XNamespace defaultNamespace)
             : base(element, defaultNamespace)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
         }
 
         public string Href

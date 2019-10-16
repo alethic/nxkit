@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Xml.Linq;
 
 using NXKit.Composition;
@@ -13,23 +12,21 @@ namespace NXKit.XForms
     /// bound node.
     /// </summary>
     [Extension("{http://www.w3.org/2002/xforms}input")]
-    [PartMetadata(ScopeCatalog.ScopeMetadataKey, Scope.Object)]
     public class Input :
         ElementExtension,
         IEventDefaultAction
     {
 
-        readonly Extension<EventTarget> eventTarget;
+        readonly IExport<EventTarget> eventTarget;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
         /// <param name="eventTarget"></param>
-        [ImportingConstructor]
         public Input(
-            XElement element, 
-            Extension<EventTarget> eventTarget)
+            XElement element,
+            IExport<EventTarget> eventTarget)
             : base(element)
         {
             if (element == null)

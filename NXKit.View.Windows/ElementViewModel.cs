@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace NXKit.View.Windows
@@ -21,9 +20,7 @@ namespace NXKit.View.Windows
         /// <param name="element"></param>
         public ElementViewModel(XElement element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
-
-            this.element = element;
+            this.element = element ?? throw new ArgumentNullException(nameof(element));
         }
 
         /// <summary>
@@ -45,8 +42,7 @@ namespace NXKit.View.Windows
         /// <param name="args"></param>
         protected void OnPropertyChanged(PropertyChangedEventArgs args)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, args);
+            PropertyChanged?.Invoke(this, args);
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
+using NXKit.Composition;
 
 namespace NXKit.XForms.IO
 {
@@ -17,9 +17,8 @@ namespace NXKit.XForms.IO
         /// Initializes a new instance.
         /// </summary>
         /// <param name="handlers"></param>
-        [ImportingConstructor]
         public ModelRequestService(
-            [ImportMany] IEnumerable<IModelRequestHandler> handlers)
+            IEnumerable<IModelRequestHandler> handlers)
         {
             this.handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
         }

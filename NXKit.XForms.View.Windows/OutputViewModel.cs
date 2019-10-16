@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 using NXKit.View.Windows;
@@ -19,7 +18,8 @@ namespace NXKit.XForms.View.Windows
         public OutputViewModel(XElement element)
             : base(element)
         {
-            Contract.Requires<ArgumentNullException>(element != null);
+            if (element is null)
+                throw new ArgumentNullException(nameof(element));
         }
 
         public string Value
