@@ -1,5 +1,6 @@
 ﻿using System.Xml.XPath;
 
+using NXKit.Diagnostics;
 using NXKit.XPath;
 
 namespace NXKit.XForms.XPath.Functions
@@ -9,6 +10,16 @@ namespace NXKit.XForms.XPath.Functions
     public class BooleanFromString :
         XPathFunction
     {
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="trace"></param>
+        public BooleanFromString(ITraceService trace) :
+            base(trace)
+        {
+
+        }
 
         public override XPathResultType[] ArgTypes
         {

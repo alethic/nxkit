@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Xml.Linq;
 
+using NXKit.Diagnostics;
+
 namespace NXKit.XForms
 {
 
@@ -26,6 +28,7 @@ namespace NXKit.XForms
 
         readonly HeaderNameAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
+        readonly ITraceService trace;
         readonly Lazy<Binding> valueBinding;
 
         /// <summary>
@@ -37,7 +40,8 @@ namespace NXKit.XForms
         public HeaderName(
             XElement element,
             HeaderNameAttributes attributes,
-            Lazy<IBindingNode> bindingNode)
+            Lazy<IBindingNode> bindingNode,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
@@ -45,7 +49,8 @@ namespace NXKit.XForms
 
             this.attributes = attributes;
             this.bindingNode = bindingNode;
-            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
+            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute, trace));
         }
 
         Binding Binding

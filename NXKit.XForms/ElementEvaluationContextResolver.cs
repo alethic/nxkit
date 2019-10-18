@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Xml.Linq;
-
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -19,20 +19,25 @@ namespace NXKit.XForms
     {
 
         readonly Lazy<CommonAttributes> attributes;
+        readonly ITraceService trace;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="attributes"></param>
+        /// <param name="trace"></param>
         public ElementEvaluationContextResolver(
             XElement element,
-            Lazy<CommonAttributes> attributes)
+            Lazy<CommonAttributes> attributes,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
                 throw new ArgumentNullException(nameof(element));
 
             this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
         }
 
         /// <summary>
@@ -110,7 +115,7 @@ namespace NXKit.XForms
                     throw new DOMTargetEventException(Element, Events.BindingException,
                         "Null Context for specified Context.");
 
-                var binding = new Binding(Element, context, Attributes.Context);
+                var binding = new Binding(Element, context, Attributes.Context, trace);
                 if (binding.ModelItem == null)
                     return null;
 

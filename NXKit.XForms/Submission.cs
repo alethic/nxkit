@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.IO;
 using NXKit.XForms.IO;
@@ -50,19 +51,22 @@ namespace NXKit.XForms
         {
 
             readonly bool excludeRelevant;
+            readonly ITraceService trace;
 
             /// <summary>
             /// Initializes a new instance.
             /// </summary>
             /// <param name="excludeRelevant"></param>
-            public SubmitTransformer(bool excludeRelevant)
+            /// <param name="trace"></param>
+            public SubmitTransformer(bool excludeRelevant, ITraceService trace)
             {
                 this.excludeRelevant = excludeRelevant;
+                this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
             }
 
             public override XObject Visit(XObject obj)
             {
-                var modelItem = ModelItem.Get(obj);
+                var modelItem = ModelItem.Get(obj, trace);
                 if (modelItem == null || modelItem.Relevant || !excludeRelevant)
                 {
                     // visit node
@@ -120,6 +124,7 @@ namespace NXKit.XForms
         }
 
         readonly IModelRequestService requestService;
+        readonly ITraceService trace;
         readonly SubmissionProperties properties;
         readonly Lazy<EvaluationContextResolver> context;
         bool submissionInProgress = false;
@@ -128,17 +133,23 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="properties"></param>
+        /// <param name="context"></param>
+        /// <param name="requestService"></param>
+        /// <param name="trace"></param>
         public Submission(
             XElement element,
             SubmissionProperties properties,
             Lazy<EvaluationContextResolver> context,
-            IModelRequestService requestService)
+            IModelRequestService requestService,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
                 throw new ArgumentNullException(nameof(element));
 
             this.requestService = requestService ?? throw new ArgumentNullException(nameof(requestService));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
             this.properties = properties ?? throw new ArgumentNullException(nameof(properties));
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -188,7 +199,7 @@ namespace NXKit.XForms
             // If the binding attributes of submission indicate an empty sequence or an item other than an element or 
             // an instance document root node, then submission fails with no-data. Otherwise, the binding attributes of 
             // submission indicate a node of instance data.
-            var modelItems = new Binding(Element, context.Value.Context, properties.Ref).ModelItems;
+            var modelItems = new Binding(Element, context.Value.Context, properties.Ref, trace).ModelItems;
             if (modelItems == null ||
                 modelItems.Length != 1 ||
                 modelItems.Any(i => i.Xml.NodeType != XmlNodeType.Document && i.Xml.NodeType != XmlNodeType.Element))
@@ -200,8 +211,7 @@ namespace NXKit.XForms
             // true, whether by default or declaration, then any selected node which is not relevant as defined in The
             // relevant Property is deselected (pruned). If all instance nodes are deselected, then submission fails
             // with no-data.
-            var node = (XNode)new SubmitTransformer(properties.Relevant)
-                .Visit(modelItems[0].Xml);
+            var node = (XNode)new SubmitTransformer(properties.Relevant, trace).Visit(modelItems[0].Xml);
             if (node == null)
                 throw new DOMTargetEventException(Element, Events.SubmitError, new SubmitErrorContextInfo(
                     SubmitErrorErrorType.NoData
@@ -248,10 +258,7 @@ namespace NXKit.XForms
             else
             {
                 var evt = Element.Interface<EventTarget>().Dispatch(Events.SubmitSerialize, new SubmitSerializeContextInfo());
-                var ctx = evt.Context as SubmitSerializeContextInfo;
-                if (ctx != null &&
-                    ctx.SubmissionBody != "")
-                    // wrap in XText
+                if (evt.Context is SubmitSerializeContextInfo ctx && ctx.SubmissionBody != "")
                     node = new XText(ctx.SubmissionBody);
             }
 
@@ -408,7 +415,7 @@ namespace NXKit.XForms
                 throw new ArgumentNullException(nameof(modelItem));
 
             // When the attribute is absent, then the default is the instance that contains the submission data.
-            var instance = modelItem != null ? modelItem.Instance : null;
+            var instance = modelItem?.Instance;
 
             // Author-optional attribute specifying the instance to replace when the replace attribute value is
             // "instance". When the attribute is absent, then the default is the instance that contains the submission
@@ -437,13 +444,13 @@ namespace NXKit.XForms
                 // element, except the context node is modified to be the document element of the instance identified
                 // by the instance attribute if present.
                 var ec = new EvaluationContext(
-                    ModelItem.Get(context.Value.Context.Instance.State.Document.Root),
+                    ModelItem.Get(context.Value.Context.Instance.State.Document.Root, trace),
                     1,
                     1);
 
                 // If the submission element has a targetref attribute, the attribute value is interpreted as a binding
                 // expression to which the first-item rule is applied to obtain the replacement target node.
-                target = new Binding(Element, ec, properties.TargetRef).ModelItem;
+                target = new Binding(Element, ec, properties.TargetRef, trace).ModelItem;
             }
 
             // final check

@@ -46,7 +46,7 @@ namespace NXKit.Net
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        ResourceWebRequestFactory()
+        public ResourceWebRequestFactory()
         {
 
         }

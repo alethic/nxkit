@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using NXKit.Diagnostics;
 
 namespace NXKit.XForms
 {
@@ -18,7 +19,7 @@ namespace NXKit.XForms
         readonly XObject xml;
         readonly EvaluationContext context;
         readonly XPathExpression xpath;
-
+        readonly ITraceService trace;
         Lazy<object> result;
         Lazy<ModelItem[]> modelItems;
         Lazy<ModelItem> modelItem;
@@ -30,11 +31,13 @@ namespace NXKit.XForms
         /// <param name="xml"></param>
         /// <param name="context"></param>
         /// <param name="xpath"></param>
-        internal Binding(XObject xml, EvaluationContext context, XPathExpression xpath)
+        /// <param name="trace"></param>
+        internal Binding(XObject xml, EvaluationContext context, XPathExpression xpath, ITraceService trace)
         {
             this.xml = xml ?? throw new ArgumentNullException(nameof(xml));
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.xpath = xpath ?? throw new ArgumentNullException(nameof(xpath));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
 
             // initial load of values
             Recalculate();
@@ -46,8 +49,9 @@ namespace NXKit.XForms
         /// <param name="xml"></param>
         /// <param name="context"></param>
         /// <param name="xpath"></param>
-        internal Binding(XObject xml, EvaluationContext context, string xpath)
-            : this(xml, context, context.CompileXPath(xml, xpath))
+        /// <param name="trace"></param>
+        internal Binding(XObject xml, EvaluationContext context, string xpath, ITraceService trace)
+            : this(xml, context, context.CompileXPath(xml, xpath), trace)
         {
             if (xml == null)
                 throw new ArgumentNullException(nameof(xml));
@@ -55,6 +59,8 @@ namespace NXKit.XForms
                 throw new ArgumentNullException(nameof(context));
             if (xpath == null)
                 throw new ArgumentNullException(nameof(xpath));
+            if (trace is null)
+                throw new ArgumentNullException(nameof(trace));
         }
 
         /// <summary>
@@ -108,7 +114,7 @@ namespace NXKit.XForms
                 return ((XPathNodeIterator)Result)
                     .Cast<XPathNavigator>()
                     .Select(i => (XObject)i.UnderlyingObject)
-                    .Select(i => ModelItem.Get(i))
+                    .Select(i => ModelItem.Get(i, trace))
                     .ToArray();
             else
                 return EmptyModelItemSequence;

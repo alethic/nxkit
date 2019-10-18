@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FluentAssertions;
+
+using NUnit.Framework;
 
 using NXKit.Serialization;
 using NXKit.Xml;
@@ -9,19 +11,17 @@ using NXKit.Xml;
 namespace NXKit.Tests
 {
 
-    [TestClass]
     public class AnnotationSerializationTests
     {
 
-        [TestMethod]
+        [Test]
         public void Test_no_annotations()
         {
-            var d1 = new XDocument(
-                new XElement("Hello"));
+            var d1 = new XDocument(new XElement("Hello"));
             var d2 = new AnnotationSerializer().Serialize(d1);
         }
 
-        [TestMethod]
+        [Test]
         public void Test_simple_round_trip()
         {
             var e1 = new XElement("Root");
@@ -30,10 +30,10 @@ namespace NXKit.Tests
             var id = e1.GetObjectId();
             var d2 = new AnnotationSerializer().Serialize(d1);
             var d3 = new AnnotationSerializer().Deserialize(d2);
-            Assert.IsTrue(d3.Root.GetObjectId() == id);
+            d3.Root.GetObjectId().Should().Be(id);
         }
 
-        [TestMethod]
+        [Test]
         public void Test_text_node()
         {
             var tx = new XText("This is some text");
@@ -44,10 +44,10 @@ namespace NXKit.Tests
             var ti = tx.GetObjectId();
             var d2 = new AnnotationSerializer().Serialize(d1);
             var d3 = new AnnotationSerializer().Deserialize(d2);
-            Assert.IsTrue(d3.Root.FirstNode.GetObjectId() == ti);
+            d3.Root.FirstNode.GetObjectId().Should().Be(ti);
         }
 
-        [TestMethod]
+        [Test]
         public void Test_formatted_text()
         {
             var d1 = XDocument.Parse(new XDocument(
@@ -62,10 +62,10 @@ namespace NXKit.Tests
             var l2 = d3.DescendantNodesAndSelf()
                 .Select(i => i.GetObjectId())
                 .ToArray();
-            Assert.IsTrue(l1.SequenceEqual(l2));
+            l1.Should().BeEquivalentTo(l2);
         }
 
-        [TestMethod]
+        [Test]
         public void Test_formatted_text_manipulation()
         {
             var d1 = XDocument.Parse(new XDocument(
@@ -92,4 +92,5 @@ namespace NXKit.Tests
         }
 
     }
+
 }

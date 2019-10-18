@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Xml.Linq;
 
+using NXKit.Diagnostics;
+
 namespace NXKit.XForms
 {
 
@@ -14,6 +16,7 @@ namespace NXKit.XForms
 
         readonly Lazy<EvaluationContextResolver> context;
         readonly OutputProperties properties;
+        readonly ITraceService trace;
         readonly Lazy<Binding> value;
 
         /// <summary>
@@ -22,25 +25,25 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="context"></param>
         /// <param name="properties"></param>
+        /// <param name="trace"></param>
         public Output(
             XElement element,
             Lazy<EvaluationContextResolver> context,
-            OutputProperties properties)
+            OutputProperties properties,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
                 throw new ArgumentNullException(nameof(element));
 
             this.properties = properties ?? throw new ArgumentNullException(nameof(properties));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
             this.context = context ?? throw new ArgumentNullException(nameof(context));
-            this.value = new Lazy<Binding>(() => properties.Value != null ? new Binding(Element, context.Value.Context, properties.Value) : null);
+            this.value = new Lazy<Binding>(() => properties.Value != null ? new Binding(Element, context.Value.Context, properties.Value, trace) : null);
         }
 
         [Remote]
-        public string Value
-        {
-            get { return value.Value != null ? value.Value.Value : null; }
-        }
+        public string Value => value.Value?.Value;
 
     }
 

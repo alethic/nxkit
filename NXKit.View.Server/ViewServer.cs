@@ -11,7 +11,6 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-using NXKit.Composition;
 using NXKit.View.Server.Serialization;
 using NXKit.Xml;
 
@@ -24,21 +23,21 @@ namespace NXKit.View.Server
     public class ViewServer
     {
 
-        readonly ICompositionContext context;
+        readonly NXEngine engine;
         readonly IEnumerable<IDocumentStore> stores;
         readonly IEnumerable<IDocumentCache> caches;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="engine"></param>
         /// <param name="store"></param>
         /// <param name="cache"></param>
         ViewServer(
-            ICompositionContext context,
+            NXEngine engine,
             IDocumentStore store = null,
             IDocumentCache cache = null)
-            : this(context, store != null ? new[] { store } : null, cache != null ? new[] { cache } : null)
+            : this(engine, store != null ? new[] { store } : null, cache != null ? new[] { cache } : null)
         {
 
         }
@@ -46,25 +45,17 @@ namespace NXKit.View.Server
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="engine"></param>
         /// <param name="stores"></param>
         /// <param name="caches"></param>
         ViewServer(
-            ICompositionContext context,
+            NXEngine engine,
             IEnumerable<IDocumentStore> stores = null,
             IEnumerable<IDocumentCache> caches = null)
         {
-            this.context = context ?? throw new ArgumentNullException(nameof(context));
+            this.engine = engine ?? throw new ArgumentNullException(nameof(engine));
             this.stores = (stores ?? new[] { new MemoryDocumentStore() }).Where(i => i != null);
             this.caches = (caches ?? new[] { new MemoryDocumentCache() }).Where(i => i != null);
-        }
-
-        /// <summary>
-        /// Gets or sets the additional set of exports to introduce to the document.
-        /// </summary>
-        public ICompositionContext Context
-        {
-            get { return context; }
         }
 
         /// <summary>
@@ -77,7 +68,7 @@ namespace NXKit.View.Server
                 throw new ArgumentNullException(nameof(uri));
 
             // load new document
-            return Save(Load(() => Document.Load(uri, context)), ViewMessageStatus.Good);
+            return Save(Load(() => engine.Load(uri)), ViewMessageStatus.Good);
         }
 
         /// <summary>
@@ -102,7 +93,7 @@ namespace NXKit.View.Server
                 throw new ArgumentNullException(nameof(reader));
 
             // load new document
-            return Save(Load(() => Document.Load(reader, context)), ViewMessageStatus.Good);
+            return Save(Load(() => engine.Load(reader)), ViewMessageStatus.Good);
         }
 
         /// <summary>
@@ -115,7 +106,7 @@ namespace NXKit.View.Server
                 throw new ArgumentNullException(nameof(reader));
 
             // load new document
-            return Save(Load(() => Document.Load(reader, context)), ViewMessageStatus.Good);
+            return Save(Load(() => engine.Load(reader)), ViewMessageStatus.Good);
         }
 
         /// <summary>
@@ -318,7 +309,7 @@ namespace NXKit.View.Server
             using (var cmp = new DeflateStream(b64, CompressionMode.Decompress))
             using (var rdr = XmlDictionaryReader.CreateBinaryReader(cmp, new XmlDictionaryReaderQuotas()))
             {
-                return Document.Load(rdr, context);
+                return engine.Load(rdr);
             }
         }
 

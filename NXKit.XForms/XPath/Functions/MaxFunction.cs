@@ -1,5 +1,7 @@
 ﻿using System.Xml.Linq;
 using System.Xml.XPath;
+
+using NXKit.Diagnostics;
 using NXKit.XPath;
 
 namespace NXKit.XForms.XPath.Functions
@@ -9,6 +11,16 @@ namespace NXKit.XForms.XPath.Functions
     public class MaxFunction : 
         XPathFunction
     {
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="trace"></param>
+        public MaxFunction(ITraceService trace) :
+            base(trace)
+        {
+
+        }
 
         public override XPathResultType[] ArgTypes
         {

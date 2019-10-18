@@ -3,75 +3,67 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-using Autofac;
+using NUnit.Framework;
 
-using Cogito.Autofac;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using NXKit.Autofac;
-using NXKit.Composition;
 using NXKit.DOMEvents;
+using NXKit.Testing;
 using NXKit.Xml;
 
 namespace NXKit.XForms.Tests
 {
 
-    [TestClass]
-    public class ExampleTests
+    public class ExampleTests : NXKitTestFixture
     {
 
-        ICompositionContext CreateCompositionContext()
+        public ExampleTests(NXKitTestFixtureContext context) :
+            base(context)
         {
-            var bld = new ContainerBuilder();
-            bld.RegisterAllAssemblyModules();
-            var cnt = bld.Build();
-            return cnt.Resolve<ICompositionContext>();
+
         }
 
-        [TestMethod]
+        [Test]
         public void Test_form()
         {
-            var host = Document.Load(new Uri("nx-example:///form.xml"), CreateCompositionContext());
+            var host = Context.Engine.Load(new Uri("nx-example:///form.xml"));
         }
 
-        [TestMethod]
+        [Test]
         public void Test_form_save_load()
         {
-            var host = Document.Load(new Uri("nx-example:///form.xml"), CreateCompositionContext());
+            var host = Context.Engine.Load(new Uri("nx-example:///form.xml"));
             var save = new MemoryStream();
             host.Save(save);
             save = new MemoryStream(save.ToArray());
             var load = XDocument.Load(save);
-            host = Document.Load(load, CreateCompositionContext());
+            host = Context.Engine.Load(load);
         }
 
-        [TestMethod]
+        [Test]
         public void Test_include()
         {
-            var host = Document.Load(new Uri("nx-example:///include.xml"), CreateCompositionContext());
+            var host = Context.Engine.Load(new Uri("nx-example:///include.xml"));
         }
 
-        [TestMethod]
+        [Test]
         public void Test_script()
         {
-            var host = Document.Load(new Uri("nx-example:///script.xml"), CreateCompositionContext());
+            var host = Context.Engine.Load(new Uri("nx-example:///script.xml"));
         }
 
-        [TestMethod]
+        [Test]
         public void Test_select1()
         {
-            var host = Document.Load(new Uri("nx-example:///select1.xml"), CreateCompositionContext());
+            var host = Context.Engine.Load(new Uri("nx-example:///select1.xml"));
         }
 
-        [TestMethod]
+        [Test]
         public void Test_send()
         {
-            var host = Document.Load(new Uri("nx-example:///trigger.xml"), CreateCompositionContext());
+            var host = Context.Engine.Load(new Uri("nx-example:///trigger.xml"));
 
             var stm = new StringWriter();
             host.Save(stm);
-            host = Document.Load(new StringReader(stm.ToString()), CreateCompositionContext());
+            host = Context.Engine.Load(new StringReader(stm.ToString()));
 
             var trigger = host.Xml.Descendants(XForms.Constants.XForms_1_0 + "trigger").First();
             trigger.Interface<EventTarget>().Dispatch("DOMActivate");

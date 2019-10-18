@@ -7,7 +7,7 @@ using NXKit.Composition;
 namespace NXKit.Diagnostics
 {
 
-    [Export(typeof(ITraceService), CompositionScope.Host)]
+    [Export(typeof(ITraceService))]
     public class DefaultTraceService :
         ITraceService
     {

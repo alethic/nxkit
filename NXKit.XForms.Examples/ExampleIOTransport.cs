@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using NXKit.Composition;
 using NXKit.IO;
@@ -10,6 +11,15 @@ namespace NXKit.XForms.Examples
     public class ExampleIOTransport :
         IOTransport
     {
+
+        /// <summary>
+        /// Initializes the static instance.
+        /// </summary>
+        static ExampleIOTransport()
+        {
+            if (UriParser.IsKnownScheme("nx-example") == false)
+                UriParser.Register(new GenericUriParser(GenericUriParserOptions.Default | GenericUriParserOptions.AllowEmptyAuthority), "nx-example", -1);
+        }
 
         public override Priority CanSend(IORequest request)
         {

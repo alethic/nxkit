@@ -6,9 +6,10 @@ using System.Reflection;
 using Autofac;
 using Autofac.Builder;
 using Autofac.Core;
-using Autofac.Core.Activators.Reflection;
 using Autofac.Core.Lifetime;
 using Autofac.Features.OpenGenerics;
+
+using Microsoft.Extensions.DependencyModel;
 
 using NXKit.Composition;
 using NXKit.Util;
@@ -25,9 +26,42 @@ namespace NXKit.Autofac
         /// <summary>
         /// Registers the specified NXKit assembly into the given Autofac builder.
         /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static ContainerBuilder RegisterNXKit(this ContainerBuilder builder)
+        {
+            if (builder is null)
+                throw new ArgumentNullException(nameof(builder));
+
+            builder.RegisterNXKit(SafeAssemblyLoader.LoadAll().ToArray());
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Registers the specified NXKit assembly into the given Autofac builder.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="dependencyContext"></param>
+        /// <returns></returns>
+        public static ContainerBuilder RegisterNXKit(this ContainerBuilder builder, DependencyContext dependencyContext)
+        {
+            if (builder is null)
+                throw new ArgumentNullException(nameof(builder));
+            if (dependencyContext is null)
+                throw new ArgumentNullException(nameof(dependencyContext));
+
+            builder.RegisterNXKit(SafeAssemblyLoader.LoadAll(dependencyContext).ToArray());
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Registers the specified NXKit assembly into the given Autofac builder.
+        /// </summary>
         /// <param name="assembly"></param>
         /// <returns></returns>
-        public static ContainerBuilder RegisterNXKitAssemblies(this ContainerBuilder builder, params Assembly[] assemblies)
+        public static ContainerBuilder RegisterNXKit(this ContainerBuilder builder, params Assembly[] assemblies)
         {
             if (builder is null)
                 throw new ArgumentNullException(nameof(builder));
@@ -86,7 +120,7 @@ namespace NXKit.Autofac
             if (assembly is null)
                 throw new ArgumentNullException(nameof(assembly));
 
-            foreach (var type in assembly.GetTypes())
+            foreach (var type in SafeAssemblyLoader.GetTypes(assembly))
                 RegisterExports(builder, type, scope);
         }
 
@@ -132,6 +166,8 @@ namespace NXKit.Autofac
                 RegisterGenericExports(builder, type, exports, scope);
                 return;
             }
+
+            Console.WriteLine("Registering Export {0}", type);
 
             // make underlying types available
             SetScope(builder.RegisterType(type).AsSelf(), scope);

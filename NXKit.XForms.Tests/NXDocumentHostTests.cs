@@ -4,21 +4,18 @@ using System.Xml.Linq;
 
 using Autofac;
 
-using Cogito.Autofac;
+using NUnit.Framework;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using NXKit.Composition;
+using NXKit.Testing;
 using NXKit.Xml;
 
 namespace NXKit.XForms.Tests
 {
 
-    [TestClass]
-    public class NXDocumentHostTests
+    public class NXDocumentHostTests : NXKitTestFixture
     {
 
-        static XDocument Sample =XDocument.Parse(@"
+        static XDocument Sample = XDocument.Parse(@"
 <unknown xmlns:xf=""http://www.w3.org/2002/xforms"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
     <xf:model id=""data"">
         <xf:instance id=""instance1"">
@@ -36,20 +33,19 @@ namespace NXKit.XForms.Tests
     </xf:group>
 </unknown>");
 
+        public NXDocumentHostTests(NXKitTestFixtureContext context) :
+            base(context)
+        {
+
+        }
+
         Document GetSampleDocument()
         {
-            return Document.Load(Sample, CreateCompositionContext());
+            return Context.Engine.Load(Sample);
         }
 
-        ICompositionContext CreateCompositionContext()
-        {
-            var bld = new ContainerBuilder();
-            bld.RegisterAllAssemblyModules();
-            var cnt = bld.Build();
-            return cnt.Resolve<ICompositionContext>();
-        }
 
-        [TestMethod]
+        [Test]
         public void Test_save_after_events()
         {
             var doc = GetSampleDocument();
@@ -81,7 +77,7 @@ namespace NXKit.XForms.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Test_save_load_after_events()
         {
             var doc = GetSampleDocument();
@@ -110,7 +106,7 @@ namespace NXKit.XForms.Tests
             {
                 doc.Save(str);
                 var xml = str.ToString();
-                Document.Load(new StringReader(xml), CreateCompositionContext());
+                Context.Engine.Load(new StringReader(xml));
             }
         }
 

@@ -63,7 +63,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj" />
-        <ProjectReference Include="..\NXKit.View.Windows\NXKit.View.Windows.csproj" />
         <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj" />
         <ProjectReference Include="..\NXKit\NXKit.csproj" />
     </ItemGroup>

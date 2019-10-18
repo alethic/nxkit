@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -19,9 +20,11 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="xpath"></param>
         /// <returns></returns>
-        public static Binding ForElement(XElement element, string xpath)
+        public static Binding ForElement(XElement element, string xpath, ITraceService trace)
         {
-            if (element == null)
+            if (trace is null)
+                throw new ArgumentNullException(nameof(trace));
+            if (element is null)
                 throw new ArgumentNullException(nameof(element));
 
             // ignore empty expressions
@@ -39,16 +42,20 @@ namespace NXKit.XForms
                 throw new DOMTargetEventException(element, Events.BindingException,
                     "Missing EvaluationContextResolver Context.");
 
-            return new Binding(element, context, xpath);
+            return new Binding(element, context, xpath, trace);
         }
 
         /// <summary>
         /// Returns a new <see cref="Binding"/> instance for the specified element and expression.
         /// </summary>
         /// <param name="attribute"></param>
+        /// <param name="trace"></param>
         /// <returns></returns>
-        public static Binding ForAttribute(XAttribute attribute)
+        public static Binding ForAttribute(XAttribute attribute, ITraceService trace)
         {
+            if (trace is null)
+                throw new ArgumentNullException(nameof(trace));
+
             // ignore empty attributes
             if (attribute == null ||
                 attribute.Value == null ||
@@ -65,7 +72,7 @@ namespace NXKit.XForms
                 throw new DOMTargetEventException(attribute.Parent, Events.BindingException,
                     "Missing EvaluationContextResolver Context.");
 
-            return new Binding(attribute.Parent, context, attribute.Value);
+            return new Binding(attribute.Parent, context, attribute.Value, trace);
         }
 
     }

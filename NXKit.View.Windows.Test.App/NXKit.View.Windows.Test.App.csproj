@@ -114,25 +114,13 @@
       <Project>{f509df8d-af13-468d-8381-028835a79dec}</Project>
       <Name>NXKit.Scripting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.View.Windows\NXKit.View.Windows.csproj">
-      <Project>{17a17c2e-baab-4df1-8cee-91c04df2d61d}</Project>
-      <Name>NXKit.View.Windows</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Examples\NXKit.XForms.Examples.csproj">
       <Project>{564c13be-ab20-49fd-9bc4-44fe701e3ac2}</Project>
       <Name>NXKit.XForms.Examples</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NXKit.XForms.Layout.View.Windows\NXKit.XForms.Layout.View.Windows.csproj">
-      <Project>{57ec368d-96c2-4775-9192-169be5d31494}</Project>
-      <Name>NXKit.XForms.Layout.View.Windows</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms.Layout\NXKit.XForms.Layout.csproj">
       <Project>{0b8bc4b5-851f-4b8e-b5d4-0a8925b23886}</Project>
       <Name>NXKit.XForms.Layout</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NXKit.XForms.View.Windows\NXKit.XForms.View.Windows.csproj">
-      <Project>{66132f55-660e-4627-a86f-11a48c1e38f0}</Project>
-      <Name>NXKit.XForms.View.Windows</Name>
     </ProjectReference>
     <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj">
       <Project>{67ecd54b-bd0d-442f-a184-65b4ca014e75}</Project>

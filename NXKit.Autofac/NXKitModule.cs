@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Linq;
 
 using Autofac;
-
-using Cogito.Reflection;
 
 namespace NXKit.Autofac
 {
@@ -11,7 +8,7 @@ namespace NXKit.Autofac
     /// <summary>
     /// Registers all the available NXKit assemblies.
     /// </summary>
-    public class CompositionModule : Module
+    public class NXKitModule : Module
     {
 
         protected override void Load(ContainerBuilder builder)
@@ -19,7 +16,11 @@ namespace NXKit.Autofac
             if (builder is null)
                 throw new ArgumentNullException(nameof(builder));
 
-            builder.RegisterNXKitAssemblies(SafeAssemblyLoader.LoadAll().ToArray());
+            if (builder.Properties.ContainsKey(typeof(NXKitModule).FullName) == false)
+            {
+                builder.RegisterNXKit();
+                builder.Properties[typeof(NXKitModule).FullName] = true;
+            }
         }
 
     }

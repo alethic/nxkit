@@ -1,17 +1,18 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
+
 using Autofac;
-using Cogito.Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NXKit.Composition;
+
+using NUnit.Framework;
+
 using NXKit.DOMEvents;
+using NXKit.Testing;
 using NXKit.Xml;
 
 namespace NXKit.XForms.Tests
 {
 
-    [TestClass]
-    public class RelevantTests
+    public class RelevantTests : NXKitTestFixture
     {
 
         static XDocument Sample = XDocument.Parse(@"
@@ -32,20 +33,18 @@ namespace NXKit.XForms.Tests
     </xf:group>
 </unknown>");
 
+        public RelevantTests(NXKitTestFixtureContext context) :
+            base(context)
+        {
+
+        }
+
         Document GetSampleDocument()
         {
-            return Document.Load(Sample, CreateCompositionContext());
+            return Context.Engine.Load(Sample);
         }
 
-        ICompositionContext CreateCompositionContext()
-        {
-            var bld = new ContainerBuilder();
-            bld.RegisterAllAssemblyModules();
-            var cnt = bld.Build();
-            return cnt.Resolve<ICompositionContext>();
-        }
-
-        [TestMethod]
+        [Test]
         public void Test_relevant_changes_on_input()
         {
             var d = GetSampleDocument();
@@ -71,7 +70,7 @@ namespace NXKit.XForms.Tests
             Assert.IsTrue(inputs[1].UIBinding.Relevant);
         }
 
-        [TestMethod]
+        [Test]
         public void Test_value_changed_event()
         {
             var d = GetSampleDocument();
@@ -98,7 +97,7 @@ namespace NXKit.XForms.Tests
             Assert.AreEqual(2, c);
         }
 
-        [TestMethod]
+        [Test]
         public void Test_disabled_event()
         {
             var d = GetSampleDocument();
@@ -122,7 +121,7 @@ namespace NXKit.XForms.Tests
             Assert.IsFalse(inputs[1].BindingNode.UIBinding.Relevant);
         }
 
-        [TestMethod]
+        [Test]
         public void Test_enabled_event()
         {
             var d = GetSampleDocument();

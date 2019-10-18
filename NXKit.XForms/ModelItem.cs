@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.XPath;
 
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.Util;
 using NXKit.Xml;
@@ -19,20 +19,21 @@ namespace NXKit.XForms
     public class ModelItem
     {
 
-        readonly static XmlQualifiedName XS_ANYTYPE = new XmlQualifiedName("anyType", XmlSchemaConstants.XMLSchema_NS);
+        static readonly XmlQualifiedName XS_ANYTYPE = new XmlQualifiedName("anyType", XmlSchemaConstants.XMLSchema_NS);
 
         /// <summary>
         /// Gets the model item for the given <see cref="XObject"/>.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static ModelItem Get(XObject obj)
+        public static ModelItem Get(XObject obj, ITraceService trace)
         {
-            return obj.AnnotationOrCreate<ModelItem>(() => new ModelItem(obj));
+            return obj.AnnotationOrCreate<ModelItem>(() => new ModelItem(obj, trace));
         }
 
 
         readonly XObject xml;
+        readonly ITraceService trace;
         readonly Lazy<Model> model;
         readonly Lazy<Instance> instance;
         readonly Lazy<ModelItemState> state;
@@ -41,9 +42,11 @@ namespace NXKit.XForms
         /// Initializes a new instance.
         /// </summary>
         /// <param name="xml"></param>
-        public ModelItem(XObject xml)
+        /// <param name="trace"></param>
+        public ModelItem(XObject xml, ITraceService trace)
         {
             this.xml = xml ?? throw new ArgumentNullException(nameof(xml));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
             this.model = new Lazy<Model>(() => xml.Document.Annotation<Model>());
             this.instance = new Lazy<Instance>(() => xml.Document.Annotation<Instance>());
             this.state = new Lazy<ModelItemState>(() => xml.AnnotationOrCreate<ModelItemState>());
@@ -62,7 +65,7 @@ namespace NXKit.XForms
             if (Xml is XAttribute)
                 return ((XAttribute)xml).Name.ToString();
             if (Xml is XText)
-                return Get(Xml.Parent).ToString();
+                return Get(Xml.Parent, trace).ToString();
 
             return Xml.GetObjectId().ToString();
         }
@@ -128,8 +131,7 @@ namespace NXKit.XForms
         void SetItemType(XName type)
         {
             State.Type = type;
-            Debug.WriteLine("ModelItem item type set: {0}: {1}", this, type);
-
+            trace.Debug("ModelItem item type set: {0}: {1}", this, type);
         }
 
         /// <summary>
@@ -158,7 +160,7 @@ namespace NXKit.XForms
         void SetRequired(bool value)
         {
             State.Required = value;
-            Debug.WriteLine("ModelItem required set: {0}: {1}", this, value);
+            trace.Debug("ModelItem required set: {0}: {1}", this, value);
         }
 
         /// <summary>
@@ -187,7 +189,7 @@ namespace NXKit.XForms
         void SetReadOnly(bool value)
         {
             State.ReadOnly = value;
-            Debug.WriteLine("ModelItem readonly set: {0}: {1}", this, value);
+            trace.Debug("ModelItem readonly set: {0}: {1}", this, value);
         }
 
         /// <summary>
@@ -216,7 +218,7 @@ namespace NXKit.XForms
         void SetRelevant(bool value)
         {
             State.Relevant = value;
-            Debug.WriteLine("ModelItem relevant set: {0}: {1}", this, value);
+            trace.Debug("ModelItem relevant set: {0}: {1}", this, value);
         }
 
         /// <summary>
@@ -374,21 +376,21 @@ namespace NXKit.XForms
                 // set new value
                 text.Value = newValue;
 
-                Debug.WriteLine("ModelItem simple content changed: {0}: '{1}'", this, text.Value);
+                trace.Debug("ModelItem simple content changed: {0}: '{1}'", this, text.Value);
             }
             else if (Xml is XAttribute)
             {
                 var target = (XAttribute)Xml;
                 target.Value = newValue;
 
-                Debug.WriteLine("ModelItem attribute value changed: {0}: '{1}'", this, target.Value);
+                trace.Debug("ModelItem attribute value changed: {0}: '{1}'", this, target.Value);
             }
             else if (Xml is XText)
             {
                 var target = (XText)Xml;
                 target.Value = newValue;
 
-                Debug.WriteLine("ModelItem text value changed: {0}: '{1}'", this, target.Value);
+                trace.Debug("ModelItem text value changed: {0}: '{1}'", this, target.Value);
             }
             else
                 throw new InvalidOperationException();

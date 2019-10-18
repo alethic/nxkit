@@ -8,7 +8,6 @@ using System.Xml.Linq;
 
 using NXKit.Composition;
 using NXKit.Diagnostics;
-using NXKit.IO;
 using NXKit.Serialization;
 using NXKit.Util;
 using NXKit.Xml;
@@ -23,168 +22,6 @@ namespace NXKit
         IDisposable
     {
 
-        /// <summary>
-        /// Loads a <see cref="Document"/> from the given <see cref="XmlReader"/>.
-        /// </summary>
-        /// <param name="reader"></param>
-        /// <param name="context"></param>
-        /// <param name="exports"></param>
-        /// <returns></returns>
-        public static Document Load(XmlReader reader, ICompositionContext context = null)
-        {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-
-            return new Document(host =>
-                host.Context.Resolve<AnnotationSerializer>().Deserialize(
-                    XDocument.Load(
-                        reader,
-                        LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
-                context);
-        }
-
-        /// <summary>
-        /// Loads a <see cref="Document"/> from the given <see cref="XmlReader"/>.
-        /// </summary>
-        /// <param name="reader"></param>
-        /// <returns></returns>
-        public static Document Load(XmlReader reader)
-        {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-
-            return Load(reader, null);
-        }
-
-        /// <summary>
-        /// Loads a <see cref="Document"/> from the given <see cref="TextReader"/>.
-        /// </summary>
-        /// <param name="reader"></param>
-        /// <param name="context"></param>
-        public static Document Load(TextReader reader, ICompositionContext context = null)
-        {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-
-            using (var rdr = XmlReader.Create(reader))
-                return Load(rdr, context);
-        }
-
-        /// <summary>
-        /// Loads a <see cref="Document"/> from the given <see cref="TextReader"/>.
-        /// </summary>
-        /// <param name="reader"></param>
-        public static Document Load(TextReader reader)
-        {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-
-            return Load(reader, null);
-        }
-
-        /// <summary>
-        /// Loads a <see cref="Document"/> from the given <see cref="Stream"/>.
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        public static Document Load(Stream stream, ICompositionContext context = null)
-        {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
-            using (var rdr = new StreamReader(stream))
-                return Load(rdr, context);
-        }
-
-        /// <summary>
-        /// Loads a <see cref="Document"/> from the given <see cref="Stream"/>.
-        /// </summary>
-        /// <param name="stream"></param>
-        public static Document Load(Stream stream)
-        {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
-            return Load(stream, null);
-        }
-
-        /// <summary>
-        /// Loads a <see cref="Document"/> from the given <see cref="Uri"/>.
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        public static Document Load(Uri uri, ICompositionContext context = null)
-        {
-            if (uri == null)
-                throw new ArgumentNullException(nameof(uri));
-
-            return new Document(host =>
-                host.Context.Resolve<AnnotationSerializer>().Deserialize(
-                    XDocument.Load(
-                        NXKit.Xml.IOXmlReader.Create(
-                            host.Context.Resolve<IIOService>(),
-                            uri),
-                        LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri)),
-                context);
-        }
-
-        /// <summary>
-        /// Loads a <see cref="Document"/> from the given <see cref="Uri"/>.
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <returns></returns>
-        public static Document Load(Uri uri)
-        {
-            if (uri == null)
-                throw new ArgumentNullException(nameof(uri));
-
-            return Load(uri, null);
-        }
-
-        /// <summary>
-        /// Loads a <see cref="Document"/> from the given <see cref="XDocument"/>.
-        /// </summary>
-        /// <param name="document"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        public static Document Load(XDocument document, ICompositionContext context = null)
-        {
-            if (document == null)
-                throw new ArgumentNullException(nameof(document));
-
-            return Load(document.CreateReader(), context);
-        }
-
-        /// <summary>
-        /// Loads a <see cref="Document"/> from the given <see cref="XDocument"/>.
-        /// </summary>
-        /// <param name="document"></param>
-        /// <returns></returns>
-        public static Document Load(XDocument document)
-        {
-            if (document == null)
-                throw new ArgumentNullException(nameof(document));
-
-            return Load(document, null);
-        }
-
-        /// <summary>
-        /// Loads a <see cref="Document"/> by parsing the given input XML.
-        /// </summary>
-        /// <param name="xml"></param>
-        /// <returns></returns>
-        public static Document Parse(string xml, ICompositionContext context = null)
-        {
-            if (xml == null)
-                throw new ArgumentNullException(nameof(xml));
-            if (string.IsNullOrWhiteSpace(xml))
-                throw new ArgumentOutOfRangeException(nameof(xml));
-
-            return Load(XDocument.Parse(xml), context);
-        }
-
         readonly ICompositionContext context;
         readonly IInvoker invoker;
         readonly ITraceService trace;
@@ -195,18 +32,22 @@ namespace NXKit
         /// </summary>
         /// <param name="xml"></param>
         /// <param name="context"></param>
-        Document(Func<Document, XDocument> xml, ICompositionContext context)
+        internal Document(
+            Func<Document, XDocument> xml,
+            ICompositionContext context)
         {
-            if (xml == null)
+            if (xml is null)
                 throw new ArgumentNullException(nameof(xml));
+            if (context is null)
+                throw new ArgumentNullException(nameof(context));
 
             // configure composition
             this.context = context.BeginContext(CompositionScope.Host);
             this.context.Resolve<DocumentEnvironment>().SetHost(this);
 
             // required services
-            this.invoker = this.context.Resolve<IInvoker>();
-            this.trace = this.context.Resolve<ITraceService>();
+            invoker = this.context.Resolve<IInvoker>();
+            trace = this.context.Resolve<ITraceService>();
 
             // initialize xml
             this.xml = xml(this);
@@ -222,32 +63,23 @@ namespace NXKit
             });
 
             // initial invocation entry
-            this.invoker.Invoke(() => { });
+            invoker.Invoke(() => { });
         }
 
         /// <summary>
         /// Gets the host configured <see cref="ICompositionContext"/>.
         /// </summary>
-        public ICompositionContext Context
-        {
-            get { return context; }
-        }
+        public ICompositionContext Context => context;
 
         /// <summary>
         /// Gets a reference to the current <see cref="Xml"/> being handled.
         /// </summary>
-        public XDocument Xml
-        {
-            get { return xml; }
-        }
+        public XDocument Xml => xml;
 
         /// <summary>
         /// Gets a reference to the root <see cref="XElement"/> instance for navigating the visual tree.
         /// </summary>
-        public XElement Root
-        {
-            get { return xml.Root; }
-        }
+        public XElement Root => xml.Root;
 
         /// <summary>
         /// Saves the current state of the <see cref="Document"/> to the specified <see cref="XmlWriter"/>.
@@ -256,7 +88,7 @@ namespace NXKit
         /// <returns></returns>
         public void Save(XmlWriter writer)
         {
-            if (writer == null)
+            if (writer is null)
                 throw new ArgumentNullException(nameof(writer));
 
             // instruct any interfaces to save their state
@@ -276,7 +108,7 @@ namespace NXKit
         /// <param name="writer"></param>
         public void Save(TextWriter writer)
         {
-            if (writer == null)
+            if (writer is null)
                 throw new ArgumentNullException(nameof(writer));
 
             var settings = new XmlWriterSettings()
@@ -296,7 +128,7 @@ namespace NXKit
         /// <param name="stream"></param>
         public void Save(Stream stream)
         {
-            if (stream == null)
+            if (stream is null)
                 throw new ArgumentNullException(nameof(stream));
 
             using (var wrt = new StreamWriter(stream, Encoding.UTF8))

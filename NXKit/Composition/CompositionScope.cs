@@ -8,7 +8,7 @@
     {
 
         /// <summary>
-        /// Export is derived from the provided catalog or export provider, and is not further scoped.
+        /// Single instance of the export is to be made available globally within the application.
         /// </summary>
         Global = 0,
 
@@ -23,7 +23,7 @@
         Object = 2,
 
         /// <summary>
-        /// Export is available per-dependency. These exports are available all the time, and associated with the context that requests them.
+        /// Export is available per-dependency. These exports are available all the time and associated with the context that requests them.
         /// </summary>
         Transient = 3,
 

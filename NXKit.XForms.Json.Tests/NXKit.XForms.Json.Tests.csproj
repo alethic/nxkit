@@ -5,13 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cogito.Autofac" Version="1.2.19" />
+    <PackageReference Include="Cogito.Autofac" Version="1.2.21" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.0.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.0.0" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NXKit.Testing\NXKit.Testing.csproj" />
     <ProjectReference Include="..\NXKit.XForms.Json\NXKit.XForms.Json.csproj" />
     <ProjectReference Include="..\NXKit\NXKit.csproj" />
   </ItemGroup>

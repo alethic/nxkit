@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 
 using NXKit.Composition;
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -11,12 +12,12 @@ namespace NXKit.XForms
 {
 
     [Extension("{http://www.w3.org/2002/xforms}bind")]
-    public class Bind :
-        ElementExtension
+    public class Bind : ElementExtension
     {
 
         readonly BindProperties properties;
         readonly IExport<IBindingNode> bindingNode;
+        readonly ITraceService trace;
         readonly Lazy<EvaluationContext> context;
 
         /// <summary>
@@ -30,7 +31,8 @@ namespace NXKit.XForms
             XElement element,
             BindProperties properties,
             IExport<IBindingNode> bindingNode,
-            IExport<EvaluationContextResolver> context)
+            IExport<EvaluationContextResolver> context,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
@@ -40,6 +42,7 @@ namespace NXKit.XForms
 
             this.properties = properties ?? throw new ArgumentNullException(nameof(properties));
             this.bindingNode = bindingNode ?? throw new ArgumentNullException(nameof(bindingNode));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
             this.context = new Lazy<EvaluationContext>(() => context.Value.Context);
         }
 
@@ -119,7 +122,7 @@ namespace NXKit.XForms
                             parentModelItem,
                             i,
                             parentItems.Length);
-                        modelItems.AddRange(new Binding(xpath, ec, (string)xpath).ModelItems);
+                        modelItems.AddRange(new Binding(xpath, ec, (string)xpath, trace).ModelItems);
                     }
                 }
             }
@@ -150,35 +153,35 @@ namespace NXKit.XForms
 
                 if (properties.ReadOnly != null)
                 {
-                    var readOnly = ParseBooleanValue(new Binding(Element, context.Value, properties.ReadOnly));
+                    var readOnly = ParseBooleanValue(new Binding(Element, context.Value, properties.ReadOnly, trace));
                     if (readOnly != null)
                         modelItem.ReadOnly = (bool)readOnly;
                 }
 
                 if (properties.Required != null)
                 {
-                    var required = ParseBooleanValue(new Binding(Element, context.Value, properties.Required));
+                    var required = ParseBooleanValue(new Binding(Element, context.Value, properties.Required, trace));
                     if (required != null)
                         modelItem.Required = (bool)required;
                 }
 
                 if (properties.Relevant != null)
                 {
-                    var relevant = ParseBooleanValue(new Binding(Element, context.Value, properties.Relevant));
+                    var relevant = ParseBooleanValue(new Binding(Element, context.Value, properties.Relevant, trace));
                     if (relevant != null)
                         modelItem.Relevant = (bool)relevant;
                 }
 
                 if (properties.Constraint != null)
                 {
-                    var constraint = ParseBooleanValue(new Binding(Element, context.Value, properties.Constraint));
+                    var constraint = ParseBooleanValue(new Binding(Element, context.Value, properties.Constraint, trace));
                     if (constraint != null)
                         modelItem.Constraint = (bool)constraint;
                 }
 
                 if (properties.Calculate != null)
                 {
-                    var calculate = new Binding(Element, context.Value, properties.Calculate).Value;
+                    var calculate = new Binding(Element, context.Value, properties.Calculate, trace).Value;
                     modelItem.ReadOnly = true;
                     modelItem.Value = calculate ?? "";
                 }

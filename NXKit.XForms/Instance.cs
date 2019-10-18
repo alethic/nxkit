@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Schema;
-
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.Util;
 using NXKit.XForms.Converters;
@@ -21,6 +21,7 @@ namespace NXKit.XForms
     {
 
         readonly InstanceAttributes attributes;
+        readonly ITraceService trace;
         readonly IModelRequestService requestService;
         readonly IEnumerable<IXsdTypeConverter> xsdTypeConverters;
         readonly Lazy<InstanceState> state;
@@ -35,6 +36,7 @@ namespace NXKit.XForms
         public Instance(
             XElement element,
             InstanceAttributes attributes,
+            ITraceService trace,
             IModelRequestService requestService,
             IEnumerable<IXsdTypeConverter> xsdTypeConverters)
             : base(element)
@@ -46,6 +48,7 @@ namespace NXKit.XForms
 
             this.requestService = requestService ?? throw new ArgumentNullException(nameof(requestService));
             this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
             this.xsdTypeConverters = xsdTypeConverters.ToList();
             this.state = new Lazy<InstanceState>(() => Element.AnnotationOrCreate<InstanceState>());
         }
@@ -180,7 +183,7 @@ namespace NXKit.XForms
                 .DescendantNodesAndSelf()
                 .OfType<XElement>()
                 .SelectMany(i => i.Attributes().Cast<XObject>().Prepend(i))
-                .Select(i => i.AnnotationOrCreate<ModelItem>(() => new ModelItem(i)));
+                .Select(i => i.AnnotationOrCreate<ModelItem>(() => new ModelItem(i, trace)));
 
             // rerun the XML schema validation
             XmlSchemaValidate();

@@ -5,6 +5,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.IO;
 using NXKit.Xml;
@@ -20,6 +21,7 @@ namespace NXKit.XForms
 
         readonly IIOService io;
         readonly ModelAttributes attributes;
+        readonly ITraceService trace;
         readonly Lazy<ModelState> state;
         readonly Lazy<DocumentAnnotation> documentAnnotation;
 
@@ -29,10 +31,12 @@ namespace NXKit.XForms
         /// <param name="io"></param>
         /// <param name="element"></param>
         /// <param name="attributes"></param>
+        /// <param name="trace"></param>
         public Model(
             IIOService io,
             XElement element,
-            ModelAttributes attributes)
+            ModelAttributes attributes,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
@@ -40,8 +44,10 @@ namespace NXKit.XForms
 
             this.io = io ?? throw new ArgumentNullException(nameof(io));
             this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
-            this.state = new Lazy<ModelState>(() => Element.AnnotationOrCreate<ModelState>());
-            this.documentAnnotation = new Lazy<DocumentAnnotation>(() => Element.Document.AnnotationOrCreate<DocumentAnnotation>());
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
+
+            state = new Lazy<ModelState>(() => Element.AnnotationOrCreate<ModelState>());
+            documentAnnotation = new Lazy<DocumentAnnotation>(() => Element.Document.AnnotationOrCreate<DocumentAnnotation>());
         }
 
         /// <summary>
@@ -91,7 +97,7 @@ namespace NXKit.XForms
                 if (defaultInstance.State.Document == null)
                     return null;
 
-                return new EvaluationContext(this, defaultInstance, ModelItem.Get(defaultInstance.State.Document.Root), 1, 1);
+                return new EvaluationContext(this, defaultInstance, ModelItem.Get(defaultInstance.State.Document.Root, trace), 1, 1);
             }
         }
 

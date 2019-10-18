@@ -1,7 +1,7 @@
 ﻿namespace NXKit.DOMEvents
 {
 
-    public interface IEventTarget
+    public interface IEventTarget : INodeExtension
     {
 
         void AddEventListener(string type, IEventListener listener, bool useCapture);

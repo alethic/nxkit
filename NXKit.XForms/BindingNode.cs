@@ -2,6 +2,7 @@
 using System.Xml.Linq;
 
 using NXKit.Composition;
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 
@@ -19,6 +20,7 @@ namespace NXKit.XForms
 
         readonly IExport<BindingProperties> properties;
         readonly IExport<EvaluationContextResolver> resolver;
+        readonly ITraceService trace;
         readonly Lazy<Binding> binding;
 
         /// <summary>
@@ -27,10 +29,12 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="properties"></param>
         /// <param name="resolver"></param>
+        /// <param name="trace"></param>
         public BindingNode(
             XElement element,
             IExport<BindingProperties> properties,
-            IExport<EvaluationContextResolver> resolver)
+            IExport<EvaluationContextResolver> resolver,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
@@ -38,6 +42,7 @@ namespace NXKit.XForms
 
             this.properties = properties ?? throw new ArgumentNullException(nameof(properties));
             this.resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
             this.binding = new Lazy<Binding>(() => GetOrCreateBinding());
         }
 
@@ -71,7 +76,7 @@ namespace NXKit.XForms
                 throw new DOMTargetEventException(Element, Events.BindingException,
                     "Could not resolve binding context.");
 
-            return new Binding(Element, context, expression);
+            return new Binding(Element, context, expression, trace);
         }
 
         /// <summary>

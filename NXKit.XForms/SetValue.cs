@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 using NXKit.XMLEvents;
@@ -19,6 +20,7 @@ namespace NXKit.XForms
         readonly BindingProperties bindingProperties;
         readonly SetValueProperties setValueProperties;
         readonly Lazy<EvaluationContextResolver> context;
+        readonly ITraceService trace;
 
         /// <summary>
         /// Initializes a new instance.
@@ -28,12 +30,14 @@ namespace NXKit.XForms
         /// <param name="bindingProperties"></param>
         /// <param name="setValueProperties"></param>
         /// <param name="context"></param>
+        /// <param name="trace"></param>
         public SetValue(
             XElement element,
             CommonProperties commonProperties,
             BindingProperties bindingProperties,
             SetValueProperties setValueProperties,
-            Lazy<EvaluationContextResolver> context)
+            Lazy<EvaluationContextResolver> context,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
@@ -43,13 +47,14 @@ namespace NXKit.XForms
             this.bindingProperties = bindingProperties ?? throw new ArgumentNullException(nameof(bindingProperties));
             this.setValueProperties = setValueProperties ?? throw new ArgumentNullException(nameof(setValueProperties));
             this.context = context ?? throw new ArgumentNullException(nameof(context));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
         }
 
         EvaluationContext GetContext()
         {
             if (commonProperties.Context != null)
             {
-                var item = new Binding(Element, context.Value.GetInScopeEvaluationContext(), commonProperties.Context).ModelItems.FirstOrDefault();
+                var item = new Binding(Element, context.Value.GetInScopeEvaluationContext(), commonProperties.Context, trace).ModelItems.FirstOrDefault();
                 if (item == null)
                     return null;
 
@@ -82,7 +87,7 @@ namespace NXKit.XForms
 
             var ref_ = bindingProperties.Ref ?? bindingProperties.NodeSet;
             if (ref_ != null)
-                return new Binding(Element, insertContext, ref_).ModelItems
+                return new Binding(Element, insertContext, ref_, trace).ModelItems
                     .Select(i => i.Xml)
                     .ToArray();
 
@@ -100,7 +105,7 @@ namespace NXKit.XForms
                 return;
 
             var insertNode = sequenceBindingNodeSequence[0];
-            var insertItem = ModelItem.Get(insertNode);
+            var insertItem = ModelItem.Get(insertNode, trace);
             if (insertItem.ReadOnly)
                 return;
 

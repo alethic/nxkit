@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cogito.Autofac" Version="1.2.21" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NXKit.Autofac\NXKit.Autofac.csproj" />
+    <ProjectReference Include="..\NXKit.Extensions.DependencyInjection\NXKit.Extensions.DependencyInjection.csproj" />
+  </ItemGroup>
+
+</Project>

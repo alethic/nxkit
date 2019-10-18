@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 
 using NXKit.Composition;
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.Serialization;
 using NXKit.Xml;
@@ -20,6 +21,7 @@ namespace NXKit.XForms
     {
 
         readonly AnnotationSerializer serializer;
+        readonly ITraceService trace;
         readonly RepeatAttributes attributes;
         readonly IExport<IBindingNode> bindingNode;
         readonly Lazy<Binding> binding;
@@ -38,25 +40,29 @@ namespace NXKit.XForms
         /// <param name="bindingNode"></param>
         /// <param name="uiBindingNode"></param>
         /// <param name="serializer"></param>
+        /// <param name="trace"></param>
         public Repeat(
             XElement element,
             RepeatAttributes attributes,
             IExport<IBindingNode> bindingNode,
             IExport<IUIBindingNode> uiBindingNode,
-            AnnotationSerializer serializer)
-            : base(element)
+            AnnotationSerializer serializer,
+            ITraceService trace) :
+            base(element)
         {
             if (element == null)
                 throw new ArgumentNullException(nameof(element));
 
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
             this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
             this.bindingNode = bindingNode ?? throw new ArgumentNullException(nameof(bindingNode));
-            this.binding = new Lazy<Binding>(() => bindingNode.Value.Binding);
             this.uiBindingNode = uiBindingNode ?? throw new ArgumentNullException(nameof(uiBindingNode));
-            this.uiBinding = new Lazy<UIBinding>(() => uiBindingNode.Value.UIBinding);
-            this.state = new Lazy<RepeatState>(() => Element.AnnotationOrCreate<RepeatState>());
-            this.template = new Lazy<XElement>(() => State.Template);
+
+            binding = new Lazy<Binding>(() => bindingNode.Value.Binding);
+            uiBinding = new Lazy<UIBinding>(() => uiBindingNode.Value.UIBinding);
+            state = new Lazy<RepeatState>(() => Element.AnnotationOrCreate<RepeatState>());
+            template = new Lazy<XElement>(() => State.Template);
         }
 
         RepeatState State
@@ -251,7 +257,7 @@ namespace NXKit.XForms
             }
 
             return new EvaluationContext(
-                ModelItem.Get(xml),
+                ModelItem.Get(xml, trace),
                 item.Index,
                 item.Size);
         }

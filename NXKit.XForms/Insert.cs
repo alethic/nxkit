@@ -4,6 +4,7 @@ using System.Xml;
 using System.Xml.Linq;
 
 using NXKit.Composition;
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 using NXKit.XMLEvents;
@@ -80,18 +81,24 @@ namespace NXKit.XForms
         readonly BindingProperties bindingProperties;
         readonly InsertProperties insertProperties;
         readonly IExport<EvaluationContextResolver> context;
+        readonly ITraceService trace;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="commonProperties"></param>
+        /// <param name="bindingProperties"></param>
+        /// <param name="insertProperties"></param>
         /// <param name="context"></param>
+        /// <param name="trace"></param>
         public Insert(
             XElement element,
             CommonProperties commonProperties,
             BindingProperties bindingProperties,
             InsertProperties insertProperties,
-            IExport<EvaluationContextResolver> context)
+            IExport<EvaluationContextResolver> context,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
@@ -101,6 +108,7 @@ namespace NXKit.XForms
             this.bindingProperties = bindingProperties ?? throw new ArgumentNullException(nameof(bindingProperties));
             this.insertProperties = insertProperties ?? throw new ArgumentNullException(nameof(insertProperties));
             this.context = context ?? throw new ArgumentNullException(nameof(context));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
         }
 
         public void HandleEvent(Event ev)
@@ -120,7 +128,7 @@ namespace NXKit.XForms
             var insertContext = context.Value.GetInScopeEvaluationContext();
             if (commonProperties.Context != null)
             {
-                var item = new Binding(Element, insertContext, commonProperties.Context).ModelItems.FirstOrDefault();
+                var item = new Binding(Element, insertContext, commonProperties.Context, trace).ModelItems.FirstOrDefault();
                 if (item == null)
                     return null;
 
@@ -161,7 +169,7 @@ namespace NXKit.XForms
             // determine the Sequence Binding node-sequence.
             var ref_ = bindingProperties.Ref ?? bindingProperties.NodeSet;
             if (ref_ != null)
-                return new Binding(Element, insertContext, ref_).ModelItems
+                return new Binding(Element, insertContext, ref_, trace).ModelItems
                     .Select(i => i.Xml)
                     .ToArray();
 
@@ -199,7 +207,7 @@ namespace NXKit.XForms
             // If the origin attribute is given, the origin node-sequence is the result of the evaluation of the origin
             // attribute in the insert context.
             else if (insertProperties.Origin != null)
-                result = new Binding(Element, insertContext, insertProperties.Origin).ModelItems
+                result = new Binding(Element, insertContext, insertProperties.Origin, trace).ModelItems
                     .Select(i => i.Xml)
                     .ToArray();
 
@@ -248,8 +256,9 @@ namespace NXKit.XForms
                 // position is 1.
                 var at = new Binding(
                     Element,
-                    new EvaluationContext(ModelItem.Get(sequenceBindingNodeSequence[0]), 1, sequenceBindingNodeSequence.Length),
-                    insertProperties.At).Value;
+                    new EvaluationContext(ModelItem.Get(sequenceBindingNodeSequence[0], trace), 1, sequenceBindingNodeSequence.Length),
+                    insertProperties.At,
+                    trace).Value;
 
                 // 2. The return value is processed according to the rules of the XPath function round(). For example,
                 // the literal 1.5 becomes 2, and the literal 'string' becomes NaN.
@@ -476,7 +485,7 @@ namespace NXKit.XForms
             // The insert action is terminated with no effect if the insertion will create nodes whose parent is
             // readonly. This occurs if the insert location node is readonly and the Sequence Binding sequence is not
             // specified or empty, or otherwise if the parent of the insert location node is readonly.
-            if (ModelItem.Get(insertLocationNode).ReadOnly)
+            if (ModelItem.Get(insertLocationNode, trace).ReadOnly)
                 return;
 
             // The target location of each of the cloned nodes is determined.

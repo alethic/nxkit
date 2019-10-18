@@ -2,14 +2,21 @@
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+
+using NXKit.Testing;
 
 namespace NXKit.DOMEvents.Tests
 {
 
-    [TestClass]
-    public class EventTargetStateTests
+    public class EventTargetStateTests : NXKitTestFixture
     {
+
+        public EventTargetStateTests(NXKitTestFixtureContext context) :
+            base(context)
+        {
+
+        }
 
         [XmlRoot("test-event-listener")]
         public class TestEventListener :
@@ -49,13 +56,13 @@ namespace NXKit.DOMEvents.Tests
             return x;
         }
 
-        [TestMethod]
+        [Test]
         public void Test_serialize()
         {
             Serialize();
         }
 
-        [TestMethod]
+        [Test]
         public void Test_deserialize()
         {
             var x = Serialize();

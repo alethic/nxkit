@@ -1,0 +1,12 @@
+{
+    "profiles": {
+        "NXKit.View.Blazor.Sample.Client": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "applicationUrl": "http://localhost:26376/"
+        }
+    }
+}

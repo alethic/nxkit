@@ -11,7 +11,7 @@
         /// </summary>
         public SubmitSerializeContextInfo()
         {
-            this.submissionBody = "";
+            submissionBody = "";
         }
 
         /// <summary>
@@ -20,8 +20,8 @@
         /// </summary>
         public string SubmissionBody
         {
-            get { return submissionBody; }
-            set { submissionBody = value; }
+            get => submissionBody;
+            set => submissionBody = value;
         }
 
     }

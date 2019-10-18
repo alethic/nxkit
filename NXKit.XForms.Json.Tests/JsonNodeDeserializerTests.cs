@@ -1,21 +1,20 @@
 ﻿using System;
 using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+using NUnit.Framework;
 
 using NXKit.XForms.Json.Serialization;
 
 namespace NXKit.XForms.Json.Tests
 {
 
-    [TestClass]
     public class JsonNodeDeserializerTests
     {
 
-        [TestMethod]
+        [Test]
         public void Test_simple_property()
         {
             var job = new JObject(
@@ -28,7 +27,7 @@ namespace NXKit.XForms.Json.Tests
             var xml = srs.Deserialize(new StreamReader(new MemoryStream(stm.ToArray())), "application/json");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_single_array()
         {
             var job = new JObject(
@@ -42,7 +41,7 @@ namespace NXKit.XForms.Json.Tests
             var xml = srs.Deserialize(new StreamReader(new MemoryStream(stm.ToArray())), "application/json");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_longer_array()
         {
             var job = new JObject(
@@ -56,7 +55,7 @@ namespace NXKit.XForms.Json.Tests
             var xml = srs.Deserialize(new StreamReader(new MemoryStream(stm.ToArray())), "application/json");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_with_types()
         {
             var job = new JObject(
@@ -70,7 +69,7 @@ namespace NXKit.XForms.Json.Tests
             var xml = srs.Deserialize(new StreamReader(new MemoryStream(stm.ToArray())), "application/json");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_deep()
         {
             var job = new JObject(

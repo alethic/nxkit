@@ -40,7 +40,7 @@ namespace NXKit.View.Windows.Test.App
 
         void ExecuteLoad(object parameter)
         {
-            Document = Document.Load(new Uri(LoadUri));
+            Document = Document.Load(new Uri(LoadUri), null);
         }
 
         public Document Document

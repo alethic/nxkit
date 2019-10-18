@@ -44,7 +44,7 @@ namespace NXKit.Util
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return GetOrValue<TKey, TValue>(source, key, default(TValue));
+            return GetOrValue<TKey, TValue>(source, key, default);
         }
 
         /// <summary>
@@ -78,8 +78,7 @@ namespace NXKit.Util
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            TValue v;
-            if (source.TryGetValue(key, out v))
+            if (source.TryGetValue(key, out var v))
                 return v;
             else
                 return source[key] = func(key);

@@ -1,11 +1,10 @@
 ﻿using System.IO;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace NXKit.Tests
 {
 
-    [TestClass]
     public class LoadTests
     {
 
@@ -18,7 +17,7 @@ namespace NXKit.Tests
             return typeof(LoadTests).Assembly.GetManifestResourceStream("NXKit.Tests.SampleXml.xml");
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethod1()
         {
 

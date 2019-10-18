@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.Xml;
 using NXKit.XMLEvents;
@@ -21,18 +21,26 @@ namespace NXKit.XForms
         readonly ActionProperties actionProperties;
         readonly DeleteProperties deleteProperties;
         readonly Lazy<EvaluationContextResolver> resolver;
+        readonly ITraceService trace;
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="element"></param>
+        /// <param name="commonProperties"></param>
+        /// <param name="bindingProperties"></param>
+        /// <param name="actionProperties"></param>
+        /// <param name="deleteProperties"></param>
+        /// <param name="resolver"></param>
+        /// <param name="trace"></param>
         public Delete(
             XElement element,
             CommonProperties commonProperties,
             BindingProperties bindingProperties,
             ActionProperties actionProperties,
             DeleteProperties deleteProperties,
-            Lazy<EvaluationContextResolver> resolver)
+            Lazy<EvaluationContextResolver> resolver,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
@@ -43,6 +51,7 @@ namespace NXKit.XForms
             this.deleteProperties = deleteProperties ?? throw new ArgumentNullException(nameof(deleteProperties));
             this.actionProperties = actionProperties ?? throw new ArgumentNullException(nameof(actionProperties));
             this.resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
         }
 
         public void HandleEvent(Event ev)
@@ -61,7 +70,7 @@ namespace NXKit.XForms
             var deleteContext = resolver.Value.GetInScopeEvaluationContext();
             if (commonProperties.Context != null)
             {
-                var item = new Binding(Element, deleteContext, commonProperties.Context).ModelItems.First();
+                var item = new Binding(Element, deleteContext, commonProperties.Context, trace).ModelItems.First();
                 if (item == null)
                     return null;
 
@@ -102,7 +111,7 @@ namespace NXKit.XForms
             // determine the Sequence Binding node-sequence.
             var ref_ = bindingProperties.Ref ?? bindingProperties.NodeSet;
             if (ref_ != null)
-                return new Binding(Element, deleteContext, ref_).ModelItems
+                return new Binding(Element, deleteContext, ref_, trace).ModelItems
                     .Select(i => i.Xml)
                     .ToArray();
 
@@ -119,7 +128,7 @@ namespace NXKit.XForms
 
             if (actionProperties.If != null)
             {
-                var result = new Binding(Element, deleteContext, actionProperties.If).Result;
+                var result = new Binding(Element, deleteContext, actionProperties.If, trace).Result;
                 if (result is bool && !(bool)result)
                     return;
                 if (result is string && !bool.Parse((string)result))
@@ -138,7 +147,7 @@ namespace NXKit.XForms
             // The behavior of the delete action is undefined if the Sequence Binding node-sequence contains nodes
             // from more than one instance.
             if (sequenceBindingNodeSequence != null &&
-                sequenceBindingNodeSequence.Select(i => ModelItem.Get(i).Instance).Distinct().Count() > 1)
+                sequenceBindingNodeSequence.Select(i => ModelItem.Get(i, trace).Instance).Distinct().Count() > 1)
                 return;
 
             // Otherwise, the Sequence Binding is not expressed, so the Sequence Binding node-sequence is set equal to
@@ -157,8 +166,9 @@ namespace NXKit.XForms
                 // position is 1.
                 var at = new Binding(
                     Element,
-                    new EvaluationContext(ModelItem.Get(sequenceBindingNodeSequence[0]), 1, sequenceBindingNodeSequence.Length),
-                    deleteProperties.At).Value;
+                    new EvaluationContext(ModelItem.Get(sequenceBindingNodeSequence[0], trace), 1, sequenceBindingNodeSequence.Length),
+                    deleteProperties.At,
+                    trace).Value;
 
                 // 2. The return value is processed according to the rules of the XPath function round(). For example,
                 // the literal 1.5 becomes 2, and the literal 'string' becomes NaN.
@@ -187,7 +197,7 @@ namespace NXKit.XForms
             var deleteNodes = deleteLocation == 0d ? sequenceBindingNodeSequence : new XObject[] { sequenceBindingNodeSequence[(int)deleteLocation - 1] };
             foreach (var deleteNode in deleteNodes)
             {
-                if (ModelItem.Get(deleteNode).ReadOnly)
+                if (ModelItem.Get(deleteNode, trace).ReadOnly)
                     continue;
 
                 if (deleteNode.NodeType == XmlNodeType.Attribute)

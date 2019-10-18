@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Xml.Linq;
 
+using NXKit.Diagnostics;
+
 namespace NXKit.XForms
 {
 
@@ -23,6 +25,7 @@ namespace NXKit.XForms
 
         readonly ItemValueAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
+        readonly ITraceService trace;
         readonly Lazy<Binding> valueBinding;
 
         /// <summary>
@@ -31,10 +34,12 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         /// <param name="bindingNode"></param>
+        /// <param name="trace"></param>
         public ItemValue(
             XElement element,
             ItemValueAttributes attributes,
-            Lazy<IBindingNode> bindingNode)
+            Lazy<IBindingNode> bindingNode,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
@@ -42,24 +47,20 @@ namespace NXKit.XForms
 
             this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
             this.bindingNode = bindingNode ?? throw new ArgumentNullException(nameof(bindingNode));
-            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
+
+            valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute, trace));
         }
 
         /// <summary>
         /// Gets the binding of the element.
         /// </summary>
-        Binding Binding
-        {
-            get { return bindingNode.Value != null ? bindingNode.Value.Binding : null; }
-        }
+        Binding Binding => bindingNode.Value?.Binding;
 
         /// <summary>
         /// Gets the 'value' attribute binding.
         /// </summary>
-        Binding ValueBinding
-        {
-            get { return valueBinding.Value; }
-        }
+        Binding ValueBinding => valueBinding.Value;
 
         /// <summary>
         /// Gets the appropriate value to use when selecting the item.

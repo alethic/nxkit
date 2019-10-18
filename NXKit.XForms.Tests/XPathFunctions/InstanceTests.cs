@@ -1,29 +1,28 @@
 ﻿using System.Linq;
+
 using Autofac;
-using Cogito.Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NXKit.Composition;
+
+using NUnit.Framework;
+
+using NXKit.Testing;
 using NXKit.Xml;
 
 namespace NXKit.XForms.Tests.XPathFunctions
 {
 
-    [TestClass]
-    public class InstanceTests
+    public class InstanceTests : NXKitTestFixture
     {
 
-        ICompositionContext CreateCompositionContext()
+        public InstanceTests(NXKitTestFixtureContext context) :
+            base(context)
         {
-            var bld = new ContainerBuilder();
-            bld.RegisterAllAssemblyModules();
-            var cnt = bld.Build();
-            return cnt.Resolve<ICompositionContext>();
+
         }
 
-        [TestMethod]
+        [Test]
         public void Test_default_instance_resolution()
         {
-            var e = Document.Parse(@"
+            var e = Context.Engine.Parse(@"
                 <unknown xmlns:xf=""http://www.w3.org/2002/xforms"">
                     <xf:model id=""data"">
                         <xf:instance id=""instance1"">
@@ -34,8 +33,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
                         </xf:instance>
                     </xf:model>
                     <xf:input ref=""xf:instance()"" />
-                </unknown>",
-                CreateCompositionContext());
+                </unknown>");
 
             var input = e.Root
                 .Descendants()
@@ -46,10 +44,10 @@ namespace NXKit.XForms.Tests.XPathFunctions
             Assert.AreEqual("node1", input.UIBinding.Value);
         }
 
-        [TestMethod]
+        [Test]
         public void Test_specified_instance_resolution()
         {
-            var e = Document.Parse(@"
+            var e = Context.Engine.Parse(@"
                 <unknown xmlns:xf=""http://www.w3.org/2002/xforms"">
                     <xf:model id=""data"">
                         <xf:instance id=""instance1"">
@@ -60,8 +58,7 @@ namespace NXKit.XForms.Tests.XPathFunctions
                         </xf:instance>
                     </xf:model>
                     <xf:input ref=""xf:instance('instance2')"" />
-                </unknown>",
-                CreateCompositionContext());
+                </unknown>");
 
             var input = e.Root
                 .Descendants()

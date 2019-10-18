@@ -1,6 +1,6 @@
-﻿using System;
-using System.Xml.XPath;
+﻿using System.Xml.XPath;
 
+using NXKit.Diagnostics;
 using NXKit.Xml;
 using NXKit.XPath;
 
@@ -12,6 +12,16 @@ namespace NXKit.XForms.XPath.Functions
     public class IndexFunction : 
         XPathFunction
     {
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="trace"></param>
+        public IndexFunction(ITraceService trace) :
+            base(trace)
+        {
+
+        }
 
         public override XPathResultType[] ArgTypes
         {

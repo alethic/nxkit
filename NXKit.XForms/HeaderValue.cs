@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Xml.Linq;
 
+using NXKit.Diagnostics;
+
 namespace NXKit.XForms
 {
 
@@ -21,6 +23,7 @@ namespace NXKit.XForms
 
         readonly HeaderValueAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
+        readonly ITraceService trace;
         readonly Lazy<Binding> valueBinding;
 
         /// <summary>
@@ -29,10 +32,12 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         /// <param name="bindingNode"></param>
+        /// <param name="trace"></param>
         public HeaderValue(
             XElement element,
             HeaderValueAttributes attributes,
-            Lazy<IBindingNode> bindingNode)
+            Lazy<IBindingNode> bindingNode,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
@@ -40,24 +45,19 @@ namespace NXKit.XForms
 
             this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
             this.bindingNode = bindingNode ?? throw new ArgumentNullException(nameof(bindingNode));
-            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.Value));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
+            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.Value,trace));
         }
 
         /// <summary>
         /// Gets the binding of the element.
         /// </summary>
-        Binding Binding
-        {
-            get { return bindingNode.Value != null ? bindingNode.Value.Binding : null; }
-        }
+        Binding Binding => bindingNode.Value?.Binding;
 
         /// <summary>
         /// Gets the 'value' attribute binding.
         /// </summary>
-        Binding ValueBinding
-        {
-            get { return valueBinding.Value; }
-        }
+        Binding ValueBinding => valueBinding.Value;
 
         /// <summary>
         /// Gets the appropriate value to use when selecting the item.

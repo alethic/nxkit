@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 
+using NXKit.Diagnostics;
 using NXKit.XForms.IO;
 
 namespace NXKit.XForms
@@ -17,6 +18,7 @@ namespace NXKit.XForms
 
         readonly MethodAttributes attributes;
         readonly Lazy<IBindingNode> bindingNode;
+        readonly ITraceService trace;
         readonly Lazy<Binding> valueBinding;
 
         /// <summary>
@@ -25,10 +27,12 @@ namespace NXKit.XForms
         /// <param name="element"></param>
         /// <param name="attributes"></param>
         /// <param name="bindingNode"></param>
+        /// <param name="trace"></param>
         public Method(
             XElement element,
             MethodAttributes attributes,
-            Lazy<IBindingNode> bindingNode)
+            Lazy<IBindingNode> bindingNode,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
@@ -36,18 +40,14 @@ namespace NXKit.XForms
 
             this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
             this.bindingNode = bindingNode ?? throw new ArgumentNullException(nameof(bindingNode));
-            this.valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute));
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
+
+            valueBinding = new Lazy<Binding>(() => BindingUtil.ForAttribute(attributes.ValueAttribute, trace));
         }
 
-        Binding Binding
-        {
-            get { return bindingNode.Value != null ? bindingNode.Value.Binding : null; }
-        }
+        Binding Binding => bindingNode.Value?.Binding;
 
-        Binding ValueBinding
-        {
-            get { return valueBinding.Value; }
-        }
+        Binding ValueBinding => valueBinding.Value;
 
         /// <summary>
         /// Gets the appropriate value to use when selecting the item.

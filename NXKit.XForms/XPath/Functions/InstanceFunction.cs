@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Xml.XPath;
 
+using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.Util;
 using NXKit.Xml;
@@ -14,6 +15,16 @@ namespace NXKit.XForms.XPath.Functions
     public class InstanceFunction :
         XPathFunction
     {
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="trace"></param>
+        public InstanceFunction(ITraceService trace) :
+            base(trace)
+        {
+
+        }
 
         public override XPathResultType[] ArgTypes
         {

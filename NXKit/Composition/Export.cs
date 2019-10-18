@@ -1,11 +1,9 @@
 ﻿using System;
 
-using NXKit.Composition;
-
-namespace NXKit.Autofac
+namespace NXKit.Composition
 {
 
-    class Export<TValue, TMetadata> : Export<TValue>, IExport<TValue, TMetadata>
+    public class Export<TValue, TMetadata> : Export<TValue>, IExport<TValue, TMetadata>
         where TMetadata : IExportMetadata
     {
 
@@ -25,7 +23,7 @@ namespace NXKit.Autofac
     }
 
 
-    class Export<TValue> : IExport<TValue>
+    public class Export<TValue> : IExport<TValue>
     {
 
         readonly Func<TValue> value;

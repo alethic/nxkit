@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
+using NXKit.Diagnostics;
 using NXKit.Xml;
 
 namespace NXKit.XForms.XPath.Functions
@@ -11,9 +12,19 @@ namespace NXKit.XForms.XPath.Functions
     /// <summary>
     /// Base XPath function for XForms.
     /// </summary>
-    public abstract class XPathFunction :
-        IXsltContextFunction
+    public abstract class XPathFunction : IXsltContextFunction
     {
+
+        readonly ITraceService trace;
+
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="trace"></param>
+        public XPathFunction(ITraceService trace)
+        {
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
+        }
 
         public abstract int Maxargs { get; }
 
@@ -100,8 +111,7 @@ namespace NXKit.XForms.XPath.Functions
             if (navigator.UnderlyingObject is XObject == false)
                 throw new ArgumentException(nameof(navigator));
 
-            return ((XObject)navigator.UnderlyingObject).AnnotationOrCreate<ModelItem>(() =>
-                new ModelItem((XObject)navigator.UnderlyingObject)).Model;
+            return ((XObject)navigator.UnderlyingObject).AnnotationOrCreate(() => new ModelItem((XObject)navigator.UnderlyingObject, trace)).Model;
         }
 
         /// <summary>
@@ -118,7 +128,7 @@ namespace NXKit.XForms.XPath.Functions
             if (navigator.UnderlyingObject is XObject == false)
                 throw new ArgumentException(nameof(navigator));
 
-            return ModelItem.Get((XObject)navigator.UnderlyingObject).Instance;
+            return ModelItem.Get((XObject)navigator.UnderlyingObject, trace).Instance;
         }
 
     }
