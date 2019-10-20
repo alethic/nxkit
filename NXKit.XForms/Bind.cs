@@ -47,27 +47,9 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the evaluation context under which binding expressions are built.
-        /// </summary>
-        EvaluationContext Context
-        {
-            get { return context.Value; }
-        }
-
-        /// <summary>
         /// Gets the binding of the element.
         /// </summary>
         private Binding GetBinding() => bindingNode.Value?.Binding;
-
-        IEnumerable<ModelItem> ModelItems => GetModelItems();
-
-        IEnumerable<ModelItem> GetModelItems()
-        {
-            if (GetBinding() != null)
-                return GetBinding().ModelItems ?? Enumerable.Empty<ModelItem>();
-            else
-                throw new Exception();
-        }
 
         /// <summary>
         /// Extracts a boolean value from the given binding.
@@ -103,7 +85,7 @@ namespace NXKit.XForms
         {
             // TODO this is a poor implementation of nested bind elements
             var modelItems = GetBinding().ModelItems.ToList();
-            var parentBind = Element.Ancestors(Constants.XForms_1_0 + "bind")
+            var parentBind = Element.Ancestors(Constants.XForms + "bind")
                 .SelectMany(i => i.Interfaces<Bind>())
                 .FirstOrDefault();
             if (parentBind != null)
@@ -145,11 +127,13 @@ namespace NXKit.XForms
                     continue;
 
                 // evaluation context for attributes
-                var context = new Lazy<EvaluationContext>(() =>
-                    new EvaluationContext(modelItem.Model, modelItem.Instance, modelItem, i, modelItems.Length));
+                var context = new Lazy<EvaluationContext>(() => new EvaluationContext(modelItem.Model, modelItem.Instance, modelItem, i, modelItems.Length));
 
-                if (properties.Type != null)
+                // item type does not get applied to elements with contents
+                if (properties.Type != null && (modelItem.Xml as XElement)?.HasElements != true)
+                {
                     modelItem.ItemType = properties.Type;
+                }
 
                 if (properties.ReadOnly != null)
                 {

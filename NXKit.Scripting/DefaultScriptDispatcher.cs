@@ -41,22 +41,6 @@ namespace NXKit.Scripting
         }
 
         /// <summary>
-        /// Gets the <see cref="IScriptEngine"/> that supports the specified language type.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="code"></param>
-        /// <returns></returns>
-        IScriptEngine GetEngine(string type, string code)
-        {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
-            if (code == null)
-                throw new ArgumentNullException(nameof(code));
-
-            return GetEngines(type, code).FirstOrDefault();
-        }
-
-        /// <summary>
         /// Evaluates the given code.
         /// </summary>
         /// <param name="type"></param>

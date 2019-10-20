@@ -23,7 +23,7 @@ namespace NXKit.XForms
             {
                 var element = obj as XElement;
                 if (element != null &&
-                    element.Name.Namespace != Constants.XForms_1_0 &&
+                    element.Name.Namespace != Constants.XForms &&
                     element.AnnotationOrCreate(() => new RepeatExtensionAttributes(element)).HasAttributes())
                     return true;
 
@@ -72,7 +72,7 @@ namespace NXKit.XForms
         {
             // acquire template
             state.Template = new XElement(
-                Constants.XForms_1_0 + "template",
+                Constants.XForms + "template",
                 Element.GetNamespacePrefixAttributes(),
                 Element.Nodes());
             Element.RemoveNodes();

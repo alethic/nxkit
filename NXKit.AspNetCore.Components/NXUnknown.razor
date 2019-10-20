@@ -1,0 +1,14 @@
+﻿@using System.Xml.Linq
+@using NXKit.Xml
+
+<div class="nx-unknown" data-nx-node="@Element.Name">
+    <NXNodeListView Nodes="@Element.Nodes()" />
+</div>
+
+@code
+{
+
+    [Parameter]
+    public XElement Element { get; set; }
+
+}

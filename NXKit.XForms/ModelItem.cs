@@ -8,6 +8,7 @@ using System.Xml.XPath;
 using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.Util;
+using NXKit.XForms.Xml;
 using NXKit.Xml;
 
 namespace NXKit.XForms
@@ -28,7 +29,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         public static ModelItem Get(XObject obj, ITraceService trace)
         {
-            return obj.AnnotationOrCreate<ModelItem>(() => new ModelItem(obj, trace));
+            return obj.AnnotationOrCreate(() => new ModelItem(obj, trace));
         }
 
 
@@ -47,9 +48,10 @@ namespace NXKit.XForms
         {
             this.xml = xml ?? throw new ArgumentNullException(nameof(xml));
             this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
-            this.model = new Lazy<Model>(() => xml.Document.Annotation<Model>());
-            this.instance = new Lazy<Instance>(() => xml.Document.Annotation<Instance>());
-            this.state = new Lazy<ModelItemState>(() => xml.AnnotationOrCreate<ModelItemState>());
+
+            model = new Lazy<Model>(() => xml.Document.Annotation<Model>());
+            instance = new Lazy<Instance>(() => xml.Document.Annotation<Instance>());
+            state = new Lazy<ModelItemState>(() => xml.AnnotationOrCreate<ModelItemState>());
         }
 
         /// <summary>
@@ -121,7 +123,18 @@ namespace NXKit.XForms
         /// <returns></returns>
         XName GetItemType()
         {
-            return State.Type ?? GetXsiType() ?? GetXsdItemType() ?? NXKit.XmlSchemaConstants.XMLSchema + "string";
+            // apply model item state if not empty element
+            var type = Xml is XElement e && e.HasElements ? null : State.Type;
+
+            // derive item type from XSI attribute or associated schema
+            if (type == null)
+                type = GetXsiType() ?? GetXsdItemType();
+
+            // do not fallback to string for element with content
+            if (type == null && (Xml as XElement)?.HasElements != true)
+                type = NXKit.XmlSchemaConstants.XMLSchema + "string";
+
+            return type;
         }
 
         /// <summary>
@@ -212,16 +225,6 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Setter for the Relevant property.
-        /// </summary>
-        /// <param name="value"></param>
-        void SetRelevant(bool value)
-        {
-            State.Relevant = value;
-            trace.Debug("ModelItem relevant set: {0}: {1}", this, value);
-        }
-
-        /// <summary>
         /// Gets whether the given model item's constraint value is currently valid.
         /// </summary>
         /// <returns></returns>
@@ -234,11 +237,6 @@ namespace NXKit.XForms
         bool GetConstraint()
         {
             return State.Constraint ?? true;
-        }
-
-        void SetConstraint(bool value)
-        {
-            State.Constraint = value;
         }
 
         /// <summary>
@@ -330,8 +328,7 @@ namespace NXKit.XForms
             // convert value to destination item type if possible
             if (ItemType != null)
             {
-                var schemaType = GetXsdSchemaType() as XmlSchemaSimpleType;
-                if (schemaType != null)
+                if (GetXsdSchemaType() is XmlSchemaSimpleType schemaType)
                 {
                     try
                     {
@@ -355,22 +352,21 @@ namespace NXKit.XForms
             // nothing changed
             if (newValue == GetValue())
                 return;
+            // An xforms-binding-exception occurs if the Single Item Binding indicates a node whose content is not
+            // simpleContent (i.e., a node that has element children).
 
-            if (Xml is XElement)
+            if (Xml is XElement element)
             {
-                // An xforms-binding-exception occurs if the Single Item Binding indicates a node whose content is not
-                // simpleContent (i.e., a node that has element children).
-                var target = (XElement)Xml;
-                if (target.HasElements)
-                    throw new DOMTargetEventException(target, Events.BindingException);
+                if (element.HasElements)
+                    throw new DOMTargetEventException(element, Events.BindingException);
 
                 // find existing text node or create
                 // preserves any existing annotations
-                var text = target.Nodes().OfType<XText>().FirstOrDefault();
+                var text = element.Nodes().OfType<XText>().FirstOrDefault();
                 if (text == null)
                 {
                     text = new XText(newValue);
-                    target.AddFirst(text);
+                    element.AddFirst(text);
                 }
 
                 // set new value
@@ -378,19 +374,17 @@ namespace NXKit.XForms
 
                 trace.Debug("ModelItem simple content changed: {0}: '{1}'", this, text.Value);
             }
-            else if (Xml is XAttribute)
+            else if (Xml is XAttribute attribute)
             {
-                var target = (XAttribute)Xml;
-                target.Value = newValue;
+                attribute.Value = newValue;
 
-                trace.Debug("ModelItem attribute value changed: {0}: '{1}'", this, target.Value);
+                trace.Debug("ModelItem attribute value changed: {0}: '{1}'", this, attribute.Value);
             }
-            else if (Xml is XText)
+            else if (Xml is XText text)
             {
-                var target = (XText)Xml;
-                target.Value = newValue;
+                text.Value = newValue;
 
-                trace.Debug("ModelItem text value changed: {0}: '{1}'", this, target.Value);
+                trace.Debug("ModelItem text value changed: {0}: '{1}'", this, text.Value);
             }
             else
                 throw new InvalidOperationException();
@@ -446,8 +440,7 @@ namespace NXKit.XForms
             if (Xml is XDocument || Xml == Xml.Document.Root)
             {
                 // new object is a document, replace the entire instance
-                var document = newObject as XDocument;
-                if (document != null)
+                if (newObject is XDocument document)
                 {
                     Instance.Load(document);
                     Model.State.Rebuild = true;
@@ -458,8 +451,7 @@ namespace NXKit.XForms
                 }
 
                 // new object is an element, replace entire instance with derived document
-                var element = newObject as XElement;
-                if (element != null)
+                if (newObject is XElement element)
                 {
                     Instance.Load(new XDocument(element));
                     Model.State.Rebuild = true;
@@ -474,16 +466,14 @@ namespace NXKit.XForms
             else if (Xml is XElement)
             {
                 // new object is a document, replace with root element
-                var document = newObject as XDocument;
-                if (document != null)
+                if (newObject is XDocument document)
                 {
                     Replace(document.Root);
                     return;
                 }
 
                 // new object is an element
-                var element = newObject as XElement;
-                if (element != null)
+                if (newObject is XElement element)
                 {
                     Replace(element);
                     return;
@@ -541,17 +531,15 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal XPathNavigator CreateNavigator()
         {
-            var attr = xml as XAttribute;
-            if (attr != null)
+            if (xml is XAttribute attribute)
             {
                 // navigator needs to be created on parent, and navigated to attribute
-                var nav = attr.Parent.CreateNavigator();
-                nav.MoveToAttribute(attr.Name.LocalName, attr.Name.NamespaceName);
+                var nav = attribute.Parent.CreateNavigator();
+                nav.MoveToAttribute(attribute.Name.LocalName, attribute.Name.NamespaceName);
                 return nav;
             }
 
-            var element = xml as XElement;
-            if (element != null)
+            if (xml is XElement element)
                 return element.CreateNavigator();
 
             throw new InvalidOperationException();
@@ -589,10 +577,11 @@ namespace NXKit.XForms
                         return false;
 
             // validate against expressed item type
-            var schemaType = Model.State.XmlSchemas.GlobalTypes[new XmlQualifiedName(ItemType.LocalName, ItemType.NamespaceName)] as XmlSchemaType;
-            if (schemaType != null)
-                if (!ValidateValueAgainstXmlSchemaType(schemaType, Value, Model.State.XmlSchemas.NameTable, null))
-                    return false;
+            var itemType = ItemType;
+            if (itemType != null)
+                if (Model.State.XmlSchemas.GetSchemaType(itemType) is XmlSchemaType schemaType)
+                    if (!ValidateValueAgainstXmlSchemaType(schemaType, Value, Model.State.XmlSchemas.NameTable, null))
+                        return false;
 
             // otherwise true
             return true;
@@ -624,6 +613,10 @@ namespace NXKit.XForms
             {
                 // ignore
             }
+            catch (XmlSchemaException)
+            {
+                // ignore
+            }
 
             return false;
         }
@@ -634,13 +627,12 @@ namespace NXKit.XForms
         /// <returns></returns>
         XName GetXsiType()
         {
-            var element = xml as XElement;
-            if (element == null)
-                return null;
-
-            var value = (string)element.Attribute("{http://www.w3.org/2001/XMLSchema-instance}type");
-            if (value != null)
-                return element.ResolvePrefixedName(value);
+            if (xml is XElement element)
+            {
+                var value = (string)element.Attribute("{http://www.w3.org/2001/XMLSchema-instance}type");
+                if (value != null)
+                    return element.ResolvePrefixedName(value);
+            }
 
             return null;
         }
@@ -659,33 +651,7 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Gets the first named <see cref="XmlSchemaType"/> associated with the model item by XSD.
-        /// </summary>
-        /// <returns></returns>
-        XmlSchemaType GetXsdNamedSchemaType()
-        {
-            var schemaType = GetXsdSchemaType();
-            if (schemaType == null)
-                return null;
-
-            return schemaType.Recurse(i => i.BaseXmlSchemaType).FirstOrDefault(i => !i.QualifiedName.IsEmpty);
-        }
-
-        /// <summary>
-        /// Gets the applied XML schema type.
-        /// </summary>
-        /// <returns></returns>
-        XName GetXsdType()
-        {
-            var schemaType = GetXsdNamedSchemaType();
-            if (schemaType == null)
-                return null;
-
-            return XName.Get(schemaType.QualifiedName.Name, schemaType.QualifiedName.Namespace);
-        }
-
-        /// <summary>
-        /// Gets the model item type from the XML schema. This is the first base type of the schema type supported by 
+        /// Gets the model item type from the XML schema. This is the first base type of the schema type supported by
         /// the native XForms type system. Ultimately, richer type information should be exposed out of model-items and
         /// be made available to the client.
         /// </summary>

@@ -21,7 +21,7 @@ namespace NXKit.XForms
             {
                 var element = obj as XElement;
                 if (element != null)
-                    return element.Name != Constants.XForms_1_0 + "bind";
+                    return element.Name != Constants.XForms + "bind";
 
                 return true;
             }

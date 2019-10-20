@@ -1,0 +1,6 @@
+﻿@attribute [NXComponent("{http://www.w3.org/1999/xhtml}div")]
+@inherits XHtmlComponentBase
+
+<div @attributes="@Element.Attributes().ToDictionary(i => i.Name.LocalName, i => (object)i.Value)">
+    <NXNodeListView Nodes="@Element.Nodes()" />
+</div>

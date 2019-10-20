@@ -16,7 +16,7 @@ namespace NXKit.XForms
 
             public bool IsMatch(XObject obj)
             {
-                return obj.Parent != null && obj.Parent.Name == Constants.XForms_1_0 + "header";
+                return obj.Parent != null && obj.Parent.Name == Constants.XForms + "header";
             }
 
         }

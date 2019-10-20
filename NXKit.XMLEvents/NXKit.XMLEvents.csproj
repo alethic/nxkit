@@ -9,10 +9,18 @@
 
   <ItemGroup>
     <None Remove="xml-events-2.xsd" />
+    <None Remove="xml-events-attribs-2.xsd" />
+    <None Remove="Xml\Schema\xml-events-1.xsd" />
+    <None Remove="Xml\Schema\xml-events-attribs-1.xsd" />
+    <None Remove="Xml\Schema\xml-handlers-1.xsd" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="xml-events-2.xsd" />
+    <EmbeddedResource Include="Xml\Schema\xml-events-1.xsd" />
+    <EmbeddedResource Include="Xml\Schema\xml-events-2.xsd" />
+    <EmbeddedResource Include="Xml\Schema\xml-events-attribs-1.xsd" />
+    <EmbeddedResource Include="Xml\Schema\xml-events-attribs-2.xsd" />
+    <EmbeddedResource Include="Xml\Schema\xml-handlers-1.xsd" />
   </ItemGroup>
 
   <ItemGroup>

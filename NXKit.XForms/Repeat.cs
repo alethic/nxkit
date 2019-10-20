@@ -99,13 +99,20 @@ namespace NXKit.XForms
             set { State.Template = value; }
         }
 
+        /// <summary>
+        /// Invoked once when the element comes into scope.
+        /// </summary>
         public void Init()
         {
             // acquire template
             Template = new XElement(
-                Constants.XForms_1_0 + "template",
+                Constants.XForms + "template",
                 Element.GetNamespacePrefixAttributes(),
                 Element.Nodes());
+            if (Template == null)
+                throw new InvalidOperationException("Unable to initialize Template.");
+
+            // clear out existing body
             Element.RemoveNodes();
         }
 
@@ -115,6 +122,9 @@ namespace NXKit.XForms
         /// <returns></returns>
         public void Update()
         {
+            if (Template == null)
+                throw new InvalidOperationException("Template not yet initialized. Init phase not executed.");
+
             // refresh binding
             if (Binding != null)
                 Binding.Recalculate();
@@ -160,7 +170,7 @@ namespace NXKit.XForms
                 var node = indx >= 0 ? nodes[indx] : null;
                 if (node == null)
                     node = new XElement(
-                        Constants.XForms_1_0 + "group",
+                        Constants.XForms + "group",
                         Template.GetNamespacePrefixAttributes(),
                         Template.Nodes());
 

@@ -21,6 +21,7 @@ namespace NXKit.XForms
 
         readonly IIOService io;
         readonly ModelAttributes attributes;
+        readonly IEnumerable<IDefaultXmlSchemaProvider> defaultSchemaProvider;
         readonly ITraceService trace;
         readonly Lazy<ModelState> state;
         readonly Lazy<DocumentAnnotation> documentAnnotation;
@@ -28,22 +29,25 @@ namespace NXKit.XForms
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="io"></param>
         /// <param name="element"></param>
         /// <param name="attributes"></param>
+        /// <param name="io"></param>
+        /// <param name="defaultSchemaProvider"></param>
         /// <param name="trace"></param>
         public Model(
-            IIOService io,
             XElement element,
             ModelAttributes attributes,
+            IIOService io,
+            IEnumerable<IDefaultXmlSchemaProvider> defaultSchemaProvider,
             ITraceService trace)
             : base(element)
         {
             if (element == null)
                 throw new ArgumentNullException(nameof(element));
 
-            this.io = io ?? throw new ArgumentNullException(nameof(io));
             this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
+            this.io = io ?? throw new ArgumentNullException(nameof(io));
+            this.defaultSchemaProvider = defaultSchemaProvider ?? throw new ArgumentNullException(nameof(defaultSchemaProvider));
             this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
 
             state = new Lazy<ModelState>(() => Element.AnnotationOrCreate<ModelState>());
@@ -53,30 +57,29 @@ namespace NXKit.XForms
         /// <summary>
         /// Gets the model state associated with this model interface.
         /// </summary>
-        public ModelState State
-        {
-            get { return state.Value; }
-        }
+        public ModelState State => state.Value;
 
-        DocumentAnnotation DocumentAnnotation
-        {
-            get { return documentAnnotation.Value; }
-        }
+        /// <summary>
+        /// Gets the known XML schemas.
+        /// </summary>
+        public XmlSchemaSet XmlSchemas => State.XmlSchemas;
+
+        /// <summary>
+        /// Gets the current document annotation.
+        /// </summary>
+        DocumentAnnotation DocumentAnnotation => documentAnnotation.Value;
 
         /// <summary>
         /// Provides the model default evaluation context.
         /// </summary>
-        public EvaluationContext Context
-        {
-            get { return DefaultEvaluationContext; }
-        }
+        public EvaluationContext Context => DefaultEvaluationContext;
 
         /// <summary>
         /// Gets the set of <see cref="Instance"/>s.
         /// </summary>
         public IEnumerable<Instance> Instances
         {
-            get { return Element.Elements(Constants.XForms_1_0 + "instance").SelectMany(i => i.Interfaces<Instance>()); }
+            get { return Element.Elements(Constants.XForms + "instance").SelectMany(i => i.Interfaces<Instance>()); }
         }
 
         /// <summary>
@@ -161,19 +164,99 @@ namespace NXKit.XForms
                     if (version != "1.0")
                         throw new DOMTargetEventException(Element, Events.VersionException);
 
+            // obtain current list of schemas
+            var xsds = State.XmlSchemas.Schemas().OfType<XmlSchema>().ToList();
+
+            // add any provided default schemas
+            ApplySchemaSet(xsds, defaultSchemaProvider.SelectMany(i => i.GetSchemas()));
+
             // attempt to load XML schemas refered to by the Schema attribute
             if (attributes.Schema != null)
                 foreach (var item in attributes.Schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
-                    LoadSchema(new Uri(item, UriKind.RelativeOrAbsolute));
+                    ApplySchemaSet(xsds, new[] { LoadSchema(new Uri(item, UriKind.RelativeOrAbsolute)) });
 
             // attempt to load XML schemas listed directly under the model
             foreach (var element in Element.Elements("{http://www.w3.org/2001/XMLSchema}schema"))
             {
-                LoadSchema(element);
+                // add loaded schema
+                ApplySchemaSet(xsds, new[] { LoadSchema(element) });
 
                 // remove node from tree
                 element.Remove();
             }
+
+            // filter out external references
+            foreach (var schema in xsds)
+            {
+                foreach (var import in schema.Includes.OfType<XmlSchemaExternal>().ToArray())
+                {
+                    // erase any external references
+                    import.SchemaLocation = null;
+                    import.Schema = null;
+
+                    // remove any includes
+                    if (import is XmlSchemaInclude include)
+                        schema.Includes.Remove(include);
+                }
+            }
+
+            // rebuild into single unified set
+            var set1 = new XmlSchemaSet();
+            set1.XmlResolver = null;
+            set1.ValidationEventHandler += (s, a) => { };
+            set1.CompilationSettings.EnableUpaCheck = false;
+
+            foreach (var xsd in xsds)
+            {
+                var all = set1.Schemas().Cast<XmlSchema>().SelectMany(i => i.Items.Cast<XmlSchemaObject>());
+
+                var xsdc = new XmlSchema();
+                xsdc.Id = xsd.Id;
+                xsdc.BlockDefault = xsd.BlockDefault;
+                xsdc.AttributeFormDefault = xsd.AttributeFormDefault;
+                xsdc.ElementFormDefault = xsd.ElementFormDefault;
+                xsdc.FinalDefault = xsd.FinalDefault;
+                xsdc.TargetNamespace = xsd.TargetNamespace;
+
+                foreach (var item in xsd.Items)
+                {
+                    switch (item)
+                    {
+                        case XmlSchemaExternal z:
+                        case XmlSchemaAttribute a when !all.OfType<XmlSchemaAttribute>().Any(i => i.QualifiedName == a.QualifiedName):
+                        case XmlSchemaAttributeGroup g when !all.OfType<XmlSchemaAttributeGroup>().Any(i => i.QualifiedName == g.QualifiedName):
+                        case XmlSchemaElement e when !all.OfType<XmlSchemaElement>().Any(i => i.QualifiedName == e.QualifiedName):
+                        case XmlSchemaType t when !all.OfType<XmlSchemaType>().Any(i => i.QualifiedName == t.QualifiedName):
+                            xsdc.Items.Add(item);
+                            break;
+                        default:
+                            // ignored
+                            break;
+                    }
+                }
+            }
+
+            // rebuild again to ensure compilation
+            var set2 = new XmlSchemaSet();
+            set2.XmlResolver = null;
+            set2.ValidationEventHandler += XmlSchemas_ValidationEventHandler;
+            set2.CompilationSettings.EnableUpaCheck = false;
+
+            try
+            {
+                set2.Add(set1);
+                set2.Compile();
+            }
+            finally
+            {
+                set2.ValidationEventHandler -= XmlSchemas_ValidationEventHandler;
+            }
+
+            if (set2.IsCompiled == false)
+                throw new InvalidOperationException("Unable to compile schema set for model.");
+
+            // replace set
+            State.XmlSchemas = set2;
 
             // attempt to load model instance data
             foreach (var instance in Instances)
@@ -182,6 +265,60 @@ namespace NXKit.XForms
             OnRebuild();
             OnRecalculate();
             OnRevalidate();
+        }
+
+        /// <summary>
+        /// Applies the source schema to the target.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="source"></param>
+        void ApplySchemaSet(List<XmlSchema> target, IEnumerable<XmlSchema> source)
+        {
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+            if (source == null)
+                return;
+
+            // apply schema from source set to target set
+            // this is done as a batch by targetNamespace to prevent us from removing what we just added
+            foreach (var g in source.GroupBy(i => i.TargetNamespace))
+            {
+                // replace target namespace
+                target.RemoveAll(i => i.TargetNamespace == g.Key);
+                target.AddRange(g);
+            }
+        }
+
+        /// <summary>
+        /// Handles any validation errors during compilation.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        void XmlSchemas_ValidationEventHandler(object sender, ValidationEventArgs args)
+        {
+            XmlSchemaCompilationEvent(args.Exception, args.Message, args.Severity);
+        }
+
+        /// <summary>
+        /// Invoked when an exception occurs during validation.
+        /// </summary>
+        /// <param name="exception"></param>
+        void XmlSchemaCompilationEvent(XmlSchemaException exception, string message, XmlSeverityType severity)
+        {
+            // default message to exception output
+            if (message == null && exception != null)
+                message = exception.Message;
+
+            // log based on severity
+            switch (severity)
+            {
+                case XmlSeverityType.Error:
+                    trace.Error(message);
+                    break;
+                case XmlSeverityType.Warning:
+                    trace.Warning(message);
+                    break;
+            }
         }
 
         /// <summary>
@@ -328,7 +465,7 @@ namespace NXKit.XForms
         /// Loads the given schema into the model.
         /// </summary>
         /// <param name="uri"></param>
-        void LoadSchema(Uri uri)
+        XmlSchema LoadSchema(Uri uri)
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
@@ -348,19 +485,18 @@ namespace NXKit.XForms
             var response = io.Send(new IORequest(uri, IOMethod.Get));
             if (response == null ||
                 response.Status != IOStatus.Success)
-                throw new DOMTargetEventException(Element, Events.LinkException,
-                    string.Format("Error retrieving schema '{0}'.", uri));
+                throw new DOMTargetEventException(Element, Events.LinkException, string.Format("Error retrieving schema '{0}'.", uri));
 
             // load the retrieved schema
             using (var rdr = XmlReader.Create(response.Content))
-                LoadSchema(rdr);
+                return LoadSchema(rdr);
         }
 
         /// <summary>
         /// Loads the schema given by the specified <see cref="XElement"/>.
         /// </summary>
         /// <param name="element"></param>
-        void LoadSchema(XElement element)
+        XmlSchema LoadSchema(XElement element)
         {
             if (element == null)
                 throw new ArgumentNullException(nameof(element));
@@ -368,22 +504,21 @@ namespace NXKit.XForms
                 throw new ArgumentException("", nameof(element));
 
             using (var rdr = element.CreateReader())
-                LoadSchema(rdr);
+                return LoadSchema(rdr);
         }
 
         /// <summary>
         /// Loads the schema given the specified <see cref="XmlReader"/>.
         /// </summary>
         /// <param name="reader"></param>
-        void LoadSchema(XmlReader reader)
+        XmlSchema LoadSchema(XmlReader reader)
         {
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
 
             // load instance
             var schema = XmlSchema.Read(reader, LoadSchema_ValidationEvent);
-            if (schema != null)
-                State.XmlSchemas.Add(schema);
+            return schema;
         }
 
         void LoadSchema_ValidationEvent(object sender, ValidationEventArgs args)

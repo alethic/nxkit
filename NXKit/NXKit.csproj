@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Product>NXKit</Product>
     <Description>
@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="xml.xsd" />
-    <EmbeddedResource Include="xsdschema.xsd" />
+    <EmbeddedResource Include="Xml\Schema\xml.xsd" />
+    <EmbeddedResource Include="Xml\Schema\xsdschema.xsd" />
   </ItemGroup>
 
   <ItemGroup>

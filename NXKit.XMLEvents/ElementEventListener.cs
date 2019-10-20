@@ -165,8 +165,7 @@ namespace NXKit.XMLEvents
             if (evt == null)
                 throw new ArgumentNullException(nameof(evt));
 
-            invoker.Invoke(() =>
-                handler.Value.HandleEvent(evt));
+            invoker.Invoke(() => handler.Value.HandleEvent(evt));
         }
 
         void IOnInit.Init()

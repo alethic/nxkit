@@ -76,7 +76,7 @@ namespace NXKit.XForms.Tests
             var d = GetSampleDocument();
 
             var inputs = d.Root
-                .Descendants(Constants.XForms_1_0 + "input")
+                .Descendants(Constants.XForms + "input")
                 .Select(i => new
                 {
                     Input = i.Interface<Input>(),
@@ -103,7 +103,7 @@ namespace NXKit.XForms.Tests
             var d = GetSampleDocument();
 
             var inputs = d.Root
-                .Descendants(Constants.XForms_1_0 + "input")
+                .Descendants(Constants.XForms + "input")
                 .Select(i => new
                 {
                     Input = i.Interface<Input>(),
@@ -127,7 +127,7 @@ namespace NXKit.XForms.Tests
             var d = GetSampleDocument();
 
             var inputs = d.Root
-                .Descendants(Constants.XForms_1_0 + "input")
+                .Descendants(Constants.XForms + "input")
                 .Select(i => new
                 {
                     Input = i.Interface<Input>(),

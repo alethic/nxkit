@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NXKit.Autofac\NXKit.Autofac.csproj" />
     <ProjectReference Include="..\NXKit.DOMEvents\NXKit.DOMEvents.csproj" />
+    <ProjectReference Include="..\NXKit.Scripting.EcmaScript\NXKit.Scripting.EcmaScript.csproj" />
     <ProjectReference Include="..\NXKit.Testing\NXKit.Testing.csproj" />
     <ProjectReference Include="..\NXKit.XForms.Examples\NXKit.XForms.Examples.csproj" />
     <ProjectReference Include="..\NXKit.XForms\NXKit.XForms.csproj" />

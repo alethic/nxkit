@@ -36,7 +36,7 @@ namespace NXKit.XForms
 
             // obtain all models
             var models = Document
-                .Descendants(Constants.XForms_1_0 + "model")
+                .Descendants(Constants.XForms + "model")
                 .Select(i => i.Interface<Model>())
                 .ToList();
 

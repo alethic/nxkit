@@ -1,0 +1,50 @@
+﻿@using NXKit.Xml
+@using NXKit.DOMEvents;
+@using NXKit.XForms;
+@attribute [NXComponent("{http://www.w3.org/2002/xforms}range")]
+@inherits XFormsComponentBase
+
+<div class="nx-xforms-range">
+    <input @onactivate="OnActivate"
+           @onfocusin="OnFocusIn"
+           @onfocusout="OnFocusOut"
+           start="@Start"
+           end="@End"
+           step="@Step"
+           @bind-value="Value"
+           @bind-value:event="oninput" />
+</div>
+
+@code
+{
+
+    NXKit.XForms.Range RangeInterface => Element.Interface<NXKit.XForms.Range>();
+
+    void OnActivate()
+    {
+        Element.DispatchEvent(UIEvents.DOMActivate);
+    }
+
+    void OnFocusIn()
+    {
+        Element.DispatchEvent(UIEvents.DOMFocusIn);
+    }
+
+    void OnFocusOut()
+    {
+        Element.DispatchEvent(UIEvents.DOMFocusOut);
+    }
+
+    int? Start => RangeInterface.Start;
+
+    int? End => RangeInterface.End;
+
+    int? Step => RangeInterface.Step;
+
+    int? Value
+    {
+        get => int.TryParse(Element.Interface<IDataNode>().Value, out var i) ? (int?)i : null;
+        set => Element.Interface<IDataNode>().Value = value?.ToString();
+    }
+
+}

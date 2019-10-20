@@ -1,0 +1,8 @@
+﻿@using NXKit.Xml
+@attribute [NXComponent("{http://schemas.nxkit.org/2014/xforms-layout}icon")]
+@inherits XFormsLayoutComponentBase
+
+<div class="nx-xforms-layout-icon">
+    <i data-nx-xforms-layout-icon-name="@(Element.Interface<NXKit.XForms.Layout.Icon>().Name)"></i>
+    <NXNodeListView Nodes="@Element.Nodes()" />
+</div>

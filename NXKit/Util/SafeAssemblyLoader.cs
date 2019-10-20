@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-
-#if NETSTANDARD2_0 || NETSTANDARD1_6
 using System.Runtime.Loader;
-#endif
 
 using Microsoft.Extensions.DependencyModel;
 

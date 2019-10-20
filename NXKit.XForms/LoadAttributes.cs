@@ -21,7 +21,7 @@ namespace NXKit.XForms
         {
             if (element == null)
                 throw new ArgumentNullException(nameof(element));
-            if (element.Name != Constants.XForms_1_0 + "load")
+            if (element.Name != Constants.XForms + "load")
                 throw new ArgumentException("", nameof(element));
         }
 

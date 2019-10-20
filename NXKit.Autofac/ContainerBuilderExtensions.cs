@@ -167,8 +167,6 @@ namespace NXKit.Autofac
                 return;
             }
 
-            Console.WriteLine("Registering Export {0}", type);
-
             // make underlying types available
             SetScope(builder.RegisterType(type).AsSelf(), scope);
 
@@ -192,8 +190,6 @@ namespace NXKit.Autofac
                 throw new ArgumentNullException(nameof(type));
             if (export is null)
                 throw new ArgumentNullException(nameof(export));
-
-            var n = type.Name;
 
             // types to export
             var exportTypes = export.Type != null ? new[] { export.Type } : type.GetInterfaces().Concat(type.Recurse(i => i.BaseType)).Distinct();

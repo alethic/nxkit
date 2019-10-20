@@ -31,7 +31,7 @@ namespace NXKit.Scripting.EcmaScript
         };
 
 
-        readonly Func<Document> host;
+        readonly DocumentEnvironment environment;
         readonly ScriptObjectDescriptor[] objects;
         readonly ScriptObjectProxyGenerator generator;
         readonly JurassicScriptEngineState state;
@@ -40,21 +40,22 @@ namespace NXKit.Scripting.EcmaScript
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="host"></param>
+        /// <param name="environment"></param>
         /// <param name="objects"></param>
         /// <param name="generator"></param>
         public JurassicScriptEngine(
-            Func<Document> host,
+            DocumentEnvironment environment,
             IEnumerable<IScriptObjectProvider> objects,
             ScriptObjectProxyGenerator generator)
         {
             if (objects == null)
                 throw new ArgumentNullException(nameof(objects));
 
-            this.host = host ?? throw new ArgumentNullException(nameof(host));
+            this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
             this.objects = objects.SelectMany(i => i.GetObjects()).ToArray();
             this.generator = generator ?? throw new ArgumentNullException(nameof(generator));
-            this.state = host().Xml.AnnotationOrCreate<JurassicScriptEngineState>();
+
+            state = environment.GetHost().Xml.AnnotationOrCreate<JurassicScriptEngineState>();
         }
 
         /// <summary>

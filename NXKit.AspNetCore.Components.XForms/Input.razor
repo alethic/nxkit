@@ -1,0 +1,185 @@
+﻿@using System.Xml.Linq
+@using NXKit.Xml
+@using NXKit.Xml.Schema
+@using NXKit.DOMEvents
+@using NXKit.XForms
+@using NXKit.XForms.Xml
+@attribute [NXComponent("{http://www.w3.org/2002/xforms}input")]
+@inherits XFormsComponentBase
+
+<div class="nx-xforms-input">
+    @foreach (var labelElement in LabelElements)
+    {
+        <label for=@UniqueId><NXNodeView Node=labelElement /></label>
+    }
+
+    @{
+        switch (DataNode.DataType)
+        {
+            case XName x when numericTypes.Any(i => IsExtendedFrom(x, i)):
+                <input id=@UniqueId type="number" @onfocusin=OnFocusIn @onfocusout=OnFocusOut @bind-value=StringValue @bind-value:event="oninput" readonly=@UINode.ReadOnly />
+                break;
+            case XName x when booleanTypes.Any(i => IsExtendedFrom(x, i)):
+                <input id=@UniqueId type="checkbox" @onfocusin=OnFocusIn @onfocusout=OnFocusOut @bind-value=BooleanValue readonly=@UINode.ReadOnly />
+                break;
+            case XName x when dateTypes.Any(i => IsExtendedFrom(x, i)):
+                <input id=@UniqueId type="date" @onfocusin=OnFocusIn @onfocusout=OnFocusOut @bind-value=DateTimeValue readonly=@UINode.ReadOnly />
+                break;
+            case XName x when timeTypes.Any(i => IsExtendedFrom(x, i)):
+                <input id=@UniqueId type="time" @onfocusin=OnFocusIn @onfocusout=OnFocusOut @bind-value=DateTimeValue readonly=@UINode.ReadOnly />
+                break;
+            default:
+                <input id=@UniqueId @onfocusin=OnFocusIn @onfocusout=OnFocusOut @bind-value=StringValue @bind-value:event="oninput" readonly=@UINode.ReadOnly />
+                break;
+        }
+    }
+</div>
+
+@code
+{
+
+    static readonly XNamespace xs = "http://www.w3.org/2001/XMLSchema";
+    static readonly XNamespace xd = "http://www.w3.org/2001/XMLSchema-datatypes";
+    static readonly XNamespace xf = "http://www.w3.org/2002/xforms";
+
+    static readonly HashSet<XName> booleanTypes = new HashSet<XName>()
+{
+        xs + "boolean",
+        xd + "boolean",
+        xf + "boolean",
+    };
+
+    static readonly HashSet<XName> numericTypes = new HashSet<XName>()
+{
+        xs + "decimal",
+        xs + "float",
+        xs + "double",
+        xs + "integer",
+        xs + "nonPositiveInteger",
+        xs + "negativeInteger",
+        xs + "long",
+        xs + "int",
+        xs + "short",
+        xs + "byte",
+        xs + "nonNegativeInteger",
+        xs + "unsignedLong",
+        xs + "unsignedInt",
+        xs + "unsignedShort",
+        xs + "unsignedByte",
+        xs + "positiveInteger",
+
+        xd + "decimal",
+        xd + "float",
+        xd + "double",
+        xd + "integer",
+        xd + "nonPositiveInteger",
+        xd + "negativeInteger",
+        xd + "long",
+        xd + "int",
+        xd + "short",
+        xd + "byte",
+        xd + "nonNegativeInteger",
+        xd + "unsignedLong",
+        xd + "unsignedInt",
+        xd + "unsignedShort",
+        xd + "unsignedByte",
+        xd + "positiveInteger",
+
+        xf + "integer",
+        xf + "nonPositiveInteger",
+        xf + "negativeInteger",
+        xf + "long",
+        xf + "int",
+        xf + "short",
+        xf + "byte",
+        xf + "nonNegativeInteger",
+        xf + "unsignedLong",
+        xf + "unsignedInt",
+        xf + "unsignedShort",
+        xf + "unsignedByte",
+        xf + "positiveInteger",
+    };
+
+    static readonly HashSet<XName> dateTypes = new HashSet<XName>()
+{
+        xs + "date",
+        xd + "date",
+        xf + "date",
+    };
+
+    static readonly HashSet<XName> timeTypes = new HashSet<XName>()
+{
+        xs + "time",
+        xd + "time",
+        xf + "time",
+    };
+
+    string UniqueId { get; } = Guid.NewGuid().ToString("n");
+
+    IDataNode DataNode => Element.Interface<IDataNode>();
+    IUINode UINode => Element.Interface<IUINode>();
+    IUIBindingNode UIBindingNode => Element.Interface<IUIBindingNode>();
+
+    IEnumerable<XElement> LabelElements => Element.Elements(xf + "label");
+    IEnumerable<XElement> HintElements => Element.Elements(xf + "hint");
+    IEnumerable<XElement> AlertElements => Element.Elements(xf + "alert");
+
+    bool IsExtendedFrom(XName source, XName target)
+    {
+        var sourceType = UIBindingNode.UIBinding.ModelItem.Model.State.XmlSchemas.GetSchemaType(source);
+        if (sourceType == null)
+        {
+            Console.WriteLine("Could not resolve {0}.", source);
+            return false;
+        }
+
+        var targetType = UIBindingNode.UIBinding.ModelItem.Model.State.XmlSchemas.GetSchemaType(target);
+        if (targetType == null)
+        {
+            Console.WriteLine("Could not resolve {0}.", target);
+            return false;
+        }
+
+        return sourceType.IsExtendedFrom(targetType);
+    }
+
+    void OnActivate()
+    {
+        Element.DispatchEvent(UIEvents.DOMActivate);
+    }
+
+    void OnFocusIn()
+    {
+        Element.DispatchEvent(UIEvents.DOMFocusIn);
+    }
+
+    void OnFocusOut()
+    {
+        Element.DispatchEvent(UIEvents.DOMFocusOut);
+    }
+
+    string StringValue
+    {
+        get => DataNode.Value;
+        set => DataNode.Value = value;
+    }
+
+    bool? BooleanValue
+    {
+        get => bool.TryParse(DataNode.Value, out var d) ? (bool?)d : null;
+        set => DataNode.Value = value switch { true => "true", false => "false", _ => null };
+    }
+
+    decimal? NumericValue
+    {
+        get => decimal.TryParse(Element.Interface<IDataNode>().Value, out var d) ? (decimal?)d : null;
+        set => Element.Interface<IDataNode>().Value = value?.ToString();
+    }
+
+    DateTime? DateTimeValue
+    {
+        get => DateTime.TryParse(Element.Interface<IDataNode>().Value, out var d) ? (DateTime?)d : null;
+        set => Element.Interface<IDataNode>().Value = value?.ToShortDateString();
+    }
+
+}

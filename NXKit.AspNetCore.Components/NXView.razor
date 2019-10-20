@@ -1,0 +1,43 @@
+﻿@inject NXEngine Engine
+
+<div class="nxkit-view">
+    <NXNodeView Node="@Document.Root" />
+</div>
+
+@code
+{
+
+    Uri documentUri;
+    Document document;
+
+    [Parameter]
+    public Document Document
+    {
+        get => document;
+        set { document = value; DocumentChanged(); }
+    }
+
+    [Parameter]
+    public Uri DocumentUri
+    {
+        get => documentUri;
+        set { documentUri = value; DocumentUriChanged(); }
+    }
+
+    /// <summary>
+    /// Invoked when the document URI is changed.
+    /// </summary>
+    void DocumentUriChanged()
+    {
+        document = documentUri != null ? Engine.Load(documentUri) : null;
+    }
+
+    /// <summary>
+    /// Invoked when the document is changed.
+    /// </summary>
+    void DocumentChanged()
+    {
+        documentUri = null;
+    }
+
+}

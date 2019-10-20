@@ -49,7 +49,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         internal EvaluationContext GetAncestorModelEvaluationContext()
         {
-            return obj.Ancestors(Constants.XForms_1_0 + "model")
+            return obj.Ancestors(Constants.XForms + "model")
                 .SelectMany(i => i.Interfaces<Model>())
                 .Select(i => i.DefaultEvaluationContext)
                 .FirstOrDefault(i => i != null);
@@ -62,7 +62,7 @@ namespace NXKit.XForms
         internal EvaluationContext GetDefaultEvaluationContext()
         {
             return obj.Document
-                .Descendants(Constants.XForms_1_0 + "model")
+                .Descendants(Constants.XForms + "model")
                 .SelectMany(i => i.Interfaces<Model>())
                 .Select(i => i.DefaultEvaluationContext)
                 .FirstOrDefault(i => i != null);

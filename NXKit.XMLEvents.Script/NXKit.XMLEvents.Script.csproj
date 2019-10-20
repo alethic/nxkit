@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Xml\Schema\xml-script-1.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Xml\Schema\xml-script-1.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NXKit.XHtml\NXKit.XHtml.csproj" />
+    <ProjectReference Include="..\NXKit.XMLEvents\NXKit.XMLEvents.csproj" />
+  </ItemGroup>
+
+</Project>

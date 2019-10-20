@@ -65,7 +65,7 @@ namespace NXKit.XForms.Tests
             host.Save(stm);
             host = Context.Engine.Load(new StringReader(stm.ToString()));
 
-            var trigger = host.Xml.Descendants(XForms.Constants.XForms_1_0 + "trigger").First();
+            var trigger = host.Xml.Descendants(XForms.Constants.XForms + "trigger").First();
             trigger.Interface<EventTarget>().Dispatch("DOMActivate");
         }
 

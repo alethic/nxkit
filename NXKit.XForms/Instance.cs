@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Schema;
+
 using NXKit.Diagnostics;
 using NXKit.DOMEvents;
-using NXKit.Util;
 using NXKit.XForms.Converters;
 using NXKit.XForms.IO;
 using NXKit.Xml;
@@ -36,9 +36,9 @@ namespace NXKit.XForms
         public Instance(
             XElement element,
             InstanceAttributes attributes,
-            ITraceService trace,
             IModelRequestService requestService,
-            IEnumerable<IXsdTypeConverter> xsdTypeConverters)
+            IEnumerable<IXsdTypeConverter> xsdTypeConverters,
+            ITraceService trace)
             : base(element)
         {
             if (element == null)
@@ -48,15 +48,16 @@ namespace NXKit.XForms
 
             this.requestService = requestService ?? throw new ArgumentNullException(nameof(requestService));
             this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
-            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
             this.xsdTypeConverters = xsdTypeConverters.ToList();
-            this.state = new Lazy<InstanceState>(() => Element.AnnotationOrCreate<InstanceState>());
+            this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
+
+            state = new Lazy<InstanceState>(() => Element.AnnotationOrCreate<InstanceState>());
         }
 
         /// <summary>
         /// Gets the model of the instance.
         /// </summary>
-        private XElement Model => Element.Ancestors(Constants.XForms_1_0 + "model").First();
+        private XElement Model => Element.Ancestors(Constants.XForms + "model").First();
 
         /// <summary>
         /// Gets the instance state associated with this instance visual.
@@ -198,11 +199,18 @@ namespace NXKit.XForms
         /// </summary>
         internal void XmlSchemaValidate()
         {
-            // initiate validation against schema
-            State.Document.Validate(
-                Model.Interface<Model>().State.XmlSchemas,
-                XmlSchemaValidate_ValidationEvent,
-                true);
+            var schema = Model.Interface<Model>().State.XmlSchemas;
+            if (schema.IsCompiled == false)
+                throw new InvalidOperationException("The model's XML schema has not yet been compiled.");
+
+            try
+            {
+                State.Document.Validate(schema, XmlSchemaValidate_ValidationEvent, true);
+            }
+            catch (XmlSchemaValidationException e)
+            {
+                XmlSchemaValidationEvent(e, null, XmlSeverityType.Error);
+            }
         }
 
         /// <summary>
@@ -210,9 +218,31 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void XmlSchemaValidate_ValidationEvent(object sender, EventArgs args)
+        void XmlSchemaValidate_ValidationEvent(object sender, ValidationEventArgs args)
         {
+            XmlSchemaValidationEvent(args.Exception, args.Message, args.Severity);
+        }
 
+        /// <summary>
+        /// Invoked when an exception occurs during validation.
+        /// </summary>
+        /// <param name="exception"></param>
+        void XmlSchemaValidationEvent(XmlSchemaException exception, string message, XmlSeverityType severity)
+        {
+            // default message to exception output
+            if (message == null && exception != null)
+                message = exception.Message;
+
+            // log based on severity
+            switch (severity)
+            {
+                case XmlSeverityType.Error:
+                    trace.Error(message);
+                    break;
+                case XmlSeverityType.Warning:
+                    trace.Warning(message);
+                    break;
+            }
         }
 
     }

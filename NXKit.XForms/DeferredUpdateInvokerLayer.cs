@@ -74,7 +74,7 @@ namespace NXKit.XForms
         void InvokeDeferredUpdates()
         {
             var models = host().Xml
-                .Descendants(Constants.XForms_1_0 + "model")
+                .Descendants(Constants.XForms + "model")
                 .Select(i => i.Interface<Model>());
 
             foreach (var model in models)

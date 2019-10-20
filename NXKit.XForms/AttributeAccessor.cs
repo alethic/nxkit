@@ -30,7 +30,7 @@ namespace NXKit.XForms
         /// </summary>
         /// <param name="element"></param>
         public AttributeAccessor(XElement element)
-            : this(element, Constants.XForms_1_0)
+            : this(element, Constants.XForms)
         {
             if (element == null)
                 throw new ArgumentNullException(nameof(element));

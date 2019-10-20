@@ -15,14 +15,14 @@ namespace NXKit.XForms
 
         public bool ConstructDoneOnce
         {
-            get { return constructDoneOnce; }
-            set { constructDoneOnce = value; }
+            get => constructDoneOnce;
+            set => constructDoneOnce = value;
         }
 
         public bool Failed
         {
-            get { return failed; }
-            set { failed = value; }
+            get => failed;
+            set => failed = value;
         }
 
         void ISerializableAnnotation.Deserialize(AnnotationSerializer serializer, XElement element)

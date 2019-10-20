@@ -144,7 +144,7 @@ namespace NXKit
         /// <summary>
         /// Gets the local name.
         /// </summary>
-        public string LocalName { get; }
+        public string LocalName { get; set; }
 
         /// <summary>
         /// Specifies the predicate type to determine whether this interface applies to the decorated <see cref="XObject"/>.

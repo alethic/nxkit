@@ -63,7 +63,7 @@ namespace NXKit.XForms
         {
             var repeat = Element.Parent;
             if (repeat == null ||
-                repeat.Name != Constants.XForms_1_0 + "repeat")
+                repeat.Name != Constants.XForms + "repeat")
                 throw new InvalidOperationException();
 
             // set the repeat index to ourselves
@@ -74,7 +74,7 @@ namespace NXKit.XForms
         {
             var repeat = Element.Parent;
             if (repeat == null ||
-                repeat.Name != Constants.XForms_1_0 + "repeat")
+                repeat.Name != Constants.XForms + "repeat")
                 throw new InvalidOperationException();
 
             // get the item context for this specific item

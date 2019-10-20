@@ -21,7 +21,7 @@ namespace NXKit.XForms
         {
             if (element == null)
                 throw new ArgumentNullException(nameof(element));
-            if (element.Name != Constants.XForms_1_0 + "insert")
+            if (element.Name != Constants.XForms + "insert")
                 throw new ArgumentException(nameof(element));
         }
 

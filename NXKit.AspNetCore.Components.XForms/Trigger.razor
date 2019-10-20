@@ -1,0 +1,37 @@
+﻿@using System.Xml.Linq
+@using NXKit.DOMEvents;
+@attribute [NXComponent("{http://www.w3.org/2002/xforms}trigger")]
+@inherits XFormsComponentBase
+
+<button class="nx-xforms-trigger" @onclick="OnClick" @onfocus="OnFocusIn" @onblur="OnFocusOut">
+    @if (LabelElement != null)
+    {
+        <NXNodeView Node="LabelElement" />
+    }
+</button>
+
+@code
+{
+
+    static readonly XNamespace xf = "http://www.w3.org/2002/xforms";
+
+    XElement LabelElement => Element.Element(xf + "label");
+    XElement HintElement => Element.Element(xf + "hint");
+    XElement AlertElement => Element.Element(xf + "alert");
+
+    void OnClick()
+    {
+        Element.DispatchEvent(UIEvents.DOMActivate);
+    }
+
+    void OnFocusIn()
+    {
+        Element.DispatchEvent(UIEvents.DOMFocusIn);
+    }
+
+    void OnFocusOut()
+    {
+        Element.DispatchEvent(UIEvents.DOMFocusOut);
+    }
+
+}

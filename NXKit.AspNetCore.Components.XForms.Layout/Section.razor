@@ -1,0 +1,24 @@
+﻿@using System.Xml.Linq
+@using NXKit.Xml
+@attribute [NXComponent("{http://schemas.nxkit.org/2014/xforms-layout}section")]
+@inherits XFormsLayoutComponentBase
+
+<section class="nx-xforms-layout-section">
+    @if (LabelElement != null)
+    {
+        <header><h1><NXNodeView Node="LabelElement" /></h1></header>
+    }
+
+    <NXNodeListView Nodes="@ContentNodes" />
+</section>
+
+@code
+{
+
+    static readonly XNamespace xf = "http://www.w3.org/2002/xforms";
+
+    XElement LabelElement => Element.Element(xf + "label");
+
+    IEnumerable<XNode> ContentNodes => Element.Nodes().Except(new[] { LabelElement });
+
+}

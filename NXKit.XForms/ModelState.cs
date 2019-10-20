@@ -14,87 +14,46 @@ namespace NXKit.XForms
         ISerializableAnnotation
     {
 
-        bool construct;
-        bool constructDone;
-        bool ready;
-        bool rebuild;
-        bool recalculate;
-        bool revalidate;
-        bool refresh;
-        XmlSchemaSet schemas = new XmlSchemaSet();
-
         [XmlAttribute("construct")]
-        public bool Construct
-        {
-            get { return construct; }
-            set { construct = value; }
-        }
+        public bool Construct { get; set; }
 
         [XmlAttribute("construct-done")]
-        public bool ConstructDone
-        {
-            get { return constructDone; }
-            set { constructDone = value; }
-        }
+        public bool ConstructDone { get; set; }
 
         [XmlAttribute("ready")]
-        public bool Ready
-        {
-            get { return ready; }
-            set { ready = value; }
-        }
+        public bool Ready { get; set; }
 
         [XmlAttribute("rebuild")]
-        public bool Rebuild
-        {
-            get { return rebuild; }
-            set { rebuild = value; }
-        }
+        public bool Rebuild { get; set; }
 
         [XmlAttribute("recalculate")]
-        public bool Recalculate
-        {
-            get { return recalculate; }
-            set { recalculate = value; }
-        }
+        public bool Recalculate { get; set; }
 
         [XmlAttribute("revalidate")]
-        public bool Revalidate
-        {
-            get { return revalidate; }
-            set { revalidate = value; }
-        }
+        public bool Revalidate { get; set; }
 
         [XmlAttribute("refresh")]
-        public bool Refresh
-        {
-            get { return refresh; }
-            set { refresh = value; }
-        }
+        public bool Refresh { get; set; }
 
         [XmlElement("schemas")]
-        public XmlSchemaSet XmlSchemas
-        {
-            get { return schemas; }
-            set { schemas = value; }
-        }
+        public XmlSchemaSet XmlSchemas { get; set; } = new XmlSchemaSet();
 
         XElement ISerializableAnnotation.Serialize(AnnotationSerializer serializer)
         {
             return new XElement("model",
-                new XAttribute("construct", construct),
-                new XAttribute("construct-done", constructDone),
-                new XAttribute("ready", ready),
-                new XAttribute("rebuild", rebuild),
-                new XAttribute("recalculate", recalculate),
-                new XAttribute("revalidate", revalidate),
-                new XAttribute("refresh", refresh),
+                new XAttribute("construct", Construct),
+                new XAttribute("construct-done", ConstructDone),
+                new XAttribute("ready", Ready),
+                new XAttribute("rebuild", Rebuild),
+                new XAttribute("recalculate", Recalculate),
+                new XAttribute("revalidate", Revalidate),
+                new XAttribute("refresh", Refresh),
                 new XElement("schemas", SerializeXmlSchemas()));
         }
 
         IEnumerable<XElement> SerializeXmlSchemas()
         {
-            foreach (XmlSchema schema in schemas.Schemas())
+            foreach (XmlSchema schema in XmlSchemas.Schemas())
             {
                 var e = new XDocument();
                 using (var wrt = e.CreateWriter())
@@ -105,13 +64,13 @@ namespace NXKit.XForms
 
         void ISerializableAnnotation.Deserialize(AnnotationSerializer serializer, XElement element)
         {
-            construct = (bool)element.Attribute("construct");
-            constructDone = (bool)element.Attribute("construct-done");
-            ready = (bool)element.Attribute("ready");
-            rebuild = (bool)element.Attribute("rebuild");
-            recalculate = (bool)element.Attribute("recalculate");
-            revalidate = (bool)element.Attribute("revalidate");
-            refresh = (bool)element.Attribute("refresh");
+            Construct = (bool)element.Attribute("construct");
+            ConstructDone = (bool)element.Attribute("construct-done");
+            Ready = (bool)element.Attribute("ready");
+            Rebuild = (bool)element.Attribute("rebuild");
+            Recalculate = (bool)element.Attribute("recalculate");
+            Revalidate = (bool)element.Attribute("revalidate");
+            Refresh = (bool)element.Attribute("refresh");
             DeserializeXmlSchemas(element.Element("schemas"));
         }
 
@@ -119,7 +78,7 @@ namespace NXKit.XForms
         {
             foreach (var element in elements.Elements())
                 using (var rdr = element.CreateReader())
-                    schemas.Add(XmlSchema.Read(rdr, (s, a) => { }));
+                    XmlSchemas.Add(XmlSchema.Read(rdr, (s, a) => { }));
         }
 
     }

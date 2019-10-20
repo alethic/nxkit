@@ -182,7 +182,7 @@ namespace NXKit.DOMEvents
             if (dispatcher == null)
                 throw new ArgumentNullException(nameof(dispatcher));
             if (string.IsNullOrWhiteSpace(eventType))
-                throw new ArgumentOutOfRangeException( nameof(eventType));
+                throw new ArgumentOutOfRangeException(nameof(eventType));
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
             if (action.Target == null)

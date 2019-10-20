@@ -1,0 +1,31 @@
+﻿@using NXKit.Xml
+@using NXKit.DOMEvents;
+@attribute [NXComponent("{http://www.w3.org/2002/xforms}select")]
+@inherits XFormsComponentBase
+
+<div class="nx-xforms-select">
+    <select @onactivate="OnActivate" @onfocusin="OnFocusIn" @onfocusout="OnFocusOut">
+    </select>
+</div>
+
+@code
+{
+
+    NXKit.XForms.Select SelectInterface => Element.Interface<NXKit.XForms.Select>();
+
+    void OnActivate()
+    {
+        Element.DispatchEvent(UIEvents.DOMActivate);
+    }
+
+    void OnFocusIn()
+    {
+        Element.DispatchEvent(UIEvents.DOMFocusIn);
+    }
+
+    void OnFocusOut()
+    {
+        Element.DispatchEvent(UIEvents.DOMFocusOut);
+    }
+
+}

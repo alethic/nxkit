@@ -60,7 +60,7 @@ namespace NXKit.XForms
             // If this attribute is omitted, then the first submission in document order from the model associated with
             // the in-scope evaluation context is used.
             return context.Value.Context.Model.Element
-                .Elements(Constants.XForms_1_0 + "submission")
+                .Elements(Constants.XForms + "submission")
                 .FirstOrDefault();
         }
 

@@ -1,0 +1,7 @@
+﻿@using NXKit.Xml
+@attribute [NXComponent("{http://schemas.nxkit.org/2014/xforms-layout}anchor")]
+@inherits XFormsLayoutComponentBase
+
+<a class="nx-xforms-layout-anchor" href="@(Element.Interface<NXKit.XForms.Layout.Anchor>().Href)">
+    <NXNodeListView Nodes="@Element.Nodes()" />
+</a>

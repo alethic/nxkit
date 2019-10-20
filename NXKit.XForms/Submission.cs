@@ -190,7 +190,7 @@ namespace NXKit.XForms
             // recalculate flag is set for the model containing this submission, then the recalculate operation is
             // performed without dispatching an event to invoke the operation. This sequence of operations affects the 
             // deferred update behavior by clearing the deferred update flags associated with the operations performed.
-            var model = Element.Ancestors(Constants.XForms_1_0 + "model").First().Interface<Model>();
+            var model = Element.Ancestors(Constants.XForms + "model").First().Interface<Model>();
             if (model.State.Rebuild)
                 model.OnRebuild();
             if (model.State.Recalculate)
@@ -338,7 +338,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         ModelMethod? GetMethod()
         {
-            var method = Element.Element(Constants.XForms_1_0 + "method");
+            var method = Element.Element(Constants.XForms + "method");
             if (method != null)
                 return method.Interface<Method>().RequestMethod;
 
@@ -375,7 +375,7 @@ namespace NXKit.XForms
         /// <returns></returns>
         IEnumerable<Uri> GetResourceUris()
         {
-            var resource = Element.Element(Constants.XForms_1_0 + "resource");
+            var resource = Element.Element(Constants.XForms + "resource");
             if (resource != null)
             {
                 var uri = resource.Interface<Resource>().Uri;

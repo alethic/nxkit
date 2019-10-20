@@ -1,0 +1,7 @@
+﻿@using NXKit.Xml
+@attribute [NXComponent("{http://schemas.nxkit.org/2014/xforms-layout}table")]
+@inherits XFormsLayoutComponentBase
+
+<table class="nx-xforms-layout-table">
+    <NXNodeListView Nodes="@Element.Nodes()" />
+</table>

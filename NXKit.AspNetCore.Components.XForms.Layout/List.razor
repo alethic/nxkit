@@ -1,0 +1,17 @@
+﻿@using System.Xml.Linq
+@attribute [NXComponent("{http://schemas.nxkit.org/2014/xforms-layout}list")]
+@inherits XFormsLayoutComponentBase
+
+<ol class="nx-xforms-layout-list">
+    @foreach (var item in Element.Elements(xf + "item"))
+    {
+        <li><NXNodeView Node="item" /></li>
+    }
+</ol>
+
+@code
+{
+
+    static readonly XNamespace xf = "http://www.w3.org/2002/xforms";
+
+}
