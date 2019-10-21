@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 
@@ -11,72 +13,103 @@ namespace NXKit.Xml.Schema
     public class XmlSchemaSetBuilder
     {
 
-        readonly XmlSchemaSet buffer;
+        readonly List<XmlSchema> buffer = new List<XmlSchema>();
         readonly List<XmlResolver> resolvers = new List<XmlResolver>();
-
-        /// <summary>
-        /// Initializes a new instance.
-        /// </summary>
-        public XmlSchemaSetBuilder()
-        {
-            buffer = new XmlSchemaSet();
-            buffer.ValidationEventHandler += (s, a) => { };
-            buffer.XmlResolver = null;
-        }
 
         /// <summary>
         /// Adds a <see cref="XmlSchema"/> to the builder.
         /// </summary>
         /// <param name="schema"></param>
-        public void Add(XmlSchema schema)
+        public XmlSchemaSetBuilder Add(XmlSchema schema)
         {
             if (schema is null)
-                throw new System.ArgumentNullException(nameof(schema));
+                throw new ArgumentNullException(nameof(schema));
 
             buffer.Add(schema);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a set of <see cref="XmlSchema"/>s to the builder.
+        /// </summary>
+        /// <param name="schemas"></param>
+        public XmlSchemaSetBuilder Add(IEnumerable<XmlSchema> schemas)
+        {
+            if (schemas is null)
+                throw new ArgumentNullException(nameof(schemas));
+
+            buffer.AddRange(schemas);
+
+            return this;
         }
 
         /// <summary>
         /// Adds a <see cref="XmlSchemaSet"/> to the builder.
         /// </summary>
         /// <param name="schemaSet"></param>
-        public void Add(XmlSchemaSet schemaSet)
+        public XmlSchemaSetBuilder Add(XmlSchemaSet schemaSet)
         {
             if (schemaSet is null)
-                throw new System.ArgumentNullException(nameof(schemaSet));
+                throw new ArgumentNullException(nameof(schemaSet));
 
-            buffer.Add(schemaSet);
+            foreach (var schema in schemaSet.Schemas().Cast<XmlSchema>())
+                Add(schema);
+
+            return this;
         }
 
         /// <summary>
         /// Adds a <see cref="XmlResolver"/> to the builder.
         /// </summary>
         /// <param name="resolver"></param>
-        public void AddResolver(XmlResolver resolver)
+        public XmlSchemaSetBuilder AddResolver(XmlResolver resolver)
         {
             if (resolver is null)
-                throw new System.ArgumentNullException(nameof(resolver));
+                throw new ArgumentNullException(nameof(resolver));
 
             resolvers.Add(resolver);
+
+            return this;
         }
 
         /// <summary>
         /// Builds and compiles a new <see cref="XmlSchemaSet"/> from the configured schemas.
         /// </summary>
         /// <returns></returns>
-        public XmlSchemaSet Build()
+        public XmlSchemaSet Build(ValidationEventHandler validationEventHandler = null)
         {
+            // temporary buffer with no validation nor resolvers
+            var buff = new XmlSchemaSet();
+            buff.XmlResolver = null;
+            buff.CompilationSettings.EnableUpaCheck = false;
+            buff.ValidationEventHandler += (s, a) => { };
+
+            // add from merge results
+            foreach (var schema in buffer)
+                buff.Add(schema);
+
             // build new schema set with resolver and compile, but ignore errors
             var temp = new XmlSchemaSet();
-            temp.XmlResolver = new AggregateXmlResolver(resolvers);
+            temp.XmlResolver = null;
+            temp.CompilationSettings.EnableUpaCheck = false;
             temp.ValidationEventHandler += (s, a) => { };
-            temp.Add(buffer);
+            temp.Add(buff);
             temp.Compile();
+
+            void ValidationEventHandler(object sender, ValidationEventArgs args)
+            {
+                if (validationEventHandler != null)
+                    validationEventHandler(sender, args);
+                else if (args.Exception != null)
+                    throw args.Exception;
+            }
 
             // build new schema set from results and compile, this time with errors
             var rslt = new XmlSchemaSet();
             rslt.XmlResolver = null;
-            rslt.ValidationEventHandler += (s, a) => { if (a.Exception != null) throw a.Exception; };
+            rslt.CompilationSettings.EnableUpaCheck = false;
+            rslt.ValidationEventHandler += ValidationEventHandler;
             rslt.Add(temp);
             rslt.Compile();
 

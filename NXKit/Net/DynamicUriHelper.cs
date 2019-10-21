@@ -4,7 +4,7 @@
     public static class DynamicUriHelper
     {
 
-        public readonly static string UriSchemeDynamic = "nx";
+        public static readonly string UriSchemeDynamic = "nx";
 
 
     }

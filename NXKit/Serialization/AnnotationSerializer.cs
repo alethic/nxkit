@@ -33,8 +33,7 @@ namespace NXKit.Serialization
         internal const string NX_FORMAT_BINARY = "binary";
         internal static readonly XName NX_TYPE = "type";
 
-        static readonly ConcurrentDictionary<Type, XmlSerializer> xmlSerializerCache =
-            new ConcurrentDictionary<Type, XmlSerializer>();
+        static readonly ConcurrentDictionary<Type, XmlSerializer> cache = new ConcurrentDictionary<Type, XmlSerializer>();
 
         /// <summary>
         /// Gets the <see cref="XmlSerializer"/> instance for the given type.
@@ -46,7 +45,7 @@ namespace NXKit.Serialization
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
 
-            return xmlSerializerCache.GetOrAdd(type, i => new XmlSerializer(i));
+            return cache.GetOrAdd(type, i => new XmlSerializer(i));
         }
 
         #region Serialize
@@ -204,14 +203,8 @@ namespace NXKit.Serialization
             if (ctor == null)
                 yield break;
 
-            // special namespace for attribute serializer
-            var ns = string.Format(
-                "nx-annotation:{0};{1}",
-                annotation.GetType().FullName,
-                annotation.GetType().Assembly.GetName().Name);
-
             // serialize object and emit attributes
-            foreach (var attr2 in annotation.Serialize(this, ns))
+            foreach (var attr2 in annotation.Serialize(this, $"nx-annotation:{annotation.GetType().FullName};{annotation.GetType().Assembly.GetName().Name}"))
                 yield return attr2;
         }
 
@@ -253,22 +246,18 @@ namespace NXKit.Serialization
             if (obj == null)
                 throw new ArgumentNullException(nameof(obj));
 
-            var document = obj as XDocument;
-            if (document != null)
+            if (obj is XDocument document)
                 return SerializeDocument(document);
 
             // object is an element
-            var element = obj as XElement;
-            if (element != null)
+            if (obj is XElement element)
                 return SerializeElement(element);
 
             // object is attribute
-            var attribute = obj as XAttribute;
-            if (attribute != null)
+            if (obj is XAttribute attribute)
                 return SerializeAttribute(attribute);
 
-            var node = obj as XNode;
-            if (node != null)
+            if (obj is XNode node)
                 return SerializeNode(node);
 
             return null;
@@ -447,11 +436,7 @@ namespace NXKit.Serialization
                 var eobj = obj as XElement;
                 if (eobj == null)
                 {
-                    var ns = string.Format(
-                        "nx-annotation:{0};{1}",
-                        annotation.GetType().FullName,
-                        annotation.GetType().Assembly.GetName().Name);
-
+                    var ns = $"nx-annotation:{annotation.GetType().FullName};{annotation.GetType().Assembly.GetName().Name}";
                     var attrs = ((IAttributeSerializableAnnotation)annotation).Serialize(this, ns);
                     if (attrs == null)
                         return null;

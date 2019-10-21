@@ -14,7 +14,8 @@ namespace NXKit.Util
         IEquatable<DynamicDictionaryValue>,
         IConvertible
     {
-        private readonly object value;
+
+        readonly object value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DynamicDictionaryValue"/> class.
@@ -30,12 +31,12 @@ namespace NXKit.Util
         /// </summary>
         /// <value><c>true</c> if this instance has value; otherwise, <c>false</c>.</value>
         /// <remarks><see langword="null"/> is considered as not being a value.</remarks>
-        public bool HasValue => (this.value != null);
+        public bool HasValue => value != null;
 
         /// <summary>
         /// Gets the inner value
         /// </summary>
-        public object Value => this.value;
+        public object Value => value;
 
         /// <summary>
         /// Returns a default value if Value is null
@@ -45,7 +46,7 @@ namespace NXKit.Util
         /// <returns>If value is not null, value is returned, else default value is returned</returns>
         public T Default<T>(T defaultValue = default(T))
         {
-            if (this.HasValue)
+            if (HasValue)
             {
                 try
                 {
@@ -82,9 +83,7 @@ namespace NXKit.Util
                     var stringValue = value as string;
                     if (TType == typeof(DateTime))
                     {
-                        DateTime result;
-
-                        if (DateTime.TryParse(stringValue, CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
+                        if (DateTime.TryParse(stringValue, CultureInfo.InvariantCulture, DateTimeStyles.None, out var result))
                         {
                             return (T)((object)result);
                         }
@@ -168,7 +167,7 @@ namespace NXKit.Util
         /// <returns>A hash code for the current instance.</returns>
         public override int GetHashCode()
         {
-            return (value != null ? this.value.GetHashCode() : 0);
+            return value != null ? value.GetHashCode() : 0;
         }
 
         /// <summary>
@@ -178,7 +177,6 @@ namespace NXKit.Util
         /// <param name="binder">Provides information about the binary operation. The binder.Operation property returns an <see cref="T:System.Linq.Expressions.ExpressionType"/> object. For example, for the sum = first + second statement, where first and second are derived from the DynamicObject class, binder.Operation returns ExpressionType.Add.</param><param name="arg">The right operand for the binary operation. For example, for the sum = first + second statement, where first and second are derived from the DynamicObject class, <paramref name="arg"/> is equal to second.</param><param name="result">The result of the binary operation.</param>
         public override bool TryBinaryOperation(BinaryOperationBinder binder, object arg, out object result)
         {
-            object resultOfCast;
             result = null;
 
             if (binder.Operation != ExpressionType.Equal)
@@ -186,17 +184,14 @@ namespace NXKit.Util
                 return false;
             }
 
-            var convert =
-                Binder.Convert(CSharpBinderFlags.None, arg.GetType(), typeof(DynamicDictionaryValue));
+            var convert = Binder.Convert(CSharpBinderFlags.None, arg.GetType(), typeof(DynamicDictionaryValue));
 
-            if (!TryConvert((ConvertBinder)convert, out resultOfCast))
+            if (!TryConvert((ConvertBinder)convert, out var resultOfCast))
             {
                 return false;
             }
 
-            result = (resultOfCast == null) ?
-                Equals(arg, resultOfCast) :
-                resultOfCast.Equals(arg);
+            result = (resultOfCast == null) ? Equals(arg, resultOfCast) : resultOfCast.Equals(arg);
 
             return true;
         }
@@ -216,7 +211,7 @@ namespace NXKit.Util
             }
 
             var binderType = binder.Type;
-            if (binderType == typeof(String))
+            if (binderType == typeof(string))
             {
                 result = Convert.ToString(value);
                 return true;
@@ -224,8 +219,7 @@ namespace NXKit.Util
 
             if (binderType == typeof(Guid) || binderType == typeof(Guid?))
             {
-                Guid guid;
-                if (Guid.TryParse(Convert.ToString(value), out guid))
+                if (Guid.TryParse(Convert.ToString(value), out var guid))
                 {
                     result = guid;
                     return true;
@@ -233,8 +227,7 @@ namespace NXKit.Util
             }
             else if (binderType == typeof(TimeSpan) || binderType == typeof(TimeSpan?))
             {
-                TimeSpan timespan;
-                if (TimeSpan.TryParse(Convert.ToString(value), out timespan))
+                if (TimeSpan.TryParse(Convert.ToString(value), out var timespan))
                 {
                     result = timespan;
                     return true;
@@ -271,7 +264,7 @@ namespace NXKit.Util
 
         public override string ToString()
         {
-            return this.value == null ? base.ToString() : Convert.ToString(this.value);
+            return value == null ? base.ToString() : Convert.ToString(value);
         }
 
         public static implicit operator bool(DynamicDictionaryValue dynamicValue)
@@ -285,9 +278,7 @@ namespace NXKit.Util
             if (dynamicValue.value.GetType().IsValueType)
                 return (Convert.ToBoolean(dynamicValue.value));
 
-
-            bool result;
-            if (bool.TryParse(dynamicValue.ToString(), out result))
+            if (bool.TryParse(dynamicValue.ToString(), out var result))
                 return result;
 
             return true;
@@ -404,7 +395,8 @@ namespace NXKit.Util
         /// <filterpriority>2</filterpriority>
         public TypeCode GetTypeCode()
         {
-            if (value == null) return TypeCode.Empty;
+            if (value == null)
+                return TypeCode.Empty;
             return Type.GetTypeCode(value.GetType());
         }
 

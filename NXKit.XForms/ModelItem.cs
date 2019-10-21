@@ -20,7 +20,8 @@ namespace NXKit.XForms
     public class ModelItem
     {
 
-        static readonly XmlQualifiedName XS_ANYTYPE = new XmlQualifiedName("anyType", XmlSchemaConstants.XMLSchema_NS);
+        static readonly XNamespace xsd = "http://www.w3.org/2001/XMLSchema";
+        static readonly XmlQualifiedName xsAnyType = new XmlQualifiedName("anyType", xsd.NamespaceName);
 
         /// <summary>
         /// Gets the model item for the given <see cref="XObject"/>.
@@ -132,7 +133,7 @@ namespace NXKit.XForms
 
             // do not fallback to string for element with content
             if (type == null && (Xml as XElement)?.HasElements != true)
-                type = NXKit.XmlSchemaConstants.XMLSchema + "string";
+                type = xsd + "string";
 
             return type;
         }
@@ -665,8 +666,8 @@ namespace NXKit.XForms
             return schemaType
                 .Recurse(i => i.BaseXmlSchemaType)
                 .Where(i => !i.QualifiedName.IsEmpty)
-                .Where(i => i.QualifiedName != XS_ANYTYPE)
-                .Where(i => i.QualifiedName.Namespace == XmlSchemaConstants.XMLSchema_NS)
+                .Where(i => i.QualifiedName != xsAnyType)
+                .Where(i => i.QualifiedName.Namespace == xsd)
                 .Select(i => XName.Get(i.QualifiedName.Name, i.QualifiedName.Namespace))
                 .FirstOrDefault();
         }

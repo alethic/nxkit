@@ -7,6 +7,9 @@ using NXKit.Composition;
 namespace NXKit.Diagnostics
 {
 
+    /// <summary>
+    /// Implements the <see cref="ITraceService"/> interface by forwarding to the exported sinks.
+    /// </summary>
     [Export(typeof(ITraceService))]
     public class DefaultTraceService :
         ITraceService

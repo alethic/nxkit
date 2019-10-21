@@ -525,15 +525,15 @@ namespace NXKit.Xml
                 var context = document.Context.BeginContext(CompositionScope.Object, b =>
                 {
                     if (self is XObject)
-                        b.AddInstance<XObject>(self);
+                        b.AddInstance(self);
                     if (self is XDocument)
-                        b.AddInstance<XDocument>((XDocument)self);
+                        b.AddInstance((XDocument)self);
                     if (self is XElement)
-                        b.AddInstance<XElement>((XElement)self);
+                        b.AddInstance((XElement)self);
                     if (self is XNode)
-                        b.AddInstance<XNode>((XNode)self);
+                        b.AddInstance((XNode)self);
                     if (self is XAttribute)
-                        b.AddInstance<XAttribute>((XAttribute)self);
+                        b.AddInstance((XAttribute)self);
                 });
 
                 return context;

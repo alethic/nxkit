@@ -14,7 +14,7 @@
         /// <returns></returns>
         public static string TrimToNull(this string source)
         {
-            var s = source != null ? source.Trim() : null;
+            var s = source?.Trim();
             return s != "" ? s : null;
         }
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Schema;
 
 using NXKit.Composition;
@@ -16,7 +15,7 @@ namespace NXKit.XForms.Xml.Schema
 
         public IEnumerable<XmlSchema> GetSchemas()
         {
-            return Xsd.SchemaSet.Schemas().Cast<XmlSchema>();
+            return Xsd.Schemas;
         }
 
     }

@@ -5,6 +5,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 
 using NXKit.Serialization;
+using NXKit.Xml.Schema;
 
 namespace NXKit.XForms
 {
@@ -56,8 +57,10 @@ namespace NXKit.XForms
             foreach (XmlSchema schema in XmlSchemas.Schemas())
             {
                 var e = new XDocument();
+
                 using (var wrt = e.CreateWriter())
                     schema.Write(wrt);
+
                 yield return e.Root;
             }
         }
@@ -76,9 +79,13 @@ namespace NXKit.XForms
 
         void DeserializeXmlSchemas(XElement elements)
         {
+            var b = new XmlSchemaSetBuilder();
+
             foreach (var element in elements.Elements())
                 using (var rdr = element.CreateReader())
-                    XmlSchemas.Add(XmlSchema.Read(rdr, (s, a) => { }));
+                    b.Add(XmlSchema.Read(rdr, (s, a) => { }));
+
+            XmlSchemas = b.Build();
         }
 
     }

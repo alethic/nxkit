@@ -49,7 +49,7 @@ namespace NXKit.Util
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return BufferInternal<T>(source.GetEnumerator(), new LinkedList<T>());
+            return BufferInternal(source.GetEnumerator(), new LinkedList<T>());
         }
 
         /// <summary>

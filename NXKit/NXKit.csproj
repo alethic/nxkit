@@ -13,12 +13,15 @@
 
   <ItemGroup>
     <None Remove="xml.xsd" />
+    <None Remove="Xml\Schema\XMLSchema-instance.xsd" />
+    <None Remove="Xml\Schema\XMLSchema.xsd" />
     <None Remove="xsdschema.xsd" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Xml\Schema\xml.xsd" />
-    <EmbeddedResource Include="Xml\Schema\xsdschema.xsd" />
+    <EmbeddedResource Include="Xml\Schema\XMLSchema-instance.xsd" />
+    <EmbeddedResource Include="Xml\Schema\XMLSchema.xsd" />
   </ItemGroup>
 
   <ItemGroup>

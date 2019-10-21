@@ -21,33 +21,25 @@ namespace NXKit.Net
         }
 
 
-        readonly Guid id;
+        readonly Guid id = Guid.NewGuid();
 
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
         protected DynamicUriAuthority()
         {
-            this.id = Guid.NewGuid();
-
             DynamicUriRegistry.Register(this);
         }
 
         /// <summary>
         /// Gets the unique registration id.
         /// </summary>
-        public Guid Id
-        {
-            get { return id; }
-        }
+        public Guid Id => id;
 
         /// <summary>
         /// Gets the base URI for this authority.
         /// </summary>
-        public Uri BaseUri
-        {
-            get { return new Uri(DynamicUriHelper.UriSchemeDynamic + "://" + id.ToString("N")); }
-        }
+        public Uri BaseUri => new Uri(DynamicUriHelper.UriSchemeDynamic + "://" + id.ToString("N"));
 
         /// <summary>
         /// Disposes of the instance.

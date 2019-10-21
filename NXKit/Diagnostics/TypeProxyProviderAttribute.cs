@@ -11,19 +11,17 @@ namespace NXKit.Diagnostics
         ITypeProxyProviderMetadata
     {
 
-        readonly Type type;
-
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        /// <param name="type"></param>
-        public TypeProxyProviderAttribute(Type type) :
+        /// <param name="proxyType"></param>
+        public TypeProxyProviderAttribute(Type proxyType) :
             base(typeof(ITypeProxyProvider))
         {
-            this.type = type ?? throw new ArgumentNullException(nameof(type));
+            ProxyType = proxyType ?? throw new ArgumentNullException(nameof(proxyType));
         }
 
-        public Type ProxyType => type;
+        public Type ProxyType { get;  }
 
     }
 

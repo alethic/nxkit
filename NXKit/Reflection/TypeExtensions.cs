@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using NXKit.Util;
+
 namespace NXKit.Reflection
 {
 
@@ -18,11 +20,7 @@ namespace NXKit.Reflection
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
 
-            while (type != null)
-            {
-                yield return type;
-                type = type.BaseType;
-            }
+            return type.Recurse(i => i.BaseType);
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ using NXKit.Diagnostics;
 using NXKit.DOMEvents;
 using NXKit.IO;
 using NXKit.Xml;
+using NXKit.Xml.Schema;
 
 namespace NXKit.XForms
 {
@@ -22,6 +23,7 @@ namespace NXKit.XForms
         readonly IIOService io;
         readonly ModelAttributes attributes;
         readonly IEnumerable<IDefaultXmlSchemaProvider> defaultSchemaProvider;
+        readonly IEnumerable<IModelXmlSchemaProvider> modelSchemaProvider;
         readonly ITraceService trace;
         readonly Lazy<ModelState> state;
         readonly Lazy<DocumentAnnotation> documentAnnotation;
@@ -33,12 +35,14 @@ namespace NXKit.XForms
         /// <param name="attributes"></param>
         /// <param name="io"></param>
         /// <param name="defaultSchemaProvider"></param>
+        /// <param name="modelSchemaProvider"></param>
         /// <param name="trace"></param>
         public Model(
             XElement element,
             ModelAttributes attributes,
             IIOService io,
             IEnumerable<IDefaultXmlSchemaProvider> defaultSchemaProvider,
+            IEnumerable<IModelXmlSchemaProvider> modelSchemaProvider,
             ITraceService trace)
             : base(element)
         {
@@ -48,6 +52,7 @@ namespace NXKit.XForms
             this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
             this.io = io ?? throw new ArgumentNullException(nameof(io));
             this.defaultSchemaProvider = defaultSchemaProvider ?? throw new ArgumentNullException(nameof(defaultSchemaProvider));
+            this.modelSchemaProvider = modelSchemaProvider ?? throw new ArgumentNullException(nameof(modelSchemaProvider));
             this.trace = trace ?? throw new ArgumentNullException(nameof(trace));
 
             state = new Lazy<ModelState>(() => Element.AnnotationOrCreate<ModelState>());
@@ -163,100 +168,38 @@ namespace NXKit.XForms
                 foreach (var version in attributes.Version.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
                     if (version != "1.0")
                         throw new DOMTargetEventException(Element, Events.VersionException);
+            
+            // begin assemblying schemas for the model
+            var builder = new XmlSchemaSetBuilder();
 
-            // obtain current list of schemas
-            var xsds = State.XmlSchemas.Schemas().OfType<XmlSchema>().ToList();
+            // add default schemas
+            foreach (var schema in defaultSchemaProvider.SelectMany(i => i.GetSchemas()).Distinct())
+                builder.Add(schema);
 
-            // add any provided default schemas
-            ApplySchemaSet(xsds, defaultSchemaProvider.SelectMany(i => i.GetSchemas()));
+            // add default schemas
+            foreach (var schema in modelSchemaProvider.SelectMany(i => i.GetSchemas(this)).Distinct())
+                builder.Add(schema);
 
-            // attempt to load XML schemas refered to by the Schema attribute
+            // override with existing schema
+            foreach (var schema in State.XmlSchemas.Schemas().OfType<XmlSchema>())
+                builder.Add(schema);
+
+            // attempt to load XML schemas referred to by the Schema attribute
             if (attributes.Schema != null)
                 foreach (var item in attributes.Schema.Split(' ').Select(i => i.Trim()).Where(i => !string.IsNullOrEmpty(i)))
-                    ApplySchemaSet(xsds, new[] { LoadSchema(new Uri(item, UriKind.RelativeOrAbsolute)) });
+                    builder.Add(LoadSchema(new Uri(item, UriKind.RelativeOrAbsolute)));
 
             // attempt to load XML schemas listed directly under the model
             foreach (var element in Element.Elements("{http://www.w3.org/2001/XMLSchema}schema"))
             {
-                // add loaded schema
-                ApplySchemaSet(xsds, new[] { LoadSchema(element) });
-
-                // remove node from tree
+                builder.Add(LoadSchema(element));
                 element.Remove();
             }
 
-            // filter out external references
-            foreach (var schema in xsds)
-            {
-                foreach (var import in schema.Includes.OfType<XmlSchemaExternal>().ToArray())
-                {
-                    // erase any external references
-                    import.SchemaLocation = null;
-                    import.Schema = null;
-
-                    // remove any includes
-                    if (import is XmlSchemaInclude include)
-                        schema.Includes.Remove(include);
-                }
-            }
-
-            // rebuild into single unified set
-            var set1 = new XmlSchemaSet();
-            set1.XmlResolver = null;
-            set1.ValidationEventHandler += (s, a) => { };
-            set1.CompilationSettings.EnableUpaCheck = false;
-
-            foreach (var xsd in xsds)
-            {
-                var all = set1.Schemas().Cast<XmlSchema>().SelectMany(i => i.Items.Cast<XmlSchemaObject>());
-
-                var xsdc = new XmlSchema();
-                xsdc.Id = xsd.Id;
-                xsdc.BlockDefault = xsd.BlockDefault;
-                xsdc.AttributeFormDefault = xsd.AttributeFormDefault;
-                xsdc.ElementFormDefault = xsd.ElementFormDefault;
-                xsdc.FinalDefault = xsd.FinalDefault;
-                xsdc.TargetNamespace = xsd.TargetNamespace;
-
-                foreach (var item in xsd.Items)
-                {
-                    switch (item)
-                    {
-                        case XmlSchemaExternal z:
-                        case XmlSchemaAttribute a when !all.OfType<XmlSchemaAttribute>().Any(i => i.QualifiedName == a.QualifiedName):
-                        case XmlSchemaAttributeGroup g when !all.OfType<XmlSchemaAttributeGroup>().Any(i => i.QualifiedName == g.QualifiedName):
-                        case XmlSchemaElement e when !all.OfType<XmlSchemaElement>().Any(i => i.QualifiedName == e.QualifiedName):
-                        case XmlSchemaType t when !all.OfType<XmlSchemaType>().Any(i => i.QualifiedName == t.QualifiedName):
-                            xsdc.Items.Add(item);
-                            break;
-                        default:
-                            // ignored
-                            break;
-                    }
-                }
-            }
-
-            // rebuild again to ensure compilation
-            var set2 = new XmlSchemaSet();
-            set2.XmlResolver = null;
-            set2.ValidationEventHandler += XmlSchemas_ValidationEventHandler;
-            set2.CompilationSettings.EnableUpaCheck = false;
-
-            try
-            {
-                set2.Add(set1);
-                set2.Compile();
-            }
-            finally
-            {
-                set2.ValidationEventHandler -= XmlSchemas_ValidationEventHandler;
-            }
-
-            if (set2.IsCompiled == false)
+            // build, compile, and check
+            State.XmlSchemas = builder.Build(ValidationEventHandler);
+            if (State.XmlSchemas.IsCompiled == false)
                 throw new InvalidOperationException("Unable to compile schema set for model.");
-
-            // replace set
-            State.XmlSchemas = set2;
 
             // attempt to load model instance data
             foreach (var instance in Instances)
@@ -268,33 +211,11 @@ namespace NXKit.XForms
         }
 
         /// <summary>
-        /// Applies the source schema to the target.
-        /// </summary>
-        /// <param name="target"></param>
-        /// <param name="source"></param>
-        void ApplySchemaSet(List<XmlSchema> target, IEnumerable<XmlSchema> source)
-        {
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
-            if (source == null)
-                return;
-
-            // apply schema from source set to target set
-            // this is done as a batch by targetNamespace to prevent us from removing what we just added
-            foreach (var g in source.GroupBy(i => i.TargetNamespace))
-            {
-                // replace target namespace
-                target.RemoveAll(i => i.TargetNamespace == g.Key);
-                target.AddRange(g);
-            }
-        }
-
-        /// <summary>
         /// Handles any validation errors during compilation.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        void XmlSchemas_ValidationEventHandler(object sender, ValidationEventArgs args)
+        void ValidationEventHandler(object sender, ValidationEventArgs args)
         {
             XmlSchemaCompilationEvent(args.Exception, args.Message, args.Severity);
         }

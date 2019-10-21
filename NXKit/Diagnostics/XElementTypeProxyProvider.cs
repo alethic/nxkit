@@ -8,10 +8,7 @@ namespace NXKit.Diagnostics
         TypeProxyProviderBase<XElement>
     {
 
-        public override object Proxy(XElement input)
-        {
-            return input.Name;
-        }
+        public override object Proxy(XElement input) => input.Name;
 
     }
 

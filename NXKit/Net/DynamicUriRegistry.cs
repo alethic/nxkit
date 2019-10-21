@@ -12,8 +12,7 @@ namespace NXKit.Net
     static class DynamicUriRegistry
     {
 
-        static Dictionary<Guid, WeakReference<DynamicUriAuthority>> authorities =
-            new Dictionary<Guid, WeakReference<DynamicUriAuthority>>();
+        static Dictionary<Guid, WeakReference<DynamicUriAuthority>> authorities = new Dictionary<Guid, WeakReference<DynamicUriAuthority>>();
 
         /// <summary>
         /// Registers the given authority.

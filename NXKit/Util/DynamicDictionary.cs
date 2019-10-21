@@ -23,10 +23,7 @@ namespace NXKit.Util
         /// Returns an empty dynamic dictionary.
         /// </summary>
         /// <value>A <see cref="DynamicDictionary"/> instance.</value>
-        public static DynamicDictionary Empty
-        {
-            get { return new DynamicDictionary(); }
-        }
+        public static DynamicDictionary Empty => new DynamicDictionary();
 
         /// <summary>
         /// Creates a dynamic dictionary from an <see cref="IDictionary{TKey,TValue}"/> instance.
@@ -109,8 +106,7 @@ namespace NXKit.Util
 
                 name = GetNeutralKey(name);
 
-                dynamic member;
-                if (!dictionary.TryGetValue(name, out member))
+                if (!dictionary.TryGetValue(name, out var member))
                     member = new DynamicDictionaryValue(null);
 
                 return member;

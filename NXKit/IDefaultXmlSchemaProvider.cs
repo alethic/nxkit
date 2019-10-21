@@ -5,7 +5,7 @@ namespace NXKit
 {
 
     /// <summary>
-    /// Provides a default set of schemas that should be made available.
+    /// Provides a set of schemas that should be made available wherever needed.
     /// </summary>
     public interface IDefaultXmlSchemaProvider
     {

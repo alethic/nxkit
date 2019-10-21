@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Xml;
-using System.Xml.Resolvers;
+using System.Collections.Generic;
 using System.Xml.Schema;
 
-using NXKit.Xml;
 using NXKit.Xml.Schema;
 
 namespace NXKit.XForms.Xml.Schema
@@ -15,50 +13,19 @@ namespace NXKit.XForms.Xml.Schema
     public static partial class Xsd
     {
 
-        static readonly Uri relativeUri = new Uri("assembly://NXKit.XForms/NXKit/XForms/Xml/Schema/");
-        static readonly Lazy<XmlSchemaSet> schemaSet = new Lazy<XmlSchemaSet>(() => LoadXmlSchemaSet(), true);
+        static readonly EmbeddedXmlHelper helper = new EmbeddedXmlHelper(new Uri("assembly://NXKit.XForms/NXKit/XForms/Xml/Schema/"));
 
-        /// <summary>
-        /// Loads the XML schema with the given XSD path.
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="resolver"></param>
-        /// <returns></returns>
-        static XmlSchema LoadXmlSchema(Uri uri, XmlResolver resolver)
+        static Xsd()
         {
-            if (uri == null)
-                throw new ArgumentNullException(nameof(uri));
-            if (uri.IsAbsoluteUri == false)
-                throw new ArgumentException(nameof(uri));
-            if (resolver == null)
-                throw new ArgumentNullException(nameof(resolver));
-
-            return XmlSchema.Read(
-                XmlReader.Create(
-                    uri.ToString(),
-                    new XmlReaderSettings() { DtdProcessing = DtdProcessing.Ignore, XmlResolver = resolver }),
-                (s, a) => { if (a.Exception != null) throw a.Exception; });
+            helper.Add(NXKit.Xml.Schema.Xsd.Schemas);
+            helper.Add(NXKit.XMLEvents.Xml.Schema.Xsd.Schemas);
+            helper.Add(new Uri("XForms-Schema.xsd", UriKind.Relative));
         }
 
         /// <summary>
-        /// Loads a new <see cref="XmlSchemaSet"/>.
+        /// Gets a reference to the XForms schema.
         /// </summary>
-        /// <returns></returns>
-        static XmlSchemaSet LoadXmlSchemaSet()
-        {
-            var resolver = new XmlPreloadedResolver(new AssemblyResourceXmlResolver(typeof(Xsd).Assembly));
-            var builder = new XmlSchemaSetBuilder();
-            builder.AddResolver(resolver);
-            builder.Add(NXKit.Xml.Schema.Xsd.SchemaSet);
-            builder.Add(NXKit.XMLEvents.Xml.Schema.Xsd.SchemaSet);
-            builder.Add(LoadXmlSchema(new Uri(relativeUri + "XForms-Schema.xsd"), resolver));
-            return builder.Build();
-        }
-
-        /// <summary>
-        /// Gets a reference to the XForms <see cref="XmlSchemaSet"/>.
-        /// </summary>
-        public static XmlSchemaSet SchemaSet => schemaSet.Value;
+        public static IEnumerable<XmlSchema> Schemas => helper.Schemas;
 
     }
 

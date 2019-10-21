@@ -9,10 +9,12 @@
         ITypeProxyProvider
     {
 
-        public object Proxy(object input)
-        {
-            return Proxy((T)input);
-        }
+        /// <summary>
+        /// Provides a proxy object for the given type.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public object Proxy(object input) => Proxy((T)input);
 
         /// <summary>
         /// Provides a proxy object for the given type.

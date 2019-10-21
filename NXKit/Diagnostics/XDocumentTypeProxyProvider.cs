@@ -8,10 +8,7 @@ namespace NXKit.Diagnostics
         TypeProxyProviderBase<XDocument>
     {
 
-        public override object Proxy(XDocument input)
-        {
-            return "XDocument";
-        }
+        public override object Proxy(XDocument input) => "XDocument";
 
     }
 

@@ -13,8 +13,7 @@ namespace NXKit.IO
         IEnumerable<KeyValuePair<string, string>>
     {
 
-        Dictionary<string, string> items =
-            new Dictionary<string, string>();
+        readonly Dictionary<string, string> items = new Dictionary<string, string>();
 
         /// <summary>
         //  Gets or sets the value associated with the specified key.
@@ -23,8 +22,8 @@ namespace NXKit.IO
         /// <returns></returns>
         public string this[string name]
         {
-            get { return items[name]; }
-            set { items[name] = value; }
+            get => items[name];
+            set => items[name] = value;
         }
 
         /// <summary>
@@ -53,15 +52,9 @@ namespace NXKit.IO
                 items[key] = headers[key];
         }
 
-        public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
-        {
-            return items.GetEnumerator();
-        }
+        public IEnumerator<KeyValuePair<string, string>> GetEnumerator() => items.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     }
 

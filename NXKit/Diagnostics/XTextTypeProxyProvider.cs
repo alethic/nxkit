@@ -8,10 +8,7 @@ namespace NXKit.Diagnostics
         TypeProxyProviderBase<XText>
     {
 
-        public override object Proxy(XText input)
-        {
-            return input.Parent.Name + ">text";
-        }
+        public override object Proxy(XText input) => input.Parent.Name + ">text";
 
     }
 

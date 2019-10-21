@@ -5,8 +5,11 @@ using NXKit.Composition;
 namespace NXKit.Diagnostics
 {
 
+    /// <summary>
+    /// Logs trace messages with the .NET trace framework.
+    /// </summary>
     [Export(typeof(ITraceSink))]
-    public class DiagnosticsTraceSink :
+    class DiagnosticsTraceSink :
         ITraceSink
     {
 
