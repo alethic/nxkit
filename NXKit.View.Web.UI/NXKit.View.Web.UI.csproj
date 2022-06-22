@@ -11,7 +11,7 @@
         <PackageReference Include="jQuery" Version="2.1.3" />
         <PackageReference Include="knockoutjs" Version="3.2.0" />
         <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="6.0.8" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="RequireJS" Version="2.1.6" />
         <PackageReference Include="RequireJS.Text" Version="2.0.7" />
         <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
